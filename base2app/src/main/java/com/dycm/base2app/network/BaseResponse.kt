@@ -1,0 +1,31 @@
+package com.dycm.base2app.network
+
+/**
+ * 默认响应
+ */
+open class BaseResponse {
+
+    var request: BaseRequest? = null
+    var message: String? = null
+    // 在鱼塘项目中,Response只返回code并不返回status,故而code即表示http的请求状态又表示接口业务是否成功
+    var code: Int? = null
+    // 接口业务是否成功状态
+    //  var status: Int = 0
+
+    fun isSuccess(): Boolean {
+        return code == RES_OK
+    }
+
+    fun toError(): ErrorResponse {
+        return ErrorResponse(request, code, message)
+    }
+
+    override fun toString(): String {
+//        return this.javaClass.simpleName + ": status = " + status + ", message = " + message + ", code = " + code
+        return this.javaClass.simpleName + ": message = " + message + ", code = " + code
+    }
+
+    companion object {
+        val RES_OK = 200
+    }
+}
