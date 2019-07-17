@@ -8,9 +8,9 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.StringRes
 
-import com.ihoment.base2app.R
-import com.ihoment.base2app.util.ResUtil
-import com.ihoment.base2app.util.ToastUtil
+import com.dycm.base2app.R
+import com.dycm.base2app.util.ResUtil
+import com.dycm.base2app.util.ToastUtil
 
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetDialog

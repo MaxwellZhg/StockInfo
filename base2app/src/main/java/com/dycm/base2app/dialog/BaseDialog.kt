@@ -10,8 +10,8 @@ import android.view.*
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import butterknife.ButterKnife
-import com.ihoment.base2app.R
-import com.ihoment.base2app.util.ToastUtil
+import com.dycm.base2app.R
+import com.dycm.base2app.util.ToastUtil
 
 /**
  * Created by xieyingwu on 2017/4/19.
@@ -73,7 +73,7 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
     }
 
     private fun initView(theme: Int) {
-        dialog = Dialog(context, if (theme != 0) theme else dialogStyle)
+        dialog = context?.let { Dialog(it, if (theme != 0) theme else dialogStyle) }
         val layout = layout
         val customDialog = LayoutInflater.from(context).inflate(layout, null)
         val params = WindowManager.LayoutParams()
@@ -94,11 +94,13 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
     protected fun reSeizeToWidth() {
         val window = dialog!!.window
         // 把 DecorView 的默认 padding 取消，同时 DecorView 的默认大小也会取消
-        window.decorView.setPadding(0, 0, 0, 0)
-        val layoutParams = window.attributes
+        window?.decorView?.setPadding(0, 0, 0, 0)
+        val layoutParams = window?.attributes
         // 设置宽度
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        window.attributes = layoutParams
+        if (layoutParams != null) {
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+        }
+        window?.attributes = layoutParams
     }
 
     private fun setDialogBg() {
