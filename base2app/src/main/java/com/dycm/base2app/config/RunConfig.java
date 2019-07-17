@@ -22,13 +22,7 @@ public class RunConfig extends AssetsProperties {
 
     /*网络配置信息*/
     @Property
-    public String user_api;/*用户域名*/
-    @Property
-    public String im_api;/*IM域名*/
-    @Property
-    public String pay_api;/*支付域名*/
-    @Property
-    public String trend_api;/*动态域名*/
+    public String domain_api;
     @Property
     int write_timeout;/*写超时时间*/
     @Property

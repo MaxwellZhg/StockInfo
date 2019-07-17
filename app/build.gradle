@@ -53,6 +53,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation project(":base2app")
+    // 支持使用butterknife注解
+    kapt "com.jakewharton:butterknife-compiler:10.0.0"
     // 在需要使用arouter的module中添加
     kapt "com.alibaba:arouter-compiler:$arouter_arouter_compiler"
 }

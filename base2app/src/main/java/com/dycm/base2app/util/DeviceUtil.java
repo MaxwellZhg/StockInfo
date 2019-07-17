@@ -10,6 +10,8 @@ import com.dycm.base2app.BaseApplication;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -21,12 +23,29 @@ public class DeviceUtil {
     }
 
     /**
+     * 获取当前手机系统语言。
+     *
+     * @return 返回当前系统语言。例如：当前设置的是“中文-中国”，则返回“zh-CN”
+     */
+    public static String getSystemLanguage() {
+        return Locale.getDefault().getLanguage();
+    }
+
+    /**
+     * 获取当前手机系统版本号
+     *
+     * @return  系统版本号
+     */
+    public static String getSystemVersion() {
+        return android.os.Build.VERSION.RELEASE;
+    }
+
+    /**
      * @return 设备品牌
      **/
     public static String getDeviceBrand() {
         return Build.BRAND;
     }
-
 
     /**
      * 获取设备厂商
@@ -90,7 +109,7 @@ public class DeviceUtil {
      * **/
     public static String getDeviceUuid() {
         /*获取AndroidId*/
-        String uuid = Settings.System.getString(BaseApplication.Companion.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        String uuid = Settings.System.getString(Objects.requireNonNull(BaseApplication.Companion.getContext()).getContentResolver(), Settings.Secure.ANDROID_ID);
         if (!TextUtils.isEmpty(uuid))
             return uuid;
         /*获取mac地址*/

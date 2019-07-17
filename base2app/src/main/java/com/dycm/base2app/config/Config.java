@@ -43,7 +43,7 @@ public class Config extends AssetsProperties {
 
     public String domain() {
         // 主域名默认使用用户域名
-        return runConfig.user_api;
+        return runConfig.domain_api;
     }
 
     public int writeTimeout() {

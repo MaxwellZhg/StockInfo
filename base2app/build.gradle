@@ -49,8 +49,6 @@ dependencies {
     // 动态权限申请处理库
 //    api 'com.github.tbruyelle:rxpermissions:0.10.2'
     api 'com.qw:soulpermission:1.1.6'
-    // 扩展版的百分比布局
-    api 'com.zhy:percent-support-extends:1.1.1'
     // 配置读取Lib
     api 'com.github.fernandodev.androidproperties:androidproperties:1.0.0'
     // noinspection GradleDependency v4、v7、v13包

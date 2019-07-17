@@ -78,7 +78,7 @@ object Network {
         /*添加Header头信息*/
         builder.addInterceptor(header)
         /*添加动态修改BaseUrl*/
-        builder.addInterceptor(BaseUrlInterceptor())
+//        builder.addInterceptor(BaseUrlInterceptor())
         val client = builder.build()
         /*设置同一个端口最大请求并发数*/
         client.dispatcher().maxRequestsPerHost = 4
