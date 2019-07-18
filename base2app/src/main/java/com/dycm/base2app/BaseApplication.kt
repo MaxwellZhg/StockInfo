@@ -16,6 +16,8 @@ import com.dycm.base2app.util.AppActivityLifecycleImp
 import com.dycm.base2app.util.AppUtil
 import com.dycm.base2app.util.ThreadPoolUtil
 import com.qw.soul.permission.SoulPermission
+import me.jessyan.autosize.AutoSize
+import me.jessyan.autosize.AutoSizeConfig
 import me.yokeyword.fragmentation.Fragmentation
 import me.yokeyword.fragmentation.helper.ExceptionHandler
 import okhttp3.Interceptor
@@ -65,6 +67,7 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
         super.onCreate()
         context = this
         AppUtil.init(this)
+        initAutoSize()
         initArouter()
 //        ThreadPoolUtil.getThreadPool().run {
             initConfig()
@@ -78,6 +81,13 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
         /*注册ActivityLifeCycle*/
         appActivityLifecycleImp = AppActivityLifecycleImp(this)
         registerActivityLifecycleCallbacks(appActivityLifecycleImp)
+    }
+
+    private fun initAutoSize() {
+        // 支持适配fragment
+        AutoSizeConfig.getInstance().isCustomFragment = true
+        // 是否需要支持多进程
+//        AutoSize.initCompatMultiProcess(this)
     }
 
     private fun initArouter() {

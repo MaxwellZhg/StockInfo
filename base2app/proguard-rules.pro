@@ -124,3 +124,7 @@
 -keep interface * implements com.alibaba.android.arouter.facade.template.IProvider
 # 如果使用了 单类注入，即不定义接口实现 IProvider，需添加下面规则，保护实现
 -keep class * implements com.alibaba.android.arouter.facade.template.IProvider
+
+# autosize
+-keep class me.jessyan.autosize.** { *; }
+-keep interface me.jessyan.autosize.** { *; }
