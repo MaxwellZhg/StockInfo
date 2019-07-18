@@ -24,7 +24,7 @@ public class JsonUtil {
     }
 
     public static <T> T fromJson(@NonNull String json, Class<T> t) {
-        if (TextUtils.isEmpty(json)) return null;
+//        if (TextUtils.isEmpty(json)) return null;
         try {
             return mGson.fromJson(json, t);
         } catch (Exception e) {

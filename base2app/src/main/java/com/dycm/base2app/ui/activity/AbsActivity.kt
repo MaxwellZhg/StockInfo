@@ -9,6 +9,7 @@ import android.view.*
 import androidx.annotation.StringRes
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import com.alibaba.android.arouter.launcher.ARouter
 import com.dycm.base2app.infra.FullDisplayConfig
 import com.dycm.base2app.util.AppUtil
 import com.dycm.base2app.util.QuickClickUtil
@@ -62,6 +63,7 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         TAG = this.javaClass.simpleName
+        ARouter.getInstance().inject(this)
         quickClick = QuickClickUtil(500)
         if (isNeedHintQuickClick) quickClick!!.setCallback(this)
         if (isFullScreen) beFullScreen()
