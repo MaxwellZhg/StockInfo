@@ -5,20 +5,4 @@
         android:layout_width="match_parent"
         android:id="@+id/root_view"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
-    <Button
-            android:id="@+id/button1"
-            android:layout_marginTop="50dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="连接websocket"/>
-
-    <Button
-            android:id="@+id/button2"
-            android:layout_marginTop="100dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="打开fragment"/>
-
-</FrameLayout>
+        tools:context=".MainActivity"/>

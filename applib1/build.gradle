@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
 
 // 在需要使用arouter的module中添加
 kapt {
@@ -50,4 +51,7 @@ dependencies {
     kapt "com.jakewharton:butterknife-compiler:10.0.0"
     // 在需要使用arouter的module中添加
     kapt "com.alibaba:arouter-compiler:$arouter_arouter_compiler"
+
+    // WebSocket
+    implementation "org.java-websocket:Java-WebSocket:1.3.9"
 }

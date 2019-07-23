@@ -1,9 +1,10 @@
 package com.dycm.base2app.util;
 
 import android.text.TextUtils;
-
 import androidx.annotation.NonNull;
 import com.google.gson.Gson;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
@@ -23,8 +24,17 @@ public class JsonUtil {
         return mGson.toJson(model);
     }
 
+    public static JSONObject toJSONObject(@NonNull String json) {
+        try {
+            return new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static <T> T fromJson(@NonNull String json, Class<T> t) {
-//        if (TextUtils.isEmpty(json)) return null;
+        if (TextUtils.isEmpty(json)) return null;
         try {
             return mGson.fromJson(json, t);
         } catch (Exception e) {
