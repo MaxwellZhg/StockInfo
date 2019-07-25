@@ -24,4 +24,18 @@ public class StockInfo {
     public String time;
     public double high;
     public double low;
+
+    public boolean updateData(StockInfo info) {
+        if (info == null) return false;
+        lotSize = info.lotSize;
+        name = info.name;
+        price = info.price;
+        lastPrice = info.lastPrice;
+        openPrice = info.openPrice;
+        amount = info.amount;
+        time = info.time;
+        high = info.high;
+        low = info.low;
+        return true;
+    }
 }

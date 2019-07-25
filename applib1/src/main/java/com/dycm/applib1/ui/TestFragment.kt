@@ -36,14 +36,23 @@ class TestFragment : AbsBackFinishEventFragment() {
     fun onStocksResponse(response: StocksResponse) {
         if (response.body.isNotEmpty()) {
             LogInfra.Log.d(TAG, "onStocksResponse: " + response.body.size)
+
             val stocksList = ArrayList<StockInfo>()
-            for (id in response.body.keys) {
-                val stockInfo = response.body[id]
-                if (stockInfo != null) {
-                    stockInfo.id = id
-                    stocksList.add(stockInfo)
+            if (mAdapter?.items?.isNotEmpty()!!) {
+                for (item in mAdapter!!.items) {
+                    val stockInfo = response.body[item.id]
+                    if (item.updateData(stockInfo)) {
+                        response.body.remove(item.id)
+                    }
                 }
             }
+
+            for (id in response.body.keys) {
+                val stockInfo = response.body[id]
+                stockInfo?.id = id
+                stockInfo?.let { stocksList.add(it) }
+            }
+
             mAdapter?.addItems(stocksList)
         }
     }

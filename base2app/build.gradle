@@ -35,7 +35,7 @@ dependencies {
     // RxJava
     api 'io.reactivex.rxjava2:rxjava:2.2.7'
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     api 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
     // 注解View
     api 'com.jakewharton:butterknife:10.0.0'

@@ -6,6 +6,7 @@ import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
 import com.dycm.base2app.infra.LogInfra;
 import com.dycm.base2app.rxbus.RxBus;
+import com.dycm.base2app.util.DeviceUtil;
 import com.dycm.base2app.util.JsonUtil;
 import com.dycm.base2app.util.Md5Util;
 import org.java_websocket.WebSocket;
@@ -28,8 +29,6 @@ public class SocketClient {
     private WebSocketClient client;
 
     private final boolean openGzip = true;
-
-    private static String devId = UUID.randomUUID().toString();
 
     public static SocketClient getInstance() {
         if (instance == null) {
@@ -171,6 +170,9 @@ public class SocketClient {
     }
 
     private void sendAuth() {
+
+        String devId = DeviceUtil.getDeviceUuid();
+
         SocketRequest SocketRequest = new SocketRequest();
         SocketHeader SocketHeader = new SocketHeader();
         SocketHeader.setDevId(devId);
@@ -186,7 +188,7 @@ public class SocketClient {
         body.put("dev_id", devId);
         long timestamp = System.currentTimeMillis();
         body.put("timestamp", System.currentTimeMillis());
-        String str = devId + timestamp + "069de7990c0c4b8d87f516b7478e9f4a";
+        String str = devId + timestamp + Lib1Constants.SOCKET_AUTH_SIGNATURE;
         String token = Md5Util.getMd5Str(str);
         body.put("token", token);
 
