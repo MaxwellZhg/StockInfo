@@ -9,11 +9,15 @@
                   android:layout_marginTop="20dp"
                   android:layout_marginBottom="15dp"
                   android:orientation="horizontal">
+
         <EditText android:layout_width="0dp"
                   android:layout_height="wrap_content"
+                  android:id="@+id/edit_search_criteria"
                   android:layout_weight="50"/>
+
         <Button android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/btn_search"
                 android:text="搜索"/>
 
         <Button android:layout_width="wrap_content"

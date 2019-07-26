@@ -34,6 +34,12 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    public void addItem(T item) {
+        if (item == null) return;
+        this.items.add(item);
+        notifyDataSetChanged();
+    }
+
     public void addItems(List<T> items) {
         if (items == null) return;
         this.items.addAll(items);

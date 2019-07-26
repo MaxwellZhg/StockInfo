@@ -2,6 +2,7 @@ package com.dycm.applib1.socket;
 
 import android.annotation.SuppressLint;
 import com.dycm.applib1.Lib1Constants;
+import com.dycm.applib1.model.SocketStockTopic;
 import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
 import com.dycm.base2app.infra.LogInfra;
@@ -137,7 +138,7 @@ public class SocketClient {
             @Override
             public void run() {
                 int index = 0;
-                while (client!= null) {
+                while (client != null) {
                     index++;
                     if (index % 30 == 0) {
                         client.sendPing();
@@ -175,9 +176,9 @@ public class SocketClient {
 
         SocketRequest SocketRequest = new SocketRequest();
         SocketHeader SocketHeader = new SocketHeader();
-        SocketHeader.setDevId(devId);
+        SocketHeader.setDev_id(devId);
         SocketHeader.setLanguage("ZN");
-        SocketHeader.setReqId(UUID.randomUUID().toString());
+        SocketHeader.setReq_id(UUID.randomUUID().toString());
         SocketHeader.setVersion("1.0.0");
         SocketHeader.setPath(Lib1Constants.AUTH);
 
@@ -210,17 +211,29 @@ public class SocketClient {
 
         SocketHeader SocketHeader = new SocketHeader();
         SocketHeader.setLanguage("ZN");
-        SocketHeader.setReqId(UUID.randomUUID().toString());
+        SocketHeader.setReq_id(UUID.randomUUID().toString());
         SocketHeader.setVersion("1.0.0");
         SocketHeader.setPath(Lib1Constants.BIND);
 
         SocketRequest.setHeader(SocketHeader);
 
-        SubTopic subTopic = new SubTopic();
-        List<String> topics = new ArrayList<>();
-        for (int k = 0; k < 5; k++) {
-            topics.add("/topic/" + String.format("%0" + 5 + "d", new Random().nextInt(2000)));
-        }
+        StockSubTopic subTopic = new StockSubTopic();
+        List<SocketStockTopic> topics = new ArrayList<>();
+//        for (int k = 0; k < 5; k++) {
+        SocketStockTopic stockTopic = new SocketStockTopic();
+        stockTopic.setDataType(1);
+        stockTopic.setTs("HK");
+        stockTopic.setCode("00700");
+        stockTopic.setType(2);
+        topics.add(stockTopic);
+
+        stockTopic = new SocketStockTopic();
+        stockTopic.setDataType(1);
+        stockTopic.setTs("HK");
+        stockTopic.setCode("800000");
+        stockTopic.setType(1);
+        topics.add(stockTopic);
+//        }
         subTopic.setTopics(topics);
 
         SocketRequest.setBody(subTopic);
