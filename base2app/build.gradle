@@ -44,7 +44,7 @@ dependencies {
     api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     api 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
     // 注解View
-    api 'com.jakewharton:butterknife:10.0.0'
+    api 'com.jakewharton:butterknife:10.1.0'
     // Json解析
     api 'com.google.code.gson:gson:2.8.5'
     // Retrofit 网络Lib 版本需要保持一致

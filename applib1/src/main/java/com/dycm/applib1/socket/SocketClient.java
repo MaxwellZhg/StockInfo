@@ -39,19 +39,24 @@ public class SocketClient {
                 }
             }
         }
-        instance.destroy();
         return instance;
     }
 
     public void destroy() {
         if (client != null) {
+            // 解除所有的订阅
+            unBindAllTopic();
+            // 断开连接
             client.close();
             client = null;
         }
     }
 
-    public void newClient() {
+    public void connect() {
         try {
+            // 先断开上一次的连接
+            destroy();
+            // 重新创建连接
             client = new WebSocketClient(new URI(Lib1Constants.SOCKET_URL), new Draft_6455()) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
@@ -72,7 +77,7 @@ public class SocketClient {
                     } else {
                         message = ByteBufferUtil.byteBuffer2String(byteBuffer);
                     }
-                    LogInfra.Log.d(TAG, "onMessage:" + message);
+                    LogInfra.Log.d(TAG, " <-- onMessage " + message);
                     if (message.equals("over")) {
                         client.close();
                     }
@@ -83,8 +88,11 @@ public class SocketClient {
                             RxBus.getDefault().post(JsonUtil.fromJson(message, StocksResponse.class));
                         } else {
                             SocketResponse response = JsonUtil.fromJson(message, SocketResponse.class);
-                            if (response != null && response.isSuccessful() && response.getPath().equals(Lib1Constants.AUTH)) {
-                                bindTopic();
+                            if (response != null && response.isSuccessful() && Objects.equals(response.getPath(), Lib1Constants.AUTH)) {
+                                // TODO 自动订阅，测试假数据，真实场景应该读取本地配置的自选股
+                                SocketStockTopic stockTopic1 = new SocketStockTopic(1, "HK", "00700", 2);
+                                SocketStockTopic stockTopic2 = new SocketStockTopic(1, "HK", "800000", 1);
+                                bindTopic(stockTopic1, stockTopic2);
                             }
                         }
                     } catch (Exception e) {
@@ -122,68 +130,42 @@ public class SocketClient {
         sendAuth();
     }
 
-    private void bindTopic() {
-        SocketRequest param = createTopicMessage();
-        String json = JsonUtil.toJson(param);
-        LogInfra.Log.d(TAG, "压缩前：" + json);
+    private void sendRequest(String json) {
+        LogInfra.Log.d(TAG, " --> sendRequest " + json);
         if (openGzip) {
             byte[] zipBytes = GZipUtil.compress(json);
-            LogInfra.Log.d(TAG, "压缩后：" + zipBytes.length);
             client.send(ByteBuffer.wrap(zipBytes));
         } else {
             client.send(ByteBufferUtil.string2ByteBuffer(json));
         }
+    }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int index = 0;
-                while (client != null) {
-                    index++;
-                    if (index % 30 == 0) {
-                        client.sendPing();
-                    }
-                    if (index % 10 == 0) {
-                        SocketRequest param;
-                        if (new Random().nextInt(2) == 0) {
-                            param = createTopicMessage();
-                        } else {
-                            param = createTopicMessage();
-                        }
-                        String json = JsonUtil.toJson(param);
-                        LogInfra.Log.d(TAG, "压缩前：" + json);
-                        if (openGzip) {
-                            byte[] zipBytes = GZipUtil.compress(json);
-                            LogInfra.Log.d(TAG, "压缩后：" + zipBytes.length);
-                            client.send(ByteBuffer.wrap(zipBytes));
-                        } else {
-                            client.send(ByteBufferUtil.string2ByteBuffer(json));
-                        }
-                    }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+    public void bindTopic(SocketStockTopic... topics) {
+        SocketRequest param = createTopicMessage(Lib1Constants.BIND, topics);
+        sendRequest(JsonUtil.toJson(param));
+    }
+
+    public void unBindTopic(SocketStockTopic... topics) {
+        SocketRequest param = createTopicMessage(Lib1Constants.UNBIND, topics);
+        sendRequest(JsonUtil.toJson(param));
+    }
+
+    private void unBindAllTopic() {
+        SocketRequest param = createTopicMessage(Lib1Constants.UNBIND_ALL);
+        sendRequest(JsonUtil.toJson(param));
     }
 
     private void sendAuth() {
-
         String devId = DeviceUtil.getDeviceUuid();
 
-        SocketRequest SocketRequest = new SocketRequest();
-        SocketHeader SocketHeader = new SocketHeader();
-        SocketHeader.setDev_id(devId);
-        SocketHeader.setLanguage("ZN");
-        SocketHeader.setReq_id(UUID.randomUUID().toString());
-        SocketHeader.setVersion("1.0.0");
-        SocketHeader.setPath(Lib1Constants.AUTH);
-
-
-        SocketRequest.setHeader(SocketHeader);
+        SocketRequest param = new SocketRequest();
+        SocketHeader socketHeader = new SocketHeader();
+        socketHeader.setDev_id(devId);
+        socketHeader.setLanguage("ZN");
+        socketHeader.setReq_id(UUID.randomUUID().toString());
+        socketHeader.setVersion("1.0.0");
+        socketHeader.setPath(Lib1Constants.AUTH);
+        param.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
         body.put("dev_id", devId);
@@ -193,51 +175,27 @@ public class SocketClient {
         String token = Md5Util.getMd5Str(str);
         body.put("token", token);
 
-        SocketRequest.setBody(body);
-        String json = JsonUtil.toJson(SocketRequest);
-        LogInfra.Log.d(TAG, "压缩前：" + json);
-        if (openGzip) {
-            byte[] zipBytes = GZipUtil.compress(json);
-            LogInfra.Log.d(TAG, "压缩后：" + zipBytes.length);
-            client.send(ByteBuffer.wrap(zipBytes));
-        } else {
-            client.send(ByteBufferUtil.string2ByteBuffer(json));
-        }
+        param.setBody(body);
+        sendRequest(JsonUtil.toJson(param));
     }
 
     @SuppressLint("DefaultLocale")
-    private SocketRequest createTopicMessage() {
-        SocketRequest SocketRequest = new SocketRequest();
+    private SocketRequest createTopicMessage(String path, SocketStockTopic... topics) {
+        SocketRequest socketRequest = new SocketRequest();
 
-        SocketHeader SocketHeader = new SocketHeader();
-        SocketHeader.setLanguage("ZN");
-        SocketHeader.setReq_id(UUID.randomUUID().toString());
-        SocketHeader.setVersion("1.0.0");
-        SocketHeader.setPath(Lib1Constants.BIND);
+        SocketHeader socketHeader = new SocketHeader();
+        socketHeader.setLanguage("ZN");
+        socketHeader.setReq_id(UUID.randomUUID().toString());
+        socketHeader.setVersion("1.0.0");
+        socketHeader.setPath(path);
+        socketRequest.setHeader(socketHeader);
 
-        SocketRequest.setHeader(SocketHeader);
+        if (topics != null) {
+            StockSubTopic subTopic = new StockSubTopic();
+            subTopic.setTopics(topics);
+            socketRequest.setBody(subTopic);
+        }
 
-        StockSubTopic subTopic = new StockSubTopic();
-        List<SocketStockTopic> topics = new ArrayList<>();
-//        for (int k = 0; k < 5; k++) {
-        SocketStockTopic stockTopic = new SocketStockTopic();
-        stockTopic.setDataType(1);
-        stockTopic.setTs("HK");
-        stockTopic.setCode("00700");
-        stockTopic.setType(2);
-        topics.add(stockTopic);
-
-        stockTopic = new SocketStockTopic();
-        stockTopic.setDataType(1);
-        stockTopic.setTs("HK");
-        stockTopic.setCode("800000");
-        stockTopic.setType(1);
-        topics.add(stockTopic);
-//        }
-        subTopic.setTopics(topics);
-
-        SocketRequest.setBody(subTopic);
-        LogInfra.Log.d(TAG, JsonUtil.toJson(SocketRequest));
-        return SocketRequest;
+        return socketRequest;
     }
 }

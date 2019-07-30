@@ -9,7 +9,6 @@ package com.dycm.applib1.socket
 class SocketRequest {
 
     var header: SocketHeader? = null
-    var subTopic: StockSubTopic? = null
     private var body: Any? = null
 
     fun setBody(body: Any) {

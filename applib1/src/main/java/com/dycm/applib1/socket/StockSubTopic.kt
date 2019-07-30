@@ -10,5 +10,6 @@ import com.dycm.applib1.model.SocketStockTopic
  */
 class StockSubTopic {
 
-    var topics: List<SocketStockTopic>? = null
+    var topics: Array<SocketStockTopic>? = null
+
 }
