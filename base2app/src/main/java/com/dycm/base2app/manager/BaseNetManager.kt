@@ -28,7 +28,7 @@ open class BaseNetManager : AbsEventManager() {
      */
     protected open fun baseError(vo: ErrorResponse) {
         ToastUtil.instance.toast(
-            if (vo.isNetworkBroken) ResUtil.getString(R.string.network_anomaly)!! else vo.message ?: ""
+            if (vo.isNetworkBroken) ResUtil.getString(R.string.network_anomaly)!! else vo.msg ?: ""
         )
     }
 

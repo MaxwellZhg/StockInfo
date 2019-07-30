@@ -18,7 +18,7 @@ abstract class NetConsumer<T : BaseResponse> : Consumer<T> {
             LogInfra.Log.w(Network.TAG, "Response: " + JsonUtil.toJson(t))
             onResponse(t)
         } else {
-            t.message?.let { ToastUtil.instance.toast(it) }
+            t.msg?.let { ToastUtil.instance.toast(it) }
         }
     }
 

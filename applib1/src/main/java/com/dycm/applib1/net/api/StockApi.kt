@@ -4,10 +4,40 @@ package com.dycm.applib1.net.api
  * 测试
  */
 interface StockApi {
-    companion object{
+    companion object {
         /**
-         * 搜索股票接口
+         * 自选股股票列表（含大盘指数）
          */
-        const val SEARCH ="/api/stock/view/v1/search"
+        const val LIST = "/stockmarket/api/stock/selected/v1/view/list"
+
+        /**
+         * 同步自选股
+         */
+        const val SYN = "/stockmarket/api/stock/selected/v1/view/syn"
+
+        /**
+         * 搜索股票
+         */
+        const val SEARCH = "/stockmarket/api/stock/view/v1/search"
+
+        /**
+         * 添加自选股
+         */
+        const val ADD = "/stockmarket/api/stock/selected/view/v1/add"
+
+        /**
+         * 删除自选股
+         */
+        const val DEL = "/stockmarket/api/stock/selected/v1/view/del"
+
+        /**
+         * 置顶自选股
+         */
+        const val TOP = "/stockmarket/api/stock/selected/v1/view/top"
+
+        /**
+         * 行情（即K线实时数据）
+         */
+        const val MARKET = "/stockmarket/api/stock/market/v1"
     }
 }

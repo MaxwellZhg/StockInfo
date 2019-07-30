@@ -11,9 +11,7 @@ import retrofit2.http.POST
 
 interface IStockNet {
 
-    @FormUrlEncoded
     @POST(StockApi.SEARCH)
-    fun search(@Field("keyword") keyword: String, @Field("currentPage") currentPage: Int, @Field("pageSize") pageSize: Int): Call<StockSearchResponse>
-//    fun search(@Body request: StockSearchRequset): Call<StockSearchResponse>
+    fun search(@Body request: StockSearchRequset): Call<StockSearchResponse>
 
 }

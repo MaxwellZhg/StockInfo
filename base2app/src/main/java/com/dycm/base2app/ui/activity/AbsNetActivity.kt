@@ -39,6 +39,6 @@ abstract class AbsNetActivity : AbsEventActivity() {
      * @param response ErrorResponse
      */
     protected fun onErrorResponse(response: ErrorResponse) {
-        toast(if (response.isNetworkBroken) getString(R.string.network_anomaly) else response.message)
+        toast(if (response.isNetworkBroken) getString(R.string.network_anomaly) else response.msg)
     }
 }

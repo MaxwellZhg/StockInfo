@@ -40,6 +40,6 @@ abstract class AbsNetFragment : AbsEventFragment() {
      * @param response ErrorResponse
      */
     protected open fun onErrorResponse(response: ErrorResponse) {
-        toast(if (response.isNetworkBroken) getString(R.string.network_anomaly) else response.message)
+        toast(if (response.isNetworkBroken) getString(R.string.network_anomaly) else response.msg)
     }
 }

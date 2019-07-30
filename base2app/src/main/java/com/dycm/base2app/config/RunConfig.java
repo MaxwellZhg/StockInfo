@@ -22,11 +22,13 @@ public class RunConfig extends AssetsProperties {
 
     /*网络配置信息*/
     @Property
-    public String domain_api;
+    String domain_api;
     @Property
     int write_timeout;/*写超时时间*/
     @Property
     int read_timeout;/*读超时时间*/
     @Property
     int connect_timeout;/*链接超时时间*/
+    @Property
+    String private_key;/*APP与服务端校验参数的加密私钥*/
 }

@@ -1,11 +1,27 @@
 package com.dycm.base2app.network
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.dycm.base2app.BaseApplication
 import com.dycm.base2app.Transaction
+import com.dycm.base2app.infra.LogInfra
+import com.dycm.base2app.util.JsonUtil
+import com.dycm.base2app.util.SignUtil
 
 /**
  * 请求的基类
  */
 open class BaseRequest : Transaction {
+    /**
+     * 所有接口的公共参数，客户端发起请求时客户端的当前时间戳
+     */
+    var timeStamp = System.currentTimeMillis()
+
+    /**
+     * android，ios客户端发起的所有post请求均需要签名校验
+     * 生成规则：将所有的字段进行升序排列，再使用私钥进行加密
+     */
+    var sign: String? = null
 
     /**
      * view 用来区分请求类型
@@ -15,7 +31,7 @@ open class BaseRequest : Transaction {
     /**
      * key 用来区分某次请求
      */
-    var key = ""
+    var key = "none"
 
     constructor(transaction: String) : super(transaction)
 
@@ -32,18 +48,26 @@ open class BaseRequest : Transaction {
         this.key = key
     }
 
-    @Throws(Exception::class)
-    fun toMap(): Map<String, Any> {
-        val map = HashMap<String, Any>()
-        val fields = this.javaClass.declaredFields
-        for (field in fields) {
-            field.isAccessible = true
-            val fieldValue = field.get(this)
-            if (fieldValue != null) {
-                map[field.name] = fieldValue
+    /**
+     * 根据参数生成签名
+     */
+    fun generateSign() {
+        try {
+            // 拿到所有的参数进行升序排列
+            var json = JsonUtil.sortJson(JsonUtil.toJson(this))
+            // 删掉sign字段
+            val jsonObject = JsonUtil.toJSONObject(json)
+            if (jsonObject.has("sign")) {
+                jsonObject.remove("sign")
             }
+            json = jsonObject.toString()
+            LogInfra.Log.d("Retrofit", "待签名：" + json)
+            // 根据新产生的json进行加密
+            sign = SignUtil.createSHA1Sign(json, BaseApplication.baseApplication.config?.privateKey()!!)
+            LogInfra.Log.d("Retrofit", "签名后：" + sign)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        return map
     }
 
     companion object {

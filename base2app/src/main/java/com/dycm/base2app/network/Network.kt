@@ -112,13 +112,13 @@ object Network {
             val code = response.code()
             if (!response.isSuccessful) {
                 LogInfra.Log.e(TAG, " Response Failure $code")
-                RxBus.getDefault().post(ErrorResponse(request, code, "服务器开小差了，请稍后再试"))
+                RxBus.getDefault().post(ErrorResponse(request, code.toString(), "服务器开小差了，请稍后再试"))
                 return
             }
             val t = response.body()
             if (t == null) {
                 LogInfra.Log.e(TAG, "Response Failure Body is empty")
-                RxBus.getDefault().post(ErrorResponse(request, code, "服务器开小差了，请稍后再试"))
+                RxBus.getDefault().post(ErrorResponse(request, code.toString(), "服务器开小差了，请稍后再试"))
                 return
             }
             t.request = request

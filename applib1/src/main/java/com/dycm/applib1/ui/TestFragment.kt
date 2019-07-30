@@ -31,9 +31,9 @@ class TestFragment : AbsBackFinishEventFragment(), View.OnClickListener {
     override fun init() {
         btn_search.setOnClickListener(this)
 
-        recyclerview.layoutManager = LinearLayoutManager(context)
+        stock_list.layoutManager = LinearLayoutManager(context)
         mAdapter = StocksAdapter()
-        recyclerview.adapter = mAdapter
+        stock_list.adapter = mAdapter
 
         SocketClient.getInstance().newClient()
     }
@@ -57,12 +57,23 @@ class TestFragment : AbsBackFinishEventFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         val requset = StockSearchRequset(edit_search_criteria.text.toString(), 1, 5, transactions.createTransaction())
-        Cache[IStockNet::class.java]?.search(edit_search_criteria.text.toString(), 1, 5)?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
+        Cache[IStockNet::class.java]?.search(requset)
+            ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-
+        if (response.data.datas.isNotEmpty()) {
+            // 显示搜索列表
+            search_list.visibility = View.VISIBLE
+            // 设置数据
+            if (search_list.adapter == null) {
+                search_list.layoutManager = LinearLayoutManager(context)
+                val adapter = SearchStocksAdapter()
+                search_list.adapter = adapter
+                adapter.addItems(response.data.datas)
+            }
+        }
     }
 
     override fun onDetach() {

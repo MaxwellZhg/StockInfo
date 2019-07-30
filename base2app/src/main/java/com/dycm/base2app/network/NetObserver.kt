@@ -30,7 +30,7 @@ abstract class NetObserver<T : BaseResponse> : Observer<T> {
         if (t.isSuccess()) {
             onResponse(t)
         } else {
-            t.message?.let { ToastUtil.instance.toast(it) }
+            t.msg?.let { ToastUtil.instance.toast(it) }
         }
         disposable?.dispose()
     }

@@ -46,6 +46,11 @@ public class Config extends AssetsProperties {
         return runConfig.domain_api;
     }
 
+    public String privateKey() {
+        // 加密私钥
+        return runConfig.private_key;
+    }
+
     public int writeTimeout() {
         return runConfig.write_timeout;
     }
