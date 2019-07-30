@@ -56,7 +56,7 @@ class TestFragment : AbsBackFinishEventFragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        val requset = StockSearchRequset(edit_search_criteria.text.toString(), 1, 5, transactions.createTransaction())
+        val requset = StockSearchRequset(edit_search_criteria.text.toString(), 0, 5, transactions.createTransaction())
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
