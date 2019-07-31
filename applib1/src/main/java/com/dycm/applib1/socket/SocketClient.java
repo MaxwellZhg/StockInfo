@@ -1,7 +1,6 @@
 package com.dycm.applib1.socket;
 
 import android.annotation.SuppressLint;
-import com.dycm.applib1.Lib1Constants;
 import com.dycm.applib1.config.LocalStocksConfig;
 import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.util.ByteBufferUtil;
@@ -67,7 +66,7 @@ public class SocketClient {
             destroy();
             // 重新创建连接
             requestMap = new HashMap<>();
-            client = new WebSocketClient(new URI(Lib1Constants.SOCKET_URL), new Draft_6455()) {
+            client = new WebSocketClient(new URI(SocketApi.SOCKET_URL), new Draft_6455()) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     LogInfra.Log.d(TAG, "握手成功");
@@ -99,15 +98,14 @@ public class SocketClient {
                         } else {
                             SocketResponse response = JsonUtil.fromJson(message, SocketResponse.class);
                             if (response != null && response.isSuccessful()) {
-//                                Objects.equals(response.getPath(), Lib1Constants.AUTH)
                                 switch (Objects.requireNonNull(response.getPath())) {
-                                    case Lib1Constants.AUTH:
+                                    case SocketApi.AUTH:
                                         // 自动订阅本地纪录中的自选股
                                         LocalStocksConfig config = LocalStocksConfig.Companion.read();
                                         StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
                                         bindTopic(stockTopics);
                                         break;
-                                    case Lib1Constants.UNBIND:
+                                    case SocketApi.TOPIC_UNBIND:
                                         // 传递上层，解绑订阅成功
                                         RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
                                         break;
@@ -164,18 +162,18 @@ public class SocketClient {
         if (topics == null || topics.length == 0) {
             return;
         }
-        SocketRequest param = createTopicMessage(Lib1Constants.BIND, topics);
+        SocketRequest param = createTopicMessage(SocketApi.TOPIC_BIND, topics);
         sendRequest(JsonUtil.toJson(param));
     }
 
     public void unBindTopic(StockTopic... topics) {
-        SocketRequest param = createTopicMessage(Lib1Constants.UNBIND, topics);
+        SocketRequest param = createTopicMessage(SocketApi.TOPIC_UNBIND, topics);
         sendRequest(JsonUtil.toJson(param));
         requestMap.put(Objects.requireNonNull(param.getHeader()).getReq_id(), param);
     }
 
     private void unBindAllTopic() {
-        SocketRequest param = createTopicMessage(Lib1Constants.UNBIND_ALL);
+        SocketRequest param = createTopicMessage(SocketApi.TOPIC_UNBIND_ALL);
         sendRequest(JsonUtil.toJson(param));
     }
 
@@ -188,14 +186,14 @@ public class SocketClient {
         socketHeader.setLanguage("ZN");
         socketHeader.setReq_id(UUID.randomUUID().toString());
         socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(Lib1Constants.AUTH);
+        socketHeader.setPath(SocketApi.AUTH);
         param.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
         body.put("dev_id", devId);
         long timestamp = System.currentTimeMillis();
         body.put("timestamp", System.currentTimeMillis());
-        String str = devId + timestamp + Lib1Constants.SOCKET_AUTH_SIGNATURE;
+        String str = devId + timestamp + SocketApi.SOCKET_AUTH_SIGNATURE;
         String token = Md5Util.getMd5Str(str);
         body.put("token", token);
 
