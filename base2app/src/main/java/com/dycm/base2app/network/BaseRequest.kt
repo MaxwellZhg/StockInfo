@@ -1,7 +1,5 @@
 package com.dycm.base2app.network
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.dycm.base2app.BaseApplication
 import com.dycm.base2app.Transaction
 import com.dycm.base2app.infra.LogInfra

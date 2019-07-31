@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="45dp"
+            android:layout_marginEnd="15dp"
             android:textColor="@color/color_FFFFFFFF"
             android:layout_toStartOf="@id/item_higher"
             android:text="---"/>
@@ -37,9 +37,18 @@
             android:id="@+id/item_higher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_toStartOf="@+id/item_delete"
+            android:layout_marginEnd="15dp"
             android:layout_centerVertical="true"
             android:textColor="@color/color_FFFFFFFF"
             android:text="---"/>
+
+    <Button
+            android:id="@+id/item_delete"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"/>
 
 </RelativeLayout>

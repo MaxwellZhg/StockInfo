@@ -13,7 +13,7 @@ abstract class AbsConfig protected constructor() {
     /**
      * 用于构建默认值属性
      */
-    protected abstract fun initDefaultAttrs()
+    protected open fun initDefaultAttrs() {}
 
     fun write() {
         StorageInfra.put(this)

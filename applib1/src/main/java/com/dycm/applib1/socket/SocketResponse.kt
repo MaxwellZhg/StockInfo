@@ -4,7 +4,7 @@ package com.dycm.applib1.socket
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
  * date   : 2019/7/17 17:46
- * desc   :
+ * desc   : 定义 websocket 响应请求
  */
 class SocketResponse {
 

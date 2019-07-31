@@ -19,18 +19,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_search"
                 android:text="搜索"/>
-
-        <Button
-                android:id="@+id/btn_bind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="订阅自选"/>
-
-        <Button
-                android:id="@+id/btn_unbind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="取消自选"/>
     </LinearLayout>
 
     <FrameLayout android:layout_width="match_parent"

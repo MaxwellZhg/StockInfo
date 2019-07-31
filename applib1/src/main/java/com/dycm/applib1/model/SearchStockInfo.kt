@@ -4,9 +4,9 @@ package com.dycm.applib1.model
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
  *    date   : 2019/7/25 18:36
- *    desc   :
+ *    desc   : 搜索返回的自选股信息
  */
-class NetStockInfo {
+class SearchStockInfo {
     var id: String? = null
     var type: Int = 0
     var ts: String? = null

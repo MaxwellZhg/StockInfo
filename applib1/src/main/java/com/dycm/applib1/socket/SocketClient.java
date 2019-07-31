@@ -2,7 +2,8 @@ package com.dycm.applib1.socket;
 
 import android.annotation.SuppressLint;
 import com.dycm.applib1.Lib1Constants;
-import com.dycm.applib1.model.SocketStockTopic;
+import com.dycm.applib1.config.LocalStocksConfig;
+import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
 import com.dycm.base2app.infra.LogInfra;
@@ -20,7 +21,10 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class SocketClient {
 
@@ -28,6 +32,7 @@ public class SocketClient {
 
     private static SocketClient instance;
     private WebSocketClient client;
+    private Map<String, SocketRequest> requestMap;
 
     private final boolean openGzip = true;
 
@@ -50,6 +55,10 @@ public class SocketClient {
             client.close();
             client = null;
         }
+        if (requestMap != null) {
+            requestMap.clear();
+            requestMap = null;
+        }
     }
 
     public void connect() {
@@ -57,6 +66,7 @@ public class SocketClient {
             // 先断开上一次的连接
             destroy();
             // 重新创建连接
+            requestMap = new HashMap<>();
             client = new WebSocketClient(new URI(Lib1Constants.SOCKET_URL), new Draft_6455()) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
@@ -77,7 +87,7 @@ public class SocketClient {
                     } else {
                         message = ByteBufferUtil.byteBuffer2String(byteBuffer);
                     }
-                    LogInfra.Log.d(TAG, " <-- onMessage " + message);
+                    LogInfra.Log.d(TAG, "<-- onMessage " + message);
                     if (message.equals("over")) {
                         client.close();
                     }
@@ -85,14 +95,24 @@ public class SocketClient {
                         JSONObject jsonObject = JsonUtil.toJSONObject(message);
                         if (jsonObject != null && jsonObject.has("header")) {
                             // 传递股市行情信息
-                            RxBus.getDefault().post(JsonUtil.fromJson(message, StocksResponse.class));
+                            RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicResponse.class));
                         } else {
                             SocketResponse response = JsonUtil.fromJson(message, SocketResponse.class);
-                            if (response != null && response.isSuccessful() && Objects.equals(response.getPath(), Lib1Constants.AUTH)) {
-                                // TODO 自动订阅，测试假数据，真实场景应该读取本地配置的自选股
-                                SocketStockTopic stockTopic1 = new SocketStockTopic(1, "HK", "00700", 2);
-                                SocketStockTopic stockTopic2 = new SocketStockTopic(1, "HK", "800000", 1);
-                                bindTopic(stockTopic1, stockTopic2);
+                            if (response != null && response.isSuccessful()) {
+//                                Objects.equals(response.getPath(), Lib1Constants.AUTH)
+                                switch (Objects.requireNonNull(response.getPath())) {
+                                    case Lib1Constants.AUTH:
+                                        // 自动订阅本地纪录中的自选股
+                                        LocalStocksConfig config = LocalStocksConfig.Companion.read();
+                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
+                                        bindTopic(stockTopics);
+                                        break;
+                                    case Lib1Constants.UNBIND:
+                                        // 传递上层，解绑订阅成功
+                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
+                                        break;
+                                }
+
                             }
                         }
                     } catch (Exception e) {
@@ -131,7 +151,7 @@ public class SocketClient {
     }
 
     private void sendRequest(String json) {
-        LogInfra.Log.d(TAG, " --> sendRequest " + json);
+        LogInfra.Log.d(TAG, "--> sendRequest " + json);
         if (openGzip) {
             byte[] zipBytes = GZipUtil.compress(json);
             client.send(ByteBuffer.wrap(zipBytes));
@@ -140,14 +160,18 @@ public class SocketClient {
         }
     }
 
-    public void bindTopic(SocketStockTopic... topics) {
+    public void bindTopic(StockTopic... topics) {
+        if (topics == null || topics.length == 0) {
+            return;
+        }
         SocketRequest param = createTopicMessage(Lib1Constants.BIND, topics);
         sendRequest(JsonUtil.toJson(param));
     }
 
-    public void unBindTopic(SocketStockTopic... topics) {
+    public void unBindTopic(StockTopic... topics) {
         SocketRequest param = createTopicMessage(Lib1Constants.UNBIND, topics);
         sendRequest(JsonUtil.toJson(param));
+        requestMap.put(Objects.requireNonNull(param.getHeader()).getReq_id(), param);
     }
 
     private void unBindAllTopic() {
@@ -180,7 +204,7 @@ public class SocketClient {
     }
 
     @SuppressLint("DefaultLocale")
-    private SocketRequest createTopicMessage(String path, SocketStockTopic... topics) {
+    private SocketRequest createTopicMessage(String path, StockTopic... topics) {
         SocketRequest socketRequest = new SocketRequest();
 
         SocketHeader socketHeader = new SocketHeader();

@@ -26,4 +26,9 @@
             android:textColor="@color/color_FFFFFFFF"
             android:layout_height="wrap_content"/>
 
+    <Button
+            android:id="@+id/item_add_topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加到自选"/>
 </LinearLayout>

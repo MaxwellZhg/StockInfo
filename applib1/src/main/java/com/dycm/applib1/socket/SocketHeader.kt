@@ -4,7 +4,7 @@ package com.dycm.applib1.socket
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
  * date   : 2019/7/17 17:54
- * desc   :
+ * desc   :  定义 websocket 发送请求的Header
  */
 class SocketHeader {
     var dev_id: String? = null

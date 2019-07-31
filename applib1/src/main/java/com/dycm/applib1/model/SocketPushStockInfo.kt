@@ -1,5 +1,11 @@
 package com.dycm.applib1.model
 
+/**
+ *    author : PengXianglin
+ *    e-mail : peng_xianglin@163.com
+ *    date   : 2019/7/25 18:36
+ *    desc   : 订阅webSocket推送接收到的自选股信息
+ */
 class SocketPushStockInfo {
 
     var code: String? = null// 股票代码

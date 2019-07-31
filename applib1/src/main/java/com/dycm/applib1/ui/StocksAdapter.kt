@@ -2,6 +2,7 @@ package com.dycm.applib1.ui
 
 import android.annotation.SuppressLint
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -20,12 +21,18 @@ import kotlin.math.abs
  */
 class StocksAdapter : BaseListAdapter<SocketPushStockInfo>() {
 
+    var onDeleteCallback: OnDeleteClickItemCallback? = null
+
     override fun getLayout(viewType: Int): Int {
         return R.layout.item_stock
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(v, true, false)
+    }
+
+    interface OnDeleteClickItemCallback {
+        fun onDeleteClickItem(pos: Int, item: SocketPushStockInfo, view: View)
     }
 
     inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
@@ -42,6 +49,21 @@ class StocksAdapter : BaseListAdapter<SocketPushStockInfo>() {
 
         @BindView(R2.id.item_higher)
         lateinit var item_higher: TextView
+
+        @BindView(R2.id.item_delete)
+        lateinit var item_delete: Button
+
+        init {
+            item_delete.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            if (v == item_delete) {
+                onDeleteCallback?.onDeleteClickItem(position, getItem(position), v)
+            } else {
+                super.onClick(v)
+            }
+        }
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: SocketPushStockInfo?, position: Int) {
