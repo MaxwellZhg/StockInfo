@@ -5,8 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
 import com.dycm.applib1.config.LocalStocksConfig
 import com.dycm.applib1.model.SearchStockInfo
-import com.dycm.applib1.model.SocketPushStockInfo
+import com.dycm.applib1.model.StockData
 import com.dycm.applib1.model.StockTopic
+import com.dycm.applib1.model.StockTopicDataTypeEnum
 import com.dycm.applib1.net.IStockNet
 import com.dycm.applib1.net.request.StockSearchRequset
 import com.dycm.applib1.net.response.StockSearchResponse
@@ -44,13 +45,13 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
         mAdapter?.onDeleteCallback = this
         stock_list.adapter = mAdapter
 
-        SocketClient.getInstance().connect()
+        SocketClient.getInstance()?.connect()
     }
 
-    override fun onDeleteClickItem(pos: Int, item: SocketPushStockInfo, view: View) {
+    override fun onDeleteClickItem(pos: Int, item: StockData, view: View) {
         // 取消订阅
-        val stockTopic = StockTopic(1, item.ts!!, item.code!!, 2)
-        SocketClient.getInstance().unBindTopic(stockTopic)
+        val stockTopic = StockTopic(StockTopicDataTypeEnum.market, item.ts, item.code, 2)
+        SocketClient.getInstance()?.unBindTopic(stockTopic)
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
@@ -61,7 +62,7 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
         if (stockTopic != null) {
             for (index in mAdapter?.items?.indices!!) {
                 val item = mAdapter?.items!![index]
-                if (item.code.equals(stockTopic.code) && item.ts.equals(stockTopic.ts)) {
+                if (item.code == stockTopic.code && item.ts == stockTopic.ts) {
                     mAdapter?.items?.removeAt(index)
                     mAdapter?.notifyItemRemoved(index)
                     // 删除本地自选股记录
@@ -74,18 +75,27 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksResponse(response: StocksTopicResponse) {
-        if (response.body?.data != null) {
-            if (mAdapter?.items?.isNotEmpty()!!) {
-                for (item in mAdapter!!.items) {
-                    if (item.code.equals(response.body!!.code)) {
-                        item.data?.updateData(response.body)
-                        mAdapter?.notifyDataSetChanged()
-                        return
+        if (response.body.stockData.isNullOrEmpty()) return
+
+        val responseList = response.body.stockData
+        LogInfra.Log.d(TAG, "onStocksResponse: " + responseList.size)
+
+        if (mAdapter?.items?.isNotEmpty()!!) {
+            for (index in mAdapter?.items?.indices!!) {
+                val item = mAdapter?.items!![index]
+                for (sub in responseList) {
+                    if (item.ts == sub.ts && item.code == sub.code) {
+                        mAdapter?.items!![index] = sub
+                        responseList.remove(sub)
+                        mAdapter?.notifyItemChanged(index)
+                        break
                     }
                 }
             }
+        }
 
-            mAdapter?.addItem(response.body)
+        if (responseList.isNotEmpty()) {
+            mAdapter?.addItems(responseList)
         }
     }
 
@@ -96,8 +106,8 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
     }
 
     override fun onAddTopicClickItem(pos: Int, item: SearchStockInfo, view: View) {
-        val stockTopic = StockTopic(1, item.ts!!, item.code!!, item.type)
-        SocketClient.getInstance().bindTopic(stockTopic)
+        val stockTopic = StockTopic(StockTopicDataTypeEnum.market, item.ts!!, item.code!!, item.type)
+        SocketClient.getInstance()?.bindTopic(stockTopic)
         // 添加纪录
         if (LocalStocksConfig.read().add(stockTopic)) {
             LogInfra.Log.d(TAG, "添加记录成功")
@@ -124,6 +134,6 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
 
     override fun onDetach() {
         super.onDetach()
-        SocketClient.getInstance().destroy()
+        SocketClient.getInstance()?.destroy()
     }
 }

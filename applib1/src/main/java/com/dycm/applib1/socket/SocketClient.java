@@ -1,8 +1,8 @@
 package com.dycm.applib1.socket;
 
 import android.annotation.SuppressLint;
-import com.dycm.applib1.config.LocalStocksConfig;
 import com.dycm.applib1.model.StockTopic;
+import com.dycm.applib1.model.StockTopicDataTypeEnum;
 import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
 import com.dycm.base2app.infra.LogInfra;
@@ -100,15 +100,18 @@ public class SocketClient {
                             if (response != null && response.isSuccessful()) {
                                 switch (Objects.requireNonNull(response.getPath())) {
                                     case SocketApi.AUTH:
-                                        // 自动订阅本地纪录中的自选股
-                                        LocalStocksConfig config = LocalStocksConfig.Companion.read();
-                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
-                                        bindTopic(stockTopics);
-                                        break;
+                                    // 自动订阅本地纪录中的自选股
+//                                        LocalStocksConfig config = LocalStocksConfig.Companion.read();
+//                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
+//                                        bindTopic(stockTopics);
+                                    // TODO 暂时写死
+                                    StockTopic stockTopic = new StockTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1);
+                                    bindTopic(stockTopic);
+                                    break;
                                     case SocketApi.TOPIC_UNBIND:
-                                        // 传递上层，解绑订阅成功
-                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
-                                        break;
+                                    // 传递上层，解绑订阅成功
+                                    RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
+                                    break;
                                 }
 
                             }
