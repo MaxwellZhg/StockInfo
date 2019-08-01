@@ -46,9 +46,14 @@ class LocalStocksConfig : AbsConfig() {
         return false
     }
 
+    override fun write() {
+        StorageInfra.put(LocalStocksConfig::class.java.simpleName, this)
+    }
+
     companion object {
         fun read(): LocalStocksConfig {
-            var config: LocalStocksConfig? = StorageInfra.get(LocalStocksConfig::class.java)
+            var config: LocalStocksConfig? =
+                StorageInfra.get(LocalStocksConfig::class.java.simpleName, LocalStocksConfig::class.java)
             if (config == null) {
                 config = LocalStocksConfig()
                 config.write()

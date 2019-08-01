@@ -15,7 +15,7 @@ abstract class AbsConfig protected constructor() {
      */
     protected open fun initDefaultAttrs() {}
 
-    fun write() {
+    open fun write() {
         StorageInfra.put(this)
     }
 }

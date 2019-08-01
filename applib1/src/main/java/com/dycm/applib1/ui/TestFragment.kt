@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
 import com.dycm.applib1.config.LocalStocksConfig
+import com.dycm.applib1.event.SocketDisconnectEvent
 import com.dycm.applib1.model.SearchStockInfo
 import com.dycm.applib1.model.StockData
 import com.dycm.applib1.model.StockTopic
@@ -132,8 +133,14 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    @RxSubscribe(observeOnThread = EventThread.IO)
+    fun onSocketDisconnectEvent(event: SocketDisconnectEvent){
+        LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
+        SocketClient.getInstance()?.connect()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         SocketClient.getInstance()?.destroy()
     }
 }

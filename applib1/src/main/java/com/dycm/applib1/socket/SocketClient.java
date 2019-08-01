@@ -1,6 +1,7 @@
 package com.dycm.applib1.socket;
 
 import android.annotation.SuppressLint;
+import com.dycm.applib1.event.SocketDisconnectEvent;
 import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.model.StockTopicDataTypeEnum;
 import com.dycm.applib1.util.ByteBufferUtil;
@@ -70,6 +71,7 @@ public class SocketClient {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     LogInfra.Log.d(TAG, "握手成功");
+                    sendAuth();
                 }
 
                 @Override
@@ -100,18 +102,18 @@ public class SocketClient {
                             if (response != null && response.isSuccessful()) {
                                 switch (Objects.requireNonNull(response.getPath())) {
                                     case SocketApi.AUTH:
-                                    // 自动订阅本地纪录中的自选股
+                                        // 自动订阅本地纪录中的自选股
 //                                        LocalStocksConfig config = LocalStocksConfig.Companion.read();
 //                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
 //                                        bindTopic(stockTopics);
-                                    // TODO 暂时写死
-                                    StockTopic stockTopic = new StockTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1);
-                                    bindTopic(stockTopic);
-                                    break;
+                                        // TODO 暂时写死
+                                        StockTopic stockTopic = new StockTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1);
+                                        bindTopic(stockTopic);
+                                        break;
                                     case SocketApi.TOPIC_UNBIND:
-                                    // 传递上层，解绑订阅成功
-                                    RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
-                                    break;
+                                        // 传递上层，解绑订阅成功
+                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
+                                        break;
                                 }
 
                             }
@@ -130,6 +132,8 @@ public class SocketClient {
                 @Override
                 public void onClose(int i, String s, boolean b) {
                     LogInfra.Log.d(TAG, "链接已关闭");
+                    // 通知上层连接断开
+                    RxBus.getDefault().post(new SocketDisconnectEvent());
                 }
 
                 @Override
@@ -144,14 +148,13 @@ public class SocketClient {
         client.setConnectionLostTimeout(30);
         client.connect();
         client.getDraft();
-        while (!client.getReadyState().equals(WebSocket.READYSTATE.OPEN)) {
-            LogInfra.Log.d(TAG, "正在连接...");
-        }
-
-        sendAuth();
+        LogInfra.Log.d(TAG, "正在连接...");
     }
 
     private void sendRequest(String json) {
+        if (client == null || client.getReadyState() != WebSocket.READYSTATE.OPEN) {
+            return;
+        }
         LogInfra.Log.d(TAG, "--> sendRequest " + json);
         if (openGzip) {
             byte[] zipBytes = GZipUtil.compress(json);
