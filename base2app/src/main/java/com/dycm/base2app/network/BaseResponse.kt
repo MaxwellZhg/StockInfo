@@ -7,7 +7,7 @@ open class BaseResponse {
 
     var request: BaseRequest? = null
     var msg: String? = null
-    // 在鱼塘项目中,Response只返回code并不返回status,故而code即表示http的请求状态又表示接口业务是否成功
+    // Response只返回code并不返回status,故而code即表示http的请求状态又表示接口业务是否成功
     var code: String? = null
     // 接口业务是否成功状态
     //  var status: Int = 0
