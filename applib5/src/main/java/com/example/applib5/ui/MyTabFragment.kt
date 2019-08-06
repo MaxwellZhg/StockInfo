@@ -10,7 +10,7 @@ import com.example.applib5.R
  * Date: 2019/8/6
  * Desc:
  */
-class MyFragment :AbsBackFinishNetFragment() {
+class MyTabFragment :AbsBackFinishNetFragment() {
     override val layout: Int
         get() = R.layout.fragment_my
 

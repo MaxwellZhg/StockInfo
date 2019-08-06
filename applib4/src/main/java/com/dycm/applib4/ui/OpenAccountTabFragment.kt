@@ -9,7 +9,7 @@ import com.dycm.base2app.ui.fragment.AbsBackFinishEventFragment
  * Date: 2019/8/6
  * Desc:
  */
-class OpenAccountFragment :AbsBackFinishEventFragment(){
+class OpenAccountTabFragment :AbsBackFinishEventFragment(){
     override val layout: Int
         get() = R.layout.open_account_fragment
     override fun init() {

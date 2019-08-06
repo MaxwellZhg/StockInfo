@@ -24,6 +24,7 @@ import com.dycm.base2app.network.Network
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsBackFinishNetFragment
+import com.dycm.base2app.ui.fragment.AbsFragment
 import kotlinx.android.synthetic.main.fragment_test.*
 
 /**
@@ -51,12 +52,12 @@ class StockTabFragment : AbsBackFinishNetFragment(), View.OnClickListener, Stock
 
         // 启动长链接
         SocketClient.getInstance()?.connect()
-        start(StockDetailLandFragment())
+        (parentFragment as AbsFragment).start(StockDetailLandFragment())
     }
 
     override fun onClickItem(pos: Int, item: StockMarketData?, v: View?) {
         // TODO 暂时没有传参数
-        start(StockDetailLandFragment())
+        (parentFragment as AbsFragment).start(StockDetailLandFragment())
     }
 
     override fun onDeleteClickItem(pos: Int, item: StockMarketData, view: View) {

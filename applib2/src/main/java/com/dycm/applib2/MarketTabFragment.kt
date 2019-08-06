@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fargment_testsub.*
  *    desc   :
  */
 @Route(path = AppLib2Constants.FRAGMENT_URL_TESTSUB)
-class TestSubFragment : AbsSwipeBackFragment() {
+class MarketTabFragment : AbsSwipeBackFragment() {
 
     var params: String ?= null
 

@@ -1,8 +1,8 @@
-package com.dycm.finance
+package com.dycm.finance.ui
 
 import android.os.Bundle
-import com.dycm.applib1.ui.StockTabFragment
 import com.dycm.base2app.ui.activity.AbsNetActivity
+import com.dycm.finance.R
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 

@@ -13,6 +13,10 @@ class StockDetailLandFragment : AbsSwipeBackNetFragment() {
     override val layout: Int
         get() = R.layout.fragment_stockdetail
 
+    override fun rootViewFitsSystemWindowsPadding(): Boolean {
+        return true
+    }
+
     override fun init() {
         val fragments = arrayOf<Fragment>(
             ChartOneDayFragment.newInstance(true),

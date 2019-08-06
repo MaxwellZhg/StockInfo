@@ -9,7 +9,7 @@ import com.dycm.base2app.ui.fragment.AbsBackFinishNetFragment
  * Date: 2019/8/6
  * Desc:
  */
-class InfomationFragment : AbsBackFinishNetFragment() {
+class InfomationTabFragment : AbsBackFinishNetFragment() {
     override val layout: Int
         get() = R.layout.fragment_info
 
