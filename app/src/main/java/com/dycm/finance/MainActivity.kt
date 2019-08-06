@@ -16,9 +16,8 @@ class MainActivity : AbsNetActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (findFragment(StockTabFragment::class.java) == null) {
-            loadRootFragment(R.id.root_view, StockTabFragment())
+        if (findFragment(MainFragment::class.java) == null) {
+            loadRootFragment(R.id.root_view, MainFragment())
         }
     }
 

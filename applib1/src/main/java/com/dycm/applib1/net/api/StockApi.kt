@@ -18,7 +18,7 @@ interface StockApi {
         /**
          * 搜索股票
          */
-        const val SEARCH = "/stockmarket/api/stock/view/v1/search"
+        const val SEARCH = "/stock-market/api/stock/view/v1/search"
 
         /**
          * 添加自选股
