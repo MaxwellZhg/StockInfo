@@ -2,6 +2,8 @@ package com.dycm.applib1.ui.detail
 
 import android.os.Bundle
 import com.dycm.applib1.R
+import com.dycm.applib1.config.LocalStocksKlineDataConfig
+import com.dycm.applib1.model.StockKlineTopic
 import com.dycm.applib1.model.StockTopic
 import com.dycm.applib1.model.StockTopicDataTypeEnum
 import com.dycm.applib1.socket.SocketClient
@@ -10,6 +12,8 @@ import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsEventFragment
 import com.github.mikephil.charting.stockChart.data.TimeDataManage
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_one_day.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -54,7 +58,7 @@ class ChartOneDayFragment : AbsEventFragment() {
         chart!!.setDataToChart(kTimeData)
 
         // 发起自选股K线订阅
-        stockTopic = StockTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1)
+        stockTopic = StockKlineTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1, 0)
         SocketClient.getInstance().bindTopic(stockTopic)
     }
 
@@ -64,6 +68,11 @@ class ChartOneDayFragment : AbsEventFragment() {
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicMinuteKlineResponse(response: StocksTopicMinuteKlineResponse) {
         // TODO 展示、缓存K线数据到本地
+        val klineData = response.body?.klineData
+        Observable.just(LocalStocksKlineDataConfig.instance?.add(klineData?.ts, klineData?.code, klineData?.data))
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe()
     }
 
     override fun onDestroy() {

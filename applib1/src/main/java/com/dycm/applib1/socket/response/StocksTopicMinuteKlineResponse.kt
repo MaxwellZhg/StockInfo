@@ -1,8 +1,8 @@
 package com.dycm.applib1.socket.response
 
 import com.dycm.applib1.socket.request.SocketHeader
-import com.dycm.applib1.socket.vo.kline.MinuteKlineData
 import com.dycm.applib1.socket.vo.kline.PushKlineDataVo
+import com.dycm.applib1.socket.vo.kline.StockMinuteVo
 
 /**
  * author : PengXianglin
@@ -12,5 +12,5 @@ import com.dycm.applib1.socket.vo.kline.PushKlineDataVo
  */
 class StocksTopicMinuteKlineResponse {
     var header: SocketHeader? = null
-    var body: PushKlineDataVo<MinuteKlineData>? = null
+    var body: PushKlineDataVo<StockMinuteVo>? = null
 }

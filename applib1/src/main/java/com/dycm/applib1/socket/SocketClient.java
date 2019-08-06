@@ -108,6 +108,7 @@ public class SocketClient {
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMarketResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_KLINE:
+                                case SocketApi.PUSH_STOCK_KLINE_COMPENSATION_DATA:
                                     // K线
                                     JSONObject body = jsonObject.getJSONObject("body");
                                     String klineType = body.getString("klineType");
@@ -116,10 +117,6 @@ public class SocketClient {
                                     if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())) {
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
                                     }
-
-                                    break;
-                                case SocketApi.PUSH_STOCK_KLINE_COMPENSATION_DATA:
-                                    // TODO K线补偿数据
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
                                     // TODO 盘口

@@ -51,6 +51,7 @@ class StockTabFragment : AbsBackFinishNetFragment(), View.OnClickListener, Stock
 
         // 启动长链接
         SocketClient.getInstance()?.connect()
+        start(StockDetailLandFragment())
     }
 
     override fun onClickItem(pos: Int, item: StockMarketData?, v: View?) {

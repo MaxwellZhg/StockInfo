@@ -7,6 +7,6 @@ import com.dycm.applib1.model.BaseStockMarket
  */
 class StockMinuteVo : BaseStockMarket() {
 
-    var data: List<MinuteKlineData>? = null
+    var data: ArrayList<MinuteKlineData>? = null
 
 }
