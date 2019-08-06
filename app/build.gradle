@@ -56,13 +56,14 @@ dependencies {
     implementation project(":base2app")
     implementation project(":applib1")
     implementation project(":applib2")
+    implementation project(":applib3")
+    implementation project(":applib4")
+    implementation project(":applib5")
+
     // 支持使用butterknife注解
     kapt "com.jakewharton:butterknife-compiler:$butterknife_plugin_version"
     // 在需要使用arouter的module中添加
     kapt "com.alibaba:arouter-compiler:$arouter_arouter_compiler"
     // dagger2
     kapt 'com.google.dagger:dagger-compiler:2.24'
-    implementation project(path: ':applib3')
-    implementation project(path: ':applib4')
-    implementation project(path: ':applib5')
 }

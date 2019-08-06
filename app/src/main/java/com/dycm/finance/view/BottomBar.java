@@ -1,7 +1,6 @@
 package com.dycm.finance.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;

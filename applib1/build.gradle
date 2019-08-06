@@ -56,5 +56,6 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.24'
     // WebSocket
     api "org.java-websocket:Java-WebSocket:1.3.9"
-    api "org.jetbrains.kotlin:kotlin-reflect:1.3.31"
+    // kotlin
+    api "org.jetbrains.kotlin:kotlin-reflect:1.3.41"
 }
