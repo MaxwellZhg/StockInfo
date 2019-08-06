@@ -20,9 +20,9 @@ object SocketApi {
     const val TOPIC_UNBIND_ALL = "topic.unBindAll" // 取消所有订阅
     const val PUSH_STOCK_DATA = "push.stock.data" //  推送股票数据
 
-//    const val PUSH_STOCK_INFO = "push.stock.info" //  推送股票行情
-//    const val PUSH_STOCK_KLINE = "push.stock.kline" // 推送股票K线
-//    const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
-//    const val PUSH_STOCK_PRICE = "push.stock.price" // 推送股票价格
+    const val PUSH_STOCK_INFO = "push.stock.info" //  推送股票行情
+    const val PUSH_STOCK_KLINE = "push.stock.kline" // 推送股票K线
+    const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
+    const val PUSH_STOCK_PRICE = "push.stock.price" // 推送股票价格
 
 }

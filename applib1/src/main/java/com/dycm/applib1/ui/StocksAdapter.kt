@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.dycm.applib1.R
 import com.dycm.applib1.R2
-import com.dycm.applib1.model.StockData
+import com.dycm.applib1.model.StockMarketData
 import com.dycm.applib1.util.MathUtil
 import com.dycm.base2app.adapter.BaseListAdapter
 import kotlin.math.abs
@@ -19,7 +19,7 @@ import kotlin.math.abs
  *    date   : 2019/7/23 16:10
  *    desc   : 行情列表
  */
-class StocksAdapter : BaseListAdapter<StockData>() {
+class StocksAdapter : BaseListAdapter<StockMarketData>() {
 
     var onDeleteCallback: OnDeleteClickItemCallback? = null
 
@@ -32,11 +32,11 @@ class StocksAdapter : BaseListAdapter<StockData>() {
     }
 
     interface OnDeleteClickItemCallback {
-        fun onDeleteClickItem(pos: Int, item: StockData, view: View)
+        fun onDeleteClickItem(pos: Int, item: StockMarketData, view: View)
     }
 
     inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
-        ListItemViewHolder<StockData>(v, needClick, needLongClick) {
+        ListItemViewHolder<StockMarketData>(v, needClick, needLongClick) {
 
         @BindView(R2.id.item_name)
         lateinit var item_name: TextView
@@ -66,14 +66,14 @@ class StocksAdapter : BaseListAdapter<StockData>() {
         }
 
         @SuppressLint("SetTextI18n")
-        override fun bind(item: StockData?, position: Int) {
+        override fun bind(item: StockMarketData?, position: Int) {
             item_name.text = item?.name
             item_id.text = item?.code
             item_price.text = item?.price.toString()
             if (item?.openPrice!! > 0) {
-                val higher = abs(item.price - item.openPrice)
+                val higher = abs(item.price!! - item.openPrice!!)
                 item_higher.text =
-                    (if (higher > 0) "+ " else "- ") + MathUtil.division(higher * 100, item.openPrice).toString() + "%"
+                    (if (higher > 0) "+ " else "- ") + MathUtil.division(higher * 100, item.openPrice!!).toString() + "%"
             } else {
                 item_higher.text = ""
             }

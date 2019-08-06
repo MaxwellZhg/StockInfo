@@ -6,7 +6,7 @@ import com.dycm.applib1.R
 import com.dycm.applib1.config.LocalStocksConfig
 import com.dycm.applib1.event.SocketDisconnectEvent
 import com.dycm.applib1.model.SearchStockInfo
-import com.dycm.applib1.model.StockData
+import com.dycm.applib1.model.StockMarketData
 import com.dycm.applib1.model.StockTopic
 import com.dycm.applib1.model.StockTopicDataTypeEnum
 import com.dycm.applib1.net.IStockNet
@@ -14,9 +14,11 @@ import com.dycm.applib1.net.request.StockSearchRequset
 import com.dycm.applib1.net.response.StockSearchResponse
 import com.dycm.applib1.socket.SocketClient
 import com.dycm.applib1.socket.StockSubTopic
-import com.dycm.applib1.socket.StockUnBindTopicResponse
-import com.dycm.applib1.socket.StocksTopicResponse
+import com.dycm.applib1.socket.response.StockUnBindTopicResponse
+import com.dycm.applib1.socket.response.StocksTopicMarketResponse
+import com.dycm.applib1.ui.detail.StockDetailLandFragment
 import com.dycm.base2app.Cache
+import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.infra.LogInfra
 import com.dycm.base2app.network.Network
 import com.dycm.base2app.rxbus.EventThread
@@ -31,7 +33,7 @@ import kotlinx.android.synthetic.main.fragment_test.*
  *    desc   :
  */
 class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAdapter.OnDeleteClickItemCallback,
-    SearchStocksAdapter.OnAddTopicClickItemCallback {
+    SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<StockMarketData> {
 
     var mAdapter: StocksAdapter? = null
 
@@ -43,15 +45,21 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
 
         stock_list.layoutManager = LinearLayoutManager(context)
         mAdapter = StocksAdapter()
+        mAdapter?.setClickItemCallback(this)
         mAdapter?.onDeleteCallback = this
         stock_list.adapter = mAdapter
 
         SocketClient.getInstance()?.connect()
     }
 
-    override fun onDeleteClickItem(pos: Int, item: StockData, view: View) {
+    override fun onClickItem(pos: Int, item: StockMarketData?, v: View?) {
+        // TODO 打开自选股详情页
+        start(StockDetailLandFragment())
+    }
+
+    override fun onDeleteClickItem(pos: Int, item: StockMarketData, view: View) {
         // 取消订阅
-        val stockTopic = StockTopic(StockTopicDataTypeEnum.market, item.ts, item.code, 2)
+        val stockTopic = StockTopic(StockTopicDataTypeEnum.market, item.ts!!, item.code!!, 2)
         SocketClient.getInstance()?.unBindTopic(stockTopic)
     }
 
@@ -75,10 +83,10 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStocksResponse(response: StocksTopicResponse) {
-        if (response.body.stockData.isNullOrEmpty()) return
+    fun onStocksResponse(response: StocksTopicMarketResponse) {
+        if (response.body.isNullOrEmpty()) return
 
-        val responseList = response.body.stockData
+        val responseList = response.body
         LogInfra.Log.d(TAG, "onStocksResponse: " + responseList.size)
 
         if (mAdapter?.items?.isNotEmpty()!!) {
@@ -107,7 +115,7 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
     }
 
     override fun onAddTopicClickItem(pos: Int, item: SearchStockInfo, view: View) {
-        val stockTopic = StockTopic(StockTopicDataTypeEnum.market, item.ts!!, item.code!!, item.type)
+        val stockTopic = StockTopic(StockTopicDataTypeEnum.market, item.ts!!, item.code!!, item.type!!)
         SocketClient.getInstance()?.bindTopic(stockTopic)
         // 添加纪录
         if (LocalStocksConfig.read().add(stockTopic)) {

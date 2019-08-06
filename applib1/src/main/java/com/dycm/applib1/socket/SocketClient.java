@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import com.dycm.applib1.event.SocketDisconnectEvent;
 import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.model.StockTopicDataTypeEnum;
+import com.dycm.applib1.socket.request.SocketHeader;
+import com.dycm.applib1.socket.request.SocketRequest;
+import com.dycm.applib1.socket.response.*;
 import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
 import com.dycm.base2app.infra.LogInfra;
@@ -25,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.dycm.applib1.model.StockTopicDataTypeEnum.kminute;
 
 public class SocketClient {
 
@@ -95,8 +100,33 @@ public class SocketClient {
                     try {
                         JSONObject jsonObject = JsonUtil.toJSONObject(message);
                         if (jsonObject != null && jsonObject.has("header")) {
-                            // 传递股市行情信息
-                            RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicResponse.class));
+                            JSONObject header = jsonObject.getJSONObject("header");
+                            String path = header.getString("path");
+                            switch (path) {
+                                case SocketApi.PUSH_STOCK_INFO:
+                                    // 行情
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMarketResponse.class));
+                                    break;
+                                case SocketApi.PUSH_STOCK_KLINE:
+                                    // K线
+                                    JSONObject body = jsonObject.getJSONObject("body");
+                                    String klineType = body.getString("klineType");
+
+                                    // TODO 暂时只判断2-1
+                                    if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())){
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
+                                    }
+
+                                    break;
+                                case SocketApi.PUSH_STOCK_TRANS:
+                                    // TODO 盘口
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTransResponse.class));
+                                    break;
+                                case SocketApi.PUSH_STOCK_PRICE:
+                                    // TODO 股价
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicPriceResponse.class));
+                                    break;
+                            }
                         } else {
                             SocketResponse response = JsonUtil.fromJson(message, SocketResponse.class);
                             if (response != null && response.isSuccessful()) {
@@ -107,8 +137,11 @@ public class SocketClient {
 //                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
 //                                        bindTopic(stockTopics);
                                         // TODO 暂时写死
-                                        StockTopic stockTopic = new StockTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1);
-                                        bindTopic(stockTopic);
+                                        StockTopic stockTopic1 = new StockTopic(StockTopicDataTypeEnum.market, "SZ", "000001", 1);
+                                        StockTopic stockTopic2 = new StockTopic(kminute, "SZ", "000001", 1);
+                                        StockTopic stockTopic3 = new StockTopic(StockTopicDataTypeEnum.trans, "SZ", "000001", 1);
+                                        StockTopic stockTopic4 = new StockTopic(StockTopicDataTypeEnum.price, "SZ", "000001", 1);
+                                        bindTopic(stockTopic1, stockTopic2, stockTopic3, stockTopic4);
                                         break;
                                     case SocketApi.TOPIC_UNBIND:
                                         // 传递上层，解绑订阅成功
