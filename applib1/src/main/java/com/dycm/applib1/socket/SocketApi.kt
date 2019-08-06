@@ -22,6 +22,7 @@ object SocketApi {
 
     const val PUSH_STOCK_INFO = "push.stock.info" //  推送股票行情
     const val PUSH_STOCK_KLINE = "push.stock.kline" // 推送股票K线
+    const val PUSH_STOCK_KLINE_COMPENSATION_DATA = "push.stock.compensationData.kline" // 推送股票K线补偿数据
     const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
     const val PUSH_STOCK_PRICE = "push.stock.price" // 推送股票价格
 

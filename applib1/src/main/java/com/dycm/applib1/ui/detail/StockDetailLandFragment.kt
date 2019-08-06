@@ -19,9 +19,11 @@ class StockDetailLandFragment : AbsSwipeBackNetFragment() {
             ChartFiveDayFragment.newInstance(true),
             ChartKLineFragment.newInstance(1, true),
             ChartKLineFragment.newInstance(7, true),
-            ChartKLineFragment.newInstance(30, true)
+            ChartKLineFragment.newInstance(30, true),
+            ChartKLineFragment.newInstance(90, true),
+            ChartKLineFragment.newInstance(365, true)
         )
-        val titles = arrayOf("分时", "五日", "日K", "周K", "月K")
+        val titles = arrayOf("分时", "五日", "日K", "周K", "月K", "季K", "年K")
         view_pager!!.offscreenPageLimit = fragments.size
         view_pager!!.adapter = SimpleFragmentPagerAdapter(childFragmentManager, fragments, titles)
         tab!!.setupWithViewPager(view_pager)

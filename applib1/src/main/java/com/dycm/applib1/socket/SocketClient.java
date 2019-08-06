@@ -113,10 +113,13 @@ public class SocketClient {
                                     String klineType = body.getString("klineType");
 
                                     // TODO 暂时只判断2-1
-                                    if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())){
+                                    if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())) {
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
                                     }
 
+                                    break;
+                                case SocketApi.PUSH_STOCK_KLINE_COMPENSATION_DATA:
+                                    // TODO K线补偿数据
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
                                     // TODO 盘口
@@ -137,11 +140,11 @@ public class SocketClient {
 //                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
 //                                        bindTopic(stockTopics);
                                         // TODO 暂时写死
-                                        StockTopic stockTopic1 = new StockTopic(StockTopicDataTypeEnum.market, "SZ", "000001", 1);
-                                        StockTopic stockTopic2 = new StockTopic(kminute, "SZ", "000001", 1);
-                                        StockTopic stockTopic3 = new StockTopic(StockTopicDataTypeEnum.trans, "SZ", "000001", 1);
-                                        StockTopic stockTopic4 = new StockTopic(StockTopicDataTypeEnum.price, "SZ", "000001", 1);
-                                        bindTopic(stockTopic1, stockTopic2, stockTopic3, stockTopic4);
+//                                        StockTopic stockTopic1 = new StockTopic(StockTopicDataTypeEnum.market, "SZ", "000001", 1);
+//                                        StockTopic stockTopic2 = new StockTopic(kminute, "SZ", "000001", 1);
+//                                        StockTopic stockTopic3 = new StockTopic(StockTopicDataTypeEnum.trans, "SZ", "000001", 1);
+//                                        StockTopic stockTopic4 = new StockTopic(StockTopicDataTypeEnum.price, "SZ", "000001", 1);
+//                                        bindTopic(stockTopic1, stockTopic2, stockTopic3, stockTopic4);
                                         break;
                                     case SocketApi.TOPIC_UNBIND:
                                         // 传递上层，解绑订阅成功

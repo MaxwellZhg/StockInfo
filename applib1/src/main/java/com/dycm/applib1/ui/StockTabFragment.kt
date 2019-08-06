@@ -30,9 +30,9 @@ import kotlinx.android.synthetic.main.fragment_test.*
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
  *    date   : 2019/7/18 10:32
- *    desc   :
+ *    desc   : 主页中的自选股Tab页面
  */
-class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAdapter.OnDeleteClickItemCallback,
+class StockTabFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAdapter.OnDeleteClickItemCallback,
     SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<StockMarketData> {
 
     var mAdapter: StocksAdapter? = null
@@ -49,11 +49,12 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
         mAdapter?.onDeleteCallback = this
         stock_list.adapter = mAdapter
 
+        // 启动长链接
         SocketClient.getInstance()?.connect()
     }
 
     override fun onClickItem(pos: Int, item: StockMarketData?, v: View?) {
-        // TODO 打开自选股详情页
+        // TODO 暂时没有传参数
         start(StockDetailLandFragment())
     }
 
@@ -142,7 +143,7 @@ class TestFragment : AbsBackFinishNetFragment(), View.OnClickListener, StocksAda
     }
 
     @RxSubscribe(observeOnThread = EventThread.IO)
-    fun onSocketDisconnectEvent(event: SocketDisconnectEvent){
+    fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
         LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
         SocketClient.getInstance()?.connect()
     }
