@@ -66,13 +66,13 @@ class ChartOneDayFragment : AbsEventFragment() {
 //        }
 
         val disposable = Observable.create(ObservableOnSubscribe<ArrayList<MinuteKlineData>> { emitter ->
-            emitter.onNext(LocalStocksKlineDataConfig.instance?.getKlineData("SZ", "000001")!!)
+            LocalStocksKlineDataConfig.instance?.getKlineData("SZ", "000001")?.let { emitter.onNext(it) }
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { list ->
                 LogInfra.Log.d(TAG, "Local kline cache data size : " + list?.size)
-//                kTimeData.parseTimeData(list, "000001.IDX.SH", 0.0)
+//                kTimeData.parseTimeData(list, "000001.IDX.SZ", 0.0)
 //                chart!!.setDataToChart(kTimeData)
             }
         disposables.add(disposable)

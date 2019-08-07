@@ -20,7 +20,9 @@ class LocalStocksKlineDataConfig : AbsConfig() {
     /**
      * 获取数据
      */
+    @Synchronized
     fun getKlineData(ts: String?, code: String?): ArrayList<MinuteKlineData>? {
+        if (klineData.isEmpty()) return null
         val key = "$ts-$code"
         if (key.isEmpty()) return null
         return klineData[key]!!
@@ -31,15 +33,24 @@ class LocalStocksKlineDataConfig : AbsConfig() {
      */
     @Synchronized
     fun add(ts: String?, code: String?, data: ArrayList<MinuteKlineData>?): Boolean {
+        if (data.isNullOrEmpty()) return false
         try {
             val key = "$ts-$code"
             var value = klineData[key]
             if (value.isNullOrEmpty()) {
                 value = data
             } else {
-                value.addAll(data!!)
+                // 需要缓存的第一条数据的时间
+                val firstDateTime = data[0].dateTime
+                // 当前缓存中最后一条数据的时间
+                val lastDateTime = value[value.size - 1].dateTime
+                if (firstDateTime == lastDateTime || firstDateTime!! < lastDateTime!!) {
+                    LogInfra.Log.e("LocalStocksKlineDataConfig", "缓存数据时间不合法")
+                    return false
+                }
+                value.addAll(data)
             }
-            klineData[key] = value!!
+            klineData[key] = value
 
             write()
             return true
@@ -54,6 +65,8 @@ class LocalStocksKlineDataConfig : AbsConfig() {
      */
     @Synchronized
     fun remove(ts: String?, code: String?): Boolean {
+        if (klineData.isEmpty()) return false
+
         try {
             val key = "$ts-$code"
             if (klineData.remove(key) != null) {
