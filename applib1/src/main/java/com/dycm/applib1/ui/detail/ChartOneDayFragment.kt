@@ -1,5 +1,6 @@
 package com.dycm.applib1.ui.detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import com.dycm.applib1.R
 import com.dycm.applib1.config.LocalStocksKlineDataConfig
@@ -13,6 +14,7 @@ import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsEventFragment
 import com.github.mikephil.charting.stockChart.data.TimeDataManage
 import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_one_day.*
 import org.json.JSONException
@@ -65,13 +67,15 @@ class ChartOneDayFragment : AbsEventFragment() {
     /**
      * 推送订阅自选股的分时数据
      */
+    @SuppressLint("CheckResult")
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicMinuteKlineResponse(response: StocksTopicMinuteKlineResponse) {
         // TODO 展示、缓存K线数据到本地
         val klineData = response.body?.klineData
-        Observable.just(LocalStocksKlineDataConfig.instance?.add(klineData?.ts, klineData?.code, klineData?.data))
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+        Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            emitter.onNext(LocalStocksKlineDataConfig.instance?.add(klineData?.ts, klineData?.code, klineData?.data)!!)
+            emitter.onComplete()
+        }).subscribeOn(Schedulers.io())
             .subscribe()
     }
 
