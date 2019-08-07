@@ -1,5 +1,6 @@
 package com.dycm.applib1.ui
 
+import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
@@ -16,7 +17,7 @@ import com.dycm.applib1.socket.SocketClient
 import com.dycm.applib1.socket.StockSubTopic
 import com.dycm.applib1.socket.response.StockUnBindTopicResponse
 import com.dycm.applib1.socket.response.StocksTopicMarketResponse
-import com.dycm.applib1.ui.detail.StockDetailLandFragment
+import com.dycm.applib1.ui.detail.StockDetailLandActivity
 import com.dycm.base2app.Cache
 import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.infra.LogInfra
@@ -52,12 +53,12 @@ class StockTabFragment : AbsBackFinishNetFragment(), View.OnClickListener, Stock
 
         // 启动长链接
         SocketClient.getInstance()?.connect()
-        (parentFragment as AbsFragment).start(StockDetailLandFragment())
+        startActivity(Intent(context, StockDetailLandActivity::class.java))
     }
 
     override fun onClickItem(pos: Int, item: StockMarketData?, v: View?) {
         // TODO 暂时没有传参数
-        (parentFragment as AbsFragment).start(StockDetailLandFragment())
+        startActivity(Intent(context, StockDetailLandActivity::class.java))
     }
 
     override fun onDeleteClickItem(pos: Int, item: StockMarketData, view: View) {

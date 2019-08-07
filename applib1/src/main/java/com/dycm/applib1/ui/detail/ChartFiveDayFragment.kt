@@ -2,8 +2,8 @@ package com.dycm.applib1.ui.detail
 
 import android.os.Bundle
 import com.dycm.applib1.R
+import com.dycm.applib1.stockChart.data.TimeDataManage
 import com.dycm.base2app.ui.fragment.AbsFragment
-import com.github.mikephil.charting.stockChart.data.TimeDataManage
 import kotlinx.android.synthetic.main.fragment_five_day.*
 import org.json.JSONException
 import org.json.JSONObject
