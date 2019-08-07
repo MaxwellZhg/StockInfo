@@ -1,8 +1,7 @@
-package com.dycm.finance.view;
+package com.dycm.finance.custom.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;

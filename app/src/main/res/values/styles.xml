@@ -5,7 +5,14 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!--控件聚焦后颜色-->
+        <item name="colorAccent">@color/white</item>
+        <!--控件默认颜色-->
+        <item name="colorControlNormal">@color/low_white</item>
+        <!--TextView默认字体颜色-->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!--TextView默认Hint字体颜色-->
+        <item name="android:textColorHint">@color/low_white</item>
     </style>
 
 </resources>

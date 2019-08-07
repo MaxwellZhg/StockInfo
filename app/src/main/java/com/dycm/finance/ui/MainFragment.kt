@@ -1,14 +1,15 @@
 package com.dycm.finance.ui
 
 import android.os.Bundle
+import com.dycm.applib1.ui.ChooseTabStockFragment
 import com.dycm.applib1.ui.StockTabFragment
 import com.dycm.applib2.MarketTabFragment
 import com.dycm.applib3.ui.InfomationTabFragment
 import com.dycm.applib4.ui.OpenAccountTabFragment
 import com.dycm.base2app.ui.fragment.AbsBackFinishNetFragment
 import com.dycm.finance.R
-import com.dycm.finance.view.BottomBar
-import com.dycm.finance.view.BottomBarTab
+import com.dycm.finance.custom.view.BottomBar
+import com.dycm.finance.custom.view.BottomBarTab
 import com.example.applib5.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import me.yokeyword.fragmentation.SupportFragment
@@ -64,9 +65,9 @@ class MainFragment : AbsBackFinishNetFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val firstFragment = findChildFragment(StockTabFragment::class.java)
+        val firstFragment = findChildFragment(ChooseTabStockFragment::class.java)
         if (firstFragment == null) {
-            mFragments[FIRST] = StockTabFragment()
+            mFragments[FIRST] = ChooseTabStockFragment()
             mFragments[SECOND] = MarketTabFragment()
             mFragments[THIRD] = InfomationTabFragment()
             mFragments[FOUR]=  OpenAccountTabFragment()
@@ -81,7 +82,6 @@ class MainFragment : AbsBackFinishNetFragment() {
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
-
             // 这里我们需要拿到mFragments的引用
             mFragments[FIRST] = firstFragment
             mFragments[SECOND] = findChildFragment(MarketTabFragment::class.java)
@@ -90,5 +90,7 @@ class MainFragment : AbsBackFinishNetFragment() {
             mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
         }
     }
+
+
 
 }

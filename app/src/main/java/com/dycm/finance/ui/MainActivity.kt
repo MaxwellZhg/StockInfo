@@ -25,4 +25,8 @@ class MainActivity : AbsNetActivity() {
         // 设置Fragment切换时默认动画为横向滑动，类似微信
         return DefaultHorizontalAnimator()
     }
+
+    override fun statusBarLightMode(): Boolean {
+        return false
+    }
 }

@@ -1,3 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">applib1</string>
+    <string name="choose_stock" tools:ignore="MissingTranslation">自选股</string>
+    <string name="stock_name_code" tools:ignore="MissingTranslation">名称代码</string>
+    <string name="updown" tools:ignore="MissingTranslation">涨跌幅</string>
+    <string name="newly_price" tools:ignore="MissingTranslation">最新价</string>
+    <string name="all_stock" tools:ignore="MissingTranslation">全部</string>
+    <string name="hk_stock" tools:ignore="MissingTranslation">港股</string>
+    <string name="sh_stock" tools:ignore="MissingTranslation">沪深</string>
+    <string name="add_choose_stock"  tools:ignore="MissingTranslation">添加自选股</string>
 </resources>
