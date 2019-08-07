@@ -55,7 +55,7 @@ class ChartOneDayFragment : AbsEventFragment() {
 
         chart!!.initChart(land)
 
-//        // 测试数据
+        // 测试数据
 //        try {
 //            val `object` = JSONObject(ChartData.TIMEDATA)
 //            // 上证指数代码000001.IDX.SH
@@ -72,8 +72,8 @@ class ChartOneDayFragment : AbsEventFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { list ->
                 LogInfra.Log.d(TAG, "Local kline cache data size : " + list?.size)
-//                kTimeData.parseTimeData(list, "000001.IDX.SZ", 0.0)
-//                chart!!.setDataToChart(kTimeData)
+                kTimeData.parseTimeData(list, "000001.IDX.SZ", 0.0)
+                chart!!.setDataToChart(kTimeData)
             }
         disposables.add(disposable)
 

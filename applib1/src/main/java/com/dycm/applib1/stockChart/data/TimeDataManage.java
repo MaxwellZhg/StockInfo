@@ -1,6 +1,8 @@
 package com.dycm.applib1.stockChart.data;
 
+import android.annotation.SuppressLint;
 import android.util.SparseArray;
+import com.dycm.applib1.socket.vo.kline.MinuteKlineData;
 import com.dycm.applib1.stockChart.model.TimeDataModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +10,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.mikephil.charting.utils.DataTimeUtil.secToDateForFiveDay;
 
@@ -27,8 +30,68 @@ public class TimeDataManage {
     private SparseArray<String> fiveDayXLabels = new SparseArray<String>();//专用于五日分时横坐标轴刻度
     private List<Integer> fiveDayXLabelKey = new ArrayList<Integer>();//专用于五日分时横坐标轴刻度
     private String assetId;
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     private double preClose;//昨收价
+
+    public void parseTimeData(ArrayList<MinuteKlineData> klineData, String assetId, double preClosePrice) {
+        this.assetId = assetId;
+        if (klineData != null) {
+            realTimeDatas.clear();
+            fiveDayXLabels.clear();
+            getFiveDayXLabelKey(assetId);
+            String preDate = null;
+            int index = 0;
+//            preClose = Double.isNaN(object.optDouble("preClose")) ? 0 : object.optDouble("preClose");
+//            JSONArray data = object.optJSONArray("data");
+            if (!klineData.isEmpty()) {
+                int size = klineData.size();
+                for (int i = 0; i < size; i++) {
+                    MinuteKlineData minuteKlineData = klineData.get(i);
+
+                    TimeDataModel timeDatamodel = new TimeDataModel();
+                    timeDatamodel.setTimeMills(minuteKlineData.getDateTime());
+                    timeDatamodel.setNowPrice(Objects.requireNonNull(minuteKlineData.getPrice()).doubleValue());
+                    timeDatamodel.setAveragePrice(Objects.requireNonNull(minuteKlineData.getAvgPrice()).doubleValue());
+                    timeDatamodel.setVolume(Objects.requireNonNull(minuteKlineData.getVol()).intValue());
+                    timeDatamodel.setOpen(Objects.requireNonNull(minuteKlineData.getOpenPrice()).doubleValue());
+                    timeDatamodel.setPreClose(preClose == 0 ? (preClosePrice == 0 ? timeDatamodel.getOpen() : preClosePrice) : preClose);
+
+                    if (i == 0) {
+                        preClose = timeDatamodel.getPreClose();
+                        mAllVolume = timeDatamodel.getVolume();
+                        max = timeDatamodel.getNowPrice();
+                        min = timeDatamodel.getNowPrice();
+                        volMaxTimeLine = 0;
+                        if (baseValue == 0) {
+                            baseValue = timeDatamodel.getPreClose();
+                        }
+                        if (fiveDayXLabelKey.size() > index) {
+                            fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
+                            index++;
+                        }
+                    } else {
+                        mAllVolume += timeDatamodel.getVolume();
+                        if (fiveDayXLabelKey.size() > index && !secToDateForFiveDay(timeDatamodel.getTimeMills()).equals(preDate)) {
+                            fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
+                            index++;
+                        }
+                    }
+                    preDate = secToDateForFiveDay(timeDatamodel.getTimeMills());
+                    timeDatamodel.setCha(timeDatamodel.getNowPrice() - preClose);
+                    timeDatamodel.setPer(timeDatamodel.getCha() / preClose);
+
+                    max = Math.max(timeDatamodel.getNowPrice(), max);
+                    min = Math.min(timeDatamodel.getNowPrice(), min);
+
+                    perVolMaxTimeLine = volMaxTimeLine;
+                    volMaxTimeLine = Math.max(timeDatamodel.getVolume(), volMaxTimeLine);
+                    realTimeDatas.add(timeDatamodel);
+                }
+                permaxmin = (max - min) / 2;
+            }
+        }
+    }
 
     /**
      * 外部传JSONObject解析获得分时数据集
