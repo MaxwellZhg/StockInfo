@@ -1,4 +1,4 @@
-package com.dycm.finance.view;
+package com.dycm.finance.custom.view;
 
 import android.content.Context;
 import android.os.Parcel;

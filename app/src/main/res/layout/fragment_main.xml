@@ -10,7 +10,7 @@
             android:layout_marginBottom="@dimen/bottombar_wechat_height"
             android:layout_height="match_parent"/>
 
-    <com.dycm.finance.view.BottomBar
+    <com.dycm.finance.custom.view.BottomBar
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottombar_wechat_height"
