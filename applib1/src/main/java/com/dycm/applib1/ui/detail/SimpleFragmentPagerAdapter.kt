@@ -4,8 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
-import java.util.Arrays
-
 /**
  * 装载Fragment的通用适配器
  */
@@ -14,7 +12,7 @@ class SimpleFragmentPagerAdapter : FragmentStatePagerAdapter {
     private var mTitles: List<String>? = null
 
     constructor(fm: FragmentManager, fragments: Array<Fragment>) : super(fm) {
-        mFragments = Arrays.asList(*fragments)
+        mFragments = listOf(*fragments)
     }
 
     constructor(fm: FragmentManager, fragments: List<Fragment>) : super(fm) {
@@ -22,7 +20,7 @@ class SimpleFragmentPagerAdapter : FragmentStatePagerAdapter {
     }
 
     constructor(fm: FragmentManager, fragments: Array<Fragment>, titles: Array<String>) : this(fm, fragments) {
-        mTitles = Arrays.asList(*titles)
+        mTitles = listOf(*titles)
     }
 
     constructor(fm: FragmentManager, fragments: List<Fragment>, titles: List<String>) : this(fm, fragments) {
@@ -38,7 +36,7 @@ class SimpleFragmentPagerAdapter : FragmentStatePagerAdapter {
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return if (mTitles != null && mTitles!!.size > 0) {
+        return if (mTitles != null && mTitles!!.isNotEmpty()) {
             mTitles!![position]
         } else super.getPageTitle(position)
     }

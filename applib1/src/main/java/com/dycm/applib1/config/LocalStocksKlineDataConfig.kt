@@ -5,8 +5,7 @@ import com.dycm.applib1.socket.vo.kline.MinuteKlineData
 import com.dycm.base2app.infra.AbsConfig
 import com.dycm.base2app.infra.LogInfra
 import com.dycm.base2app.infra.StorageInfra
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+
 
 /**
  *    author : PengXianglin
@@ -18,24 +17,42 @@ class LocalStocksKlineDataConfig : AbsConfig() {
 
     private var klineData = HashMap<String, ArrayList<MinuteKlineData>>()
 
+    /**
+     * 获取数据
+     */
+    @Synchronized
+    fun getKlineData(ts: String?, code: String?): ArrayList<MinuteKlineData>? {
+        if (klineData.isEmpty()) return null
+        val key = "$ts-$code"
+        if (key.isEmpty()) return null
+        return klineData[key]!!
+    }
+
     /***
      * 添加K线缓存数据
      */
+    @Synchronized
     fun add(ts: String?, code: String?, data: ArrayList<MinuteKlineData>?): Boolean {
+        if (data.isNullOrEmpty()) return false
         try {
             val key = "$ts-$code"
             var value = klineData[key]
             if (value.isNullOrEmpty()) {
                 value = data
             } else {
-                value.addAll(data!!)
+                // 需要缓存的第一条数据的时间
+                val firstDateTime = data[0].dateTime
+                // 当前缓存中最后一条数据的时间
+                val lastDateTime = value[value.size - 1].dateTime
+                if (firstDateTime == lastDateTime || firstDateTime!! < lastDateTime!!) {
+                    LogInfra.Log.e("LocalStocksKlineDataConfig", "缓存数据时间不合法")
+                    return false
+                }
+                value.addAll(data)
             }
-            klineData[key] = value!!
+            klineData[key] = value
 
-            Observable.just(write())
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe()
+            write()
             return true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -46,14 +63,14 @@ class LocalStocksKlineDataConfig : AbsConfig() {
     /***
      * 删除K线缓存数据
      */
+    @Synchronized
     fun remove(ts: String?, code: String?): Boolean {
+        if (klineData.isEmpty()) return false
+
         try {
             val key = "$ts-$code"
             if (klineData.remove(key) != null) {
-                Observable.just(write())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe()
+                write()
                 return true
             }
             return false
@@ -63,9 +80,11 @@ class LocalStocksKlineDataConfig : AbsConfig() {
         return false
     }
 
-    @Synchronized
     override fun write() {
-        LogInfra.Log.d("LocalStocksKlineDataConfig", "write thread: " + Looper.myLooper()?.thread?.name)
+        LogInfra.Log.d("LocalStocksKlineDataConfig", "write thread: " + Thread.currentThread().name)
+        if (Thread.currentThread().name == Looper.getMainLooper().thread.name) {
+            throw RuntimeException("IO操作必须在子线程中更新本地数据")
+        }
         StorageInfra.put(LocalStocksKlineDataConfig::class.java.simpleName, this)
     }
 
@@ -82,7 +101,7 @@ class LocalStocksKlineDataConfig : AbsConfig() {
             }
 
         private fun read(): LocalStocksKlineDataConfig {
-            LogInfra.Log.d("LocalStocksKlineDataConfig", "read thread: " + Looper.myLooper()?.thread?.name)
+            LogInfra.Log.d("LocalStocksKlineDataConfig", "read thread: " + Thread.currentThread().name)
             var config: LocalStocksKlineDataConfig? =
                 StorageInfra.get(
                     LocalStocksKlineDataConfig::class.java.simpleName,

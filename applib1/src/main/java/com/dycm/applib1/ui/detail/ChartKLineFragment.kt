@@ -1,13 +1,9 @@
 package com.dycm.applib1.ui.detail
 
 import android.os.Bundle
-import butterknife.BindView
 import com.dycm.applib1.R
-import com.dycm.applib1.R2
+import com.dycm.applib1.stockChart.data.KLineDataManage
 import com.dycm.base2app.ui.fragment.AbsFragment
-import com.github.mikephil.charting.stockChart.CoupleChartGestureListener
-import com.github.mikephil.charting.stockChart.data.KLineDataManage
-import com.github.mikephil.charting.stockChart.view.KLineView
 import kotlinx.android.synthetic.main.fragment_kline.*
 import org.json.JSONException
 import org.json.JSONObject
