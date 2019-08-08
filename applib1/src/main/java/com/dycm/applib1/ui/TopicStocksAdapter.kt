@@ -7,6 +7,7 @@ import butterknife.BindView
 import com.dycm.applib1.R
 import com.dycm.applib1.R2
 import com.dycm.applib1.model.ChooseStockData
+import com.dycm.applib1.model.StockMarketData
 import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.util.ResUtil
 
@@ -20,11 +21,13 @@ class TopicStocksAdapter(val context: TopicStockListFragment) : BaseListAdapter<
 
     private val default = 0x00
     private val bottom = 0x01
-
+    var addTopicCallback: AddTopicCallback? = null
     override fun getItemCount(): Int {
         return items.size + 1
     }
-
+    interface AddTopicCallback {
+        fun addTopicCallback(pos: Int, item: ChooseStockData?, view: View)
+    }
     override fun getItem(position: Int): ChooseStockData? {
         if (position > items.size || position == items.size) return null
         return super.getItem(position)
@@ -123,6 +126,7 @@ class TopicStocksAdapter(val context: TopicStockListFragment) : BaseListAdapter<
 
         override fun onClick(v: View) {
             if (v == ll_add_stock) {
+                addTopicCallback?.addTopicCallback(position, getItem(position), v)
             } else {
                 super.onClick(v)
             }

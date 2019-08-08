@@ -1,12 +1,15 @@
 package com.dycm.applib1.ui
 
 import android.content.Context
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.dycm.applib.TopicStockSearchFragment
 import com.dycm.applib1.R
 import com.dycm.base2app.ui.fragment.AbsBackFinishFragment
+import com.dycm.base2app.ui.fragment.AbsFragment
 import com.dycm.base2app.util.ResUtil
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -24,7 +27,7 @@ import java.util.*
  *    date   : 2019/7/18 10:32
  *    desc   : 主页中的自选股Tab页面
  */
-class StockTabFragment : AbsBackFinishFragment() {
+class StockTabFragment : AbsBackFinishFragment(), View.OnClickListener {
 
     private var mfragment: ArrayList<PageInfo> = ArrayList()
 
@@ -91,6 +94,8 @@ class StockTabFragment : AbsBackFinishFragment() {
         // 指示器绑定viewpager
         magic_indicator.navigator = commonNavigator
         ViewPagerHelper.bind(magic_indicator, viewpager)
+        iv_serach.setOnClickListener(this)
+
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -106,5 +111,13 @@ class StockTabFragment : AbsBackFinishFragment() {
         override fun getPageTitle(position: Int): CharSequence? {
             return mfragment[position].title
         }
+    }
+
+    override fun onClick(p0: View?) {
+       when(p0?.id){
+           R.id.iv_serach->{
+               (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
+           }
+       }
     }
 }

@@ -8,4 +8,5 @@
     <string name="hk_stock" tools:ignore="MissingTranslation">港股</string>
     <string name="sh_stock" tools:ignore="MissingTranslation">沪深</string>
     <string name="add_choose_stock"  tools:ignore="MissingTranslation">添加自选股</string>
+    <string name="see_more" tools:ignore="MissingTranslation">查看更多</string>
 </resources>
