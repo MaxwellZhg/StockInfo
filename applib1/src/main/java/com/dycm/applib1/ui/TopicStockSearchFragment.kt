@@ -1,4 +1,7 @@
-package com.dycm.applib1.ui
+package com.dycm.applib
+
+import com.dycm.applib1.ui.SearchStocksAdapter
+
 
 import android.os.Bundle
 import android.text.Editable
@@ -80,7 +83,6 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (response.data.datas.isNotEmpty()) {
             // 显示搜索列表
-            datas = response.data.datas
             search_list.visibility = View.VISIBLE
             // 设置数据
             if (search_list.adapter == null) {
@@ -89,7 +91,16 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
                 adapter!!.setClickItemCallback(this)
                 adapter!!.onAddTopicClickItemCallback = this
                 search_list.adapter = adapter
-                adapter!!.addItems(response.data.datas)
+                when(type){
+                    1-> adapter!!.addItems(response.data.datas)
+                    //假数据操作
+                    2->   for (i in 1..4) {
+                        if (adapter?.items?.size!! < 20) {
+                            adapter!!.addItems(response.data.datas)
+                        }
+                        adapter?.notifyDataSetChanged()
+                    }
+                }
             }
         }
     }
@@ -98,14 +109,7 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
         if (item == null) {
             type = max
             //20条数据请求。。目前注释
-            //getTopicStockData(tips,20)
-            //假数据操作
-            for (i in 1..4) {
-                if (adapter?.items?.size!! < 20) {
-                    adapter?.addItems(datas)
-                }
-                adapter?.notifyDataSetChanged()
-            }
+            getTopicStockData(tips,20)
         }
     }
 
