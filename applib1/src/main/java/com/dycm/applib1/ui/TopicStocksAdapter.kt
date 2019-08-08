@@ -16,9 +16,31 @@ import com.dycm.base2app.util.ResUtil
  * Date: 2019/8/7
  * Desc:
  */
-class ChooseStockAdapter(val context: AllChooseFragment) : BaseListAdapter<ChooseStockData>() {
+class TopicStocksAdapter(val context: TopicStockListFragment) : BaseListAdapter<ChooseStockData>() {
+
     private val default = 0x00
     private val bottom = 0x01
+
+    override fun getItemCount(): Int {
+        return items.size + 1
+    }
+
+    override fun getItem(position: Int): ChooseStockData? {
+        if (position > items.size || position == items.size) return null
+        return super.getItem(position)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            itemCount - 1 -> {
+                bottom
+            }
+            else -> {
+                default
+            }
+        }
+    }
+
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
             default -> R.layout.item_choose_stock
@@ -111,20 +133,4 @@ class ChooseStockAdapter(val context: AllChooseFragment) : BaseListAdapter<Choos
         }
 
     }
-
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            itemCount - 1 -> {
-                bottom
-            }
-            else -> {
-                default
-            }
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
 }

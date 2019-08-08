@@ -1,7 +1,6 @@
 package com.dycm.finance.ui
 
 import android.os.Bundle
-import com.dycm.applib1.ui.ChooseTabStockFragment
 import com.dycm.applib1.ui.StockTabFragment
 import com.dycm.applib2.MarketTabFragment
 import com.dycm.applib3.ui.InfomationTabFragment
@@ -65,9 +64,9 @@ class MainFragment : AbsBackFinishNetFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val firstFragment = findChildFragment(ChooseTabStockFragment::class.java)
+        val firstFragment = findChildFragment(StockTabFragment::class.java)
         if (firstFragment == null) {
-            mFragments[FIRST] = ChooseTabStockFragment()
+            mFragments[FIRST] = StockTabFragment()
             mFragments[SECOND] = MarketTabFragment()
             mFragments[THIRD] = InfomationTabFragment()
             mFragments[FOUR]=  OpenAccountTabFragment()
@@ -90,7 +89,4 @@ class MainFragment : AbsBackFinishNetFragment() {
             mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
         }
     }
-
-
-
 }
