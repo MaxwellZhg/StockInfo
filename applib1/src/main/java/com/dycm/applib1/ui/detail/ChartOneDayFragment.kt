@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import com.dycm.applib1.R
 import com.dycm.applib1.config.LocalStocksKlineDataConfig
-import com.dycm.applib1.model.StockKlineTopic
+import com.dycm.applib1.model.PushStockKlineTopic
 import com.dycm.applib1.model.StockTopic
 import com.dycm.applib1.model.StockTopicDataTypeEnum
 import com.dycm.applib1.socket.SocketClient
@@ -21,8 +21,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_one_day.*
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 
 /**
@@ -78,7 +76,7 @@ class ChartOneDayFragment : AbsEventFragment() {
         disposables.add(disposable)
 
         // 发起自选股K线订阅
-        stockTopic = StockKlineTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1, 0)
+        stockTopic = PushStockKlineTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1, 0)
         SocketClient.getInstance().bindTopic(stockTopic)
     }
 
@@ -88,7 +86,15 @@ class ChartOneDayFragment : AbsEventFragment() {
     @SuppressLint("CheckResult")
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicMinuteKlineResponse(response: StocksTopicMinuteKlineResponse) {
-        // TODO 展示、缓存K线数据到本地
+        // 展示K线数据
+        if (kTimeData.datas.isNullOrEmpty()) {
+            kTimeData.parseTimeData(response.body?.klineData?.data, "000001.IDX.SZ", 0.0)
+            chart!!.setDataToChart(kTimeData)
+        } else {
+            // TODO 在子线程中整合新数据再更新到界面
+        }
+
+        // 缓存K线数据到本地
         val klineData = response.body?.klineData
         val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             emitter.onNext(LocalStocksKlineDataConfig.instance?.add(klineData?.ts, klineData?.code, klineData?.data)!!)

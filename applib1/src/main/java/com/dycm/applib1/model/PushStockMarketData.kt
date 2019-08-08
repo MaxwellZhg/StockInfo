@@ -1,9 +1,9 @@
 package com.dycm.applib1.model
 
 /**
- * 描述一支自选股的信息
+ * websocket返回的自选股信息
  */
-class StockMarketData : BaseStockMarket() {
+class PushStockMarketData : BaseStockMarket() {
 
     var amount: Int = 0
     var avgPrice: Double? = null

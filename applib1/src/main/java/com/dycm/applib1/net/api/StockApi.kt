@@ -8,7 +8,7 @@ interface StockApi {
         /**
          * 自选股股票列表（含大盘指数）
          */
-        const val LIST = "/stockmarket/api/stock/selected/v1/view/list"
+        const val LIST = "/as-market/api/stock/selected/v1/view/list"
 
         /**
          * 同步自选股

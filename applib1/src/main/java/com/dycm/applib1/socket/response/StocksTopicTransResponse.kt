@@ -1,6 +1,6 @@
 package com.dycm.applib1.socket.response
 
-import com.dycm.applib1.model.StockTransData
+import com.dycm.applib1.model.PushStockMarketData
 import com.dycm.applib1.socket.request.SocketHeader
 
 /**
@@ -11,5 +11,5 @@ import com.dycm.applib1.socket.request.SocketHeader
  */
 class StocksTopicTransResponse(
     val header: SocketHeader,
-    val body: StockTransData
+    val body: PushStockMarketData
 )

@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/tab_bar_bg">
-<RelativeLayout android:layout_width="match_parent"
-                android:layout_height="51dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:background="@color/tab_bar_bg"
+                tools:ignore="UselessParent">
+
     <RelativeLayout android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="13dp"
+                    android:layout_marginStart="13dp"
                     android:layout_centerVertical="true">
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textColor="@color/un_tab_select"
-                          android:id="@+id/tv_stock_tile"
-                          android:textSize="17sp"
-                          android:text="恒生指数"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/un_tab_select"
+                  android:id="@+id/tv_stock_tile"
+                  android:textSize="17sp"
+                  android:text="恒生指数"/>
+
         <ImageView android:layout_width="15dp"
                    android:layout_height="13dp"
                    android:layout_marginTop="2dp"
-                   android:id="@+id/iv_stock_tag"
+                   android:id="@+id/iv_stock_ts"
                    android:layout_below="@+id/tv_stock_tile"
                    android:background="@mipmap/hk"/>
+
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_below="@+id/tv_stock_tile"
                   android:id="@+id/stock_code"
                   android:textSize="10sp"
-                  android:layout_marginLeft="5dp"
+                  android:layout_marginStart="5dp"
                   android:layout_marginTop="2dp"
                   android:textColor="@color/tv_stock_code"
-                  android:layout_toRightOf="@+id/iv_stock_tag"
+                  android:layout_toEndOf="@+id/iv_stock_ts"
                   android:text="800000"/>
     </RelativeLayout>
+
     <RelativeLayout android:layout_width="79dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="13dp"
+                    android:layout_marginEnd="13dp"
                     android:id="@+id/rl_stock_up_down"
                     android:background="@color/up_stock_color">
+
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_centerInParent="true"
@@ -48,18 +53,20 @@
                   android:text="+3.41%"
                   android:textColor="@color/un_tab_select"/>
     </RelativeLayout>
+
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="27498.77"
               android:layout_centerVertical="true"
-              android:layout_marginRight="12dp"
-              android:id="@+id/tv_precent"
+              android:layout_marginEnd="12dp"
+              android:id="@+id/tv_price"
               android:textColor="@color/up_price_color"
               android:textSize="18sp"
-              android:layout_toLeftOf="@+id/rl_stock_up_down"/>
+              android:layout_toStartOf="@+id/rl_stock_up_down"/>
+
     <ImageView android:layout_width="match_parent"
                android:layout_height="1dp"
                android:layout_alignParentBottom="true"
                android:background="@color/cent_color"/>
+
 </RelativeLayout>
-</LinearLayout>

@@ -6,7 +6,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.dycm.applib1.R
-import com.dycm.base2app.ui.fragment.AbsBackFinishFragment
+import com.dycm.applib1.event.SocketDisconnectEvent
+import com.dycm.applib1.model.StockTsEnum
+import com.dycm.applib1.socket.SocketClient
+import com.dycm.base2app.infra.LogInfra
+import com.dycm.base2app.rxbus.EventThread
+import com.dycm.base2app.rxbus.RxSubscribe
+import com.dycm.base2app.ui.fragment.AbsBackFinishEventFragment
 import com.dycm.base2app.util.ResUtil
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -24,14 +30,14 @@ import java.util.*
  *    date   : 2019/7/18 10:32
  *    desc   : 主页中的自选股Tab页面
  */
-class StockTabFragment : AbsBackFinishFragment() {
+class StockTabFragment : AbsBackFinishEventFragment() {
 
     private var mfragment: ArrayList<PageInfo> = ArrayList()
 
     override val layout: Int
         get() = R.layout.fragment_stock_tab
 
-    inner class PageInfo(val title: String, val type: Int)
+    inner class PageInfo(val title: String, val type: StockTsEnum?)
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -39,9 +45,9 @@ class StockTabFragment : AbsBackFinishFragment() {
 
     override fun init() {
         // 添加标题页面
-        mfragment.add(PageInfo(ResUtil.getString(R.string.all_stock)!!, TopicStockListFragment.ALL))
-        mfragment.add(PageInfo(ResUtil.getString(R.string.hk_stock)!!, TopicStockListFragment.HK))
-        mfragment.add(PageInfo(ResUtil.getString(R.string.sh_stock)!!, TopicStockListFragment.HS))
+        mfragment.add(PageInfo(ResUtil.getString(R.string.all_stock)!!, null))
+        mfragment.add(PageInfo(ResUtil.getString(R.string.hk_stock)!!, StockTsEnum.HK))
+        mfragment.add(PageInfo(ResUtil.getString(R.string.sh_stock)!!, StockTsEnum.HS))
 
         // 设置viewpager指示器
         val commonNavigator = CommonNavigator(requireContext())
@@ -91,6 +97,10 @@ class StockTabFragment : AbsBackFinishFragment() {
         // 指示器绑定viewpager
         magic_indicator.navigator = commonNavigator
         ViewPagerHelper.bind(magic_indicator, viewpager)
+
+
+        // 启动长链接
+        SocketClient.getInstance()?.connect()
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -106,5 +116,20 @@ class StockTabFragment : AbsBackFinishFragment() {
         override fun getPageTitle(position: Int): CharSequence? {
             return mfragment[position].title
         }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.NEW)
+    fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
+        LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
+        Thread.sleep(100)
+        SocketClient.getInstance()?.connect()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // 关闭长链接
+        SocketClient.getInstance()?.destroy()
+
     }
 }

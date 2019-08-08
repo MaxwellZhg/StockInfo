@@ -1,6 +1,6 @@
 package com.dycm.applib1.socket.response
 
-import com.dycm.applib1.model.StockPriceData
+import com.dycm.applib1.model.PushStockPriceData
 import com.dycm.applib1.socket.request.SocketHeader
 
 /**
@@ -11,5 +11,5 @@ import com.dycm.applib1.socket.request.SocketHeader
  */
 class StocksTopicPriceResponse(
     val header: SocketHeader,
-    val body: ArrayList<StockPriceData>
+    val body: ArrayList<PushStockPriceData>
 )

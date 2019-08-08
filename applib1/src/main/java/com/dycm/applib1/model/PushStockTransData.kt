@@ -5,7 +5,7 @@ import java.math.BigDecimal
 /**
  * 盘口数据
  */
-class StockTransData : BaseStockMarket() {
+class PushStockTransData : BaseStockMarket() {
 
     /**
      * 卖1价

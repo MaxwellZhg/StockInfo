@@ -8,7 +8,7 @@ import java.math.BigDecimal
  *    date   : 2019/8/6 11:18
  *    desc   : 推送股价数据
  */
-class StockPriceData  : BaseStockMarket() {
+class PushStockPriceData  : BaseStockMarket() {
     /**
      * 开盘价格
      */
