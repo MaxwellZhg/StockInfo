@@ -14,6 +14,7 @@ import com.dycm.applib1.model.StockMarketInfo
 import com.dycm.applib1.model.StockTsEnum
 import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.util.ResUtil
+import com.dycm.commonwidget.StateButton
 
 /**
  * Created by Maxwell.
@@ -74,11 +75,9 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         @BindView(R2.id.stock_code)
         lateinit var stock_code: TextView
         @BindView(R2.id.stock_up_down)
-        lateinit var stock_up_down: TextView
+        lateinit var stock_up_down: StateButton
         @BindView(R2.id.tv_price)
         lateinit var tv_price: TextView
-        @BindView(R2.id.rl_stock_up_down)
-        lateinit var rl_stock_up_down: RelativeLayout
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockMarketInfo?, position: Int) {
@@ -97,12 +96,12 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             if (item?.diffRate!! > 0 || item.diffRate == 0.0) {
                 tv_price.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
 
-                rl_stock_up_down.setBackgroundColor(ResUtil.getColor(R.color.up_stock_color)!!)
+                stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.up_stock_color)!!)
                 stock_up_down.text = "+" + item.diffRate * 100 + "%"
             } else {
                 tv_price.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
 
-                rl_stock_up_down.setBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
+                stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
                 stock_up_down.text = "-" + item.diffRate * 100 + "%"
             }
         }
