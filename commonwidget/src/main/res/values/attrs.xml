@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="CircularImageView">
-        <!--是否显示为圆形（默认为矩形）-->
-        <attr name="is_circle" format="boolean" />
-        <!--边框，inner_border是否覆盖图片内容-->
-        <attr name="is_cover_src" format="boolean" />
-        <!--统一设置四个角的圆角半径-->
-        <attr name="corner_radius" format="dimension" />
-        <!--左上角圆角半径-->
-        <attr name="corner_top_left_radius" format="dimension" />
-        <!--右上角圆角半径-->
-        <attr name="corner_top_right_radius" format="dimension" />
-        <!--左下角圆角半径-->
-        <attr name="corner_bottom_left_radius" format="dimension" />
-        <!--右下角圆角半径-->
-        <attr name="corner_bottom_right_radius" format="dimension" />
-        <!--边框宽度-->
-        <attr name="border_width" format="dimension" />
-        <!--边框颜色-->
-        <attr name="border_color" format="color" />
-        <!--相当于内层边框（is_circle为真时支持）-->
-        <attr name="inner_border_width" format="dimension" />
-        <!--内边框颜色-->
-        <attr name="inner_border_color" format="color" />
-        <!--图片上绘制的遮罩颜色-->
-        <attr name="mask_color" format="color" />
-    </declare-styleable>
-
-
     <declare-styleable name="StateButton">
         <!--text color-->
         <attr name="normalTextColor" format="color|reference"/>
@@ -56,15 +28,6 @@
 
         <!--animation duration-->
         <attr name="animationDuration" format="integer|reference"/>
-
     </declare-styleable>
 
-
-    <declare-styleable name="FlowTagView">
-        <attr name="lineSpacing" format="dimension" />
-        <attr name="tagSpacing" format="dimension" />
-        <!-- 是否是固定布局 -->
-        <attr name="isFixed" format="boolean" />
-        <attr name="columnSize" format="integer" />
-    </declare-styleable>
 </resources>
