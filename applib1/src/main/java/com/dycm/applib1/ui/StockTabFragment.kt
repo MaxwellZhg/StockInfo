@@ -1,10 +1,12 @@
 package com.dycm.applib1.ui
 
 import android.content.Context
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.dycm.applib.TopicStockSearchFragment
 import com.dycm.applib1.R
 import com.dycm.applib1.event.SocketDisconnectEvent
 import com.dycm.applib1.model.StockTsEnum
@@ -13,6 +15,8 @@ import com.dycm.base2app.infra.LogInfra
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsBackFinishEventFragment
+import com.dycm.base2app.ui.fragment.AbsBackFinishFragment
+import com.dycm.base2app.ui.fragment.AbsFragment
 import com.dycm.base2app.util.ResUtil
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -30,7 +34,7 @@ import java.util.*
  *    date   : 2019/7/18 10:32
  *    desc   : 主页中的自选股Tab页面
  */
-class StockTabFragment : AbsBackFinishEventFragment() {
+class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
 
     private var mfragment: ArrayList<PageInfo> = ArrayList()
 
@@ -44,6 +48,8 @@ class StockTabFragment : AbsBackFinishEventFragment() {
     }
 
     override fun init() {
+        iv_serach.setOnClickListener(this)
+
         // 添加标题页面
         mfragment.add(PageInfo(ResUtil.getString(R.string.all_stock)!!, null))
         mfragment.add(PageInfo(ResUtil.getString(R.string.hk_stock)!!, StockTsEnum.HK))
@@ -98,7 +104,6 @@ class StockTabFragment : AbsBackFinishEventFragment() {
         magic_indicator.navigator = commonNavigator
         ViewPagerHelper.bind(magic_indicator, viewpager)
 
-
         // 启动长链接
         SocketClient.getInstance()?.connect()
     }
@@ -116,6 +121,14 @@ class StockTabFragment : AbsBackFinishEventFragment() {
         override fun getPageTitle(position: Int): CharSequence? {
             return mfragment[position].title
         }
+    }
+
+    override fun onClick(p0: View?) {
+       when(p0?.id){
+           R.id.iv_serach->{
+               (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
+           }
+       }
     }
 
     @RxSubscribe(observeOnThread = EventThread.SINGLE)
