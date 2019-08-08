@@ -89,7 +89,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onRecommendStocklistResponse(response: RecommendStocklistResponse) {
         if (mAdapter == null) return
 
@@ -116,7 +116,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
     }
 
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStocksResponse(response: StocksTopicMarketResponse) {
         if (response.body.isNullOrEmpty()) return
 

@@ -118,7 +118,7 @@ class StockTabFragment : AbsBackFinishEventFragment() {
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.NEW)
+    @RxSubscribe(observeOnThread = EventThread.SINGLE)
     fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
         LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
         Thread.sleep(100)
