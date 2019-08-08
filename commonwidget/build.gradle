@@ -33,6 +33,8 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api project(":base2app")
+    // 刷新控件
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-11'
     // kotlin
     api "org.jetbrains.kotlin:kotlin-reflect:1.3.41"
 }
