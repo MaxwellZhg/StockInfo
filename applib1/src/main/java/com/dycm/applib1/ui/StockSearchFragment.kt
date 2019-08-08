@@ -1,7 +1,4 @@
-package com.dycm.applib
-
-import com.dycm.applib1.ui.SearchStocksAdapter
-
+package com.dycm.applib1.ui
 
 import android.os.Bundle
 import android.text.Editable
@@ -27,12 +24,11 @@ import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
  * Date: 2019/8/8
  * Desc:自选股搜索
  */
-class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
+class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
     SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<SearchStockInfo> {
 
     private var type: Int = 0
     private lateinit var tips: String
-    private lateinit var datas: List<SearchStockInfo>
     private var adapter: SearchStocksAdapter? = null
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -43,8 +39,8 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
         const val min = 1 // 列表1-5
         const val max = 2 // 列表>5
 
-        fun newInstance(type: Int): TopicStockSearchFragment {
-            val fragment = TopicStockSearchFragment()
+        fun newInstance(type: Int): StockSearchFragment {
+            val fragment = StockSearchFragment()
             val bundle = Bundle()
             bundle.putInt("type", type)
             fragment.arguments = bundle
@@ -91,16 +87,7 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
                 adapter!!.setClickItemCallback(this)
                 adapter!!.onAddTopicClickItemCallback = this
                 search_list.adapter = adapter
-                when(type){
-                    1-> adapter!!.addItems(response.data.datas)
-                    //假数据操作
-                    2->   for (i in 1..4) {
-                        if (adapter?.items?.size!! < 20) {
-                            adapter!!.addItems(response.data.datas)
-                        }
-                        adapter?.notifyDataSetChanged()
-                    }
-                }
+                adapter!!.addItems(response.data.datas)
             }
         }
     }
@@ -108,8 +95,10 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
     override fun onClickItem(pos: Int, item: SearchStockInfo?, v: View?) {
         if (item == null) {
             type = max
-            //20条数据请求。。目前注释
-            getTopicStockData(tips,20)
+
+            //假数据操作
+            val items = adapter?.items
+            adapter?.addItems(items)
         }
     }
 

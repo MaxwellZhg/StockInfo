@@ -78,7 +78,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
             startActivity(Intent(context, StockDetailLandActivity::class.java))
         } else {
             // 跳转到搜索
-            (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
+            (parentFragment as AbsFragment).start(StockSearchFragment.newInstance(1))
         }
     }
 
