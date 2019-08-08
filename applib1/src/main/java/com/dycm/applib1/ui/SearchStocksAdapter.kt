@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.dycm.applib1.R
 import com.dycm.applib1.R2
-import com.dycm.applib1.model.ChooseStockData
 import com.dycm.applib1.model.SearchStockInfo
 import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.util.ResUtil
@@ -23,17 +22,18 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
     var onAddTopicClickItemCallback: OnAddTopicClickItemCallback? = null
 
     override fun getItemCount(): Int {
-        return if(items.size>5){
+        return if (items.size > 5) {
             items.size
-        }else{
-            items.size+1
+        } else {
+            items.size + 1
         }
     }
+
     override fun getLayout(viewType: Int): Int {
-        return if(items.size>5){
+        return if (items.size > 5) {
             R.layout.item_search_topic_stock
-        }else {
-               when (viewType) {
+        } else {
+            when (viewType) {
                 default -> R.layout.item_search_topic_stock
                 else -> {
                     R.layout.item_add_more
@@ -43,13 +43,13 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
-        return if(items.size>5){
+        return if (items.size > 5) {
             ViewHolder(v, false, false)
-        }else {
+        } else {
             when (viewType) {
                 default -> ViewHolder(v, false, false)
                 else -> {
-                    ViewHolderBottom(v, false, false)
+                    ViewHolderBottom(v, true, false)
                 }
             }
         }
@@ -57,7 +57,6 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
 
     interface OnAddTopicClickItemCallback {
         fun onAddTopicClickItem(pos: Int, item: SearchStockInfo?, view: View)
-        fun addSerachTopicMore(pos: Int, item: SearchStockInfo?, view: View)
     }
 
     inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
@@ -88,16 +87,16 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
         }
 
         override fun bind(item: SearchStockInfo?, position: Int) {
-           // item_ts.text = item?.ts
-            when(item?.ts){
-                "SH"->{
-                    iv_tag.background=ResUtil.getDrawable(R.mipmap.sh)
+            // item_ts.text = item?.ts
+            when (item?.ts) {
+                "SH" -> {
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.sh)
                 }
-                "SZ"->{
-                    iv_tag.background=ResUtil.getDrawable(R.mipmap.hk)
+                "SZ" -> {
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.hk)
                 }
-                "HK"->{
-                    iv_tag.background=ResUtil.getDrawable(R.mipmap.hk)
+                "HK" -> {
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.hk)
                 }
             }
             tv_stock_code.text = item?.code
@@ -108,7 +107,7 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
     override fun getItemViewType(position: Int): Int {
         return if (items.size > 5) {
             default
-          } else {
+        } else {
             return when (position) {
                 itemCount - 1 -> {
                     bottom
@@ -126,25 +125,12 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
     }
 
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean) :
-        ListItemViewHolder<ChooseStockData>(v, needClick, needLongClick) {
+        ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
         @BindView(R2.id.rl_add_more)
         lateinit var rl_add_more: RelativeLayout
 
-        init {
-            rl_add_more.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View) {
-            if (v == rl_add_more) {
-                onAddTopicClickItemCallback?.addSerachTopicMore(position, getItem(position), v)
-            } else {
-                super.onClick(v)
-            }
-        }
-
-        override fun bind(item: ChooseStockData?, position: Int) {
+        override fun bind(item: SearchStockInfo?, position: Int) {
 
         }
-
     }
 }

@@ -1,7 +1,4 @@
-package com.dycm.applib
-
-import com.dycm.applib1.ui.SearchStocksAdapter
-
+package com.dycm.applib1.ui
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,17 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
 import com.dycm.applib1.model.SearchStockInfo
 import com.dycm.applib1.net.IStockNet
-import com.dycm.applib1.net.request.StockSearchRequset
+import com.dycm.applib1.net.request.StockSearchRequest
 import com.dycm.applib1.net.response.StockSearchResponse
 import com.dycm.base2app.Cache
+import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.network.Network
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
-import com.dycm.base2app.ui.fragment.AbsBackFinishNetFragment
-import com.dycm.base2app.ui.fragment.AbsFragment
 import com.dycm.base2app.ui.fragment.AbsSwipeBackEventFragment
 import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
-import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -30,7 +25,8 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:自选股搜索
  */
 class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
-    SearchStocksAdapter.OnAddTopicClickItemCallback {
+    SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<SearchStockInfo> {
+
     private var type: Int = 0
     private lateinit var tips: String
     private lateinit var datas: List<SearchStockInfo>
@@ -90,6 +86,7 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
             if (search_list.adapter == null) {
                 search_list.layoutManager = LinearLayoutManager(context)
                 adapter = SearchStocksAdapter()
+                adapter!!.setClickItemCallback(this)
                 adapter!!.onAddTopicClickItemCallback = this
                 search_list.adapter = adapter
                 adapter!!.addItems(response.data.datas)
@@ -97,29 +94,29 @@ class TopicStockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
         }
     }
 
-    override fun onAddTopicClickItem(pos: Int, item: SearchStockInfo?, view: View) {
-
-    }
-
-    override fun addSerachTopicMore(pos: Int, item: SearchStockInfo?, view: View) {
-        type = max
-        //20条数据请求。。目前注释
-        //getTopicStockData(tips,20)
-        //假数据操作
-        for (i in 1..4) {
-            if (adapter?.items?.size!! < 20) {
-                adapter?.addItems(datas)
+    override fun onClickItem(pos: Int, item: SearchStockInfo?, v: View?) {
+        if (item == null) {
+            type = max
+            //20条数据请求。。目前注释
+            //getTopicStockData(tips,20)
+            //假数据操作
+            for (i in 1..4) {
+                if (adapter?.items?.size!! < 20) {
+                    adapter?.addItems(datas)
+                }
+                adapter?.notifyDataSetChanged()
             }
-            adapter?.notifyDataSetChanged()
         }
     }
 
+    override fun onAddTopicClickItem(pos: Int, item: SearchStockInfo?, view: View) {
+        // TODO 点击添加到自选列表
+    }
+
     fun getTopicStockData(str: String, count: Int) {
-        val requset = StockSearchRequset(str, 0, count, transactions.createTransaction())
+        val requset = StockSearchRequest(str, 0, count, transactions.createTransaction())
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
         tips = str
     }
-
-
 }

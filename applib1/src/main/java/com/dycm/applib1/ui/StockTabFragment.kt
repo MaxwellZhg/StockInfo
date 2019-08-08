@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.dycm.applib.TopicStockSearchFragment
 import com.dycm.applib1.R
 import com.dycm.applib1.event.SocketDisconnectEvent
 import com.dycm.applib1.model.StockTsEnum
@@ -15,7 +14,6 @@ import com.dycm.base2app.infra.LogInfra
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsBackFinishEventFragment
-import com.dycm.base2app.ui.fragment.AbsBackFinishFragment
 import com.dycm.base2app.ui.fragment.AbsFragment
 import com.dycm.base2app.util.ResUtil
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
@@ -124,11 +122,11 @@ class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-       when(p0?.id){
-           R.id.iv_serach->{
-               (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
-           }
-       }
+        when (p0?.id) {
+            R.id.iv_serach -> {
+                (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
+            }
+        }
     }
 
     @RxSubscribe(observeOnThread = EventThread.SINGLE)
@@ -143,6 +141,5 @@ class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
 
         // 关闭长链接
         SocketClient.getInstance()?.destroy()
-
     }
 }

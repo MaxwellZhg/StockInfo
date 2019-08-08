@@ -113,35 +113,9 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         @BindView(R2.id.ll_add_stock)
         lateinit var ll_add_stock: LinearLayout
 
-        init {
-            ll_add_stock.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View) {
-            if (v == ll_add_stock) {
-            } else {
-                super.onClick(v)
-            }
-        }
-
         override fun bind(item: StockMarketInfo?, position: Int) {
 
         }
 
     }
 }
-
-// 计算跌涨幅
-//val value = abs(item.price!! - item.openPrice!!)
-//
-//if (value > 0) {
-//    tv_price.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
-//
-//    rl_stock_up_down.setBackgroundColor(ResUtil.getColor(R.color.up_stock_color)!!)
-//    stock_up_down.text = "+" + MathUtil.division(value * 100, item.openPrice!!).toString() + "%"
-//} else {
-//    tv_price.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
-//
-//    rl_stock_up_down.setBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
-//    stock_up_down.text = "-" + MathUtil.division(value * 100, item.openPrice!!).toString() + "%"
-//}

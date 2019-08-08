@@ -34,8 +34,7 @@ import kotlin.math.abs
  * Desc: 自选股列表界面
  */
 @Suppress("NAME_SHADOWING")
-class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnClickItemCallback<StockMarketInfo>,
-    TopicStocksAdapter.AddTopicCallback {
+class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnClickItemCallback<StockMarketInfo> {
 
     private var type: StockTsEnum? = null
     private var mAdapter: TopicStocksAdapter? = null
@@ -69,7 +68,6 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
         mAdapter = TopicStocksAdapter()
         mAdapter?.setClickItemCallback(this)
         rv_stock.adapter = mAdapter
-        mAdapter?.addTopicCallback = this
 
         requestStocks()
     }
@@ -79,12 +77,9 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
             // TODO 跳转到详情页
             startActivity(Intent(context, StockDetailLandActivity::class.java))
         } else {
-            // TODO 跳转到搜索
+            // 跳转到搜索
+            (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
         }
-    }
-
-    override fun addTopicCallback(pos: Int, item: ChooseStockData?, view: View) {
-        (parentFragment as AbsFragment).start(TopicStockSearchFragment.newInstance(1))
     }
 
     /**
@@ -96,7 +91,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onRecommendStocklistResponse(response: RecommendStocklistResponse) {
         if (mAdapter == null) return
 
@@ -123,7 +118,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
     }
 
 
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksResponse(response: StocksTopicMarketResponse) {
         if (response.body.isNullOrEmpty()) return
 
