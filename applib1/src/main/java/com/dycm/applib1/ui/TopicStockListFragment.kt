@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
+import com.dycm.applib1.event.AddTopicStockEvent
 import com.dycm.applib1.model.StockMarketInfo
 import com.dycm.applib1.model.StockTopic
 import com.dycm.applib1.model.StockTopicDataTypeEnum
@@ -24,7 +25,12 @@ import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsBackFinishNetFragment
 import com.dycm.base2app.ui.fragment.AbsFragment
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
+import java.util.*
 import kotlin.math.abs
 
 /**
@@ -40,6 +46,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
     private var pageSize = 20
+    private var disposables = LinkedList<Disposable>()
 
     companion object {
         fun newInstance(type: StockTsEnum?): TopicStockListFragment {
@@ -117,7 +124,6 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
         }
     }
 
-
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksResponse(response: StocksTopicMarketResponse) {
         if (response.body.isNullOrEmpty()) return
@@ -143,5 +149,56 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
                 }
             }
         }
+    }
+
+    /**
+     * 添加自选股
+     */
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    fun onAddTopicStockEvent(event: AddTopicStockEvent) {
+        if (type != null && !event.stock.ts.equals(type?.name)) return
+
+//        for (item in mAdapter?.items!!) {
+//            if (item.ts.equals(event.stock.ts) && item.code.equals(event.stock.ts)) return
+//        }
+
+        // 发起订阅行情
+        val stockTopic = event.stock.ts?.let {
+            event.stock.code?.let { it1 ->
+                event.stock.type?.let { it2 ->
+                    StockTopic(StockTopicDataTypeEnum.market,
+                        it, it1, it2
+                    )
+                }
+            }
+        }
+        SocketClient.getInstance().bindTopic(stockTopic)
+
+        // 显示新添加的自选股
+        val stock = StockMarketInfo()
+        stock.ts = event.stock.ts
+        stock.code = event.stock.code
+        stock.name = event.stock.name
+        stock.type = event.stock.type
+        stock.tsCode = event.stock.tsCode
+
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            mAdapter?.addItem(stock)
+            emitter.onNext(true)
+            emitter.onComplete()
+        }).subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+        disposables.add(disposable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // 释放disposable
+        if (disposables.isNullOrEmpty()) return
+        for (disposable in disposables) {
+            disposable.dispose()
+        }
+        disposables.clear()
     }
 }

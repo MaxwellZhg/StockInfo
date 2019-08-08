@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
+import com.dycm.applib1.event.AddTopicStockEvent
 import com.dycm.applib1.model.SearchStockInfo
 import com.dycm.applib1.net.IStockNet
 import com.dycm.applib1.net.request.StockSearchRequest
@@ -14,6 +15,7 @@ import com.dycm.base2app.Cache
 import com.dycm.base2app.adapter.BaseListAdapter
 import com.dycm.base2app.network.Network
 import com.dycm.base2app.rxbus.EventThread
+import com.dycm.base2app.rxbus.RxBus
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsSwipeBackEventFragment
 import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
@@ -103,7 +105,9 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
     }
 
     override fun onAddTopicClickItem(pos: Int, item: SearchStockInfo?, view: View) {
-        // TODO 点击添加到自选列表
+        // 点击添加到自选列表
+        item?.let { AddTopicStockEvent(it) }?.let { RxBus.getDefault().post(it) }
+        toast(R.string.add_topic_successful)
     }
 
     fun getTopicStockData(str: String, count: Int) {
