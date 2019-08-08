@@ -12,7 +12,7 @@
         <ImageView android:layout_width="25dp"
                    android:layout_height="25dp"
                    android:layout_centerVertical="true"
-                   android:layout_marginLeft="22dp"
+                   android:layout_marginStart="22dp"
                    android:background="@mipmap/prof"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -24,12 +24,12 @@
                    android:layout_height="24dp"
                    android:id="@+id/iv_message"
                    android:layout_centerVertical="true"
-                   android:layout_alignParentRight="true"
-                   android:layout_marginRight="22dp"
+                   android:layout_alignParentEnd="true"
+                   android:layout_marginEnd="22dp"
                    android:background="@mipmap/message"/>
         <ImageView android:layout_width="24dp"
-                   android:layout_toLeftOf="@+id/iv_message"
-                   android:layout_marginRight="19dp"
+                   android:layout_toStartOf="@+id/iv_message"
+                   android:layout_marginEnd="19dp"
                    android:id="@+id/iv_serach"
                    android:layout_height="23dp"
                    android:layout_centerVertical="true"
@@ -46,8 +46,8 @@
         <ImageView android:background="@mipmap/list"
                    android:id="@+id/iv_list"
                    android:layout_centerVertical="true"
-                   android:layout_alignParentRight="true"
-                   android:layout_marginRight="13dp"
+                   android:layout_alignParentEnd="true"
+                   android:layout_marginEnd="13dp"
                    android:layout_width="19dp"
                    android:layout_height="15dp"/>
     </RelativeLayout>
