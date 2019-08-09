@@ -14,7 +14,7 @@ import com.dycm.applib1.net.IStockNet
 import com.dycm.applib1.net.request.RecommendStocklistRequest
 import com.dycm.applib1.net.response.RecommendStocklistResponse
 import com.dycm.applib1.socket.SocketClient
-import com.dycm.applib1.socket.response.StocksTopicMarketResponse
+import com.dycm.applib1.socket.push.StocksTopicMarketResponse
 import com.dycm.applib1.ui.detail.StockDetailLandActivity
 import com.dycm.applib1.util.MathUtil
 import com.dycm.base2app.Cache

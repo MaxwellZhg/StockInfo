@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.dycm.applib1.R
 import com.dycm.applib1.socket.SocketClient
 import com.dycm.applib1.socket.request.StockKlineGetDaily
-import com.dycm.applib1.socket.response.StocksTopicDayKlineResponse
+import com.dycm.applib1.socket.response.StocksDayKlineResponse
 import com.dycm.applib1.stockChart.data.KLineDataManage
 import com.dycm.base2app.infra.LogInfra
 import com.dycm.base2app.rxbus.EventThread
@@ -100,7 +100,7 @@ class ChartKLineFragment : AbsEventFragment() {
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStocksTopicDayKlineResponse(response: StocksTopicDayKlineResponse) {
+    fun onStocksTopicDayKlineResponse(response: StocksDayKlineResponse) {
         if (requestIds.remove(response.respId)) {
             LogInfra.Log.d(TAG, "onStocksTopicDayKlineResponse ...")
 

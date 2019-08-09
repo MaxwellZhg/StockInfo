@@ -8,7 +8,7 @@ import com.dycm.applib1.socket.vo.kline.DayKlineData
  * date   : 2019/7/23 15:49
  * desc   : 日K数据返回对象
  */
-class StocksTopicDayKlineResponse : SocketResponse() {
+class StocksDayKlineResponse : SocketResponse() {
 
     var data: ArrayList<DayKlineData>? = null
 }

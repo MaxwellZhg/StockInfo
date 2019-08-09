@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import com.dycm.applib1.event.SocketDisconnectEvent;
 import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.model.StockTopicDataTypeEnum;
+import com.dycm.applib1.socket.push.StocksTopicMinuteKlineResponse;
+import com.dycm.applib1.socket.push.StocksTopicMarketResponse;
+import com.dycm.applib1.socket.push.StocksTopicPriceResponse;
+import com.dycm.applib1.socket.push.StocksTopicTransResponse;
 import com.dycm.applib1.socket.request.SocketHeader;
 import com.dycm.applib1.socket.request.SocketRequest;
 import com.dycm.applib1.socket.request.StockKlineGetDaily;
@@ -114,7 +118,7 @@ public class SocketClient {
 
                                     // TODO 暂时只判断2-1
                                     if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())) {
-                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksMinuteKlineResponse.class));
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
                                     }
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
@@ -152,7 +156,7 @@ public class SocketClient {
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_DAILY:
                                         // 获取日K
-                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicDayKlineResponse.class));
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksDayKlineResponse.class));
                                         break;
                                 }
 

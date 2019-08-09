@@ -1,4 +1,4 @@
-package com.dycm.applib1.socket.response
+package com.dycm.applib1.socket.push
 
 import com.dycm.applib1.model.PushStockPriceData
 import com.dycm.applib1.socket.request.SocketHeader
