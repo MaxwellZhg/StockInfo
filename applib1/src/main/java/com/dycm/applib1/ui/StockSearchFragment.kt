@@ -79,7 +79,7 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-        if (response.data.datas.isNotEmpty()) {
+        if (response.data!=null&&response.data.datas.isNotEmpty()) {
             // 显示搜索列表
             search_list.visibility = View.VISIBLE
             // 设置数据
@@ -90,6 +90,10 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
                 adapter!!.onAddTopicClickItemCallback = this
                 search_list.adapter = adapter
                 adapter!!.addItems(response.data.datas)
+            }else{
+                if(adapter!!.items.size<20) {
+                    adapter!!.addItems(response.data.datas)
+                }
             }
         }
     }
@@ -97,10 +101,8 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
     override fun onClickItem(pos: Int, item: SearchStockInfo?, v: View?) {
         if (item == null) {
             type = max
-
-            //假数据操作
-            val items = adapter?.items
-            adapter?.addItems(items)
+            //做更多的请求
+            getTopicStockData(tips, 20)
         }
     }
 

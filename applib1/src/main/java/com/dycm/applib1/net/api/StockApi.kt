@@ -39,5 +39,10 @@ interface StockApi {
          * 行情（即K线实时数据）
          */
         const val MARKET = "/stockmarket/api/stock/market/v1"
+
+        /**
+         * 关键字搜索
+         */
+        const val SEARCH_TOPIC ="/as-market/api/stock/view/v1/search"
     }
 }
