@@ -1,7 +1,7 @@
 package com.dycm.applib1.model
 
 /**
- * websocket返回的自选股信息
+ * websocket返回的自选股行情信息
  */
 class PushStockMarketData : BaseStockMarket() {
 
@@ -16,4 +16,5 @@ class PushStockMarketData : BaseStockMarket() {
     var price: Double? = null
     var time: String? = null
     var vol: Int = 0
+    var dateTime: Long = 0
 }

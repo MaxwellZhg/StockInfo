@@ -7,32 +7,43 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 /**
  * 装载Fragment的通用适配器
  */
-class SimpleFragmentPagerAdapter : FragmentStatePagerAdapter {
-    private var mFragments: List<Fragment>? = null
+class SimpleFragmentPagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentStatePagerAdapter(fm) {
     private var mTitles: List<String>? = null
 
-    constructor(fm: FragmentManager, fragments: Array<Fragment>) : super(fm) {
-        mFragments = listOf(*fragments)
-    }
-
-    constructor(fm: FragmentManager, fragments: List<Fragment>) : super(fm) {
-        mFragments = fragments
-    }
-
-    constructor(fm: FragmentManager, fragments: Array<Fragment>, titles: Array<String>) : this(fm, fragments) {
+    init {
         mTitles = listOf(*titles)
     }
 
-    constructor(fm: FragmentManager, fragments: List<Fragment>, titles: List<String>) : this(fm, fragments) {
-        mTitles = titles
-    }
 
-    override fun getItem(position: Int): Fragment {
-        return mFragments!![position]
+    override fun getItem(position: Int): Fragment? {
+        when (position) {
+            0 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+            1 -> {
+                return ChartFiveDayFragment.newInstance(true)
+            }
+            2 -> {
+                return ChartKLineFragment.newInstance(1, true)
+            }
+            3 -> {
+                return ChartKLineFragment.newInstance(7, true)
+            }
+            4 -> {
+                return ChartKLineFragment.newInstance(30, true)
+            }
+            5 -> {
+                return ChartKLineFragment.newInstance(90, true)
+            }
+            6 -> {
+                return ChartKLineFragment.newInstance(365, true)
+            }
+        }
+        return null
     }
 
     override fun getCount(): Int {
-        return mFragments!!.size
+        return mTitles!!.size
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

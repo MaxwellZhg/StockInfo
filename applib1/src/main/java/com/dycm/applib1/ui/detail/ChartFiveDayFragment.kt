@@ -22,6 +22,10 @@ class ChartFiveDayFragment : AbsFragment() {
 
     override fun init() {
         land = arguments!!.getBoolean("landscape")
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
 
         chart!!.initChart(land)
 
