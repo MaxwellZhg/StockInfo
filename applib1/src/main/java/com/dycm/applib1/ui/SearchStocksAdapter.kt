@@ -93,7 +93,7 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
                     iv_tag.background = ResUtil.getDrawable(R.mipmap.sh)
                 }
                 "SZ" -> {
-                    iv_tag.background = ResUtil.getDrawable(R.mipmap.hk)
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.sz)
                 }
                 "HK" -> {
                     iv_tag.background = ResUtil.getDrawable(R.mipmap.hk)

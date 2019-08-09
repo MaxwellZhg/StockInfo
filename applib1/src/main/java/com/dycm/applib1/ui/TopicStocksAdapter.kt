@@ -90,6 +90,9 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 StockTsEnum.SH.name -> {
                     iv_stock_ts.setImageResource(R.mipmap.sh)
                 }
+                StockTsEnum.SZ.name -> {
+                    iv_stock_ts.setImageResource(R.mipmap.sz)
+                }
             }
             tv_price.text = item?.price.toString()
 
