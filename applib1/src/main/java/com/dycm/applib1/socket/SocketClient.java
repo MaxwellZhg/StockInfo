@@ -6,6 +6,7 @@ import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.model.StockTopicDataTypeEnum;
 import com.dycm.applib1.socket.request.SocketHeader;
 import com.dycm.applib1.socket.request.SocketRequest;
+import com.dycm.applib1.socket.request.StockKlineGetDaily;
 import com.dycm.applib1.socket.response.*;
 import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
@@ -28,8 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-
-import static com.dycm.applib1.model.StockTopicDataTypeEnum.kminute;
 
 public class SocketClient {
 
@@ -147,6 +146,10 @@ public class SocketClient {
                                         // 传递上层，解绑订阅成功
                                         RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
                                         break;
+                                    case SocketApi.PUSH_STOCK_KLINE_GET_DAILY:
+                                        // 获取日K
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicDayKlineResponse.class));
+                                        break;
                                 }
 
                             }
@@ -258,5 +261,22 @@ public class SocketClient {
         }
 
         return socketRequest;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void requestGetDailyKline(StockKlineGetDaily stockKlineGetDaily) {
+        SocketRequest socketRequest = new SocketRequest();
+
+        SocketHeader socketHeader = new SocketHeader();
+        socketHeader.setLanguage("ZN");
+        socketHeader.setReq_id(UUID.randomUUID().toString());
+        socketHeader.setVersion("1.0.0");
+        socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
+        socketRequest.setHeader(socketHeader);
+
+        socketRequest.setBody(stockKlineGetDaily);
+
+        sendRequest(JsonUtil.toJson(socketRequest));
+        requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReq_id(), socketRequest);
     }
 }
