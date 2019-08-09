@@ -19,7 +19,6 @@ import com.dycm.applib1.ui.detail.StockDetailLandActivity
 import com.dycm.applib1.util.MathUtil
 import com.dycm.base2app.Cache
 import com.dycm.base2app.adapter.BaseListAdapter
-import com.dycm.base2app.infra.LogInfra
 import com.dycm.base2app.network.Network
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
@@ -32,6 +31,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import java.util.*
 import kotlin.math.abs
+import androidx.recyclerview.widget.SimpleItemAnimator
 
 /**
  * Created by Maxwell.
@@ -71,6 +71,7 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
         super.onLazyInitView(savedInstanceState)
 
         // 设置列表数据适配器
+        (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_stock.layoutManager = LinearLayoutManager(context)
         mAdapter = TopicStocksAdapter()
         mAdapter?.setClickItemCallback(this)
@@ -126,27 +127,26 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksResponse(response: StocksTopicMarketResponse) {
-        if (response.body.isNullOrEmpty()) return
+        if (mAdapter == null) return
 
-        val responseList = response.body
-        LogInfra.Log.d(TAG, "onStocksResponse: " + responseList.size)
+        val adapterData = mAdapter?.items
+        if (adapterData?.isNullOrEmpty()!!) return
 
-        if (mAdapter?.items?.isNotEmpty()!!) {
-            for (index in mAdapter?.items?.indices!!) {
+        val stockMarketData = response.body
+
+        for (index in mAdapter?.items?.indices!!) {
+            val item = mAdapter?.items!![index]
+            if (item.ts == stockMarketData.ts && item.code == stockMarketData.code) {
+                // 更新数据
                 val item = mAdapter?.items!![index]
-                for (sub in responseList) {
-                    if (item.ts == sub.ts && item.code == sub.code) {
-                        // 更新数据
-                        val item = mAdapter?.items!![index]
-                        item.price = sub.price!!
-                        item.diffRate =
-                            MathUtil.division(abs(sub.price!! - sub.openPrice!!) * 100, sub.openPrice!!)
-                        mAdapter?.notifyItemChanged(index)
-
-                        responseList.remove(sub)
-                        break
-                    }
-                }
+                item.price = stockMarketData.price!!
+                item.diffRate =
+                    MathUtil.division(
+                        abs(stockMarketData.price!! - stockMarketData.openPrice!!) * 100,
+                        stockMarketData.openPrice!!
+                    )
+                mAdapter?.notifyItemChanged(index)
+                break
             }
         }
     }
@@ -166,7 +166,8 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
         val stockTopic = event.stock.ts?.let {
             event.stock.code?.let { it1 ->
                 event.stock.type?.let { it2 ->
-                    StockTopic(StockTopicDataTypeEnum.market,
+                    StockTopic(
+                        StockTopicDataTypeEnum.market,
                         it, it1, it2
                     )
                 }

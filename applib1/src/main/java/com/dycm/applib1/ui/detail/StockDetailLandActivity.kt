@@ -2,7 +2,7 @@ package com.dycm.applib1.ui.detail
 
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatDelegate
 import com.dycm.applib1.R
 import com.dycm.base2app.ui.activity.AbsActivity
 import kotlinx.android.synthetic.main.fragment_stockdetail.*
@@ -21,20 +21,14 @@ class StockDetailLandActivity : AbsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // 全屏
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        // 设置夜间模式
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-        val fragments = arrayOf<Fragment>(
-            ChartOneDayFragment.newInstance(true),
-            ChartFiveDayFragment.newInstance(true),
-            ChartKLineFragment.newInstance(1, true),
-            ChartKLineFragment.newInstance(7, true),
-            ChartKLineFragment.newInstance(30, true),
-            ChartKLineFragment.newInstance(90, true),
-            ChartKLineFragment.newInstance(365, true)
-        )
         val titles = arrayOf("分时", "五日", "日K", "周K", "月K", "季K", "年K")
-        view_pager!!.offscreenPageLimit = fragments.size
-        view_pager!!.adapter = SimpleFragmentPagerAdapter(supportFragmentManager, fragments, titles)
+        view_pager!!.offscreenPageLimit = titles.size
+        view_pager!!.adapter = SimpleFragmentPagerAdapter(supportFragmentManager, titles)
         tab!!.setupWithViewPager(view_pager)
     }
 }

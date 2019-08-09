@@ -25,6 +25,10 @@ class ChartKLineFragment : AbsFragment() {
     override fun init() {
         mType = arguments!!.getInt("type")
         land = arguments!!.getBoolean("landscape")
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
 
         kLineData = KLineDataManage(activity)
         combinedchart!!.initChart(land)

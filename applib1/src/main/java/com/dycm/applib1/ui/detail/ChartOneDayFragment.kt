@@ -50,7 +50,10 @@ class ChartOneDayFragment : AbsEventFragment() {
     @SuppressLint("CheckResult")
     override fun init() {
         land = arguments!!.getBoolean("landscape")
+    }
 
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         chart!!.initChart(land)
 
         // 测试数据

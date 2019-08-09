@@ -39,8 +39,6 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
 
-    api 'androidx.appcompat:appcompat:1.0.2'
-
     api project(":base2app")
     // 支持使用butterknife注解
     kapt "com.jakewharton:butterknife-compiler:$butterknife_plugin_version"

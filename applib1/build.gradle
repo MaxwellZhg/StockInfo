@@ -40,13 +40,8 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-
-    api 'androidx.appcompat:appcompat:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
     api project(":base2app")
+    api project(":commonwidget")
     implementation project(":MPChartLib")
     // 支持使用butterknife注解
     kapt "com.jakewharton:butterknife-compiler:$butterknife_plugin_version"
