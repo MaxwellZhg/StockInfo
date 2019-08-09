@@ -7,6 +7,7 @@ import com.dycm.applib1.model.StockTopicDataTypeEnum;
 import com.dycm.applib1.socket.request.SocketHeader;
 import com.dycm.applib1.socket.request.SocketRequest;
 import com.dycm.applib1.socket.request.StockKlineGetDaily;
+import com.dycm.applib1.socket.request.StockMinuteKline;
 import com.dycm.applib1.socket.response.*;
 import com.dycm.applib1.util.ByteBufferUtil;
 import com.dycm.applib1.util.GZipUtil;
@@ -107,14 +108,13 @@ public class SocketClient {
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMarketResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_KLINE:
-                                case SocketApi.PUSH_STOCK_KLINE_COMPENSATION_DATA:
                                     // K线
                                     JSONObject body = jsonObject.getJSONObject("body");
                                     String klineType = body.getString("klineType");
 
                                     // TODO 暂时只判断2-1
                                     if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())) {
-                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksMinuteKlineResponse.class));
                                     }
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
@@ -144,7 +144,11 @@ public class SocketClient {
                                         break;
                                     case SocketApi.TOPIC_UNBIND:
                                         // 传递上层，解绑订阅成功
-                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getResp_id())));
+                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getRespId())));
+                                        break;
+                                    case SocketApi.PUSH_STOCK_KLINE_GET_MINUTE:
+                                        // 获取分时
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksMinuteKlineResponse.class));
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_DAILY:
                                         // 获取日K
@@ -211,7 +215,7 @@ public class SocketClient {
     public void unBindTopic(StockTopic... topics) {
         SocketRequest param = createTopicMessage(SocketApi.TOPIC_UNBIND, topics);
         sendRequest(JsonUtil.toJson(param));
-        requestMap.put(Objects.requireNonNull(param.getHeader()).getReq_id(), param);
+        requestMap.put(Objects.requireNonNull(param.getHeader()).getReqId(), param);
     }
 
     private void unBindAllTopic() {
@@ -226,7 +230,7 @@ public class SocketClient {
         SocketHeader socketHeader = new SocketHeader();
         socketHeader.setDev_id(devId);
         socketHeader.setLanguage("ZN");
-        socketHeader.setReq_id(UUID.randomUUID().toString());
+        socketHeader.setReqId(UUID.randomUUID().toString());
         socketHeader.setVersion("1.0.0");
         socketHeader.setPath(SocketApi.AUTH);
         param.setHeader(socketHeader);
@@ -249,7 +253,7 @@ public class SocketClient {
 
         SocketHeader socketHeader = new SocketHeader();
         socketHeader.setLanguage("ZN");
-        socketHeader.setReq_id(UUID.randomUUID().toString());
+        socketHeader.setReqId(UUID.randomUUID().toString());
         socketHeader.setVersion("1.0.0");
         socketHeader.setPath(path);
         socketRequest.setHeader(socketHeader);
@@ -269,7 +273,7 @@ public class SocketClient {
 
         SocketHeader socketHeader = new SocketHeader();
         socketHeader.setLanguage("ZN");
-        socketHeader.setReq_id(UUID.randomUUID().toString());
+        socketHeader.setReqId(stockKlineGetDaily.getUuid());
         socketHeader.setVersion("1.0.0");
         socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
         socketRequest.setHeader(socketHeader);
@@ -277,6 +281,23 @@ public class SocketClient {
         socketRequest.setBody(stockKlineGetDaily);
 
         sendRequest(JsonUtil.toJson(socketRequest));
-        requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReq_id(), socketRequest);
+        requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReqId(), socketRequest);
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void requestGetMinuteKline(StockMinuteKline stockMinuteKline) {
+        SocketRequest socketRequest = new SocketRequest();
+
+        SocketHeader socketHeader = new SocketHeader();
+        socketHeader.setLanguage("ZN");
+        socketHeader.setReqId(stockMinuteKline.getUuid());
+        socketHeader.setVersion("1.0.0");
+        socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_MINUTE);
+        socketRequest.setHeader(socketHeader);
+
+        socketRequest.setBody(stockMinuteKline);
+
+        sendRequest(JsonUtil.toJson(socketRequest));
+        requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReqId(), socketRequest);
     }
 }

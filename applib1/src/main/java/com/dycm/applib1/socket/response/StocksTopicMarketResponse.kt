@@ -11,5 +11,5 @@ import com.dycm.applib1.socket.request.SocketHeader
  */
 class StocksTopicMarketResponse(
     val header: SocketHeader,
-    val body:  PushStockMarketData
+    val body: PushStockMarketData
 )

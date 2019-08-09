@@ -11,7 +11,7 @@ open class SocketResponse {
     var code: String? = null// 0代表成功
     var msg: String? = null
     var path: String? = null
-    var resp_id: String? = null
+    var respId: String? = null
 
     val isSuccessful: Boolean
         get() = code != null && code == "0000"

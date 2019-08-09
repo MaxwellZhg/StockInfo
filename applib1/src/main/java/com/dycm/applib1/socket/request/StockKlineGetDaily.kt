@@ -1,5 +1,7 @@
 package com.dycm.applib1.socket.request
 
+import java.util.*
+
 /**
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
@@ -12,4 +14,6 @@ open class StockKlineGetDaily(
     val startTime: Long, // 开始时间
     val endTime: Long, // 结束时间
     val pageSize: Int // 查询条数
-)
+) {
+    val uuid = UUID.randomUUID().toString()
+}

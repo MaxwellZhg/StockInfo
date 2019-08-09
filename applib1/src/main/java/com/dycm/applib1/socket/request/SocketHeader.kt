@@ -9,7 +9,7 @@ package com.dycm.applib1.socket.request
 class SocketHeader {
     var dev_id: String? = null
     var language: String? = null
-    var req_id: String? = null
+    var reqId: String? = null
     var version: String? = null
     var path: String? = null
 }

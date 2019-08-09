@@ -7,6 +7,7 @@ package com.dycm.applib1.socket.vo.kline
  *    desc   : 日K数据对象
  */
 data class DayKlineData(
+    val id: String,
     val amount: Double,// 成交额 （千元）
     val change: Double,// 涨跌额
     val closePrice: Double,// 收盘价格
