@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.SparseArray;
 import com.dycm.applib1.socket.vo.kline.MinuteKlineData;
 import com.dycm.applib1.stockChart.model.TimeDataModel;
+import com.dycm.base2app.infra.LogInfra;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,6 +40,18 @@ public class TimeDataManage {
         if (klineData != null) {
             realTimeDatas.clear();
             fiveDayXLabels.clear();
+
+//            if (!realTimeDatas.isEmpty()) {
+//                // 需要加入的第一条数据的时间
+//                long firstDateTime = klineData.get(0).getDateTime();
+//                // 当前数集合最后一条数据的时间
+//                long lastDateTime = realTimeDatas.get(realTimeDatas.size() - 1).getTimeMills();
+//                if (firstDateTime == lastDateTime || firstDateTime < lastDateTime) {
+//                    LogInfra.Log.e("LocalStocksKlineDataConfig", "缓存数据时间不合法");
+//                    return;
+//                }
+//            }
+
             getFiveDayXLabelKey(assetId);
             String preDate = null;
             int index = 0;

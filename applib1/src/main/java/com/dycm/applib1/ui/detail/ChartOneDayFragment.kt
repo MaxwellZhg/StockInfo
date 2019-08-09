@@ -30,6 +30,7 @@ class ChartOneDayFragment : AbsEventFragment() {
 
     private var land: Boolean = false // 是否横屏
     private val kTimeData = TimeDataManage()
+    private var stockCompensationDataTopic: StockTopic? = null
     private var stockTopic: StockTopic? = null
     private val disposables = LinkedList<Disposable>()
 
@@ -66,53 +67,84 @@ class ChartOneDayFragment : AbsEventFragment() {
 //            e.printStackTrace()
 //        }
 
-        val disposable = Observable.create(ObservableOnSubscribe<ArrayList<MinuteKlineData>> { emitter ->
-            LocalStocksKlineDataConfig.instance?.getKlineData("SZ", "000001")?.let { emitter.onNext(it) }
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { list ->
-                LogInfra.Log.d(TAG, "Local kline cache data size : " + list?.size)
-                kTimeData.parseTimeData(list, "000001.IDX.SZ", 0.0)
-                chart!!.setDataToChart(kTimeData)
-            }
-        disposables.add(disposable)
+//        val disposable = Observable.create(ObservableOnSubscribe<ArrayList<MinuteKlineData>> { emitter ->
+//            LocalStocksKlineDataConfig.instance?.getKlineData("SZ", "000001")?.let { emitter.onNext(it) }
+//            emitter.onComplete()
+//        }).subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe { list ->
+//                LogInfra.Log.d(TAG, "Local kline cache data size : " + list?.size)
+//                kTimeData.parseTimeData(list, "000001.IDX.SZ", 0.0)
+//                chart!!.setDataToChart(kTimeData)
+//            }
+//        disposables.add(disposable)
 
-        // 发起自选股K线订阅
-        stockTopic = PushStockKlineTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1, 0)
-        SocketClient.getInstance().bindTopic(stockTopic)
+        // 发起自选股K线订阅补偿数据
+        stockCompensationDataTopic = PushStockKlineTopic(StockTopicDataTypeEnum.kminute, "SZ", "000001", 1, 0)
+        SocketClient.getInstance().bindTopic(stockCompensationDataTopic)
     }
 
     /**
      * 推送订阅自选股的分时数据
      */
     @SuppressLint("CheckResult")
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStocksTopicMinuteKlineResponse(response: StocksTopicMinuteKlineResponse) {
+        LogInfra.Log.d(TAG, "onStocksTopicMinuteKlineResponse ...")
+
+        val klineData = response.body?.klineData
+        val data = klineData?.data
+
+        if (stockCompensationDataTopic != null) {
+            // 取消补偿数据订阅
+            SocketClient.getInstance().unBindTopic(stockCompensationDataTopic)
+            stockCompensationDataTopic = null
+
+            // 订阅正常数据
+            stockTopic = data!![data.size - 1].dateTime?.let {
+                PushStockKlineTopic(
+                    StockTopicDataTypeEnum.kminute, "SZ", "000001", 1,
+                    it
+                )
+            }
+            SocketClient.getInstance().bindTopic(stockTopic)
+        }
+
         // 展示K线数据
         if (kTimeData.datas.isNullOrEmpty()) {
-            kTimeData.parseTimeData(response.body?.klineData?.data, "000001.IDX.SZ", 0.0)
-            chart!!.setDataToChart(kTimeData)
+            kTimeData.parseTimeData(data, "000001.IDX.SZ", 0.0)
+            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                chart!!.setDataToChart(kTimeData)
+                emitter.onNext(true)
+                emitter.onComplete()
+            }).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+            disposables.add(disposable)
         } else {
-            // TODO 在子线程中整合新数据再更新到界面
+            // 在子线程中整合新数据再更新到界面
+//            kTimeData.parseTimeData(data, "000001.IDX.SZ", 0.0)
+////            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+////                chart!!.setDataToChart(kTimeData)
+////                emitter.onNext(true)
+////                emitter.onComplete()
+////            }).subscribeOn(AndroidSchedulers.mainThread())
+////                .subscribe()
+////            disposables.add(disposable)
         }
 
         // 缓存K线数据到本地
-        val klineData = response.body?.klineData
-        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalStocksKlineDataConfig.instance?.add(klineData?.ts, klineData?.code, klineData?.data)!!)
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .subscribe()
-        disposables.add(disposable)
+//        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+//            emitter.onNext(LocalStocksKlineDataConfig.instance?.add(klineData?.ts, klineData?.code, data)!!)
+//            emitter.onComplete()
+//        }).subscribeOn(Schedulers.io())
+//            .subscribe()
+//        disposables.add(disposable)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // 取消订阅分时数据
-        SocketClient.getInstance().bindTopic(stockTopic)
-
+        // 取消补偿数据订阅
+        SocketClient.getInstance().unBindTopic(stockTopic)
         // 释放disposable
         if (disposables.isNullOrEmpty()) return
         for (disposable in disposables) {
