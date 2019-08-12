@@ -232,7 +232,7 @@ public class SocketClient {
 
         SocketRequest param = new SocketRequest();
         SocketHeader socketHeader = new SocketHeader();
-        socketHeader.setDev_id(devId);
+        socketHeader.setDevId(devId);
         socketHeader.setLanguage("ZN");
         socketHeader.setReqId(UUID.randomUUID().toString());
         socketHeader.setVersion("1.0.0");
@@ -240,7 +240,7 @@ public class SocketClient {
         param.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("dev_id", devId);
+        body.put("devId", devId);
         long timestamp = System.currentTimeMillis();
         body.put("timestamp", System.currentTimeMillis());
         String str = devId + timestamp + SocketApi.SOCKET_AUTH_SIGNATURE;

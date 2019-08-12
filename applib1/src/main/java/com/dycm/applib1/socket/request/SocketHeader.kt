@@ -7,7 +7,7 @@ package com.dycm.applib1.socket.request
  * desc   :  定义 websocket 发送请求的Header
  */
 class SocketHeader {
-    var dev_id: String? = null
+    var devId: String? = null
     var language: String? = null
     var reqId: String? = null
     var version: String? = null
