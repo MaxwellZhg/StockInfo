@@ -28,6 +28,24 @@ class LocalStocksKlineDataConfig : AbsConfig() {
         return klineData[key]!!
     }
 
+    /**
+     * 替换数据
+     */
+    fun replaceData(ts: String?, code: String?, data: ArrayList<MinuteKlineData>?): Boolean {
+        if (data.isNullOrEmpty()) return false
+        try {
+            val key = "$ts-$code"
+            klineData[key] = data
+
+            write()
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
+
+
     /***
      * 添加K线缓存数据
      */
