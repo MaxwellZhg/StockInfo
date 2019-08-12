@@ -23,6 +23,7 @@ import android.view.ViewConfiguration;
 
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
+import me.jessyan.autosize.AutoSizeConfig;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -112,8 +113,15 @@ public abstract class Utils {
                             "take place.");
             return dp;
         }
+        int designWidthInDp = AutoSizeConfig.getInstance().getDesignWidthInDp();
+        int designHeightInDp = AutoSizeConfig.getInstance().getDesignHeightInDp();
 
-        return dp * mMetrics.density;
+        int screenHeight = mMetrics.heightPixels;
+        int screenWidth = mMetrics.widthPixels;
+        float scaleH = screenHeight / designWidthInDp;
+        float scaleW = screenWidth / designHeightInDp;
+        float scale = scaleH < scaleW ? scaleW : scaleH;
+        return dp * mMetrics.density / scale;
     }
 
     /**

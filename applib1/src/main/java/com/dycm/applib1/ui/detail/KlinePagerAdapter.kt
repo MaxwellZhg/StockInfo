@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 /**
  * 装载Fragment的通用适配器
  */
-class SimpleFragmentPagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentStatePagerAdapter(fm) {
+class KlinePagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentStatePagerAdapter(fm) {
     private var mTitles: List<String>? = null
 
     init {

@@ -28,7 +28,7 @@ class StockDetailLandActivity : AbsActivity() {
 
         val titles = arrayOf("分时", "五日", "日K", "周K", "月K", "季K", "年K")
         view_pager!!.offscreenPageLimit = titles.size
-        view_pager!!.adapter = SimpleFragmentPagerAdapter(supportFragmentManager, titles)
+        view_pager!!.adapter = KlinePagerAdapter(supportFragmentManager, titles)
         tab!!.setupWithViewPager(view_pager)
     }
 }
