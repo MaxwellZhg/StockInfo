@@ -56,7 +56,7 @@
                android:layout_centerVertical="true"
                android:layout_toRightOf="@id/tv_arrows"
               android:textSize="15sp"
-              android:background="@mipmap/arrows"/>
+              android:background="@mipmap/updown"/>
     </RelativeLayout>
 </RelativeLayout>
     <ImageView android:layout_width="match_parent"
