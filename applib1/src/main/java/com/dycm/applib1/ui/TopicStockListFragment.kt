@@ -40,14 +40,14 @@ import androidx.recyclerview.widget.SimpleItemAnimator
  * Desc: 自选股列表界面
  */
 @Suppress("NAME_SHADOWING")
-class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnClickItemCallback<StockMarketInfo> {
+class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnClickItemCallback<StockMarketInfo>,
+    View.OnClickListener {
 
     private var type: StockTsEnum? = null
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
     private var pageSize = 20
     private var disposables = LinkedList<Disposable>()
-
     companion object {
         fun newInstance(type: StockTsEnum?): TopicStockListFragment {
             val fragment = TopicStockListFragment()
@@ -65,11 +65,12 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
 
     override fun init() {
         type = arguments?.getSerializable("type") as StockTsEnum?
+        rl_updown.setOnClickListener(this)
+        rl_arrows.setOnClickListener(this)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_stock.layoutManager = LinearLayoutManager(context)
@@ -202,4 +203,16 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
         }
         disposables.clear()
     }
+    override fun onClick(p0: View?) {
+      when(p0?.id){
+          R.id.rl_updown->{
+
+          }
+          R.id.rl_arrows->{
+
+          }
+      }
+    }
+
+
 }

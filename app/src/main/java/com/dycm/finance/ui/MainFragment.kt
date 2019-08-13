@@ -9,6 +9,7 @@ import com.dycm.base2app.ui.fragment.AbsBackFinishNetFragment
 import com.dycm.finance.R
 import com.dycm.finance.custom.view.BottomBar
 import com.dycm.finance.custom.view.BottomBarTab
+import com.dycm.modulea.ui.ModuleFragment
 import com.example.applib5.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import me.yokeyword.fragmentation.SupportFragment
@@ -70,7 +71,7 @@ class MainFragment : AbsBackFinishNetFragment() {
             mFragments[SECOND] = MarketTabFragment()
             mFragments[THIRD] = InfomationTabFragment()
             mFragments[FOUR]=  OpenAccountTabFragment()
-            mFragments[FIVE]=  MyTabFragment()
+            mFragments[FIVE]=  ModuleFragment()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, FIRST,
                 mFragments[FIRST],
@@ -86,7 +87,7 @@ class MainFragment : AbsBackFinishNetFragment() {
             mFragments[SECOND] = findChildFragment(MarketTabFragment::class.java)
             mFragments[THIRD] = findChildFragment(InfomationTabFragment::class.java)
             mFragments[FOUR] = findChildFragment(OpenAccountTabFragment::class.java)
-            mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
+            mFragments[FIVE] = findChildFragment(ModuleFragment::class.java)
         }
     }
 }
