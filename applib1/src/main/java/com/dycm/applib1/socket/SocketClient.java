@@ -152,7 +152,7 @@ public class SocketClient {
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_MINUTE:
                                         // 获取分时
-                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksMinuteKlineResponse.class));
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetStocksMinuteKlineResponse.class));
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_DAILY:
                                         // 获取日K
