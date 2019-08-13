@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import com.dycm.applib1.R
 import com.dycm.applib1.config.LocalStocksKlineDataConfig
+import com.dycm.applib1.event.SocketAuthCompleteEvent
 import com.dycm.applib1.model.StockTopic
 import com.dycm.applib1.model.StockTopicDataTypeEnum
 import com.dycm.applib1.socket.SocketClient
@@ -76,6 +77,10 @@ class ChartOneDayFragment : AbsEventFragment() {
             }
         disposables.add(disposable)
 
+        loadKlineMinuteData()
+    }
+
+    private fun loadKlineMinuteData() {
         // 发起自选股K线拉取补偿数据
         val stockMinuteKline = StockMinuteKline("SZ", "000001", 1)
         val reqId = SocketClient.getInstance().requestGetMinuteKline(stockMinuteKline)
@@ -148,11 +153,21 @@ class ChartOneDayFragment : AbsEventFragment() {
         disposables.add(disposable)
     }
 
+    @RxSubscribe(observeOnThread = EventThread.NEW)
+    fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
+        // 恢复订阅
+        if (stockTopic != null) {
+            LogInfra.Log.d(TAG, "onSocketAuthCompleteEvent 先再拉一次补偿书记，再恢复订阅")
+            loadKlineMinuteData()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         // 取消补偿数据订阅
         if (stockTopic != null) {
             SocketClient.getInstance().unBindTopic(stockTopic)
+            stockTopic = null
         }
         // 释放disposable
         if (disposables.isNullOrEmpty()) return
