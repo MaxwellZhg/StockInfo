@@ -64,8 +64,8 @@ class ChartKLineFragment : AbsEventFragment() {
         // TODO 测试代码
         if (mType == 1) {
             val klineGetDaily = StockKlineGetDaily("SZ", "000001", 0, 0, 0)
-            requestIds.add(klineGetDaily.uuid)
-            SocketClient.getInstance().requestGetDailyKline(klineGetDaily)
+            val reqId = SocketClient.getInstance().requestGetDailyKline(klineGetDaily)
+            requestIds.add(reqId)
         }
     }
 

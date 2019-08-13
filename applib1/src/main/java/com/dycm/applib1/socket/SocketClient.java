@@ -231,12 +231,8 @@ public class SocketClient {
         String devId = DeviceUtil.getDeviceUuid();
 
         SocketRequest param = new SocketRequest();
-        SocketHeader socketHeader = new SocketHeader();
+        SocketHeader socketHeader = getRequestHeader(SocketApi.AUTH);
         socketHeader.setDevId(devId);
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(UUID.randomUUID().toString());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(SocketApi.AUTH);
         param.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
@@ -255,11 +251,7 @@ public class SocketClient {
     private SocketRequest createTopicMessage(String path, StockTopic... topics) {
         SocketRequest socketRequest = new SocketRequest();
 
-        SocketHeader socketHeader = new SocketHeader();
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(UUID.randomUUID().toString());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(path);
+        SocketHeader socketHeader = getRequestHeader(path);
         socketRequest.setHeader(socketHeader);
 
         if (topics != null) {
@@ -272,36 +264,35 @@ public class SocketClient {
     }
 
     @SuppressLint("DefaultLocale")
-    public void requestGetDailyKline(StockKlineGetDaily stockKlineGetDaily) {
+    public String requestGetDailyKline(StockKlineGetDaily stockKlineGetDaily) {
         SocketRequest socketRequest = new SocketRequest();
-
-        SocketHeader socketHeader = new SocketHeader();
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(stockKlineGetDaily.getUuid());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
+        SocketHeader socketHeader = getRequestHeader(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
         socketRequest.setHeader(socketHeader);
-
         socketRequest.setBody(stockKlineGetDaily);
 
         sendRequest(JsonUtil.toJson(socketRequest));
         requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReqId(), socketRequest);
+        return socketHeader.getReqId();
     }
 
     @SuppressLint("DefaultLocale")
-    public void requestGetMinuteKline(StockMinuteKline stockMinuteKline) {
+    public String requestGetMinuteKline(StockMinuteKline stockMinuteKline) {
         SocketRequest socketRequest = new SocketRequest();
-
-        SocketHeader socketHeader = new SocketHeader();
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(stockMinuteKline.getUuid());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_MINUTE);
+        SocketHeader socketHeader = getRequestHeader(SocketApi.PUSH_STOCK_KLINE_GET_MINUTE);
         socketRequest.setHeader(socketHeader);
-
         socketRequest.setBody(stockMinuteKline);
 
         sendRequest(JsonUtil.toJson(socketRequest));
         requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReqId(), socketRequest);
+        return socketHeader.getReqId();
+    }
+
+    private SocketHeader getRequestHeader(String path) {
+        SocketHeader socketHeader = new SocketHeader();
+        socketHeader.setLanguage("ZN");
+        socketHeader.setReqId(UUID.randomUUID().toString());
+        socketHeader.setVersion("1.0.0");
+        socketHeader.setPath(path);
+        return socketHeader;
     }
 }

@@ -78,8 +78,8 @@ class ChartOneDayFragment : AbsEventFragment() {
 
         // 发起自选股K线拉取补偿数据
         val stockMinuteKline = StockMinuteKline("SZ", "000001", 1)
-        requestIds.add(stockMinuteKline.uuid)
-        SocketClient.getInstance().requestGetMinuteKline(stockMinuteKline)
+        val reqId = SocketClient.getInstance().requestGetMinuteKline(stockMinuteKline)
+        requestIds.add(reqId)
     }
 
     /**
