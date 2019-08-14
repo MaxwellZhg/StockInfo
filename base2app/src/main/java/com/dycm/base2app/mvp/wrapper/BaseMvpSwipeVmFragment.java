@@ -11,7 +11,7 @@ import com.dycm.base2app.mvp.BasePresenter;
  * Desc:
  */
 public abstract class BaseMvpSwipeVmFragment<P extends BasePresenter, VW extends BaseViewWrapper, D extends ViewDataBinding>
-        extends BaseNetVmFragment<D> {
+        extends BaseSwipevVmFragment<D> {
 
     protected P presenter;
     protected VW viewWrapper;

@@ -35,29 +35,6 @@ public abstract class BaseMvpFinishNetFragment <P extends BasePresenter> extends
 
     }
 
-
-    //***************************************IBaseView方法实现*************************************
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void dismissLoading() {
-
-    }
-
-    @Override
-    public void onEmpty(Object tag) {
-
-    }
-
-    @Override
-    public void onError(Object tag, String errorMsg) {
-
-    }
-    //***************************************IBaseView方法实现*************************************
-
     /**
      * 创建Presenter
      */

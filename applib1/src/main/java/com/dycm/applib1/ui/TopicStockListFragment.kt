@@ -2,7 +2,9 @@ package com.dycm.applib1.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
 import com.dycm.applib1.event.AddTopicStockEvent
@@ -32,6 +34,11 @@ import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import java.util.*
 import kotlin.math.abs
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.dycm.applib1.databinding.FragmentAllChooseStockBinding
+import com.dycm.applib1.ui.contract.TopicStockListContract
+import com.dycm.applib1.ui.mvp.TopicListStockVmWarpper
+import com.dycm.applib1.ui.mvp.TopicStockListPresenter
+import com.dycm.base2app.mvp.wrapper.BaseMvpNetVmFragment
 
 /**
  * Created by Maxwell.
@@ -40,9 +47,8 @@ import androidx.recyclerview.widget.SimpleItemAnimator
  * Desc: 自选股列表界面
  */
 @Suppress("NAME_SHADOWING")
-class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnClickItemCallback<StockMarketInfo>,
-    View.OnClickListener {
-
+class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,TopicListStockVmWarpper,FragmentAllChooseStockBinding>(), BaseListAdapter.OnClickItemCallback<StockMarketInfo>,
+    View.OnClickListener,TopicStockListContract.View {
     private var type: StockTsEnum? = null
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
@@ -72,11 +78,11 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         // 设置列表数据适配器
-        (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        rv_stock.layoutManager = LinearLayoutManager(context)
+        (dataBinding.rvStock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        dataBinding.rvStock.layoutManager = LinearLayoutManager(context)
         mAdapter = TopicStocksAdapter()
         mAdapter?.setClickItemCallback(this)
-        rv_stock.adapter = mAdapter
+        dataBinding.rvStock.adapter = mAdapter
 
         requestStocks()
     }
@@ -212,6 +218,27 @@ class TopicStockListFragment : AbsBackFinishNetFragment(), BaseListAdapter.OnCli
 
           }
       }
+    }
+
+    override fun createPresenter(): TopicStockListPresenter {
+        return TopicStockListPresenter(this)
+    }
+
+    override fun isDestroyed(): Boolean {
+        return  false
+    }
+
+    override fun createWrapper(): TopicListStockVmWarpper {
+        return TopicListStockVmWarpper(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dataBinding = generateDataBinding(inflater,container,layout)
+        if (viewWrapper != null) {
+            viewWrapper.setBinding(dataBinding)
+        }
+        presenter.fetchData()
+        return dataBinding.root
     }
 
 

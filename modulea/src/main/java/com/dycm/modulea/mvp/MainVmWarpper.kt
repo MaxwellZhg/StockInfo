@@ -1,8 +1,7 @@
 package com.dycm.modulea.mvp
 
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.base2app.mvp.wrapper.BaseViewWrapper
-import com.dycm.modulea.ModuleaViewModel
+import com.dycm.modulea.viewmodel.ModuleaViewModel
 import com.dycm.modulea.contract.MainContract
 import com.dycm.modulea.model.PersonalInfo
 import com.dycm.modulea.databinding.FragmentModuleaBinding
@@ -15,15 +14,21 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class MainVmWarpper(view: MainContract.View) :BaseViewWrapper<MainContract.View,FragmentModuleaBinding>(),MainContract.ViewWrapper{
+    private val viewModel by lazy {
+        ModuleaViewModel()
+    }
     init {
         attachView(view)
     }
     override fun setData(infos: List<PersonalInfo>) {
         LogUtils.e(infos.size.toString())
+       viewModel.setInfo(infos[0])
     }
 
     override fun onBind() {
-        super.onBind()
+        dataBinding.viewmodel=viewModel
+        dataBinding.executePendingBindings()
     }
+
 
 }
