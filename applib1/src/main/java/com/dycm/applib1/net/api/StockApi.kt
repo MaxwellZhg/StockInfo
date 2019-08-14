@@ -44,5 +44,6 @@ interface StockApi {
          * 关键字搜索
          */
         const val SEARCH_TOPIC ="/as-market/api/stock/view/v1/search"
+
     }
 }

@@ -28,6 +28,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions {
+        abortOnError false
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -76,4 +83,6 @@ dependencies {
     api 'me.jessyan:autosize:1.1.2'
     //dagger2
     api 'com.google.dagger:dagger:2.24'
+    api 'io.reactivex:rxandroid:1.2.0'
+    api 'io.reactivex:rxjava:1.1.6'
 }
