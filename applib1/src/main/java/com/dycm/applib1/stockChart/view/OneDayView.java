@@ -505,5 +505,7 @@ public class OneDayView extends BaseView {
         EventBus.getDefault().unregister(this);
     }
 
-
+    public TimeDataManage getData() {
+        return mData;
+    }
 }

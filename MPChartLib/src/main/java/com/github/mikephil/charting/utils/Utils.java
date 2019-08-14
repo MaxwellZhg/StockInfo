@@ -121,7 +121,7 @@ public abstract class Utils {
         float scaleH = screenHeight / designWidthInDp;
         float scaleW = screenWidth / designHeightInDp;
         float scale = scaleH < scaleW ? scaleW : scaleH;
-        return dp * mMetrics.density / scale;
+        return dp * mMetrics.density / scale * 1.5f;
     }
 
     /**
