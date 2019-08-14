@@ -114,14 +114,14 @@ public class KLineDataManage {
 
                 KLineDataModel klineDatamodel = new KLineDataModel();
                 // TODO 日期时间
-                klineDatamodel.setDateMills(System.currentTimeMillis() + 86400000 * i);
+                klineDatamodel.setDateMills(dayKlineData.getTradeDate());
                 klineDatamodel.setOpen(dayKlineData.getOpenPrice());
                 klineDatamodel.setHigh(dayKlineData.getHigh());
                 klineDatamodel.setLow(dayKlineData.getLow());
                 klineDatamodel.setClose(dayKlineData.getClosePrice());
                 klineDatamodel.setVolume(dayKlineData.getVol());
                 klineDatamodel.setTotal(NumberUtils.stringNoE10ForVol(dayKlineData.getAmount()));
-//                klineDatamodel.setMa5(data.optJSONArray(i).optDouble(7));
+                klineDatamodel.setMa5(dayKlineData.getMa5());
 //                klineDatamodel.setMa10(data.optJSONArray(i).optDouble(8));
 //                klineDatamodel.setMa20(data.optJSONArray(i).optDouble(9));
 //                klineDatamodel.setMa30(data.optJSONArray(i).optDouble(10));

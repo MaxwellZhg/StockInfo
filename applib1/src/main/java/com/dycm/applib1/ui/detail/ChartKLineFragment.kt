@@ -77,6 +77,8 @@ class ChartKLineFragment : AbsEventFragment() {
                 loadIndexData(if (indexType < 5) ++indexType else 1)
             }
         }
+
+        loadKlineData()
     }
 
     /**

@@ -16,7 +16,8 @@ data class DayKlineData(
     val openPrice: Double,// 开盘价格
     val pctChg: Double,// 涨跌幅 （未复权）
     val preClose: Double,// 昨日收盘
-    val tradeDate: String,// 交易日期
+    val tradeDate: Long,// 交易日期
     val tsCode: String,
-    val vol: Double// 成交量 （手）
+    val vol: Double,// 成交量 （手）
+    val ma5: Double// ma5数据
 )
