@@ -1,7 +1,9 @@
-package com.dycm.modulea
+package com.dycm.modulea.viewmodel
 
+import android.view.View
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import com.dycm.modulea.BR
 import com.dycm.modulea.model.PersonalInfo
 
 /**
@@ -15,15 +17,14 @@ import com.dycm.modulea.model.PersonalInfo
 
     private var introduction: String? = null
 
-
     fun getInfo(): PersonalInfo? {
         return info
     }
 
     fun setInfo(info: PersonalInfo) {
         this.info = info
-        val introduction = "I'm " + info.name + ", " + info.gender + ", I like " + info.hobbies
-        //setIntroduction(introduction)
+        val introduction = "I'm " + info.getName() + ", " + info.getGender() + ", I like " + info.getHobbies()
+        setIntroduction(introduction)
     }
 
     @Bindable
@@ -35,5 +36,10 @@ import com.dycm.modulea.model.PersonalInfo
         this.introduction = introduction
         notifyPropertyChanged(BR.introduction)
     }
+
+    fun detail(view: View){
+        setIntroduction("3333333")
+    }
+
 
 }

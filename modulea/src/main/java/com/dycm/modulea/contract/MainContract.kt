@@ -11,7 +11,7 @@ import com.dycm.modulea.model.PersonalInfo
  */
 interface MainContract {
     interface View : IBaseView {
-        fun showPersonalInfoDialog(info: PersonalInfo)
+
     }
 
     interface Presenter {

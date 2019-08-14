@@ -38,6 +38,10 @@ android {
         experimental = true
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     //greendao配置
     greendao {
         // 数据库的schema版本，也可以理解为数据库版本号

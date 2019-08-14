@@ -3,16 +3,25 @@ package com.dycm.applib1.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dycm.applib1.R
+import com.dycm.applib1.databinding.FragmentTopicStockSearchBinding
 import com.dycm.applib1.event.AddTopicStockEvent
 import com.dycm.applib1.model.SearchStockInfo
 import com.dycm.applib1.net.IStockNet
 import com.dycm.applib1.net.request.StockSearchRequest
 import com.dycm.applib1.net.response.StockSearchResponse
+import com.dycm.applib1.ui.contract.StockSearchContract
+import com.dycm.applib1.ui.mvp.StockSearchPresenter
+import com.dycm.applib1.ui.mvp.StockSearchVmWarpper
 import com.dycm.base2app.Cache
 import com.dycm.base2app.adapter.BaseListAdapter
+import com.dycm.base2app.mvp.wrapper.BaseMvpNetVmFragment
+import com.dycm.base2app.mvp.wrapper.BaseMvpSwipeVmFragment
+import com.dycm.base2app.mvp.wrapper.BaseSwipevVmFragment
 import com.dycm.base2app.network.Network
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxBus
@@ -26,8 +35,8 @@ import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
  * Date: 2019/8/8
  * Desc:自选股搜索
  */
-class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
-    SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<SearchStockInfo> {
+class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSearchVmWarpper, FragmentTopicStockSearchBinding>(), TextWatcher,
+    SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<SearchStockInfo>,StockSearchContract.View {
 
     private var type: Int = 0
     private lateinit var tips: String
@@ -54,7 +63,7 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
         get() = R.layout.fragment_topic_stock_search
 
     override fun init() {
-        et_serach.addTextChangedListener(this)
+        dataBinding.etSerach.addTextChangedListener(this)
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -81,10 +90,10 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (response.data!=null&&response.data.datas.isNotEmpty()) {
             // 显示搜索列表
-            search_list.visibility = View.VISIBLE
+            dataBinding.searchList.visibility = View.VISIBLE
             // 设置数据
-            if (search_list.adapter == null) {
-                search_list.layoutManager = LinearLayoutManager(context)
+            if (dataBinding.searchList.adapter == null) {
+                dataBinding.searchList.layoutManager = LinearLayoutManager(context)
                 adapter = SearchStocksAdapter()
                 adapter!!.setClickItemCallback(this)
                 adapter!!.onAddTopicClickItemCallback = this
@@ -117,5 +126,26 @@ class StockSearchFragment : AbsSwipeBackEventFragment(), TextWatcher,
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
         tips = str
+    }
+    override fun createPresenter(): StockSearchPresenter {
+       return StockSearchPresenter(this)
+    }
+
+    override fun isDestroyed(): Boolean {
+        return false
+    }
+
+    override fun createWrapper(): StockSearchVmWarpper {
+        return StockSearchVmWarpper(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dataBinding = generateDataBinding(inflater,container,layout)
+        if (viewWrapper != null) {
+            viewWrapper.setBinding(dataBinding)
+        }
+        presenter.fetchData()
+        dataBinding.root.setPadding(0, getRootViewFitsSystemWindowsPadding(), 0, 0)
+        return dataBinding.root
     }
 }

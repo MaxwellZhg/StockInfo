@@ -5,6 +5,7 @@ import androidx.databinding.ViewDataBinding;
 import com.dycm.base2app.mvp.BasePresenter;
 import com.dycm.base2app.mvp.wrapper.BaseNetVmFragment;
 import com.dycm.base2app.mvp.wrapper.BaseViewWrapper;
+import com.dycm.base2app.util.StatusBarUtil;
 
 /**
  * Created by Maxwell.

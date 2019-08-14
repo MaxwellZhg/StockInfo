@@ -1,16 +1,24 @@
 package com.dycm.applib1.ui
 
 import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.dycm.applib1.R
+import com.dycm.applib1.databinding.FragmentStockTabBinding
 import com.dycm.applib1.event.SocketDisconnectEvent
 import com.dycm.applib1.model.StockTsEnum
 import com.dycm.applib1.socket.SocketClient
+import com.dycm.applib1.ui.contract.StockTabContract
+import com.dycm.applib1.ui.mvp.StockTabPresenter
+import com.dycm.applib1.ui.mvp.StockTabVmWarpper
 import com.dycm.base2app.infra.LogInfra
+import com.dycm.base2app.mvp.wrapper.BaseMvpNetVmFragment
 import com.dycm.base2app.rxbus.EventThread
 import com.dycm.base2app.rxbus.RxSubscribe
 import com.dycm.base2app.ui.fragment.AbsBackFinishEventFragment
@@ -32,7 +40,18 @@ import java.util.*
  *    date   : 2019/7/18 10:32
  *    desc   : 主页中的自选股Tab页面
  */
-class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
+class StockTabFragment : BaseMvpNetVmFragment<StockTabPresenter,StockTabVmWarpper,FragmentStockTabBinding>(), View.OnClickListener,StockTabContract.View {
+    override fun createPresenter(): StockTabPresenter {
+      return StockTabPresenter(this)
+    }
+
+    override fun isDestroyed(): Boolean {
+       return false
+    }
+
+    override fun createWrapper(): StockTabVmWarpper {
+      return StockTabVmWarpper(this)
+    }
 
     private var mfragment: ArrayList<PageInfo> = ArrayList()
 
@@ -40,10 +59,6 @@ class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
         get() = R.layout.fragment_stock_tab
 
     inner class PageInfo(val title: String, val type: StockTsEnum?)
-
-    override fun rootViewFitsSystemWindowsPadding(): Boolean {
-        return true
-    }
 
     override fun init() {
         iv_serach.setOnClickListener(this)
@@ -81,26 +96,26 @@ class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
         }
 
         // 设置viewpager页面缓存数量
-        viewpager.offscreenPageLimit = mfragment.size
+        dataBinding.viewpager.offscreenPageLimit = mfragment.size
         // 设置viewpager适配器
-        viewpager.adapter = fragmentManager?.let { ViewPagerAdapter(it) }
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        dataBinding.viewpager.adapter = fragmentManager?.let { ViewPagerAdapter(it) }
+        dataBinding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
-                magic_indicator.onPageScrollStateChanged(state)
+                dataBinding.magicIndicator.onPageScrollStateChanged(state)
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                magic_indicator.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                dataBinding.magicIndicator.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
 
             override fun onPageSelected(position: Int) {
-                magic_indicator.onPageSelected(position)
+                dataBinding.magicIndicator.onPageSelected(position)
             }
         })
 
         // 指示器绑定viewpager
-        magic_indicator.navigator = commonNavigator
-        ViewPagerHelper.bind(magic_indicator, viewpager)
+        dataBinding.magicIndicator.navigator = commonNavigator
+        ViewPagerHelper.bind(dataBinding.magicIndicator, dataBinding.viewpager)
 
         // 启动长链接
         SocketClient.getInstance()?.connect()
@@ -141,5 +156,15 @@ class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
 
         // 关闭长链接
         SocketClient.getInstance()?.destroy()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dataBinding = generateDataBinding(inflater,container,layout)
+        if (viewWrapper != null) {
+            viewWrapper.setBinding(dataBinding)
+        }
+        presenter.fetchData()
+        dataBinding.root.setPadding(0, getRootViewFitsSystemWindowsPadding(), 0, 0)
+        return dataBinding.root
     }
 }
