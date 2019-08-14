@@ -1,6 +1,7 @@
 package com.dycm.applib1.socket;
 
 import android.annotation.SuppressLint;
+import com.dycm.applib1.event.SocketAuthCompleteEvent;
 import com.dycm.applib1.event.SocketDisconnectEvent;
 import com.dycm.applib1.model.StockTopic;
 import com.dycm.applib1.model.StockTopicDataTypeEnum;
@@ -135,16 +136,8 @@ public class SocketClient {
                             if (response != null && response.isSuccessful()) {
                                 switch (Objects.requireNonNull(response.getPath())) {
                                     case SocketApi.AUTH:
-                                        // 自动订阅本地纪录中的自选股
-//                                        LocalStocksConfig config = LocalStocksConfig.Companion.read();
-//                                        StockTopic[] stockTopics = config.getStocks().toArray(new StockTopic[0]);
-//                                        bindTopic(stockTopics);
-                                        // TODO 暂时写死
-//                                        StockTopic stockTopic1 = new StockTopic(StockTopicDataTypeEnum.market, "SZ", "000001", 1);
-//                                        StockTopic stockTopic2 = new StockTopic(kminute, "SZ", "000001", 1);
-//                                        StockTopic stockTopic3 = new StockTopic(StockTopicDataTypeEnum.trans, "SZ", "000001", 1);
-//                                        StockTopic stockTopic4 = new StockTopic(StockTopicDataTypeEnum.price, "SZ", "000001", 1);
-//                                        bindTopic(stockTopic1, stockTopic2, stockTopic3, stockTopic4);
+                                        // 认证成功
+                                        RxBus.getDefault().post(new SocketAuthCompleteEvent());
                                         break;
                                     case SocketApi.TOPIC_UNBIND:
                                         // 传递上层，解绑订阅成功
@@ -152,10 +145,12 @@ public class SocketClient {
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_MINUTE:
                                         // 获取分时
+                                        requestMap.remove(response.getRespId());
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetStocksMinuteKlineResponse.class));
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_DAILY:
                                         // 获取日K
+                                        requestMap.remove(response.getRespId());
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksDayKlineResponse.class));
                                         break;
                                 }
@@ -195,10 +190,11 @@ public class SocketClient {
         LogInfra.Log.d(TAG, "正在连接...");
     }
 
-    private void sendRequest(String json) {
-        if (client == null || client.getReadyState() != WebSocket.READYSTATE.OPEN) {
+    private void sendRequest(SocketRequest request) {
+        if (request == null || client == null || client.getReadyState() != WebSocket.READYSTATE.OPEN) {
             return;
         }
+        String json = JsonUtil.toJson(request);
         LogInfra.Log.d(TAG, "--> sendRequest " + json);
         if (openGzip) {
             byte[] zipBytes = GZipUtil.compress(json);
@@ -212,32 +208,27 @@ public class SocketClient {
         if (topics == null || topics.length == 0) {
             return;
         }
-        SocketRequest param = createTopicMessage(SocketApi.TOPIC_BIND, topics);
-        sendRequest(JsonUtil.toJson(param));
+        sendRequest(createTopicMessage(SocketApi.TOPIC_BIND, topics));
     }
 
     public void unBindTopic(StockTopic... topics) {
-        SocketRequest param = createTopicMessage(SocketApi.TOPIC_UNBIND, topics);
-        sendRequest(JsonUtil.toJson(param));
-        requestMap.put(Objects.requireNonNull(param.getHeader()).getReqId(), param);
+        SocketRequest request = createTopicMessage(SocketApi.TOPIC_UNBIND, topics);
+        sendRequest(request);
+        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
     }
 
     private void unBindAllTopic() {
-        SocketRequest param = createTopicMessage(SocketApi.TOPIC_UNBIND_ALL);
-        sendRequest(JsonUtil.toJson(param));
+        SocketRequest request = createTopicMessage(SocketApi.TOPIC_UNBIND_ALL);
+        sendRequest(request);
     }
 
     private void sendAuth() {
         String devId = DeviceUtil.getDeviceUuid();
 
-        SocketRequest param = new SocketRequest();
-        SocketHeader socketHeader = new SocketHeader();
+        SocketRequest request = new SocketRequest();
+        SocketHeader socketHeader = getRequestHeader(SocketApi.AUTH);
         socketHeader.setDevId(devId);
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(UUID.randomUUID().toString());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(SocketApi.AUTH);
-        param.setHeader(socketHeader);
+        request.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
         body.put("devId", devId);
@@ -247,19 +238,14 @@ public class SocketClient {
         String token = Md5Util.getMd5Str(str);
         body.put("token", token);
 
-        param.setBody(body);
-        sendRequest(JsonUtil.toJson(param));
+        request.setBody(body);
+        sendRequest(request);
     }
 
     @SuppressLint("DefaultLocale")
     private SocketRequest createTopicMessage(String path, StockTopic... topics) {
         SocketRequest socketRequest = new SocketRequest();
-
-        SocketHeader socketHeader = new SocketHeader();
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(UUID.randomUUID().toString());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(path);
+        SocketHeader socketHeader = getRequestHeader(path);
         socketRequest.setHeader(socketHeader);
 
         if (topics != null) {
@@ -272,36 +258,35 @@ public class SocketClient {
     }
 
     @SuppressLint("DefaultLocale")
-    public void requestGetDailyKline(StockKlineGetDaily stockKlineGetDaily) {
-        SocketRequest socketRequest = new SocketRequest();
+    public String requestGetDailyKline(StockKlineGetDaily stockKlineGetDaily) {
+        SocketRequest request = new SocketRequest();
+        SocketHeader socketHeader = getRequestHeader(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
+        request.setHeader(socketHeader);
+        request.setBody(stockKlineGetDaily);
 
-        SocketHeader socketHeader = new SocketHeader();
-        socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(stockKlineGetDaily.getUuid());
-        socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
-        socketRequest.setHeader(socketHeader);
-
-        socketRequest.setBody(stockKlineGetDaily);
-
-        sendRequest(JsonUtil.toJson(socketRequest));
-        requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReqId(), socketRequest);
+        sendRequest(request);
+        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+        return socketHeader.getReqId();
     }
 
     @SuppressLint("DefaultLocale")
-    public void requestGetMinuteKline(StockMinuteKline stockMinuteKline) {
-        SocketRequest socketRequest = new SocketRequest();
+    public String requestGetMinuteKline(StockMinuteKline stockMinuteKline) {
+        SocketRequest request = new SocketRequest();
+        SocketHeader socketHeader = getRequestHeader(SocketApi.PUSH_STOCK_KLINE_GET_MINUTE);
+        request.setHeader(socketHeader);
+        request.setBody(stockMinuteKline);
 
+        sendRequest(request);
+        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+        return socketHeader.getReqId();
+    }
+
+    private SocketHeader getRequestHeader(String path) {
         SocketHeader socketHeader = new SocketHeader();
         socketHeader.setLanguage("ZN");
-        socketHeader.setReqId(stockMinuteKline.getUuid());
+        socketHeader.setReqId(UUID.randomUUID().toString());
         socketHeader.setVersion("1.0.0");
-        socketHeader.setPath(SocketApi.PUSH_STOCK_KLINE_GET_MINUTE);
-        socketRequest.setHeader(socketHeader);
-
-        socketRequest.setBody(stockMinuteKline);
-
-        sendRequest(JsonUtil.toJson(socketRequest));
-        requestMap.put(Objects.requireNonNull(socketRequest.getHeader()).getReqId(), socketRequest);
+        socketHeader.setPath(path);
+        return socketHeader;
     }
 }

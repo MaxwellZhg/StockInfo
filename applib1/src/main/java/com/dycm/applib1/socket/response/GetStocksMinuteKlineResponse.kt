@@ -9,5 +9,5 @@ import com.dycm.applib1.socket.vo.kline.MinuteKlineData
  * desc   : websocket拉取自选股K线补偿数据
  */
 class GetStocksMinuteKlineResponse : SocketResponse() {
-    var data: ArrayList<MinuteKlineData>? = null
+    var data: List<MinuteKlineData>? = null
 }

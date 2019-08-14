@@ -132,7 +132,7 @@ class StockTabFragment : AbsBackFinishEventFragment(), View.OnClickListener {
     @RxSubscribe(observeOnThread = EventThread.SINGLE)
     fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
         LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
-        Thread.sleep(100)
+        Thread.sleep(1000)
         SocketClient.getInstance()?.connect()
     }
 

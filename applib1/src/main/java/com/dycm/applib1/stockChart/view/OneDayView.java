@@ -248,6 +248,7 @@ public class OneDayView extends BaseView {
      * @param mData
      */
     public void setDataToChart(TimeDataManage mData) {
+        if (mData == null) return;
         this.mData = mData;
         if (mData.getDatas().size() == 0) {
             cirCleView.setVisibility(View.GONE);
