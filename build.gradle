@@ -12,13 +12,15 @@ buildscript {
         jcenter()
 
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.4.1'
+            classpath 'com.android.tools.build:gradle:3.4.2'
             // kotlin
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
             // arouter
             classpath "com.alibaba:arouter-register:$arouter_register_version"
             // butterknife
             classpath "com.jakewharton:butterknife-gradle-plugin:$butterknife_plugin_version"
+            // greendao
+            classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
         }
     }
 }

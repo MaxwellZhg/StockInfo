@@ -3,7 +3,7 @@ package com.dycm.applib1.ui.detail
 import android.annotation.SuppressLint
 import android.os.Bundle
 import com.dycm.applib1.R
-import com.dycm.applib1.config.LocalStocksKlineDataConfig
+import com.dycm.applib1.db.MinuteKlineDataDBManager
 import com.dycm.applib1.event.SocketAuthCompleteEvent
 import com.dycm.applib1.model.StockTopic
 import com.dycm.applib1.model.StockTopicDataTypeEnum
@@ -60,12 +60,14 @@ class ChartOneDayFragment : AbsEventFragment() {
         super.onLazyInitView(savedInstanceState)
         chart!!.initChart(land)
 
-        val disposable = Observable.create(ObservableOnSubscribe<ArrayList<MinuteKlineData>> { emitter ->
-            LocalStocksKlineDataConfig.instance?.getKlineData("SZ", "000001")?.let {
+        val disposable = Observable.create(ObservableOnSubscribe<List<MinuteKlineData>> { emitter ->
+            MinuteKlineDataDBManager.getInstance("SZ000001").queryAll().let {
                 LogInfra.Log.d(TAG, "Local kline cache data size : " + it.size)
-                kTimeData = TimeDataManage()
-                kTimeData?.parseTimeData(it, "000001.IDX.SZ", 0.0, true)
-                emitter.onNext(it)
+                if (!it.isNullOrEmpty()) {
+                    kTimeData = TimeDataManage()
+                    kTimeData?.parseTimeData(it, "000001.IDX.SZ", 0.0, true)
+                    emitter.onNext(it)
+                }
             }
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
@@ -111,10 +113,10 @@ class ChartOneDayFragment : AbsEventFragment() {
 
             // 更新本地数据
             disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                val result = LocalStocksKlineDataConfig.instance?.replaceData("SZ", "000001", klineData)
-                if (result != null) {
-                    emitter.onNext(result)
-                }
+                val manager = MinuteKlineDataDBManager.getInstance("SZ000001")
+                manager.deleteAll()
+                manager.insertInTx(klineData)
+                emitter.onNext(true)
                 emitter.onComplete()
             }).subscribeOn(Schedulers.io())
                 .subscribe()
@@ -146,7 +148,8 @@ class ChartOneDayFragment : AbsEventFragment() {
 
         // 缓存K线数据到本地
         disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalStocksKlineDataConfig.instance?.add(stockTopic?.ts, stockTopic?.code, klineData)!!)
+            MinuteKlineDataDBManager.getInstance("SZ000001").insertInTx(klineData)
+            emitter.onNext(true)
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe()
@@ -164,6 +167,16 @@ class ChartOneDayFragment : AbsEventFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        // 关闭数据库
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            MinuteKlineDataDBManager.getInstance("SZ000001").closeDataBase()
+            emitter.onNext(true)
+            emitter.onComplete()
+        }).subscribeOn(Schedulers.io())
+            .subscribe()
+        disposables.add(disposable)
+
         // 取消补偿数据订阅
         if (stockTopic != null) {
             SocketClient.getInstance().unBindTopic(stockTopic)

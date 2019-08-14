@@ -3,6 +3,7 @@ package com.dycm.applib1.stockChart.data;
 import android.content.Context;
 import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
+import com.dycm.applib1.socket.vo.kline.DayKlineData;
 import com.dycm.applib1.stockChart.model.KLineDataModel;
 import com.dycm.applib1.stockChart.model.bean.BOLLEntity;
 import com.dycm.applib1.stockChart.model.bean.KDJEntity;
@@ -96,7 +97,62 @@ public class KLineDataManage {
     /**
      * 解析K线数据
      */
-    public void parseKlineData(JSONObject object, String assetId,boolean landscape) {
+    public void parseKlineData(List<DayKlineData> klineData, String assetId, boolean landscape) {
+        this.assetId = assetId;
+        this.landscape = landscape;
+        if (klineData != null && !klineData.isEmpty()) {
+            kDatas.clear();
+            lineDataMA.clear();
+            xVal.clear();
+            ArrayList<CandleEntry> candleEntries = new ArrayList<>();
+            ArrayList<BarEntry> barEntries = new ArrayList<>();
+            ArrayList<Entry> line5Entries = new ArrayList<>();
+            ArrayList<Entry> line10Entries = new ArrayList<>();
+            ArrayList<Entry> line20Entries = new ArrayList<>();
+            for (int i = 0; i < klineData.size(); i++) {
+                DayKlineData dayKlineData = klineData.get(i);
+
+                KLineDataModel klineDatamodel = new KLineDataModel();
+                // TODO 日期时间
+                klineDatamodel.setDateMills(System.currentTimeMillis() + 86400000 * i);
+                klineDatamodel.setOpen(dayKlineData.getOpenPrice());
+                klineDatamodel.setHigh(dayKlineData.getHigh());
+                klineDatamodel.setLow(dayKlineData.getLow());
+                klineDatamodel.setClose(dayKlineData.getClosePrice());
+                klineDatamodel.setVolume(dayKlineData.getVol());
+                klineDatamodel.setTotal(NumberUtils.stringNoE10ForVol(dayKlineData.getAmount()));
+//                klineDatamodel.setMa5(data.optJSONArray(i).optDouble(7));
+//                klineDatamodel.setMa10(data.optJSONArray(i).optDouble(8));
+//                klineDatamodel.setMa20(data.optJSONArray(i).optDouble(9));
+//                klineDatamodel.setMa30(data.optJSONArray(i).optDouble(10));
+//                klineDatamodel.setMa60(data.optJSONArray(i).optDouble(11));
+                klineDatamodel.setPreClose(dayKlineData.getPreClose());
+                preClosePrice = klineDatamodel.getPreClose();
+                kDatas.add(klineDatamodel);
+
+                xVal.add(DataTimeUtil.secToDate(getKLineDatas().get(i).getDateMills()));
+                candleEntries.add(new CandleEntry(i, i + offSet, (float) getKLineDatas().get(i).getHigh(), (float) getKLineDatas().get(i).getLow(), (float) getKLineDatas().get(i).getOpen(), (float) getKLineDatas().get(i).getClose()));
+
+                float color = getKLineDatas().get(i).getOpen() > getKLineDatas().get(i).getClose() ? 0f : 1f;
+                barEntries.add(new BarEntry(i, i + offSet, (float) getKLineDatas().get(i).getVolume(), color));
+
+                line5Entries.add(new Entry(i, i + offSet, (float) getKLineDatas().get(i).getMa5()));
+                line10Entries.add(new Entry(i, i + offSet, (float) getKLineDatas().get(i).getMa10()));
+                line20Entries.add(new Entry(i, i + offSet, (float) getKLineDatas().get(i).getMa20()));
+            }
+            candleDataSet = setACandle(candleEntries);
+            bollCandleDataSet = setBOLLCandle(candleEntries);
+            volumeDataSet = setABar(barEntries, "成交量");
+            lineDataMA.add(setALine(ColorType.blue, line5Entries, false));
+            lineDataMA.add(setALine(ColorType.yellow, line10Entries, false));
+            lineDataMA.add(setALine(ColorType.purple, line20Entries, false));
+        }
+    }
+
+    /**
+     * 解析K线数据
+     */
+    public void parseKlineData(JSONObject object, String assetId, boolean landscape) {
         this.assetId = assetId;
         this.landscape = landscape;
         if (object != null) {
@@ -159,7 +215,7 @@ public class KLineDataManage {
         deaData = new ArrayList<>();
         difData = new ArrayList<>();
         for (int i = 0; i < macdEntity.getMACD().size(); i++) {
-            macdData.add(new BarEntry(i,i + offSet, macdEntity.getMACD().get(i), macdEntity.getMACD().get(i)));
+            macdData.add(new BarEntry(i, i + offSet, macdEntity.getMACD().get(i), macdEntity.getMACD().get(i)));
             deaData.add(new Entry(i, i + offSet, macdEntity.getDEA().get(i)));
             difData.add(new Entry(i, i + offSet, macdEntity.getDIF().get(i)));
         }
@@ -204,6 +260,7 @@ public class KLineDataManage {
         lineDataBOLL.add(setALine(ColorType.yellow, bollDataMB, false));
         lineDataBOLL.add(setALine(ColorType.purple, bollDataDN, false));
     }
+
     /**
      * 初始化自己计算RSI
      */
@@ -277,7 +334,7 @@ public class KLineDataManage {
     private LineDataSet setALine(ColorType colorType, ArrayList<Entry> lineEntries, String label, boolean highlightEnable) {
         LineDataSet lineDataSetMa = new LineDataSet(lineEntries, label);
         lineDataSetMa.setDrawHorizontalHighlightIndicator(false);
-        lineDataSetMa.setHighlightEnabled(landscape?highlightEnable:landscape);
+        lineDataSetMa.setHighlightEnabled(landscape ? highlightEnable : landscape);
         lineDataSetMa.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
         lineDataSetMa.setDrawValues(false);
         if (colorType == ColorType.blue) {

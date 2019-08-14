@@ -35,7 +35,7 @@ public class TimeDataManage {
     private SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     private double preClose;//昨收价
 
-    public void parseTimeData(ArrayList<MinuteKlineData> klineData, String assetId, double preClosePrice, boolean refresh) {
+    public void parseTimeData(List<MinuteKlineData> klineData, String assetId, double preClosePrice, boolean refresh) {
         this.assetId = assetId;
         if (klineData != null && !klineData.isEmpty()) {
             if (refresh) {
