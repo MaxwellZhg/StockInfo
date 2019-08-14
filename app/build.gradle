@@ -40,6 +40,9 @@ android {
     androidExtensions {
         experimental = true
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -64,4 +67,5 @@ dependencies {
     kapt "com.alibaba:arouter-compiler:$arouter_arouter_compiler"
     // dagger2
     kapt 'com.google.dagger:dagger-compiler:2.24'
+    implementation project(path: ':modulea')
 }

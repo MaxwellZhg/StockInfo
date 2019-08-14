@@ -17,7 +17,7 @@ import me.yokeyword.fragmentation.SupportFragment
  *    date   : 2019-05-20 14:13
  *    desc   : 定义基础Fragment
  */
-abstract class AbsFragment : SupportFragment() {
+abstract class AbsFragment() : SupportFragment() {
 
     protected var TAG: String? = null
 

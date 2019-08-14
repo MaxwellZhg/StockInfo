@@ -1,70 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-<RelativeLayout android:layout_width="match_parent"
-                android:background="@color/tab_bar_bg"
-                android:layout_height="44dp">
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerVertical="true"
-              android:textColor="@color/stock_code"
-              android:layout_marginLeft="13dp"
-              android:text="@string/stock_name_code"/>
-    <RelativeLayout android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/rl_updown"
-                    android:layout_toLeftOf="@+id/rl_arrows"
-                    android:layout_marginRight="6dp"
-                    android:gravity="center_vertical">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:id="@+id/tv_undown"
-                  android:layout_marginRight="5dp"
-                  android:layout_centerVertical="true"
-                  android:textColor="@color/stock_code"
-                  android:textSize="15sp"
-                  android:text="@string/newly_price"/>
-        <ImageView android:layout_width="11dp"
-                   android:layout_height="13dp"
-                   android:id="@+id/iv_updown"
-                   android:layout_centerVertical="true"
-                   android:layout_toRightOf="@id/tv_undown"
-                   android:textSize="15sp"
-                   android:background="@mipmap/updown"/>
-    </RelativeLayout>
-    <RelativeLayout android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/rl_arrows"
-                    android:layout_marginRight="13dp"
-                    android:gravity="center_vertical"
-                   android:layout_alignParentRight="true">
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/tv_arrows"
-              android:layout_marginRight="5dp"
-              android:layout_centerVertical="true"
-              android:textColor="@color/stock_code"
-              android:textSize="15sp"
-              android:text="@string/updown"/>
-    <ImageView android:layout_width="11dp"
-              android:layout_height="13dp"
-               android:id="@+id/iv_arrows"
-               android:layout_centerVertical="true"
-               android:layout_toRightOf="@id/tv_arrows"
-              android:textSize="15sp"
-              android:background="@mipmap/updown"/>
-    </RelativeLayout>
-</RelativeLayout>
-    <ImageView android:layout_width="match_parent"
-               android:layout_height="1dp"
-               android:background="@color/cent_color"/>
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_stock"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    </androidx.recyclerview.widget.RecyclerView>
-</LinearLayout>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="viewmodel"
+                type="com.dycm.applib1.ui.viewmodel.TopicStockListViewModel"/>
+    </data>
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:background="@color/tab_bar_bg"
+                        android:layout_height="44dp">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerVertical="true"
+                      android:textColor="@color/stock_code"
+                      android:layout_marginLeft="13dp"
+                      android:text="@string/stock_name_code"/>
+            <RelativeLayout android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/rl_updown"
+                            android:layout_toLeftOf="@+id/rl_arrows"
+                            android:layout_marginRight="6dp"
+                            android:gravity="center_vertical">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/tv_undown"
+                          android:layout_marginRight="5dp"
+                          android:layout_centerVertical="true"
+                          android:textColor="@color/stock_code"
+                          android:textSize="15sp"
+                          android:text="@string/newly_price"/>
+                <ImageView android:layout_width="11dp"
+                           android:layout_height="13dp"
+                           android:id="@+id/iv_updown"
+                           android:layout_centerVertical="true"
+                           android:layout_toRightOf="@id/tv_undown"
+                           android:textSize="15sp"
+                           android:background="@mipmap/updown"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/rl_arrows"
+                            android:layout_marginRight="13dp"
+                            android:gravity="center_vertical"
+                            android:layout_alignParentRight="true">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/tv_arrows"
+                          android:layout_marginRight="5dp"
+                          android:layout_centerVertical="true"
+                          android:textColor="@color/stock_code"
+                          android:textSize="15sp"
+                          android:text="@string/updown"/>
+                <ImageView android:layout_width="11dp"
+                           android:layout_height="13dp"
+                           android:id="@+id/iv_arrows"
+                           android:layout_centerVertical="true"
+                           android:layout_toRightOf="@id/tv_arrows"
+                           android:textSize="15sp"
+                           android:background="@mipmap/updown"/>
+            </RelativeLayout>
+        </RelativeLayout>
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="1dp"
+                   android:background="@color/cent_color"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_stock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+</layout>
