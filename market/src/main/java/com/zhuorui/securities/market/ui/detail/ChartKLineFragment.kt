@@ -133,6 +133,7 @@ class ChartKLineFragment : AbsEventFragment() {
             LogInfra.Log.d(TAG, "onStocksTopicDayKlineResponse ... klineData size = " + kTimeData?.size)
 
             // 展示K线数据
+            kLineData = KLineDataManage(context)
             kLineData!!.parseKlineData(kTimeData, "000001.IDX.SZ", land)
             var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 combinedchart!!.setDataToChart(kLineData)
@@ -181,5 +182,6 @@ class ChartKLineFragment : AbsEventFragment() {
             disposable.dispose()
         }
         disposables.clear()
+        kLineData = null
     }
 }
