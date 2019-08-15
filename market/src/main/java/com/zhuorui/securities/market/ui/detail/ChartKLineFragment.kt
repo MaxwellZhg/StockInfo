@@ -1,6 +1,10 @@
 package com.zhuorui.securities.market.ui.detail
 
 import android.os.Bundle
+import com.zhuorui.securities.base2app.infra.LogInfra
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
+import com.zhuorui.securities.base2app.ui.fragment.AbsEventFragment
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
@@ -9,10 +13,6 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.request.StockKlineGetDaily
 import com.zhuorui.securities.market.socket.response.StocksDayKlineResponse
 import com.zhuorui.securities.market.stockChart.data.KLineDataManage
-import com.zhuorui.securities.base2app.infra.LogInfra
-import com.zhuorui.securities.base2app.rxbus.EventThread
-import com.zhuorui.securities.base2app.rxbus.RxSubscribe
-import com.zhuorui.securities.base2app.ui.fragment.AbsEventFragment
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -77,6 +77,8 @@ class ChartKLineFragment : AbsEventFragment() {
                 loadIndexData(if (indexType < 5) ++indexType else 1)
             }
         }
+
+        loadKlineData()
     }
 
     /**
