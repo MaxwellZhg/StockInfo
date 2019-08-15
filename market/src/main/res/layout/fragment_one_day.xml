@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-    <com.zhuorui.securities.applib1.stockChart.view.OneDayView
+    <com.zhuorui.securities.market.stockChart.view.OneDayView
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
