@@ -55,7 +55,7 @@ dependencies {
 
     implementation project(":base2app")
     implementation project(":commonwidget")
-    implementation project(":applib1")
+    implementation project(':market')
     implementation project(":applib2")
     implementation project(":applib3")
     implementation project(":applib4")
@@ -67,5 +67,4 @@ dependencies {
     kapt "com.alibaba:arouter-compiler:$arouter_arouter_compiler"
     // dagger2
     kapt 'com.google.dagger:dagger-compiler:2.24'
-    implementation project(path: ':modulea')
 }

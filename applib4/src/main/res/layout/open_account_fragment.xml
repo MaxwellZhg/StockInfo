@@ -15,7 +15,7 @@
    <data>
       <variable
               name="viewmodel"
-              type="com.dycm.applib4.ui.viewmodel.OpenAccountViewModel"/>
+              type="com.zhuorui.securities.applib4.ui.viewmodel.OpenAccountViewModel"/>
    </data>
 
    <RelativeLayout android:orientation="vertical"

@@ -4,7 +4,7 @@
     <data>
         <variable
                 name="viewmodel"
-                type="com.example.applib5.ui.viewmodel.MyTabViewModel"/>
+                type="com.zhuorui.securities.applib5.ui.viewmodel.MyTabViewModel"/>
     </data>
 
     <RelativeLayout android:orientation="vertical"
