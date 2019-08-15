@@ -38,6 +38,7 @@ import com.zhuorui.securities.market.ui.contract.TopicStockListContract
 import com.zhuorui.securities.market.ui.mvp.TopicListStockVmWarpper
 import com.zhuorui.securities.market.ui.mvp.TopicStockListPresenter
 import com.zhuorui.securities.base2app.mvp.wrapper.BaseMvpNetVmFragment
+import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 
 /**
  * Created by Maxwell.
@@ -46,13 +47,16 @@ import com.zhuorui.securities.base2app.mvp.wrapper.BaseMvpNetVmFragment
  * Desc: 自选股列表界面
  */
 @Suppress("NAME_SHADOWING")
-class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,TopicListStockVmWarpper,FragmentAllChooseStockBinding>(), BaseListAdapter.OnClickItemCallback<StockMarketInfo>,
-    View.OnClickListener,TopicStockListContract.View {
+class TopicStockListFragment :
+    BaseMvpNetVmFragment<TopicStockListPresenter, TopicListStockVmWarpper, FragmentAllChooseStockBinding>(),
+    BaseListAdapter.OnClickItemCallback<StockMarketInfo>,
+    View.OnClickListener, TopicStockListContract.View {
     private var type: StockTsEnum? = null
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
     private var pageSize = 20
     private var disposables = LinkedList<Disposable>()
+
     companion object {
         fun newInstance(type: StockTsEnum?): TopicStockListFragment {
             val fragment = TopicStockListFragment()
@@ -121,7 +125,7 @@ class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,Topi
                 item.code?.let { it1 ->
                     item.type?.let { it2 ->
                         StockTopic(
-                            StockTopicDataTypeEnum.market, it,
+                            StockTopicDataTypeEnum.price, it,
                             it1, it2
                         )
                     }
@@ -131,28 +135,31 @@ class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,Topi
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStocksResponse(response: StocksTopicMarketResponse) {
+
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
         if (mAdapter == null) return
 
         val adapterData = mAdapter?.items
         if (adapterData?.isNullOrEmpty()!!) return
 
-        val stockMarketData = response.body
+        val stockPriceDatas = response.body
 
         for (index in mAdapter?.items?.indices!!) {
             val item = mAdapter?.items!![index]
-            if (item.ts == stockMarketData.ts && item.code == stockMarketData.code) {
-                // 更新数据
-                val item = mAdapter?.items!![index]
-                item.price = stockMarketData.price!!
-                item.diffRate =
-                    MathUtil.division(
-                        abs(stockMarketData.price!! - stockMarketData.openPrice!!) * 100,
-                        stockMarketData.openPrice!!
-                    )
-                mAdapter?.notifyItemChanged(index)
-                break
+            for (sub in stockPriceDatas) {
+                if (item.ts == sub.ts && item.code == sub.code) {
+                    // 更新数据
+                    val item = mAdapter?.items!![index]
+                    item.price = sub.price!!
+                    item.diffRate =
+                        MathUtil.division(
+                            abs(sub.price!! - sub.openPrice!!) * 100,
+                            sub.openPrice!!
+                        )
+                    _mActivity?.runOnUiThread { mAdapter?.notifyItemChanged(index) }
+                    break
+                }
             }
         }
     }
@@ -208,15 +215,16 @@ class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,Topi
         }
         disposables.clear()
     }
+
     override fun onClick(p0: View?) {
-      when(p0?.id){
-          R.id.rl_updown->{
+        when (p0?.id) {
+            R.id.rl_updown -> {
 
-          }
-          R.id.rl_arrows->{
+            }
+            R.id.rl_arrows -> {
 
-          }
-      }
+            }
+        }
     }
 
     override fun createPresenter(): TopicStockListPresenter {
@@ -224,7 +232,7 @@ class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,Topi
     }
 
     override fun isDestroyed(): Boolean {
-        return  false
+        return false
     }
 
     override fun createWrapper(): TopicListStockVmWarpper {
@@ -232,7 +240,7 @@ class TopicStockListFragment : BaseMvpNetVmFragment<TopicStockListPresenter,Topi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dataBinding = generateDataBinding(inflater,container,layout)
+        dataBinding = generateDataBinding(inflater, container, layout)
         if (viewWrapper != null) {
             viewWrapper.setBinding(dataBinding)
         }

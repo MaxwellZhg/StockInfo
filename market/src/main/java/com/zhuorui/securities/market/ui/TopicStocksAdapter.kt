@@ -99,12 +99,12 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 tv_price.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
 
                 stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.up_stock_color)!!)
-                stock_up_down.text = "+" + item.diffRate * 100 + "%"
+                stock_up_down.text = "+" + item.diffRate + "%"
             } else {
                 tv_price.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
 
                 stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
-                stock_up_down.text = "-" + item.diffRate * 100 + "%"
+                stock_up_down.text = "-" + item.diffRate + "%"
             }
         }
     }
