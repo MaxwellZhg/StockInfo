@@ -4,7 +4,7 @@
     <data>
         <variable
                 name="viewmodel"
-                type="com.zhuorui.securities.applib1.ui.viewmodel.StockSearchViewModel"/>
+                type="com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel"/>
     </data>
     <LinearLayout android:orientation="vertical"
                   android:background="@color/tab_bar_bg"

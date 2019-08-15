@@ -1,7 +1,7 @@
 package com.zhuorui.securities.ui
 
 import android.os.Bundle
-import com.zhuorui.securities.applib1.ui.StockTabFragment
+import com.zhuorui.securities.market.ui.StockTabFragment
 import com.zhuorui.securities.applib2.MarketTabFragment
 import com.zhuorui.securities.applib3.ui.InfomationTabFragment
 import com.zhuorui.securities.applib4.ui.OpenAccountTabFragment

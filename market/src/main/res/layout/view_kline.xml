@@ -4,14 +4,14 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.zhuorui.securities.applib1.stockChart.CandleCombinedChart
+    <com.zhuorui.securities.market.stockChart.CandleCombinedChart
             android:id="@+id/candleChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_above="@+id/barchart"
             android:layout_weight="1.8"/>
 
-    <com.zhuorui.securities.applib1.stockChart.MyCombinedChart
+    <com.zhuorui.securities.market.stockChart.MyCombinedChart
             android:id="@+id/barchart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
