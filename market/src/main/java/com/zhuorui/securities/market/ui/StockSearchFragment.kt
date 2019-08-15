@@ -1,6 +1,8 @@
 package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -32,12 +34,19 @@ import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
  * Date: 2019/8/8
  * Desc:自选股搜索
  */
-class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSearchVmWarpper, FragmentTopicStockSearchBinding>(), TextWatcher,
-    SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<SearchStockInfo>,StockSearchContract.View {
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class StockSearchFragment :
+    BaseMvpSwipeVmFragment<StockSearchPresenter, StockSearchVmWarpper, FragmentTopicStockSearchBinding>(), TextWatcher,
+    SearchStocksAdapter.OnAddTopicClickItemCallback, BaseListAdapter.OnClickItemCallback<SearchStockInfo>,
+    StockSearchContract.View {
 
     private var type: Int = 0
     private lateinit var tips: String
     private var adapter: SearchStocksAdapter? = null
+
+    private var handler = Handler()
+    private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
+
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
@@ -65,13 +74,23 @@ class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSe
 
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
+
             p0?.toString()?.trim()?.let {
-                getTopicStockData(it, 5)
+                handler.removeCallbacks(getTopicStockDataRunnable)
+                getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
+                handler.postDelayed(getTopicStockDataRunnable, 500)
                 type = min
             }
 
         } else {
             search_list.visibility = View.INVISIBLE
+        }
+    }
+
+    private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
+        override fun run() {
+            dataBinding.searchList.adapter = null
+            getTopicStockData(keyWord, 5)
         }
     }
 
@@ -85,7 +104,7 @@ class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSe
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-        if (response.data!=null&&response.data.datas.isNotEmpty()) {
+        if (response.data != null && response.data.datas.isNotEmpty()) {
             // 显示搜索列表
             dataBinding.searchList.visibility = View.VISIBLE
             // 设置数据
@@ -96,8 +115,8 @@ class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSe
                 adapter!!.onAddTopicClickItemCallback = this
                 search_list.adapter = adapter
                 adapter!!.addItems(response.data.datas)
-            }else{
-                if(adapter!!.items.size<20) {
+            } else {
+                if (adapter!!.items.size < 20) {
                     adapter!!.addItems(response.data.datas)
                 }
             }
@@ -124,8 +143,9 @@ class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSe
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
         tips = str
     }
+
     override fun createPresenter(): StockSearchPresenter {
-       return StockSearchPresenter(this)
+        return StockSearchPresenter(this)
     }
 
     override fun isDestroyed(): Boolean {
@@ -137,7 +157,7 @@ class StockSearchFragment : BaseMvpSwipeVmFragment<StockSearchPresenter, StockSe
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dataBinding = generateDataBinding(inflater,container,layout)
+        dataBinding = generateDataBinding(inflater, container, layout)
         if (viewWrapper != null) {
             viewWrapper.setBinding(dataBinding)
         }
