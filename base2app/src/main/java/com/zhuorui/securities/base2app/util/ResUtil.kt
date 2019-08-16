@@ -20,10 +20,6 @@ object ResUtil {
         return BaseApplication.context?.let { ContextCompat.getColor(it, colorResId) }
     }
 
-    fun getString(@StringRes stringResId: Int): String? {
-        return BaseApplication.context?.getString(stringResId)
-    }
-
     fun getStringFormat(@StringRes stringResId: Int, formatArgs: Any): String? {
         return BaseApplication.context?.getString(stringResId, formatArgs)
     }
@@ -43,5 +39,9 @@ object ResUtil {
 
     fun getIntArray(@ArrayRes intArrayResId: Int): IntArray? {
         return BaseApplication.context?.resources?.getIntArray(intArrayResId)
+    }
+
+    fun getString(stringResId: Int): String? {
+        return BaseApplication.context?.getString(stringResId)
     }
 }

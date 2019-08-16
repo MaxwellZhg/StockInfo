@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,9 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
+import com.zhuorui.securities.base2app.util.ToastUtil
 import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
+import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -108,7 +111,7 @@ class StockSearchFragment :
             // 显示搜索列表
             dataBinding.searchList.visibility = View.VISIBLE
             // 设置数据
-            if (dataBinding.searchList.adapter == null) {
+            if (dataBinding.searchList.adapter == null&&!TextUtils.isEmpty(dataBinding.etSerach.text.toString().trim())) {
                 dataBinding.searchList.layoutManager = LinearLayoutManager(context)
                 adapter = SearchStocksAdapter()
                 adapter!!.setClickItemCallback(this)

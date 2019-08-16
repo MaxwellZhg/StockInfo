@@ -4,12 +4,13 @@ import android.os.Bundle
 import com.zhuorui.securities.market.ui.StockTabFragment
 import com.zhuorui.securities.applib2.MarketTabFragment
 import com.zhuorui.securities.applib3.ui.InfomationTabFragment
-import com.zhuorui.securities.applib4.ui.OpenAccountTabFragment
+import com.zhuorui.securities.infomation.ui.OpenAccountTabFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishNetFragment
 import com.zhuorui.securities.R
 import com.zhuorui.securities.custom.view.BottomBar
 import com.zhuorui.securities.custom.view.BottomBarTab
 import com.zhuorui.securities.applib5.ui.MyTabFragment
+import com.zhuorui.securities.infomation.ui.LoginRegisterFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import me.yokeyword.fragmentation.SupportFragment
 

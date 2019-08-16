@@ -24,34 +24,40 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
     override fun getItemCount(): Int {
         return if (items.size > 5) {
             items.size
-        } else {
+        } else if(items.size==5) {
             items.size + 1
+        }else{
+            items.size
         }
     }
 
     override fun getLayout(viewType: Int): Int {
         return if (items.size > 5) {
             R.layout.item_search_topic_stock
-        } else {
+        } else if(items.size==5){
             when (viewType) {
                 default -> R.layout.item_search_topic_stock
                 else -> {
                     R.layout.item_add_more
                 }
             }
+        }else{
+                R.layout.item_search_topic_stock
         }
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return if (items.size > 5) {
             ViewHolder(v, false, false)
-        } else {
-            when (viewType) {
+        } else if(items.size==5){
+            return when (viewType) {
                 default -> ViewHolder(v, false, false)
                 else -> {
                     ViewHolderBottom(v, true, false)
                 }
             }
+        }else{
+                ViewHolder(v, false, false)
         }
     }
 
@@ -107,8 +113,8 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
     override fun getItemViewType(position: Int): Int {
         return if (items.size > 5) {
             default
-        } else {
-            return when (position) {
+        } else if(items.size==5){
+            when (position) {
                 itemCount - 1 -> {
                     bottom
                 }
@@ -116,6 +122,8 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
                     default
                 }
             }
+        }else{
+            default
         }
     }
 

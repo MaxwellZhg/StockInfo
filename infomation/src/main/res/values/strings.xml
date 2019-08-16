@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">applib4</string>
+    <string name="login_and_register">登录/注册</string>
+    <string name="area">国家/地区</string>
+    <string name="china_mother_land">中国内地</string>
+    <string name="china_area_phone">+86</string>
+    <string name="input_phone_num">请输入手机号</string>
+    <string name="verification_code">验证码</string>
+    <string name="input_verification_code">请输入验证码</string>
+    <string name="send_verification_code">发送验证码</string>
+    <string name="login">登录</string>
+    <string name="phone_num_login">手机号密码登录</string>
+    <string name="phone_tips">请输入手机号</string>
+    <string name="phone_code_tips">请输入验证码</string>
+    <string name="credit_time">%d s</string>
+    <string name="minutiues">60s</string>
+    <string name="setting_psw">设置登录密码</string>
+    <string name="login_psw">登录密码</string>
+    <string name="ensure_psw">确认密码</string>
+    <string name="complete">完成</string>
+    <string name="psw_conbine">6-20位组合密码</string>
+    <string name="ensure_psw_again">请再次确认</string>
+    <string name="login_tips1">登录即表示阅读并同意 </string>
+    <string name="login_tips2">服务协议</string>
+    <string name="login_tips3">和</string>
+    <string name="login_tips4">隐私政策</string>
+</resources>

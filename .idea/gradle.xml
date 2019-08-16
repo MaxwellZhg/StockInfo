@@ -12,13 +12,13 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/applib2" />
             <option value="$PROJECT_DIR$/applib3" />
-            <option value="$PROJECT_DIR$/applib4" />
             <option value="$PROJECT_DIR$/applib5" />
             <option value="$PROJECT_DIR$/base2app" />
             <option value="$PROJECT_DIR$/commonwidget" />
             <option value="$PROJECT_DIR$/fragmentation" />
             <option value="$PROJECT_DIR$/fragmentation_core" />
             <option value="$PROJECT_DIR$/fragmentation_swipeback" />
+            <option value="$PROJECT_DIR$/infomation" />
             <option value="$PROJECT_DIR$/market" />
           </set>
         </option>

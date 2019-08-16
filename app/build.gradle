@@ -58,7 +58,7 @@ dependencies {
     implementation project(':market')
     implementation project(":applib2")
     implementation project(":applib3")
-    implementation project(":applib4")
+    implementation project(':infomation')
     implementation project(":applib5")
 
     // 支持使用butterknife注解
