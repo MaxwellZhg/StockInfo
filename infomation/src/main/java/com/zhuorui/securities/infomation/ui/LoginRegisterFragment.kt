@@ -131,7 +131,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
                     }).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            tv_send_code.text = recLen.toString() + "s"
+                            tv_send_code.text = ResUtil.getStringFormat(R.string.credit_time,recLen)
                             if (recLen < 0) {
                                 timer!!.cancel()
                                 task = null
