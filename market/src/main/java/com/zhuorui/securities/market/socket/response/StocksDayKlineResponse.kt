@@ -10,5 +10,5 @@ import com.zhuorui.securities.market.socket.vo.kline.DayKlineData
  */
 class StocksDayKlineResponse : SocketResponse() {
 
-    var data: ArrayList<DayKlineData>? = null
+    var data: List<DayKlineData>? = null
 }

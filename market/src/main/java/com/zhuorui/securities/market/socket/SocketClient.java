@@ -153,6 +153,11 @@ public class SocketClient {
                                         requestMap.remove(response.getRespId());
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksDayKlineResponse.class));
                                         break;
+                                    case SocketApi.PUSH_STOCK_KLINE_GET_FIVE_DAY:
+                                        // 获取五日
+                                        requestMap.remove(response.getRespId());
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksFiveDayKlineResponse.class));
+                                        break;
                                 }
 
                             }
@@ -261,6 +266,18 @@ public class SocketClient {
     public String requestGetDailyKline(StockKlineGetDaily stockKlineGetDaily) {
         SocketRequest request = new SocketRequest();
         SocketHeader socketHeader = getRequestHeader(SocketApi.PUSH_STOCK_KLINE_GET_DAILY);
+        request.setHeader(socketHeader);
+        request.setBody(stockKlineGetDaily);
+
+        sendRequest(request);
+        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+        return socketHeader.getReqId();
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String requestGetFiveDayKline(StockKlineGetDaily stockKlineGetDaily) {
+        SocketRequest request = new SocketRequest();
+        SocketHeader socketHeader = getRequestHeader(SocketApi.PUSH_STOCK_KLINE_GET_FIVE_DAY);
         request.setHeader(socketHeader);
         request.setBody(stockKlineGetDaily);
 

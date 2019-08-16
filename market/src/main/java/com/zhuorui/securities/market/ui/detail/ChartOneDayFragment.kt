@@ -188,5 +188,6 @@ class ChartOneDayFragment : AbsEventFragment() {
             disposable.dispose()
         }
         disposables.clear()
+        kTimeData = null
     }
 }

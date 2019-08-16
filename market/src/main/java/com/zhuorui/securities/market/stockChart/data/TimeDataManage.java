@@ -2,9 +2,12 @@ package com.zhuorui.securities.market.stockChart.data;
 
 import android.annotation.SuppressLint;
 import android.util.SparseArray;
+import com.zhuorui.securities.market.socket.vo.kline.FiveDayKlineData;
 import com.zhuorui.securities.market.socket.vo.kline.MinuteKlineData;
 import com.zhuorui.securities.market.stockChart.model.TimeDataModel;
 import com.zhuorui.securities.base2app.infra.LogInfra;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -69,6 +72,78 @@ public class TimeDataManage {
                 timeDatamodel.setAveragePrice(Objects.requireNonNull(minuteKlineData.getAvgPrice()).doubleValue());
                 timeDatamodel.setVolume(Objects.requireNonNull(minuteKlineData.getVol()).intValue());
                 timeDatamodel.setOpen(Objects.requireNonNull(minuteKlineData.getOpenPrice()).doubleValue());
+                timeDatamodel.setPreClose(preClose == 0 ? (preClosePrice == 0 ? timeDatamodel.getOpen() : preClosePrice) : preClose);
+
+                if (i == 0 && refresh) {
+                    preClose = timeDatamodel.getPreClose();
+                    mAllVolume = timeDatamodel.getVolume();
+                    max = timeDatamodel.getNowPrice();
+                    min = timeDatamodel.getNowPrice();
+                    volMaxTimeLine = 0;
+                    if (baseValue == 0) {
+                        baseValue = timeDatamodel.getPreClose();
+                    }
+                    if (fiveDayXLabelKey.size() > index) {
+                        fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
+                        index++;
+                    }
+                } else {
+                    mAllVolume += timeDatamodel.getVolume();
+                    if (fiveDayXLabelKey.size() > index && !secToDateForFiveDay(timeDatamodel.getTimeMills()).equals(preDate)) {
+                        fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
+                        index++;
+                    }
+                }
+                preDate = secToDateForFiveDay(timeDatamodel.getTimeMills());
+                timeDatamodel.setCha(timeDatamodel.getNowPrice() - preClose);
+                timeDatamodel.setPer(timeDatamodel.getCha() / preClose);
+
+                max = Math.max(timeDatamodel.getNowPrice(), max);
+                min = Math.min(timeDatamodel.getNowPrice(), min);
+
+                perVolMaxTimeLine = volMaxTimeLine;
+                volMaxTimeLine = Math.max(timeDatamodel.getVolume(), volMaxTimeLine);
+                realTimeDatas.add(timeDatamodel);
+            }
+            permaxmin = (max - min) / 2;
+        }
+    }
+
+
+    public void parseKlineData(List<FiveDayKlineData> klineData, String assetId, double preClosePrice, boolean refresh) {
+        this.assetId = assetId;
+        if (klineData != null && !klineData.isEmpty()) {
+            if (refresh) {
+                realTimeDatas.clear();
+                fiveDayXLabels.clear();
+                getFiveDayXLabelKey(assetId);
+            } else {
+                if (!realTimeDatas.isEmpty()) {
+                    // 需要加入的第一条数据的时间
+                    long firstDateTime = klineData.get(0).getDateTime();
+                    // 当前数集合最后一条数据的时间
+                    long lastDateTime = realTimeDatas.get(realTimeDatas.size() - 1).getTimeMills();
+                    if (firstDateTime == lastDateTime || firstDateTime < lastDateTime) {
+                        LogInfra.Log.e("TimeDataManage", "新增数据时间不合法");
+                        return;
+                    }
+                }
+            }
+
+            String preDate = null;
+            int index = 0;
+//            preClose = Double.isNaN(object.optDouble("preClose")) ? 0 : object.optDouble("preClose");
+//            JSONArray data = object.optJSONArray("data");
+            int size = klineData.size();
+            for (int i = 0; i < size; i++) {
+                FiveDayKlineData fiveDayKlineData =  klineData.get(i);
+
+                TimeDataModel timeDatamodel = new TimeDataModel();
+                timeDatamodel.setTimeMills(fiveDayKlineData.getDateTime());
+                timeDatamodel.setNowPrice(Objects.requireNonNull(fiveDayKlineData.getPrice()).doubleValue());
+                timeDatamodel.setAveragePrice(Objects.requireNonNull(fiveDayKlineData.getAvgPrice()).doubleValue());
+                timeDatamodel.setVolume(Objects.requireNonNull(fiveDayKlineData.getVol()).intValue());
+                timeDatamodel.setOpen(Objects.requireNonNull(fiveDayKlineData.getOpenPrice()).doubleValue());
                 timeDatamodel.setPreClose(preClose == 0 ? (preClosePrice == 0 ? timeDatamodel.getOpen() : preClosePrice) : preClose);
 
                 if (i == 0 && refresh) {
@@ -291,5 +366,4 @@ public class TimeDataManage {
         }
         return fiveDayXLabelKey;
     }
-
 }
