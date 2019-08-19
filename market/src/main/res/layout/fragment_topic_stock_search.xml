@@ -18,19 +18,18 @@
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:background="@mipmap/serach"
-                       android:layout_marginLeft="13dp"
+                       android:layout_marginStart="13dp"
                        android:layout_centerVertical="true"
                        android:id="@+id/iv_serach"/>
 
-            <EditText android:layout_toRightOf="@+id/iv_serach"
+            <EditText android:layout_toEndOf="@+id/iv_serach"
                       android:layout_width="match_parent"
                       android:layout_centerVertical="true"
                       android:id="@+id/et_serach"
                       android:hint="请输入股票代码或名称"
-                      android:text="@{viewModel.keyWord}"
                       android:textColor="@color/tab_select"
                       android:textColorHint="@color/stock_code"
-                      android:layout_marginRight="13dp"
+                      android:layout_marginEnd="13dp"
                       android:background="@null"
                       android:layout_height="35dp"/>
         </RelativeLayout>

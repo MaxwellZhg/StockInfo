@@ -1,7 +1,5 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -14,10 +12,8 @@ import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
-import com.zhuorui.securities.market.ui.SearchStocksAdapter
 import com.zhuorui.securities.market.ui.view.StockSearchFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel
-import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
 
 /**
  *    author : PengXianglin
@@ -33,7 +29,9 @@ class StockSearchFragmentPresenter : AbsNetPresenter<StockSearchFragmentView, St
     }
 
     fun getTopicStockData(keyWord: String, count: Int) {
-       viewModel?.getTopicStockData(keyWord, count, transactions.createTransaction())
+        val requset = StockSearchRequest(keyWord, 0, count, transactions.createTransaction())
+        Cache[IStockNet::class.java]?.search(requset)
+            ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)

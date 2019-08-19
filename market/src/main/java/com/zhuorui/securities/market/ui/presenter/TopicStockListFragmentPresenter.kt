@@ -1,26 +1,24 @@
 package com.zhuorui.securities.market.ui.presenter
 
+import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.event.AddTopicStockEvent
-import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.model.StockTsEnum
+import com.zhuorui.securities.market.net.IStockNet
+import com.zhuorui.securities.market.net.request.RecommendStocklistRequest
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.ui.TopicStocksAdapter
 import com.zhuorui.securities.market.ui.view.TopicStockListFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
-import com.zhuorui.securities.market.util.MathUtil
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.util.*
-import kotlin.math.abs
 
 /**
  *    author : PengXianglin
@@ -41,7 +39,9 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
      * 加载推荐自选股列表
      */
     fun requestStocks(ts: StockTsEnum?, currentPage: Int, pageSize: Int) {
-        viewModel?.requestStocks(ts, currentPage, pageSize, transactions.createTransaction())
+        val request = RecommendStocklistRequest(ts, currentPage, pageSize, transactions.createTransaction())
+        Cache[IStockNet::class.java]?.list(request)
+            ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }
 
     fun getAdapter(): TopicStocksAdapter? {
