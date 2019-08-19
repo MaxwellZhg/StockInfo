@@ -7,10 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.annotation.StringRes
-import butterknife.ButterKnife
-import butterknife.Unbinder
-import com.alibaba.android.arouter.launcher.ARouter
-import com.zhuorui.securities.base2app.infra.FullDisplayConfig
 import com.zhuorui.securities.base2app.util.AppUtil
 import com.zhuorui.securities.base2app.util.QuickClickUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
@@ -23,17 +19,7 @@ import me.yokeyword.fragmentation.SupportActivity
  */
 abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
     protected var TAG: String? = null
-    private var unbinder: Unbinder? = null
-    private var quickClick: QuickClickUtil? = null
     private var inStopLife: Boolean = false
-
-    /**
-     * 默认不提示
-     *
-     * @return boolean
-     */
-    protected val isNeedHintQuickClick: Boolean
-        get() = false
 
     /**
      * 获取当前Ac的布局的xml布局content的布局id
@@ -63,14 +49,8 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         TAG = this.javaClass.simpleName
-        ARouter.getInstance().inject(this)
-        quickClick = QuickClickUtil(500)
-        if (isNeedHintQuickClick) quickClick!!.setCallback(this)
         if (isFullScreen) beFullScreen()
         setContentView(layout)
-        dynamicAddView()
-        /*采用ButterKnife来注解该Activity界面控件*/
-        unbinder = ButterKnife.bind(this)
         if (needChangeHeight()) {
             try {
                 val container = findViewById<View>(acContentRootViewId)
@@ -145,11 +125,6 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
 
     }
 
-    /**
-     * 指定在butterKnife之前动态添加的视图
-     */
-    protected fun dynamicAddView() {}
-
     private fun beFullScreen() {
         //设置状态栏沉浸
         val window = window
@@ -192,27 +167,8 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
         return true
     }
 
-    /**
-     * 解除绑定
-     */
-    protected fun unbindButterKnife() {
-        if (unbinder != null) unbinder!!.unbind()
-        unbinder = null
-    }
-
-    fun isTooQuickClick(id: Int): Boolean {
-        return !quickClick!!.clickRecord(id)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        quickClick!!.clearClickRecord()
-        /*解除ButterKnife绑定*/
-        unbindButterKnife()
-    }
-
     protected fun needChangeHeight(): Boolean {
-        return FullDisplayConfig.read().isFullDisplay
+        return false
     }
 
     protected fun toast(@StringRes res: Int) {
