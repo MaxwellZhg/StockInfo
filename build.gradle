@@ -6,6 +6,7 @@ buildscript {
     ext.arouter_arouter_compiler = '1.2.2'
     ext.arouter_register_version = '1.0.2'
     ext.butterknife_plugin_version = '10.1.0'
+    ext.databinding_version = '3.1.4'
 
     repositories {
         google()

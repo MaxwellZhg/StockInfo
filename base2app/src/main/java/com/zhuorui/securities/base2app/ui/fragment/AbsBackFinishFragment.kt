@@ -1,5 +1,7 @@
 package com.zhuorui.securities.base2app.ui.fragment
 
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.R
 import com.zhuorui.securities.base2app.infra.LogInfra
@@ -13,7 +15,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
  *    desc   : 双击返回键退出Activity的Fragment
  *             适用场景：一级页面（如主页中的Tab）
  */
-abstract class AbsBackFinishFragment : AbsFragment() {
+abstract class AbsBackFinishFragment<D : ViewDataBinding, VM : ViewModel, V : AbsView, P : AbsPresenter<V, VM>> :
+    AbsFragment<D, VM, V, P>() {
+
     private var TOUCH_TIME: Long = 0
 
     /**
@@ -27,7 +31,12 @@ abstract class AbsBackFinishFragment : AbsFragment() {
             _mActivity.finish()
         } else {
             TOUCH_TIME = System.currentTimeMillis()
-            toast(ResUtil.getStringFormat(R.string.press_again_exit, AppUtil.getAppName(BaseApplication.context!!) ?: ""))
+            presenter?.toast(
+                ResUtil.getStringFormat(
+                    R.string.press_again_exit,
+                    AppUtil.getAppName(BaseApplication.context!!) ?: ""
+                )
+            )
         }
         return true
     }

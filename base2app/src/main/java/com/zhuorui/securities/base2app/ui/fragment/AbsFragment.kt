@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
-import butterknife.ButterKnife
-import butterknife.Unbinder
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.base2app.util.StatusBarUtil
-import com.zhuorui.securities.base2app.util.ToastUtil
 import me.yokeyword.fragmentation.SupportFragment
 
 /**
@@ -17,31 +16,25 @@ import me.yokeyword.fragmentation.SupportFragment
  *    date   : 2019-05-20 14:13
  *    desc   : 定义基础Fragment
  */
-abstract class AbsFragment() : SupportFragment() {
+abstract class AbsFragment<D : ViewDataBinding, VM : ViewModel, V : AbsView, P : AbsPresenter<V, VM>> :
+    SupportFragment(), AbsView {
 
     protected var TAG: String? = null
 
-    private var unbinder: Unbinder? = null
+    /**
+     * 绑定数据
+     */
+    private var dataBinding: D? = null
+    /**
+     * 控制逻辑
+     */
+    protected var presenter: P? = null
     /**
      * 是否DestroyView()被调用
      *
      * @return isDestroyView
      */
-    var isDestroyView: Boolean = false
-        private set
-    /**
-     * 是否Destroy()被调用
-     *
-     * @return isDestroy
-     */
-    var isDestroy: Boolean = false
-        private set
-    /**
-     * 是否已解除View的绑定
-     *
-     * @return isBindView
-     */
-    var isBindView: Boolean = false
+    protected var isDestroyView: Boolean = false
         private set
     /**
      * Fragment的ContentView布局
@@ -49,6 +42,22 @@ abstract class AbsFragment() : SupportFragment() {
      * @return layout
      */
     protected abstract val layout: Int
+    /**
+     * viewModel的id
+     */
+    protected abstract val viewModelId: Int
+    /***
+     * 创建presenter
+     */
+    protected abstract val createPresenter: P
+    /***
+     * 创建viewModel
+     */
+    protected abstract val createViewModel: VM?
+    /**
+     * 返回View
+     */
+    protected abstract val getView: V
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,15 +66,20 @@ abstract class AbsFragment() : SupportFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         isDestroyView = false
-        unbindButterKnife()
-        val layout = inflater.inflate(layout, container, false)
-        if (rootViewFitsSystemWindowsPadding()){
-            layout.setPadding(0, getRootViewFitsSystemWindowsPadding(), 0, 0)
+        dataBinding = DataBindingUtil.inflate(inflater, layout, container, false)
+        if (rootViewFitsSystemWindowsPadding()) {
+            dataBinding?.root?.setPadding(0, getRootViewFitsSystemWindowsPadding(), 0, 0)
         }
-        /*绑定ButterKnife*/
-        unbinder = ButterKnife.bind(this, layout)
-        isBindView = true
-        return layout
+        val viewModel = createViewModel
+        presenter = createPresenter
+        context?.let { presenter?.bindContext(it) }
+        presenter?.bindView(getView)
+        presenter?.bindViewModel(viewModel)
+        //关联ViewModel
+        dataBinding?.setVariable(viewModelId, viewModel)
+        // 让xml内绑定的LiveData和Observer建立连接，让LiveData能感知Fragment的生命周期
+        dataBinding?.lifecycleOwner = this
+        return dataBinding?.root
     }
 
     /**
@@ -78,42 +92,25 @@ abstract class AbsFragment() : SupportFragment() {
     /**
      * 设置视图减去状态栏的高度
      */
-    open fun getRootViewFitsSystemWindowsPadding(): Int{
+    open fun getRootViewFitsSystemWindowsPadding(): Int {
         return StatusBarUtil.getStatusBarHeight(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+        presenter?.init()
     }
 
-    protected abstract fun init()
+    override fun isDestroy(): Boolean {
+        return isDestroyView
+    }
 
     override fun onDestroyView() {
         isDestroyView = true
+        dataBinding?.unbind()
+        dataBinding = null
+        presenter?.destroy()
+        presenter = null
         super.onDestroyView()
-        unbindButterKnife()
-    }
-
-    override fun onDestroy() {
-        isDestroy = true
-        super.onDestroy()
-    }
-
-    /**
-     * 解除绑定
-     */
-    protected fun unbindButterKnife() {
-        isBindView = false
-        if (unbinder != null) unbinder!!.unbind()
-        unbinder = null
-    }
-
-    protected fun toast(@StringRes res: Int) {
-        ToastUtil.instance.toast(res)
-    }
-
-    protected fun toast(str: String?) {
-        str?.let { ToastUtil.instance.toast(it) }
     }
 }

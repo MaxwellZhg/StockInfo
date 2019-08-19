@@ -1,28 +1,20 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
-import com.zhuorui.securities.market.event.SocketDisconnectEvent
-import com.zhuorui.securities.market.model.StockTsEnum
-import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.ui.contract.StockTabContract
-import com.zhuorui.securities.market.ui.mvp.StockTabPresenter
-import com.zhuorui.securities.market.ui.mvp.StockTabVmWarpper
-import com.zhuorui.securities.base2app.infra.LogInfra
-import com.zhuorui.securities.base2app.mvp.wrapper.BaseMvpNetVmFragment
-import com.zhuorui.securities.base2app.rxbus.EventThread
-import com.zhuorui.securities.base2app.rxbus.RxSubscribe
+import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.market.BR
+import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
+import com.zhuorui.securities.market.ui.presenter.StockTabFragmentPresenter
+import com.zhuorui.securities.market.ui.view.StockTabFragmentView
+import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -39,47 +31,55 @@ import java.util.*
  *    date   : 2019/7/18 10:32
  *    desc   : 主页中的自选股Tab页面
  */
-class StockTabFragment : BaseMvpNetVmFragment<StockTabPresenter,StockTabVmWarpper,FragmentStockTabBinding>(), View.OnClickListener,StockTabContract.View {
-    override fun createPresenter(): StockTabPresenter {
-      return StockTabPresenter(this)
-    }
+class StockTabFragment :
+    AbsBackFinishFragment<FragmentStockTabBinding, StockTabViewModel, StockTabFragmentView, StockTabFragmentPresenter>(),
+    View.OnClickListener, StockTabFragmentView {
 
-    override fun isDestroyed(): Boolean {
-       return false
-    }
+    private var mfragment: ArrayList<StockTabViewModel.PageInfo>? = null
 
-    override fun createWrapper(): StockTabVmWarpper {
-      return StockTabVmWarpper(this)
+    companion object {
+        fun newInstance(): StockTabFragment {
+            return StockTabFragment()
+        }
     }
-
-    private var mfragment: ArrayList<PageInfo> = ArrayList()
 
     override val layout: Int
         get() = R.layout.fragment_stock_tab
 
-    inner class PageInfo(val title: String, val type: StockTsEnum?)
+    override val viewModelId: Int
+        get() = BR.viewModel
 
-    override fun init() {
+    override val createPresenter: StockTabFragmentPresenter
+        get() = StockTabFragmentPresenter()
+
+    override val createViewModel: StockTabViewModel?
+        get() = StockTabViewModel()
+
+    override val getView: StockTabFragmentView
+        get() = this
+
+    override fun rootViewFitsSystemWindowsPadding(): Boolean {
+        return true
+    }
+
+    override fun init(fragments: ArrayList<StockTabViewModel.PageInfo>) {
+        mfragment = fragments
+
         iv_serach.setOnClickListener(this)
-
-        // 添加标题页面
-        mfragment.add(PageInfo(ResUtil.getString(R.string.all_stock)!!, null))
-        mfragment.add(PageInfo(ResUtil.getString(R.string.hk_stock)!!, StockTsEnum.HK))
-        mfragment.add(PageInfo(ResUtil.getString(R.string.sh_stock)!!, StockTsEnum.HS))
 
         // 设置viewpager指示器
         val commonNavigator = CommonNavigator(requireContext())
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
             override fun getCount(): Int {
-                return mfragment.size
+                return mfragment!!.size
             }
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
                 colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.un_tab_select)!!
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
-                colorTransitionPagerTitleView.text = mfragment[index].title
+                colorTransitionPagerTitleView.text = mfragment!![index].title
                 colorTransitionPagerTitleView.setOnClickListener {
                     viewpager.currentItem = index
                 }
@@ -95,75 +95,48 @@ class StockTabFragment : BaseMvpNetVmFragment<StockTabPresenter,StockTabVmWarppe
         }
 
         // 设置viewpager页面缓存数量
-        dataBinding.viewpager.offscreenPageLimit = mfragment.size
+        viewpager.offscreenPageLimit = mfragment!!.size
         // 设置viewpager适配器
-        dataBinding.viewpager.adapter = fragmentManager?.let { ViewPagerAdapter(it) }
-        dataBinding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewpager.adapter = fragmentManager?.let { ViewPagerAdapter(it) }
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
-                dataBinding.magicIndicator.onPageScrollStateChanged(state)
+                magic_indicator.onPageScrollStateChanged(state)
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                dataBinding.magicIndicator.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                magic_indicator.onPageScrolled(position, positionOffset, positionOffsetPixels)
             }
 
             override fun onPageSelected(position: Int) {
-                dataBinding.magicIndicator.onPageSelected(position)
+                magic_indicator.onPageSelected(position)
             }
         })
 
         // 指示器绑定viewpager
-        dataBinding.magicIndicator.navigator = commonNavigator
-        ViewPagerHelper.bind(dataBinding.magicIndicator, dataBinding.viewpager)
-
-        // 启动长链接
-        SocketClient.getInstance()?.connect()
+        magic_indicator.navigator = commonNavigator
+        ViewPagerHelper.bind(magic_indicator, viewpager)
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            return TopicStockListFragment.newInstance(mfragment[position].type)
+            return TopicStockListFragment.newInstance(mfragment?.get(position)?.type)
         }
 
         override fun getCount(): Int {
-            return mfragment.size
+            return mfragment?.size!!
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return mfragment[position].title
+            return mfragment?.get(position)?.title
         }
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.iv_serach -> {
-                (parentFragment as AbsFragment).start(StockSearchFragment.newInstance(1))
+                (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
             }
         }
-    }
-
-    @RxSubscribe(observeOnThread = EventThread.SINGLE)
-    fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
-        LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
-        Thread.sleep(1000)
-        SocketClient.getInstance()?.connect()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // 关闭长链接
-        SocketClient.getInstance()?.destroy()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dataBinding = generateDataBinding(inflater,container,layout)
-        if (viewWrapper != null) {
-            viewWrapper.setBinding(dataBinding)
-        }
-        presenter.fetchData()
-        dataBinding.root.setPadding(0, getRootViewFitsSystemWindowsPadding(), 0, 0)
-        return dataBinding.root
     }
 }

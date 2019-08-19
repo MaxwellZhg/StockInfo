@@ -1,9 +1,7 @@
 package com.zhuorui.securities.base2app.ui.fragment
 
-import android.os.Bundle
-import com.zhuorui.securities.base2app.network.Transactions
-import com.zhuorui.securities.base2app.rxbus.IRxBusEvent
-import com.zhuorui.securities.base2app.rxbus.RxBus
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 
 /**
  *    author : Pengxianglin
@@ -13,31 +11,5 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
  *             适用场景：二级页面（如查看详情）
  *             在此基础上增加了RxBus
  */
-abstract class AbsSwipeBackEventFragment : AbsSwipeBackFragment(), IRxBusEvent {
-    protected var transactions = Transactions()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        registerRxBus()
-    }
-
-    override fun registerRxBus() {
-        val registered = RxBus.getDefault().isRegistered(this)
-        if (!registered) {
-            RxBus.getDefault().register(this)
-        }
-    }
-
-    override fun unregisterRxBus() {
-        val registered = RxBus.getDefault().isRegistered(this)
-        if (registered) {
-            RxBus.getDefault().unregister(this)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        transactions.clear()
-        unregisterRxBus()
-    }
-}
+abstract class AbsSwipeBackEventFragment<D : ViewDataBinding, VM : ViewModel, V : AbsView, P : AbsEventPresenter<V, VM>> :
+    AbsSwipeBackFragment<D, VM, V, P>()

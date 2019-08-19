@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.FloatRange
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import me.yokeyword.fragmentation.SwipeBackLayout
 import me.yokeyword.fragmentation_swipeback.core.ISwipeBackFragment
 import me.yokeyword.fragmentation_swipeback.core.SwipeBackFragmentDelegate
@@ -16,7 +18,7 @@ import me.yokeyword.fragmentation_swipeback.core.SwipeBackFragmentDelegate
  *    desc   : 定义基础侧滑返回的Fragment
  *             适用场景：二级页面（如查看详情）
  */
-abstract class AbsSwipeBackFragment : AbsFragment(), ISwipeBackFragment {
+abstract class AbsSwipeBackFragment<D : ViewDataBinding, VM : ViewModel,  V : AbsView, P : AbsPresenter<V, VM>> : AbsFragment<D, VM,V, P>(), ISwipeBackFragment {
 
     private val mDelegate = SwipeBackFragmentDelegate(this)
 
