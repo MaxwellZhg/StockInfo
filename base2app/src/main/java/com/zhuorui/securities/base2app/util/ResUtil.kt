@@ -20,7 +20,7 @@ object ResUtil {
         return BaseApplication.context?.let { ContextCompat.getColor(it, colorResId) }
     }
 
-    fun getString(@StringRes stringResId: Int): String? {
+    fun getString(stringResId: Int): String? {
         return BaseApplication.context?.getString(stringResId)
     }
 

@@ -59,7 +59,7 @@ dependencies {
     // TODO 修改完架构后，需要释放
 //    implementation project(":applib2")
 //    implementation project(":applib3")
-//    implementation project(":applib4")
+//    implementation project(":infomation")
 //    implementation project(":applib5")
     // databinding
     kapt "com.android.databinding:compiler:$databinding_version"

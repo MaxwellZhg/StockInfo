@@ -94,7 +94,7 @@ public class DebugStackDelegate implements SensorEventListener {
     }
 
     /**
-     * 调试相关:以dialog形式 显示 栈视图
+     * 调试相关:以dialog形式 show_psw 栈视图
      */
     public void showFragmentStackHierarchyView() {
         if (mStackDialog != null && mStackDialog.isShowing()) return;
