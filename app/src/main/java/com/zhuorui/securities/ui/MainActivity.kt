@@ -1,12 +1,12 @@
 package com.zhuorui.securities.ui
 
 import android.os.Bundle
-import com.zhuorui.securities.base2app.ui.activity.AbsNetActivity
 import com.zhuorui.securities.R
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
-class MainActivity : AbsNetActivity() {
+class MainActivity : AbsActivity() {
 
     override val acContentRootViewId: Int
         get() = R.id.root_view
