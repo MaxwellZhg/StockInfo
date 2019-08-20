@@ -1,4 +1,4 @@
-include ':fragmentation_swipeback', ':fragmentation', ':fragmentation_core',
+include ':fragmentation_swipeback', ':fragmentation', ':fragmentation_core', ':openaccount',
         ':base2app', ':MPChartLib', ':commonwidget',
         // 功能组件
         ':app' , ':market'// TODO 修改完架构后，需要释放 , ':applib2', ':applib3', ':infomation', ':applib5'

@@ -15,6 +15,7 @@ import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
 import com.zhuorui.securities.market.ui.presenter.StockTabFragmentPresenter
 import com.zhuorui.securities.market.ui.view.StockTabFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
+import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -37,7 +38,7 @@ class StockTabFragment :
 
     private var mfragment: ArrayList<StockTabViewModel.PageInfo>? = null
 
-    companion object {
+    companion  object {
         fun newInstance(): StockTabFragment {
             return StockTabFragment()
         }
@@ -65,6 +66,7 @@ class StockTabFragment :
     override fun init(fragments: ArrayList<StockTabViewModel.PageInfo>) {
         mfragment = fragments
 
+        user_logo.setOnClickListener(this)
         iv_serach.setOnClickListener(this)
 
         // 设置viewpager指示器
@@ -136,6 +138,9 @@ class StockTabFragment :
         when (p0?.id) {
             R.id.iv_serach -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
+            }
+            R.id.user_logo -> {
+                (parentFragment as AbsFragment<*, *, *, *>).start(OASelectRegionFragment.newInstance())
             }
         }
     }

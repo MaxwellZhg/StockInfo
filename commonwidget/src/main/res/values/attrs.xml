@@ -30,4 +30,8 @@
         <attr name="animationDuration" format="integer|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="ZhuoRuiTopBar">
+        <attr name="zrtb_title" format="string|reference"/>
+    </declare-styleable>
+
 </resources>
