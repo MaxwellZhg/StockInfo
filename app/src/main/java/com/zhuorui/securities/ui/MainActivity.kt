@@ -6,6 +6,12 @@ import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
+/**
+ *    author : PengXianglin
+ *    e-mail : peng_xianglin@163.com
+ *    date   : 2019/8/8 13:55
+ *    desc   : 主界面
+ */
 class MainActivity : AbsActivity() {
 
     override val acContentRootViewId: Int

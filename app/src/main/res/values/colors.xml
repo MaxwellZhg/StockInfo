@@ -8,4 +8,5 @@
     <color name="tab_unselect" tools:ignore="MissingDefaultResource">#c9c9c9</color>
     <color name="tab_bar_bg" tools:ignore="MissingDefaultResource">#211F2A</color>
     <color name="tab_select" tools:ignore="MissingDefaultResource">#53A0FD</color>
+    <color name="color_ff333333" tools:ignore="MissingDefaultResource">#ff333333</color>
 </resources>

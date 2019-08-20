@@ -4,7 +4,7 @@
           package="com.zhuorui.securities">
 
     <application
-            android:name="com.zhuorui.securities.Application"
+            android:name=".Application"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -13,8 +13,7 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-
-        <!--配置设计稿尺寸-->
+        <!-- 配置设计稿尺寸 -->
         <meta-data
                 android:name="design_width_in_dp"
                 android:value="375"/>
@@ -22,15 +21,21 @@
                 android:name="design_height_in_dp"
                 android:value="667"/>
 
-        <activity android:name="com.zhuorui.securities.ui.MainActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden|screenSize">
+        <!--启动页-->
+        <activity android:name=".ui.SplashActivity"
+                  android:theme="@style/SplashTheme"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!--主界面-->
+        <activity
+                android:name=".ui.MainActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
