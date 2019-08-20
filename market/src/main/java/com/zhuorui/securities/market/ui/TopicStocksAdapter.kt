@@ -14,6 +14,7 @@ import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.commonwidget.StateButton
+import com.zhuorui.securities.market.util.MathUtil
 
 /**
  * Created by Maxwell.
@@ -93,7 +94,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                     iv_stock_ts.setImageResource(R.mipmap.sz)
                 }
             }
-            tv_price.text = item?.price.toString()
+            tv_price.text = item?.price?.let { MathUtil.rounded2(it).toString() }
 
             if (item?.diffRate!! > 0 || item.diffRate == 0.0) {
                 tv_price.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
@@ -104,7 +105,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 tv_price.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
 
                 stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
-                stock_up_down.text = "-" + item.diffRate + "%"
+                stock_up_down.text = item.diffRate.toString() + "%"
             }
         }
     }

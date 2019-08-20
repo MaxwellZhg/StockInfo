@@ -3,10 +3,10 @@
     <color name="tab_bar_bg" tools:ignore="MissingDefaultResource">#211F2A</color>
     <color name="title_bar_color" tools:ignore="MissingDefaultResource">#FEFDFD</color>
     <color name="tablayout_bg" tools:ignore="MissingDefaultResource">#191A21</color>
-    <color name="stock_code" tools:ignore="MissingDefaultResource">#BBBBBB</color>
+    <color name="stock_code" tools:ignore="MissingDefaultResource">#A4B2CB</color>
     <color name="cent_color" tools:ignore="MissingDefaultResource">#191821</color>
     <color name="tab_select" tools:ignore="MissingDefaultResource">#53A0FD</color>
-    <color name="un_tab_select" tools:ignore="MissingDefaultResource">#FFFFFF</color>
+    <color name="un_tab_select" tools:ignore="MissingDefaultResource">#B3BCD0</color>
     <color name="tv_stock_code" tools:ignore="MissingDefaultResource">#B2B0BA</color>
     <color name="up_stock_color" tools:ignore="MissingDefaultResource">#AC3E19</color>
     <color name="down_stock_color" tools:ignore="MissingDefaultResource">#37672E</color>
