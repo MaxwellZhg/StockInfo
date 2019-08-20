@@ -115,8 +115,7 @@ class TopicStockListFragment :
         context?.let {
             StockPopupWindow.create(it, object : StockPopupWindow.CallBack {
                 override fun onStickyOnTop() {
-                    //TODO 置顶
-                    ToastUtil.instance.toast("置顶")
+                    presenter?.onStickyOnTop(item)
                 }
 
                 override fun onRemind() {
@@ -125,8 +124,7 @@ class TopicStockListFragment :
                 }
 
                 override fun onDelete() {
-                    //TODO 删除
-                    ToastUtil.instance.toast("删除")
+                    presenter?.onDelete(item)
                 }
 
                 override fun onDismiss() {
@@ -138,7 +136,11 @@ class TopicStockListFragment :
     }
 
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
-        mAdapter?.addItems(list)
+        if (mAdapter?.items?.isNullOrEmpty()!!) {
+            mAdapter?.items = list
+        } else {
+            mAdapter?.notifyDataSetChanged()
+        }
     }
 
     override fun notifyItemChanged(index: Int) {
