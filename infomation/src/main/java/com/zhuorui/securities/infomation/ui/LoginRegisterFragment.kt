@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -16,13 +17,17 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
+import com.zhuorui.securities.infomation.BR
 
 import com.zhuorui.securities.infomation.R
+import com.zhuorui.securities.infomation.R2.id.iv_cancle
+import com.zhuorui.securities.infomation.R2.id.tv_send_code
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
+import com.zhuorui.securities.infomation.ui.viewmodel.LoginRegisterViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Scheduler
@@ -35,6 +40,9 @@ import kotlinx.android.synthetic.main.setting_psw_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import java.util.*
 import kotlin.String as String
+import com.zhuorui.securities.infomation.databinding.LoginAndRegisterFragmentBinding
+import com.zhuorui.securities.infomation.ui.presenter.LoginRegisterPresenter
+import com.zhuorui.securities.infomation.ui.view.LoginRegisterView
 
 /**
  * Created by Maxwell.
@@ -42,7 +50,7 @@ import kotlin.String as String
  * Date: 2019/8/15
  * Desc:手机号登录与注册
  */
-class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, TextWatcher {
+class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(), View.OnClickListener, TextWatcher,LoginRegisterView {
     private lateinit var strphone: String
     private lateinit var phonecode: String
     internal var timer: Timer? = null
@@ -50,12 +58,20 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
     internal var task: TimerTask? = null
     override val layout: Int
         get() = R.layout.login_and_register_fragment
-
+    override val viewModelId: Int
+        get() =  BR.viewmodel
+    override val createPresenter: LoginRegisterPresenter
+        get() = LoginRegisterPresenter()
+    override val createViewModel: LoginRegisterViewModel?
+        get() = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
+    override val getView: LoginRegisterView
+        get() = this
     override fun init() {
         tv_send_code.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
         et_phone_code.addTextChangedListener(this)
+        tv_phone_num_login.setOnClickListener(this)
     }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
@@ -72,7 +88,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
                     return
                 }
                 startTimeCountDown(R.string.minutiues)
-                requestSendLoginCode(strphone)
+                presenter?.requestSendLoginCode(strphone)
             }
             R.id.iv_cancle -> {
                pop()
@@ -86,39 +102,14 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
                     ToastUtil.instance.toast(R.string.phone_code_tips)
                     return
                 }
-             requestUserLoginCode(strphone,phonecode)
-                startWithPop(SettingPswFragment())
+                presenter?.requestUserLoginCode(strphone,phonecode)
+            }
+            R.id.tv_phone_num_login->{
+                start(LoginPswFragment())
             }
         }
     }
 
-    private fun requestSendLoginCode(str: kotlin.String) {
-        val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
-        Cache[InfomationNet::class.java]?.sendLoginCode(request)
-            ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
-    }
-
-    private fun requestUserLoginCode(str: kotlin.String,vfcode:kotlin.String) {
-        val request = UserLoginCodeRequest(str, vfcode,"0086", transactions.createTransaction())
-        Cache[InfomationNet::class.java]?.userLoginCode(request)
-            ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
-    }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
-    }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
-
-    }
-
-    override fun onErrorResponse(response: ErrorResponse) {
-        if (response.request is UserLoginCodeRequest) {
-            if(response.code=="010001"){
-                 startWithPop(SettingPswFragment())
-              }
-        }
-        super.onErrorResponse(response)
-    }
     @Throws(InterruptedException::class)
     fun startTask() {
         if (task == null) {
@@ -131,12 +122,16 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
                     }).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            tv_send_code.text = ResUtil.getStringFormat(R.string.credit_time,recLen)
+                            if(tv_send_code!=null) {
+                                tv_send_code.text = ResUtil.getStringFormat(R.string.credit_time, recLen)
+                            }
                             if (recLen < 0) {
                                 timer!!.cancel()
                                 task = null
                                 timer = null
-                                tv_send_code.text = ResUtil.getString(R.string.send_verification_code)
+                                if(tv_send_code!=null) {
+                                    tv_send_code.text = ResUtil.getString(R.string.send_verification_code)
+                                }
                             }
                         }
                 }
@@ -172,11 +167,11 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
                 if(TextUtils.isEmpty(et_phone.text.toString())){
                     ToastUtil.instance.toast(R.string.phone_tips)
                 }else {
-                    tv_btn_login.background = ResUtil.getDrawable(R.drawable.login_btn_checked)
+                    presenter?.setState(0)
                 }
              }
         } else {
-            tv_btn_login.background = ResUtil.getDrawable(R.drawable.login_btn_unchecked)
+            presenter?.setState(1)
         }
     }
 
@@ -188,5 +183,31 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment(), View.OnClickListener, T
 
     }
 
+    override fun gotopsw() {
+        startWithPop(SettingPswFragment.newInstance(strphone,phonecode))
+    }
+
+    override fun gotomain() {
+
+    }
+
+    override fun countdown() {
+
+    }
+    companion object {
+        fun newInstance(): LoginRegisterFragment {
+            return LoginRegisterFragment()
+
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer!!.cancel()
+        task = null
+        timer = null
+       // tv_send_code.text = ResUtil.getString(R.string.send_verification_code)
+
+    }
 }
 

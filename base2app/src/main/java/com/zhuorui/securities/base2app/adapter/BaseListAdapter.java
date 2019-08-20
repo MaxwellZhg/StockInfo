@@ -45,6 +45,12 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    public void clearItems(){
+        if (items == null) return;
+        this.items.clear();
+        notifyDataSetChanged();
+    }
+
     public T getItem(int position) {
         return items.get(position);
     }
