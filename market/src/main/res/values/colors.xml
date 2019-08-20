@@ -13,4 +13,6 @@
     <color name="up_price_color" tools:ignore="MissingDefaultResource">#FF0000</color>
     <color name="down_price_color" tools:ignore="MissingDefaultResource">#00CC00</color>
     <color name="add_choose_stock_color" tools:ignore="MissingDefaultResource">#449FFF</color>
+    <color name="color_ffac3519" tools:ignore="MissingDefaultResource">#ffac3519</color>
+    <color name="color_ff367639" tools:ignore="MissingDefaultResource">#ff367639</color>
 </resources>
