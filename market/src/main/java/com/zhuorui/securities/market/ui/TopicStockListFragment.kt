@@ -30,7 +30,6 @@ class TopicStockListFragment :
     BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
     TopicStockListFragmentView {
 
-    private var type: StockTsEnum? = null
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
     private var pageSize = 20
@@ -63,7 +62,8 @@ class TopicStockListFragment :
         get() = this
 
     override fun init() {
-        type = arguments?.getSerializable("type") as StockTsEnum?
+        val type = arguments?.getSerializable("type") as StockTsEnum?
+        presenter?.setType(type)
         rl_updown.setOnClickListener(this)
         rl_arrows.setOnClickListener(this)
     }
@@ -94,7 +94,7 @@ class TopicStockListFragment :
      * 加载推荐自选股列表
      */
     private fun requestStocks() {
-        presenter?.requestStocks(type, currentPage, pageSize)
+        presenter?.requestStocks(currentPage, pageSize)
     }
 
     override fun onClick(p0: View?) {

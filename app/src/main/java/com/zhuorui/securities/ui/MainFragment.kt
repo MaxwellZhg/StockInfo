@@ -104,10 +104,10 @@ class MainFragment :
         val firstFragment = findChildFragment(StockTabFragment::class.java)
         if (firstFragment == null) {
             mFragments[FIRST] = StockTabFragment.newInstance()
-            mFragments[SECOND] = StockTabFragment.newInstance()
-            mFragments[THIRD] = StockTabFragment.newInstance()
-            mFragments[FOUR] = StockTabFragment.newInstance()
-            mFragments[FIVE] = StockTabFragment.newInstance()
+//            mFragments[SECOND] = StockTabFragment.newInstance()
+//            mFragments[THIRD] = StockTabFragment.newInstance()
+//            mFragments[FOUR] = StockTabFragment.newInstance()
+//            mFragments[FIVE] = StockTabFragment.newInstance()
 
             // TODO 修改完架构后，需要释放
 //            mFragments[FIRST] = StockTabFragment.newInstance()
@@ -117,11 +117,11 @@ class MainFragment :
 //            mFragments[FIVE] = MyTabFragment()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, FIRST,
-                mFragments[FIRST],
-                mFragments[SECOND],
-                mFragments[THIRD],
-                mFragments[FOUR],
-                mFragments[FIVE]
+                mFragments[FIRST]
+//                mFragments[SECOND],
+//                mFragments[THIRD],
+//                mFragments[FOUR],
+//                mFragments[FIVE]
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
