@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
@@ -18,6 +19,7 @@ import com.zhuorui.securities.market.ui.presenter.TopicStockListFragmentPresente
 import com.zhuorui.securities.market.ui.view.TopicStockListFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
+import kotlinx.android.synthetic.main.layout_guide_open_accout.*
 
 /**
  * Created by Maxwell.
@@ -63,6 +65,10 @@ class TopicStockListFragment :
 
     override fun init() {
         val type = arguments?.getSerializable("type") as StockTsEnum?
+        if (type == null) {
+            guide_open_accout.inflate()
+            tv_opne_account.setOnClickListener(this)
+        }
         presenter?.setType(type)
         presenter?.setLifecycleOwner(this)
         rl_updown.setOnClickListener(this)
@@ -118,6 +124,10 @@ class TopicStockListFragment :
             }
             R.id.rl_arrows -> {
 
+            }
+            R.id.tv_opne_account -> {
+                //TODO 开户
+                ToastUtil.instance.toast("开户")
             }
         }
     }
