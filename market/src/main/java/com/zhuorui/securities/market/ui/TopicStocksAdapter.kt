@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -58,7 +59,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            default -> ViewHolderdefalt(v, true, false)
+            default -> ViewHolderdefalt(v, true, true)
             else -> {
                 ViewHolderBottom(v, true, false)
             }
@@ -81,6 +82,12 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockMarketInfo?, position: Int) {
+            if (item?.longClick != null && item.longClick) {
+                itemView.setBackgroundResource(R.color.color_312E40_85)
+            } else {
+                itemView.setBackgroundColor(Color.TRANSPARENT)
+            }
+
             tv_stock_tile.text = item?.name
             stock_code.text = item?.code
             when (item?.ts) {

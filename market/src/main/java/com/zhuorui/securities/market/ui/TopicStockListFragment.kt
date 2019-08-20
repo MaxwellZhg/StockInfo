@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.layout_guide_open_accout.*
 class TopicStockListFragment :
     AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListFragmentView, TopicStockListFragmentPresenter>(),
     BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
-    TopicStockListFragmentView {
+    TopicStockListFragmentView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
 
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
@@ -86,6 +86,7 @@ class TopicStockListFragment :
         mAdapter = TopicStocksAdapter()
 
         mAdapter?.setClickItemCallback(this)
+        mAdapter?.setLongClickItemCallback(this)
         rv_stock.adapter = mAdapter
 
         requestStocks()
@@ -99,6 +100,12 @@ class TopicStockListFragment :
             // 跳转到搜索
             (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
         }
+    }
+
+    override fun onLongClickItem(pos: Int, item: StockMarketInfo?, view: View?) {
+        item?.longClick = true
+        mAdapter?.notifyItemChanged(pos)
+        // 显示
     }
 
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
