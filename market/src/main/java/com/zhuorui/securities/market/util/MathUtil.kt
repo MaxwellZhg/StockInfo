@@ -17,4 +17,12 @@ object MathUtil {
         val b = BigDecimal(divisor / dividend)
         return b.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
     }
+
+    /**
+     * 四舍五入保留两位小数
+     */
+    fun rounded2(number: Double): Double {
+        val b = BigDecimal(number)
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+    }
 }
