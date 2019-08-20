@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.presenter
 
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -15,15 +16,9 @@ import com.zhuorui.securities.market.net.request.RecommendStocklistRequest
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
-import com.zhuorui.securities.market.ui.TopicStocksAdapter
 import com.zhuorui.securities.market.ui.view.TopicStockListFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
 import com.zhuorui.securities.market.util.MathUtil
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import java.util.*
 
 /**
  *    author : PengXianglin
@@ -31,10 +26,10 @@ import java.util.*
  *    date   : 2019/8/19 17:13
  *    desc   :
  */
+@Suppress("NAME_SHADOWING")
 class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentView, TopicStockListViewModel>() {
 
     private var ts: StockTsEnum? = null
-    private var disposables = LinkedList<Disposable>()
 
     override fun init() {
         super.init()
@@ -43,6 +38,14 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
 
     fun setType(type: StockTsEnum?) {
         ts = type
+    }
+
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.datas?.observe(it,
+                androidx.lifecycle.Observer<List<StockMarketInfo>> { t -> view?.notifyDataSetChanged(t) })
+        }
     }
 
     /**
@@ -54,19 +57,12 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }
 
-    fun getAdapter(): TopicStocksAdapter? {
-        if (viewModel?.adapter?.value == null) {
-            viewModel?.adapter?.value = TopicStocksAdapter()
-        }
-        return viewModel?.adapter?.value
-    }
-
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onRecommendStocklistResponse(response: RecommendStocklistResponse) {
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data?.datas
         if (datas.isNullOrEmpty()) return
-        viewModel?.adapter?.value?.addItems(datas)
+        viewModel?.datas?.value = datas
 
         // 发起价格订阅
         for (item in datas) {
@@ -87,22 +83,20 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
 
-        val adapter = viewModel?.adapter?.value ?: return
-        val adapterData = adapter.items
-        if (adapterData?.isNullOrEmpty()!!) return
+        val datas = viewModel?.datas?.value ?: return
 
         val stockPriceDatas = response.body
 
-        for (index in adapter.items?.indices!!) {
-            val item = adapter.items!![index]
+        for (index in datas.indices) {
+            val item = datas[index]
             for (sub in stockPriceDatas) {
                 if (item.ts == sub.ts && item.code == sub.code) {
                     // 更新数据
-                    val item = adapter.items!![index]
+                    val item = datas[index]
                     item.price = sub.price!!
                     item.diffRate =
                         MathUtil.division((sub.price!! - sub.openPrice!!) * 100, sub.openPrice!!)
-//                    _mActivity?.runOnUiThread { mAdapter?.notifyItemChanged(index) }
+                    view?.notifyItemChanged(index)
                     break
                 }
             }
@@ -115,9 +109,9 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onAddTopicStockEvent(event: AddTopicStockEvent) {
         if (ts != null && !event.stock.ts.equals(ts?.name)) return
+        val datas = viewModel?.datas?.value ?: return
 
-        val adapter = viewModel?.adapter?.value
-        for (item in adapter?.items!!) {
+        for (item in datas) {
             if (item.ts.equals(event.stock.ts) && item.code.equals(event.stock.ts)) return
         }
 
@@ -142,24 +136,9 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
         stock.type = event.stock.type
         stock.tsCode = event.stock.tsCode
 
-        adapter.items.add(stock)
-//        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-//            adapter.addItem(stock)
-//            emitter.onNext(true)
-//            emitter.onComplete()
-//        }).subscribeOn(AndroidSchedulers.mainThread())
-//            .subscribe()
-//        disposables.add(disposable)
+        datas.add(stock)
+
+        view?.notifyItemInserted(datas.size - 1)
     }
 
-    override fun destroy() {
-        super.destroy()
-
-        // 释放disposable
-        if (disposables.isNullOrEmpty()) return
-        for (disposable in disposables) {
-            disposable.dispose()
-        }
-        disposables.clear()
-    }
 }

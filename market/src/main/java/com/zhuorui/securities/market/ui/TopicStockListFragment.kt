@@ -51,19 +51,20 @@ class TopicStockListFragment :
 
     override val viewModelId: Int
         get() = BR.viewModel
-    
+
     override val createPresenter: TopicStockListFragmentPresenter
         get() = TopicStockListFragmentPresenter()
-    
+
     override val createViewModel: TopicStockListViewModel?
         get() = ViewModelProviders.of(this).get(TopicStockListViewModel::class.java)
-    
+
     override val getView: TopicStockListFragmentView
         get() = this
 
     override fun init() {
         val type = arguments?.getSerializable("type") as StockTsEnum?
         presenter?.setType(type)
+        presenter?.setLifecycleOwner(this)
         rl_updown.setOnClickListener(this)
         rl_arrows.setOnClickListener(this)
     }
@@ -73,7 +74,8 @@ class TopicStockListFragment :
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_stock.layoutManager = LinearLayoutManager(context)
-        mAdapter = presenter?.getAdapter()
+        mAdapter = TopicStocksAdapter()
+
         mAdapter?.setClickItemCallback(this)
         rv_stock.adapter = mAdapter
 
@@ -88,6 +90,18 @@ class TopicStockListFragment :
             // 跳转到搜索
             (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
         }
+    }
+
+    override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
+        mAdapter?.addItems(list)
+    }
+
+    override fun notifyItemChanged(index: Int) {
+        _mActivity?.runOnUiThread { mAdapter?.notifyItemChanged(index) }
+    }
+
+    override fun notifyItemInserted(index: Int) {
+        _mActivity?.runOnUiThread { mAdapter?.notifyItemInserted(index) }
     }
 
     /**

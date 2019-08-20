@@ -2,7 +2,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zhuorui.securities.market.ui.TopicStocksAdapter
+import com.zhuorui.securities.market.model.StockMarketInfo
 
 /**
  * Created by Maxwell.
@@ -11,6 +11,5 @@ import com.zhuorui.securities.market.ui.TopicStocksAdapter
  * Desc:
  */
 class TopicStockListViewModel : ViewModel() {
-
-    var adapter: MutableLiveData<TopicStocksAdapter> = MutableLiveData()
+    var datas: MutableLiveData<MutableList<StockMarketInfo>> = MutableLiveData()
 }

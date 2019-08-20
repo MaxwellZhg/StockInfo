@@ -83,7 +83,6 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_stock"
                 android:layout_width="match_parent"
-                android:adapter="@{viewModel.adapter}"
                 android:layout_height="match_parent"/>
 
     </LinearLayout>
