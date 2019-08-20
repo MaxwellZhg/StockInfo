@@ -136,7 +136,7 @@ class TopicStockListFragment :
     }
 
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
-        if (mAdapter?.items?.isNullOrEmpty()!!) {
+        if (mAdapter?.items == null) {
             mAdapter?.items = list
         } else {
             mAdapter?.notifyDataSetChanged()
