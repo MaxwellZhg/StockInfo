@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.custom.StockPopupWindow
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
@@ -105,7 +107,34 @@ class TopicStockListFragment :
     override fun onLongClickItem(pos: Int, item: StockMarketInfo?, view: View?) {
         item?.longClick = true
         mAdapter?.notifyItemChanged(pos)
-        // 显示
+
+        //获取需要在其上方显示的控件的位置信息
+        val location = IntArray(2)
+        view?.getLocationOnScreen(location)
+        // 显示更多操作
+        context?.let {
+            StockPopupWindow.create(it, object : StockPopupWindow.CallBack {
+                override fun onStickyOnTop() {
+                    //TODO 置顶
+                    ToastUtil.instance.toast("置顶")
+                }
+
+                override fun onRemind() {
+                    //TODO 提醒
+                    ToastUtil.instance.toast("提醒")
+                }
+
+                override fun onDelete() {
+                    //TODO 删除
+                    ToastUtil.instance.toast("删除")
+                }
+
+                override fun onDismiss() {
+                    item?.longClick = false
+                    mAdapter?.notifyItemChanged(pos)
+                }
+            }).showAtLocation(view, Gravity.TOP, location[0], location[1])
+        }
     }
 
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
