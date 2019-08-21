@@ -61,7 +61,6 @@ class LoginRegisterPresenter: AbsNetPresenter<LoginRegisterView, LoginRegisterVi
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
-        view?.showdialog()
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginOutResponse(response: SendLoginCodeResponse) {

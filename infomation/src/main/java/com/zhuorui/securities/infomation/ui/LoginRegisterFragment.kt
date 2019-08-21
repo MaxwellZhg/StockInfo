@@ -69,6 +69,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         tv_btn_login.setOnClickListener(this)
         et_phone_code.addTextChangedListener(this)
         tv_phone_num_login.setOnClickListener(this)
+        rl_country_disct.setOnClickListener(this)
     }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
