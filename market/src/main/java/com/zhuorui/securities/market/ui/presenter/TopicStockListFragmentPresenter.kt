@@ -52,7 +52,12 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
      * 加载推荐自选股列表
      */
     fun requestStocks(currentPage: Int, pageSize: Int) {
-        val request = RecommendStocklistRequest(ts, currentPage, pageSize, transactions.createTransaction())
+        val request = RecommendStocklistRequest(
+            if (ts == StockTsEnum.HS) StockTsEnum.SH.name + "," + StockTsEnum.SZ.name else ts?.name,
+            currentPage,
+            pageSize,
+            transactions.createTransaction()
+        )
         Cache[IStockNet::class.java]?.list(request)
             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }

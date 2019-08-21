@@ -22,7 +22,7 @@ class StockTabViewModel : ViewModel() {
         // 添加标题页面
         mfragment.add(PageInfo(ResUtil.getString(R.string.all_stock)!!, null))
         mfragment.add(PageInfo(ResUtil.getString(R.string.hk_stock)!!, StockTsEnum.HK))
-        mfragment.add(PageInfo(ResUtil.getString(R.string.sh_stock)!!, StockTsEnum.SZ))
+        mfragment.add(PageInfo(ResUtil.getString(R.string.sh_stock)!!, StockTsEnum.HS))
     }
 
 }

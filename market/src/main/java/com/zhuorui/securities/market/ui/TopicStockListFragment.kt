@@ -73,7 +73,7 @@ class TopicStockListFragment :
             guide_open_accout.inflate()
             tv_opne_account.setOnClickListener(this)
         }
-        if (type == StockTsEnum.SZ) {
+        if (type == StockTsEnum.HS) {
             root_view.addView(View.inflate(context, R.layout.layout_trans_index, null), 0)
         }
         presenter?.setType(type)
