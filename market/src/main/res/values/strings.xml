@@ -4,6 +4,7 @@
     <string name="stock_name_code" tools:ignore="MissingTranslation">名称代码</string>
     <string name="updown" tools:ignore="MissingTranslation">涨跌幅</string>
     <string name="newly_price" tools:ignore="MissingTranslation">最新价</string>
+    <string name="diff_price" tools:ignore="MissingTranslation">跌涨价</string>
     <string name="all_stock" tools:ignore="MissingTranslation">全部</string>
     <string name="hk_stock" tools:ignore="MissingTranslation">港股</string>
     <string name="sh_stock" tools:ignore="MissingTranslation">沪深</string>

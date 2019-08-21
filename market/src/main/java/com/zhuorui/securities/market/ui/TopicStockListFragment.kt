@@ -78,8 +78,6 @@ class TopicStockListFragment :
         }
         presenter?.setType(type)
         presenter?.setLifecycleOwner(this)
-        rl_updown.setOnClickListener(this)
-        rl_arrows.setOnClickListener(this)
 
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -161,12 +159,6 @@ class TopicStockListFragment :
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.rl_updown -> {
-
-            }
-            R.id.rl_arrows -> {
-
-            }
             R.id.tv_opne_account -> {
                 //TODO 开户
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
