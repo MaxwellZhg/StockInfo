@@ -21,7 +21,6 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
     public BaseListAdapter() {
         TAG = this.getClass().getName();
-        this.items = new ArrayList<>();
     }
 
     public List<T> getItems() {
@@ -43,6 +42,12 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     public void addItems(List<T> items) {
         if (items == null) return;
         this.items.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void clearItems(){
+        if (items == null) return;
+        this.items.clear();
         notifyDataSetChanged();
     }
 

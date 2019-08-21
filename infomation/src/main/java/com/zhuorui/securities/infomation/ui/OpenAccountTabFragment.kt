@@ -1,17 +1,22 @@
 package com.zhuorui.securities.infomation.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.infomation.R
+import com.zhuorui.securities.infomation.BR
 import com.zhuorui.securities.infomation.ui.contract.OpenAccountTabContract
-import com.zhuorui.securities.infomation.ui.mvp.OpenAccountTabPresenter
-import com.zhuorui.securities.infomation.ui.mvp.OpenAccountTabVmWarpper
-import com.zhuorui.securities.base2app.mvp.wrapper.BaseMvpNetVmFragment
+import com.zhuorui.securities.infomation.ui.presenter.OpenAccountTabPresenter
+import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.infomation.databinding.OpenAccountFragmentBinding
+import com.zhuorui.securities.infomation.ui.view.OpenAccountTabView
+import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
+import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
+import kotlinx.android.synthetic.main.open_account_fragment.*
+import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -19,32 +24,47 @@ import com.zhuorui.securities.infomation.databinding.OpenAccountFragmentBinding
  * Date: 2019/8/6
  * Desc:
  */
-class OpenAccountTabFragment :BaseMvpNetVmFragment<OpenAccountTabPresenter,OpenAccountTabVmWarpper,OpenAccountFragmentBinding>(),OpenAccountTabContract.View{
-    override fun createPresenter(): OpenAccountTabPresenter {
-        return OpenAccountTabPresenter(this)
-    }
-
-    override fun isDestroyed(): Boolean {
-        return false
-    }
-
-    override fun createWrapper(): OpenAccountTabVmWarpper {
-       return OpenAccountTabVmWarpper(this)
-    }
-
+class OpenAccountTabFragment :
+    AbsBackFinishFragment<OpenAccountFragmentBinding,OpenAccountTabViewModel,OpenAccountTabView,OpenAccountTabPresenter>(),OpenAccountTabView,View.OnClickListener{
     override val layout: Int
         get() = R.layout.open_account_fragment
-    override fun init() {
-        (parentFragment as AbsFragment).start(LoginRegisterFragment())
+
+    override val viewModelId: Int
+        get() = BR.viewmodel
+
+    override val createPresenter: OpenAccountTabPresenter
+        get() = OpenAccountTabPresenter()
+
+    override val createViewModel: OpenAccountTabViewModel?
+        get() = ViewModelProviders.of(this).get(OpenAccountTabViewModel::class.java)
+
+    override val getView: OpenAccountTabView
+        get() = this
+
+    override fun rootViewFitsSystemWindowsPadding(): Boolean {
+        return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dataBinding = generateDataBinding(inflater,container,layout)
-        if (viewWrapper != null) {
-            viewWrapper.setBinding(dataBinding)
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+    }
+
+    override fun init() {
+
+    }
+
+    override fun onClick(p0: View?) {
+      when(p0?.id){
+
         }
-        presenter.fetchData()
-        return dataBinding.root
+    }
+
+    companion object {
+        fun newInstance(): OpenAccountTabFragment {
+            return OpenAccountTabFragment()
+
+        }
     }
 
 }

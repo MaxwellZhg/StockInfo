@@ -30,6 +30,13 @@
         <attr name="animationDuration" format="integer|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="QuickIndexBar">
+        <attr name="text_normal_color" format="color" />
+        <attr name="text_press_color" format="color" />
+        <attr name="text_size" format="dimension" />
+        <attr name="bg_color" format="color" />
+    </declare-styleable>
+
     <declare-styleable name="ZhuoRuiTopBar">
         <attr name="zrtb_title" format="string|reference"/>
     </declare-styleable>

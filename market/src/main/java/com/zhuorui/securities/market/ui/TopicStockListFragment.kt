@@ -2,15 +2,19 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
+import com.zhuorui.securities.infomation.ui.LoginRegisterFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.custom.StockPopupWindow
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
@@ -30,7 +34,7 @@ import kotlinx.android.synthetic.main.layout_guide_open_accout.*
 class TopicStockListFragment :
     AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListFragmentView, TopicStockListFragmentPresenter>(),
     BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
-    TopicStockListFragmentView {
+    TopicStockListFragmentView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
 
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
@@ -69,6 +73,9 @@ class TopicStockListFragment :
             guide_open_accout.inflate()
             tv_opne_account.setOnClickListener(this)
         }
+        if (type == StockTsEnum.SZ) {
+            root_view.addView(View.inflate(context, R.layout.layout_trans_index, null), 0)
+        }
         presenter?.setType(type)
         presenter?.setLifecycleOwner(this)
         rl_updown.setOnClickListener(this)
@@ -83,6 +90,7 @@ class TopicStockListFragment :
         mAdapter = TopicStocksAdapter()
 
         mAdapter?.setClickItemCallback(this)
+        mAdapter?.setLongClickItemCallback(this)
         rv_stock.adapter = mAdapter
 
         requestStocks()
@@ -98,8 +106,45 @@ class TopicStockListFragment :
         }
     }
 
+    override fun onLongClickItem(pos: Int, item: StockMarketInfo?, view: View?) {
+        item?.longClick = true
+        mAdapter?.notifyItemChanged(pos)
+
+        //获取需要在其上方显示的控件的位置信息
+        val location = IntArray(2)
+        view?.getLocationOnScreen(location)
+        // 显示更多操作
+        context?.let {
+            StockPopupWindow.create(it, object : StockPopupWindow.CallBack {
+                override fun onStickyOnTop() {
+                    presenter?.onStickyOnTop(item)
+                    ScreenCentralStateToast.show(getString(R.string.sticky_on_top_successful))
+                }
+
+                override fun onRemind() {
+                    //TODO 提醒
+                    ToastUtil.instance.toast("提醒")
+                }
+
+                override fun onDelete() {
+                    presenter?.onDelete(item)
+                    ScreenCentralStateToast.show(getString(R.string.delete_successful))
+                }
+
+                override fun onDismiss() {
+                    item?.longClick = false
+                    mAdapter?.notifyItemChanged(pos)
+                }
+            }).showAtLocation(view, Gravity.TOP, location[0], location[1])
+        }
+    }
+
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
-        mAdapter?.addItems(list)
+        if (mAdapter?.items == null) {
+            mAdapter?.items = list
+        } else {
+            mAdapter?.notifyDataSetChanged()
+        }
     }
 
     override fun notifyItemChanged(index: Int) {
@@ -127,7 +172,7 @@ class TopicStockListFragment :
             }
             R.id.tv_opne_account -> {
                 //TODO 开户
-                ToastUtil.instance.toast("开户")
+                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
             }
         }
     }

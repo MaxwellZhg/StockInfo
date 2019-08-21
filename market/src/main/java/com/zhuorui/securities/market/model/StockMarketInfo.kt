@@ -19,4 +19,6 @@ class StockMarketInfo : BaseStockMarket() {
     var diffRate: Double = 0.0
     // 创建时间
     var createTime: Long = 0
+    // 长按
+    var longClick :Boolean = false
 }

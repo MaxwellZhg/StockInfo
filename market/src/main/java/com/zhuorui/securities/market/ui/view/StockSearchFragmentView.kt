@@ -13,5 +13,5 @@ interface StockSearchFragmentView : AbsView {
 
     fun init()
 
-    fun onStockSearchResponse(response: StockSearchResponse)
+   // fun onStockSearchResponse(response: StockSearchResponse)
 }

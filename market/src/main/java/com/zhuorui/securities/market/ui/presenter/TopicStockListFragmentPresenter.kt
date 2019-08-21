@@ -120,7 +120,7 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
             event.stock.code?.let { it1 ->
                 event.stock.type?.let { it2 ->
                     StockTopic(
-                        StockTopicDataTypeEnum.market,
+                        StockTopicDataTypeEnum.price,
                         it, it1, it2
                     )
                 }
@@ -141,4 +141,28 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
         view?.notifyItemInserted(datas.size - 1)
     }
 
+    fun onStickyOnTop(item: StockMarketInfo?) {
+        val datas = viewModel?.datas?.value ?: return
+        datas.remove(item)
+        item?.let { datas.add(0, it) }
+        view?.notifyDataSetChanged(datas)
+    }
+
+    fun onDelete(item: StockMarketInfo?) {
+        val datas = viewModel?.datas?.value ?: return
+        datas.remove(item)
+        view?.notifyDataSetChanged(datas)
+        // 取消订阅
+        val stockTopic = item?.ts?.let {
+            item.code?.let { it1 ->
+                item.type?.let { it2 ->
+                    StockTopic(
+                        StockTopicDataTypeEnum.price, it,
+                        it1, it2
+                    )
+                }
+            }
+        }
+        SocketClient.getInstance().bindTopic(stockTopic)
+    }
 }

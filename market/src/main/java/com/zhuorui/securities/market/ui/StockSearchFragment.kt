@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
@@ -17,6 +18,7 @@ import com.zhuorui.securities.market.net.response.StockSearchResponse
 import com.zhuorui.securities.market.ui.presenter.StockSearchFragmentPresenter
 import com.zhuorui.securities.market.ui.view.StockSearchFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel
+import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
 
 /**
@@ -81,6 +83,8 @@ class StockSearchFragment :
                 getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
                 handler.postDelayed(getTopicStockDataRunnable, 500)
                 type = min
+                search_list.visibility = View.VISIBLE
+
             }
 
         } else {
@@ -90,7 +94,6 @@ class StockSearchFragment :
 
     private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
         override fun run() {
-            search_list.adapter = null
             tips = keyWord
             presenter?.getTopicStockData(keyWord, 5)
         }
@@ -104,24 +107,14 @@ class StockSearchFragment :
 
     }
 
-    override fun onStockSearchResponse(response: StockSearchResponse) {
-        if (response.data != null && response.data.datas.isNotEmpty()) {
-            // 显示搜索列表
-            search_list.visibility = View.VISIBLE
-            // 设置数据
-            if (search_list.adapter == null) {
-                search_list.layoutManager = LinearLayoutManager(context)
-                adapter = SearchStocksAdapter()
-                adapter!!.setClickItemCallback(this)
-                adapter!!.onAddTopicClickItemCallback = this
-                search_list.adapter = adapter
-                adapter!!.addItems(response.data.datas)
-            } else {
-                if (adapter!!.items.size < 20) {
-                    adapter!!.addItems(response.data.datas)
-                }
-            }
-        }
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        (search_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        adapter = presenter?.getAdapter()
+        adapter?.setClickItemCallback(this)
+        adapter?.onAddTopicClickItemCallback=this
+        search_list.adapter = adapter
+
     }
 
     override fun onClickItem(pos: Int, item: SearchStockInfo?, v: View?) {

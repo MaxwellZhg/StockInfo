@@ -10,16 +10,10 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  */
 class UserLoginCodeResponse(val data:Data) : BaseResponse(){
     data class Data(
-        val userLoginDto: UserLoginDto,
-        val lastLoginDeviceVo :LastLoginDeviceVo
+        val userId: String,
+        val token :String,
+        val phone:String
     )
-    data class UserLoginDto(
-        val token: String
-    )
-    data class LastLoginDeviceVo(
-        val lastLogionDate:Long,
-        val lastLoginId:String,
-        val osType:String
-    )
+
 
 }

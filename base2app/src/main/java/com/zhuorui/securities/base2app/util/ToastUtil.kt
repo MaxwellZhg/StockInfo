@@ -1,14 +1,9 @@
 package com.zhuorui.securities.base2app.util
 
 import android.annotation.SuppressLint
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
-
 import com.zhuorui.securities.base2app.BaseApplication
-import com.zhuorui.securities.base2app.R
 
 /**
  * Created by xieyingwu on 2018/5/8
@@ -22,75 +17,40 @@ class ToastUtil private constructor() {
         val instance = ToastUtil()
     }
 
-    fun toast(@StringRes res: Int, duration: Int, gravity: Int) {
-        createToast()
-        val tv = toast!!.view.findViewById<TextView>(R.id.toast_tv)
-        tv.setText(res)
-        val yOffset = getYOffset(gravity)
-        toast!!.setGravity(gravity, 0, yOffset)
-        toast!!.duration = duration
-        toast!!.show()
-    }
-
-    private fun getYOffset(gravity: Int): Int {
-        if (Gravity.BOTTOM == gravity) {
-            return ResUtil.getDimensionDp2Px(100f)
-        } else if (Gravity.CENTER == gravity) {
-            return 0
+    @SuppressLint("ShowToast")
+    fun toast(@StringRes res: Int, duration: Int) {
+        if (toast == null) {
+            toast = Toast.makeText(BaseApplication.context, res, duration)
         }
-        return 0
+        toast?.setText(res)
+        toast?.show()
     }
 
-    fun toast(cs: CharSequence, duration: Int, gravity: Int) {
-        createToast()
-        val tv = toast!!.view.findViewById<TextView>(R.id.toast_tv)
-        tv.text = cs
-        val yOffset = getYOffset(gravity)
-        toast!!.setGravity(gravity, 0, yOffset)
-        toast!!.duration = duration
-        toast!!.show()
+    @SuppressLint("ShowToast")
+    fun toast(cs: CharSequence, duration: Int) {
+        if (toast == null) {
+            toast = Toast.makeText(BaseApplication.context, cs, duration)
+        }
+        toast?.setText(cs)
+        toast?.show()
     }
 
     fun toast(@StringRes strRes: Int) {
-        toast(strRes, Toast.LENGTH_SHORT, Gravity.BOTTOM)
+        toast(strRes, Toast.LENGTH_SHORT)
     }
 
     fun toast(str: CharSequence) {
-        toast(str, Toast.LENGTH_SHORT, Gravity.BOTTOM)
+        toast(str, Toast.LENGTH_SHORT)
     }
 
-    fun toastLong(@StringRes res: Int, gravity: Int) {
-        toast(res, Toast.LENGTH_LONG, gravity)
+    fun toastLong(@StringRes res: Int) {
+        toast(res, Toast.LENGTH_LONG)
     }
 
-    fun toastLong(cs: CharSequence, gravity: Int) {
-        toast(cs, Toast.LENGTH_LONG, gravity)
+    fun toastLong(cs: CharSequence) {
+        toast(cs, Toast.LENGTH_LONG)
     }
 
-    fun toastShort(cs: CharSequence, gravity: Int) {
-        toast(cs, Toast.LENGTH_SHORT, gravity)
-    }
-
-    fun toastShort(@StringRes res: Int, gravity: Int) {
-        toast(res, Toast.LENGTH_SHORT, gravity)
-    }
-
-    fun toastCenter(@StringRes res: Int) {
-        toastLong(res, Gravity.CENTER)
-    }
-
-    fun toastCenter(cs: CharSequence) {
-        toastLong(cs, Gravity.CENTER)
-    }
-
-    @SuppressLint("InflateParams")
-    private fun createToast() {
-        if (toast == null) {
-            toast = Toast(BaseApplication.context)
-            val view = LayoutInflater.from(BaseApplication.context).inflate(R.layout.layout_toast, null)
-            toast!!.view = view
-        }
-    }
 
     companion object {
 

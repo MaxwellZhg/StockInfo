@@ -1,6 +1,5 @@
 package com.zhuorui.securities.infomation.ui.contract
 
-import com.zhuorui.securities.base2app.mvp.IBaseView
 
 /**
  * Created by Maxwell.
@@ -9,7 +8,7 @@ import com.zhuorui.securities.base2app.mvp.IBaseView
  * Desc:
  */
 interface OpenAccountTabContract{
-    interface View : IBaseView {
+ /*   interface View : IBaseView {
 
     }
 
@@ -19,5 +18,5 @@ interface OpenAccountTabContract{
 
     interface ViewWrapper {
         fun setData()
-    }
+    }*/
 }

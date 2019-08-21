@@ -59,7 +59,8 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api project(":base2app")
     api project(":commonwidget")
-    implementation project(":MPChartLib")
+    api project(":MPChartLib")
+    api project(":infomation")
     implementation project(":openaccount")
     // 支持使用butterknife注解
     kapt "com.jakewharton:butterknife-compiler:$butterknife_plugin_version"
