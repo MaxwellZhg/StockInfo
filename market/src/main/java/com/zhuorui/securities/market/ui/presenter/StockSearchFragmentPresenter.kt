@@ -42,11 +42,14 @@ class StockSearchFragmentPresenter : AbsNetPresenter<StockSearchFragmentView, St
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-           val datas = response.data?.datas
-            if (datas.isNullOrEmpty()) return
-             viewModel?.adapter?.value?.clearItems()
-             viewModel?.adapter?.value?.addItems(datas)
-            LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
+        val datas = response.data?.datas
+        if (datas.isNullOrEmpty()) return
+        viewModel?.adapter?.value?.clearItems()
+        if (viewModel?.adapter?.value?.items == null) {
+            viewModel?.adapter?.value?.items = ArrayList()
+        }
+        viewModel?.adapter?.value?.addItems(datas)
+        LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
 
     }
 
@@ -55,6 +58,7 @@ class StockSearchFragmentPresenter : AbsNetPresenter<StockSearchFragmentView, St
         item?.let { AddTopicStockEvent(it) }?.let { RxBus.getDefault().post(it) }
         toast(R.string.add_topic_successful)
     }
+
     fun getAdapter(): SearchStocksAdapter? {
         if (viewModel?.adapter?.value == null) {
             viewModel?.adapter?.value = SearchStocksAdapter()
