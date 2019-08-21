@@ -196,7 +196,7 @@ class StockTabFragment :
             values[1] = 0
         }
         val valueAnimator = ValueAnimator.ofInt(values[0], values[1])
-        valueAnimator.duration = 300
+        valueAnimator.duration = 150
         valueAnimator.addUpdateListener { animation ->
             val value = animation.animatedValue as Int
             val layoutParams = rl_filter.layoutParams
