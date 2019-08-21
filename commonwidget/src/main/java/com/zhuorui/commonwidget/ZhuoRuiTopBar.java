@@ -14,12 +14,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.zhuorui.securities.base2app.util.StatusBarUtil;
+import me.yokeyword.fragmentation.ISupportActivity;
+import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * author : liuwei
  * e-mail : vsanliu@foxmail.com
  * date   : 2019-08-20 15:38
- * desc   :
+ * desc   : 自定义TopBar
  */
 public class ZhuoRuiTopBar extends FrameLayout {
 
@@ -36,7 +39,6 @@ public class ZhuoRuiTopBar extends FrameLayout {
 
     public ZhuoRuiTopBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        Log.i("lw", "ZhuoRuiTopBar: ");
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZhuoRuiTopBar);
         String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zrtb_title);
         setBackView(getBackView());
@@ -44,6 +46,15 @@ public class ZhuoRuiTopBar extends FrameLayout {
         setTitle(mTitle);
         setBackgroundColor(Color.parseColor("#211F2A"));
         setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0);
+        setBackClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                if (context instanceof ISupportActivity) {
+                    ((ISupportActivity) context).onBackPressedSupport();
+                }
+            }
+        });
     }
 
     public void setTitleView(View v) {
@@ -87,5 +98,9 @@ public class ZhuoRuiTopBar extends FrameLayout {
         iv.setLayoutParams(lp);
         iv.setPadding(padding, padding, padding, padding);
         return iv;
+    }
+
+    public void setBackClickListener(OnClickListener l) {
+        if (mBackView != null) mBackView.setOnClickListener(l);
     }
 }

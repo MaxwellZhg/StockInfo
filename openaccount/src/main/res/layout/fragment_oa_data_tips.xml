@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.openaccount.ui.viewmodel.OADataTipsViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:background="@android:color/white"
+            android:layout_height="match_parent">
+
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:id="@+id/top_bar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:zrtb_title="卓锐证券开户"/>
+
+        <ImageView
+                android:id="@+id/top_bg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@mipmap/bg_oa_datatips"
+                app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintDimensionRatio="375:167"
+        />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:id="@+id/iv_topimg1"
+                android:src="@mipmap/ic_lightning_white_shadow"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_toptxt1"
+                app:layout_constraintRight_toRightOf="@+id/tv_toptxt1"
+                app:layout_constraintBottom_toTopOf="@+id/tv_toptxt1"
+                app:layout_constraintTop_toTopOf="@+id/top_bg"
+        />
+
+        <TextView
+                android:id="@+id/tv_toptxt1"
+                style="@style/oa_data_tips_toptxt"
+                android:layout_marginTop="14dp"
+                android:text="急速开户"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/iv_topimg1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/top_bg"
+                app:layout_constraintRight_toLeftOf="@+id/tv_toptxt2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:src="@mipmap/ic_timepiece_white_shadow"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_toptxt2"
+                app:layout_constraintRight_toRightOf="@+id/tv_toptxt2"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_topimg1"
+                app:layout_constraintTop_toTopOf="@+id/iv_topimg1"
+        />
+
+        <TextView
+                style="@style/oa_data_tips_toptxt"
+                android:id="@+id/tv_toptxt2"
+                android:text="24小时服务"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="@+id/tv_toptxt1"
+                app:layout_constraintLeft_toRightOf="@+id/tv_toptxt1"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_toptxt1"
+                app:layout_constraintRight_toLeftOf="@+id/tv_toptxt3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:src="@mipmap/ic_computer_white_shadow"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_toptxt3"
+                app:layout_constraintRight_toRightOf="@+id/tv_toptxt3"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_topimg1"
+                app:layout_constraintTop_toTopOf="@+id/iv_topimg1"
+        />
+
+        <TextView
+                style="@style/oa_data_tips_toptxt"
+                android:id="@+id/tv_toptxt3"
+                android:text="免费行情"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="@+id/tv_toptxt1"
+                app:layout_constraintLeft_toRightOf="@+id/tv_toptxt2"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_toptxt1"
+                android:layout_width="0dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_height="wrap_content"/>
+
+
+        <!-- top end-->
+
+        <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/sub_title"
+                android:text="开户前请准备"
+                android:textColor="@color/text_color"
+                android:paddingLeft="26dp"
+                android:paddingTop="10dp"
+                android:background="@color/app_background_color"
+                android:paddingBottom="10dp"
+                android:textSize="17sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_bg"
+        />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:overScrollMode="never"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/sub_title"
+                app:layout_constraintBottom_toTopOf="@+id/cbox"
+        />
+
+
+        <CheckBox
+                android:id="@+id/cbox"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:button="@null"
+                android:padding="6dp"
+                android:layout_marginBottom="6dp"
+                android:drawableLeft="@drawable/checkbox_style"
+                android:drawableStart="@drawable/checkbox_style"
+                android:layout_marginLeft="25dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/open_btn"
+        />
+
+        <TextView
+                android:id="@+id/agreement"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/cbox"
+                app:layout_constraintBottom_toBottomOf="@+id/cbox"
+                app:layout_constraintLeft_toRightOf="@+id/cbox"
+                android:textSize="10sp"
+                android:textColor="@color/text_color"
+                android:text="本人已仔细阅读并同意签署全部开户协议"
+        />
+
+
+        <com.zhuorui.commonwidget.StateButton
+                style="@style/btnStyle"
+                android:id="@+id/open_btn"
+                android:layout_width="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="立即开户"
+                android:enabled="false"
+                android:layout_marginBottom="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -11,4 +11,9 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OASelectRegonViewModel
  *    desc   :
  */
 class OASelectRegionPresenter : AbsNetPresenter<OASeletRegionView, OASelectRegonViewModel>() {
+
+    override fun init() {
+        super.init()
+        view?.init();
+    }
 }
