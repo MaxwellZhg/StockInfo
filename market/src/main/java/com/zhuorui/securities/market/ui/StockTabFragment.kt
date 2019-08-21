@@ -16,6 +16,8 @@ import com.zhuorui.securities.market.ui.presenter.StockTabFragmentPresenter
 import com.zhuorui.securities.market.ui.view.StockTabFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
+import me.jessyan.autosize.AutoSize
+import me.jessyan.autosize.utils.AutoSizeUtils
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -66,6 +68,7 @@ class StockTabFragment :
         mfragment = fragments
 
         iv_serach.setOnClickListener(this)
+        iv_list.setOnClickListener(this)
 
         // 设置viewpager指示器
         val commonNavigator = CommonNavigator(requireContext())
@@ -80,6 +83,7 @@ class StockTabFragment :
                 colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.un_tab_select)!!
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.text = mfragment!![index].title
+                colorTransitionPagerTitleView.textSize = 18f
                 colorTransitionPagerTitleView.setOnClickListener {
                     viewpager.currentItem = index
                 }
@@ -90,6 +94,8 @@ class StockTabFragment :
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
                 indicator.setColors(ResUtil.getColor(R.color.tab_select))
+                indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
+                indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator
             }
         }
@@ -137,6 +143,10 @@ class StockTabFragment :
             R.id.iv_serach -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
             }
+            R.id.iv_list -> {
+                presenter?.toggleStockTab()
+            }
         }
     }
+
 }

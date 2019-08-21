@@ -38,4 +38,8 @@ class StockTabFragmentPresenter : AbsEventPresenter<StockTabFragmentView, StockT
         // 关闭长链接
         SocketClient.getInstance()?.destroy()
     }
+
+    fun toggleStockTab() {
+        viewModel?.toggleStockTab?.value = !viewModel?.toggleStockTab?.value!!
+    }
 }

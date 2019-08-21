@@ -45,7 +45,7 @@
                            android:layout_centerVertical="true"
                            android:layout_toEndOf="@id/tv_undown"
                            android:textSize="15sp"
-                           android:background="@mipmap/updown"/>
+                           android:background="@mipmap/ic_sort"/>
 
             </RelativeLayout>
 
@@ -72,7 +72,7 @@
                            android:layout_centerVertical="true"
                            android:layout_toEndOf="@id/tv_arrows"
                            android:textSize="15sp"
-                           android:background="@mipmap/updown"/>
+                           android:background="@mipmap/ic_sort"/>
             </RelativeLayout>
 
         </RelativeLayout>

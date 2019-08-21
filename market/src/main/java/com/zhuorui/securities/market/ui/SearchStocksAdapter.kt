@@ -96,13 +96,13 @@ class SearchStocksAdapter : BaseListAdapter<SearchStockInfo>() {
             // item_ts.text = item?.ts
             when (item?.ts) {
                 "SH" -> {
-                    iv_tag.background = ResUtil.getDrawable(R.mipmap.sh)
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.ic_ts_sh)
                 }
                 "SZ" -> {
-                    iv_tag.background = ResUtil.getDrawable(R.mipmap.sz)
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.ic_ts_sz)
                 }
                 "HK" -> {
-                    iv_tag.background = ResUtil.getDrawable(R.mipmap.hk)
+                    iv_tag.background = ResUtil.getDrawable(R.mipmap.ic_ts_hk)
                 }
             }
             tv_stock_code.text = item?.code
