@@ -1,17 +1,22 @@
 package com.zhuorui.securities.infomation.ui.presenter
 
+import android.content.Context
+import android.view.View
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
+import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginrRegisterRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
+import com.zhuorui.securities.infomation.ui.LoginPswFragment
 import com.zhuorui.securities.infomation.ui.config.LocalLoginResConfig
+import com.zhuorui.securities.infomation.ui.dailog.InfoDialog
 import com.zhuorui.securities.infomation.ui.view.SettingPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
 
@@ -21,7 +26,12 @@ import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
  * Date: 2019/8/20
  * Desc:
  */
-class SettingPswPresenter :AbsNetPresenter<SettingPswView,SettingPswViewModel>() {
+class SettingPswPresenter(context: Context) :AbsNetPresenter<SettingPswView,SettingPswViewModel>() {
+    private val infodialog: InfoDialog by lazy {
+
+        InfoDialog(context)
+    }
+
     override fun init() {
         super.init()
         view?.init()
@@ -42,5 +52,21 @@ class SettingPswPresenter :AbsNetPresenter<SettingPswView,SettingPswViewModel>()
                 }
             }
         }
+    }
+
+    fun showDailog() {
+        infodialog.show()
+        infodialog.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_gotomain->{
+                    infodialog.dismiss()
+                    view?.gotomain()
+                }
+                R.id.rl_completeinfo->{
+                    infodialog.dismiss()
+                    view?.openaccount()
+                }
+            }
+        })
     }
 }

@@ -53,9 +53,6 @@ import com.zhuorui.securities.infomation.ui.view.LoginRegisterView
 class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(), View.OnClickListener, TextWatcher,LoginRegisterView {
     private lateinit var strphone: String
     private lateinit var phonecode: String
-    internal var timer: Timer? = null
-    private var recLen = 60//跳过倒计时提示5秒
-    internal var task: TimerTask? = null
     override val layout: Int
         get() = R.layout.login_and_register_fragment
     override val viewModelId: Int
@@ -87,7 +84,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                     ToastUtil.instance.toast(R.string.phone_tips)
                     return
                 }
-                startTimeCountDown(R.string.minutiues)
+                presenter?.startTimeCountDown()
                 presenter?.requestSendLoginCode(strphone)
             }
             R.id.iv_cancle -> {
@@ -107,57 +104,6 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
             R.id.tv_phone_num_login->{
                 start(LoginPswFragment())
             }
-        }
-    }
-
-    @Throws(InterruptedException::class)
-    fun startTask() {
-        if (task == null) {
-            timer = Timer()
-            task = object : TimerTask() {
-                override fun run() {
-                    recLen--
-                    Observable.create(ObservableOnSubscribe<Int> {
-                        it.onNext(recLen)
-                    }).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            if(tv_send_code!=null) {
-                                tv_send_code.text = ResUtil.getStringFormat(R.string.credit_time, recLen)
-                            }
-                            if (recLen < 0) {
-                                timer!!.cancel()
-                                task = null
-                                timer = null
-                                if(tv_send_code!=null) {
-                                    tv_send_code.text = ResUtil.getString(R.string.send_verification_code)
-                                }
-                            }
-                        }
-                }
-            }
-        }
-        timer!!.schedule(task, 1000, 1000)
-    }
-
-    private fun startTimeCountDown(@StringRes str: Int) {
-        if (recLen == 60) {
-            tv_send_code.text = ResUtil.getString(str)
-            try {
-                startTask()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-
-        } else if (recLen < 0) {
-            recLen = 60
-            tv_send_code.text = ResUtil.getString(str)
-            try {
-                startTask()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-
         }
     }
 
@@ -188,26 +134,15 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     }
 
     override fun gotomain() {
-
+         pop()
     }
 
-    override fun countdown() {
-
-    }
     companion object {
         fun newInstance(): LoginRegisterFragment {
             return LoginRegisterFragment()
-
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        timer!!.cancel()
-        task = null
-        timer = null
-       // tv_send_code.text = ResUtil.getString(R.string.send_verification_code)
 
-    }
 }
 

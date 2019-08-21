@@ -131,7 +131,7 @@
                           android:layout_alignParentRight="true"
                           android:layout_centerVertical="true"
                           android:textStyle="bold"
-                          android:text="@string/send_verification_code"
+                          android:text="@{viewmodel.str}"
                           android:textColor="@color/color_8DB9E4"/>
             </RelativeLayout>
             <ImageView android:layout_width="match_parent"

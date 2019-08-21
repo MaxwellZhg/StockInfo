@@ -36,10 +36,14 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     }
     override fun init() {
         tv_code_login_register.setOnClickListener(this)
+        ll_country_disct.setOnClickListener(this)
     }
     override fun onClick(p0: View?) {
        when(p0?.id){
            R.id.tv_code_login_register->{
+               pop()
+           }
+           R.id.ll_country_disct->{
                pop()
            }
        }

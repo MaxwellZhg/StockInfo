@@ -30,6 +30,5 @@ class InfoDialog :Dialog {
         if (rl_completeinfo !== null){
             rl_completeinfo.setOnClickListener(listener)
         }
-
     }
 }

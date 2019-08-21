@@ -37,16 +37,11 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: SettingPswPresenter
-        get() = SettingPswPresenter()
+        get() = SettingPswPresenter(requireContext())
     override val createViewModel: SettingPswViewModel?
         get() =  ViewModelProviders.of(this).get(SettingPswViewModel::class.java)
     override val getView: SettingPswView
         get() = this
-    private val infodialog:InfoDialog by lazy {
-
-        InfoDialog(this.requireContext())
-    }
-
     private lateinit var strloginpsw: String
     private lateinit var strensurepsw: String
 
@@ -123,23 +118,16 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
             }
         }
     }
-    private fun showDailog() {
-       infodialog.show()
-       infodialog.setOnclickListener( View.OnClickListener {
-           when(it.id){
-               R.id.rl_gotomain->{
-                   infodialog.dismiss()
-               }
-               R.id.rl_completeinfo->{
-                   infodialog.dismiss()
-                   start(LoginPswFragment())
-               }
-           }
-       })
-   }
+    override fun gotomain() {
+        pop()
+    }
+
+    override fun openaccount() {
+        ToastUtil.instance.toast("去开户页面")
+    }
 
     override fun showDialog() {
-       showDailog()
+       presenter?.showDailog()
     }
 
 }
