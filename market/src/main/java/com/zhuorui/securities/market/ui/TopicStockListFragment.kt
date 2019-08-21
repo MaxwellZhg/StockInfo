@@ -80,10 +80,7 @@ class TopicStockListFragment :
         presenter?.setLifecycleOwner(this)
         rl_updown.setOnClickListener(this)
         rl_arrows.setOnClickListener(this)
-    }
 
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_stock.layoutManager = LinearLayoutManager(context)

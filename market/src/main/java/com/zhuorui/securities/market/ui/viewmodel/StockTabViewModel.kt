@@ -27,6 +27,10 @@ class StockTabViewModel : ViewModel() {
     init {
         toggleStockTab.value = false
 
+        allNum.value = 0
+        hkNum.value = 0
+        hsNum.value = 0
+
         // 添加标题页面
         mfragment.add(PageInfo(ResUtil.getString(R.string.all_stock)!!, null))
         mfragment.add(PageInfo(ResUtil.getString(R.string.hk_stock)!!, StockTsEnum.HK))

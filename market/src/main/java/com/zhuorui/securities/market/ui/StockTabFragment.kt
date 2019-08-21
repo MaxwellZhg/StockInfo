@@ -1,8 +1,8 @@
 package com.zhuorui.securities.market.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -16,8 +16,6 @@ import com.zhuorui.securities.market.ui.presenter.StockTabFragmentPresenter
 import com.zhuorui.securities.market.ui.view.StockTabFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
-import me.jessyan.autosize.AutoSize
-import me.jessyan.autosize.utils.AutoSizeUtils
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -26,6 +24,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import java.util.*
+
 
 /**
  *    author : PengXianglin
@@ -38,6 +37,7 @@ class StockTabFragment :
     View.OnClickListener, StockTabFragmentView {
 
     private var mfragment: ArrayList<StockTabViewModel.PageInfo>? = null
+    private var toggleStockTabShowing = false
 
     companion object {
         fun newInstance(): StockTabFragment {
@@ -69,6 +69,9 @@ class StockTabFragment :
 
         iv_serach.setOnClickListener(this)
         iv_list.setOnClickListener(this)
+        tv_select_all.setOnClickListener(this)
+        tv_select_hk.setOnClickListener(this)
+        tv_select_hs.setOnClickListener(this)
 
         // 设置viewpager指示器
         val commonNavigator = CommonNavigator(requireContext())
@@ -115,6 +118,9 @@ class StockTabFragment :
 
             override fun onPageSelected(position: Int) {
                 magic_indicator.onPageSelected(position)
+                if (toggleStockTabShowing) {
+                    presenter?.toggleStockTab()
+                }
             }
         })
 
@@ -125,7 +131,7 @@ class StockTabFragment :
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment {
+        override fun getItem(position: Int): TopicStockListFragment {
             return TopicStockListFragment.newInstance(mfragment?.get(position)?.type)
         }
 
@@ -146,7 +152,39 @@ class StockTabFragment :
             R.id.iv_list -> {
                 presenter?.toggleStockTab()
             }
+            R.id.tv_select_all -> {
+                presenter?.toggleStockTab()
+                viewpager.currentItem = 0
+            }
+            R.id.tv_select_hk -> {
+                presenter?.toggleStockTab()
+                viewpager.currentItem = 1
+            }
+            R.id.tv_select_hs -> {
+                presenter?.toggleStockTab()
+                viewpager.currentItem = 2
+            }
         }
     }
 
+    override fun toggleStockTab(show: Boolean) {
+        toggleStockTabShowing = show
+        val values = IntArray(2)
+        if (show) {
+            values[0] = 0
+            values[1] = ResUtil.getDimensionDp2Px(80f)
+        } else {
+            values[0] = ResUtil.getDimensionDp2Px(80f)
+            values[1] = 0
+        }
+        val valueAnimator = ValueAnimator.ofInt(values[0], values[1])
+        valueAnimator.duration = 300
+        valueAnimator.addUpdateListener { animation ->
+            val value = animation.animatedValue as Int
+            val layoutParams = rl_filter.layoutParams
+            layoutParams.height = value
+            rl_filter?.layoutParams = layoutParams
+        }
+        valueAnimator.start()
+    }
 }

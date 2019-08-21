@@ -4,9 +4,11 @@ import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.event.AddTopicStockEvent
+import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
@@ -44,7 +46,10 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
         // 监听datas的变化
         lifecycleOwner.let {
             viewModel?.datas?.observe(it,
-                androidx.lifecycle.Observer<List<StockMarketInfo>> { t -> view?.notifyDataSetChanged(t) })
+                androidx.lifecycle.Observer<List<StockMarketInfo>> { t ->
+                    RxBus.getDefault().post(NotifyStockCountEvent(ts, t.size))
+                    view?.notifyDataSetChanged(t)
+                })
         }
     }
 
@@ -144,6 +149,7 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
         datas.add(stock)
 
         view?.notifyItemInserted(datas.size - 1)
+        RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
     }
 
     fun onStickyOnTop(item: StockMarketInfo?) {
@@ -169,5 +175,6 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
             }
         }
         SocketClient.getInstance().bindTopic(stockTopic)
+        RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
     }
 }

@@ -4,7 +4,9 @@ import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
+import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.event.SocketDisconnectEvent
+import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.view.StockTabFragmentView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
@@ -32,6 +34,11 @@ class StockTabFragmentPresenter : AbsEventPresenter<StockTabFragmentView, StockT
         SocketClient.getInstance()?.connect()
     }
 
+    fun toggleStockTab() {
+        viewModel?.toggleStockTab?.value = !viewModel?.toggleStockTab?.value!!
+        view?.toggleStockTab(viewModel?.toggleStockTab?.value!!)
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -39,7 +46,12 @@ class StockTabFragmentPresenter : AbsEventPresenter<StockTabFragmentView, StockT
         SocketClient.getInstance()?.destroy()
     }
 
-    fun toggleStockTab() {
-        viewModel?.toggleStockTab?.value = !viewModel?.toggleStockTab?.value!!
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onNotifyStockCountEvent(event: NotifyStockCountEvent) {
+        when (event.ts) {
+            null -> viewModel?.allNum?.value = event.count
+            StockTsEnum.HK -> viewModel?.hkNum?.value = event.count
+            else -> viewModel?.hsNum?.value = event.count
+        }
     }
 }

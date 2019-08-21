@@ -13,4 +13,6 @@ import java.util.ArrayList
 interface StockTabFragmentView : AbsView {
 
     fun init(fragments: ArrayList<StockTabViewModel.PageInfo>)
+
+    fun toggleStockTab(show: Boolean)
 }
