@@ -173,6 +173,24 @@ class StockTabFragment :
         if (show) {
             values[0] = 0
             values[1] = ResUtil.getDimensionDp2Px(80f)
+
+            when (viewpager.currentItem) {
+                0 -> {
+                    ResUtil.getColor(R.color.tab_select)?.let { tv_select_all.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hk.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hs.setTextColor(it) }
+                }
+                1 -> {
+                    ResUtil.getColor(R.color.tab_select)?.let { tv_select_hk.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_all.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hs.setTextColor(it) }
+                }
+                else -> {
+                    ResUtil.getColor(R.color.tab_select)?.let { tv_select_hs.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hk.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_all.setTextColor(it) }
+                }
+            }
         } else {
             values[0] = ResUtil.getDimensionDp2Px(80f)
             values[1] = 0
