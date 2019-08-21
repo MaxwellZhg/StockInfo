@@ -93,7 +93,8 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            var adpter = SortAdapter(requireContext(), it)
+                            var adpter = SortAdapter(requireContext())
+                            adpter.addItems(it)
                             lv_country.adapter = adpter
                             adpter.notifyDataSetChanged()
                         }

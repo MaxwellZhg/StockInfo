@@ -24,11 +24,13 @@ public class SortAdapter extends BaseAdapter {
 
     private ArrayList<JsonBean> list;
 
-    public SortAdapter(Context context, ArrayList<JsonBean> list) {
+    public SortAdapter(Context context) {
         this.context = context;
-        this.list = list;
     }
-
+    public void addItems(ArrayList<JsonBean> list){
+        this.list=list;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {
