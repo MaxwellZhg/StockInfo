@@ -10,6 +10,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface LoginRegisterView :AbsView{
     fun init()
+
     fun gotopsw()
     fun gotomain()
 }
