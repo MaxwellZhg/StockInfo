@@ -45,9 +45,15 @@ class OpenAccountTabFragment :
         return true
     }
 
-    override fun init() {
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
     }
+
+    override fun init() {
+
+    }
+
     override fun onClick(p0: View?) {
       when(p0?.id){
 

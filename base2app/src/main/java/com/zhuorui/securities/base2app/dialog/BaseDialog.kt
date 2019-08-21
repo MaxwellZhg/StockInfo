@@ -171,7 +171,7 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         if (shortDuration) {
             ToastUtil.instance.toast(strRes)
         } else {
-            ToastUtil.instance.toastLong(strRes, Gravity.BOTTOM)
+            ToastUtil.instance.toastLong(strRes)
         }
     }
 
@@ -179,7 +179,7 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         if (shortDuration) {
             ToastUtil.instance.toast(str)
         } else {
-            ToastUtil.instance.toastLong(str, Gravity.BOTTOM)
+            ToastUtil.instance.toastLong(str)
         }
     }
 
