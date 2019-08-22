@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/infomation" />
             <option value="$PROJECT_DIR$/market" />
             <option value="$PROJECT_DIR$/openaccount" />
+            <option value="$PROJECT_DIR$/pickerview" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

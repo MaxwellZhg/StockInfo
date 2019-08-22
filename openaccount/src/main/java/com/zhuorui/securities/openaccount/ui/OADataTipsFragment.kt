@@ -40,6 +40,10 @@ class OADataTipsFragment :
     private var mAdapter: OADataTipsAdapter? = null
 
     override fun init() {
+        (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        rv.layoutManager = LinearLayoutManager(context)
+        mAdapter = OADataTipsAdapter()
+        rv.adapter = mAdapter
         cbox.setOnCheckedChangeListener(this)
         presenter?.setLifecycleOwner(this)
         var txt = getAgreementText()
@@ -107,10 +111,6 @@ class OADataTipsFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        rv.layoutManager = LinearLayoutManager(context)
-        mAdapter = OADataTipsAdapter()
-        rv.adapter = mAdapter;
         presenter?.getDataTips()
     }
 
