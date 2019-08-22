@@ -16,30 +16,6 @@ class KlinePagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentSt
 
 
     override fun getItem(position: Int): Fragment? {
-//        when (position) {
-//            0 -> {
-//                return ChartOneDayFragment.newInstance(true)
-//            }
-//            1 -> {
-//                return ChartFiveDayFragment.newInstance(true)
-//            }
-//            2 -> {
-//                return ChartKLineFragment.newInstance(1, true)
-//            }
-//            3 -> {
-//                return ChartKLineFragment.newInstance(7, true)
-//            }
-//            4 -> {
-//                return ChartKLineFragment.newInstance(30, true)
-//            }
-//            5 -> {
-//                return ChartKLineFragment.newInstance(90, true)
-//            }
-//            6 -> {
-//                return ChartKLineFragment.newInstance(365, true)
-//            }
-//        }
-
         when (position) {
             0 -> {
                 return ChartOneDayFragment.newInstance(true)
@@ -48,19 +24,19 @@ class KlinePagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentSt
                 return ChartFiveDayFragment.newInstance(true)
             }
             2 -> {
-                return ChartOneDayFragment.newInstance(true)
+                return ChartKLineFragment.newInstance(1, true)
             }
             3 -> {
-                return ChartOneDayFragment.newInstance(true)
+                return ChartKLineFragment.newInstance(7, true)
             }
             4 -> {
-                return ChartOneDayFragment.newInstance(true)
+                return ChartKLineFragment.newInstance(30, true)
             }
             5 -> {
-                return ChartOneDayFragment.newInstance(true)
+                return ChartKLineFragment.newInstance(90, true)
             }
             6 -> {
-                return ChartOneDayFragment.newInstance(true)
+                return ChartKLineFragment.newInstance(365, true)
             }
         }
         return null
