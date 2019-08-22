@@ -1,20 +1,12 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
-import android.view.View
 import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaDataTipsBinding
@@ -37,7 +29,13 @@ class OADataTipsFragment :
     OADataTipsView,
     CompoundButton.OnCheckedChangeListener {
 
-    private var mAdapter: OADataTipsAdapter? = null
+    var mAdapter: OADataTipsAdapter? = null
+
+    companion object {
+        fun newInstance(): OADataTipsFragment {
+            return OADataTipsFragment()
+        }
+    }
 
     override fun init() {
         (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -45,49 +43,8 @@ class OADataTipsFragment :
         mAdapter = OADataTipsAdapter()
         rv.adapter = mAdapter
         cbox.setOnCheckedChangeListener(this)
-        presenter?.setLifecycleOwner(this)
-        var txt = getAgreementText()
-        agreement.text = txt;
+        agreement.text = presenter?.getAgreementText(resources)
         agreement.movementMethod = LinkMovementMethod.getInstance()
-    }
-
-    private fun getAgreementText(): SpannableString {
-        var afr = "开户协议"
-        var text = "本人已仔细阅读并同意签署全部"
-        var spannableString = SpannableString(text + afr)
-        spannableString.setSpan(
-            AgreementClickableSpan(),
-            text.length,
-            spannableString?.length,
-            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-        spannableString.setSpan(
-            ForegroundColorSpan(resources.getColor(R.color.app_bule)),
-            text.length,
-            spannableString?.length,
-            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-        return spannableString
-    }
-
-    class AgreementClickableSpan() : ClickableSpan() {
-        override fun onClick(p0: View) {
-            ToastUtil.instance.toast("点击开户协议")
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            super.updateDrawState(ds)
-            ds.color = ds.linkColor
-            ds.isUnderlineText = false
-        }
-
-    }
-
-
-    companion object {
-        fun newInstance(): OADataTipsFragment {
-            return OADataTipsFragment()
-        }
     }
 
     override val layout: Int
@@ -106,16 +63,21 @@ class OADataTipsFragment :
         get() = this
 
     override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-        open_btn?.isEnabled = p1;
+        open_btn?.isEnabled = p1
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        presenter?.setLifecycleOwner(this)
         presenter?.getDataTips()
     }
 
     override fun notifyDataSetChanged(list: List<OADataTips>?) {
         mAdapter?.addItems(list)
     }
+
+
+
+
 
 }

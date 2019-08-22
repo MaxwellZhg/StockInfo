@@ -1,8 +1,18 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
+import android.content.res.Resources
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ToastUtil
+import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.model.OADataTips
+import com.zhuorui.securities.openaccount.ui.OADataTipsFragment
 import com.zhuorui.securities.openaccount.ui.view.OADataTipsView
 import com.zhuorui.securities.openaccount.ui.view.OASeletRegionView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OADataTipsViewModel
@@ -28,11 +38,43 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
         }
     }
 
-    fun getDataTips(){
+    fun getDataTips() {
         val datas = mutableListOf<OADataTips>()
         datas.add(OADataTips(1))
         datas.add(OADataTips(2))
         datas.add(OADataTips(3))
         viewModel?.datas?.value = datas
+    }
+
+    fun getAgreementText(resources: Resources): SpannableString {
+        var afr = "开户协议"
+        var text = "本人已仔细阅读并同意签署全部"
+        var spannableString = SpannableString(text + afr)
+        spannableString.setSpan(
+            AgreementClickableSpan(),
+            text.length,
+            spannableString?.length,
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            ForegroundColorSpan(resources.getColor(R.color.app_bule)),
+            text.length,
+            spannableString?.length,
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        return spannableString
+    }
+
+    class AgreementClickableSpan() : ClickableSpan() {
+        override fun onClick(p0: View) {
+            ToastUtil.instance.toast("点击开户协议")
+        }
+
+        override fun updateDrawState(ds: TextPaint) {
+            super.updateDrawState(ds)
+            ds.color = ds.linkColor
+            ds.isUnderlineText = false
+        }
+
     }
 }
