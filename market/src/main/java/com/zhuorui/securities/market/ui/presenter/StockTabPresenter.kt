@@ -8,7 +8,7 @@ import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.event.SocketDisconnectEvent
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.ui.view.StockTabFragmentView
+import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 
 /**
@@ -17,7 +17,7 @@ import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
  *    date   : 2019/8/19 15:44
  *    desc   :
  */
-class StockTabFragmentPresenter : AbsEventPresenter<StockTabFragmentView, StockTabViewModel>() {
+class StockTabPresenter : AbsEventPresenter<StockTabView, StockTabViewModel>() {
 
     override fun init() {
         super.init()

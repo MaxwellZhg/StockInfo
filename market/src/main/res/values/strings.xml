@@ -21,4 +21,11 @@
     <string name="all_stock_num" tools:ignore="MissingTranslation">全部(%1$d)</string>
     <string name="hk_stock_num" tools:ignore="MissingTranslation">港股(%1$d)</string>
     <string name="hs_stock_num" tools:ignore="MissingTranslation">沪深(%1$d)</string>
+    <string name="unable_notice" translatable="false">消息通知已关闭，无法接收提醒推送</string>
+    <string name="open_notice" translatable="false">去开启</string>
+    <string name="setting_remind" translatable="false">设置提醒</string>
+    <string name="rise_threshold">价格涨到</string>
+    <string name="down_threshold">价格跌到</string>
+    <string name="rise_range">涨幅超</string>
+    <string name="down_range">跌幅超</string>
 </resources>
