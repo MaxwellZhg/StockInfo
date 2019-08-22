@@ -7,7 +7,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentOneDayBinding
 import com.zhuorui.securities.market.stockChart.data.TimeDataManage
-import com.zhuorui.securities.market.ui.detail.presenter.ChartOneDayFragmentPresenter
+import com.zhuorui.securities.market.ui.detail.presenter.ChartOneDayPresenter
 import com.zhuorui.securities.market.ui.detail.view.OneDayKlineView
 import com.zhuorui.securities.market.ui.detail.viewmodel.OneDayKlineViewModel
 import kotlinx.android.synthetic.main.fragment_one_day.*
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_one_day.*
  * 分时页
  */
 class ChartOneDayFragment :
-    AbsFragment<FragmentOneDayBinding, OneDayKlineViewModel, OneDayKlineView, ChartOneDayFragmentPresenter>(),
+    AbsFragment<FragmentOneDayBinding, OneDayKlineViewModel, OneDayKlineView, ChartOneDayPresenter>(),
     OneDayKlineView {
 
     private var land: Boolean = false // 是否横屏
@@ -38,8 +38,8 @@ class ChartOneDayFragment :
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: ChartOneDayFragmentPresenter
-        get() = ChartOneDayFragmentPresenter()
+    override val createPresenter: ChartOneDayPresenter
+        get() = ChartOneDayPresenter()
 
     override val createViewModel: OneDayKlineViewModel?
         get() = ViewModelProviders.of(this).get(OneDayKlineViewModel::class.java)

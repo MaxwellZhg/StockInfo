@@ -7,7 +7,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentKlineBinding
 import com.zhuorui.securities.market.stockChart.data.KLineDataManage
-import com.zhuorui.securities.market.ui.detail.presenter.ChartKLineFragmentPresenter
+import com.zhuorui.securities.market.ui.detail.presenter.ChartKLinePresenter
 import com.zhuorui.securities.market.ui.detail.view.KlineView
 import com.zhuorui.securities.market.ui.detail.viewmodel.KlineViewModel
 import kotlinx.android.synthetic.main.fragment_kline.*
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_kline.*
 /**
  * K线
  */
-class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, KlineView, ChartKLineFragmentPresenter>(),
+class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
     KlineView {
 
     private var land: Boolean = false//是否横屏
@@ -38,8 +38,8 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: ChartKLineFragmentPresenter
-        get() = ChartKLineFragmentPresenter()
+    override val createPresenter: ChartKLinePresenter
+        get() = ChartKLinePresenter()
 
     override val createViewModel: KlineViewModel?
         get() = ViewModelProviders.of(this).get(KlineViewModel::class.java)

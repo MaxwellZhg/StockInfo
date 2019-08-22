@@ -30,7 +30,7 @@ import java.util.*
  *    date   : 2019/8/22 9:52
  *    desc   :
  */
-class ChartOneDayFragmentPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewModel>() {
+class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewModel>() {
 
     private var requestIds = ArrayList<String>()
     private val disposables = LinkedList<Disposable>()

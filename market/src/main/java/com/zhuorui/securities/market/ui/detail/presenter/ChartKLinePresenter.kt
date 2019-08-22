@@ -25,7 +25,7 @@ import java.util.*
  *    date   : 2019/8/22 9:52
  *    desc   :
  */
-class ChartKLineFragmentPresenter : AbsEventPresenter<KlineView, KlineViewModel>() {
+class ChartKLinePresenter : AbsEventPresenter<KlineView, KlineViewModel>() {
 
     var kType: Int = 0//日K：1；周K：7；月K：30
     var land: Boolean = false

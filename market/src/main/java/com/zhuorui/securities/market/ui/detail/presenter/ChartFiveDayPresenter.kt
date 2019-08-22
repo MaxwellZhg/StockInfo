@@ -25,7 +25,7 @@ import java.util.*
  *    date   : 2019/8/22 10:32
  *    desc   :
  */
-class ChartFiveDayFragmentPresenter : AbsEventPresenter<FiveDayKlineView, FiveDayKlineViewModel>() {
+class ChartFiveDayPresenter : AbsEventPresenter<FiveDayKlineView, FiveDayKlineViewModel>() {
 
     private val disposables = LinkedList<Disposable>()
     private var requestIds = ArrayList<String>()

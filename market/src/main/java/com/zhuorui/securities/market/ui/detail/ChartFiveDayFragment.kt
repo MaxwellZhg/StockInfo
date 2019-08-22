@@ -7,7 +7,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentFiveDayBinding
 import com.zhuorui.securities.market.stockChart.data.TimeDataManage
-import com.zhuorui.securities.market.ui.detail.presenter.ChartFiveDayFragmentPresenter
+import com.zhuorui.securities.market.ui.detail.presenter.ChartFiveDayPresenter
 import com.zhuorui.securities.market.ui.detail.view.FiveDayKlineView
 import com.zhuorui.securities.market.ui.detail.viewmodel.FiveDayKlineViewModel
 import kotlinx.android.synthetic.main.fragment_five_day.*
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_five_day.*
  * 五日分时页
  */
 class ChartFiveDayFragment :
-    AbsFragment<FragmentFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayFragmentPresenter>(),
+    AbsFragment<FragmentFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayPresenter>(),
     FiveDayKlineView {
 
     private var land: Boolean = false // 是否横屏
@@ -39,8 +39,8 @@ class ChartFiveDayFragment :
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: ChartFiveDayFragmentPresenter
-        get() = ChartFiveDayFragmentPresenter()
+    override val createPresenter: ChartFiveDayPresenter
+        get() = ChartFiveDayPresenter()
 
     override val createViewModel: FiveDayKlineViewModel?
         get() = ViewModelProviders.of(this).get(FiveDayKlineViewModel::class.java)
