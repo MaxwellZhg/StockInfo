@@ -16,4 +16,6 @@ class CountryDisctPresenter : AbsNetPresenter<CountryDisctView, CountryDisctView
         super.init()
         view?.init()
     }
+
+
 }

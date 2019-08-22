@@ -1,6 +1,8 @@
 package com.zhuorui.securities.infomation.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.infomation.ui.adapter.SortAdapter
 
 /**
  * Created by Maxwell.
@@ -9,5 +11,5 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class CountryDisctViewModel :ViewModel(){
-
+    var adapter: MutableLiveData<SortAdapter> = MutableLiveData()
 }

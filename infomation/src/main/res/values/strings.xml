@@ -41,4 +41,13 @@
     <string name="error_psw_input_times" tools:ignore="MissingTranslation">密码错误超10次，请明天再试</string>
     <string name="ensure" tools:ignore="MissingTranslation">确定</string>
     <string name="vrf_code_time" tools:ignore="MissingTranslation">验证码已超过10次\n 请明天再试 </string>
+    <string name="commit" tools:ignore="MissingTranslation">提交</string>
+    <string name="phone_code_vrf_login" tools:ignore="MissingTranslation">短信验证码登录</string>
+    <string name="rest_psw" tools:ignore="MissingTranslation">重置密码</string>
+    <string name="new_psw" tools:ignore="MissingTranslation">新密码</string>
+    <string name="ensure_rest" tools:ignore="MissingTranslation">确认重置</string>
+    <string name="input_new_pws" tools:ignore="MissingTranslation">请输入新密码</string>
+    <string name="input_new_pws_mix" tools:ignore="MissingTranslation">*请输入至少6位密码</string>
+    <string name="compare_no_match" tools:ignore="MissingTranslation">*两次密码输入不一致</string>
+    <string name="new_psw_no_match" tools:ignore="MissingTranslation">*大、小写字母,数字或标点至少含有2种</string>
 </resources>

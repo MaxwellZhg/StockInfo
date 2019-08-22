@@ -103,7 +103,10 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                 presenter?.requestUserLoginCode(strphone,phonecode)
             }
             R.id.tv_phone_num_login->{
-                start(LoginPswFragment())
+                startWithPop(LoginPswFragment())
+            }
+            R.id.rl_country_disct->{
+                start(CountryDisctFragment())
             }
         }
     }
@@ -112,7 +115,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if(TextUtils.isEmpty(et_phone.text.toString())){
-                    ToastUtil.instance.toast(R.string.phone_tips)
+                    ToastUtil.instance.toast(R.string.phone_code_tips)
                 }else {
                     presenter?.setState(0)
                 }
