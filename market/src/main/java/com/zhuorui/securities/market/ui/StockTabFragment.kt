@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
@@ -55,7 +56,7 @@ class StockTabFragment :
         get() = StockTabFragmentPresenter()
 
     override val createViewModel: StockTabViewModel?
-        get() = StockTabViewModel()
+        get() = ViewModelProviders.of(this).get(StockTabViewModel::class.java)
 
     override val getView: StockTabFragmentView
         get() = this

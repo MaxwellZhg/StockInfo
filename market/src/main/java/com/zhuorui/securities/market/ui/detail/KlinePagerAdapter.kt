@@ -39,6 +39,30 @@ class KlinePagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentSt
 //                return ChartKLineFragment.newInstance(365, true)
 //            }
 //        }
+
+        when (position) {
+            0 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+            1 -> {
+                return ChartFiveDayFragment.newInstance(true)
+            }
+            2 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+            3 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+            4 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+            5 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+            6 -> {
+                return ChartOneDayFragment.newInstance(true)
+            }
+        }
         return null
     }
 
