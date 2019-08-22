@@ -22,7 +22,7 @@
                        android:id="@+id/user_logo"
                        android:layout_centerVertical="true"
                        android:layout_marginStart="22dp"
-                       android:background="@mipmap/prof"/>
+                       android:background="@mipmap/ic_prof"/>
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                        android:layout_centerVertical="true"
                        android:layout_alignParentEnd="true"
                        android:layout_marginEnd="22dp"
-                       android:background="@mipmap/message"/>
+                       android:background="@mipmap/ic_message"/>
 
             <ImageView android:layout_width="24dp"
                        android:layout_toStartOf="@+id/iv_message"
@@ -45,7 +45,7 @@
                        android:id="@+id/iv_serach"
                        android:layout_height="23dp"
                        android:layout_centerVertical="true"
-                       android:background="@mipmap/serach"/>
+                       android:background="@mipmap/ic_serach"/>
 
         </RelativeLayout>
 
@@ -58,28 +58,72 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"/>
 
-            <ImageView android:background="@mipmap/list"
-                       android:id="@+id/iv_list"
-                       android:layout_centerVertical="true"
-                       android:layout_alignParentEnd="true"
-                       android:layout_marginEnd="13dp"
-                       android:layout_width="19dp"
-                       android:layout_height="15dp"/>
+            <ImageView
+                    android:src="@{viewModel.toggleStockTab?@drawable/ic_stock_filter_pressed:@drawable/ic_stock_filter_normal}"
+                    android:id="@+id/iv_list"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="13dp"
+                    android:layout_width="19dp"
+                    android:layout_height="15dp"/>
         </RelativeLayout>
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srlEnableLoadMore="false"
-                app:srlEnableOverScrollBounce="true"
-                app:srlEnableOverScrollDrag="true"
-                app:srlEnableRefresh="false"
-                app:srlReboundDuration="1000">
+                android:layout_height="wrap_content">
 
-            <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/viewpager"
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                    android:layout_height="match_parent"
+                    app:srlEnableLoadMore="false"
+                    app:srlEnableOverScrollBounce="true"
+                    app:srlEnableOverScrollDrag="true"
+                    app:srlEnableRefresh="false"
+                    app:srlReboundDuration="1000">
+
+                <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <RelativeLayout
+                    android:id="@+id/rl_filter"
+                    android:layout_width="match_parent"
+                    android:background="@color/color_424147"
+                    android:gravity="center_vertical"
+                    android:layout_height="0dp">
+
+                <TextView
+                        android:id="@+id/tv_select_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/all_stock_num(viewModel.allNum)}"
+                        android:layout_marginStart="45dp"
+                        android:layout_alignParentStart="true"
+                        android:textColor="@color/color_FFB3BCD0"
+                        android:textSize="18sp"/>
+
+                <TextView
+                        android:id="@+id/tv_select_hk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/hk_stock_num(viewModel.hkNum)}"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/color_FFB3BCD0"
+                        android:textSize="18sp"/>
+
+                <TextView
+                        android:id="@+id/tv_select_hs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/hs_stock_num(viewModel.hsNum)}"
+                        android:layout_marginEnd="45dp"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/color_FFB3BCD0"
+                        android:textSize="18sp"/>
+
+            </RelativeLayout>
+        </FrameLayout>
     </LinearLayout>
 </layout>

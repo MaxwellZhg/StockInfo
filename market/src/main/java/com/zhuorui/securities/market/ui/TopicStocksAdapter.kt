@@ -95,13 +95,13 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             stock_code.text = item?.code
             when (item?.ts) {
                 StockTsEnum.HK.name -> {
-                    iv_stock_ts.setImageResource(R.mipmap.hk)
+                    iv_stock_ts.setImageResource(R.mipmap.ic_ts_hk)
                 }
                 StockTsEnum.SH.name -> {
-                    iv_stock_ts.setImageResource(R.mipmap.sh)
+                    iv_stock_ts.setImageResource(R.mipmap.ic_ts_sh)
                 }
                 StockTsEnum.SZ.name -> {
-                    iv_stock_ts.setImageResource(R.mipmap.sz)
+                    iv_stock_ts.setImageResource(R.mipmap.ic_ts_sz)
                 }
             }
             tv_price.text = item?.price?.let { MathUtil.rounded2(it).toString() }

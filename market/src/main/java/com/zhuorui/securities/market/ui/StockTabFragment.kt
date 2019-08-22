@@ -1,10 +1,11 @@
 package com.zhuorui.securities.market.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
@@ -12,8 +13,8 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
-import com.zhuorui.securities.market.ui.presenter.StockTabFragmentPresenter
-import com.zhuorui.securities.market.ui.view.StockTabFragmentView
+import com.zhuorui.securities.market.ui.presenter.StockTabPresenter
+import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
@@ -26,6 +27,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import java.util.*
 
+
 /**
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
@@ -33,12 +35,13 @@ import java.util.*
  *    desc   : 主页中的自选股Tab页面
  */
 class StockTabFragment :
-    AbsBackFinishFragment<FragmentStockTabBinding, StockTabViewModel, StockTabFragmentView, StockTabFragmentPresenter>(),
-    View.OnClickListener, StockTabFragmentView {
+    AbsBackFinishFragment<FragmentStockTabBinding, StockTabViewModel, StockTabView, StockTabPresenter>(),
+    View.OnClickListener, StockTabView {
 
     private var mfragment: ArrayList<StockTabViewModel.PageInfo>? = null
+    private var toggleStockTabShowing = false
 
-    companion  object {
+    companion object {
         fun newInstance(): StockTabFragment {
             return StockTabFragment()
         }
@@ -50,13 +53,13 @@ class StockTabFragment :
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: StockTabFragmentPresenter
-        get() = StockTabFragmentPresenter()
+    override val createPresenter: StockTabPresenter
+        get() = StockTabPresenter()
 
     override val createViewModel: StockTabViewModel?
-        get() = StockTabViewModel()
+        get() = ViewModelProviders.of(this).get(StockTabViewModel::class.java)
 
-    override val getView: StockTabFragmentView
+    override val getView: StockTabView
         get() = this
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
@@ -66,8 +69,11 @@ class StockTabFragment :
     override fun init(fragments: ArrayList<StockTabViewModel.PageInfo>) {
         mfragment = fragments
 
-        user_logo.setOnClickListener(this)
         iv_serach.setOnClickListener(this)
+        iv_list.setOnClickListener(this)
+        tv_select_all.setOnClickListener(this)
+        tv_select_hk.setOnClickListener(this)
+        tv_select_hs.setOnClickListener(this)
 
         // 设置viewpager指示器
         val commonNavigator = CommonNavigator(requireContext())
@@ -82,6 +88,7 @@ class StockTabFragment :
                 colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.un_tab_select)!!
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.text = mfragment!![index].title
+                colorTransitionPagerTitleView.textSize = 18f
                 colorTransitionPagerTitleView.setOnClickListener {
                     viewpager.currentItem = index
                 }
@@ -92,6 +99,8 @@ class StockTabFragment :
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
                 indicator.setColors(ResUtil.getColor(R.color.tab_select))
+                indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
+                indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator
             }
         }
@@ -111,6 +120,9 @@ class StockTabFragment :
 
             override fun onPageSelected(position: Int) {
                 magic_indicator.onPageSelected(position)
+                if (toggleStockTabShowing) {
+                    presenter?.toggleStockTab()
+                }
             }
         })
 
@@ -121,7 +133,7 @@ class StockTabFragment :
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment {
+        override fun getItem(position: Int): TopicStockListFragment {
             return TopicStockListFragment.newInstance(mfragment?.get(position)?.type)
         }
 
@@ -137,11 +149,63 @@ class StockTabFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.iv_serach -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
-            }
-            R.id.user_logo -> {
+//                (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
                 (parentFragment as AbsFragment<*, *, *, *>).start(OASelectRegionFragment.newInstance())
             }
+            R.id.iv_list -> {
+                presenter?.toggleStockTab()
+            }
+            R.id.tv_select_all -> {
+                presenter?.toggleStockTab()
+                viewpager.currentItem = 0
+            }
+            R.id.tv_select_hk -> {
+                presenter?.toggleStockTab()
+                viewpager.currentItem = 1
+            }
+            R.id.tv_select_hs -> {
+                presenter?.toggleStockTab()
+                viewpager.currentItem = 2
+            }
         }
+    }
+
+    override fun toggleStockTab(show: Boolean) {
+        toggleStockTabShowing = show
+        val values = IntArray(2)
+        if (show) {
+            values[0] = 0
+            values[1] = ResUtil.getDimensionDp2Px(80f)
+
+            when (viewpager.currentItem) {
+                0 -> {
+                    ResUtil.getColor(R.color.tab_select)?.let { tv_select_all.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hk.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hs.setTextColor(it) }
+                }
+                1 -> {
+                    ResUtil.getColor(R.color.tab_select)?.let { tv_select_hk.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_all.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hs.setTextColor(it) }
+                }
+                else -> {
+                    ResUtil.getColor(R.color.tab_select)?.let { tv_select_hs.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_hk.setTextColor(it) }
+                    ResUtil.getColor(R.color.un_tab_select)?.let { tv_select_all.setTextColor(it) }
+                }
+            }
+        } else {
+            values[0] = ResUtil.getDimensionDp2Px(80f)
+            values[1] = 0
+        }
+        val valueAnimator = ValueAnimator.ofInt(values[0], values[1])
+        valueAnimator.duration = 150
+        valueAnimator.addUpdateListener { animation ->
+            val value = animation.animatedValue as Int
+            val layoutParams = rl_filter.layoutParams
+            layoutParams.height = value
+            rl_filter?.layoutParams = layoutParams
+        }
+        valueAnimator.start()
     }
 }

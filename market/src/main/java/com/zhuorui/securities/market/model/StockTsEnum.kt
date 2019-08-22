@@ -10,5 +10,6 @@ enum class StockTsEnum {
     SZ,// 深圳
     SH,// 上海
     HK,// 港股
-    US// 美股
+    US,// 美股
+    HS// 沪深
 }

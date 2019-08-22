@@ -28,5 +28,21 @@ interface InfomationApi {
          * 用户退出登录
          */
         const val USER_LOGIN_OUT = "/as-user/api/useraccount/v1/sign_out"
+        /**
+         * 发送忘记密码短信
+         *
+         */
+        const val SEND_FORGET_CODE="/as-user/api/sms/v1/send_forget_code"
+
+        /**
+         * 验证忘记密码发送短信
+         *
+         */
+        const val VERIFY_FORGET_CODE="/as-user/api/useraccount/v1/forgot_password_code"
+        /**
+         * 重置登录密码
+         *
+         */
+        const val REST_LOGIN_PSW="/as-user/api/useraccount/v1/reset_login_password"
     }
 }

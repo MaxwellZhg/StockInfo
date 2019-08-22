@@ -1,7 +1,5 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -15,10 +13,8 @@ import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
 import com.zhuorui.securities.market.ui.SearchStocksAdapter
-import com.zhuorui.securities.market.ui.TopicStocksAdapter
-import com.zhuorui.securities.market.ui.view.StockSearchFragmentView
+import com.zhuorui.securities.market.ui.view.StockSearchView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel
-import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
 import me.jessyan.autosize.utils.LogUtils
 
 /**
@@ -27,7 +23,7 @@ import me.jessyan.autosize.utils.LogUtils
  *    date   : 2019/8/19 16:16
  *    desc   :
  */
-class StockSearchFragmentPresenter : AbsNetPresenter<StockSearchFragmentView, StockSearchViewModel>() {
+class StockSearchPresenter : AbsNetPresenter<StockSearchView, StockSearchViewModel>() {
 
     override fun init() {
         super.init()
@@ -42,11 +38,14 @@ class StockSearchFragmentPresenter : AbsNetPresenter<StockSearchFragmentView, St
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-           val datas = response.data?.datas
-            if (datas.isNullOrEmpty()) return
-             viewModel?.adapter?.value?.clearItems()
-             viewModel?.adapter?.value?.addItems(datas)
-            LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
+        val datas = response.data?.datas
+        if (datas.isNullOrEmpty()) return
+        viewModel?.adapter?.value?.clearItems()
+        if (viewModel?.adapter?.value?.items == null) {
+            viewModel?.adapter?.value?.items = ArrayList()
+        }
+        viewModel?.adapter?.value?.addItems(datas)
+        LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
 
     }
 
@@ -55,6 +54,7 @@ class StockSearchFragmentPresenter : AbsNetPresenter<StockSearchFragmentView, St
         item?.let { AddTopicStockEvent(it) }?.let { RxBus.getDefault().post(it) }
         toast(R.string.add_topic_successful)
     }
+
     fun getAdapter(): SearchStocksAdapter? {
         if (viewModel?.adapter?.value == null) {
             viewModel?.adapter?.value = SearchStocksAdapter()

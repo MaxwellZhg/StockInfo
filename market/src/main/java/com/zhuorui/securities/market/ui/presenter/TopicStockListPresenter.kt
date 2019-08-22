@@ -4,9 +4,11 @@ import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.event.AddTopicStockEvent
+import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
@@ -16,7 +18,7 @@ import com.zhuorui.securities.market.net.request.RecommendStocklistRequest
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
-import com.zhuorui.securities.market.ui.view.TopicStockListFragmentView
+import com.zhuorui.securities.market.ui.view.TopicStockListView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
 import com.zhuorui.securities.market.util.MathUtil
 
@@ -27,7 +29,7 @@ import com.zhuorui.securities.market.util.MathUtil
  *    desc   :
  */
 @Suppress("NAME_SHADOWING")
-class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentView, TopicStockListViewModel>() {
+class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockListViewModel>() {
 
     private var ts: StockTsEnum? = null
 
@@ -44,7 +46,10 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
         // 监听datas的变化
         lifecycleOwner.let {
             viewModel?.datas?.observe(it,
-                androidx.lifecycle.Observer<List<StockMarketInfo>> { t -> view?.notifyDataSetChanged(t) })
+                androidx.lifecycle.Observer<List<StockMarketInfo>> { t ->
+                    RxBus.getDefault().post(NotifyStockCountEvent(ts, t.size))
+                    view?.notifyDataSetChanged(t)
+                })
         }
     }
 
@@ -52,7 +57,12 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
      * 加载推荐自选股列表
      */
     fun requestStocks(currentPage: Int, pageSize: Int) {
-        val request = RecommendStocklistRequest(ts, currentPage, pageSize, transactions.createTransaction())
+        val request = RecommendStocklistRequest(
+            if (ts == StockTsEnum.HS) StockTsEnum.SH.name + "," + StockTsEnum.SZ.name else ts?.name,
+            currentPage,
+            pageSize,
+            transactions.createTransaction()
+        )
         Cache[IStockNet::class.java]?.list(request)
             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }
@@ -139,6 +149,7 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
         datas.add(stock)
 
         view?.notifyItemInserted(datas.size - 1)
+        RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
     }
 
     fun onStickyOnTop(item: StockMarketInfo?) {
@@ -164,5 +175,6 @@ class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentVi
             }
         }
         SocketClient.getInstance().bindTopic(stockTopic)
+        RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
     }
 }

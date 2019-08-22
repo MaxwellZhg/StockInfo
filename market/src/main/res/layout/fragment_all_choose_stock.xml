@@ -25,14 +25,14 @@
             <RelativeLayout android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:id="@+id/rl_updown"
-                            android:layout_toStartOf="@+id/rl_arrows"
-                            android:layout_marginEnd="6dp"
+                            android:id="@+id/rl_now_price"
+                            android:layout_toStartOf="@+id/rl_diff_pirce"
+                            android:layout_marginEnd="13dp"
                             android:gravity="center_vertical">
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:id="@+id/tv_undown"
+                          android:id="@+id/tv_now_price"
                           android:layout_marginEnd="5dp"
                           android:layout_centerVertical="true"
                           android:textColor="@color/stock_code"
@@ -41,25 +41,52 @@
 
                 <ImageView android:layout_width="11dp"
                            android:layout_height="13dp"
-                           android:id="@+id/iv_updown"
+                           android:id="@+id/iv_now_price"
                            android:layout_centerVertical="true"
-                           android:layout_toEndOf="@id/tv_undown"
+                           android:layout_toEndOf="@id/tv_now_price"
                            android:textSize="15sp"
-                           android:background="@mipmap/updown"/>
+                           android:background="@mipmap/ic_sort"/>
 
             </RelativeLayout>
 
             <RelativeLayout android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:id="@+id/rl_arrows"
+                            android:id="@+id/rl_diff_pirce"
+                            android:layout_toStartOf="@+id/rl_diff_rate"
+                            android:layout_marginEnd="28dp"
+                            android:gravity="center_vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/tv_diff_pirce"
+                          android:layout_marginEnd="5dp"
+                          android:layout_centerVertical="true"
+                          android:textColor="@color/stock_code"
+                          android:textSize="15sp"
+                          android:text="@string/diff_price"/>
+
+                <ImageView android:layout_width="11dp"
+                           android:layout_height="13dp"
+                           android:id="@+id/iv_diff_pirce"
+                           android:layout_centerVertical="true"
+                           android:layout_toEndOf="@id/tv_diff_pirce"
+                           android:textSize="15sp"
+                           android:background="@mipmap/ic_sort"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/rl_diff_rate"
                             android:layout_marginEnd="13dp"
                             android:gravity="center_vertical"
                             android:layout_alignParentEnd="true">
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:id="@+id/tv_arrows"
+                          android:id="@+id/tv_diff_rate"
                           android:layout_marginEnd="5dp"
                           android:layout_centerVertical="true"
                           android:textColor="@color/stock_code"
@@ -70,9 +97,9 @@
                            android:layout_height="13dp"
                            android:id="@+id/iv_arrows"
                            android:layout_centerVertical="true"
-                           android:layout_toEndOf="@id/tv_arrows"
+                           android:layout_toEndOf="@id/tv_diff_rate"
                            android:textSize="15sp"
-                           android:background="@mipmap/updown"/>
+                           android:background="@mipmap/ic_sort"/>
             </RelativeLayout>
 
         </RelativeLayout>
@@ -93,6 +120,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inflatedId="@+id/viewInfalatedRootId"
-                android:layout="@layout/layout_guide_open_accout" />
+                android:layout="@layout/layout_guide_open_accout"/>
     </LinearLayout>
 </layout>

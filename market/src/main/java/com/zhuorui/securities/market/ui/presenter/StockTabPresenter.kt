@@ -4,9 +4,11 @@ import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
+import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.event.SocketDisconnectEvent
+import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.ui.view.StockTabFragmentView
+import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 
 /**
@@ -15,7 +17,7 @@ import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
  *    date   : 2019/8/19 15:44
  *    desc   :
  */
-class StockTabFragmentPresenter : AbsEventPresenter<StockTabFragmentView, StockTabViewModel>() {
+class StockTabPresenter : AbsEventPresenter<StockTabView, StockTabViewModel>() {
 
     override fun init() {
         super.init()
@@ -32,10 +34,24 @@ class StockTabFragmentPresenter : AbsEventPresenter<StockTabFragmentView, StockT
         SocketClient.getInstance()?.connect()
     }
 
+    fun toggleStockTab() {
+        viewModel?.toggleStockTab?.value = !viewModel?.toggleStockTab?.value!!
+        view?.toggleStockTab(viewModel?.toggleStockTab?.value!!)
+    }
+
     override fun destroy() {
         super.destroy()
 
         // 关闭长链接
         SocketClient.getInstance()?.destroy()
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onNotifyStockCountEvent(event: NotifyStockCountEvent) {
+        when (event.ts) {
+            null -> viewModel?.allNum?.value = event.count
+            StockTsEnum.HK -> viewModel?.hkNum?.value = event.count
+            else -> viewModel?.hsNum?.value = event.count
+        }
     }
 }

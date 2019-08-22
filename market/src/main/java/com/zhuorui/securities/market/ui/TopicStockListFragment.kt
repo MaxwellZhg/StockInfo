@@ -19,8 +19,8 @@ import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.ui.detail.StockDetailLandActivity
-import com.zhuorui.securities.market.ui.presenter.TopicStockListFragmentPresenter
-import com.zhuorui.securities.market.ui.view.TopicStockListFragmentView
+import com.zhuorui.securities.market.ui.presenter.TopicStockListPresenter
+import com.zhuorui.securities.market.ui.view.TopicStockListView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.layout_guide_open_accout.*
@@ -32,9 +32,9 @@ import kotlinx.android.synthetic.main.layout_guide_open_accout.*
  * Desc: 自选股列表界面
  */
 class TopicStockListFragment :
-    AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListFragmentView, TopicStockListFragmentPresenter>(),
+    AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListView, TopicStockListPresenter>(),
     BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
-    TopicStockListFragmentView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
+    TopicStockListView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
 
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
@@ -58,13 +58,13 @@ class TopicStockListFragment :
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: TopicStockListFragmentPresenter
-        get() = TopicStockListFragmentPresenter()
+    override val createPresenter: TopicStockListPresenter
+        get() = TopicStockListPresenter()
 
     override val createViewModel: TopicStockListViewModel?
         get() = ViewModelProviders.of(this).get(TopicStockListViewModel::class.java)
 
-    override val getView: TopicStockListFragmentView
+    override val getView: TopicStockListView
         get() = this
 
     override fun init() {
@@ -73,17 +73,12 @@ class TopicStockListFragment :
             guide_open_accout.inflate()
             tv_opne_account.setOnClickListener(this)
         }
-        if (type == StockTsEnum.SZ) {
+        if (type == StockTsEnum.HS) {
             root_view.addView(View.inflate(context, R.layout.layout_trans_index, null), 0)
         }
         presenter?.setType(type)
         presenter?.setLifecycleOwner(this)
-        rl_updown.setOnClickListener(this)
-        rl_arrows.setOnClickListener(this)
-    }
 
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_stock.layoutManager = LinearLayoutManager(context)
@@ -122,8 +117,7 @@ class TopicStockListFragment :
                 }
 
                 override fun onRemind() {
-                    //TODO 提醒
-                    ToastUtil.instance.toast("提醒")
+                    (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance())
                 }
 
                 override fun onDelete() {
@@ -164,12 +158,6 @@ class TopicStockListFragment :
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.rl_updown -> {
-
-            }
-            R.id.rl_arrows -> {
-
-            }
             R.id.tv_opne_account -> {
                 //TODO 开户
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
