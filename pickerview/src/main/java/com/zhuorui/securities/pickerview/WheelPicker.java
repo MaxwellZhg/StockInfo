@@ -276,8 +276,8 @@ public class WheelPicker<T> extends View {
         mIsShowCurtainBorder = a.getBoolean(R.styleable.WheelPicker_wheelCurtainBorder, true);
         mCurtainBorderColor = a.getColor(R.styleable.WheelPicker_wheelCurtainBorderColor, Color.parseColor("#CCCCCC"));
         mIndicatorText = a.getString(R.styleable.WheelPicker_indicatorText);
-        mIndicatorTextColor = a.getColor(R.styleable.WheelPicker_indicatorTextColor, mSelectedItemTextColor);
-        mIndicatorTextSize = a.getDimensionPixelSize(R.styleable.WheelPicker_indicatorTextSize, mTextSize);
+        mIndicatorTextColor = a.getColor(R.styleable.WheelPicker_indicatorTextColor, Color.parseColor("#232323"));
+        mIndicatorTextSize = a.getDimensionPixelSize(R.styleable.WheelPicker_indicatorTextSize, mSelectedItemTextSize);
 		a.recycle();
 	}
 

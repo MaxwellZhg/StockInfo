@@ -5,6 +5,7 @@ import android.text.method.LinkMovementMethod
 import android.widget.CompoundButton
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
@@ -39,7 +40,7 @@ class OADataTipsFragment :
 
     override fun init() {
         (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        rv.layoutManager = LinearLayoutManager(context)
+        rv.layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager?
         mAdapter = OADataTipsAdapter()
         rv.adapter = mAdapter
         cbox.setOnCheckedChangeListener(this)
@@ -73,7 +74,7 @@ class OADataTipsFragment :
     }
 
     override fun notifyDataSetChanged(list: List<OADataTips>?) {
-        mAdapter?.addItems(list)
+        mAdapter?.items = list
     }
 
 

@@ -2,6 +2,7 @@ package com.zhuorui.securities.openaccount.ui
 
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
@@ -44,8 +45,9 @@ class OASelectRegionFragment :
                 start(OADataTipsFragment.newInstance())
             }
             R.id.region -> {
-                dialog?.setCurrentData(region.text.toString())
-                dialog?.show()
+//                dialog?.setCurrentData(region.text.toString())
+//                dialog?.show()
+                activity?.let { DatePickerDialog(it).show() }
             }
 
 

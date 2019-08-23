@@ -22,6 +22,10 @@ class OADataTipsAdapter : BaseListAdapter<OADataTips>() {
         return R.layout.item_oa_data_tips
     }
 
+    override fun getItemCount(): Int {
+        return if(items == null) 0 else super.getItemCount()
+    }
+
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(v, false, false);
     }
