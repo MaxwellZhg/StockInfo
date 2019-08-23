@@ -30,6 +30,7 @@ import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.widget.AdapterView
 import kotlin.collections.ArrayList
 
 
@@ -39,7 +40,7 @@ import kotlin.collections.ArrayList
  * Date: 2019/8/19
  * Desc:
  */
-class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView,TextWatcher {
+class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView,TextWatcher,AdapterView.OnItemClickListener {
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
@@ -90,6 +91,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
             }
         }
         et_search.addTextChangedListener(this)
+        lv_country.setOnItemClickListener(this)
     }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
@@ -206,6 +208,12 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
             }
         }
     }
+
+    override fun onItemClick(p0: AdapterView<*>, p1: View?, p2: Int, p3: Long) {
+             presenter?.postValue(adapter!!.list[p2].cn,adapter!!.list[p2].number)
+             pop()
+    }
+
 
 
 }

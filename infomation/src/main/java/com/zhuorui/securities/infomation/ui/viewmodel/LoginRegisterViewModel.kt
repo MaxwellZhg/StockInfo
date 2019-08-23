@@ -14,8 +14,12 @@ import com.zhuorui.securities.infomation.R
 class LoginRegisterViewModel : ViewModel() {
     var state = ObservableField<Int>()
     var str=ObservableField<String>()
+    var strdisct = ObservableField<String>()
+    var code = ObservableField<String>()
     init {
         state.set(1)
         str.set(ResUtil.getString(R.string.send_verification_code))
+        strdisct.set(ResUtil.getString(R.string.china_mother_land))
+        code.set(ResUtil.getString(R.string.china_area_phone))
     }
 }

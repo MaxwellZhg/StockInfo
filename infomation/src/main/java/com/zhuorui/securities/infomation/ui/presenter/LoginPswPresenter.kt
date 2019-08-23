@@ -10,7 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.infomation.LoginStateChangeEvent
+import com.zhuorui.securities.infomation.event.LoginStateChangeEvent
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.net.InfomationNet

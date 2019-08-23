@@ -37,6 +37,9 @@ public class SortAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public LinkedList<JsonBean> getList(){
+        return  list;
+    }
     @Override
     public int getCount() {
         return list.size();

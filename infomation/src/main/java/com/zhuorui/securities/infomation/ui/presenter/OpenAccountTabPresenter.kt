@@ -1,5 +1,6 @@
 package com.zhuorui.securities.infomation.ui.presenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
+import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.ui.view.OpenAccountTabView
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
 
@@ -13,5 +14,8 @@ class OpenAccountTabPresenter:AbsEventPresenter<OpenAccountTabView,OpenAccountTa
     override fun init() {
         super.init()
         view?.init()
+    }
+    fun getLoginStatus() :Boolean{
+        return  LocalAccountConfig.read().isLogin()
     }
 }
