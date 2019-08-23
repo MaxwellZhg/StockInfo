@@ -1,4 +1,4 @@
-package com.zhuorui.securities.base2app.util;
+package com.zhuorui.securities.infomation.util;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;

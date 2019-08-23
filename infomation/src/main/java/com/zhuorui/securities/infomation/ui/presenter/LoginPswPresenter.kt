@@ -6,8 +6,10 @@ import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.infomation.LoginStateChangeEvent
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.net.InfomationNet
@@ -58,6 +60,8 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
                 )
             ) {
                 view?.gotomain()
+                // 通知登录状态发生改变
+                RxBus.getDefault().post(LoginStateChangeEvent())
             }
         }
     }

@@ -13,7 +13,7 @@ interface StockApi {
         /**
          * 同步自选股
          */
-        const val SYN = "/stockmarket/api/stock/selected/v1/view/syn"
+        const val SYN = "as_market/api/stock/selected/v1/view/syn"
 
         /**
          * 搜索股票

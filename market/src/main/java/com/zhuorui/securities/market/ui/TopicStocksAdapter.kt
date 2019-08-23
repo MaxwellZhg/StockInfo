@@ -30,13 +30,13 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
 
     override fun getItemCount(): Int {
         if (items.isNullOrEmpty()) {
-            return 0
+            return 1
         }
         return items.size + 1
     }
 
     override fun getItem(position: Int): StockMarketInfo? {
-        if (position > items.size || position == items.size) return null
+        if (items.isNullOrEmpty() || position > items.size || position == items.size) return null
         return super.getItem(position)
     }
 

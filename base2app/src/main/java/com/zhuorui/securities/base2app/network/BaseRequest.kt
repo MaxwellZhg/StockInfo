@@ -1,5 +1,6 @@
 package com.zhuorui.securities.base2app.network
 
+import com.alibaba.fastjson.JSON
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.Transaction
 import com.zhuorui.securities.base2app.infra.LogInfra
@@ -52,13 +53,7 @@ open class BaseRequest : Transaction {
     fun generateSign() {
         try {
             // 拿到所有的参数进行升序排列
-            var json = JsonUtil.sortJson(JsonUtil.toJson(this))
-            // 删掉sign字段
-            val jsonObject = JsonUtil.toJSONObject(json)
-            if (jsonObject.has("sign")) {
-                jsonObject.remove("sign")
-            }
-            json = jsonObject.toString()
+            val json = JSON.toJSONString(this)
             LogInfra.Log.d("Retrofit", "待签名：" + json)
             // 根据新产生的json进行加密
             sign = SignUtil.createSHA1Sign(json, BaseApplication.baseApplication.config?.privateKey()!!)

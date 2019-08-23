@@ -1,10 +1,10 @@
 package com.zhuorui.securities.infomation.ui.presenter
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.base2app.util.PinyinUtils
 import com.zhuorui.securities.infomation.ui.model.JsonBean
 import com.zhuorui.securities.infomation.ui.view.CountryDisctView
 import com.zhuorui.securities.infomation.ui.viewmodel.CountryDisctViewModel
+import com.zhuorui.securities.infomation.util.PinyinUtils
 import java.util.regex.Pattern
 
 /**

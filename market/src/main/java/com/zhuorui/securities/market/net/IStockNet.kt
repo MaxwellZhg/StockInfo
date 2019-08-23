@@ -25,4 +25,7 @@ interface IStockNet {
 
     @POST(StockApi.TOP)
     fun stickyOnTop(@Body request: StickyOnTopStockRequest): Call<BaseResponse>
+
+    @POST(StockApi.SYN)
+    fun synStock(@Body request: SynStockRequest): Call<BaseResponse>
 }
