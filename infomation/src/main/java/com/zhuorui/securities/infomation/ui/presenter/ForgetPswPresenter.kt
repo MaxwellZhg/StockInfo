@@ -2,7 +2,9 @@ package com.zhuorui.securities.infomation.ui.presenter
 
 import android.content.Context
 import android.view.View
+import com.zhuorui.commonwidget.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -11,12 +13,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
-import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.VerifForgetCodeRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
-import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
-import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.ForgetPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.ForgetPswViewModel
 import java.util.*
@@ -91,6 +90,18 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
           dialogshow(0)
           startTimeCountDown()
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onErrorRes(response: ErrorResponse) {
+        if (response.request is SendLoginCodeRequest) {
+            dialogshow(0)
+            if(response.msg=="当天短信验证码超过次"){
+                showErrorDailog()
+            }
+        }else if(response.request is VerifForgetCodeRequest){
+            dialogshow(0)
+        }
     }
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){

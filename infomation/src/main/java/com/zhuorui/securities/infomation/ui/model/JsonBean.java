@@ -100,16 +100,16 @@ public class JsonBean {
         this.sortLetters = sortLetters;
     }
 
-    public JsonBean(String cn_py, String hant, String hant_py, boolean used, String number, String en, String cn) {
-        this.cn_py = cn_py.toUpperCase();
+    public JsonBean(String cn_py, String hant, String hant_py, boolean used, String number, String en, String cn, String sortLetters, String sortEnletters) {
+        this.cn_py = cn_py;
         this.hant = hant;
-        this.hant_py = hant_py.toUpperCase();
+        this.hant_py = hant_py;
         this.used = used;
         this.number = number;
         this.en = en;
         this.cn = cn;
-        setSortLetters(cn_py.substring(0, 1).toUpperCase());
-        setSortEnletters(en.substring(0, 1).toUpperCase());
+        this.sortLetters = sortLetters;
+        this.sortEnletters = sortEnletters;
     }
 
     @Override
@@ -123,6 +123,7 @@ public class JsonBean {
                 ", en='" + en + '\'' +
                 ", cn='" + cn + '\'' +
                 ", sortLetters='" + sortLetters + '\'' +
+                ", sortEnletters='" + sortEnletters + '\'' +
                 '}';
     }
 }

@@ -20,7 +20,7 @@ public class QuickIndexBar extends View {
 
     private String[] indexArr = {"A", "B", "C", "D", "E", "F", "G", "H",
             "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-            "V", "W", "X", "Y", "Z","#"};
+            "V", "W", "X", "Y", "Z"};
 
     private Paint paint;
     private int width;

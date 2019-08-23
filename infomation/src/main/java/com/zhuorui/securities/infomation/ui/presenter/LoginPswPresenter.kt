@@ -2,6 +2,7 @@ package com.zhuorui.securities.infomation.ui.presenter
 
 import android.content.Context
 import android.view.View
+import com.zhuorui.commonwidget.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -13,14 +14,9 @@ import com.zhuorui.securities.infomation.LoginStateChangeEvent
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.net.InfomationNet
-import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
-import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginPwdRequest
-import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
-import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
-import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.LoginPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.LoginPswViewModel
 

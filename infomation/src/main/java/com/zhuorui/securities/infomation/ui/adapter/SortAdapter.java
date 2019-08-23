@@ -11,6 +11,7 @@ import com.zhuorui.securities.infomation.R;
 import com.zhuorui.securities.infomation.ui.model.JsonBean;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,13 +23,13 @@ import java.util.List;
 public class SortAdapter extends BaseAdapter {
     private Context context;
 
-    private ArrayList<JsonBean> list;
+    private LinkedList<JsonBean> list=new LinkedList<>();
 
     public SortAdapter(Context context) {
         this.context = context;
     }
-    public void addItems(ArrayList<JsonBean> list){
-        this.list=list;
+    public void addItems(LinkedList<JsonBean> list){
+        this.list.addAll(list);
         notifyDataSetChanged();
     }
     public void clearItems(){
