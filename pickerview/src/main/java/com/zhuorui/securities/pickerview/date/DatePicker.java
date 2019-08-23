@@ -113,36 +113,6 @@ public class DatePicker extends LinearLayout implements YearPicker.OnYearSelecte
         mDayPicker.setIndicatorText("日");
     }
 
-    @Override
-    public void setBackgroundColor(int color) {
-        super.setBackgroundColor(color);
-        if (mYearPicker != null && mMonthPicker != null && mDayPicker != null) {
-            mYearPicker.setBackgroundColor(color);
-            mMonthPicker.setBackgroundColor(color);
-            mDayPicker.setBackgroundColor(color);
-        }
-    }
-
-    @Override
-    public void setBackgroundResource(int resid) {
-        super.setBackgroundResource(resid);
-        if (mYearPicker != null && mMonthPicker != null && mDayPicker != null) {
-            mYearPicker.setBackgroundResource(resid);
-            mMonthPicker.setBackgroundResource(resid);
-            mDayPicker.setBackgroundResource(resid);
-        }
-    }
-
-    @Override
-    public void setBackgroundDrawable(Drawable background) {
-        super.setBackgroundDrawable(background);
-        if (mYearPicker != null && mMonthPicker != null && mDayPicker != null) {
-            mYearPicker.setBackgroundDrawable(background);
-            mMonthPicker.setBackgroundDrawable(background);
-            mDayPicker.setBackgroundDrawable(background);
-        }
-    }
-
     public void confirm() {
         onDateSelected();
     }
