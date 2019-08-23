@@ -20,7 +20,9 @@ import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.ui.LoginPswFragment
 import com.zhuorui.securities.infomation.ui.SettingPswFragment
+import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.infomation.ui.dailog.InfoDialog
+import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.LoginRegisterView
 import com.zhuorui.securities.infomation.ui.viewmodel.LoginRegisterViewModel
 import io.reactivex.Observable
@@ -35,10 +37,17 @@ import java.util.*
  * Date: 2019/8/20
  * Desc:
  */
-class LoginRegisterPresenter: AbsNetPresenter<LoginRegisterView, LoginRegisterViewModel>(){
+class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterView, LoginRegisterViewModel>(){
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(context)
+    }
+    private val errorDialog by lazy {
+        ErrorTimesDialog(context,1)
+    }
     override fun init() {
         super.init()
         view?.init()
@@ -46,36 +55,42 @@ class LoginRegisterPresenter: AbsNetPresenter<LoginRegisterView, LoginRegisterVi
 
 
     fun requestSendLoginCode(str: kotlin.String) {
+        dialogshow(1)
         val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
         Cache[InfomationNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
 
     fun requestUserLoginCode(str: kotlin.String,vfcode:kotlin.String) {
+        dialogshow(1)
         val request = UserLoginCodeRequest(str, vfcode,"0086", transactions.createTransaction())
         Cache[InfomationNet::class.java]?.userLoginCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
+        if(response.request is SendLoginCodeRequest){
+               dialogshow(0)
+            }
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
-    }
+        if (response.request is UserLoginCodeRequest) {
+               dialogshow(0)
+              view?.gotomain()
+            }
+        }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginOutResponse(response: SendLoginCodeResponse) {
-        view?.gotomain()
+        if (response.request is UserLoginOutRequest) {
+            view?.gotomain()
+        }
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onErrorRes(response: ErrorResponse) {
         if (response.request is UserLoginCodeRequest) {
+             dialogshow(0)
             if(response.code=="010003"){
-                view?.gotopsw()
-            }
-            if(response.code=="010002"){
-                view?.gotopsw()
-            }
-            if(response.code=="010001"){
                 view?.gotopsw()
             }
         }
@@ -126,5 +141,31 @@ class LoginRegisterPresenter: AbsNetPresenter<LoginRegisterView, LoginRegisterVi
                 e.printStackTrace()
             }
         }
+    }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+              }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
+            }
+        }
+
+    fun showErrorDailog() {
+        errorDialog.show()
+        errorDialog.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_verify->{
+                    errorDialog.dismiss()
+                }
+            }
+        })
     }
 }

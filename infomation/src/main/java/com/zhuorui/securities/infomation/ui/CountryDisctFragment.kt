@@ -25,7 +25,10 @@ import me.jessyan.autosize.utils.LogUtils
 import org.json.JSONArray
 import java.util.*
 import com.zhuorui.securities.infomation.databinding.CountryCityFragmentBinding
+import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
+import android.text.TextUtils
+
 
 /**
  * Created by Maxwell.
@@ -61,6 +64,24 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
 
     override fun init() {
         iv_back.setOnClickListener(this)
+        quickindexbar.setonTouchLetterListener{
+            for (i in 0 until jsonBean.size) {
+
+                val city = jsonBean[i]
+
+                val l = city.sortLetters
+
+                if (TextUtils.equals(it, l)) {
+
+                    //匹配成功
+                    lv_country.setSelection(i)
+
+                    break
+
+                }
+
+            }
+        }
     }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
@@ -93,6 +114,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
+                            Collections.sort(it, PinyinComparator())
                             var adpter = SortAdapter(requireContext())
                             adpter.addItems(it)
                             lv_country.adapter = adpter
@@ -119,8 +141,8 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
             val data = JSONArray(result)
             val gson = Gson()
             for (i in 0 until data.length()) {
-                val entity = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
-                detail.add(entity as JsonBean)
+                val entity:JsonBean = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
+                detail.add(JsonBean(entity.cn_py,entity.hant,entity.hant_py,entity.isUsed,entity.number,entity.en,entity.cn))
             }
             mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS)
         } catch (e: Exception) {

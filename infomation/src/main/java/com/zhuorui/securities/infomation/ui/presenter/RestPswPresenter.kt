@@ -1,8 +1,19 @@
 package com.zhuorui.securities.infomation.ui.presenter
 
+import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.Network
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.infomation.R
+import com.zhuorui.securities.infomation.net.InfomationNet
+import com.zhuorui.securities.infomation.net.request.RestLoginPswRequest
+import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
+import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
+import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
+import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
+import com.zhuorui.securities.infomation.ui.config.LocalLoginResConfig
 import com.zhuorui.securities.infomation.ui.view.RestPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.RestPswViewModel
 import java.util.regex.Pattern
@@ -81,4 +92,18 @@ class RestPswPresenter:AbsNetPresenter<RestPswView, RestPswViewModel>() {
             return
         }
     }
+    fun requestRestLoginPsw(phone: kotlin.String?,newpsw:kotlin.String,code: kotlin.String?) {
+        val request = RestLoginPswRequest(phone, newpsw,code, transactions.createTransaction())
+        Cache[InfomationNet::class.java]?.restLoginPsw(request)
+            ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onRestLoginPswResponse(response: SendLoginCodeResponse) {
+        if (response.request is RestLoginPswRequest) {
+              view?.gotopswlogin()
+        }
+    }
+
+
 }

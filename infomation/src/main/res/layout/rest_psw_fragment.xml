@@ -55,6 +55,7 @@
                                   android:inputType="textPassword"
                                   android:textColor="@color/color_282828"
                                   android:hint="@string/psw_conbine"
+                                  android:textCursorDrawable="@drawable/bg_edittext"
                                   android:textColorHint="@color/color_A1A1A1"
                                   android:background="@null"/>
                         <CheckBox android:layout_width="17dp"
@@ -101,6 +102,7 @@
                                   android:textStyle="bold"
                                   android:id="@+id/et_rest_ensure_psw"
                                   android:inputType="textPassword"
+                                  android:textCursorDrawable="@drawable/bg_edittext"
                                   android:textColor="@color/color_282828"
                                   android:hint="@string/ensure_psw_again"
                                   android:textColorHint="@color/color_A1A1A1"

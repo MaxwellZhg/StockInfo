@@ -74,6 +74,7 @@
                         android:background="@color/color_FFFFFFFF">
             <ListView android:id="@+id/lv_country"
                       android:layout_width="match_parent"
+                      android:overScrollMode="never"
                       android:layout_marginRight="25dp"
                       android:layout_height="match_parent">
             </ListView>

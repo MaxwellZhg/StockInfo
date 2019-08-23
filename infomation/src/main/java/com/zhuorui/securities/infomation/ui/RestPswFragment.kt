@@ -8,6 +8,7 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.infomation.BR
@@ -29,7 +30,6 @@ import kotlinx.android.synthetic.main.setting_psw_fragment.*
  */
 
 class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswViewModel, RestPswView, RestPswPresenter>(),RestPswView,View.OnClickListener,TextWatcher{
-
     private var phone: String? = null
     private var code :String?=null
     private lateinit var strnewpsw: String
@@ -93,15 +93,9 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
                pop()
            }
            R.id.tv_btn_rest->{
-            /*   if (strnewpsw == null || strnewpsw == "") {
-                  presenter?.setTips(ResUtil.getString(R.string.input_new_pws_mix),ResUtil.getString(R.string.compare_no_match))
-                   return
-               }
-               if (strensurepsw == null || strensurepsw == "") {
-                   ToastUtil.instance.toast(R.string.phone_code_tips)
-                   return
-               }*/
-               presenter?.detailtips(strnewpsw,strensurepsw);
+               presenter?.detailtips(strnewpsw,strensurepsw)
+               presenter?.requestRestLoginPsw(phone,Md5Util.getMd5Str(strensurepsw),code)
+
            }
            R.id.tv_phone_code_login->{
                startWithPop(LoginRegisterFragment.newInstance())
@@ -130,5 +124,9 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
     }
+    override fun gotopswlogin() {
+       pop()
+    }
+
 
 }

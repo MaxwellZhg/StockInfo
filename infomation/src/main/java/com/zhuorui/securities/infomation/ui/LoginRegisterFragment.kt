@@ -58,7 +58,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override val viewModelId: Int
         get() =  BR.viewmodel
     override val createPresenter: LoginRegisterPresenter
-        get() = LoginRegisterPresenter()
+        get() = LoginRegisterPresenter(requireContext())
     override val createViewModel: LoginRegisterViewModel?
         get() = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
     override val getView: LoginRegisterView

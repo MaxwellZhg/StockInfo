@@ -1,15 +1,22 @@
 package com.zhuorui.securities.infomation.ui.presenter
 
+import android.content.Context
+import android.view.View
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
+import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginPwdRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
+import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
+import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.LoginPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.LoginPswViewModel
 
@@ -19,12 +26,20 @@ import com.zhuorui.securities.infomation.ui.viewmodel.LoginPswViewModel
  * Date: 2019/8/20
  * Desc:
  */
-class LoginPswPresenter : AbsNetPresenter<LoginPswView, LoginPswViewModel>(){
+class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginPswViewModel>(){
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(context)
+    }
+    private val errorDialog by lazy {
+        ErrorTimesDialog(context,2)
+    }
     override fun init() {
         super.init()
         view?.init()
     }
     fun requestLoginPwd(phone: kotlin.String,password: kotlin.String,phoneArea:kotlin.String) {
+        dialogshow(1)
         val request = UserLoginPwdRequest(phone, password,"0086", transactions.createTransaction())
         Cache[InfomationNet::class.java]?.userLoginByPwd(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
@@ -32,7 +47,47 @@ class LoginPswPresenter : AbsNetPresenter<LoginPswView, LoginPswViewModel>(){
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginPwdResponse(response: UserLoginCodeResponse) {
+        dialogshow(0)
          view?.gotomain()
+    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onErrorRes(response: ErrorResponse) {
+        if (response.request is UserLoginPwdRequest) {
+            dialogshow(0)
+            if(response.code=="010012"){
+                showPswError()
+            }
+        }
+    }
+
+    private fun showPswError() {
+
+    }
+
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
+        }
+    }
+    fun showErrorDailog() {
+        errorDialog.show()
+        errorDialog.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_psw->{
+                    errorDialog.dismiss()
+                }
+            }
+        })
     }
 
 }
