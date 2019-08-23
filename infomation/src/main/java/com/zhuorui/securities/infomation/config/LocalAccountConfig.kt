@@ -22,7 +22,7 @@ class LocalAccountConfig : AbsConfig() {
      * 是否登录
      */
     fun isLogin():Boolean{
-        return accountInfo.token?.isNotEmpty()!!
+        return accountInfo.token?.isNotEmpty()?:false
     }
 
     /**
