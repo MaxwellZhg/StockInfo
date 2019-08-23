@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:orientation="vertical"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content">
+
+    <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/tv_title"
+            android:text="title"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+    <ImageView
+
+            android:id="@+id/iv_image"
+            android:layout_marginTop="8dp"
+            app:layout_constraintWidth_percent="0.625"
+            app:layout_constraintDimensionRatio="5:3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            android:layout_width="0dp" android:layout_height="0dp"/>
+
+    <View
+            android:id="@+id/v_img_stroke"
+            android:background="@drawable/rectangle_dottedline616161"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_image"
+            app:layout_constraintRight_toRightOf="@+id/iv_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_image"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    <TextView
+            android:id="@+id/tv_err_msg"
+            android:background="@drawable/rectangle_solid80000000_strokeca0000"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_image"
+            app:layout_constraintRight_toRightOf="@+id/iv_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_image"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+            android:layout_width="0dp"
+            android:text="上传失败，请重新上传"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_height="0dp"/>
+
+    <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_watermark"
+            android:background="@drawable/rectangle_solid80000000_stroke1a6ed2"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_image"
+            app:layout_constraintRight_toRightOf="@+id/iv_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_image"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+
+    <TextView
+            android:id="@+id/sb_btn"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp" android:layout_height="30dp"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_image"
+            app:layout_constraintRight_toRightOf="@+id/iv_image"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image"
+            android:background="@drawable/buttom_bule_radius_selector"
+
+    />
+    <!--app:unableBackgroundColor="#8db9e4"-->
+    <!--app:normalBackgroundColor="#1A6ED2"-->
+    <!--app:pressedBackgroundColor="#145bb3"-->
+    <!--app:radius="3dp"-->
+
+    <ImageView
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:src="@mipmap/ic_camera_white"
+            app:layout_constraintTop_toTopOf="@+id/sb_btn"
+            app:layout_constraintBottom_toBottomOf="@+id/sb_btn"
+            app:layout_constraintLeft_toLeftOf="@id/sb_btn"
+            app:layout_constraintRight_toLeftOf="@+id/tv_btn_text"
+            android:id="@+id/iv_btnimg"
+            android:layout_width="22dp" android:layout_height="17dp"/>
+
+    <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tv_btn_text"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toRightOf="@+id/iv_btnimg"
+            app:layout_constraintTop_toTopOf="@+id/sb_btn"
+            app:layout_constraintBottom_toBottomOf="@+id/sb_btn"
+            app:layout_constraintRight_toRightOf="@+id/sb_btn"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:zrtb_title="卓锐证券开户"/>
+                app:zr_topbarTitle="卓锐证券开户"
+                />
 
         <ImageView
                 android:id="@+id/top_bg"

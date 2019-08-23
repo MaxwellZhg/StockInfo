@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.zhuorui.securities.base2app.util.StatusBarUtil;
 import me.yokeyword.fragmentation.ISupportActivity;
-import me.yokeyword.fragmentation.ISupportFragment;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * author : liuwei
@@ -40,7 +37,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
     public ZhuoRuiTopBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZhuoRuiTopBar);
-        String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zrtb_title);
+        String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zr_topbarTitle);
         setBackView(getBackView());
         setTitleView(getTitleView());
         setTitle(mTitle);

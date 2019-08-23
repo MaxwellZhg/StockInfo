@@ -392,7 +392,7 @@ public class Legend extends ComponentBase {
      * * A null label will start a group.
      * This will disable the feature that automatically calculates the legend
      * entries from the datasets.
-     * Call resetCustom() to re-enable automatic calculation (and then
+     * Call resetCustom() to rectangle_dottedline616161-enable automatic calculation (and then
      * notifyDataSetChanged() is needed to auto-calculate the legend again)
      */
     public void setCustom(LegendEntry[] entries) {
@@ -406,7 +406,7 @@ public class Legend extends ComponentBase {
      * * A null label will start a group.
      * This will disable the feature that automatically calculates the legend
      * entries from the datasets.
-     * Call resetCustom() to re-enable automatic calculation (and then
+     * Call resetCustom() to rectangle_dottedline616161-enable automatic calculation (and then
      * notifyDataSetChanged() is needed to auto-calculate the legend again)
      */
     public void setCustom(List<LegendEntry> entries) {

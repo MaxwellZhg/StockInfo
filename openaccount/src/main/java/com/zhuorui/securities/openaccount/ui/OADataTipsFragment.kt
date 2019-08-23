@@ -2,10 +2,10 @@ package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
@@ -28,7 +28,14 @@ import kotlinx.android.synthetic.main.fragment_oa_data_tips.*
 class OADataTipsFragment :
     AbsSwipeBackNetFragment<FragmentOaDataTipsBinding, OADataTipsViewModel, OADataTipsView, OADataTipsPresenter>(),
     OADataTipsView,
-    CompoundButton.OnCheckedChangeListener {
+    CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            R.id.open_btn ->{
+                start(OAAuthenticationFragment.newInstance())
+
+            }        }
+    }
 
     var mAdapter: OADataTipsAdapter? = null
 
@@ -40,12 +47,13 @@ class OADataTipsFragment :
 
     override fun init() {
         (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        rv.layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager?
+        rv.layoutManager = LinearLayoutManager(context)
         mAdapter = OADataTipsAdapter()
         rv.adapter = mAdapter
         cbox.setOnCheckedChangeListener(this)
         agreement.text = presenter?.getAgreementText(resources)
         agreement.movementMethod = LinkMovementMethod.getInstance()
+        open_btn.setOnClickListener(this)
     }
 
     override val layout: Int
