@@ -16,6 +16,7 @@ import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.AddTopicStockEvent
+import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.event.SynStockEvent
 import com.zhuorui.securities.market.model.StockMarketInfo
@@ -234,19 +235,23 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             Cache[IStockNet::class.java]?.delelte(request)
                 ?.enqueue(Network.IHCallBack<BaseResponse>(request))
         } else {
-            deleteTopicStock(item)
+            // 发送删除事件
+            item?.let { RxBus.getDefault().post(DeleteTopicStockEvent(it)) }
         }
     }
 
-    private fun deleteTopicStock(item: StockMarketInfo?) {
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onDeleteTopicStockEvent(event: DeleteTopicStockEvent) {
+        if (ts != null && !event.stockInfo.ts.equals(ts?.name)) return
+
         val datas = viewModel?.datas?.value
-        datas?.remove(item)
+        datas?.remove(event.stockInfo)
         // 刷新界面
         view?.notifyDataSetChanged(datas)
         // 取消订阅
-        val stockTopic = item?.ts?.let {
-            item.code?.let { it1 ->
-                item.type?.let { it2 ->
+        val stockTopic = event.stockInfo.ts?.let {
+            event.stockInfo.code?.let { it1 ->
+                event.stockInfo.type?.let { it2 ->
                     StockTopic(
                         StockTopicDataTypeEnum.price, it,
                         it1, it2
@@ -264,7 +269,9 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
         if (response.request is DeleteStockRequest) {
-            deleteTopicStock((response.request as DeleteStockRequest).custom as StockMarketInfo)
+            // 发送删除事件
+            RxBus.getDefault()
+                .post(DeleteTopicStockEvent((response.request as DeleteStockRequest).custom as StockMarketInfo))
         } else if (response.request is StickyOnTopStockRequest) {
             stickyOnTop((response.request as StickyOnTopStockRequest).custom as StockMarketInfo)
         } else if (response.request is SynStockRequest) {
