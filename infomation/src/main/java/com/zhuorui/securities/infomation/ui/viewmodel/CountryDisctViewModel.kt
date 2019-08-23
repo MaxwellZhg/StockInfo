@@ -1,8 +1,11 @@
 package com.zhuorui.securities.infomation.ui.viewmodel
 
+import androidx.databinding.ObservableField
+import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.infomation.ui.adapter.SortAdapter
+import com.zhuorui.securities.infomation.ui.model.JsonBean
 
 /**
  * Created by Maxwell.

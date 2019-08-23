@@ -9,10 +9,12 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.infomation.R
+import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginPwdRequest
+import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
@@ -48,14 +50,25 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginPwdResponse(response: UserLoginCodeResponse) {
         dialogshow(0)
-         view?.gotomain()
+        if (response.request is UserLoginPwdRequest) {
+            if (LocalAccountConfig.read().saveLogin(
+                    response.data.userId,
+                    response.data.phone,
+                    response.data.token
+                )
+            ) {
+                view?.gotomain()
+            }
+        }
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onErrorRes(response: ErrorResponse) {
         if (response.request is UserLoginPwdRequest) {
             dialogshow(0)
-            if(response.code=="010012"){
-                showPswError()
+            if(response.code=="010006"){
+                if(response.errordata?.loginCount==0) {
+                    showErrorDailog()
+                }
             }
         }
     }

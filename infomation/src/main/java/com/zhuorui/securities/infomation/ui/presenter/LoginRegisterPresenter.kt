@@ -12,6 +12,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.infomation.R
+import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
@@ -71,14 +72,22 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if(response.request is SendLoginCodeRequest){
                dialogshow(0)
+
             }
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginCodeRequest) {
                dialogshow(0)
-              view?.gotomain()
+            if (LocalAccountConfig.read().saveLogin(
+                    response.data.userId,
+                    response.data.phone,
+                    response.data.token
+                )
+            ) {
+                view?.gotomain()
             }
+          }
         }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginOutResponse(response: SendLoginCodeResponse) {
@@ -92,6 +101,9 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
              dialogshow(0)
             if(response.code=="010003"){
                 view?.gotopsw()
+            }
+            if(response.msg=="当天短信验证码超过次"){
+                showErrorDailog()
             }
         }
     }

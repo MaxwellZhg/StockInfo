@@ -31,6 +31,10 @@ public class SortAdapter extends BaseAdapter {
         this.list=list;
         notifyDataSetChanged();
     }
+    public void clearItems(){
+        this.list.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {

@@ -11,13 +11,13 @@ open class BaseResponse {
     var code: String? = null
     // 接口业务是否成功状态
     //  var status: Int = 0
-
+    var errordata:ErrorData?=null
     fun isSuccess(): Boolean {
         return code.equals(RES_OK)
     }
 
     fun toError(): ErrorResponse {
-        return ErrorResponse(request, code, msg)
+        return ErrorResponse(request, code, msg,errordata)
     }
 
     override fun toString(): String {
@@ -28,4 +28,7 @@ open class BaseResponse {
     companion object {
         val RES_OK = "000000"
     }
+    data class ErrorData(
+        val loginCount: Int
+    )
 }

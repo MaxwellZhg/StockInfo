@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.text.Editable
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
@@ -28,6 +29,7 @@ import com.zhuorui.securities.infomation.databinding.CountryCityFragmentBinding
 import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
 import android.text.TextUtils
+import android.text.TextWatcher
 
 
 /**
@@ -36,13 +38,17 @@ import android.text.TextUtils
  * Date: 2019/8/19
  * Desc:
  */
-class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView {
+class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView,TextWatcher {
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
     private var thread: Thread? = null
     private lateinit var jsonBean: ArrayList<JsonBean>
+    private var result: ArrayList<JsonBean>? = null
     private var isLoaded: Boolean = false
+    private var adapter:SortAdapter?=null
+    private var handler = Handler()
+    private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
     override val layout: Int
         get() = R.layout.country_city_fragment
     override val viewModelId: Int
@@ -82,6 +88,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
 
             }
         }
+        et_search.addTextChangedListener(this)
     }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
@@ -115,10 +122,10 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             Collections.sort(it, PinyinComparator())
-                            var adpter = SortAdapter(requireContext())
-                            adpter.addItems(it)
-                            lv_country.adapter = adpter
-                            adpter.notifyDataSetChanged()
+                            adapter = SortAdapter(requireContext())
+                            adapter?.addItems(it)
+                            lv_country.adapter = adapter
+                            adapter?.notifyDataSetChanged()
                         }
                     isLoaded = true
                 }
@@ -156,6 +163,37 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
     override fun onDestroy() {
         super.onDestroy()
         mHandler?.removeCallbacksAndMessages(null)
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+        if (p0.toString().isNotEmpty()) {
+
+            p0?.toString()?.trim()?.let {
+                handler.removeCallbacks(getTopicStockDataRunnable)
+                getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
+                handler.postDelayed(getTopicStockDataRunnable, 500)
+            }
+
+        }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
+        override fun run() {
+            result= presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!
+            if(result?.size!!>0) {
+                adapter?.clearItems()
+                adapter?.addItems(result)
+                adapter?.notifyDataSetChanged()
+            }
+        }
     }
 
 
