@@ -7,10 +7,8 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.infomation.ui.LoginRegisterFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -113,7 +111,6 @@ class TopicStockListFragment :
             StockPopupWindow.create(it, object : StockPopupWindow.CallBack {
                 override fun onStickyOnTop() {
                     presenter?.onStickyOnTop(item)
-                    ScreenCentralStateToast.show(getString(R.string.sticky_on_top_successful))
                 }
 
                 override fun onRemind() {
@@ -122,7 +119,6 @@ class TopicStockListFragment :
 
                 override fun onDelete() {
                     presenter?.onDelete(item)
-                    ScreenCentralStateToast.show(getString(R.string.delete_successful))
                 }
 
                 override fun onDismiss() {
@@ -145,14 +141,10 @@ class TopicStockListFragment :
         _mActivity?.runOnUiThread { mAdapter?.notifyItemChanged(index) }
     }
 
-    override fun notifyItemInserted(index: Int) {
-        _mActivity?.runOnUiThread { mAdapter?.notifyItemInserted(index) }
-    }
-
     /**
      * 加载推荐自选股列表
      */
-    private fun requestStocks() {
+    override fun requestStocks() {
         presenter?.requestStocks(currentPage, pageSize)
     }
 

@@ -60,9 +60,9 @@ dependencies {
     // dagger2
     kapt 'com.google.dagger:dagger-compiler:2.24'
     // kotlin
-    api "org.jetbrains.kotlin:kotlin-reflect:1.3.41"
+    api 'org.jetbrains.kotlin:kotlin-reflect:1.3.50'
     implementation project(path: ':commonwidget')
-    implementation files('libs\\pinyin4j-2.5.0.jar')
     // databinding
     kapt "com.android.databinding:compiler:$databinding_version"
+    implementation files('libs\\pinyin4j-2.5.0.jar')
 }

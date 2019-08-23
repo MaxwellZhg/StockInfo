@@ -203,7 +203,7 @@
                     android:textColor="@color/color_FFFFFFFF"
                     android:textSize="17sp"/>
 
-            <EditText android:layout_width="60dp"
+            <androidx.appcompat.widget.AppCompatEditText android:layout_width="60dp"
                       android:background="@color/color_000000"
                       android:layout_marginStart="10dp"
                       android:includeFontPadding="false"
@@ -248,7 +248,7 @@
                     android:textColor="@color/color_FFFFFFFF"
                     android:textSize="17sp"/>
 
-            <EditText android:layout_width="60dp"
+            <androidx.appcompat.widget.AppCompatEditText android:layout_width="60dp"
                       android:background="@color/color_000000"
                       android:layout_marginStart="10dp"
                       android:includeFontPadding="false"
@@ -338,7 +338,7 @@
                     android:textColor="@color/color_FFFFFFFF"
                     android:textSize="17sp"/>
 
-            <EditText android:layout_width="60dp"
+            <androidx.appcompat.widget.AppCompatEditText android:layout_width="60dp"
                       android:background="@color/color_000000"
                       android:layout_marginStart="19dp"
                       android:includeFontPadding="false"

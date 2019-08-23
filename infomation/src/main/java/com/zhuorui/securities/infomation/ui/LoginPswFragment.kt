@@ -37,7 +37,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: LoginPswPresenter
-        get() = LoginPswPresenter()
+        get() = LoginPswPresenter(requireContext())
     override val createViewModel: LoginPswViewModel?
         get() = ViewModelProviders.of(this).get(LoginPswViewModel::class.java)
     override val getView: LoginPswView
@@ -75,10 +75,11 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                    ToastUtil.instance.toast(R.string.input_psw_tips)
                    return
                }
+               //fe008700f25cb28940ca8ed91b23b354
                presenter?.requestLoginPwd(strphone,Md5Util.getMd5Str(password),"0086")
            }
            R.id.tv_forget_psw->{
-               start(ForgetPswFragment())
+               startWithPop(ForgetPswFragment())
            }
        }
     }

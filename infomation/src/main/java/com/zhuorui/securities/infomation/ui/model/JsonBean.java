@@ -26,6 +26,15 @@ public class JsonBean {
     private String en;
     private String cn;
     private String sortLetters;//显示数据拼音的首字母
+    private String sortEnletters;
+
+    public String getSortEnletters() {
+        return sortEnletters;
+    }
+
+    public void setSortEnletters(String sortEnletters) {
+        this.sortEnletters = sortEnletters;
+    }
 
     public String getCn_py() {
         return cn_py;
@@ -83,8 +92,15 @@ public class JsonBean {
         this.cn = cn;
     }
 
+    public String getSortLetters() {
+        return sortLetters;
+    }
 
-    public JsonBean(String cn_py, String hant, String hant_py, boolean used, String number, String en, String cn) {
+    public void setSortLetters(String sortLetters) {
+        this.sortLetters = sortLetters;
+    }
+
+    public JsonBean(String cn_py, String hant, String hant_py, boolean used, String number, String en, String cn, String sortLetters, String sortEnletters) {
         this.cn_py = cn_py;
         this.hant = hant;
         this.hant_py = hant_py;
@@ -92,6 +108,8 @@ public class JsonBean {
         this.number = number;
         this.en = en;
         this.cn = cn;
+        this.sortLetters = sortLetters;
+        this.sortEnletters = sortEnletters;
     }
 
     @Override
@@ -104,6 +122,8 @@ public class JsonBean {
                 ", number='" + number + '\'' +
                 ", en='" + en + '\'' +
                 ", cn='" + cn + '\'' +
+                ", sortLetters='" + sortLetters + '\'' +
+                ", sortEnletters='" + sortEnletters + '\'' +
                 '}';
     }
 }

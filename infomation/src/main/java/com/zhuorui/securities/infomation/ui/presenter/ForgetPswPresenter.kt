@@ -1,6 +1,10 @@
 package com.zhuorui.securities.infomation.ui.presenter
 
+import android.content.Context
+import android.view.View
+import com.zhuorui.commonwidget.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -9,10 +13,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.SendLoginCodeRequest
-import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.infomation.net.request.VerifForgetCodeRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
-import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
+import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.infomation.ui.view.ForgetPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.ForgetPswViewModel
 import java.util.*
@@ -23,10 +26,17 @@ import java.util.*
  * Date: 2019/8/21
  * Desc:
  */
-class ForgetPswPresenter : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
+class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
+    private val errorDialog by lazy {
+        ErrorTimesDialog(context,1)
+    }
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(context)
+    }
     override fun init() {
         super.init()
         view?.init()
@@ -70,6 +80,7 @@ class ForgetPswPresenter : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
     }
 
     fun requestSendForgetCode(str: kotlin.String) {
+        dialogshow(1)
         val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
         Cache[InfomationNet::class.java]?.sendForgetPwdCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -77,10 +88,24 @@ class ForgetPswPresenter : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
+          dialogshow(0)
+          startTimeCountDown()
+    }
 
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onErrorRes(response: ErrorResponse) {
+        if (response.request is SendLoginCodeRequest) {
+            dialogshow(0)
+            if(response.msg=="当天短信验证码超过次"){
+                showErrorDailog()
+            }
+        }else if(response.request is VerifForgetCodeRequest){
+            dialogshow(0)
+        }
     }
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
+        dialogshow(1)
         val request = VerifForgetCodeRequest(str, code, transactions.createTransaction())
         Cache[InfomationNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -88,7 +113,34 @@ class ForgetPswPresenter : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onVerifyForgetCodeResponse(response: SendLoginCodeResponse) {
         if(response.request is VerifForgetCodeRequest) {
+            dialogshow(0)
             view?.restpsw()
+        }
+    }
+
+    fun showErrorDailog() {
+        errorDialog.show()
+        errorDialog.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_verify->{
+                    errorDialog.dismiss()
+                }
+            }
+        })
+    }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
         }
     }
 }

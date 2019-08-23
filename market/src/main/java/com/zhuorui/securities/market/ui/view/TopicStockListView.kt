@@ -13,9 +13,9 @@ interface TopicStockListView : AbsView {
 
     fun init()
 
+    fun requestStocks()
+
     fun notifyDataSetChanged(list: List<StockMarketInfo>?)
 
     fun notifyItemChanged(index: Int)
-
-    fun notifyItemInserted(index: Int)
 }

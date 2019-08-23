@@ -1,6 +1,6 @@
 package com.zhuorui.securities.market.config
 
-import com.zhuorui.securities.market.model.StockTopic
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
 
@@ -12,16 +12,28 @@ import com.zhuorui.securities.base2app.infra.StorageInfra
  */
 class LocalStocksConfig : AbsConfig() {
 
-    private var stocks: ArrayList<StockTopic> = ArrayList()
+    private var stocks: MutableList<StockMarketInfo> = ArrayList()
 
-    fun getStocks(): ArrayList<StockTopic> {
-        return stocks
+    fun getStocks(): MutableList<StockMarketInfo> {
+        return ArrayList(stocks)
     }
 
     /**
      * 添加自选股
      */
-    fun add(stockInfo: StockTopic): Boolean {
+    fun replaceAll(list: MutableList<StockMarketInfo>): Boolean {
+        if (list.isNullOrEmpty()) {
+            return false
+        }
+        stocks.addAll(list)
+        write()
+        return true
+    }
+
+    /**
+     * 添加自选股
+     */
+    fun add(stockInfo: StockMarketInfo): Boolean {
         for (stock in stocks) {
             if (stock.code == stockInfo.code && stock.ts == stockInfo.ts) {
                 return false

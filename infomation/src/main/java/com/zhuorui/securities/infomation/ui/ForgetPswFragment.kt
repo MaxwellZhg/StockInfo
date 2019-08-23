@@ -36,7 +36,7 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: ForgetPswPresenter
-        get() = ForgetPswPresenter()
+        get() = ForgetPswPresenter(requireContext())
     override val createViewModel: ForgetPswViewModel?
         get() = ForgetPswViewModel()
     override val getView: ForgetPswView
@@ -64,7 +64,6 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                    ToastUtil.instance.toast(R.string.phone_tips)
                    return
                }
-               presenter?.startTimeCountDown()
                presenter?.requestSendForgetCode(strphone)
            }
            R.id.tv_btn_commit->{
@@ -76,11 +75,11 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                    ToastUtil.instance.toast(R.string.phone_code_tips)
                    return
                }
-               start(RestPswFragment.newInstance(strphone,phonecode))
-              // presenter?.requestVerifyForgetCode(strphone,phonecode)
+              //
+               presenter?.requestVerifyForgetCode(strphone,phonecode)
            }
            R.id.tv_phone_code_login->{
-               start(LoginRegisterFragment.newInstance())
+               startWithPop(LoginRegisterFragment.newInstance())
            }
            R.id.iv_back->{
                pop()
@@ -109,7 +108,7 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
 
     }
     override fun restpsw() {
-       start(RestPswFragment())
+        startWithPop(RestPswFragment.newInstance(strphone,phonecode))
     }
 
 

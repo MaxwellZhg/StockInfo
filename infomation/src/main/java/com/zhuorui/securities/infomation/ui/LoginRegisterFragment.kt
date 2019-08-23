@@ -58,7 +58,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override val viewModelId: Int
         get() =  BR.viewmodel
     override val createPresenter: LoginRegisterPresenter
-        get() = LoginRegisterPresenter()
+        get() = LoginRegisterPresenter(requireContext())
     override val createViewModel: LoginRegisterViewModel?
         get() = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
     override val getView: LoginRegisterView
@@ -85,7 +85,6 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                     ToastUtil.instance.toast(R.string.phone_tips)
                     return
                 }
-                presenter?.startTimeCountDown()
                 presenter?.requestSendLoginCode(strphone)
             }
             R.id.iv_cancle -> {

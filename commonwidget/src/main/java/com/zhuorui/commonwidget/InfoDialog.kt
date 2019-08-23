@@ -1,11 +1,10 @@
-package com.zhuorui.securities.infomation.ui.dailog
+package com.zhuorui.commonwidget
 
 import android.app.Dialog
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import com.zhuorui.securities.infomation.R
 import kotlinx.android.synthetic.main.item_dailog_info.*
 
 /**
@@ -16,17 +15,23 @@ import kotlinx.android.synthetic.main.item_dailog_info.*
  */
 
 class InfoDialog :Dialog {
+
     constructor(context: Context) : this(context, 0)
+
     constructor(context: Context, themeResId: Int) : super(context, R.style.dialog) {
         setContentView(R.layout.item_dailog_info)
+
         window!!.setGravity(Gravity.CENTER)
         window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(false)
     }
+
     public fun setOnclickListener(listener: View.OnClickListener){
+
         if (rl_gotomain !== null){
             rl_gotomain.setOnClickListener(listener)
         }
+
         if (rl_completeinfo !== null){
             rl_completeinfo.setOnClickListener(listener)
         }

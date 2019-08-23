@@ -12,7 +12,8 @@ class UserLoginCodeResponse(val data:Data) : BaseResponse(){
     data class Data(
         val userId: String,
         val token :String,
-        val phone:String
+        val phone:String,
+        val loginCount: Int
     )
 
 

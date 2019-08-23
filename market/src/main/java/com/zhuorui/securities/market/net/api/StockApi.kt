@@ -13,7 +13,7 @@ interface StockApi {
         /**
          * 同步自选股
          */
-        const val SYN = "/stockmarket/api/stock/selected/v1/view/syn"
+        const val SYN = "as_market/api/stock/selected/v1/view/syn"
 
         /**
          * 搜索股票
@@ -23,17 +23,17 @@ interface StockApi {
         /**
          * 添加自选股
          */
-        const val ADD = "/stockmarket/api/stock/selected/view/v1/add"
+        const val ADD = "as_market/api/stock/selected/v1/view/add"
 
         /**
          * 删除自选股
          */
-        const val DEL = "/stockmarket/api/stock/selected/v1/view/del"
+        const val DEL = "as_market/api/stock/selected/v1/view/del"
 
         /**
          * 置顶自选股
          */
-        const val TOP = "/stockmarket/api/stock/selected/v1/view/top"
+        const val TOP = "as_market/api/stock/selected/v1/view/top"
 
         /**
          * 行情（即K线实时数据）

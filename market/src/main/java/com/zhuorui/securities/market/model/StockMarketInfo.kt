@@ -7,6 +7,8 @@ package com.zhuorui.securities.market.model
  *    desc   : 自选股行情信息
  */
 class StockMarketInfo : BaseStockMarket() {
+    // 登录后拉取列表会返回id
+    var id: String?= null
     // 名称
     var name: String? = null
     // 排序

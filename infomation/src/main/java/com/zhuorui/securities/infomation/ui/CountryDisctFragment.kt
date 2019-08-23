@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.text.Editable
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
@@ -25,7 +26,12 @@ import me.jessyan.autosize.utils.LogUtils
 import org.json.JSONArray
 import java.util.*
 import com.zhuorui.securities.infomation.databinding.CountryCityFragmentBinding
+import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
+import android.text.TextUtils
+import android.text.TextWatcher
+import kotlin.collections.ArrayList
+
 
 /**
  * Created by Maxwell.
@@ -33,13 +39,17 @@ import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
  * Date: 2019/8/19
  * Desc:
  */
-class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView {
+class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView,TextWatcher {
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
     private var thread: Thread? = null
-    private lateinit var jsonBean: ArrayList<JsonBean>
+    private lateinit var jsonBean: LinkedList<JsonBean>
+    private var result: LinkedList<JsonBean> = LinkedList()
     private var isLoaded: Boolean = false
+    private var adapter:SortAdapter?=null
+    private var handler = Handler()
+    private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
     override val layout: Int
         get() = R.layout.country_city_fragment
     override val viewModelId: Int
@@ -61,6 +71,25 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
 
     override fun init() {
         iv_back.setOnClickListener(this)
+        quickindexbar.setonTouchLetterListener{
+            for (i in 0 until jsonBean.size) {
+
+                val city = jsonBean[i]
+
+                val l = city.sortLetters
+
+                if (TextUtils.equals(it, l)) {
+
+                    //匹配成功
+                    lv_country.setSelection(i)
+
+                    break
+
+                }
+
+            }
+        }
+        et_search.addTextChangedListener(this)
     }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
@@ -93,10 +122,16 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            var adpter = SortAdapter(requireContext())
-                            adpter.addItems(it)
-                            lv_country.adapter = adpter
-                            adpter.notifyDataSetChanged()
+                            Collections.sort(it, PinyinComparator())
+                            adapter = SortAdapter(requireContext())
+                            it.addFirst(JsonBean("meiguo","美國","meiguo",false,"+1","United States of America","美国","常用地区","U"))
+                            it.addFirst(JsonBean("zhongguotaiwan","中國台灣","zhongguotaiwan",false,"+886","Taiwan,China","中国台湾","常用地区","T"))
+                            it.addFirst(JsonBean("zhongguoaomen","中國澳門","zhongguoaomen",false,"+853","Macao,China","中国澳门","常用地区","M"))
+                            it.addFirst(JsonBean("zhongguoxianggang","中國香港","zhongguoxianggang",false,"+852","Hongkong,China","中国香港","常用地区","H"))
+                            it.addFirst(JsonBean("zhongguo","中國内地","zhongguo",false,"+86","China","中国内地","常用地区","C"))
+                            adapter?.addItems(it)
+                            lv_country.adapter = adapter
+                            adapter?.notifyDataSetChanged()
                         }
                     isLoaded = true
                 }
@@ -113,14 +148,14 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
         jsonBean = parseData(JsonData)//用Gson 转成实体
     }
 
-    private fun parseData(result: String): ArrayList<JsonBean> {//Gson 解析
-        val detail = ArrayList<JsonBean>()
+    private fun parseData(result: String): LinkedList<JsonBean> {//Gson 解析
+        val detail = LinkedList<JsonBean>()
         try {
             val data = JSONArray(result)
             val gson = Gson()
             for (i in 0 until data.length()) {
-                val entity = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
-                detail.add(entity as JsonBean)
+                val entity:JsonBean = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
+                detail.add(JsonBean(entity.cn_py,entity.hant,entity.hant_py,entity.isUsed,entity.number,entity.en,entity.cn,entity.cn_py.substring(0,1).toUpperCase(),entity.en.substring(0,1).toUpperCase()))
             }
             mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS)
         } catch (e: Exception) {
@@ -134,6 +169,42 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
     override fun onDestroy() {
         super.onDestroy()
         mHandler?.removeCallbacksAndMessages(null)
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+        if (p0.toString().isNotEmpty()) {
+
+            p0?.toString()?.trim()?.let {
+                handler.removeCallbacks(getTopicStockDataRunnable)
+                getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
+                handler.postDelayed(getTopicStockDataRunnable, 500)
+            }
+
+        }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    private inner class GetTopicStockDataRunnable(var keyWord: String) : Runnable {
+        override fun run() {
+             result.clear()
+             result.addAll(presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
+            if(result?.size!!>0) {
+                adapter?.clearItems()
+                adapter?.addItems(result)
+                adapter?.notifyDataSetChanged()
+            }else{
+                adapter?.clearItems()
+                adapter?.addItems(jsonBean)
+                adapter?.notifyDataSetChanged()
+            }
+        }
     }
 
 

@@ -1,5 +1,7 @@
 package com.zhuorui.securities.market.ui
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
 import com.zhuorui.securities.market.BR
@@ -8,6 +10,7 @@ import com.zhuorui.securities.market.databinding.FragmentRemindSettingBinding
 import com.zhuorui.securities.market.ui.presenter.RemindSettingPresenter
 import com.zhuorui.securities.market.ui.view.RemindSettingView
 import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
+import kotlinx.android.synthetic.main.fragment_remind_setting.*
 
 /**
  *    author : PengXianglin
@@ -17,7 +20,7 @@ import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
  */
 class RemindSettingFragment :
     AbsSwipeBackEventFragment<FragmentRemindSettingBinding, RemindSettingViewModel, RemindSettingView, RemindSettingPresenter>(),
-    RemindSettingView {
+    RemindSettingView, View.OnClickListener {
 
     companion object {
         fun newInstance(): RemindSettingFragment {
@@ -42,5 +45,20 @@ class RemindSettingFragment :
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        iv_back.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.iv_back-> {
+                pop()
+            }
+            else -> {
+            }
+        }
     }
 }

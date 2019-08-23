@@ -11,6 +11,7 @@ import com.zhuorui.securities.infomation.R;
 import com.zhuorui.securities.infomation.ui.model.JsonBean;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,13 +23,17 @@ import java.util.List;
 public class SortAdapter extends BaseAdapter {
     private Context context;
 
-    private ArrayList<JsonBean> list;
+    private LinkedList<JsonBean> list=new LinkedList<>();
 
     public SortAdapter(Context context) {
         this.context = context;
     }
-    public void addItems(ArrayList<JsonBean> list){
-        this.list=list;
+    public void addItems(LinkedList<JsonBean> list){
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+    public void clearItems(){
+        this.list.clear();
         notifyDataSetChanged();
     }
 
@@ -56,12 +61,12 @@ public class SortAdapter extends BaseAdapter {
 
         //设置数据
          JsonBean jsonBean = list.get(position);
-        holder.tv_contry.setText(jsonBean.getHant());
+        holder.tv_contry.setText(jsonBean.getCn());
         holder.tv_contry_code.setText(jsonBean.getNumber());
-        String currentWord = jsonBean.getEn().charAt(0) + "";
+        String currentWord = jsonBean.getSortLetters() + "";
         //获取上一个item的首字母
         if (position > 0) {
-            String lastWord = list.get(position - 1).getEn().charAt(0) + "";
+            String lastWord = list.get(position - 1).getSortLetters() + "";
             if (currentWord.equals(lastWord)) {
                 //首字母相同
                 holder.tv_frist_tips.setVisibility(View.GONE);
@@ -75,6 +80,7 @@ public class SortAdapter extends BaseAdapter {
             }
         } else {
             //第一个
+            holder.rl_tips.setVisibility(View.VISIBLE);
             holder.tv_frist_tips.setVisibility(View.VISIBLE);
             holder.tv_frist_tips.setText(currentWord);
         }
