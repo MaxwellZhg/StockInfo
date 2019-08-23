@@ -14,5 +14,5 @@ open class SocketResponse {
     var respId: String? = null
 
     val isSuccessful: Boolean
-        get() = code != null && code == "0000"
+        get() = code != null && code == "000000"
 }
