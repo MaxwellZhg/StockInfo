@@ -16,17 +16,23 @@ import kotlinx.android.synthetic.main.item_dailog_info.*
  */
 
 class InfoDialog :Dialog {
+
     constructor(context: Context) : this(context, 0)
+
     constructor(context: Context, themeResId: Int) : super(context, R.style.dialog) {
         setContentView(R.layout.item_dailog_info)
+
         window!!.setGravity(Gravity.CENTER)
         window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         setCanceledOnTouchOutside(false)
     }
+
     public fun setOnclickListener(listener: View.OnClickListener){
+
         if (rl_gotomain !== null){
             rl_gotomain.setOnClickListener(listener)
         }
+
         if (rl_completeinfo !== null){
             rl_completeinfo.setOnClickListener(listener)
         }
