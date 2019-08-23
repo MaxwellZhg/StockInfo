@@ -28,12 +28,12 @@ interface StockApi {
         /**
          * 删除自选股
          */
-        const val DEL = "/stockmarket/api/stock/selected/v1/view/del"
+        const val DEL = "as_market/api/stock/selected/v1/view/del"
 
         /**
          * 置顶自选股
          */
-        const val TOP = "/stockmarket/api/stock/selected/v1/view/top"
+        const val TOP = "as_market/api/stock/selected/v1/view/top"
 
         /**
          * 行情（即K线实时数据）

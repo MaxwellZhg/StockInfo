@@ -1,8 +1,8 @@
 package com.zhuorui.securities.market.net
 
+import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.market.net.api.StockApi
-import com.zhuorui.securities.market.net.request.RecommendStocklistRequest
-import com.zhuorui.securities.market.net.request.StockSearchRequest
+import com.zhuorui.securities.market.net.request.*
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.net.response.StockSearchResponse
 import retrofit2.Call
@@ -18,6 +18,11 @@ interface IStockNet {
     fun search(@Body request: StockSearchRequest): Call<StockSearchResponse>
 
     @POST(StockApi.ADD)
-    fun add(@Body request: StockSearchRequest): Call<StockSearchResponse>
+    fun collection(@Body request: CollectionStockRequest): Call<BaseResponse>
 
+    @POST(StockApi.DEL)
+    fun delelte(@Body request: DeleteStockRequest): Call<BaseResponse>
+
+    @POST(StockApi.TOP)
+    fun stickyOnTop(@Body request: StickyOnTopStockRequest): Call<BaseResponse>
 }
