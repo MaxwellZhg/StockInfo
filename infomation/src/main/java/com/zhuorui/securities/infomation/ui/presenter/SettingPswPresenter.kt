@@ -42,15 +42,13 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginPwdResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginRegisterRequest) {
-            if (response.code == "000000") {
-                if (LocalAccountConfig.read().saveLogin(
-                        response.data.userId,
-                        response.data.phone,
-                        response.data.token
-                    )
-                ) {
-                    view?.showDialog()
-                }
+            if (LocalAccountConfig.read().saveLogin(
+                    response.data.userId,
+                    response.data.phone,
+                    response.data.token
+                )
+            ) {
+                view?.showDialog()
             }
         }
     }
