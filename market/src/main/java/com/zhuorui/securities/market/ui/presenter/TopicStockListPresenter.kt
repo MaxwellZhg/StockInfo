@@ -36,6 +36,7 @@ import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
 import com.zhuorui.securities.market.util.MathUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -194,7 +195,17 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
 
             datas.add(stock)
 
-            view?.notifyDataSetChanged(datas)
+            if (viewModel?.datas?.value.isNullOrEmpty()) {
+                val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                    viewModel?.datas?.value = datas
+                    emitter.onNext(true)
+                    emitter.onComplete()
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+                disposables.add(disposable)
+            } else {
+                view?.notifyDataSetChanged(datas)
+            }
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
 
             // TODO 保存本地数据
