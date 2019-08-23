@@ -1,7 +1,6 @@
 package com.zhuorui.securities.infomation.ui
 
 import android.os.Bundle
-import android.text.InputFilter
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -11,16 +10,11 @@ import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.infomation.BR
 import com.zhuorui.securities.infomation.R
-import com.zhuorui.securities.infomation.ui.dailog.InfoDialog
 import com.zhuorui.securities.infomation.ui.presenter.SettingPswPresenter
 import com.zhuorui.securities.infomation.ui.view.SettingPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
-import kotlinx.android.synthetic.main.item_dailog_info.*
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import kotlinx.android.synthetic.main.setting_psw_fragment.*
 import com.zhuorui.securities.infomation.databinding.SettingPswFragmentBinding
-import com.zhuorui.securities.infomation.ui.config.LocalLoginResConfig
-import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.

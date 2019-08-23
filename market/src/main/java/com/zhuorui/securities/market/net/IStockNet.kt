@@ -17,4 +17,7 @@ interface IStockNet {
     @POST(StockApi.SEARCH_TOPIC)
     fun search(@Body request: StockSearchRequest): Call<StockSearchResponse>
 
+    @POST(StockApi.ADD)
+    fun add(@Body request: StockSearchRequest): Call<StockSearchResponse>
+
 }
