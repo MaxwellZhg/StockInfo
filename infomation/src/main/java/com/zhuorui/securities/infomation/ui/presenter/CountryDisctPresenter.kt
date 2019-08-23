@@ -5,6 +5,7 @@ import com.zhuorui.securities.infomation.ui.model.JsonBean
 import com.zhuorui.securities.infomation.ui.view.CountryDisctView
 import com.zhuorui.securities.infomation.ui.viewmodel.CountryDisctViewModel
 import com.zhuorui.securities.infomation.util.PinyinUtils
+import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -14,32 +15,59 @@ import java.util.regex.Pattern
  * Desc:
  */
 class CountryDisctPresenter : AbsNetPresenter<CountryDisctView, CountryDisctViewModel>(){
-   var list:ArrayList<JsonBean> = ArrayList()
+   var list:LinkedList<JsonBean> = LinkedList()
     lateinit var searchStr:String
     override fun init() {
         super.init()
         view?.init()
     }
 
-    fun deatilJson(detail:ArrayList<JsonBean>,str:String,type:Int):ArrayList<JsonBean>{
-        searchStr = if(type==1) {
+    fun deatilJson(detail: LinkedList<JsonBean>, str:String, type:Int):LinkedList<JsonBean>{
+         list.clear()
+         when(type){
+             1->{
+                 val pinyin = PinyinUtils.getPingYin(str)
+                  searchStr=pinyin.substring(0, 1).toUpperCase()
+             }
+             2->{
+                 searchStr=str.substring(0, 1).toUpperCase()
+             }
+             3->{
+                 searchStr=str
+             }
+         }
+                /*if(type==1) {
             val pinyin = PinyinUtils.getPingYin(str)
             pinyin.substring(0, 1).toUpperCase()
         }else{
             str
-        }
+        }*/
         for(jsonbean in detail){
-           if(jsonbean.sortLetters==searchStr){
-               list.add(jsonbean)
-           }
+          when(type){
+              1->{
+                  if(jsonbean.sortLetters==searchStr&&jsonbean.cn.contains(str)){
+                      list.add(jsonbean)
+                  }
+              }
+              2->{
+                  if(jsonbean.sortEnletters==searchStr&&jsonbean.en.contains(str)){
+                      list.add(jsonbean)
+                  }
+              }
+              3->{
+                  if(jsonbean.number.contains(searchStr)){
+                      list.add(jsonbean)
+                  }
+              }
+          }
         }
         return list
     }
 
     fun judgeSerachType(str: String) : Int{
         val pattern1 = "^[\\u4E00-\\u9FA5]+\$"
-        val pattern2 ="^\\+?[1-9][0-9]*\$"
-        val pattern3 ="\"^[a-zA-Z]+\$\""
+        val pattern2 ="^[A-Za-z]+\$"
+        val pattern3 ="^\\+?[1-9][0-9]*\$"
         //用正则式匹配文本获取匹配器
         val matcher1 = Pattern.compile(pattern1).matcher(str)
         val matcher2 = Pattern.compile(pattern2).matcher(str)

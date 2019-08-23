@@ -30,6 +30,7 @@ import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
 import android.text.TextUtils
 import android.text.TextWatcher
+import kotlin.collections.ArrayList
 
 
 /**
@@ -43,8 +44,8 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
     private var thread: Thread? = null
-    private lateinit var jsonBean: ArrayList<JsonBean>
-    private var result: ArrayList<JsonBean>? = null
+    private lateinit var jsonBean: LinkedList<JsonBean>
+    private var result: LinkedList<JsonBean> = LinkedList()
     private var isLoaded: Boolean = false
     private var adapter:SortAdapter?=null
     private var handler = Handler()
@@ -123,6 +124,11 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
                         .subscribe {
                             Collections.sort(it, PinyinComparator())
                             adapter = SortAdapter(requireContext())
+                            it.addFirst(JsonBean("meiguo","美國","meiguo",false,"+1","United States of America","美国","常用地区","U"))
+                            it.addFirst(JsonBean("zhongguotaiwan","中國台灣","zhongguotaiwan",false,"+886","Taiwan,China","中国台湾","常用地区","T"))
+                            it.addFirst(JsonBean("zhongguoaomen","中國澳門","zhongguoaomen",false,"+853","Macao,China","中国澳门","常用地区","M"))
+                            it.addFirst(JsonBean("zhongguoxianggang","中國香港","zhongguoxianggang",false,"+852","Hongkong,China","中国香港","常用地区","H"))
+                            it.addFirst(JsonBean("zhongguo","中國内地","zhongguo",false,"+86","China","中国内地","常用地区","C"))
                             adapter?.addItems(it)
                             lv_country.adapter = adapter
                             adapter?.notifyDataSetChanged()
@@ -142,14 +148,14 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
         jsonBean = parseData(JsonData)//用Gson 转成实体
     }
 
-    private fun parseData(result: String): ArrayList<JsonBean> {//Gson 解析
-        val detail = ArrayList<JsonBean>()
+    private fun parseData(result: String): LinkedList<JsonBean> {//Gson 解析
+        val detail = LinkedList<JsonBean>()
         try {
             val data = JSONArray(result)
             val gson = Gson()
             for (i in 0 until data.length()) {
                 val entity:JsonBean = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
-                detail.add(JsonBean(entity.cn_py,entity.hant,entity.hant_py,entity.isUsed,entity.number,entity.en,entity.cn))
+                detail.add(JsonBean(entity.cn_py,entity.hant,entity.hant_py,entity.isUsed,entity.number,entity.en,entity.cn,entity.cn_py.substring(0,1).toUpperCase(),entity.en.substring(0,1).toUpperCase()))
             }
             mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS)
         } catch (e: Exception) {
@@ -185,12 +191,17 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
 
     }
 
-    private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
+    private inner class GetTopicStockDataRunnable(var keyWord: String) : Runnable {
         override fun run() {
-            result= presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!
+             result.clear()
+             result.addAll(presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
             if(result?.size!!>0) {
                 adapter?.clearItems()
                 adapter?.addItems(result)
+                adapter?.notifyDataSetChanged()
+            }else{
+                adapter?.clearItems()
+                adapter?.addItems(jsonBean)
                 adapter?.notifyDataSetChanged()
             }
         }

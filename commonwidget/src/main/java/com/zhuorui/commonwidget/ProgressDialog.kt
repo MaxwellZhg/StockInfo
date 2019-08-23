@@ -1,13 +1,10 @@
-package com.zhuorui.securities.infomation.ui.dailog
+package com.zhuorui.commonwidget
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.drawable.AnimationDrawable
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import com.zhuorui.securities.infomation.R
 
 /**
  * Created by Maxwell.
@@ -61,15 +58,7 @@ class ProgressDialog(context: Context): Dialog(context, R.style.loading_dialog_s
      */
 
     private fun startAnimation() {
-        /* if (messageView != null){*/
         val rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
         findViewById<View>(R.id.net_iv_loading).startAnimation(rotate)
-        /*  }*//*else{
-            val drawable = findViewById<ImageView>(R.id.net_iv_loading).drawable as? AnimationDrawable
-            drawable?.let {
-                drawable.start()
-            }
-        }
-    }*/
     }
 }

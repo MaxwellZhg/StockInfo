@@ -1,6 +1,8 @@
 package com.zhuorui.securities.infomation.ui.presenter
 import android.content.Context
+import com.zhuorui.commonwidget.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -10,7 +12,6 @@ import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.RestLoginPswRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
-import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.RestPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.RestPswViewModel
 import java.util.regex.Pattern
@@ -104,6 +105,13 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         if (response.request is RestLoginPswRequest) {
              dialogshow(0)
               view?.gotopswlogin()
+        }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onErrorRes(response: ErrorResponse) {
+        if (response.request is RestLoginPswRequest) {
+            dialogshow(0)
         }
     }
 

@@ -2,7 +2,10 @@ package com.zhuorui.securities.infomation.ui.presenter
 
 import android.content.Context
 import android.view.View
+import com.zhuorui.commonwidget.InfoDialog
+import com.zhuorui.commonwidget.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -14,8 +17,6 @@ import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.config.LocalAccountConfig
-import com.zhuorui.securities.infomation.ui.dailog.InfoDialog
-import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.SettingPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
 
@@ -62,6 +63,14 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
             }
         }
     }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onErrorRes(response: ErrorResponse) {
+        if (response.request is UserLoginRegisterRequest) {
+            dialogshow(0)
+        }
+    }
+
 
     fun showDailog() {
         infodialog.show()

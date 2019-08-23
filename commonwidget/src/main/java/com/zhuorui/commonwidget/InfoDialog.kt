@@ -1,11 +1,10 @@
-package com.zhuorui.securities.infomation.ui.dailog
+package com.zhuorui.commonwidget
 
 import android.app.Dialog
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import com.zhuorui.securities.infomation.R
 import kotlinx.android.synthetic.main.item_dailog_info.*
 
 /**
