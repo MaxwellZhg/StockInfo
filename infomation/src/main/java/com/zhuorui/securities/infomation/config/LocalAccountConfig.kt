@@ -19,6 +19,13 @@ class LocalAccountConfig : AbsConfig() {
     }
 
     /**
+     * 是否登录
+     */
+    fun isLogin():Boolean{
+        return accountInfo.token?.isNotEmpty()!!
+    }
+
+    /**
      * 更新登录信息
      */
     fun saveLogin(userId: String, phone: String, token: String): Boolean {
