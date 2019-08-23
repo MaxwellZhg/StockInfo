@@ -18,7 +18,7 @@ import com.zhuorui.securities.market.net.request.RecommendStocklistRequest
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
-import com.zhuorui.securities.market.ui.view.TopicStockListFragmentView
+import com.zhuorui.securities.market.ui.view.TopicStockListView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
 import com.zhuorui.securities.market.util.MathUtil
 
@@ -29,7 +29,7 @@ import com.zhuorui.securities.market.util.MathUtil
  *    desc   :
  */
 @Suppress("NAME_SHADOWING")
-class TopicStockListFragmentPresenter : AbsNetPresenter<TopicStockListFragmentView, TopicStockListViewModel>() {
+class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockListViewModel>() {
 
     private var ts: StockTsEnum? = null
 

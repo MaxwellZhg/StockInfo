@@ -9,7 +9,7 @@ import com.zhuorui.securities.market.model.StockMarketInfo
  *    date   : 2019/8/19 17:08
  *    desc   :
  */
-interface TopicStockListFragmentView : AbsView {
+interface TopicStockListView : AbsView {
 
     fun init()
 

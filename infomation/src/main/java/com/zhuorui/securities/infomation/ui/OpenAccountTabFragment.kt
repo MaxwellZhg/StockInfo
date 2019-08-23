@@ -1,22 +1,16 @@
 package com.zhuorui.securities.infomation.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.securities.infomation.R
-import com.zhuorui.securities.infomation.BR
-import com.zhuorui.securities.infomation.ui.contract.OpenAccountTabContract
-import com.zhuorui.securities.infomation.ui.presenter.OpenAccountTabPresenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.infomation.BR
+import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.databinding.OpenAccountFragmentBinding
+import com.zhuorui.securities.infomation.ui.presenter.OpenAccountTabPresenter
 import com.zhuorui.securities.infomation.ui.view.OpenAccountTabView
 import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
-import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
-import kotlinx.android.synthetic.main.open_account_fragment.*
-import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.

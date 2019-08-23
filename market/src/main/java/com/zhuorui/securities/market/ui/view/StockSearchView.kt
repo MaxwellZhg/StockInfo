@@ -9,7 +9,7 @@ import com.zhuorui.securities.market.net.response.StockSearchResponse
  *    date   : 2019/8/19 16:15
  *    desc   :
  */
-interface StockSearchFragmentView : AbsView {
+interface StockSearchView : AbsView {
 
     fun init()
 

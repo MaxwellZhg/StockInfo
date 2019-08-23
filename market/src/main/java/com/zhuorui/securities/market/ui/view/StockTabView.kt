@@ -10,7 +10,7 @@ import java.util.ArrayList
  *    date   : 2019/8/19 15:43
  *    desc   :
  */
-interface StockTabFragmentView : AbsView {
+interface StockTabView : AbsView {
 
     fun init(fragments: ArrayList<StockTabViewModel.PageInfo>)
 

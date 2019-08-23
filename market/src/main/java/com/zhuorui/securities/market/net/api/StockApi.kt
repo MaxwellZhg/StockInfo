@@ -23,7 +23,7 @@ interface StockApi {
         /**
          * 添加自选股
          */
-        const val ADD = "/stockmarket/api/stock/selected/view/v1/add"
+        const val ADD = "as_market/api/stock/selected/v1/view/add"
 
         /**
          * 删除自选股

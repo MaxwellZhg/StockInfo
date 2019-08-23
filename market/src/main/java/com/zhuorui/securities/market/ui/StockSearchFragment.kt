@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -14,11 +13,9 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentTopicStockSearchBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
-import com.zhuorui.securities.market.net.response.StockSearchResponse
-import com.zhuorui.securities.market.ui.presenter.StockSearchFragmentPresenter
-import com.zhuorui.securities.market.ui.view.StockSearchFragmentView
+import com.zhuorui.securities.market.ui.presenter.StockSearchPresenter
+import com.zhuorui.securities.market.ui.view.StockSearchView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel
-import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
 
 /**
@@ -28,8 +25,8 @@ import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
  * Desc:自选股搜索
  */
 class StockSearchFragment :
-    AbsSwipeBackNetFragment<FragmentTopicStockSearchBinding, StockSearchViewModel, StockSearchFragmentView, StockSearchFragmentPresenter>(),
-    StockSearchFragmentView, TextWatcher, SearchStocksAdapter.OnAddTopicClickItemCallback,
+    AbsSwipeBackNetFragment<FragmentTopicStockSearchBinding, StockSearchViewModel, StockSearchView, StockSearchPresenter>(),
+    StockSearchView, TextWatcher, SearchStocksAdapter.OnAddTopicClickItemCallback,
     BaseListAdapter.OnClickItemCallback<SearchStockInfo> {
 
     private var type: Int = 0
@@ -59,13 +56,13 @@ class StockSearchFragment :
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: StockSearchFragmentPresenter
-        get() = StockSearchFragmentPresenter()
+    override val createPresenter: StockSearchPresenter
+        get() = StockSearchPresenter()
 
     override val createViewModel: StockSearchViewModel?
         get() = ViewModelProviders.of(this).get(StockSearchViewModel::class.java)
 
-    override val getView: StockSearchFragmentView get() = this
+    override val getView: StockSearchView get() = this
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true

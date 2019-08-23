@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
@@ -12,8 +13,8 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
-import com.zhuorui.securities.market.ui.presenter.StockTabFragmentPresenter
-import com.zhuorui.securities.market.ui.view.StockTabFragmentView
+import com.zhuorui.securities.market.ui.presenter.StockTabPresenter
+import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -33,8 +34,8 @@ import java.util.*
  *    desc   : 主页中的自选股Tab页面
  */
 class StockTabFragment :
-    AbsBackFinishFragment<FragmentStockTabBinding, StockTabViewModel, StockTabFragmentView, StockTabFragmentPresenter>(),
-    View.OnClickListener, StockTabFragmentView {
+    AbsBackFinishFragment<FragmentStockTabBinding, StockTabViewModel, StockTabView, StockTabPresenter>(),
+    View.OnClickListener, StockTabView {
 
     private var mfragment: ArrayList<StockTabViewModel.PageInfo>? = null
     private var toggleStockTabShowing = false
@@ -51,13 +52,13 @@ class StockTabFragment :
     override val viewModelId: Int
         get() = BR.viewModel
 
-    override val createPresenter: StockTabFragmentPresenter
-        get() = StockTabFragmentPresenter()
+    override val createPresenter: StockTabPresenter
+        get() = StockTabPresenter()
 
     override val createViewModel: StockTabViewModel?
-        get() = StockTabViewModel()
+        get() = ViewModelProviders.of(this).get(StockTabViewModel::class.java)
 
-    override val getView: StockTabFragmentView
+    override val getView: StockTabView
         get() = this
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {

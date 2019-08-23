@@ -11,7 +11,7 @@ import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
-import com.zhuorui.securities.infomation.ui.config.LocalLoginResConfig
+import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.ui.dailog.InfoDialog
 import com.zhuorui.securities.infomation.ui.view.SettingPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
@@ -22,7 +22,7 @@ import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
  * Date: 2019/8/20
  * Desc:
  */
-class SettingPswPresenter(context: Context) :AbsNetPresenter<SettingPswView,SettingPswViewModel>() {
+class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, SettingPswViewModel>() {
     private val infodialog: InfoDialog by lazy {
 
         InfoDialog(context)
@@ -43,7 +43,12 @@ class SettingPswPresenter(context: Context) :AbsNetPresenter<SettingPswView,Sett
     fun onSendLoginPwdResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginRegisterRequest) {
             if (response.code == "000000") {
-                if (LocalLoginResConfig.read().add(response)) {
+                if (LocalAccountConfig.read().saveLogin(
+                        response.data.userId,
+                        response.data.phone,
+                        response.data.token
+                    )
+                ) {
                     view?.showDialog()
                 }
             }
@@ -52,13 +57,13 @@ class SettingPswPresenter(context: Context) :AbsNetPresenter<SettingPswView,Sett
 
     fun showDailog() {
         infodialog.show()
-        infodialog.setOnclickListener( View.OnClickListener {
-            when(it.id){
-                R.id.rl_gotomain->{
+        infodialog.setOnclickListener(View.OnClickListener {
+            when (it.id) {
+                R.id.rl_gotomain -> {
                     infodialog.dismiss()
                     view?.gotomain()
                 }
-                R.id.rl_completeinfo->{
+                R.id.rl_completeinfo -> {
                     infodialog.dismiss()
                     view?.openaccount()
                 }
