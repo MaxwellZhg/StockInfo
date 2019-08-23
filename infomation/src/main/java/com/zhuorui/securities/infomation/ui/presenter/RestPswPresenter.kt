@@ -1,5 +1,4 @@
 package com.zhuorui.securities.infomation.ui.presenter
-
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -9,11 +8,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.RestLoginPswRequest
-import com.zhuorui.securities.infomation.net.request.UserLoginCodeRequest
-import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
-import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
-import com.zhuorui.securities.infomation.ui.config.LocalLoginResConfig
 import com.zhuorui.securities.infomation.ui.view.RestPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.RestPswViewModel
 import java.util.regex.Pattern
