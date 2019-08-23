@@ -1,4 +1,5 @@
 package com.zhuorui.securities.infomation.ui.presenter
+import android.content.Context
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -9,6 +10,7 @@ import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.RestLoginPswRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
+import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.RestPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.RestPswViewModel
 import java.util.regex.Pattern
@@ -19,12 +21,15 @@ import java.util.regex.Pattern
  * Date: 2019/8/21
  * Desc:
  */
-class RestPswPresenter:AbsNetPresenter<RestPswView, RestPswViewModel>() {
+class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswViewModel>() {
     override fun init() {
         super.init()
         view?.init()
     }
-
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(context)
+    }
     fun setTips(strnew:String?,strensure:String?){
         viewModel?.strnew?.set(strnew)
         viewModel?.strensure?.set(strensure)
@@ -88,6 +93,7 @@ class RestPswPresenter:AbsNetPresenter<RestPswView, RestPswViewModel>() {
         }
     }
     fun requestRestLoginPsw(phone: kotlin.String?,newpsw:kotlin.String,code: kotlin.String?) {
+        dialogshow(1)
         val request = RestLoginPswRequest(phone, newpsw,code, transactions.createTransaction())
         Cache[InfomationNet::class.java]?.restLoginPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -96,7 +102,23 @@ class RestPswPresenter:AbsNetPresenter<RestPswView, RestPswViewModel>() {
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onRestLoginPswResponse(response: SendLoginCodeResponse) {
         if (response.request is RestLoginPswRequest) {
+             dialogshow(0)
               view?.gotopswlogin()
+        }
+    }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
         }
     }
 

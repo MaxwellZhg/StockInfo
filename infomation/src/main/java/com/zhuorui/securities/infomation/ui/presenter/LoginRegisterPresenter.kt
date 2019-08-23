@@ -72,8 +72,8 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if(response.request is SendLoginCodeRequest){
                dialogshow(0)
-
-            }
+               startTimeCountDown()
+        }
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
@@ -105,6 +105,8 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
             if(response.msg=="当天短信验证码超过次"){
                 showErrorDailog()
             }
+        }else if(response.request is SendLoginCodeRequest){
+              dialogshow(0)
         }
     }
 

@@ -85,7 +85,6 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                     ToastUtil.instance.toast(R.string.phone_tips)
                     return
                 }
-                presenter?.startTimeCountDown()
                 presenter?.requestSendLoginCode(strphone)
             }
             R.id.iv_cancle -> {

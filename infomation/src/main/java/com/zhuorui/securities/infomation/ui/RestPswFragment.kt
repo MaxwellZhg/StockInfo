@@ -39,7 +39,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: RestPswPresenter
-        get() = RestPswPresenter()
+        get() = RestPswPresenter(requireContext())
     override val createViewModel: RestPswViewModel?
         get() = RestPswViewModel()
     override val getView: RestPswView

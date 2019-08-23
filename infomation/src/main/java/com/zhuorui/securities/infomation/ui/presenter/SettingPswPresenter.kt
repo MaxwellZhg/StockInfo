@@ -13,6 +13,7 @@ import com.zhuorui.securities.infomation.net.request.UserLoginRegisterRequest
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.config.LocalAccountConfig
 import com.zhuorui.securities.infomation.ui.dailog.InfoDialog
+import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.SettingPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.SettingPswViewModel
 
@@ -27,13 +28,17 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
 
         InfoDialog(context)
     }
-
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(context)
+    }
     override fun init() {
         super.init()
         view?.init()
     }
 
     fun requestUserLoginPwdCode(pwd: kotlin.String, code: kotlin.String, phone: kotlin.String) {
+        dialogshow(1)
         val request = UserLoginRegisterRequest(pwd, code, phone, "0086", transactions.createTransaction())
         Cache[InfomationNet::class.java]?.userPwdCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
@@ -48,6 +53,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
                     response.data.token
                 )
             ) {
+                dialogshow(0)
                 view?.showDialog()
             }
         }
@@ -67,5 +73,20 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
                 }
             }
         })
+    }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
+        }
     }
 }

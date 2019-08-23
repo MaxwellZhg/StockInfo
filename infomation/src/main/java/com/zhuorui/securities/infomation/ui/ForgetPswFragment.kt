@@ -64,7 +64,6 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                    ToastUtil.instance.toast(R.string.phone_tips)
                    return
                }
-               presenter?.startTimeCountDown()
                presenter?.requestSendForgetCode(strphone)
            }
            R.id.tv_btn_commit->{

@@ -16,6 +16,7 @@ import com.zhuorui.securities.infomation.net.request.VerifForgetCodeRequest
 import com.zhuorui.securities.infomation.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.infomation.ui.dailog.ErrorTimesDialog
+import com.zhuorui.securities.infomation.ui.dailog.ProgressDialog
 import com.zhuorui.securities.infomation.ui.view.ForgetPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.ForgetPswViewModel
 import java.util.*
@@ -32,6 +33,10 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     internal var task: TimerTask? = null
     private val errorDialog by lazy {
         ErrorTimesDialog(context,1)
+    }
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(context)
     }
     override fun init() {
         super.init()
@@ -76,6 +81,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     }
 
     fun requestSendForgetCode(str: kotlin.String) {
+        dialogshow(1)
         val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
         Cache[InfomationNet::class.java]?.sendForgetPwdCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -83,10 +89,12 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
-
+          dialogshow(0)
+          startTimeCountDown()
     }
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
+        dialogshow(1)
         val request = VerifForgetCodeRequest(str, code, transactions.createTransaction())
         Cache[InfomationNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -94,6 +102,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onVerifyForgetCodeResponse(response: SendLoginCodeResponse) {
         if(response.request is VerifForgetCodeRequest) {
+            dialogshow(0)
             view?.restpsw()
         }
     }
@@ -107,5 +116,20 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
                 }
             }
         })
+    }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
+        }
     }
 }
