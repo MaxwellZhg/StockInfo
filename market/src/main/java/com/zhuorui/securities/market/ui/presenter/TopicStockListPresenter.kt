@@ -103,13 +103,15 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             .subscribe()
         disposables.add(disposable)
 
-        // 保存本地数据
-        disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .subscribe()
-        disposables.add(disposable)
+        if (ts == null) {
+            // 保存本地数据
+            disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
+                emitter.onComplete()
+            }).subscribeOn(Schedulers.io())
+                .subscribe()
+            disposables.add(disposable)
+        }
     }
 
     /**
