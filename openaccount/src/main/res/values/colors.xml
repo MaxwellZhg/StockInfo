@@ -2,7 +2,9 @@
 <resources>
     <color name="app_bule">#1A6ED2</color>
     <color name="app_background_color">#f0f0f0</color>
-    <color name="line_color">#A1A1A1</color>
+    <color name="seekbar_background">#B3B3B3</color>
+    <color name="seekbar_progress">@color/app_bule</color>
+    <color name="line_color">#cccccc</color>
     <color name="text_color">#282828</color>
     <color name="title_color">#232323</color>
     <color name="hint_color">#A1A1A1</color>

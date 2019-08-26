@@ -20,7 +20,7 @@ import com.zhuorui.securities.pickerview.IWheelData as IWheelData
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
  *    date   : 2019-08-20 14:01
- *    desc   : 提示用户准备开户资料
+ *    desc   : 选择开户用户地区
  */
 
 class OASelectRegionFragment :
@@ -45,9 +45,8 @@ class OASelectRegionFragment :
                 start(OADataTipsFragment.newInstance())
             }
             R.id.region -> {
-//                dialog?.setCurrentData(region.text.toString())
-//                dialog?.show()
-                activity?.let { DatePickerDialog(it).show() }
+                dialog?.setCurrentData(region.text.toString())
+                dialog?.show()
             }
 
 

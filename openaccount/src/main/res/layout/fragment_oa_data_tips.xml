@@ -49,7 +49,7 @@
 
         <TextView
                 android:id="@+id/tv_toptxt1"
-                style="@style/oa_data_tips_toptxt"
+                style="@style/oaDataTipsToptxt"
                 android:layout_marginTop="14dp"
                 android:text="急速开户"
                 android:gravity="center"
@@ -72,7 +72,7 @@
         />
 
         <TextView
-                style="@style/oa_data_tips_toptxt"
+                style="@style/oaDataTipsToptxt"
                 android:id="@+id/tv_toptxt2"
                 android:text="24小时服务"
                 android:gravity="center"
@@ -95,7 +95,7 @@
         />
 
         <TextView
-                style="@style/oa_data_tips_toptxt"
+                style="@style/oaDataTipsToptxt"
                 android:id="@+id/tv_toptxt3"
                 android:text="免费行情"
                 android:gravity="center"

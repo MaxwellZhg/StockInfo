@@ -29,13 +29,7 @@ class OADataTipsFragment :
     AbsSwipeBackNetFragment<FragmentOaDataTipsBinding, OADataTipsViewModel, OADataTipsView, OADataTipsPresenter>(),
     OADataTipsView,
     CompoundButton.OnCheckedChangeListener, View.OnClickListener {
-    override fun onClick(p0: View?) {
-        when(p0?.id){
-            R.id.open_btn ->{
-                start(OAAuthenticationFragment.newInstance())
 
-            }        }
-    }
 
     var mAdapter: OADataTipsAdapter? = null
 
@@ -43,17 +37,6 @@ class OADataTipsFragment :
         fun newInstance(): OADataTipsFragment {
             return OADataTipsFragment()
         }
-    }
-
-    override fun init() {
-        (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        rv.layoutManager = LinearLayoutManager(context)
-        mAdapter = OADataTipsAdapter()
-        rv.adapter = mAdapter
-        cbox.setOnCheckedChangeListener(this)
-        agreement.text = presenter?.getAgreementText(resources)
-        agreement.movementMethod = LinkMovementMethod.getInstance()
-        open_btn.setOnClickListener(this)
     }
 
     override val layout: Int
@@ -75,15 +58,36 @@ class OADataTipsFragment :
         open_btn?.isEnabled = p1
     }
 
+    override fun notifyDataSetChanged(list: List<OADataTips>?) {
+        mAdapter?.items = list
+    }
+
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            R.id.open_btn ->{
+                start(OAUploadDocumentsFragment.newInstance())
+
+            }
+        }
+    }
+
+    override fun init() {
+        (rv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        rv.layoutManager = LinearLayoutManager(context)
+        mAdapter = OADataTipsAdapter()
+        rv.adapter = mAdapter
+        cbox.setOnCheckedChangeListener(this)
+        agreement.text = presenter?.getAgreementText(resources)
+        agreement.movementMethod = LinkMovementMethod.getInstance()
+        open_btn.setOnClickListener(this)
+    }
+
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         presenter?.setLifecycleOwner(this)
         presenter?.getDataTips()
     }
 
-    override fun notifyDataSetChanged(list: List<OADataTips>?) {
-        mAdapter?.items = list
-    }
 
 
 
