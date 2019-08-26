@@ -309,7 +309,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onLoginStateChangeEvent(event: LoginStateChangeEvent) {
         // 只同步全部列表中的自选股
-        if (ts == null) {
+        if (ts == null && event.isLogin) {
             val datas = viewModel?.datas?.value ?: return
             val request = SynStockRequest(datas, transactions.createTransaction())
             Cache[IStockNet::class.java]?.synStock(request)

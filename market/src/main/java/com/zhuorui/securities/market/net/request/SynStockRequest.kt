@@ -10,5 +10,7 @@ import com.zhuorui.securities.market.model.StockMarketInfo
  *    desc   : 同步自选股
  */
 class SynStockRequest(val stockList: MutableList<StockMarketInfo>, transaction: String) : BaseRequest(transaction) {
-
+    init {
+        generateSign()
+    }
 }

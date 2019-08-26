@@ -6,5 +6,5 @@ package com.zhuorui.securities.infomation.event
  *    date   : 2019/8/23 16:37
  *    desc   : 登录状态发生改变
  */
-class LoginStateChangeEvent {
+class LoginStateChangeEvent(val isLogin :Boolean) {
 }

@@ -59,7 +59,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
                 dialogshow(0)
                 view?.showDialog()
                 // 通知登录状态发生改变
-                RxBus.getDefault().post(LoginStateChangeEvent())
+                RxBus.getDefault().post(LoginStateChangeEvent(true))
             }
         }
     }
