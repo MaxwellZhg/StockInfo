@@ -1,4 +1,4 @@
-package com.zhuorui.securities.infomation
+package com.zhuorui.securities.infomation.event
 
 /**
  *    author : PengXianglin

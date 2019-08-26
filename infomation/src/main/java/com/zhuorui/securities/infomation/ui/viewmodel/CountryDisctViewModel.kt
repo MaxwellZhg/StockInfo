@@ -13,6 +13,6 @@ import com.zhuorui.securities.infomation.ui.model.JsonBean
  * Date: 2019/8/20
  * Desc:
  */
-class CountryDisctViewModel :ViewModel(){
+class CountryDisctViewModel : ViewModel() {
     var adapter: MutableLiveData<SortAdapter> = MutableLiveData()
 }

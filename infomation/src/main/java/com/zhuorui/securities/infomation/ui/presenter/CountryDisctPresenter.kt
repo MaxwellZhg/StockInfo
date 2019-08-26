@@ -1,6 +1,14 @@
 package com.zhuorui.securities.infomation.ui.presenter
 
+import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.Network
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.infomation.event.DisctCodeSelectEvent
+import com.zhuorui.securities.infomation.event.LoginStateChangeEvent
 import com.zhuorui.securities.infomation.ui.model.JsonBean
 import com.zhuorui.securities.infomation.ui.view.CountryDisctView
 import com.zhuorui.securities.infomation.ui.viewmodel.CountryDisctViewModel
@@ -78,6 +86,10 @@ class CountryDisctPresenter : AbsNetPresenter<CountryDisctView, CountryDisctView
             matcher3.find() -> 3
             else -> 0
         }
+    }
+
+    fun postValue(str:String?,code:String?){
+        RxBus.getDefault().post(DisctCodeSelectEvent(str,code))
     }
 
 
