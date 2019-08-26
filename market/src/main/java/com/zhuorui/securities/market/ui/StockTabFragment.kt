@@ -16,7 +16,6 @@ import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
 import com.zhuorui.securities.market.ui.presenter.StockTabPresenter
 import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
-import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -26,7 +25,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import java.util.*
-
 
 /**
  *    author : PengXianglin
