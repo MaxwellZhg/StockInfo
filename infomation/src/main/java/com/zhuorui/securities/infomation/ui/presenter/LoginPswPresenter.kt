@@ -13,6 +13,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.infomation.event.LoginStateChangeEvent
 import com.zhuorui.securities.infomation.R
 import com.zhuorui.securities.infomation.config.LocalAccountConfig
+import com.zhuorui.securities.infomation.event.DisctCodeSelectEvent
 import com.zhuorui.securities.infomation.net.InfomationNet
 import com.zhuorui.securities.infomation.net.request.UserLoginPwdRequest
 import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
@@ -101,6 +102,13 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
                 }
             }
         })
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    fun onLoginStateChangeEvent(event: DisctCodeSelectEvent) {
+        // 传值
+        viewModel?.strdisct?.set(event.str)
+        viewModel?.code?.set(event.code)
     }
 
 }

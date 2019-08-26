@@ -48,7 +48,7 @@
                   android:id="@+id/tv_contry"
                   android:textStyle="bold"
                   android:textColor="@color/color_282828"
-                  android:text="@string/china_mother_land"
+                  android:text="@{viewmodel.strdisct}"
                   android:layout_toLeftOf="@+id/iv_more_arrows"
                   android:layout_toRightOf="@+id/tv_area_tips"/>
         <ImageView android:layout_width="10dp"
@@ -79,7 +79,7 @@
                   android:textStyle="bold"
                   android:layout_alignParentLeft="true"
                   android:textColor="@color/color_232323"
-                  android:text="@string/china_area_phone"/>
+                  android:text="@{viewmodel.code}"/>
         <EditText android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:id="@+id/et_phone"

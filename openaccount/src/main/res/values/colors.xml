@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="app_bule">#1A6ED2</color>
-    <color name="app_background_color">#f0f0f0</color>
-    <color name="line_color">#A1A1A1</color>
-    <color name="text_color">#282828</color>
-    <color name="title_color">#232323</color>
-    <color name="hint_color">#A1A1A1</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="app_bule" tools:ignore="MissingDefaultResource">#1A6ED2</color>
+    <color name="app_background_color" tools:ignore="MissingDefaultResource">#f0f0f0</color>
+    <color name="line_color" tools:ignore="MissingDefaultResource">#A1A1A1</color>
+    <color name="text_color" tools:ignore="MissingDefaultResource">#282828</color>
+    <color name="title_color" tools:ignore="MissingDefaultResource">#232323</color>
+    <color name="hint_color" tools:ignore="MissingDefaultResource">#A1A1A1</color>
+    <color name="color_b3b3b3" tools:ignore="MissingDefaultResource">#B3B3B3</color>
+    <color name="color_454553" tools:ignore="MissingDefaultResource">#454553</color>
 </resources>

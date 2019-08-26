@@ -16,9 +16,7 @@ import kotlinx.android.synthetic.main.item_dailog_info.*
 
 class InfoDialog :Dialog {
 
-    constructor(context: Context) : this(context, 0)
-
-    constructor(context: Context, themeResId: Int) : super(context, R.style.dialog) {
+    constructor(context: Context) : super(context, R.style.dialog) {
         setContentView(R.layout.item_dailog_info)
 
         window!!.setGravity(Gravity.CENTER)
