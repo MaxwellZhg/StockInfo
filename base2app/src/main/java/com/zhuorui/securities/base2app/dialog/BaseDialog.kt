@@ -84,7 +84,10 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         dialog!!.setOnShowListener(this)
         dialog!!.setOnDismissListener(this)
         dialog!!.setOnCancelListener(this)
+        init(customDialog)
     }
+
+    protected open fun init(contentView: View) {}
 
     fun show() {
         dialog!!.show()
