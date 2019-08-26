@@ -56,11 +56,8 @@ dependencies {
     implementation project(":base2app")
     implementation project(":commonwidget")
     implementation project(':market')
-    // TODO 修改完架构后，需要释放
-//    implementation project(":applib2")
-//    implementation project(":applib3")
+   implementation project(":openaccount")
    implementation project(":infomation")
-//    implementation project(":applib5")
     // databinding
     kapt "com.android.databinding:compiler:$databinding_version"
 }

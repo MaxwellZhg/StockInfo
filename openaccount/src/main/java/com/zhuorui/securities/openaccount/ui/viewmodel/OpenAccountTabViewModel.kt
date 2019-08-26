@@ -1,6 +1,5 @@
-package com.zhuorui.securities.infomation.ui.viewmodel
+package com.zhuorui.securities.openaccount.ui.viewmodel
 
-import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 
@@ -11,7 +10,9 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class OpenAccountTabViewModel : ViewModel(){
+
     var str= ObservableField<String>()
+
     init {
         str.set("开户")
     }

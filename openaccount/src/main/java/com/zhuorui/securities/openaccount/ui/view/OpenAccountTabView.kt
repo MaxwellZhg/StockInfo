@@ -1,4 +1,4 @@
-package com.zhuorui.securities.infomation.ui.view
+package com.zhuorui.securities.openaccount.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 

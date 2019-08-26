@@ -5,12 +5,12 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
-import com.zhuorui.securities.infomation.BR
-import com.zhuorui.securities.infomation.R
-import com.zhuorui.securities.infomation.databinding.OpenAccountFragmentBinding
-import com.zhuorui.securities.infomation.ui.presenter.OpenAccountTabPresenter
-import com.zhuorui.securities.infomation.ui.view.OpenAccountTabView
-import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
+import com.zhuorui.securities.openaccount.BR
+import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.databinding.FragmentOpenAccountBinding
+import com.zhuorui.securities.openaccount.ui.presenter.OpenAccountTabPresenter
+import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
+import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
 
 /**
  * Created by Maxwell.
@@ -18,13 +18,15 @@ import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
  * Date: 2019/8/6
  * Desc:
  */
-class OpenAccountTabFragment :
-    AbsBackFinishFragment<OpenAccountFragmentBinding,OpenAccountTabViewModel,OpenAccountTabView,OpenAccountTabPresenter>(),OpenAccountTabView,View.OnClickListener{
+open class OpenAccountTabFragment :
+    AbsBackFinishFragment<FragmentOpenAccountBinding, OpenAccountTabViewModel, OpenAccountTabView, OpenAccountTabPresenter>(),
+    OpenAccountTabView, View.OnClickListener {
+
     override val layout: Int
-        get() = R.layout.open_account_fragment
+        get() = R.layout.fragment_open_account
 
     override val viewModelId: Int
-        get() = BR.viewmodel
+        get() = BR.viewModel
 
     override val createPresenter: OpenAccountTabPresenter
         get() = OpenAccountTabPresenter()
@@ -41,8 +43,8 @@ class OpenAccountTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        when(presenter?.getLoginStatus()){
-            false->{
+        when (presenter?.getLoginStatus()) {
+            false -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
             }
         }
@@ -53,7 +55,7 @@ class OpenAccountTabFragment :
     }
 
     override fun onClick(p0: View?) {
-      when(p0?.id){
+        when (p0?.id) {
 
         }
     }
@@ -61,8 +63,6 @@ class OpenAccountTabFragment :
     companion object {
         fun newInstance(): OpenAccountTabFragment {
             return OpenAccountTabFragment()
-
         }
     }
-
 }
