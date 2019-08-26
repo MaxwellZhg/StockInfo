@@ -14,8 +14,6 @@ import com.zhuorui.securities.infomation.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.infomation.ui.view.LoginPswView
 import com.zhuorui.securities.infomation.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.infomation.databinding.LoginPswFragmentBinding
-import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle

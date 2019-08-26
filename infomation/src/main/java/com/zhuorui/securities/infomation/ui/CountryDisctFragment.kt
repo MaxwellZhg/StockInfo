@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
+import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -13,7 +16,9 @@ import com.zhuorui.securities.base2app.util.GetJsonDataUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.infomation.BR
 import com.zhuorui.securities.infomation.R
+import com.zhuorui.securities.infomation.databinding.CountryCityFragmentBinding
 import com.zhuorui.securities.infomation.ui.adapter.SortAdapter
+import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
 import com.zhuorui.securities.infomation.ui.model.JsonBean
 import com.zhuorui.securities.infomation.ui.presenter.CountryDisctPresenter
 import com.zhuorui.securities.infomation.ui.view.CountryDisctView
@@ -25,13 +30,6 @@ import kotlinx.android.synthetic.main.country_city_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import org.json.JSONArray
 import java.util.*
-import com.zhuorui.securities.infomation.databinding.CountryCityFragmentBinding
-import com.zhuorui.securities.infomation.ui.compare.PinyinComparator
-import com.zhuorui.securities.infomation.ui.viewmodel.OpenAccountTabViewModel
-import android.text.TextUtils
-import android.text.TextWatcher
-import android.widget.AdapterView
-import kotlin.collections.ArrayList
 
 
 /**
