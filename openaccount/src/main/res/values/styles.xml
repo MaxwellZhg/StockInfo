@@ -13,7 +13,24 @@
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="oa_data_tips_toptxt">
+
+    <style name="btnStrokeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@null</item>
+        <item name="unableStrokeColor">#666666</item>
+        <item name="normalStrokeColor">#333333</item>
+        <item name="pressedStrokeColor">#000000</item>
+        <item name="normalStrokeWidth">1dp</item>
+        <item name="pressedStrokeWidth">1dp</item>
+        <item name="unableStrokeWidth">1dp</item>
+        <item name="radius">3dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="oaDataTipsToptxt">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#ffffff</item>
@@ -21,5 +38,31 @@
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">2</item>
         <item name="android:shadowRadius">1</item>
+    </style>
+    <style name="openAccountStep">
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginLeft">23dp</item>
+        <item name="android:layout_marginRight">23dp</item>
+    </style>
+    <style name="openAccountSubTitle">
+        <item name="android:textColor">#282828</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+    </style>
+    <style name="openAccountLine">
+        <item name="android:background">@color/line_color</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0.5dp</item>
+    </style>
+    <style name="openAccountItem">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintRight_toRightOf">parent</item>
     </style>
 </resources>

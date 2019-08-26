@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
@@ -43,6 +44,9 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
         String title = a.getString(R.styleable.ZRTitleEditText_zr_teditTitle);
         String text = a.getString(R.styleable.ZRTitleEditText_zr_teditText);
         String hiht = a.getString(R.styleable.ZRTitleEditText_zr_teditHint);
+        if (TextUtils.isEmpty(hiht)) {
+            hiht = "请输入" + title;
+        }
         setOrientation(orientation);
         setTitle(title);
         setText(text);

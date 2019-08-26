@@ -8,4 +8,6 @@
     <color name="hint_color" tools:ignore="MissingDefaultResource">#A1A1A1</color>
     <color name="color_b3b3b3" tools:ignore="MissingDefaultResource">#B3B3B3</color>
     <color name="color_454553" tools:ignore="MissingDefaultResource">#454553</color>
+    <color name="seekbar_background">#B3B3B3</color>
+    <color name="seekbar_progress">#1A6ED2</color>
 </resources>

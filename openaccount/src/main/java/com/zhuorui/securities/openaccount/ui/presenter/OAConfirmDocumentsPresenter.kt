@@ -1,0 +1,24 @@
+package com.zhuorui.securities.openaccount.ui.presenter
+
+import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
+import com.zhuorui.securities.openaccount.ui.view.OAAuthenticationView
+import com.zhuorui.securities.openaccount.ui.view.OAConfirmDocumentsView
+import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
+import com.zhuorui.securities.openaccount.ui.viewmodel.OAAuthenticationViewModel
+import com.zhuorui.securities.openaccount.ui.viewmodel.OAConfirmDocumentsViewModel
+import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
+
+/**
+ *    author : liuwei
+ *    e-mail : vsanliu@foxmail.com
+ *    date   : 2019-08-20 14:19
+ *    desc   :
+ */
+class OAConfirmDocumentsPresenter : AbsPresenter<OAConfirmDocumentsView, OAConfirmDocumentsViewModel>() {
+    override fun init() {
+        super.init()
+        view?.init();
+    }
+
+
+}

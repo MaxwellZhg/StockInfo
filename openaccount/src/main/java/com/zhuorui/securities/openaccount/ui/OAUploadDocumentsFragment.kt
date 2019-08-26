@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui
 
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.openaccount.BR
@@ -12,16 +13,17 @@ import com.zhuorui.securities.openaccount.ui.view.OAAuthenticationView
 import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAAuthenticationViewModel
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
+import kotlinx.android.synthetic.main.fragment_oa_upload_documents.*
 
 /**
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
  *    date   : 2019-08-23 14:09
- *    desc   :
+ *    desc   : 上传身份证信息
  */
 class OAUploadDocumentsFragment :
     AbsFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
-    OAUploadDocumentsView {
+    OAUploadDocumentsView, View.OnClickListener {
 
     companion object {
         fun newInstance(): OAUploadDocumentsFragment {
@@ -41,8 +43,16 @@ class OAUploadDocumentsFragment :
     override val getView: OAUploadDocumentsView
         get() = this
 
-    override fun init() {
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            R.id.btn_next -> {
+                start(OAConfirmDocumentsFragment.newInstance())
+            }
+        }
+    }
 
+    override fun init() {
+        btn_next.setOnClickListener(this)
     }
 
 }

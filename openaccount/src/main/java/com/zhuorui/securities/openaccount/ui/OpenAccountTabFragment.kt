@@ -8,6 +8,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOpenAccountBinding
+import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
 import com.zhuorui.securities.openaccount.ui.presenter.OpenAccountTabPresenter
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
@@ -46,6 +47,9 @@ open class OpenAccountTabFragment :
         when (presenter?.getLoginStatus()) {
             false -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+            }
+            true -> {
+                (parentFragment as AbsFragment<*, *, *, *>).start(OASelectRegionFragment.newInstance())
             }
         }
     }

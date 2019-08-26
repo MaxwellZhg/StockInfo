@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
@@ -44,6 +45,9 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
         String title = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewTitle);
         String text = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewText);
         String hiht = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewHint);
+        if (TextUtils.isEmpty(hiht)){
+            hiht = "请选择" + title;
+        }
         setOrientation(orientation);
         setTitle(title);
         setText(text);

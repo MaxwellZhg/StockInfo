@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.model.OADataTips
@@ -56,8 +57,9 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
             spannableString?.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
+        var color = ResUtil.getColor(R.color.app_bule)
         spannableString.setSpan(
-            ForegroundColorSpan(resources.getColor(R.color.app_bule)),
+            ForegroundColorSpan(color!!),
             text.length,
             spannableString?.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
