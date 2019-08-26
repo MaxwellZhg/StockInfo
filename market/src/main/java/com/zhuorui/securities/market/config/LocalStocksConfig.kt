@@ -1,8 +1,8 @@
 package com.zhuorui.securities.market.config
 
-import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
+import com.zhuorui.securities.market.model.StockMarketInfo
 
 /**
  *    author : PengXianglin
@@ -19,12 +19,32 @@ class LocalStocksConfig : AbsConfig() {
     }
 
     /**
+     * 检查自选股列表中是否存在
+     */
+    private fun getStock(ts: String, code: String): StockMarketInfo? {
+        for (stock in stocks) {
+            if (stock.code.equals(code) && stock.ts.equals(ts)) {
+                return stock
+            }
+        }
+        return null
+    }
+
+    /**
+     * 检查自选股列表中是否存在
+     */
+    fun isExist(ts: String, code: String): Boolean {
+        return getStock(ts, code) != null
+    }
+
+    /**
      * 添加自选股
      */
     fun replaceAll(list: MutableList<StockMarketInfo>): Boolean {
         if (list.isNullOrEmpty()) {
             return false
         }
+        stocks.clear()
         stocks.addAll(list)
         write()
         return true
@@ -34,10 +54,8 @@ class LocalStocksConfig : AbsConfig() {
      * 添加自选股
      */
     fun add(stockInfo: StockMarketInfo): Boolean {
-        for (stock in stocks) {
-            if (stock.code == stockInfo.code && stock.ts == stockInfo.ts) {
-                return false
-            }
+        if (isExist(stockInfo.ts!!, stockInfo.tsCode!!)) {
+            return false
         }
         stocks.add(stockInfo)
         write()
@@ -47,13 +65,12 @@ class LocalStocksConfig : AbsConfig() {
     /**
      * 删除自选股
      */
-    fun remove(code: String?, ts: String?): Boolean {
-        for (stock in stocks) {
-            if (stock.code == code && stock.ts == ts) {
-                stocks.remove(stock)
-                write()
-                return true
-            }
+    fun remove(code: String, ts: String): Boolean {
+        val stock = getStock(ts, code)
+        if (stock != null) {
+            stocks.remove(stock)
+            write()
+            return true
         }
         return false
     }

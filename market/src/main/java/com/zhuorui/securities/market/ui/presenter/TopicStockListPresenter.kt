@@ -103,13 +103,15 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             .subscribe()
         disposables.add(disposable)
 
-        // 保存本地数据
-        disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .subscribe()
-        disposables.add(disposable)
+        if (ts == null) {
+            // 保存本地数据
+            disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
+                emitter.onComplete()
+            }).subscribeOn(Schedulers.io())
+                .subscribe()
+            disposables.add(disposable)
+        }
     }
 
     /**
@@ -309,7 +311,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onLoginStateChangeEvent(event: LoginStateChangeEvent) {
         // 只同步全部列表中的自选股
-        if (ts == null) {
+        if (ts == null && event.isLogin) {
             val datas = viewModel?.datas?.value ?: return
             val request = SynStockRequest(datas, transactions.createTransaction())
             Cache[IStockNet::class.java]?.synStock(request)

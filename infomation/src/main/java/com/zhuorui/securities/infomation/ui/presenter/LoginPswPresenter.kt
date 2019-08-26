@@ -58,7 +58,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
             ) {
                 view?.gotomain()
                 // 通知登录状态发生改变
-                RxBus.getDefault().post(LoginStateChangeEvent())
+                RxBus.getDefault().post(LoginStateChangeEvent(true))
             }
         }
     }
