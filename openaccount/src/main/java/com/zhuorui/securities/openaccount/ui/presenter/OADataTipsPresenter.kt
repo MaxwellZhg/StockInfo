@@ -44,7 +44,7 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
         viewModel?.datas?.value = datas
     }
 
-    fun getAgreementText(resources: Resources): SpannableString {
+    fun getAgreementText(): SpannableString {
         var afr = ResUtil.getString(R.string.str_account_opening_agreement)
         var text = ResUtil.getString(R.string.str_confirm_Read_agreement)
         var spannableString = SpannableString(text + afr)
@@ -58,7 +58,7 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
         spannableString.setSpan(
             ForegroundColorSpan(color!!),
             text.length,
-            spannableString?.length,
+            spannableString.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
         return spannableString

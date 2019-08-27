@@ -50,7 +50,8 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
         when (p0?.id) {
             R.id.tv_shot -> {
                 hide()
-                listener?.goCamera(listener?.getToCameraRequestCode())
+                var uri:Uri = GetPhotoFromAlbumUtil.getOutputMediaFileUri(listener?.getCameraSavePath(),p0.context)
+                listener?.goCamera(listener?.getToCameraRequestCode(),uri)
             }
             R.id.tv_album -> {
                 hide()
@@ -109,7 +110,7 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
          */
         fun onPicturePath(path: String)
 
-        fun goCamera(toCameraRequestCode: Int?)
+        fun goCamera(toCameraRequestCode: Int?,uri: Uri?)
 
         fun goAlbum(toAlbumRequestCode: Int?)
 

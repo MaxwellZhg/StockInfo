@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -118,8 +119,8 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
     }
 
     @Override
-    public void goCamera(@Nullable Integer toCameraRequestCode) {
-        if (mListener != null) mListener.goCamera(toCameraRequestCode);
+    public void goCamera(@Nullable Integer toCameraRequestCode,@Nullable Uri uri) {
+        if (mListener != null) mListener.goCamera(toCameraRequestCode,uri);
     }
 
     @Override
@@ -131,8 +132,9 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
         mListener = l;
     }
 
+
     public interface OnUploadImageListener {
-        void goCamera(int requestCode);
+        void goCamera(int requestCode, Uri uri);
 
         void goAlbum(int requestCode);
     }

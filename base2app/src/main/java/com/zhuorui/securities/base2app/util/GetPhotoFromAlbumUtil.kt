@@ -3,11 +3,18 @@ package com.zhuorui.securities.base2app.util
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import com.zhuorui.securities.base2app.BaseApplication.Companion.context
+import java.io.File
 
 /**
  *    author : liuwei
@@ -126,4 +133,33 @@ object GetPhotoFromAlbumUtil {
         return "com.android.providers.downloads.documents" == uri.authority
 
     }
+
+    fun getOutputMediaFileUri(cameraSavePath: String?,context: Context): Uri {
+        var mediaFile :File = File(cameraSavePath)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {// sdk >= 24  android7.0以上
+            var contentUri:Uri  = FileProvider.getUriForFile(context, "com.zhuorui.securities.openaccount.fileprovider",//与清单文件中android:authorities的值保持一致
+                    mediaFile)//FileProvider方式或者ContentProvider。也可使用VmPolicy方式
+            return contentUri
+        } else {
+            return Uri.fromFile(mediaFile)//或者 Uri.isPaise("file://"+file.toString()
+
+        }
+    }
+
+    fun goCamera(fragment: Fragment, requestCode: Int, uri: Uri?) {
+        //打开照相机
+        val openCameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        //Android7.0添加临时权限标记，此步千万别忘了
+        openCameraIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        fragment.startActivityForResult(openCameraIntent, requestCode)
+    }
+
+    fun goAlbum(fragment: Fragment, requestCode: Int) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_PICK
+        intent.type = "image/*"
+        fragment.startActivityForResult(intent,requestCode)
+    }
+
 }

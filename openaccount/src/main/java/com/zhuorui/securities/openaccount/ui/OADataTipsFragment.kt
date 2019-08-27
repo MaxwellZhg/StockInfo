@@ -77,7 +77,7 @@ class OADataTipsFragment :
         mAdapter = OADataTipsAdapter()
         rv.adapter = mAdapter
         cbox.setOnCheckedChangeListener(this)
-        agreement.text = presenter?.getAgreementText(resources)
+        agreement.text = presenter?.getAgreementText()
         agreement.movementMethod = LinkMovementMethod.getInstance()
         open_btn.setOnClickListener(this)
     }

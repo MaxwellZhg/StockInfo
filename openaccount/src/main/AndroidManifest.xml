@@ -2,10 +2,11 @@
           package="com.zhuorui.securities.openaccount">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application>
         <provider
                 android:name="androidx.core.content.FileProvider"
-                android:authorities="com.example.hxd.pictest.fileprovider"
+                android:authorities="com.zhuorui.securities.openaccount.fileprovider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data

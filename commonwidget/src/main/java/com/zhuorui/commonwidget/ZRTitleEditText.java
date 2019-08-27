@@ -61,17 +61,20 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     private void setRightIcon(TypedArray a) {
         vRightIcon = findViewById(R.id.iv_right_icon);
         if (vRightIcon == null) return;
-        int width = a.getDimensionPixelOffset(R.styleable.ZRTitleEditText_zr_iconWidth, 0);
-        int hight = a.getDimensionPixelOffset(R.styleable.ZRTitleEditText_zr_iconHight, 0);
-        int resId = a.getResourceId(R.styleable.ZRTitleEditText_zr_iconSrc, 0);
-        int visible = a.getResourceId(R.styleable.ZRTitleEditText_zr_iconVisibility, 0);
-        vRightIcon.setVisibility(visible);
-        ViewGroup.LayoutParams params = vRightIcon.getLayoutParams();
-//        params.width = ResUtil.INSTANCE.getDimensionDp2Px(width);
-//        params.height = ResUtil.INSTANCE.getDimensionDp2Px(hight);
-        params.width = width;
-        params.height = hight;
-        vRightIcon.setImageResource(resId);
+        int visible = a.getResourceId(R.styleable.ZRTitleEditText_zr_iconVisibility, 8);
+        if (visible == 0){
+            vRightIcon.setVisibility(VISIBLE);
+            int width = a.getDimensionPixelOffset(R.styleable.ZRTitleEditText_zr_iconWidth, 0);
+            int hight = a.getDimensionPixelOffset(R.styleable.ZRTitleEditText_zr_iconHight, 0);
+            int resId = a.getResourceId(R.styleable.ZRTitleEditText_zr_iconSrc, 0);
+            ViewGroup.LayoutParams params = vRightIcon.getLayoutParams();
+            params.width = width > 0 ? width : ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.height = hight > 0 ? hight : ViewGroup.LayoutParams.WRAP_CONTENT;
+            vRightIcon.setImageResource(resId);
+        }else {
+            vRightIcon.setVisibility(GONE);
+        }
+
     }
 
     public void setHint(String hiht) {
