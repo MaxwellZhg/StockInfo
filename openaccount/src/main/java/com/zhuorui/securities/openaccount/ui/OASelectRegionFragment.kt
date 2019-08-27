@@ -37,7 +37,6 @@ class OASelectRegionFragment :
         dialog = activity?.let { OptionsPickerDialog<String>(it) }
         dialog?.setData(regionData)
         dialog?.setOnOptionSelectedListener(this)
-        top_bar.setBackClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -48,9 +47,6 @@ class OASelectRegionFragment :
             R.id.region -> {
                 dialog?.setCurrentData(region.text.toString())
                 dialog?.show()
-            }
-            top_bar.backViewId -> {
-                pop()
             }
         }
     }

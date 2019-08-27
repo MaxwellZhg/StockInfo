@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.zhuorui.securities.base2app.util.StatusBarUtil;
+import me.yokeyword.fragmentation.ISupportActivity;
 
 /**
  * author : liuwei
@@ -42,6 +43,15 @@ public class ZhuoRuiTopBar extends FrameLayout {
         setTitle(mTitle);
         setBackgroundColor(Color.parseColor("#211F2A"));
         setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0);
+        setBackClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                if (context instanceof ISupportActivity) {
+                    ((ISupportActivity) context).onBackPressedSupport();
+                }
+            }
+        });
     }
 
     public void setTitleView(View v) {
@@ -89,9 +99,5 @@ public class ZhuoRuiTopBar extends FrameLayout {
 
     public void setBackClickListener(OnClickListener l) {
         if (mBackView != null) mBackView.setOnClickListener(l);
-    }
-
-    public int getBackViewId() {
-        return mBackView != null ? mBackView.getId() : 0;
     }
 }
