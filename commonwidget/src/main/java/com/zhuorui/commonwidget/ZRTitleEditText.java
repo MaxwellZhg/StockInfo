@@ -9,8 +9,10 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.zhuorui.securities.base2app.util.ResUtil;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * author : liuwei
