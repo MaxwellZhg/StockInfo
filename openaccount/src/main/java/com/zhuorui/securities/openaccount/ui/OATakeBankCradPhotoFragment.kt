@@ -1,6 +1,8 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputType
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog
@@ -13,6 +15,7 @@ import com.zhuorui.securities.openaccount.databinding.FragmentOaTakeBankCardPhot
 import com.zhuorui.securities.openaccount.ui.presenter.OATakeBankCradPhotoPresenter
 import com.zhuorui.securities.openaccount.ui.view.OATakeBankCradPhotoView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OATakeBankCradPhotoViewModel
+import com.zhuorui.securities.openaccount.widget.BankCardTextWatcher
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import kotlinx.android.synthetic.main.fragment_oa_take_bank_card_photo.*
 
@@ -52,6 +55,11 @@ class OATakeBankCradPhotoFragment :
         tv_take_sample.setOnClickListener(this)
         tv_bank.vEt.setOnClickListener(this)
         tv_card_id?.vRightIcon?.setOnClickListener(this)
+
+        tv_card_id.vEt.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_NORMAL
+        tv_card_id.vEt.filters = arrayOf(InputFilter.LengthFilter(26))
+        tv_card_id.vEt.maxLines = 1
+        BankCardTextWatcher.bind(tv_card_id.vEt)
     }
 
     override fun onClick(p0: View?) {

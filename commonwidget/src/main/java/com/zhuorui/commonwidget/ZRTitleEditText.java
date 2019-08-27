@@ -26,7 +26,7 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     public static final int VERTICAL = 1;
 
     private TextView vTitle;
-    private EditText vEt;
+    public EditText vEt;
     public ImageView vRightIcon;
     //    private ImageView vRImg;
     private int mOrientation = -1;
