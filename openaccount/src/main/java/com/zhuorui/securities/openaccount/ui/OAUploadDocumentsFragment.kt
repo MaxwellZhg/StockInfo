@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.ZRUploadImageView
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_oa_upload_documents.*
  *    desc   : 上传身份证信息
  */
 class OAUploadDocumentsFragment :
-    AbsFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
+    AbsSwipeBackFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
     OAUploadDocumentsView, View.OnClickListener,ZRUploadImageView.OnUploadImageListener {
 
     companion object {

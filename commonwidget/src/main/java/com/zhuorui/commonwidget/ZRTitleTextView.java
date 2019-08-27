@@ -25,7 +25,7 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public static final int VERTICAL = 1;
 
     private TextView vTitle;
-    private TextView vEt;
+    public TextView vEt;
     private ImageView vRImg;
     private int mOrientation = -1;
 
@@ -62,8 +62,8 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
         int width = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconWidth, 0);
         int hight = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconHight, 0);
         int resId = a.getResourceId(R.styleable.ZRTitleTextView_zr_iconSrc, 0);
-        int visible = a.getResourceId(R.styleable.ZRTitleTextView_zr_iconVisibility, 0);
-        vRImg.setVisibility(visible);
+        boolean visible = a.getBoolean(R.styleable.ZRTitleTextView_zr_iconVisible, false);
+        vRImg.setVisibility(visible ? VISIBLE : GONE);
         ViewGroup.LayoutParams params = vRImg.getLayoutParams();
 //        params.width = ResUtil.INSTANCE.getDimensionDp2Px(width);
 //        params.height = ResUtil.INSTANCE.getDimensionDp2Px(hight);

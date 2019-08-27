@@ -58,12 +58,14 @@
                   android:background="@color/color_CCCCCC"/>
 
             <com.zhuorui.commonwidget.ZRTitleEditText
+                    android:id="@+id/tv_card_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:zr_iconSrc="@mipmap/ic_camera"
                     style="@style/openAccountItem"
                     app:zr_iconWidth="15dp"
                     app:zr_iconHight="11dp"
+                    app:zr_iconVisible="true"
                     android:layout_marginTop="10dp"
                     app:zr_teditTitle="@string/bank_card_code"
                     app:zr_teditHint="@string/bank_card_hint"
@@ -71,6 +73,7 @@
 
 
             <TextView
+                    android:id="@+id/tv_take_sample"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/take_sample"
@@ -82,10 +85,12 @@
                     tools:ignore="SmallSp"/>
 
             <com.zhuorui.commonwidget.ZRTitleTextView
+                    android:id="@+id/tv_bank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:zr_ttextviewTitle="@string/open_account_bank"
+                    app:zr_iconVisible="true"
                     style="@style/ZRTitleTextViewRightArrow"
                     app:zr_ttextviewHint="@string/open_account_bank_hint"
                     app:zr_teditOrientation="VERTICAL"/>
