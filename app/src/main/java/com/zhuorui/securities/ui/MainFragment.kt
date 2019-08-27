@@ -1,5 +1,6 @@
 package com.zhuorui.securities.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.BR
@@ -52,7 +53,6 @@ class MainFragment :
 
     override fun init() {
         // mBottomBar = view?.findViewById<View>(R.id.bottomBar) as BottomBar
-
         bottomBar!!
             .addItem(
                 BottomBarTab(
@@ -107,7 +107,7 @@ class MainFragment :
         val firstFragment = findChildFragment(StockTabFragment::class.java)
         if (firstFragment == null) {
             mFragments[FIRST] = StockTabFragment.newInstance()
-            mFragments[SECOND] = OASelectRegionFragment.newInstance()
+            mFragments[SECOND] = OpenAccountTabFragment.newInstance()
             mFragments[THIRD] = StockTabFragment.newInstance()
             mFragments[FOUR] = StockTabFragment.newInstance()
             mFragments[FIVE] = StockTabFragment.newInstance()
@@ -134,4 +134,5 @@ class MainFragment :
 //            mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
         }
     }
+
 }
