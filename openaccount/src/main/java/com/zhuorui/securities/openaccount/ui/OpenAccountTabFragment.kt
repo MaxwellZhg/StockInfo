@@ -1,4 +1,4 @@
-package com.zhuorui.securities.infomation.ui
+package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
 import android.view.View
@@ -8,10 +8,10 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOpenAccountBinding
-import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
 import com.zhuorui.securities.openaccount.ui.presenter.OpenAccountTabPresenter
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
+import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 
 /**
  * Created by Maxwell.

@@ -7,7 +7,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.infomation.config.LocalAccountConfig
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo

@@ -3,7 +3,7 @@ package com.zhuorui.securities.net.header
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.util.AppUtil
 import com.zhuorui.securities.base2app.util.DeviceUtil
-import com.zhuorui.securities.infomation.config.LocalAccountConfig
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

@@ -29,4 +29,11 @@
     <string name="str_validity_period_end">有效期（结束）</string>
     <string name="str_document_address">证件地址</string>
     <string name="str_the_last_step">上一步</string>
+    <string name="bank_card_verify">银行卡验证</string>
+    <string name="bank_card_verify_tips">根据合规要求，银行卡仅用于实名认证</string>
+    <string name="bank_card_code">银行卡号</string>
+    <string name="bank_card_hint">请输入银行卡号</string>
+    <string name="open_account_bank">开户银行</string>
+    <string name="open_account_bank_hint">请选择开户银行</string>
+    <string name="take_sample">拍摄范例</string>
 </resources>

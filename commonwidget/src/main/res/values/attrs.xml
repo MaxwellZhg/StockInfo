@@ -41,6 +41,14 @@
         <attr name="zr_topbarTitle" format="string|reference"/>
     </declare-styleable>
 
+
+    <attr name="zr_iconWidth" format="dimension"/>
+    <attr name="zr_iconHight" format="dimension"/>
+    <attr name="zr_iconSrc" format="reference"/>
+    <attr name="zr_iconVisibility" format="enum">
+        <enum name="gone" value="8"/>
+        <enum name="visible" value="0"/>
+    </attr>
     <declare-styleable name="ZRTitleEditText">
         <attr name="zr_teditTitle" format="string|reference"/>
         <attr name="zr_teditText" format="string|reference"/>
@@ -49,13 +57,10 @@
             <enum name="HORIZONTAL" value="0"/>
             <enum name="VERTICAL" value="1"/>
         </attr>
-        <attr name="zr_iconWidth" format="dimension"/>
-        <attr name="zr_iconHight" format="dimension"/>
-        <attr name="zr_iconSrc" format="reference"/>
-        <attr name="zr_iconVisibility" format="enum">
-            <enum name="gone" value="8"/>
-            <enum name="visible" value="0"/>
-        </attr>
+        <attr name="zr_iconWidth"/>
+        <attr name="zr_iconHight"/>
+        <attr name="zr_iconSrc"/>
+        <attr name="zr_iconVisibility"/>
     </declare-styleable>
 
     <declare-styleable name="ZRTitleTextView">
@@ -66,7 +71,12 @@
             <enum name="HORIZONTAL" value="0"/>
             <enum name="VERTICAL" value="1"/>
         </attr>
+        <attr name="zr_iconWidth"/>
+        <attr name="zr_iconHight"/>
+        <attr name="zr_iconSrc"/>
+        <attr name="zr_iconVisibility"/>
     </declare-styleable>
+
     <declare-styleable name="ZRUploadImageView">
         <attr name="zr_upimageviewTitle" format="string|reference"/>
         <attr name="zr_upimageviewBtnText" format="string|reference"/>
