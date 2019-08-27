@@ -10,4 +10,5 @@
     <color name="color_454553" tools:ignore="MissingDefaultResource">#454553</color>
     <color name="seekbar_background">#B3B3B3</color>
     <color name="seekbar_progress">#1A6ED2</color>
+    <color name="color_8DB9E4" tools:ignore="MissingDefaultResource">#8DB9E4</color>
 </resources>

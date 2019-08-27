@@ -8,7 +8,9 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -24,10 +26,8 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
 
     private TextView vTitle;
     private TextView vEt;
-    //    private ImageView vRImg;
+    private ImageView vRImg;
     private int mOrientation = -1;
-    private Drawable mRightBtnDraw;
-
 
     public ZRTitleTextView(Context context) {
         this(context, null);
@@ -40,19 +40,36 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public ZRTitleTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZRTitleTextView);
-//        mRightBtnDraw = a.getDrawable(R.styleable.ZhuoruiEditText_zret_right_button_resources);
+
         int orientation = a.getInt(R.styleable.ZRTitleTextView_zr_ttextviewOrientation, VERTICAL);
         String title = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewTitle);
         String text = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewText);
         String hiht = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewHint);
-        if (TextUtils.isEmpty(hiht)){
+        if (TextUtils.isEmpty(hiht)) {
             hiht = "请选择" + title;
         }
         setOrientation(orientation);
         setTitle(title);
         setText(text);
         setHint(hiht);
+        setRightIcon(a);
+        a.recycle();
+    }
 
+    private void setRightIcon(TypedArray a) {
+        vRImg = findViewById(R.id.iv_right_icon);
+        if (vRImg == null) return;
+        int width = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconWidth, 0);
+        int hight = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconHight, 0);
+        int resId = a.getResourceId(R.styleable.ZRTitleTextView_zr_iconSrc, 0);
+        int visible = a.getResourceId(R.styleable.ZRTitleTextView_zr_iconVisibility, 0);
+        vRImg.setVisibility(visible);
+        ViewGroup.LayoutParams params = vRImg.getLayoutParams();
+//        params.width = ResUtil.INSTANCE.getDimensionDp2Px(width);
+//        params.height = ResUtil.INSTANCE.getDimensionDp2Px(hight);
+        params.width = width;
+        params.height = hight;
+        vRImg.setImageResource(resId);
     }
 
     public void setHint(String hiht) {

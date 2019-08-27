@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.zhuorui.securities.openaccount.ui.viewmodel.OATakeBankCradPhotoViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:background="@color/app_background_color"
+            android:layout_height="match_parent">
+
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:layout_width="match_parent"
+                app:zr_topbarTitle="卓锐证券开户"
+                android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_FFFFFFFF">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="银行卡验证"
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginStart="17dp"
+                    android:textColor="#ff232323"
+                    android:textSize="18sp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginTop="10dp"
+                    android:text="根据合规要求，银行卡仅用于实名认证"
+                    android:textColor="#ffa1a1a1"
+                    android:textSize="12sp"/>
+
+            <View android:layout_width="match_parent"
+                  android:layout_height="1dp"
+                  android:layout_marginStart="15dp"
+                  android:layout_marginEnd="15dp"
+                  android:layout_marginTop="5dp"
+                  android:background="@color/line_color"/>
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="银行卡号"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:layout_marginEnd="17dp"-->
+            <!--android:layout_marginStart="17dp"-->
+            <!--android:textColor="#ff232323"-->
+            <!--android:textSize="16sp"/>-->
+
+            <!--<androidx.appcompat.widget.LinearLayoutCompat-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginEnd="18dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<androidx.appcompat.widget.AppCompatEditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="请输入银行卡号"-->
+            <!--android:textColor="#ffa1a1a1"-->
+            <!--android:layout_weight="20"-->
+            <!--android:textSize="14sp"/>-->
+
+            <!--<androidx.appcompat.widget.AppCompatImageView-->
+            <!--android:layout_width="15dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_height="11dp"-->
+            <!--android:src="@mipmap/ic_camera"/>-->
+            <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+
+            <!--<View android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginStart="15dp"-->
+            <!--android:layout_marginEnd="15dp"-->
+            <!--android:background="@color/line_color"/>-->
+
+            <com.zhuorui.commonwidget.ZRTitleEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:zr_iconSrc="@mipmap/ic_camera"
+                    style="@style/openAccountItem"
+                    app:zr_iconWidth="15dp"
+                    app:zr_iconHight="11dp"
+                    app:zr_teditTitle="银行卡号"
+                    app:zr_teditHint="请输入银行卡号"
+                    app:zr_teditOrientation="VERTICAL"/>
+
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拍摄范例"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="17dp"
+                    android:textColor="#ff1a6ed2"
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp"/>
+
+            <com.zhuorui.commonwidget.ZRTitleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:zr_ttextviewTitle="开户银行"
+                    style="@style/ZRTitleTextViewRightArrow"
+                    app:zr_ttextviewHint="请选择开户银行"
+                    app:zr_teditOrientation="VERTICAL"/>
+
+            <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="开户银行"-->
+                    <!--android:layout_marginEnd="17dp"-->
+                    <!--android:layout_marginStart="17dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:textColor="#ff232323"-->
+                    <!--android:textSize="16sp"/>-->
+
+            <!--<androidx.appcompat.widget.LinearLayoutCompat-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_marginStart="16dp"-->
+                    <!--android:layout_marginEnd="18dp"-->
+                    <!--android:layout_height="30dp">-->
+
+                <!--<TextView-->
+                        <!--android:layout_weight="40"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center_vertical"-->
+                        <!--android:text="请选择开户银行"-->
+                        <!--android:textColor="#ffa1a1a1"-->
+                        <!--android:textSize="14sp"/>-->
+
+                <!--<ImageView-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_width="7dp"-->
+                        <!--android:layout_height="11dp"-->
+                        <!--android:src="@mipmap/ic_small_arrow"/>-->
+            <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+
+            <!--<View android:layout_width="match_parent"-->
+                  <!--android:layout_height="1dp"-->
+                  <!--android:layout_marginStart="15dp"-->
+                  <!--android:layout_marginEnd="15dp"-->
+                  <!--android:background="@color/line_color"/>-->
+
+            <com.zhuorui.commonwidget.StateButton
+                    android:layout_marginTop="50dp"
+                    android:layout_width="match_parent"
+                    android:text="下一步"
+                    android:gravity="center"
+                    android:textSize="23sp"
+                    app:radius="3dp"
+                    android:textColor="@color/color_FFFFFFFF"
+                    app:unableBackgroundColor="@color/color_8DB9E4"
+                    android:enabled="false"
+                    app:normalBackgroundColor="@color/app_bule"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginEnd="28dp"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
+</layout>
