@@ -13,11 +13,17 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OATakeBankCradPhotoViewMo
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
  *    date   : 2019/8/26 17:08
- *    desc   :
+ *    desc   : 拍摄银行卡页面
  */
 class OATakeBankCradPhotoFragment :
     AbsFragment<FragmentOaTakeBankCardPhotoBinding, OATakeBankCradPhotoViewModel, OATakeBankCradPhotoView, OATakeBankCradPhotoPresenter>(),
     OATakeBankCradPhotoView {
+
+    companion object {
+        fun newInstance(): OATakeBankCradPhotoFragment {
+            return OATakeBankCradPhotoFragment()
+        }
+    }
 
     override val layout: Int
         get() = R.layout.fragment_oa_take_bank_card_photo

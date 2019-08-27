@@ -2,7 +2,6 @@ package com.zhuorui.securities.openaccount.ui
 
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
@@ -13,8 +12,6 @@ import com.zhuorui.securities.openaccount.ui.view.OASeletRegionView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OASelectRegonViewModel
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import kotlinx.android.synthetic.main.fragment_oa_select_region.*
-import com.zhuorui.securities.pickerview.IWheelData as IWheelData
-
 
 /**
  *    author : liuwei

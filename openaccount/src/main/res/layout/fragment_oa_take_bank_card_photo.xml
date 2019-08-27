@@ -91,17 +91,10 @@
                     app:zr_teditOrientation="VERTICAL"/>
 
             <com.zhuorui.commonwidget.StateButton
+                    android:id="@+id/btn_next"
                     android:layout_marginTop="50dp"
-                    android:layout_width="match_parent"
+                    style="@style/btnStyle"
                     android:text="@string/str_next_step"
-                    android:gravity="center"
-                    android:textSize="23sp"
-                    app:radius="3dp"
-                    android:textColor="@color/color_FFFFFFFF"
-                    app:unableBackgroundColor="@color/color_8DB9E4"
-                    android:enabled="false"
-                    app:normalBackgroundColor="@color/app_bule"
-                    android:layout_height="50dp"
                     android:layout_marginStart="28dp"
                     android:layout_marginEnd="28dp"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
