@@ -21,7 +21,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:zr_topbarTitle="卓锐证券开户"
+                app:zr_topbarTitle="@string/zhuorui_openaccount"
                 />
 
         <ImageView
@@ -51,7 +51,7 @@
                 android:id="@+id/tv_toptxt1"
                 style="@style/oaDataTipsToptxt"
                 android:layout_marginTop="14dp"
-                android:text="急速开户"
+                android:text="@string/str_quick_opening_of_accounts"
                 android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/iv_topimg1"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -74,7 +74,7 @@
         <TextView
                 style="@style/oaDataTipsToptxt"
                 android:id="@+id/tv_toptxt2"
-                android:text="24小时服务"
+                android:text="@string/str_24hour_service"
                 android:gravity="center"
                 app:layout_constraintTop_toTopOf="@+id/tv_toptxt1"
                 app:layout_constraintLeft_toRightOf="@+id/tv_toptxt1"
@@ -97,7 +97,7 @@
         <TextView
                 style="@style/oaDataTipsToptxt"
                 android:id="@+id/tv_toptxt3"
-                android:text="免费行情"
+                android:text="@string/str_free_quotation"
                 android:gravity="center"
                 app:layout_constraintTop_toTopOf="@+id/tv_toptxt1"
                 app:layout_constraintLeft_toRightOf="@+id/tv_toptxt2"
@@ -112,7 +112,7 @@
         <TextView
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:id="@+id/sub_title"
-                android:text="开户前请准备"
+                android:text="@string/str_please_prepare_before_opening_an_account"
                 android:textColor="@color/text_color"
                 android:paddingLeft="26dp"
                 android:paddingTop="10dp"
@@ -161,7 +161,6 @@
                 app:layout_constraintLeft_toRightOf="@+id/cbox"
                 android:textSize="10sp"
                 android:textColor="@color/text_color"
-                android:text="本人已仔细阅读并同意签署全部开户协议"
         />
 
 
@@ -173,7 +172,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:text="立即开户"
+                android:text="@string/str_open_an_account_immediately"
                 android:enabled="false"
                 android:layout_marginBottom="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"

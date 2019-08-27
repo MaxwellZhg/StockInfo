@@ -13,11 +13,8 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.model.OADataTips
-import com.zhuorui.securities.openaccount.ui.OADataTipsFragment
 import com.zhuorui.securities.openaccount.ui.view.OADataTipsView
-import com.zhuorui.securities.openaccount.ui.view.OASeletRegionView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OADataTipsViewModel
-import com.zhuorui.securities.openaccount.ui.viewmodel.OASelectRegonViewModel
 
 /**
  *    author : liuwei
@@ -48,12 +45,12 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
     }
 
     fun getAgreementText(resources: Resources): SpannableString {
-        var afr = "开户协议"
-        var text = "本人已仔细阅读并同意签署全部"
+        var afr = ResUtil.getString(R.string.str_account_opening_agreement)
+        var text = ResUtil.getString(R.string.str_confirm_Read_agreement)
         var spannableString = SpannableString(text + afr)
         spannableString.setSpan(
             AgreementClickableSpan(),
-            text.length,
+            text!!.length,
             spannableString?.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )

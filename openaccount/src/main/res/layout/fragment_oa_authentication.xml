@@ -42,20 +42,22 @@
                     android:layout_height="wrap_content"/>
 
             <com.zhuorui.commonwidget.ZRUploadImageView
-                    app:zr_upimageviewTitle="身份证人像面"
-                    app:zr_upimageviewBtnText="拍摄人像面"
                     android:layout_margin="35dp"
                     android:background="@drawable/rectangle_solidf0f0f0_doteeedline616161"
                     app:zr_upimageviewPlaceholder="@mipmap/example_idcard_portrait"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:zr_upimageviewTitle="@string/str_identity_witness_profile"
+                    app:zr_upimageviewBtnText="@string/str_photographing_portraits"
+            />
 
             <com.zhuorui.commonwidget.ZRUploadImageView
                     android:background="@drawable/rectangle_solidf0f0f0_doteeedline616161"
                     android:layout_margin="35dp"
                     app:zr_upimageviewPlaceholder="@mipmap/example_idcard_national_emblem"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+            />
 
 
         </LinearLayout>

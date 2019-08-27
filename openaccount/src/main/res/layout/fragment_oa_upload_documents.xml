@@ -12,7 +12,7 @@
             android:layout_width="match_parent" android:layout_height="wrap_content">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 style="@style/oaDataTipsToptxt"
-                app:zr_topbarTitle="卓锐证券开户"
+                app:zr_topbarTitle="@string/zhuorui_openaccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -52,7 +52,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginLeft="27dp"
                         android:id="@+id/sub_title"
-                        android:text="上传身份证信息"
+                        android:text="@string/str_upload_id_card_information"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@+id/v1"
@@ -68,7 +68,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="拍摄范例"
+                        android:text="@string/str_examples_of_shooting"
                         android:textColor="#1d7eeb"
                         android:textSize="12sp"
                 />
@@ -81,8 +81,8 @@
                         android:layout_marginRight="35dp"
                         android:layout_marginTop="23dp"
                         android:background="@drawable/rectangle_solidf0f0f0_doteeedline616161"
-                        app:zr_upimageviewTitle="身份证人像面"
-                        app:zr_upimageviewBtnText="拍摄人像面"
+                        app:zr_upimageviewTitle="@string/str_identity_witness_profile"
+                        app:zr_upimageviewBtnText="@string/str_photographing_portraits"
                         app:zr_upimageviewPlaceholder="@mipmap/example_idcard_portrait"
                         app:layout_constraintTop_toBottomOf="@+id/sub_title"
                 />
@@ -105,8 +105,8 @@
                         android:layout_marginTop="29dp"
                         app:layout_constraintTop_toBottomOf="@+id/v2"
                         app:zr_upimageviewPlaceholder="@mipmap/example_idcard_national_emblem"
-                        app:zr_upimageviewTitle="身份证国徽面"
-                        app:zr_upimageviewBtnText="拍摄国徽面"
+                        app:zr_upimageviewTitle="@string/str_national_emblem_face_of_identity_card"
+                        app:zr_upimageviewBtnText="@string/str_shooting_the_national_emblem"
                 />
 
                 <com.zhuorui.commonwidget.StateButton
@@ -121,7 +121,7 @@
                         android:layout_marginBottom="30dp"
                         android:layout_marginLeft="30dp"
                         android:layout_marginRight="30dp"
-                        android:text="下一步"
+                        android:text="@string/str_next_step"
 
                 />
 

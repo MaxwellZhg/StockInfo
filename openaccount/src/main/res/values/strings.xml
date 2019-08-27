@@ -6,4 +6,27 @@
     <string name="verify_info" tools:ignore="MissingTranslatio">资料审核</string>
     <string name="verify_self" tools:ignore="MissingTranslatio">人身验证</string>
     <string name="read_num"   tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
+    <string name="str_account_opening_agreement">开户协议</string>
+    <string name="str_confirm_Read_agreement">本人已仔细阅读并同意签署全部</string>
+    <string name="str_identity_witness_profile">身份证人像面</string>
+    <string name="str_photographing_portraits">拍摄人像面</string>
+    <string name="str_national_emblem_face_of_identity_card">身份证国徽面</string>
+    <string name="str_shooting_the_national_emblem">拍摄国徽面</string>
+    <string name="str_next_step">下一步</string>
+    <string name="str_upload_id_card_information">上传身份证信息</string>
+    <string name="str_examples_of_shooting">拍摄范例</string>
+    <string name="str_resident_identity_choice">居民身份选择</string>
+    <string name="str_quick_opening_of_accounts">急速开户</string>
+    <string name="str_24hour_service">24小时服务</string>
+    <string name="str_free_quotation">免费行情</string>
+    <string name="str_please_prepare_before_opening_an_account">开户前请准备</string>
+    <string name="str_open_an_account_immediately">立即开户</string>
+    <string name="str_chinese_name">中文姓名</string>
+    <string name="str_gender">性别</string>
+    <string name="str_date_of_birth">出生日期</string>
+    <string name="str_id_card_no">身份证号码</string>
+    <string name="str_validity_period_beginning">有效期(开始)</string>
+    <string name="str_validity_period_end">有效期（结束）</string>
+    <string name="str_document_address">证件地址</string>
+    <string name="str_the_last_step">上一步</string>
 </resources>
