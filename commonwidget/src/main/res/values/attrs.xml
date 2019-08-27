@@ -71,7 +71,9 @@
         <attr name="zr_upimageviewTitle" format="string|reference"/>
         <attr name="zr_upimageviewBtnText" format="string|reference"/>
         <attr name="zr_upimageviewPlaceholder" format="reference"/>
-        <attr name="zr_upimageviewWatermark" format="reference"/>
+        <attr name="zr_upimageviewWatermark" format="string|reference"/>
+        <attr name="zr_toAlbumRequestCode" format="integer|reference"/>
+        <attr name="zr_toCameraRequestCode" format="integer|reference"/>
     </declare-styleable>
 
 </resources>

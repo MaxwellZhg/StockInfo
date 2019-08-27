@@ -1,6 +1,7 @@
 package com.zhuorui.commonwidget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -8,6 +9,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 /**
  * author : liuwei
@@ -15,7 +21,7 @@ import android.widget.TextView;
  * date   : 2019-08-23 15:34
  * desc   :
  */
-public class ZRUploadImageView extends FrameLayout implements View.OnClickListener {
+public class ZRUploadImageView extends FrameLayout implements View.OnClickListener, GetPicturesModeDialog.OnGetPicturesModeListener {
 
     private TextView vTitle;
     private TextView vBtnText;
@@ -23,7 +29,12 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
     private ImageView vImg;
     private String mBtnText;
     private Drawable mPlaceholder;
-    private Drawable mWatermark;
+    private String mWatermarkTxt;
+    private GetPicturesModeDialog dialog;
+    private OnUploadImageListener mListener;
+    private String mFileName;
+    private int mAlbumRequestCode = 1;
+    private int mCameraRequestCode = 2;
 
     public ZRUploadImageView(Context context) {
         this(context, null);
@@ -41,10 +52,13 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
         String title = a.getString(R.styleable.ZRUploadImageView_zr_upimageviewTitle);
         mBtnText = a.getString(R.styleable.ZRUploadImageView_zr_upimageviewBtnText);
         mPlaceholder = a.getDrawable(R.styleable.ZRUploadImageView_zr_upimageviewPlaceholder);
-        mWatermark = a.getDrawable(R.styleable.ZRUploadImageView_zr_upimageviewWatermark);
+        mWatermarkTxt = a.getString(R.styleable.ZRUploadImageView_zr_upimageviewWatermark);
+        mAlbumRequestCode = a.getInt(R.styleable.ZRUploadImageView_zr_toAlbumRequestCode, mAlbumRequestCode);
+        mCameraRequestCode = a.getInt(R.styleable.ZRUploadImageView_zr_toCameraRequestCode, mCameraRequestCode);
         setTitle(title);
         setButtonText(mBtnText);
         setPlaceholder(mPlaceholder);
+        mFileName = String.valueOf(hashCode()) + ".jpg";
     }
 
     private void initView() {
@@ -69,8 +83,57 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if (view == vBtn){
-
+        if (view == vBtn) {
+            if (dialog == null) {
+                dialog = new GetPicturesModeDialog(view.getContext());
+                dialog.setListener(this);
+            }
+            dialog.show();
         }
+    }
+
+    @Override
+    public int getToAlbumRequestCode() {
+        return mAlbumRequestCode;
+    }
+
+    @Override
+    public int getToCameraRequestCode() {
+        return mCameraRequestCode;
+    }
+
+    @NotNull
+    @Override
+    public String getCameraSavePath() {
+        return getContext().getExternalCacheDir().getAbsolutePath() + "/" + mFileName;
+    }
+
+    @Override
+    public void onPicturePath(@NotNull String path) {
+        Glide.with(vImg).load(path).placeholder(mPlaceholder).error(mPlaceholder).centerCrop().into(vImg);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (dialog != null) dialog.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void goCamera(@Nullable Integer toCameraRequestCode) {
+        if (mListener != null) mListener.goCamera(toCameraRequestCode);
+    }
+
+    @Override
+    public void goAlbum(@Nullable Integer toAlbumRequestCode) {
+        if (mListener != null) mListener.goAlbum(toAlbumRequestCode);
+    }
+
+    public void setOnUploadImageListener(OnUploadImageListener l) {
+        mListener = l;
+    }
+
+    public interface OnUploadImageListener {
+        void goCamera(int requestCode);
+
+        void goAlbum(int requestCode);
     }
 }

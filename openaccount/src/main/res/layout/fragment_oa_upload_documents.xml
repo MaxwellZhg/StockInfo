@@ -84,6 +84,8 @@
                         app:zr_upimageviewTitle="@string/str_identity_witness_profile"
                         app:zr_upimageviewBtnText="@string/str_photographing_portraits"
                         app:zr_upimageviewPlaceholder="@mipmap/example_idcard_portrait"
+                        app:zr_toAlbumRequestCode="101"
+                        app:zr_toCameraRequestCode="102"
                         app:layout_constraintTop_toBottomOf="@+id/sub_title"
                 />
 
@@ -107,6 +109,8 @@
                         app:zr_upimageviewPlaceholder="@mipmap/example_idcard_national_emblem"
                         app:zr_upimageviewTitle="@string/str_national_emblem_face_of_identity_card"
                         app:zr_upimageviewBtnText="@string/str_shooting_the_national_emblem"
+                        app:zr_toAlbumRequestCode="201"
+                        app:zr_toCameraRequestCode="202"
                 />
 
                 <com.zhuorui.commonwidget.StateButton
