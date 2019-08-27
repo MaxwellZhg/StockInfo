@@ -11,6 +11,7 @@ import com.zhuorui.securities.databinding.FragmentMainBinding
 import com.zhuorui.securities.infomation.ui.OpenAccountTabFragment
 import com.zhuorui.securities.market.ui.StockTabFragment
 import com.zhuorui.securities.openaccount.ui.OABiopsyFragment
+import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
@@ -106,7 +107,7 @@ class MainFragment :
         val firstFragment = findChildFragment(StockTabFragment::class.java)
         if (firstFragment == null) {
             mFragments[FIRST] = StockTabFragment.newInstance()
-            mFragments[SECOND] = OABiopsyFragment.newInstance()
+            mFragments[SECOND] = OASelectRegionFragment.newInstance()
             mFragments[THIRD] = StockTabFragment.newInstance()
             mFragments[FOUR] = StockTabFragment.newInstance()
             mFragments[FIVE] = StockTabFragment.newInstance()
@@ -127,7 +128,7 @@ class MainFragment :
             // 这里我们需要拿到mFragments的引用
             mFragments[FIRST] = firstFragment
             // TODO 修改完架构后，需要释放
-            mFragments[SECOND] = findChildFragment(OABiopsyFragment::class.java)
+            mFragments[SECOND] = findChildFragment(OASelectRegionFragment::class.java)
 //            mFragments[THIRD] = findChildFragment(InfomationTabFragment::class.java)
 //            mFragments[FOUR] = findChildFragment(OpenAccountTabFragment::class.java)
 //            mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)

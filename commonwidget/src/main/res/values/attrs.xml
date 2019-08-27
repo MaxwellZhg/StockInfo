@@ -49,6 +49,13 @@
             <enum name="HORIZONTAL" value="0"/>
             <enum name="VERTICAL" value="1"/>
         </attr>
+        <attr name="zr_iconWidth" format="dimension"/>
+        <attr name="zr_iconHight" format="dimension"/>
+        <attr name="zr_iconSrc" format="reference"/>
+        <attr name="zr_iconVisibility" format="enum">
+            <enum name="gone" value="8"/>
+            <enum name="visible" value="0"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="ZRTitleTextView">
