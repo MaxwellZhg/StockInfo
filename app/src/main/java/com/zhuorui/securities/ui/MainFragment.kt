@@ -9,9 +9,9 @@ import com.zhuorui.securities.custom.view.BottomBar
 import com.zhuorui.securities.custom.view.BottomBarTab
 import com.zhuorui.securities.databinding.FragmentMainBinding
 import com.zhuorui.securities.infomation.ui.InfomationTabFragment
-import com.zhuorui.securities.personal.ui.OpenAccountTabFragment
 import com.zhuorui.securities.market.ui.MarketTabFragment
 import com.zhuorui.securities.market.ui.StockTabFragment
+import com.zhuorui.securities.openaccount.ui.OpenAccountTabFragment
 import com.zhuorui.securities.personal.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
