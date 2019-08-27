@@ -1,7 +1,7 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
-import com.zhuorui.securities.infomation.config.LocalAccountConfig
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
 

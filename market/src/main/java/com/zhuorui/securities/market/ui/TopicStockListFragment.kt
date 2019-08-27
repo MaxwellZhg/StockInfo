@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
-import com.zhuorui.securities.infomation.config.LocalAccountConfig
-import com.zhuorui.securities.infomation.ui.LoginRegisterFragment
+import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.custom.StockPopupWindow

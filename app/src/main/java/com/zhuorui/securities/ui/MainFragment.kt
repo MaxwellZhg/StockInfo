@@ -8,10 +8,11 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.custom.view.BottomBar
 import com.zhuorui.securities.custom.view.BottomBarTab
 import com.zhuorui.securities.databinding.FragmentMainBinding
-import com.zhuorui.securities.infomation.ui.OpenAccountTabFragment
+import com.zhuorui.securities.infomation.ui.InfomationTabFragment
+import com.zhuorui.securities.personal.ui.OpenAccountTabFragment
+import com.zhuorui.securities.market.ui.MarketTabFragment
 import com.zhuorui.securities.market.ui.StockTabFragment
-import com.zhuorui.securities.openaccount.ui.OABiopsyFragment
-import com.zhuorui.securities.openaccount.ui.OASelectRegionFragment
+import com.zhuorui.securities.personal.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
@@ -107,31 +108,26 @@ class MainFragment :
         val firstFragment = findChildFragment(StockTabFragment::class.java)
         if (firstFragment == null) {
             mFragments[FIRST] = StockTabFragment.newInstance()
-            mFragments[SECOND] = OASelectRegionFragment.newInstance()
-            mFragments[THIRD] = StockTabFragment.newInstance()
-            mFragments[FOUR] = StockTabFragment.newInstance()
-            mFragments[FIVE] = StockTabFragment.newInstance()
-
-            // TODO 修改完架构后，需要释放
-//            mFragments[FIRST] = StockTabFragment.newInstance()
-//            mFragments[SECOND] = MarketTabFragment()
-//            mFragments[THIRD] = InfomationTabFragment()
-//            mFragments[FOUR] = OpenAccountTabFragment()
-//            mFragments[FIVE] = MyTabFragment()
+            mFragments[SECOND] = MarketTabFragment.newInstance()
+            mFragments[THIRD] = InfomationTabFragment.newInstance()
+            mFragments[FOUR] = OpenAccountTabFragment.newInstance()
+            mFragments[FIVE] = MyTabFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, FIRST,
                 mFragments[FIRST],
-                mFragments[SECOND]
+                mFragments[SECOND],
+                mFragments[THIRD],
+                mFragments[FOUR],
+                mFragments[FIVE]
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
             // 这里我们需要拿到mFragments的引用
             mFragments[FIRST] = firstFragment
-            // TODO 修改完架构后，需要释放
-            mFragments[SECOND] = findChildFragment(OASelectRegionFragment::class.java)
-//            mFragments[THIRD] = findChildFragment(InfomationTabFragment::class.java)
-//            mFragments[FOUR] = findChildFragment(OpenAccountTabFragment::class.java)
-//            mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
+            mFragments[SECOND] = findChildFragment(MarketTabFragment::class.java)
+            mFragments[THIRD] = findChildFragment(InfomationTabFragment::class.java)
+            mFragments[FOUR] = findChildFragment(OpenAccountTabFragment::class.java)
+            mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
         }
     }
 }

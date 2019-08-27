@@ -1,7 +1,6 @@
 package com.zhuorui.securities.openaccount.ui
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.infomation.ui.OpenAccountTabFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.ui.presenter.OABiopsyPresenter

@@ -1,4 +1,4 @@
-package com.zhuorui.securities.infomation.ui
+package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
 import android.view.View

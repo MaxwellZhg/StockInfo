@@ -9,7 +9,7 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:background="@color/app_background_color"
+            android:background="@color/color_FFFFFFFF"
             android:layout_height="match_parent">
 
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
@@ -17,12 +17,19 @@
                 app:zr_topbarTitle="@string/zhuorui_openaccount"
                 android:layout_height="wrap_content"/>
 
+        <com.zhuorui.securities.openaccount.widget.OpenAccountStepView
+                android:layout_width="match_parent"
+                style="@style/openAccountStep"
+                android:layout_height="wrap_content"
+                app:zr_openAccountStep="STEP_1"/>
+
+        <View android:layout_width="match_parent" android:layout_height="5dp"
+              android:background="@color/app_background_color"/>
+
         <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_marginTop="5dp"
-                android:layout_height="match_parent"
-                android:background="@color/color_FFFFFFFF">
+                android:layout_height="match_parent">
 
             <TextView
                     android:layout_width="wrap_content"

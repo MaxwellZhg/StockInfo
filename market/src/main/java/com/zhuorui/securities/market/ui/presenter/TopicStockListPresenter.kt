@@ -10,9 +10,8 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.infomation.config.LocalAccountConfig
-import com.zhuorui.securities.infomation.event.LoginStateChangeEvent
-import com.zhuorui.securities.infomation.net.response.UserLoginCodeResponse
+import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.AddTopicStockEvent
