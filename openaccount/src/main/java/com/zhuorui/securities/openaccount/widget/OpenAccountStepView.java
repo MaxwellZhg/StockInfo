@@ -38,6 +38,14 @@ public class OpenAccountStepView extends FrameLayout {
         initView();
         TypedArray a = getResources().obtainAttributes(attrs, R.styleable.OpenAccountStepView);
         mStep = a.getInt(R.styleable.OpenAccountStepView_zr_openAccountStep, 0);
+        a.recycle();
+        vSymbol3.setEnabled(mStep >= 4);
+        vSymbol2.setEnabled(mStep >= 3);
+        vSymbol1.setEnabled(mStep >= 1);
+        vTxt3.setEnabled(mStep >= 4);
+        vTxt2.setEnabled(mStep >= 3);
+        vTxt1.setEnabled(mStep >= 1);
+        vSB.setProgress(mStep);
     }
 
     private void initView() {
