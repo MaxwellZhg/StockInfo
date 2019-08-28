@@ -57,4 +57,7 @@
     <string name="read_risk_complete">我已阅读全部开户文件，了解相关风险并自愿在卓锐证券开户</string>
     <string name="btn_resignature">重签</string>
     <string name="btn_confirm">确认</string>
+    <string name="str_wait_audit">请等待审核</string>
+    <string name="str_wait_audit_tips" tools:ignore="TypographyDashes">我们已成功收到您的开户申请，预计1-2个工作日会通知 您开户结果，届时请留意短信和邮件提醒。</string>
+    <string name="btn_return_to_main" tools:ignore="TypographyDashes">返回首页</string>
 </resources>

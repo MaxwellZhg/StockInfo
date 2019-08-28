@@ -21,7 +21,7 @@
                 app:zr_topbarTitle="@string/zhuorui_openaccount"
                 android:layout_height="wrap_content"/>
 
-        <com.zhuorui.securities.openaccount.widget.LandConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/content_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -78,7 +78,7 @@
                     android:layout_marginEnd="125dp"
                     android:text="@string/btn_confirm"/>
 
-        </com.zhuorui.securities.openaccount.widget.LandConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 </layout>

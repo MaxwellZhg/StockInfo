@@ -1,6 +1,7 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.base2app.util.AppUtil
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_oa_signature.*
  */
 class OASignatureFragment :
     AbsSwipeBackFragment<FragmentOaSignatureBinding, OASignatureViewModel, OASignatureView, OASignaturePresenter>(),
-    OASignatureView {
+    OASignatureView, View.OnClickListener {
 
     companion object {
         fun newInstance(): OASignatureFragment {
@@ -54,5 +55,17 @@ class OASignatureFragment :
         val translation = (layoutParams.width - layoutParams.height) / 2
         content_view.translationX = -translation - 1f
         content_view.translationY = translation.toFloat()
+
+        btn_next.setOnClickListener(this)
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0) {
+            btn_next -> {
+                start(OAWaitAuditFragment.newInstance())
+            }
+            else -> {
+            }
+        }
     }
 }
