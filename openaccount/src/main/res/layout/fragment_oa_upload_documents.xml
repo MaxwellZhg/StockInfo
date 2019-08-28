@@ -68,7 +68,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/str_examples_of_shooting"
+                        android:text="@string/take_sample"
                         android:textColor="#1d7eeb"
                         android:textSize="12sp"
                 />
