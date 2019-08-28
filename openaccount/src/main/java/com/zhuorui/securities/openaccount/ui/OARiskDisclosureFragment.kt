@@ -53,6 +53,7 @@ class OARiskDisclosureFragment :
         when (p0) {
             btn_next -> {
                 // 跳转到下一步
+                start(OASignatureFragment.newInstance())
             }
             btn_per -> {
                 // 跳转到上一步

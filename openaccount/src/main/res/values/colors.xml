@@ -12,4 +12,5 @@
     <color name="seekbar_progress">#1A6ED2</color>
     <color name="color_8DB9E4" tools:ignore="MissingDefaultResource">#8DB9E4</color>
     <color name="color_2F2F2F" tools:ignore="MissingDefaultResource">#2F2F2F</color>
+    <color name="color_333333" tools:ignore="MissingDefaultResource">#333333</color>
 </resources>
