@@ -55,6 +55,7 @@ class OATakeBankCradPhotoFragment :
         tv_take_sample.setOnClickListener(this)
         tv_bank.vEt.setOnClickListener(this)
         tv_card_id?.vRightIcon?.setOnClickListener(this)
+        btn_next.setOnClickListener(this)
 
         tv_card_id.vEt.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_NORMAL
         tv_card_id.vEt.filters = arrayOf(InputFilter.LengthFilter(26))
@@ -64,7 +65,12 @@ class OATakeBankCradPhotoFragment :
 
     override fun onClick(p0: View?) {
         when (p0) {
+            btn_next -> {
+                // 跳转到下一步
+                start(OARiskDisclosureFragment.newInstance())
+            }
             tv_bank.vEt -> {
+                // 选择银行
                 val dialog = context?.let { OptionsPickerDialog<String>(it) }
                 val regionData: MutableList<String> =
                     mutableListOf("中国工商银行", "中国农业银行", "中国银行", "中国建设银行", "中国邮政储蓄银行", "交通银行", "招商银行")
@@ -73,10 +79,12 @@ class OATakeBankCradPhotoFragment :
                 dialog?.show()
             }
             tv_card_id.vRightIcon -> {
+                // 选取银行卡照片方式
                 val dialog = context?.let { GetPicturesModeDialog(it) }
                 dialog?.show()
             }
             else -> {
+                // 拍照示例
                 context?.let { TakePhotoBankCardTipsDialog(it).show() }
             }
         }
