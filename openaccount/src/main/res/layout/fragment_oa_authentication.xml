@@ -21,7 +21,6 @@
                     app:zr_iconSrc="@color/app_bule"
                     app:zr_iconHight="20dp"
                     app:zr_iconWidth="30dp"
-                    app:zr_iconVisibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

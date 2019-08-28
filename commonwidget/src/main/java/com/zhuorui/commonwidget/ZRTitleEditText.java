@@ -9,8 +9,10 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.zhuorui.securities.base2app.util.ResUtil;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * author : liuwei
@@ -24,8 +26,8 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     public static final int VERTICAL = 1;
 
     private TextView vTitle;
-    private EditText vEt;
-    private ImageView vRightIcon;
+    public EditText vEt;
+    public ImageView vRightIcon;
     //    private ImageView vRImg;
     private int mOrientation = -1;
     private Drawable mRightBtnDraw;
@@ -61,8 +63,8 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     private void setRightIcon(TypedArray a) {
         vRightIcon = findViewById(R.id.iv_right_icon);
         if (vRightIcon == null) return;
-        int visible = a.getResourceId(R.styleable.ZRTitleEditText_zr_iconVisibility, 8);
-        if (visible == 0){
+        boolean visible = a.getBoolean(R.styleable.ZRTitleEditText_zr_iconVisible, false);
+        if (visible) {
             vRightIcon.setVisibility(VISIBLE);
             int width = a.getDimensionPixelOffset(R.styleable.ZRTitleEditText_zr_iconWidth, 0);
             int hight = a.getDimensionPixelOffset(R.styleable.ZRTitleEditText_zr_iconHight, 0);
@@ -71,7 +73,7 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
             params.width = width > 0 ? width : ViewGroup.LayoutParams.WRAP_CONTENT;
             params.height = hight > 0 ? hight : ViewGroup.LayoutParams.WRAP_CONTENT;
             vRightIcon.setImageResource(resId);
-        }else {
+        } else {
             vRightIcon.setVisibility(GONE);
         }
 

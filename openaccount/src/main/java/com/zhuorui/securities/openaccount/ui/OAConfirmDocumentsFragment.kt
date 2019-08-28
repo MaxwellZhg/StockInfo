@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaConfirmDocumentsBinding
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_oa_confirm_documents.*
  *    desc   : 确认身份信息
  */
 class OAConfirmDocumentsFragment :
-    AbsFragment<FragmentOaConfirmDocumentsBinding, OAConfirmDocumentsViewModel, OAConfirmDocumentsView, OAConfirmDocumentsPresenter>(),
+    AbsSwipeBackFragment<FragmentOaConfirmDocumentsBinding, OAConfirmDocumentsViewModel, OAConfirmDocumentsView, OAConfirmDocumentsPresenter>(),
     OAConfirmDocumentsView, View.OnClickListener {
 
     var mDatePicker: DatePickerDialog? = null

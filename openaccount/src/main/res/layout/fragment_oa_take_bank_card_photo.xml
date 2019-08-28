@@ -35,16 +35,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bank_card_verify"
-                    android:layout_marginEnd="17dp"
-                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
                     android:textColor="#ff232323"
                     android:textSize="18sp"/>
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginEnd="18dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="10dp"
                     android:text="@string/bank_card_verify_tips"
                     android:textColor="#ffa1a1a1"
@@ -58,12 +59,14 @@
                   android:background="@color/color_CCCCCC"/>
 
             <com.zhuorui.commonwidget.ZRTitleEditText
+                    android:id="@+id/tv_card_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:zr_iconSrc="@mipmap/ic_camera"
                     style="@style/openAccountItem"
                     app:zr_iconWidth="15dp"
                     app:zr_iconHight="11dp"
+                    app:zr_iconVisible="true"
                     android:layout_marginTop="10dp"
                     app:zr_teditTitle="@string/bank_card_code"
                     app:zr_teditHint="@string/bank_card_hint"
@@ -71,6 +74,7 @@
 
 
             <TextView
+                    android:id="@+id/tv_take_sample"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/take_sample"
@@ -82,10 +86,12 @@
                     tools:ignore="SmallSp"/>
 
             <com.zhuorui.commonwidget.ZRTitleTextView
+                    android:id="@+id/tv_bank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:zr_ttextviewTitle="@string/open_account_bank"
+                    app:zr_iconVisible="true"
                     style="@style/ZRTitleTextViewRightArrow"
                     app:zr_ttextviewHint="@string/open_account_bank_hint"
                     app:zr_teditOrientation="VERTICAL"/>
