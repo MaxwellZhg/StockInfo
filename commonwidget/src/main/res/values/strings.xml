@@ -3,4 +3,6 @@
     <string name="register_tips" tools:ignore="MissingTranslation">注册成功,是否立即开户?</string>
     <string name="go_to_main" tools:ignore="MissingTranslation">进入首页</string>
     <string name="complete_info" tools:ignore="MissingTranslation">立即开户</string>
+    <string name="upload_waiting">上传中，请稍后</string>
+    <string name="str_reshooting">重新拍摄</string>
 </resources>

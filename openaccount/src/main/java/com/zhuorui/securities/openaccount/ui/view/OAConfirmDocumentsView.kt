@@ -11,4 +11,11 @@ import com.zhuorui.securities.openaccount.model.OADataTips
  */
 interface OAConfirmDocumentsView : AbsView {
     fun init()
+    fun setBirthday(date: String?)
+    fun setName(name: String?)
+    fun setGender(gender: String?)
+    fun setCardNo(cardNo: String?)
+    fun setCardValidStartDate(date: String?)
+    fun setCardValidEndDate(date: String?)
+    fun setCardAddress(address: String?)
 }

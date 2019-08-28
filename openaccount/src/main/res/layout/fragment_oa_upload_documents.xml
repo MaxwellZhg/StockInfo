@@ -87,6 +87,7 @@
                         app:zr_toAlbumRequestCode="101"
                         app:zr_toCameraRequestCode="102"
                         app:layout_constraintTop_toBottomOf="@+id/sub_title"
+                        app:zr_upimageviewWatermark="@string/openaccount_watermark"
                 />
 
                 <View android:id="@+id/v2"
@@ -111,6 +112,7 @@
                         app:zr_upimageviewBtnText="@string/str_shooting_the_national_emblem"
                         app:zr_toAlbumRequestCode="201"
                         app:zr_toCameraRequestCode="202"
+                        app:zr_upimageviewWatermark="@string/openaccount_watermark"
                 />
 
                 <com.zhuorui.commonwidget.StateButton
@@ -121,6 +123,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/idcard_national_emblem"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        android:enabled="false"
                         android:layout_marginTop="38dp"
                         android:layout_marginBottom="30dp"
                         android:layout_marginLeft="30dp"

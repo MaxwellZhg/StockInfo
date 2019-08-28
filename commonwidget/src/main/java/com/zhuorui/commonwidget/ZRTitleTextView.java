@@ -122,4 +122,8 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public void afterTextChanged(Editable editable) {
 
     }
+
+    public String getText() {
+        return vEt.getText().toString();
+    }
 }

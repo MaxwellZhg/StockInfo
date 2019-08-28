@@ -9,4 +9,6 @@ import androidx.lifecycle.ViewModel
  *    desc   :
  */
 class OAConfirmDocumentsViewModel : ViewModel() {
+    var cardName :String?=null
+
 }

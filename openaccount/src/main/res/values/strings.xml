@@ -5,7 +5,7 @@
     <string name="infomation" tools:ignore="MissingTranslatio">填写资料</string>
     <string name="verify_info" tools:ignore="MissingTranslatio">资料审核</string>
     <string name="verify_self" tools:ignore="MissingTranslatio">人身验证</string>
-    <string name="read_num"   tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
+    <string name="read_num" tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
     <string name="str_account_opening_agreement">开户协议</string>
     <string name="str_confirm_Read_agreement">本人已仔细阅读并同意签署全部</string>
     <string name="str_identity_witness_profile">身份证人像面</string>
@@ -36,4 +36,5 @@
     <string name="open_account_bank">开户银行</string>
     <string name="open_account_bank_hint">请选择开户银行</string>
     <string name="take_sample">拍摄范例</string>
+    <string name="openaccount_watermark">仅用于卓锐证券开户使用</string>
 </resources>
