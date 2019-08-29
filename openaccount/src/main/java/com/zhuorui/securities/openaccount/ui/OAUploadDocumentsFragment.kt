@@ -2,16 +2,13 @@ package com.zhuorui.securities.openaccount.ui
 
 import android.content.Intent
 import android.net.Uri
-import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.google.gson.Gson
 import com.zhuorui.commonwidget.ZRUploadImageView
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.base2app.util.JsonUtil
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
 import com.zhuorui.securities.openaccount.model.CardOcrData
@@ -28,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_oa_upload_documents.*
  *    desc   : 上传身份证信息
  */
 class OAUploadDocumentsFragment :
-    AbsFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
+    AbsSwipeBackNetFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
     OAUploadDocumentsView, View.OnClickListener, ZRUploadImageView.OnUploadImageListener {
 
 
@@ -54,7 +51,7 @@ class OAUploadDocumentsFragment :
         get() = this
 
     override fun goCamera(requestCode: Int, uri: Uri?) {
-        GetPhotoFromAlbumUtil.goCamera(this, requestCode, uri)
+//        GetPhotoFromAlbumUtil.goCamera(this, requestCode, uri)
 
     }
 
