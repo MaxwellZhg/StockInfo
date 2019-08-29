@@ -1,10 +1,11 @@
-package com.zhuorui.commonwidget
+package com.zhuorui.commonwidget.dialog
 
 import android.app.Dialog
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
+import com.zhuorui.commonwidget.R
 
 /**
  * Created by Maxwell.

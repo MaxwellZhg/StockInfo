@@ -30,7 +30,7 @@
     <string name="input_psw_tips" tools:ignore="MissingTranslation">请输入密码</string>
     <string name="compare_psw_again" tools:ignore="MissingTranslation">两次输入密码不一致，请再次输入</string>
     <string name="input_mix_count" tools:ignore="MissingTranslation">最小输入6位字符</string>
-    <string name="register_tips" tools:ignore="MissingTranslation">注册成功,是否立即开户?</string>
+    <string name="register_tips" tools:ignore="ExtraTranslation,MissingTranslation">注册成功,是否立即开户?</string>
     <string name="go_to_main" tools:ignore="MissingTranslation">进入首页</string>
     <string name="complete_info" tools:ignore="MissingTranslation">立即开户</string>
     <string name="password" tools:ignore="MissingTranslation">密码</string>
