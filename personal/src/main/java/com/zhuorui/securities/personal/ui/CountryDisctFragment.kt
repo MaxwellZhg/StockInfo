@@ -168,7 +168,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
 
     override fun onDestroy() {
         super.onDestroy()
-        mHandler?.removeCallbacksAndMessages(null)
+        mHandler.removeCallbacksAndMessages(null)
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -195,7 +195,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
         override fun run() {
              result.clear()
              result.addAll(presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
-            if(result?.size!!>0) {
+            if(result?.size>0) {
                 adapter?.clearItems()
                 adapter?.addItems(result)
                 adapter?.notifyDataSetChanged()

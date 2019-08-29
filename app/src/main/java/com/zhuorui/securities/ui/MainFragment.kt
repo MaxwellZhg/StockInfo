@@ -11,6 +11,7 @@ import com.zhuorui.securities.databinding.FragmentMainBinding
 import com.zhuorui.securities.infomation.ui.InfomationTabFragment
 import com.zhuorui.securities.market.ui.MarketTabFragment
 import com.zhuorui.securities.market.ui.StockTabFragment
+import com.zhuorui.securities.openaccount.ui.OABiopsyFragment
 import com.zhuorui.securities.openaccount.ui.OpenAccountTabFragment
 import com.zhuorui.securities.personal.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -126,7 +127,7 @@ class MainFragment :
             mFragments[FIRST] = firstFragment
             mFragments[SECOND] = findChildFragment(MarketTabFragment::class.java)
             mFragments[THIRD] = findChildFragment(InfomationTabFragment::class.java)
-            mFragments[FOUR] = findChildFragment(OpenAccountTabFragment::class.java)
+            mFragments[FOUR] = findChildFragment(OABiopsyFragment::class.java)
             mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
         }
     }

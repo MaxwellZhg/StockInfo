@@ -44,7 +44,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         code = arguments?.getSerializable("code") as String?
         iv_back.setOnClickListener(this)
         tv_btn_finish.setOnClickListener(this)
-        cb_login_psw.setOnCheckedChangeListener{buttonView, isChecked->
+        cb_login_psw.setOnCheckedChangeListener{ _, isChecked->
             run {
                 if (isChecked) {
                     et_login_psw.transformationMethod = HideReturnsTransformationMethod.getInstance()
@@ -87,11 +87,11 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
                 pop()
             }
             R.id.tv_btn_finish->{
-                if (strloginpsw == null || strloginpsw == "") {
+                if (strloginpsw == "") {
                     ToastUtil.instance.toast(R.string.input_psw_tips)
                     return
                 }
-                if (strensurepsw == null || strensurepsw == "") {
+                if (strensurepsw == "") {
                     ToastUtil.instance.toast(R.string.input_psw_tips)
                     return
                 }

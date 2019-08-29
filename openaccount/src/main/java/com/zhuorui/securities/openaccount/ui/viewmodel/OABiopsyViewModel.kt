@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.viewmodel
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 
 /**
@@ -8,6 +9,11 @@ import androidx.lifecycle.ViewModel
  * Date: 2019/8/26
  * Desc:
  */
-class OABiopsyViewModel : ViewModel(){
+class OABiopsyViewModel : ViewModel() {
+    var str = ObservableField<String>()
+
+    init {
+        str.set("3458")
+    }
 
 }

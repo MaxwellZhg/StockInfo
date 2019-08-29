@@ -40,11 +40,11 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         get() = dialog != null && dialog!!.isShowing
 
     protected constructor(context: Context) {
-        init(context, 0)
+        initView(context, 0)
     }
 
     protected constructor(context: Context, theme: Int = 0) {
-        init(context, theme)
+        initView(context, theme)
     }
 
     protected constructor(context: Context, initView: Boolean, theme: Int = 0) {
@@ -55,7 +55,7 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         }
     }
 
-    private fun init(context: Context, theme: Int) {
+    private fun initView(context: Context, theme: Int) {
         this.TAG = this.javaClass.name
         this.context = context
         initView(theme)
@@ -64,7 +64,7 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
     protected constructor(context: Context, w: Int, h: Int) {
         this.width = w
         this.height = h
-        init(context, 0)
+        initView(context, 0)
     }
 
     fun setLifeCycle(lifeCycle: DialogLifeCycle): BaseDialog {
@@ -84,10 +84,10 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         dialog!!.setOnShowListener(this)
         dialog!!.setOnDismissListener(this)
         dialog!!.setOnCancelListener(this)
-        init(customDialog)
+        init()
     }
 
-    protected open fun init(contentView: View) {}
+    protected open fun init() {}
 
     fun show() {
         dialog!!.show()
@@ -131,10 +131,16 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
             lifeCycle!!.onDialogShow(this.javaClass.name)
     }
 
+    /**
+     * 是否允许外部点击来取消对话框
+     */
     protected fun changeDialogOutside(isCanClick: Boolean) {
         dialog!!.setCanceledOnTouchOutside(isCanClick)
     }
 
+    /**
+     * 是否要屏蔽返回键来取消对话框
+     */
     protected fun ignoreBackPressed() {
         /*设置onKeyListener*/
         dialog!!.setOnKeyListener { dialog, keyCode, event -> keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0 }

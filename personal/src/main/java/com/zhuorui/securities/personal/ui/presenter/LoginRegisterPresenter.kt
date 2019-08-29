@@ -2,7 +2,7 @@ package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
 import android.view.View
-import com.zhuorui.commonwidget.ProgressDialog
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -160,10 +160,9 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                 progressDialog.show()
               }
             else->{
-                if(progressDialog!=null) {
-                    progressDialog.setCancelable(true)
-                    progressDialog.dismiss()
-                }
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
             }
             }
         }

@@ -56,18 +56,18 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                start(CountryDisctFragment())
            }
            R.id.tv_send_code->{
-               if (strphone == null || strphone == "") {
+               if (strphone == "") {
                    ToastUtil.instance.toast(R.string.phone_tips)
                    return
                }
                presenter?.requestSendForgetCode(strphone)
            }
            R.id.tv_btn_commit->{
-               if (strphone == null || strphone == "") {
+               if (strphone == "") {
                    ToastUtil.instance.toast(R.string.phone_tips)
                    return
                }
-               if (phonecode == null || phonecode == "") {
+               if (phonecode == "") {
                    ToastUtil.instance.toast(R.string.phone_code_tips)
                    return
                }

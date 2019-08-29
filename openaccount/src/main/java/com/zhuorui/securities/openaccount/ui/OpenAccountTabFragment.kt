@@ -44,7 +44,7 @@ open class OpenAccountTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        (parentFragment as AbsFragment<*, *, *, *>).start(OASelectRegionFragment.newInstance())
+        (parentFragment as AbsFragment<*, *, *, *>).start(OASignatureFragment.newInstance())
 //        when (presenter?.getLoginStatus()) {
 //            false -> {
 //                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())

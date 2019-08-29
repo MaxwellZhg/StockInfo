@@ -11,8 +11,10 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OABiopsyViewModel
  * Desc:
  */
 class OABiopsyPresenter : AbsNetPresenter<OABiopsyView,OABiopsyViewModel>(){
+
     override fun init() {
-      view?.init()
+        super.init()
+        view?.init()
     }
 
 }

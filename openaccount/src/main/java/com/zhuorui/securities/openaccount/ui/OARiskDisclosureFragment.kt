@@ -47,6 +47,7 @@ class OARiskDisclosureFragment :
         super.onLazyInitView(savedInstanceState)
         btn_next.setOnClickListener(this)
         btn_per.setOnClickListener(this)
+        btn_speech_risk.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -58,6 +59,9 @@ class OARiskDisclosureFragment :
             btn_per -> {
                 // 跳转到上一步
                 pop()
+            }
+            btn_speech_risk -> {
+                presenter?.speechRisk()
             }
         }
     }

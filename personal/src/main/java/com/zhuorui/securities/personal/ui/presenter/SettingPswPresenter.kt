@@ -1,9 +1,8 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
-import android.view.View
-import com.zhuorui.commonwidget.InfoDialog
-import com.zhuorui.commonwidget.ProgressDialog
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -11,12 +10,12 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.UserLoginRegisterRequest
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
-import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.ui.view.SettingPswView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
 
@@ -27,14 +26,19 @@ import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
  * Desc:
  */
 class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, SettingPswViewModel>() {
-    private val infodialog: InfoDialog by lazy {
 
-        InfoDialog(context)
+    private val infodialog: ConfirmToCancelDialog by lazy {
+        ConfirmToCancelDialog.createWidth265Dialog(context, false, false)
+            .setMsgText(R.string.register_tips)
+            .setCancelText(R.string.go_to_main)
+            .setConfirmText(R.string.complete_info)
     }
+
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
+
     override fun init() {
         super.init()
         view?.init()
@@ -73,32 +77,26 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
 
 
     fun showDailog() {
-        infodialog.show()
-        infodialog.setOnclickListener(View.OnClickListener {
-            when (it.id) {
-                R.id.rl_gotomain -> {
-                    infodialog.dismiss()
-                    view?.gotomain()
-                }
-                R.id.rl_completeinfo -> {
-                    infodialog.dismiss()
-                    view?.openaccount()
-                }
+        infodialog.setCallBack(object : ConfirmToCancelDialog.CallBack {
+            override fun onCancel() {
+                view?.gotomain()
             }
-        })
+
+            override fun onConfirm() {
+                view?.openaccount()
+            }
+        }).show()
     }
 
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
+    fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
                 progressDialog.setCancelable(false)
                 progressDialog.show()
             }
-            else->{
-                if(progressDialog!=null) {
-                    progressDialog.setCancelable(true)
-                    progressDialog.dismiss()
-                }
+            else -> {
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
             }
         }
     }

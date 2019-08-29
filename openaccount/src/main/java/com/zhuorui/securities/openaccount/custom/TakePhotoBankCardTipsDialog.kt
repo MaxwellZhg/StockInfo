@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import butterknife.BindView
 import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.R2
 
 /**
  *    author : PengXianglin
@@ -18,12 +20,14 @@ class TakePhotoBankCardTipsDialog(context: Context) :
     BaseDialog(context, ResUtil.getDimensionDp2Px(265f), WindowManager.LayoutParams.WRAP_CONTENT),
     View.OnClickListener {
 
+    @BindView(R2.id.tv_close)
+    lateinit var tv_close: TextView
+
     override val layout: Int
         get() = R.layout.dialog_take_photo_bank_card_tips
 
-    override fun init(contentView: View) {
-        super.init(contentView)
-        contentView.findViewById<TextView>(R.id.tv_close).setOnClickListener(this)
+    override fun init() {
+        tv_close.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {

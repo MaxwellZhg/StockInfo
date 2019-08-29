@@ -39,6 +39,7 @@
 
     <declare-styleable name="ZhuoRuiTopBar">
         <attr name="zr_topbarTitle" format="string|reference"/>
+        <attr name="zr_shareVisibility" format="boolean"/>
     </declare-styleable>
 
 

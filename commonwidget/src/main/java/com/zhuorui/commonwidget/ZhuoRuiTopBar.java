@@ -25,6 +25,8 @@ public class ZhuoRuiTopBar extends FrameLayout {
 
     private View mTitleView;
     private View mBackView;
+    private View mShareView;
+    private Boolean mShare;
 
     public ZhuoRuiTopBar(Context context) {
         this(context, null);
@@ -38,11 +40,18 @@ public class ZhuoRuiTopBar extends FrameLayout {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZhuoRuiTopBar);
         String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zr_topbarTitle);
+        mShare= a.getBoolean(R.styleable.ZhuoRuiTopBar_zr_shareVisibility,false);
         setBackView(getBackView());
         setTitleView(getTitleView());
         setTitle(mTitle);
+        setShareView(getShareView());
         setBackgroundColor(Color.parseColor("#211F2A"));
         setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0);
+        if(mShare){
+            mShareView.setVisibility(VISIBLE);
+        }else{
+            mShareView.setVisibility(INVISIBLE);
+        }
         setBackClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,5 +108,24 @@ public class ZhuoRuiTopBar extends FrameLayout {
 
     public void setBackClickListener(OnClickListener l) {
         if (mBackView != null) mBackView.setOnClickListener(l);
+    }
+
+    public void setShareView(View v) {
+        if (v == null) return;
+        if (mShareView != null) removeView(mShareView);
+        mShareView = v;
+        addView(mShareView);
+    }
+
+    private View getShareView() {
+        ImageView iv = new ImageView(getContext());
+        iv.setImageResource(R.mipmap.share_more);
+        float density = getResources().getDisplayMetrics().density;
+        int wh = (int) (density * 44f);
+        int padding = (int) (density * 12);
+        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        iv.setLayoutParams(lp);
+        iv.setPadding(padding, padding, padding, padding);
+        return iv;
     }
 }
