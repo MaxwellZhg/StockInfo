@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,4 +10,13 @@ import androidx.lifecycle.ViewModel
  *    desc   :
  */
 class OARiskDisclosureViewModel : ViewModel() {
+
+    /**
+     * 风险披露播放状态
+     */
+    val playingRisk: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        playingRisk.value = false
+    }
 }
