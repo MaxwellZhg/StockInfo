@@ -11,6 +11,7 @@ import com.zhuorui.securities.pickerview.IWheelData
 import com.zhuorui.securities.pickerview.date.DatePicker
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import com.zhuorui.securities.pickerview.option.OptionsPicker
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.text.Typography.times
@@ -25,11 +26,14 @@ import kotlin.text.Typography.times
 class DatePickerDialog(context: Context) : BaseBottomSheetsDialog(context),
     View.OnClickListener {
 
+    var format: String = "yyyy-MM-dd"
+    var listener: OnDateSelectedListener? = null
+
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.confirm -> {
                 hide()
-//                pickver.confirm()
+                listener?.onDateSelected(pickver.getDate(SimpleDateFormat(format)))
             }
             R.id.cancel -> {
                 hide()
@@ -61,15 +65,24 @@ class DatePickerDialog(context: Context) : BaseBottomSheetsDialog(context),
     fun setCurrentData(timeInMillis: Long) {
         var tms = Calendar.getInstance()
         tms.timeInMillis = timeInMillis
-        pickver.setDate(tms.get(Calendar.YEAR), tms.get(Calendar.MONTH), Calendar.DAY_OF_MONTH)
+        var y: Int = tms.get(Calendar.YEAR)
+        var m: Int = tms.get(Calendar.MONTH) + 1
+        var d: Int = tms.get(Calendar.DAY_OF_MONTH)
+        pickver.setDate(y, m, d)
     }
 
-    fun setCurrentData(timeStr: String, format: String) {
+    fun setCurrentData(timeStr: String, format: String?) {
+        this.format = format.toString()
         setCurrentData(SimpleDateFormat(format).parse(timeStr).time)
     }
 
-    fun setOnOptionSelectedListener(l: DatePicker.OnDateSelectedListener) {
-        pickver.setOnDateSelectedListener(l)
+    fun setOnDateSelectedListener(l: OnDateSelectedListener?) {
+        listener = l
+    }
+
+    interface OnDateSelectedListener {
+
+        fun onDateSelected(date: String)
     }
 
 

@@ -54,7 +54,7 @@ class OptionsPickerDialog<T>(context: Context) : BaseBottomSheetsDialog(context)
         title.setOnClickListener(this)
     }
 
-    fun setData(vararg datas: MutableList<T>) {
+    fun setData(vararg datas: MutableList<T>?) {
         pickver.setData(*datas)
 
     }
@@ -63,7 +63,7 @@ class OptionsPickerDialog<T>(context: Context) : BaseBottomSheetsDialog(context)
         pickver.setCurrentData(*datas)
     }
 
-    fun setOnOptionSelectedListener(l: OnOptionSelectedListener<T>) {
+    fun setOnOptionSelectedListener(l: OnOptionSelectedListener<T>?) {
         pickver.setOnOptionSelectedListener(l)
     }
 

@@ -1,3 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
+    <string name="upload_waiting" tools:ignore="ExtraTranslation">上传中，请稍后</string>
+    <string name="str_reshooting" tools:ignore="ExtraTranslation">重新拍摄</string>
 </resources>
