@@ -5,8 +5,6 @@ import android.text.InputFilter
 import android.text.InputType
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.commonwidget.dialog.ConfirmDialog
-import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment

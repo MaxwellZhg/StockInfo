@@ -1,11 +1,13 @@
 package com.zhuorui.commonwidget.dialog
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.Spanned
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import butterknife.BindView
 import com.zhuorui.commonwidget.R
@@ -43,6 +45,15 @@ class ConfirmDialog(
             ignoreBackPressed()
     }
 
+    fun setMagDrawableStart(drawable: Drawable): ConfirmDialog {
+        tv_msg.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+        return this
+    }
+
+    fun setMagDrawableStart(@DrawableRes drawableId: Int): ConfirmDialog {
+        tv_msg.setCompoundDrawablesRelativeWithIntrinsicBounds(ResUtil.getDrawable(drawableId), null, null, null)
+        return this
+    }
 
     fun setMsgText(str: String): ConfirmDialog {
         tv_msg.text = str
