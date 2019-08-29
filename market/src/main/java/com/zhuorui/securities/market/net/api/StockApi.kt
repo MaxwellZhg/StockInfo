@@ -8,7 +8,7 @@ interface StockApi {
         /**
          * 自选股股票列表（含大盘指数）
          */
-        const val LIST = "/as_market/api/stock/selected/v1/view/list"
+        const val LIST = "as_market/api/stock/selected/v1/view/list"
 
         /**
          * 同步自选股
@@ -38,12 +38,12 @@ interface StockApi {
         /**
          * 行情（即K线实时数据）
          */
-        const val MARKET = "/stockmarket/api/stock/market/v1"
+        const val MARKET = "stockmarket/api/stock/market/v1"
 
         /**
          * 关键字搜索
          */
-        const val SEARCH_TOPIC ="/as_market/api/stock/view/v1/search"
+        const val SEARCH_TOPIC ="as_market/api/stock/view/v1/search"
 
     }
 }

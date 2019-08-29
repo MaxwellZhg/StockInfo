@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,4 +10,10 @@ import androidx.lifecycle.ViewModel
  *    desc   :
  */
 class OASignatureViewModel : ViewModel() {
+
+    val agreement: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        agreement.value = false
+    }
 }

@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.ui.net.request
+package com.zhuorui.securities.openaccount.net.request
 
 import com.zhuorui.securities.base2app.network.BaseRequest
 
@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/8/28
  * Desc:
  */
-class LiveRecognRequest (val video:String,val validateCode:String?, val id:String?,  transaction: String) : BaseRequest(transaction) {
+class LiveCodeRequest(val id:String, transaction: String) :BaseRequest(transaction){
     init {
         generateSign()
     }

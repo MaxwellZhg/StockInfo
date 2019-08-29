@@ -9,4 +9,10 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface OASignatureView : AbsView {
+
+    fun showLoading()
+
+    fun jumpToNext()
+
+    fun hideLoading()
 }

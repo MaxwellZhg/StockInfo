@@ -1,7 +1,6 @@
-package com.zhuorui.securities.openaccount.ui.net.response
+package com.zhuorui.securities.openaccount.net.response
 
 import com.zhuorui.securities.base2app.network.BaseResponse
-import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 
 /**
  * Created by Maxwell.

@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModel
  * Date: 2019/8/26
  * Desc:
  */
-class OABiopsyViewModel : ViewModel(){
-   var str=ObservableField<String>()
+class OABiopsyViewModel : ViewModel() {
+    var str = ObservableField<String>()
 
-   init {
-       str.set("3458")
-   }
+    init {
+        str.set("3458")
+    }
 
 }

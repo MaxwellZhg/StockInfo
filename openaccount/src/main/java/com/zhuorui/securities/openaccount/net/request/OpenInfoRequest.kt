@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.ui.net.request
+package com.zhuorui.securities.openaccount.net.request
 
 import com.zhuorui.securities.base2app.network.BaseRequest
 
