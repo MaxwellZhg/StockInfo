@@ -36,13 +36,13 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         viewModel?.strensure?.set(strensure)
     }
     fun detailtips(strnewpsw:String,strensurepsw:String){
-        if (strnewpsw == null || strnewpsw == "") {
+        if (strnewpsw == "") {
             viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
             return
         }else{
             if (strnewpsw.length<6){
                 viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
-                if(strensurepsw != null && strensurepsw != ""){
+                if(strensurepsw != ""){
                     if(strnewpsw==strensurepsw){
                         viewModel?.strensure?.set(ResUtil.getString(R.string.input_new_pws_mix))
                         return
@@ -57,7 +57,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
                 val matcher = Pattern.compile(pattern).matcher(strnewpsw)
                 if (!matcher.find()) {
                     viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
-                    if(strensurepsw != null && strensurepsw != ""){
+                    if(strensurepsw != ""){
                         if(strnewpsw==strensurepsw){
                             viewModel?.strensure?.set(ResUtil.getString(R.string.new_psw_no_match))
                             return
@@ -69,7 +69,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
                 }
             }
         }
-        if (strensurepsw == null || strensurepsw == "") {
+        if (strensurepsw == "") {
             viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
             return
         }else{
@@ -122,10 +122,9 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
                 progressDialog.show()
             }
             else->{
-                if(progressDialog!=null) {
-                    progressDialog.setCancelable(true)
-                    progressDialog.dismiss()
-                }
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
             }
         }
     }

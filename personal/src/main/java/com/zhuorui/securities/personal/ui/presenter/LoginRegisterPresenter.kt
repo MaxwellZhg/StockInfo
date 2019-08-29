@@ -160,10 +160,9 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                 progressDialog.show()
               }
             else->{
-                if(progressDialog!=null) {
-                    progressDialog.setCancelable(true)
-                    progressDialog.dismiss()
-                }
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
             }
             }
         }

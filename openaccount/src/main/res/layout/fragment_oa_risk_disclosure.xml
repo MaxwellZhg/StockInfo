@@ -32,7 +32,7 @@
                         android:layout_width="match_parent"
                         style="@style/openAccountStep"
                         android:layout_height="wrap_content"
-                        app:zr_openAccountStep="STEP_2"/>
+                        app:zr_openAccountStep="STEP_3"/>
 
                 <View android:layout_width="match_parent" android:layout_height="5dp"
                       android:background="@color/app_background_color"/>

@@ -55,7 +55,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         phonecode = et_phone_code.text.toString().trim()
         when (v?.id) {
             R.id.tv_send_code -> {
-                if (strphone == null || strphone == "") {
+                if (strphone == "") {
                     ToastUtil.instance.toast(R.string.phone_tips)
                     return
                 }
@@ -65,11 +65,11 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                pop()
             }
             R.id.tv_btn_login->{
-              if (strphone == null || strphone == "") {
+              if (strphone == "") {
                     ToastUtil.instance.toast(R.string.phone_tips)
                     return
                 }
-                if (phonecode == null || phonecode == "") {
+                if (phonecode == "") {
                     ToastUtil.instance.toast(R.string.phone_code_tips)
                     return
                 }

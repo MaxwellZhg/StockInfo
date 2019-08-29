@@ -65,11 +65,11 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                pop()
            }
            R.id.tv_btn_login->{
-               if (strphone == null || strphone == "") {
+               if (strphone == "") {
                    ToastUtil.instance.toast(R.string.phone_tips)
                    return
                }
-               if (password == null || password == "") {
+               if (password == "") {
                    ToastUtil.instance.toast(R.string.input_psw_tips)
                    return
                }

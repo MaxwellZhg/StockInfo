@@ -2,10 +2,12 @@
     <string name="app_name">openaccount</string>
     <string name="zhuorui_openaccount" tools:ignore="MissingTranslatio">卓锐证券开户</string>
     <string name="ocr" tools:ignore="MissingTranslatio">身份验证</string>
-    <string name="infomation" tools:ignore="MissingTranslatio">填写资料</string>
+    <string name="complete_infomation" tools:ignore="MissingTranslatio">填写资料</string>
     <string name="verify_info" tools:ignore="MissingTranslatio">资料审核</string>
     <string name="verify_self" tools:ignore="MissingTranslatio">人身验证</string>
-    <string name="read_num" tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
+    <string name="verify_read_num" tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
+    <string name="start_vedio" tools:ignore="MissingTranslatio">开始拍摄</string>
+    <string name="read_num"  tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
     <string name="str_account_opening_agreement">开户协议</string>
     <string name="str_confirm_Read_agreement">本人已仔细阅读并同意签署全部</string>
     <string name="str_identity_witness_profile">身份证人像面</string>
