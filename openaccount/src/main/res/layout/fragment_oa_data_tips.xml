@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:zr_topbarTitle="@string/zhuorui_openaccount"
-                />
+        />
 
         <ImageView
                 android:id="@+id/top_bg"
@@ -144,8 +144,8 @@
                 android:layout_height="20dp"
                 android:gravity="center"
                 android:button="@null"
-                android:padding="6dp"
-                android:layout_marginBottom="6dp"
+                android:padding="4dp"
+                android:layout_marginBottom="8dp"
                 android:drawableLeft="@drawable/checkbox_style"
                 android:drawableStart="@drawable/checkbox_style"
                 android:layout_marginLeft="25dp"
@@ -159,7 +159,7 @@
                 app:layout_constraintTop_toTopOf="@+id/cbox"
                 app:layout_constraintBottom_toBottomOf="@+id/cbox"
                 app:layout_constraintLeft_toRightOf="@+id/cbox"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textColor="@color/text_color"
         />
 
@@ -174,7 +174,7 @@
                 android:layout_marginRight="30dp"
                 android:text="@string/str_open_an_account_immediately"
                 android:enabled="false"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
         />
 

@@ -60,4 +60,28 @@
     <string name="str_wait_audit">请等待审核</string>
     <string name="str_wait_audit_tips" tools:ignore="TypographyDashes">我们已成功收到您的开户申请，预计1-2个工作日会通知 您开户结果，届时请留意短信和邮件提醒。</string>
     <string name="btn_return_to_main" tools:ignore="TypographyDashes">返回首页</string>
+    <string name="str_verification_of_ocument_information">核对证件信息</string>
+    <string name="str_personal_information">个人信息</string>
+    <string name="str_employment_status">就业状态</string>
+    <string name="str_email_address">邮箱地址</string>
+    <string name="str_tax_information">税务信息</string>
+    <string name="str_tax_paying_countries_regions">纳税国家/地区</string>
+    <string name="str_tax_number">税务编号</string>
+    <string name="str_risk_assessment_tips">根据合规要求，请填写以下信息</string>
+    <string name="str_property_status">财产状况</string>
+    <string name="str_annual_income">全年收入</string>
+    <string name="str_frequency_of_monthly_transactions">每月交易频次</string>
+    <string name="str_risk_following_ability">风险随能力</string>
+    <string name="str_investment_experience">投资经验</string>
+    <string name="str_shares">股票</string>
+    <string name="str_bond">债券</string>
+    <string name="str_foreign_exchange_or_gold">外汇/黄金</string>
+    <string name="str_fund_or_financing">基金/理财</string>
+    <string name="str_salary">薪金</string>
+    <string name="str_deposit">存款</string>
+    <string name="str_rent">租金</string>
+    <string name="str_investment">投资</string>
+    <string name="to_loan">借贷</string>
+    <string name="str_other">其他</string>
+    <string name="str_other_information_notes">其他信息说明</string>
 </resources>

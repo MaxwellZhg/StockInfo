@@ -5,7 +5,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.zhuorui.securities.openaccount.ui.viewmodel.OAConfirmDocumentsViewModel"/>
+                type="com.zhuorui.securities.openaccount.ui.viewmodel.OAInvestmentExperienceViewModel"/>
     </data>
     <LinearLayout
             android:orientation="vertical"
@@ -36,7 +36,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:zr_openAccountStep="STEP_1"
+                        app:zr_openAccountStep="STEP_2"
                 />
 
                 <View android:id="@+id/v1"
@@ -52,73 +52,66 @@
                         style="@style/openAccountSubTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="16dp"
                         app:layout_constraintTop_toBottomOf="@+id/v1"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        android:text="@string/str_verification_of_ocument_information"
-
+                        android:text="@string/str_investment_experience"
                 />
 
-                <com.zhuorui.commonwidget.ZRTitleEditText
-                        android:id="@+id/et_cn_name"
-                        style="@style/openAccountItem"
-                        android:layout_marginTop="25dp"
+                <TextView
+                        android:id="@+id/sub_title_desc"
+                        style="@style/openAccountSubTitleDesc"
+                        android:text="@string/str_risk_assessment_tips"
                         app:layout_constraintTop_toBottomOf="@+id/sub_title"
-                        app:zr_teditTitle="@string/str_chinese_name"
-                        tools:ignore="MissingConstraints"/>
+                        app:layout_constraintLeft_toLeftOf="parent"
+                />
+
+                <View
+                        style="@style/openAccountLine"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/sub_title_desc"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                />
 
                 <com.zhuorui.commonwidget.ZRTitleTextView
-                        android:id="@+id/et_gender"
+                        android:id="@+id/tv_shares"
                         style="@style/ZRTitleTextViewRightArrow"
-                        app:layout_constraintTop_toBottomOf="@+id/et_cn_name"
-                        app:zr_ttextviewTitle="@string/str_gender"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="11dp"
+                        app:layout_constraintTop_toBottomOf="@+id/sub_title_desc"
+                        app:zr_ttextviewTitle="@string/str_shares"
+                        app:zr_ttextviewOrientation="HORIZONTAL"
+                        tools:ignore="MissingConstraints"
+                />
+
+
+                <com.zhuorui.commonwidget.ZRTitleTextView
+                        android:id="@+id/tv_bond"
+                        style="@style/ZRTitleTextViewRightArrow"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_shares"
+                        app:zr_ttextviewTitle="@string/str_bond"
+                        app:zr_ttextviewOrientation="HORIZONTAL"
                         tools:ignore="MissingConstraints"
                 />
 
                 <com.zhuorui.commonwidget.ZRTitleTextView
-                        android:id="@+id/et_birthday"
+                        android:id="@+id/tv_exchange_or_gold"
                         style="@style/ZRTitleTextViewRightArrow"
-                        app:layout_constraintTop_toBottomOf="@+id/et_gender"
-                        app:zr_ttextviewTitle="@string/str_date_of_birth"
-                        android:layout_marginTop="10dp"
-                        tools:ignore="MissingConstraints"
-                />
-
-                <com.zhuorui.commonwidget.ZRTitleEditText
-                        android:id="@+id/et_idcard_no"
-                        style="@style/openAccountItem"
-                        android:layout_marginTop="10dp"
-                        app:layout_constraintTop_toBottomOf="@+id/et_birthday"
-                        app:zr_teditTitle="@string/str_id_card_no"
-                        tools:ignore="MissingConstraints"/>
-
-                <com.zhuorui.commonwidget.ZRTitleTextView
-                        android:id="@+id/et_s_expiry"
-                        style="@style/ZRTitleTextViewRightArrow"
-                        app:layout_constraintTop_toBottomOf="@+id/et_idcard_no"
-                        app:zr_ttextviewTitle="@string/str_validity_period_beginning"
-                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_bond"
+                        app:zr_ttextviewTitle="@string/str_foreign_exchange_or_gold"
+                        app:zr_ttextviewOrientation="HORIZONTAL"
                         tools:ignore="MissingConstraints"
                 />
 
                 <com.zhuorui.commonwidget.ZRTitleTextView
-                        android:id="@+id/et_e_expiry"
+                        android:id="@+id/tv_fund_or_financing"
                         style="@style/ZRTitleTextViewRightArrow"
-                        app:layout_constraintTop_toBottomOf="@+id/et_s_expiry"
-                        app:zr_ttextviewTitle="@string/str_validity_period_end"
-                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_exchange_or_gold"
+                        app:zr_ttextviewTitle="@string/str_fund_or_financing"
+                        app:zr_ttextviewOrientation="HORIZONTAL"
+                        app:zr_titleWidthBaseline="true"
                         tools:ignore="MissingConstraints"
                 />
-
-                <com.zhuorui.commonwidget.ZRTitleEditText
-                        android:id="@+id/et_address"
-                        style="@style/openAccountItem"
-                        android:layout_marginTop="10dp"
-                        app:layout_constraintTop_toBottomOf="@+id/et_e_expiry"
-                        app:zr_teditTitle="@string/str_document_address"
-                        tools:ignore="MissingConstraints"/>
 
                 <com.zhuorui.commonwidget.StateButton
                         android:id="@+id/btn_per"
@@ -126,7 +119,7 @@
                         android:layout_width="96dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/btn_next"
-                        app:layout_constraintTop_toBottomOf="@+id/et_address"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_fund_or_financing"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginTop="38dp"
                         android:layout_marginBottom="30dp"

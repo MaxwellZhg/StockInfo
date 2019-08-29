@@ -32,31 +32,23 @@
                 android:layout_height="match_parent">
 
             <TextView
+                    style="@style/openAccountSubTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bank_card_verify"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:textColor="#ff232323"
-                    android:textSize="18sp"/>
+            />
 
             <TextView
+                    style="@style/openAccountSubTitleDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="10dp"
                     android:text="@string/bank_card_verify_tips"
-                    android:textColor="#ffa1a1a1"
-                    android:textSize="12sp"/>
+            />
 
-            <View android:layout_width="match_parent"
-                  android:layout_height="0.5dp"
-                  android:layout_marginStart="15dp"
-                  android:layout_marginEnd="15dp"
-                  android:layout_marginTop="5dp"
-                  android:background="@color/color_CCCCCC"/>
+            <View style="@style/openAccountLine"
+                  android:layout_width="match_parent"
+                  android:layout_marginTop="10dp"
+            />
 
             <com.zhuorui.commonwidget.ZRTitleEditText
                     android:id="@+id/tv_card_id"
@@ -91,7 +83,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:zr_ttextviewTitle="@string/open_account_bank"
-                    app:zr_iconVisible="true"
                     style="@style/ZRTitleTextViewRightArrow"
                     app:zr_ttextviewHint="@string/open_account_bank_hint"
                     app:zr_teditOrientation="VERTICAL"/>

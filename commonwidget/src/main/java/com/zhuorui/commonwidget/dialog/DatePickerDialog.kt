@@ -1,6 +1,7 @@
 package com.zhuorui.commonwidget.dialog
 
 import android.content.Context
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import butterknife.BindView
@@ -72,6 +73,7 @@ class DatePickerDialog(context: Context) : BaseBottomSheetsDialog(context),
     }
 
     fun setCurrentData(timeStr: String, format: String?) {
+        if (TextUtils.isEmpty(timeStr)) return
         this.format = format.toString()
         setCurrentData(SimpleDateFormat(format).parse(timeStr).time)
     }

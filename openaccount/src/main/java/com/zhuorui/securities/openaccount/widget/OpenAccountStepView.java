@@ -46,6 +46,7 @@ public class OpenAccountStepView extends FrameLayout {
         vTxt2.setEnabled(mStep >= 3);
         vTxt1.setEnabled(mStep >= 1);
         vSB.setProgress(mStep);
+        vSB.setEnabled(false);
     }
 
     private void initView() {

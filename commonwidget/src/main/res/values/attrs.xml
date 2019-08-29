@@ -45,7 +45,8 @@
     <attr name="zr_iconWidth" format="dimension"/>
     <attr name="zr_iconHight" format="dimension"/>
     <attr name="zr_iconSrc" format="reference"/>
-    <attr name="zr_iconVisibility" format="boolean"/>
+    <attr name="zr_iconVisible" format="boolean"/>
+    <attr name="zr_titleWidthBaseline" format="boolean"/>
 
     <declare-styleable name="ZRTitleEditText">
         <attr name="zr_teditTitle" format="string|reference"/>
@@ -59,6 +60,7 @@
         <attr name="zr_iconHight"/>
         <attr name="zr_iconSrc"/>
         <attr name="zr_iconVisible"/>
+        <attr name="zr_titleWidthBaseline"/>
     </declare-styleable>
 
     <declare-styleable name="ZRTitleTextView">
@@ -73,6 +75,7 @@
         <attr name="zr_iconHight"/>
         <attr name="zr_iconSrc"/>
         <attr name="zr_iconVisible"/>
+        <attr name="zr_titleWidthBaseline"/>
     </declare-styleable>
 
     <declare-styleable name="ZRUploadImageView">

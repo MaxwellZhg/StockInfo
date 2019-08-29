@@ -92,6 +92,10 @@ class OAConfirmDocumentsFragment :
         et_e_expiry.setOnClickListener(this)
         mDatePicker = context?.let { DatePickerDialog(it) }
         mOptionsPicker = context?.let { OptionsPickerDialog(it) }
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         var jsonData: String? = arguments?.getString("data")
         presenter?.setIdCardData(jsonData)
     }
@@ -102,7 +106,8 @@ class OAConfirmDocumentsFragment :
                 pop()
             }
             btn_next -> {
-                start(OATakeBankCradPhotoFragment.newInstance())
+                //start(OATakeBankCradPhotoFragment.newInstance())
+                start(OAPersonalInformationFragment.newInstance())
             }
             et_birthday -> {
                 mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())

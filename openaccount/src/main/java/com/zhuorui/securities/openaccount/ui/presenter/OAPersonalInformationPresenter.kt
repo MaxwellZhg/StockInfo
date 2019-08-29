@@ -1,7 +1,9 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
+import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
 import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
+import com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
 
 /**
@@ -10,10 +12,10 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewMode
  *    date   : 2019-08-20 14:19
  *    desc   :
  */
-class OAUploadDocumentsPresenter : AbsPresenter<OAUploadDocumentsView, OAUploadDocumentsViewModel>() {
+class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, OAPersonalInformationViewModel>() {
     override fun init() {
         super.init()
-        view?.init();
+        view?.init()
     }
 
 

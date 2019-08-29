@@ -9,9 +9,11 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.zhuorui.commonwidget.impl.IZRTitleView;
 
 /**
  * author : liuwei
@@ -19,7 +21,7 @@ import android.widget.TextView;
  * date   : 2019-08-23 10:09
  * desc   :
  */
-public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeListener, TextWatcher {
+public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeListener, TextWatcher , IZRTitleView {
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
@@ -28,6 +30,7 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public TextView vEt;
     private ImageView vRImg;
     private int mOrientation = -1;
+    private boolean mTitleBaseline = false;
 
     public ZRTitleTextView(Context context) {
         this(context, null);
@@ -40,11 +43,11 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public ZRTitleTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZRTitleTextView);
-
         int orientation = a.getInt(R.styleable.ZRTitleTextView_zr_ttextviewOrientation, VERTICAL);
         String title = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewTitle);
         String text = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewText);
         String hiht = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewHint);
+        mTitleBaseline = a.getBoolean(R.styleable.ZRTitleTextView_zr_titleWidthBaseline, mTitleBaseline);
         if (TextUtils.isEmpty(hiht)) {
             hiht = "请选择" + title;
         }
@@ -54,6 +57,43 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
         setHint(hiht);
         setRightIcon(a);
         a.recycle();
+        if (mTitleBaseline){
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    titleBasel();
+                }
+            });
+
+        }
+
+    }
+
+    private void titleBasel() {
+//        vTitle.post(new Runnable() {
+//            @Override
+//            public void run() {
+                ViewParent parent = getParent();
+                if (parent != null && parent instanceof ViewGroup) {
+                    ViewGroup group = (ViewGroup) parent;
+                    for (int i = 0, l = group.getChildCount(); i < l; i++) {
+                        View v = group.getChildAt(i);
+                        if (v != ZRTitleTextView.this && v instanceof IZRTitleView) {
+                            ((IZRTitleView) v).setTitleWidth(vTitle.getWidth());
+                        }
+                    }
+
+                }
+//            }
+//        });
+    }
+
+    public void setTitleWidth(int width) {
+        if (width > 0) {
+            ViewGroup.LayoutParams params = vTitle.getLayoutParams();
+            params.width = width;
+            vTitle.setLayoutParams(params);
+        }
     }
 
     private void setRightIcon(TypedArray a) {
@@ -65,8 +105,6 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
         boolean visible = a.getBoolean(R.styleable.ZRTitleTextView_zr_iconVisible, false);
         vRImg.setVisibility(visible ? VISIBLE : GONE);
         ViewGroup.LayoutParams params = vRImg.getLayoutParams();
-//        params.width = ResUtil.INSTANCE.getDimensionDp2Px(width);
-//        params.height = ResUtil.INSTANCE.getDimensionDp2Px(hight);
         params.width = width;
         params.height = hight;
         vRImg.setImageResource(resId);

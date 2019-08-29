@@ -9,10 +9,12 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.zhuorui.commonwidget.impl.IZRTitleView;
 
 /**
  * author : liuwei
@@ -20,7 +22,7 @@ import android.widget.TextView;
  * date   : 2019-08-23 10:09
  * desc   :
  */
-public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeListener, TextWatcher {
+public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeListener, TextWatcher, IZRTitleView {
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
@@ -31,6 +33,7 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     //    private ImageView vRImg;
     private int mOrientation = -1;
     private Drawable mRightBtnDraw;
+    private boolean mTitleBaseline = false;
 
 
     public ZRTitleEditText(Context context) {
@@ -48,6 +51,7 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
         String title = a.getString(R.styleable.ZRTitleEditText_zr_teditTitle);
         String text = a.getString(R.styleable.ZRTitleEditText_zr_teditText);
         String hiht = a.getString(R.styleable.ZRTitleEditText_zr_teditHint);
+        mTitleBaseline = a.getBoolean(R.styleable.ZRTitleTextView_zr_titleWidthBaseline, mTitleBaseline);
         if (TextUtils.isEmpty(hiht)) {
             hiht = "请输入" + title;
         }
@@ -55,9 +59,39 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
         setTitle(title);
         setText(text);
         setHint(hiht);
-
         setRightIcon(a);
         a.recycle();
+        if (mTitleBaseline) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    titleBasel();
+                }
+            });
+
+        }
+    }
+
+    private void titleBasel() {
+        ViewParent parent = getParent();
+        if (parent != null && parent instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) parent;
+            for (int i = 0, l = group.getChildCount(); i < l; i++) {
+                View v = group.getChildAt(i);
+                if (v != ZRTitleEditText.this && v instanceof IZRTitleView) {
+                    ((IZRTitleView) v).setTitleWidth(vTitle.getWidth());
+                }
+            }
+
+        }
+    }
+
+    public void setTitleWidth(int width) {
+        if (width > 0) {
+            ViewGroup.LayoutParams params = vTitle.getLayoutParams();
+            params.width = width;
+            vTitle.setLayoutParams(params);
+        }
     }
 
     private void setRightIcon(TypedArray a) {
