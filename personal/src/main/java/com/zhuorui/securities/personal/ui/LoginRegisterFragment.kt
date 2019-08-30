@@ -5,6 +5,8 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
+import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
@@ -79,7 +81,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                 startWithPop(LoginPswFragment())
             }
             R.id.rl_country_disct->{
-                start(CountryDisctFragment())
+                start(CommonCountryCodeFragment.newInstance(CommonEnum.Code))
             }
         }
     }

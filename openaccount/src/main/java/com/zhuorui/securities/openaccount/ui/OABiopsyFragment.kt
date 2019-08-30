@@ -1,5 +1,7 @@
 package com.zhuorui.securities.openaccount.ui
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
@@ -8,6 +10,7 @@ import com.zhuorui.securities.openaccount.ui.presenter.OABiopsyPresenter
 import com.zhuorui.securities.openaccount.ui.view.OABiopsyView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OABiopsyViewModel
 import com.zhuorui.securities.openaccount.databinding.FragmentOaBiopayBinding
+import kotlinx.android.synthetic.main.fragment_oa_biopay.*
 
 /**
  * Created by Maxwell.
@@ -17,7 +20,10 @@ import com.zhuorui.securities.openaccount.databinding.FragmentOaBiopayBinding
  */
 class OABiopsyFragment :
     AbsSwipeBackNetFragment<FragmentOaBiopayBinding, OABiopsyViewModel, OABiopsyView, OABiopsyPresenter>(),
-    OABiopsyView {
+    OABiopsyView ,View.OnClickListener{
+    override fun init() {
+
+    }
 
     override val layout: Int
         get() = R.layout.fragment_oa_biopay
@@ -34,13 +40,19 @@ class OABiopsyFragment :
     override val getView: OABiopsyView
         get() = this
 
-    override fun init() {
-
-    }
 
     companion object {
         fun newInstance(): OABiopsyFragment {
             return OABiopsyFragment()
         }
+    }
+
+    override fun onClick(p0: View?) {
+          startWithPop(OAVedioRecordFragment.newInstance())
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        btn_vedio.setOnClickListener(this)
     }
 }

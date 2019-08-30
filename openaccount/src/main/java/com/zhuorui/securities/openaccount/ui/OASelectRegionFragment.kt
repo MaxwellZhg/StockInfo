@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui
 
+import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
@@ -27,7 +28,9 @@ class OASelectRegionFragment :
     var dialog: OptionsPickerDialog<String>? = null
     val regionData: MutableList<String> = mutableListOf("中国澳门", "中国香港", "中国内地", "中国台湾", "海外居民")
 
-    override fun init() {
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+
         next.setOnClickListener(this)
         region.setOnClickListener(this)
         region.text = regionData[2]
@@ -39,7 +42,8 @@ class OASelectRegionFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.next -> {
-                start(OADataTipsFragment.newInstance())
+//                start(OADataTipsFragment.newInstance())
+                start(OAVedioRecordFragment.newInstance())
             }
             R.id.region -> {
                 dialog?.setCurrentData(region.text.toString())

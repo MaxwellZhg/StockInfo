@@ -8,11 +8,11 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  * Date: 2019/8/28
  * Desc:
  */
-class LiveRecognResponse(val data:Data) :BaseResponse(){
+class LiveRecognResponse(val data: Data) : BaseResponse() {
     data class Data(
-        val id:String,
-        val openStatus:Int,
-        val video:String,
-       val validateCode:String
+        val id: String,
+        val openStatus: Int,
+        val video: String,
+        val validateCode: String
     )
 }

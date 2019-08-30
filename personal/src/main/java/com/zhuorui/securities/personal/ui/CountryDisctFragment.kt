@@ -50,7 +50,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
     private var handler = Handler()
     private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
     override val layout: Int
-        get() = R.layout.country_city_fragment
+        get() = R.layout.common_country_code_fragment
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: CountryDisctPresenter

@@ -1,6 +1,7 @@
 package com.zhuorui.securities.openaccount.net.response
 
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
 
 /**
  * Created by Maxwell.
@@ -8,8 +9,8 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  * Date: 2019/8/28
  * Desc:
  */
-class OpenInfoResponse(val data:Data) :BaseResponse(){
-    data class Data(
+class OpenInfoResponse(val data:OpenAccountInfo) :BaseResponse(){
+/*    data class Data(
         val id: String,
        val userId :String,
         val openStatus:Int,
@@ -44,6 +45,6 @@ class OpenInfoResponse(val data:Data) :BaseResponse(){
         val investBond: Int,
         val investGoldForeign: Int,
         val investFund: Int
-       )
+       )*/
 
 }
