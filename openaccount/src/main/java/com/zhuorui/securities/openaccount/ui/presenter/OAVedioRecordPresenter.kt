@@ -1,6 +1,8 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -9,13 +11,20 @@ import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.LiveCodeRequest
 import com.zhuorui.securities.openaccount.net.request.LiveRecognRequest
-import com.zhuorui.securities.openaccount.net.request.OpenInfoRequest
+import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
 import com.zhuorui.securities.openaccount.net.response.LiveCodeResponse
 import com.zhuorui.securities.openaccount.net.response.LiveRecognResponse
-import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
+import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
 import com.zhuorui.securities.openaccount.ui.view.OAVedioRecordView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel
+import com.zhuorui.securities.openaccount.utils.Base64Enum
+import com.zhuorui.securities.openaccount.utils.FileToBase64Util
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import me.jessyan.autosize.utils.LogUtils
+import java.util.*
 
 /**
  * Created by Maxwell.
@@ -24,10 +33,9 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordViewModel>() {
-    override fun init() {
-        super.init()
-        view?.init()
-    }
+
+    private val disposables = LinkedList<Disposable>()
+
     /*   fun requestOpenInfo() {
            val request = OpenInfoRequest( transactions.createTransaction())
            Cache[IOpenAccountNet::class.java]?.getOpenInfo(request)
@@ -40,19 +48,16 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
                requestVedioVerifyCode(OpenInfoManager.get().info?.id)
            }
        }*/
-//
-//    fun requestVedioVerifyCode(id:String ?) {
-//        id?.let {
-//            val request =     LiveCodeRequest(it, transactions.createTransaction())
-//            Cache[IOpenAccountNet::class.java]?.getLiveCode(request)
-//                ?.enqueue(Network.IHCallBack<LiveCodeResponse>(request))
-//        }
-//
-//    }
 
+    /**
+     * 请求活体检查数字码
+     */
     fun requestVedioVerifyCode() {
-        // TODO 假数据
-        viewModel?.str?.set("1234")
+        OpenInfoManager.getInstance()?.info?.id?.let {
+            val request = LiveCodeRequest(it, transactions.createTransaction())
+            Cache[IOpenAccountNet::class.java]?.getLiveCode(request)
+                ?.enqueue(Network.IHCallBack<LiveCodeResponse>(request))
+        }
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
@@ -62,27 +67,54 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
         }
     }
 
-    fun requestCode() {
-        view?.requestCode()
-    }
+    fun uploadVedio(vedioBytes: ByteArray?) {
+        view?.showUploading()
 
-    fun uploadVedio(vedio: String) {
-        val request = LiveRecognRequest(
-            vedio,
-            viewModel?.str?.get(),
-            "0e1e0da346b7fb71dff9c3c3a863e075",
-            transactions.createTransaction()
-        )
-        Cache[IOpenAccountNet::class.java]?.getLiveRecogn(request)
-            ?.enqueue(Network.IHCallBack<LiveRecognResponse>(request))
+        //  在子线程中计算视频流的Base64码，然后上传
+        val disposable = Observable.create(ObservableOnSubscribe<String> { emitter ->
+            emitter.onNext(FileToBase64Util.getBase64String(Base64Enum.MP4, vedioBytes))
+            emitter.onComplete()
+        }).subscribeOn(Schedulers.io())
+            .subscribe {
+                val request = LiveRecognRequest(
+                    it,
+                    viewModel?.str?.get(),
+                    OpenInfoManager.getInstance()?.info?.id,
+                    transactions.createTransaction()
+                )
+                Cache[IOpenAccountNet::class.java]?.getLiveRecogn(request)
+                    ?.enqueue(Network.IHCallBack<LiveRecognResponse>(request))
+            }
+        disposables.add(disposable)
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onLiveRecognCode(response: LiveRecognResponse) {
+    fun onLiveRecognResponse(response: LiveRecognResponse) {
+        // 设置数据
+        val info = OpenInfoManager.getInstance()?.info
+        info?.openStatus = response.data.openStatus
+        info?.video = response.data.video
+        info?.validateCode = response.data.validateCode
+
+        view?.hideUploading()
+        view?.uploadComplete()
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
         if (response.request is LiveRecognRequest) {
-            LogUtils.e("成功")
+            view?.hideUploading()
         }
     }
 
+    override fun destroy() {
+        super.destroy()
 
+        // 释放disposable
+        if (disposables.isNullOrEmpty()) return
+        for (disposable in disposables) {
+            disposable.dispose()
+        }
+        disposables.clear()
+    }
 }

@@ -8,7 +8,7 @@
                   type="com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel"/>
     </data>
 
-    <LinearLayout
+    <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:background="@color/color_1a1a22"
@@ -23,18 +23,26 @@
                 android:layout_height="wrap_content"
                 app:zr_topbarTitle="@string/zhuorui_openaccount"/>
 
-        <com.zhuorui.securities.openaccount.widget.MySurfaceView
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
-                android:id="@+id/camera_mysurfaceview"
-                android:layout_width="300dp"
-                android:layout_height="278dp"
-                android:background="@drawable/circle"/>
+        <com.zhuorui.securities.openaccount.widget.CameraView
+                android:id="@+id/camera_View"
+                android:layout_below="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_below="@id/top_bar"
+                android:layout_marginTop="9dp"
+                android:src="@mipmap/ic_detection_head"
+                android:layout_height="wrap_content"/>
 
         <LinearLayout android:layout_width="234dp"
                       android:layout_height="107dp"
                       android:layout_marginTop="51dp"
                       android:orientation="vertical"
+                      android:layout_centerHorizontal="true"
+                      android:layout_above="@+id/btn_record"
+                      android:layout_marginBottom="30dp"
                       android:layout_gravity="center_horizontal"
                       android:background="@drawable/oa_code_bg">
 
@@ -61,9 +69,11 @@
 
         <ImageView android:layout_width="40dp"
                    android:layout_height="40dp"
-                   android:layout_marginTop="30dp"
+                   android:layout_marginBottom="58dp"
+                   android:layout_alignParentBottom="true"
+                   android:layout_centerHorizontal="true"
                    android:id="@+id/btn_record"
                    android:layout_gravity="center_horizontal"
                    android:background="@mipmap/voice_button"/>
-    </LinearLayout>
+    </RelativeLayout>
 </layout>

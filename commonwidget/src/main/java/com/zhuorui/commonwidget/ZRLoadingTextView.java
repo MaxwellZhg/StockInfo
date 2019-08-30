@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import org.jetbrains.annotations.NotNull;
@@ -98,6 +99,10 @@ public class ZRLoadingTextView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (TextUtils.isEmpty(mText)) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            return;
+        }
 
         int width = onMeasureR(0, widthMeasureSpec);
         int height = onMeasureR(1, heightMeasureSpec);
@@ -150,6 +155,9 @@ public class ZRLoadingTextView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (TextUtils.isEmpty(mText)) return;
+
         // 控件高度/2 + 文字高度/2,绘制文字从文字左下角开始,因此"+"
         Paint.FontMetricsInt fm = mPaint.getFontMetricsInt();
         mStartY = getMeasuredHeight() / 2 - fm.descent
@@ -316,6 +324,8 @@ public class ZRLoadingTextView extends View {
     }
 
     public void setText(@NotNull String text) {
+        if (TextUtils.isEmpty(text)) return;
+
         this.mText = text;
 
         // 初始化画笔,绘制的范围
