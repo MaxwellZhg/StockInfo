@@ -55,7 +55,7 @@ public class SortAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_contry_dicts, null);
+            convertView = View.inflate(context, R.layout.item_common_contry_dicts, null);
         }
         ViewHolder holder = ViewHolder.getHolder(convertView);
 

@@ -39,7 +39,7 @@ class SortAdapter(private val context: Context, private var list: List<JsonBean>
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_contry_dicts, null)
+            convertView = View.inflate(context, R.layout.item_common_contry_dicts, null)
         }
         val holder = ViewHolder.getHolder(convertView!!)
 

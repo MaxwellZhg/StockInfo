@@ -1,4 +1,4 @@
-package com.zhuorui.securities.personal.ui
+package com.zhuorui.commonwidget.common
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,38 +7,30 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.View
-import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
+import com.zhuorui.commonwidget.BR
+import com.zhuorui.commonwidget.R
+import com.zhuorui.commonwidget.databinding.CommonCountryCodeFragmentBinding
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetJsonDataUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
-import com.zhuorui.securities.personal.BR
-import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.databinding.CountryCityFragmentBinding
-import com.zhuorui.securities.personal.ui.adapter.SortAdapter
-import com.zhuorui.securities.personal.ui.compare.PinyinComparator
-import com.zhuorui.securities.personal.ui.model.JsonBean
-import com.zhuorui.securities.personal.ui.presenter.CountryDisctPresenter
-import com.zhuorui.securities.personal.ui.view.CountryDisctView
-import com.zhuorui.securities.personal.ui.viewmodel.CountryDisctViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.country_city_fragment.*
+import kotlinx.android.synthetic.main.common_country_code_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import org.json.JSONArray
 import java.util.*
 
-
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
- * Date: 2019/8/19
+ * Date: 2019/8/30
  * Desc:
  */
-class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, CountryDisctViewModel, CountryDisctView, CountryDisctPresenter>(),View.OnClickListener,CountryDisctView,TextWatcher,AdapterView.OnItemClickListener {
+class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding,CommonCountryViewModel,CommonCountryCodeView,CommonCountryCodePresenter>(),CommonCountryCodeView,TextWatcher{
+
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
@@ -49,27 +41,34 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
     private var adapter:SortAdapter?=null
     private var handler = Handler()
     private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
+    private  var type:CommonEnum?=null
     override val layout: Int
         get() = R.layout.common_country_code_fragment
     override val viewModelId: Int
         get() = BR.viewmodel
-    override val createPresenter: CountryDisctPresenter
-        get() = CountryDisctPresenter()
-    override val createViewModel: CountryDisctViewModel?
-        get() = ViewModelProviders.of(this).get(CountryDisctViewModel::class.java)
-    override val getView: CountryDisctView
+    override val createPresenter: CommonCountryCodePresenter
+        get() = CommonCountryCodePresenter()
+    override val createViewModel: CommonCountryViewModel?
+        get() = ViewModelProviders.of(this).get(CommonCountryViewModel::class.java)
+    override val getView: CommonCountryCodeView
         get() = this
 
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
-            R.id.iv_back -> {
-                pop()
+    companion object {
+        fun newInstance(type: CommonEnum?): CommonCountryCodeFragment {
+            val fragment = CommonCountryCodeFragment()
+            if (type != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("type", type)
+                fragment.arguments = bundle
             }
+            return fragment
         }
     }
 
-    override fun init() {
-        iv_back.setOnClickListener(this)
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+         type = arguments?.getSerializable("type") as CommonEnum?
+        initJsonData()
         quickindexbar.setonTouchLetterListener{
             for (i in 0 until jsonBean.size) {
 
@@ -89,18 +88,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
             }
         }
         et_search.addTextChangedListener(this)
-        lv_country.setOnItemClickListener(this)
     }
-
-    override fun rootViewFitsSystemWindowsPadding(): Boolean {
-        return true
-    }
-
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
-        initJsonData()
-    }
-
     @SuppressLint("HandlerLeak")
     private val mHandler = object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -123,7 +111,7 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             Collections.sort(it, PinyinComparator())
-                            adapter = SortAdapter(requireContext())
+                            adapter = SortAdapter(requireContext(),type)
                             it.addFirst(JsonBean("meiguo","美國","meiguo",false,"+1","United States of America","美国","常用地区","U"))
                             it.addFirst(JsonBean("zhongguotaiwan","中國台灣","zhongguotaiwan",false,"+886","Taiwan,China","中国台湾","常用地区","T"))
                             it.addFirst(JsonBean("zhongguoaomen","中國澳門","zhongguoaomen",false,"+853","Macao,China","中国澳门","常用地区","M"))
@@ -193,8 +181,8 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
 
     private inner class GetTopicStockDataRunnable(var keyWord: String) : Runnable {
         override fun run() {
-             result.clear()
-             result.addAll(presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
+            result.clear()
+            result.addAll(presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
             if(result?.size>0) {
                 adapter?.clearItems()
                 adapter?.addItems(result)
@@ -206,13 +194,4 @@ class CountryDisctFragment :AbsSwipeBackNetFragment<CountryCityFragmentBinding, 
             }
         }
     }
-
-    override fun onItemClick(p0: AdapterView<*>, p1: View?, p2: Int, p3: Long) {
-             presenter?.postValue(adapter!!.list[p2].cn,adapter!!.list[p2].number)
-             pop()
-    }
-
-
-
 }
-
