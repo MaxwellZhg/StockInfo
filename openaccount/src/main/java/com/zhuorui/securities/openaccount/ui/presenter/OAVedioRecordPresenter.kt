@@ -1,7 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -11,10 +10,8 @@ import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.LiveCodeRequest
 import com.zhuorui.securities.openaccount.net.request.LiveRecognRequest
-import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
 import com.zhuorui.securities.openaccount.net.response.LiveCodeResponse
 import com.zhuorui.securities.openaccount.net.response.LiveRecognResponse
-import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
 import com.zhuorui.securities.openaccount.ui.view.OAVedioRecordView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel
 import com.zhuorui.securities.openaccount.utils.Base64Enum
@@ -23,7 +20,6 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.jessyan.autosize.utils.LogUtils
 import java.util.*
 
 /**
@@ -36,18 +32,10 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
 
     private val disposables = LinkedList<Disposable>()
 
-    /*   fun requestOpenInfo() {
-           val request = OpenInfoRequest( transactions.createTransaction())
-           Cache[IOpenAccountNet::class.java]?.getOpenInfo(request)
-               ?.enqueue(Network.IHCallBack<OpenInfoResponse>(request))
-       }
-       @RxSubscribe(observeOnThread = EventThread.MAIN)
-       fun onVerifyOpenInfo(response: OpenInfoResponse) {
-           if(response.request is OpenInfoRequest) {
-               viewModel?.idstr?.set(response.data.id)
-               requestVedioVerifyCode(OpenInfoManager.get().info?.id)
-           }
-       }*/
+    override fun init() {
+        super.init()
+        requestVedioVerifyCode()
+    }
 
     /**
      * 请求活体检查数字码

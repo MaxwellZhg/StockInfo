@@ -52,8 +52,6 @@ class OAVedioRecordFragment :
         super.onLazyInitView(savedInstanceState)
 
         btn_record.setOnClickListener(this)
-
-        presenter?.requestVedioVerifyCode()
     }
 
     override fun onSupportVisible() {
