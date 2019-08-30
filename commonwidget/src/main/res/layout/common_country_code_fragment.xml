@@ -51,6 +51,7 @@
                       android:layout_marginRight="16dp"
                       android:layout_centerVertical="true"
                       android:textStyle="bold"
+                      android:clickable="true"
                       android:textColor="@color/color_1A6ED2"
                       android:textSize="16sp"
                       android:layout_alignParentRight="true"

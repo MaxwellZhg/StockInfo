@@ -40,14 +40,15 @@
                              android:layout_marginRight="6dp"
                              android:layout_alignParentRight="true"
                              android:layout_marginLeft="13dp"
+                             android:visibility="invisible"
                              android:layout_centerVertical="true"
                              android:text=""/>
-                   <CheckBox android:layout_width="15dp"
+                   <ImageView android:layout_width="15dp"
                              android:layout_height="15dp"
                              android:id="@+id/checkbox"
                              android:layout_centerVertical="true"
                              android:layout_alignParentRight="true"
-                             android:button="@drawable/cb_select"
+                             android:background="@mipmap/un_check"
                              android:layout_marginEnd="13dp"/>
                </RelativeLayout>
            </LinearLayout>

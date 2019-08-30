@@ -7,19 +7,25 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.zhuorui.commonwidget.BR
 import com.zhuorui.commonwidget.R
 import com.zhuorui.commonwidget.databinding.CommonCountryCodeFragmentBinding
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetJsonDataUtil
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.common_country_code_fragment.*
+import kotlinx.android.synthetic.main.dialog_get_pictures_mode.*
 import me.jessyan.autosize.utils.LogUtils
+import me.yokeyword.fragmentation.ISupportFragment
 import org.json.JSONArray
 import java.util.*
 
@@ -29,7 +35,7 @@ import java.util.*
  * Date: 2019/8/30
  * Desc:
  */
-class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding,CommonCountryViewModel,CommonCountryCodeView,CommonCountryCodePresenter>(),CommonCountryCodeView,TextWatcher{
+class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding,CommonCountryViewModel,CommonCountryCodeView,CommonCountryCodePresenter>(),CommonCountryCodeView,TextWatcher,View.OnClickListener{
 
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
@@ -88,6 +94,18 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
             }
         }
         et_search.addTextChangedListener(this)
+        if(type==CommonEnum.SINGLE||type==CommonEnum.ALL){
+            tv_cancel.text=ResUtil.getString(R.string.ensure)
+        }
+        if(type==CommonEnum.Code){
+            tv_cancel.text=ResUtil.getString(R.string.cancle)
+        }
+        tv_cancle.setOnClickListener{
+            var b=  Bundle ()
+            b.putString("str",adapter?.getinfo())
+            setFragmentResult(ISupportFragment.RESULT_OK,b)
+            pop()
+        }
     }
     @SuppressLint("HandlerLeak")
     private val mHandler = object : Handler() {
@@ -194,4 +212,15 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
             }
         }
     }
+    override fun onClick(p0: View?) {
+    /*    when(p0?.id){
+            R.id.tv_cancel->{
+                var b=  Bundle ()
+                b.putString("str",adapter?.getinfo())
+                setFragmentResult(ISupportFragment.RESULT_OK,b)
+                pop()
+            }
+        }*/
+    }
+
 }
