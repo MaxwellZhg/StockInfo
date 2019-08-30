@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
@@ -12,6 +13,7 @@ import com.zhuorui.securities.personal.ui.presenter.ForgetPswPresenter
 import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
 import com.zhuorui.securities.personal.databinding.ForgetPswFragmentBinding
+import com.zhuorui.securities.personal.ui.viewmodel.CountryDisctViewModel
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
@@ -34,7 +36,7 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
     override val createPresenter: ForgetPswPresenter
         get() = ForgetPswPresenter(requireContext())
     override val createViewModel: ForgetPswViewModel?
-        get() = ForgetPswViewModel()
+        get() = ViewModelProviders.of(this).get(ForgetPswViewModel::class.java)
     override val getView: ForgetPswView
         get() = this
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
