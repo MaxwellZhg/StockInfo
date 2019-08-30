@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.zhuorui.commonwidget.BR
@@ -35,8 +36,9 @@ import java.util.*
  * Date: 2019/8/30
  * Desc:
  */
-class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding,CommonCountryViewModel,CommonCountryCodeView,CommonCountryCodePresenter>(),CommonCountryCodeView,TextWatcher,View.OnClickListener{
-
+class CommonCountryCodeFragment :
+    AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding, CommonCountryViewModel, CommonCountryCodeView, CommonCountryCodePresenter>(),
+    CommonCountryCodeView, TextWatcher, View.OnClickListener,AdapterView.OnItemClickListener {
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
@@ -44,10 +46,10 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
     private lateinit var jsonBean: LinkedList<JsonBean>
     private var result: LinkedList<JsonBean> = LinkedList()
     private var isLoaded: Boolean = false
-    private var adapter:SortAdapter?=null
+    private var adapter: SortAdapter? = null
     private var handler = Handler()
     private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
-    private  var type:CommonEnum?=null
+    private var type: CommonEnum? = null
     override val layout: Int
         get() = R.layout.common_country_code_fragment
     override val viewModelId: Int
@@ -73,9 +75,9 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-         type = arguments?.getSerializable("type") as CommonEnum?
+        type = arguments?.getSerializable("type") as CommonEnum?
         initJsonData()
-        quickindexbar.setonTouchLetterListener{
+        quickindexbar.setonTouchLetterListener {
             for (i in 0 until jsonBean.size) {
 
                 val city = jsonBean[i]
@@ -94,19 +96,15 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
             }
         }
         et_search.addTextChangedListener(this)
-        if(type==CommonEnum.SINGLE||type==CommonEnum.ALL){
-            tv_cancel.text=ResUtil.getString(R.string.ensure)
+        if (type == CommonEnum.SINGLE || type == CommonEnum.ALL) {
+            tv_detele.text = ResUtil.getString(R.string.ensure)
+        } else {
+            tv_detele.text = ResUtil.getString(R.string.cancle)
         }
-        if(type==CommonEnum.Code){
-            tv_cancel.text=ResUtil.getString(R.string.cancle)
-        }
-        tv_cancle.setOnClickListener{
-            var b=  Bundle ()
-            b.putString("str",adapter?.getinfo())
-            setFragmentResult(ISupportFragment.RESULT_OK,b)
-            pop()
-        }
+        tv_detele.setOnClickListener (this)
+        lv_country.onItemClickListener = this
     }
+
     @SuppressLint("HandlerLeak")
     private val mHandler = object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -129,12 +127,72 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             Collections.sort(it, PinyinComparator())
-                            adapter = SortAdapter(requireContext(),type)
-                            it.addFirst(JsonBean("meiguo","美國","meiguo",false,"+1","United States of America","美国","常用地区","U"))
-                            it.addFirst(JsonBean("zhongguotaiwan","中國台灣","zhongguotaiwan",false,"+886","Taiwan,China","中国台湾","常用地区","T"))
-                            it.addFirst(JsonBean("zhongguoaomen","中國澳門","zhongguoaomen",false,"+853","Macao,China","中国澳门","常用地区","M"))
-                            it.addFirst(JsonBean("zhongguoxianggang","中國香港","zhongguoxianggang",false,"+852","Hongkong,China","中国香港","常用地区","H"))
-                            it.addFirst(JsonBean("zhongguo","中國内地","zhongguo",false,"+86","China","中国内地","常用地区","C"))
+                            adapter = SortAdapter(requireContext(), type)
+                            it.addFirst(
+                                JsonBean(
+                                    "meiguo",
+                                    "美國",
+                                    "meiguo",
+                                    false,
+                                    "+1",
+                                    "United States of America",
+                                    "美国",
+                                    "常用地区",
+                                    "U"
+                                )
+                            )
+                            it.addFirst(
+                                JsonBean(
+                                    "zhongguotaiwan",
+                                    "中國台灣",
+                                    "zhongguotaiwan",
+                                    false,
+                                    "+886",
+                                    "Taiwan,China",
+                                    "中国台湾",
+                                    "常用地区",
+                                    "T"
+                                )
+                            )
+                            it.addFirst(
+                                JsonBean(
+                                    "zhongguoaomen",
+                                    "中國澳門",
+                                    "zhongguoaomen",
+                                    false,
+                                    "+853",
+                                    "Macao,China",
+                                    "中国澳门",
+                                    "常用地区",
+                                    "M"
+                                )
+                            )
+                            it.addFirst(
+                                JsonBean(
+                                    "zhongguoxianggang",
+                                    "中國香港",
+                                    "zhongguoxianggang",
+                                    false,
+                                    "+852",
+                                    "Hongkong,China",
+                                    "中国香港",
+                                    "常用地区",
+                                    "H"
+                                )
+                            )
+                            it.addFirst(
+                                JsonBean(
+                                    "zhongguo",
+                                    "中國内地",
+                                    "zhongguo",
+                                    false,
+                                    "+86",
+                                    "China",
+                                    "中国内地",
+                                    "常用地区",
+                                    "C"
+                                )
+                            )
                             adapter?.addItems(it)
                             lv_country.adapter = adapter
                             adapter?.notifyDataSetChanged()
@@ -160,8 +218,20 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
             val data = JSONArray(result)
             val gson = Gson()
             for (i in 0 until data.length()) {
-                val entity:JsonBean = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
-                detail.add(JsonBean(entity.cn_py,entity.hant,entity.hant_py,entity.isUsed,entity.number,entity.en,entity.cn,entity.cn_py.substring(0,1).toUpperCase(),entity.en.substring(0,1).toUpperCase()))
+                val entity: JsonBean = gson.fromJson<JsonBean>(data.optJSONObject(i).toString(), JsonBean::class.java)
+                detail.add(
+                    JsonBean(
+                        entity.cn_py,
+                        entity.hant,
+                        entity.hant_py,
+                        entity.isUsed,
+                        entity.number,
+                        entity.en,
+                        entity.cn,
+                        entity.cn_py.substring(0, 1).toUpperCase(),
+                        entity.en.substring(0, 1).toUpperCase()
+                    )
+                )
             }
             mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS)
         } catch (e: Exception) {
@@ -200,27 +270,45 @@ class CommonCountryCodeFragment :AbsSwipeBackNetFragment<CommonCountryCodeFragme
     private inner class GetTopicStockDataRunnable(var keyWord: String) : Runnable {
         override fun run() {
             result.clear()
-            result.addAll(presenter?.deatilJson(jsonBean,keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
-            if(result?.size>0) {
+            result.addAll(presenter?.deatilJson(jsonBean, keyWord, presenter?.judgeSerachType(keyWord)!!)!!)
+            if (result?.size > 0) {
                 adapter?.clearItems()
                 adapter?.addItems(result)
                 adapter?.notifyDataSetChanged()
-            }else{
+            } else {
                 adapter?.clearItems()
                 adapter?.addItems(jsonBean)
                 adapter?.notifyDataSetChanged()
             }
         }
     }
+
     override fun onClick(p0: View?) {
-    /*    when(p0?.id){
-            R.id.tv_cancel->{
-                var b=  Bundle ()
-                b.putString("str",adapter?.getinfo())
-                setFragmentResult(ISupportFragment.RESULT_OK,b)
+            when(p0?.id){
+                R.id.tv_detele->{
+                    var b = Bundle()
+                    if (type == CommonEnum.SINGLE || type == CommonEnum.ALL) {
+                        b.putString("str", adapter?.info)
+                        setFragmentResult(ISupportFragment.RESULT_OK, b)
+                    } else {
+                        b.putString("str", jsonBean[0].cn)
+                        b.putString("code", jsonBean[0].number)
+                        setFragmentResult(ISupportFragment.RESULT_OK, b)
+
+                    }
+                    pop()
+                }
+            }
+    }
+    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+             var b = Bundle()
+            if(type==CommonEnum.Code) {
+                b.putString("str", jsonBean[p2].cn)
+                b.putString("code", jsonBean[p2].number)
+                setFragmentResult(ISupportFragment.RESULT_OK, b)
                 pop()
             }
-        }*/
     }
+
 
 }

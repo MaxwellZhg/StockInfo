@@ -63,13 +63,17 @@ public class SortAdapter extends BaseAdapter {
             hodler.tv_contry_code=(TextView) convertView.findViewById(R.id.tv_contry_code);
             hodler.rl_tips=(RelativeLayout) convertView.findViewById(R.id.rl_tips);
             hodler.checkbox=(ImageView) convertView.findViewById(R.id.checkbox);
+            hodler.ll_content=(LinearLayout) convertView.findViewById(R.id.ll_content);
             convertView.setTag(hodler);
         }else{
             hodler=(ViewHolder)convertView.getTag();
         }
-        hodler.rl_tips.setOnClickListener(new View.OnClickListener() {
+        hodler.ll_content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(commonEnum==CommonEnum.Code) {
+                    list.get(position).setUsed(true);
+                }
             }
         });
        hodler.checkbox.setOnClickListener(new View.OnClickListener() {
@@ -107,10 +111,17 @@ public class SortAdapter extends BaseAdapter {
                 //首字母相同
                 hodler.tv_frist_tips.setVisibility(View.GONE);
                 hodler.rl_tips.setVisibility(View.GONE);
-                if(list.get(position).isUsed()){
-                    hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.cb_checked));
+                if(commonEnum==CommonEnum.ALL||commonEnum==CommonEnum.SINGLE) {
+                    hodler.tv_contry_code.setVisibility(View.INVISIBLE);
+                    hodler.checkbox.setVisibility(View.VISIBLE);
+                    if (list.get(position).isUsed()) {
+                        hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.cb_checked));
+                    } else {
+                        hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.un_check));
+                    }
                 }else{
-                    hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.un_check));
+                    hodler.tv_contry_code.setVisibility(View.VISIBLE);
+                    hodler.checkbox.setVisibility(View.INVISIBLE);
                 }
 
             } else {
@@ -119,10 +130,15 @@ public class SortAdapter extends BaseAdapter {
                 hodler.tv_frist_tips.setVisibility(View.VISIBLE);
                 hodler.rl_tips.setVisibility(View.VISIBLE);
                 hodler.tv_frist_tips.setText(currentWord);
-                if(list.get(position).isUsed()){
-                    hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.cb_checked));
+                if(commonEnum==CommonEnum.ALL||commonEnum==CommonEnum.SINGLE) {
+                    if (list.get(position).isUsed()) {
+                        hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.cb_checked));
+                    } else {
+                        hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.un_check));
+                    }
                 }else{
-                    hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.un_check));
+                    hodler.tv_contry_code.setVisibility(View.VISIBLE);
+                    hodler.checkbox.setVisibility(View.INVISIBLE);
                 }
             }
         } else {
@@ -130,10 +146,15 @@ public class SortAdapter extends BaseAdapter {
             hodler.rl_tips.setVisibility(View.VISIBLE);
             hodler.tv_frist_tips.setVisibility(View.VISIBLE);
             hodler.tv_frist_tips.setText(currentWord);
-            if(list.get(position).isUsed()){
-                hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.cb_checked));
+            if(commonEnum==CommonEnum.ALL||commonEnum==CommonEnum.SINGLE) {
+                if (list.get(position).isUsed()) {
+                    hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.cb_checked));
+                } else {
+                    hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.un_check));
+                }
             }else{
-                hodler.checkbox.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.un_check));
+                hodler.tv_contry_code.setVisibility(View.VISIBLE);
+                hodler.checkbox.setVisibility(View.INVISIBLE);
             }
         }
         return convertView;
@@ -143,9 +164,10 @@ public class SortAdapter extends BaseAdapter {
         TextView tv_contry, tv_frist_tips,tv_contry_code;
         RelativeLayout rl_tips;
         ImageView checkbox;
+        LinearLayout ll_content;
     }
 
-    public String getinfo() {
+    public String getInfo() {
         LinkedList<JsonBean> info = new LinkedList<>();
         String str = "";
         if (commonEnum == CommonEnum.ALL) {
@@ -162,13 +184,22 @@ public class SortAdapter extends BaseAdapter {
                 }
             }
             return str;
-        }else if(commonEnum == CommonEnum.SINGLE){
+        }else if(commonEnum == CommonEnum.SINGLE||commonEnum == CommonEnum.Code){
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).isUsed()) {
                    str=list.get(i).getCn();
                 }
             }
             return str;
+        }
+        return str;
+    }
+    public String getStrCode() {
+        String str = "";
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isUsed()) {
+                str=list.get(i).getNumber();
+            }
         }
         return str;
     }
