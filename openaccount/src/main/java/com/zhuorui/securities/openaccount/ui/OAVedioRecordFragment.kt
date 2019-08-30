@@ -1,37 +1,25 @@
 package com.zhuorui.securities.openaccount.ui
 
-import android.Manifest
 import android.hardware.Camera
 import android.media.MediaRecorder
 import android.os.Environment
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
-import com.qw.soul.permission.SoulPermission
 import com.qw.soul.permission.bean.Permission
-import com.qw.soul.permission.bean.Permissions
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaVediorecordBinding
-import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.ui.presenter.OAVedioRecordPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAVedioRecordView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel
-import com.zhuorui.securities.openaccount.utils.FileToBase64Util
-import com.zhuorui.securities.openaccount.utils.FormatUtil
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_oa_vediorecord.*
 import me.jessyan.autosize.utils.LogUtils
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.TimeUnit
-import io.reactivex.disposables.CompositeDisposable
-
 
 /**
  * Created by Maxwell.
@@ -57,23 +45,31 @@ class OAVedioRecordFragment :
     private var mPreBuffer = ByteArray(400)
     var compositeDisposable = CompositeDisposable()
     private var mProgress = 0
+
     override val layout: Int
         get() = R.layout.fragment_oa_vediorecord
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: OAVedioRecordPresenter
         get() = OAVedioRecordPresenter()
+
     override val createViewModel: OAVedioRecordViewModel?
         get() = OAVedioRecordViewModel()
+
     override val getView: OAVedioRecordView
         get() = this
 
     override fun init() {
+
         presenter?.requestCode()
+
         mRecVideoPath = File(
             Environment.getDataDirectory()
                 .absolutePath + "/CameraDemo/video/ErrorVideo/"
         )
+
         if (!mRecVideoPath?.exists()!!) {
             mRecVideoPath?.mkdirs()
             LogUtils.e("创建文件夹")
@@ -83,7 +79,7 @@ class OAVedioRecordFragment :
         cameraSurfaceHolder?.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 cameraSurfaceHolder = holder
-                 getPremission()
+//                getPremission()
             }
 
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -96,7 +92,6 @@ class OAVedioRecordFragment :
         })
 
         btn_record.setOnClickListener(this)
-
     }
 
     private fun releaseCamera() {
@@ -109,7 +104,6 @@ class OAVedioRecordFragment :
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     private fun initView() {
@@ -134,6 +128,7 @@ class OAVedioRecordFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_record -> {
+                tv_change.clear()
                 btn_record.isClickable = false
                 startVedio()
             }
@@ -164,7 +159,7 @@ class OAVedioRecordFragment :
                 camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK)
             }
             camera?.lock()
-            val parameters =  camera?.getParameters()
+            val parameters = camera?.getParameters()
             if (cameraType == 0)
                 parameters?.flashMode = Camera.Parameters.FLASH_MODE_TORCH
             camera?.setDisplayOrientation(90)
@@ -202,61 +197,57 @@ class OAVedioRecordFragment :
             Log.e("ttttttttttttt", "=====开始录制视频=====")
         }
 
-        //在app build 中compile一下，是一个第三方的库
-        Observable.interval(
-            1000,
-            TimeUnit.MILLISECONDS,
-            AndroidSchedulers.mainThread()
-        ).take(6).subscribe(object : Observer<Long> {
-            override fun onSubscribe(d: Disposable) {
-                compositeDisposable.addAll(d)
-               object : Thread() {
-                    override fun run() {
-                        while (mProgress < tv_change.max) {
-                              changeTextColor()
-                            try {
-                                sleep(100)
-                                mProgress+=8
-                            } catch (e: InterruptedException) {
-                                e.printStackTrace()
-                            }
-
-                        }
-                    }
-                }.start()
-            }
-
-            override fun onError(e: Throwable) {
-
-            }
-
-            override fun onNext(t: Long) {
-
-            }
-
-            override fun onComplete() {
-                val parameters = camera?.parameters
-                parameters?.flashMode = Camera.Parameters.FLASH_MODE_OFF
-                camera?.setParameters(parameters)
-                /*
-                  * 录像的关闭和资源释放
-                  */
-                mediaRecorder?.stop()
-                mediaRecorder?.reset()
-                mediaRecorder?.release()
-                mediaRecorder = null
-                FormatUtil.videoRename(mRecAudioFile)
-               var str=FileToBase64Util.fileBase64String(mRecAudioFile?.path)
-                presenter?.uploadVedio("")
-                Log.e("ttttttttt", "=====录制完成，已保存=====")
-                btn_record.isClickable = true
-                isRecording = !isRecording
-            }
-        })
-    }
-
-    fun changeTextColor(){
-        tv_change.setProgress(mProgress)
+//        //在app build 中compile一下，是一个第三方的库
+//        Observable.interval(
+//            1000,
+//            TimeUnit.MILLISECONDS,
+//            AndroidSchedulers.mainThread()
+//        ).take(6).subscribe(object : Observer<Long> {
+//            override fun onSubscribe(d: Disposable) {
+//                compositeDisposable.addAll(d)
+//                object : Thread() {
+//                    override fun run() {
+//                        while (mProgress < ZRLoadingTextView.MAX) {
+//                            changeTextColor()
+//                            try {
+//                                sleep(100)
+//                                mProgress += 8
+//                            } catch (e: InterruptedException) {
+//                                e.printStackTrace()
+//                            }
+//
+//                        }
+//                    }
+//                }.start()
+//            }
+//
+//            override fun onError(e: Throwable) {
+//
+//            }
+//
+//            override fun onNext(t: Long) {
+//
+//            }
+//
+//            override fun onComplete() {
+//                val parameters = camera?.parameters
+//                parameters?.flashMode = Camera.Parameters.FLASH_MODE_OFF
+//                camera?.setParameters(parameters)
+//                /*
+//                  * 录像的关闭和资源释放
+//                  */
+//                mediaRecorder?.stop()
+//                mediaRecorder?.reset()
+//                mediaRecorder?.release()
+//                mediaRecorder = null
+//                FormatUtil.videoRename(mRecAudioFile)
+//                var str = FileToBase64Util.fileBase64String(mRecAudioFile?.path)
+//                presenter?.uploadVedio("")
+//                Log.e("ttttttttt", "=====录制完成，已保存=====")
+//                btn_record.isClickable = true
+//                isRecording = !isRecording
+//            }
+//        })
     }
 
     companion object {
@@ -264,6 +255,7 @@ class OAVedioRecordFragment :
             return OAVedioRecordFragment()
         }
     }
+
     override fun onAllPermissionOk(allPermissions: Array<out Permission>?) {
         initView()
     }
@@ -271,15 +263,20 @@ class OAVedioRecordFragment :
     override fun onPermissionDenied(refusedPermissions: Array<out Permission>?) {
 
     }
-   fun getPremission(){
-       SoulPermission.getInstance().checkAndRequestPermissions( Permissions.build(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE),this)
-   }
+
+//    fun getPremission() {
+//        SoulPermission.getInstance().checkAndRequestPermissions(
+//            Permissions.build(
+//                Manifest.permission.CAMERA,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.READ_EXTERNAL_STORAGE
+//            ), this
+//        )
+//    }
 
     override fun requestCode() {
-      presenter?.requestVedioVerifyCode(OpenInfoManager.getInstance()?.info?.id)
+//        presenter?.requestVedioVerifyCode(OpenInfoManager.getInstance()?.info?.id)
+        presenter?.requestVedioVerifyCode()
+        tv_change.start(6000)
     }
-
 }
-
-
-

@@ -23,53 +23,63 @@ import me.jessyan.autosize.utils.LogUtils
  * Date: 2019/8/27
  * Desc:
  */
-class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView,OAVedioRecordViewModel>(){
+class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordViewModel>() {
     override fun init() {
         super.init()
         view?.init()
     }
- /*   fun requestOpenInfo() {
-        val request = OpenInfoRequest( transactions.createTransaction())
-        Cache[IOpenAccountNet::class.java]?.getOpenInfo(request)
-            ?.enqueue(Network.IHCallBack<OpenInfoResponse>(request))
-    }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onVerifyOpenInfo(response: OpenInfoResponse) {
-        if(response.request is OpenInfoRequest) {
-            viewModel?.idstr?.set(response.data.id)
-            requestVedioVerifyCode(OpenInfoManager.get().info?.id)
-        }
-    }*/
+    /*   fun requestOpenInfo() {
+           val request = OpenInfoRequest( transactions.createTransaction())
+           Cache[IOpenAccountNet::class.java]?.getOpenInfo(request)
+               ?.enqueue(Network.IHCallBack<OpenInfoResponse>(request))
+       }
+       @RxSubscribe(observeOnThread = EventThread.MAIN)
+       fun onVerifyOpenInfo(response: OpenInfoResponse) {
+           if(response.request is OpenInfoRequest) {
+               viewModel?.idstr?.set(response.data.id)
+               requestVedioVerifyCode(OpenInfoManager.get().info?.id)
+           }
+       }*/
+//
+//    fun requestVedioVerifyCode(id:String ?) {
+//        id?.let {
+//            val request =     LiveCodeRequest(it, transactions.createTransaction())
+//            Cache[IOpenAccountNet::class.java]?.getLiveCode(request)
+//                ?.enqueue(Network.IHCallBack<LiveCodeResponse>(request))
+//        }
+//
+//    }
 
-    fun requestVedioVerifyCode(id:String ?) {
-        id?.let {
-            val request =     LiveCodeRequest(it, transactions.createTransaction())
-            Cache[IOpenAccountNet::class.java]?.getLiveCode(request)
-                ?.enqueue(Network.IHCallBack<LiveCodeResponse>(request))
-        }
-
+    fun requestVedioVerifyCode() {
+        // TODO 假数据
+        viewModel?.str?.set("1234")
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onVerifyLiveCode(response: LiveCodeResponse) {
-        if(response.request is LiveCodeRequest){
+        if (response.request is LiveCodeRequest) {
             viewModel?.str?.set(response.data.validateCode)
         }
     }
 
-    fun requestCode(){
+    fun requestCode() {
         view?.requestCode()
     }
 
-    fun uploadVedio(vedio:String){
-        val request = LiveRecognRequest(vedio,viewModel?.str?.get(),"0e1e0da346b7fb71dff9c3c3a863e075",transactions.createTransaction())
+    fun uploadVedio(vedio: String) {
+        val request = LiveRecognRequest(
+            vedio,
+            viewModel?.str?.get(),
+            "0e1e0da346b7fb71dff9c3c3a863e075",
+            transactions.createTransaction()
+        )
         Cache[IOpenAccountNet::class.java]?.getLiveRecogn(request)
             ?.enqueue(Network.IHCallBack<LiveRecognResponse>(request))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onLiveRecognCode(response: LiveRecognResponse) {
-        if(response.request is LiveRecognRequest){
+        if (response.request is LiveRecognRequest) {
             LogUtils.e("成功")
         }
     }

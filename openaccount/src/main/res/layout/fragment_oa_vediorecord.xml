@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -46,14 +47,16 @@
                       android:textColor="@color/color_FFFFFFFF"
                       android:text="@string/read_num"/>
 
-            <com.zhuorui.securities.openaccount.widget.XCColorTrackTextView
+            <com.zhuorui.commonwidget.ZRLoadingTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="36sp"
+                    app:text_size="37dp"
+                    app:text_color_normal="@color/color_FFFFFFFF"
+                    app:text_color_hightlight="@color/color_1A6ED2"
+                    app:text="@{viewModel.str}"
+                    app:direction="left"
                     android:id="@+id/tv_change"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/color_FFFFFFFF"
-                    android:text="@{viewModel.str}"/>
+                    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
 
         <ImageView android:layout_width="40dp"

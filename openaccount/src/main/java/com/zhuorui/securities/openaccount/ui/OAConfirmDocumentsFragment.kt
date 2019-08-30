@@ -106,8 +106,9 @@ class OAConfirmDocumentsFragment :
                 pop()
             }
             btn_next -> {
-                //start(OATakeBankCradPhotoFragment.newInstance())
-                start(OAPersonalInformationFragment.newInstance())
+//                start(OATakeBankCradPhotoFragment.newInstance())
+                start(OAVedioRecordFragment.newInstance())
+//                start(OAPersonalInformationFragment.newInstance())
             }
             et_birthday -> {
                 mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())

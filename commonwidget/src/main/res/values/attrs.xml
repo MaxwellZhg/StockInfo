@@ -30,10 +30,11 @@
         <attr name="animationDuration" format="integer|reference"/>
     </declare-styleable>
 
+    <attr name="text_size" format="dimension"/>
     <declare-styleable name="QuickIndexBar">
         <attr name="text_normal_color" format="color"/>
         <attr name="text_press_color" format="color"/>
-        <attr name="text_size" format="dimension"/>
+        <attr name="text_size"/>
         <attr name="bg_color" format="color"/>
     </declare-styleable>
 
@@ -87,8 +88,22 @@
         <attr name="zr_toAlbumRequestCode" format="integer|reference"/>
         <attr name="zr_toCameraRequestCode" format="integer|reference"/>
     </declare-styleable>
+
     <declare-styleable name="ZRRotateTextView">
         <attr name="zr_degree" format="integer"/>
     </declare-styleable>
 
+    <!-- ZRLoadingTextView -->
+    <declare-styleable name="ZRLoadingTextView">
+        <attr name="text" format="string"/>
+        <attr name="text_size"/>
+        <attr name="text_color_normal" format="color"/>
+        <attr name="text_color_hightlight" format="color"/>
+        <attr name="direction">
+            <enum name="left" value="1"/>
+            <enum name="top" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="bottom" value="4"/>
+        </attr>
+    </declare-styleable>
 </resources>
