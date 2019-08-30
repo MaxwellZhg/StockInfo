@@ -8,7 +8,11 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Date: 2019/8/27
  * Desc:
  */
-interface OAVedioRecordView :AbsView{
-    fun init()
-    fun requestCode()
+interface OAVedioRecordView : AbsView {
+
+    fun showUploading()
+
+    fun hideUploading()
+
+    fun uploadComplete()
 }

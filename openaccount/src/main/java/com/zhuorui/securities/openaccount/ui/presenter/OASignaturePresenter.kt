@@ -11,6 +11,7 @@ import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
 import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
 import com.zhuorui.securities.openaccount.ui.view.OASignatureView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OASignatureViewModel
+import com.zhuorui.securities.openaccount.utils.Base64Enum
 import com.zhuorui.securities.openaccount.utils.FileToBase64Util
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
@@ -43,7 +44,7 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
 
         // 转码后发起请求
         val disposable = Observable.create(ObservableOnSubscribe<String> { emitter ->
-            emitter.onNext(FileToBase64Util.bitMapBase64String(bitmap))
+            emitter.onNext(FileToBase64Util.bitMapBase64String(Base64Enum.PNG, bitmap))
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe {
