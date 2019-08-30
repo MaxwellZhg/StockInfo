@@ -7,7 +7,7 @@
     <string name="verify_self" tools:ignore="MissingTranslatio">人身验证</string>
     <string name="verify_read_num" tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
     <string name="start_vedio" tools:ignore="MissingTranslatio">开始拍摄</string>
-    <string name="read_num"  tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
+    <string name="read_num" tools:ignore="MissingTranslatio">请面对镜头匀速朗读下面数字</string>
     <string name="str_account_opening_agreement">开户协议</string>
     <string name="str_confirm_Read_agreement">本人已仔细阅读并同意签署全部</string>
     <string name="str_identity_witness_profile">身份证人像面</string>
@@ -75,7 +75,7 @@
     <string name="str_property_status">财产状况</string>
     <string name="str_annual_income">全年收入</string>
     <string name="str_frequency_of_monthly_transactions">每月交易频次</string>
-    <string name="str_risk_following_ability">风险随能力</string>
+    <string name="str_risk_following_ability">风险承受能力</string>
     <string name="str_investment_experience">投资经验</string>
     <string name="str_shares">股票</string>
     <string name="str_bond">债券</string>
@@ -88,4 +88,7 @@
     <string name="to_loan">借贷</string>
     <string name="str_other">其他</string>
     <string name="str_other_information_notes">其他信息说明</string>
+    <string name="idcard_tips">温馨提示：\n1.请将身份证放平；\n2.请确保边框完整，文字清晰可见。</string>
+    <string name="str_china">中华人民共和国</string>
+    <string name="str_sources_funds">资金来源</string>
 </resources>

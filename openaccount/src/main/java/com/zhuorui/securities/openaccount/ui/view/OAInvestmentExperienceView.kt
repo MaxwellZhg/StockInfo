@@ -9,5 +9,8 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface OAInvestmentExperienceView :AbsView{
-    fun init()
+    fun setInvestSharesText(time: String?)
+    fun setInvestBondText(time: String?)
+    fun setInvestGoldForeignText(time: String?)
+    fun setInvestFundText(time: String?)
 }

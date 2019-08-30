@@ -9,5 +9,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface OAPersonalInformationView :AbsView{
-    fun init()
+    fun setOccupation(get: String?)
+    fun setTaxType(get: String?)
+    fun setTaxState(string: String?)
 }

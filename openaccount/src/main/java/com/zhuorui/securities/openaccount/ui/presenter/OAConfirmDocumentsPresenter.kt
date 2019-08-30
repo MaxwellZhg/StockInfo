@@ -42,16 +42,16 @@ class OAConfirmDocumentsPresenter : AbsPresenter<OAConfirmDocumentsView, OAConfi
 
     fun setIdCardData(jsonData: String?) {
         if (TextUtils.isEmpty(jsonData)) return
-        var data: CardOcrData = JsonUtil.fromJson(jsonData.toString(), CardOcrData::class.java)
+        val data: CardOcrData = JsonUtil.fromJson(jsonData.toString(), CardOcrData::class.java)
         mData = data
         viewModel?.cardName = mData?.cardName
         view?.setName(data.cardName)
-        var genderPos: Int? = genderCodeData?.indexOf(data.cardSex)
-        var gender = if (genderPos == null) "" else genderPickerData?.get(genderPos)
+        val genderPos: Int? = genderCodeData?.indexOf(data.cardSex)
+        val gender = if (genderPos == null) "" else genderPickerData?.get(genderPos)
         view?.setGender(gender)
         view?.setBirthday(SimpleDateFormat(BIRTHDAY_DATE_FORMAT).format(SimpleDateFormat("yyyy-MM-dd").parse(data.cardBirth)))
         view?.setCardNo(data.cardNo)
-        var sDate = SimpleDateFormat("yyyy-MM-dd").parse(data.cardValidStartDate)
+        val sDate = SimpleDateFormat("yyyy-MM-dd").parse(data.cardValidStartDate)
         view?.setCardValidStartDate(SimpleDateFormat(BIRTHDAY_DATE_FORMAT).format(sDate))
         initCardValidEndData(sDate.time)
         mCardValidYear = data.cardValidYear;
@@ -66,18 +66,18 @@ class OAConfirmDocumentsPresenter : AbsPresenter<OAConfirmDocumentsView, OAConfi
      */
     fun initCardValidEndData(timeInMillis: Long) {
         if (idCardValidNumDate == null) return
-        var list: MutableList<Int> = idCardValidNumDate as MutableList<Int>
-        var tms = Calendar.getInstance()
+        val list: MutableList<Int> = idCardValidNumDate as MutableList<Int>
+        val tms = Calendar.getInstance()
         tms.timeInMillis = timeInMillis
-        var y: Int = tms.get(Calendar.YEAR)
-        var m: Int = tms.get(Calendar.MONTH) + 1
-        var d: Int = tms.get(Calendar.DAY_OF_MONTH)
+        val y: Int = tms.get(Calendar.YEAR)
+        val m: Int = tms.get(Calendar.MONTH) + 1
+        val d: Int = tms.get(Calendar.DAY_OF_MONTH)
         endValidPickerData = mutableListOf()
         for ((index, e) in list.withIndex()) {
             if (e == -1) {
                 endValidPickerData?.add(idCardValidData?.get(index).toString())
             } else {
-                var txt = "%d年%02d月%02d日（%s）"
+                val txt = "%d年%02d月%02d日（%s）"
                 endValidPickerData?.add(String.format(txt, y + e, m, d, idCardValidData?.get(index)))
             }
         }
@@ -118,7 +118,7 @@ class OAConfirmDocumentsPresenter : AbsPresenter<OAConfirmDocumentsView, OAConfi
     fun getValidEndDatePickerListener(): OnOptionSelectedListener<String> {
         return object : OnOptionSelectedListener<String> {
             override fun onOptionSelected(data: MutableList<String>?) {
-                var date = data?.get(0)
+                val date = data?.get(0)
                 view?.setCardValidEndDate(data?.get(0))
                 mCardValidYear = endValidPickerData?.indexOf(date)?.let { idCardValidNumDate?.get(it) }
             }
@@ -133,7 +133,7 @@ class OAConfirmDocumentsPresenter : AbsPresenter<OAConfirmDocumentsView, OAConfi
     fun getGenderPickerListener(): OnOptionSelectedListener<String> {
         return object : OnOptionSelectedListener<String> {
             override fun onOptionSelected(data: MutableList<String>?) {
-                var gender = data?.get(0)
+                val gender = data?.get(0)
                 view?.setGender(gender)
             }
         }

@@ -10,5 +10,4 @@ import com.zhuorui.securities.openaccount.model.OADataTips
  *    desc   :
  */
 interface OAUploadDocumentsView : AbsView {
-    fun init()
 }
