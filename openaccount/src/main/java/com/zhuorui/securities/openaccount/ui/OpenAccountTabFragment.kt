@@ -11,7 +11,6 @@ import com.zhuorui.securities.openaccount.databinding.FragmentOpenAccountBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OpenAccountTabPresenter
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
-import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 
 /**
  * Created by Maxwell.
@@ -44,7 +43,7 @@ open class OpenAccountTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        (parentFragment as AbsFragment<*, *, *, *>).start(OASignatureFragment.newInstance())
+        (parentFragment as AbsFragment<*, *, *, *>).start(OASelectRegionFragment.newInstance())
 //        when (presenter?.getLoginStatus()) {
 //            false -> {
 //                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
