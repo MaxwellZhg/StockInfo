@@ -87,8 +87,30 @@
         <attr name="zr_toAlbumRequestCode" format="integer|reference"/>
         <attr name="zr_toCameraRequestCode" format="integer|reference"/>
     </declare-styleable>
+
     <declare-styleable name="ZRRotateTextView">
         <attr name="zr_degree" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="ZRSwitch">
+        <attr name="zr_switchShadowEffect" format="boolean"/>
+        <attr name="zr_switchUncheckcircleColor" format="color|reference"/>
+        <attr name="zr_switchUncheckcircleWidth" format="dimension|reference"/>
+        <attr name="zr_switchUncheckcircleRadius" format="dimension|reference"/>
+        <attr name="zr_switchShadowRadius" format="dimension|reference"/>
+        <attr name="zr_switchShadowOffset" format="dimension|reference"/>
+        <attr name="zr_switchShadowColor" format="color|reference"/>
+        <attr name="zr_switchUncheckColor" format="color|reference"/>
+        <attr name="zr_switchCheckedColor" format="color|reference"/>
+        <attr name="zr_switchBorderWidth" format="dimension|reference"/>
+        <attr name="zr_switchChecklineColor" format="color|reference"/>
+        <attr name="zr_switchChecklineWidth" format="dimension|reference"/>
+        <attr name="zr_switchButtonColor" format="color|reference"/>
+        <attr name="zr_switchEffectDuration" format="integer|reference"/>
+        <attr name="zr_switchChecked" format="boolean"/>
+        <attr name="zr_switchShowIndicator" format="boolean"/>
+        <attr name="zr_switchBackground" format="color|reference"/>
+        <attr name="zr_switchEnableEffect" format="dimension|reference"/>
     </declare-styleable>
 
 </resources>

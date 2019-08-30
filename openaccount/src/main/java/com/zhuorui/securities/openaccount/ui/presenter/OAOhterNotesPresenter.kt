@@ -19,7 +19,6 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewMode
 class OAOhterNotesPresenter : AbsPresenter<OAOhterNotesView, OAOhterNotesViewModel>() {
     override fun init() {
         super.init()
-        view?.init()
     }
 
 

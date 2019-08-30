@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui
 
+import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
@@ -28,7 +29,6 @@ class OAOhterNotesFragment :
         }
     }
 
-
     override val layout: Int
         get() = R.layout.fragment_oa_ohter_notes
 
@@ -44,7 +44,8 @@ class OAOhterNotesFragment :
     override val getView: OAOhterNotesView
         get() = this
 
-    override fun init() {
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         btn_per.setOnClickListener(this)
         btn_next.setOnClickListener(this)
     }
