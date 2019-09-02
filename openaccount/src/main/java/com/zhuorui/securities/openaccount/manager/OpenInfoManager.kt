@@ -34,6 +34,4 @@ open class OpenInfoManager {
     }
 
 
-
-
 }

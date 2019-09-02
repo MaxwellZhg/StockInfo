@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ProgressDialog
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
@@ -12,7 +11,6 @@ import com.zhuorui.securities.openaccount.databinding.FragmentOaVediorecordBindi
 import com.zhuorui.securities.openaccount.ui.presenter.OAVedioRecordPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAVedioRecordView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel
-import com.zhuorui.securities.openaccount.widget.CameraView
 import kotlinx.android.synthetic.main.fragment_oa_vediorecord.*
 
 /**
@@ -23,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_oa_vediorecord.*
  */
 class OAVedioRecordFragment :
     AbsSwipeBackNetFragment<FragmentOaVediorecordBinding, OAVedioRecordViewModel, OAVedioRecordView, OAVedioRecordPresenter>(),
-    OAVedioRecordView, View.OnClickListener, CameraView.RecordVedioCallBack {
+    OAVedioRecordView, View.OnClickListener {
 
     private var progressDialog: ProgressDialog? = null
 
@@ -48,38 +46,44 @@ class OAVedioRecordFragment :
     override val getView: OAVedioRecordView
         get() = this
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        camera_View.init()
+    }
+
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
         btn_record.setOnClickListener(this)
     }
 
-    override fun onSupportVisible() {
-        super.onSupportVisible()
-        LogInfra.Log.d(TAG, "onSupportVisible")
-        camera_View.init()
+    override fun onResume() {
+        super.onResume()
+        camera_View.onResume()
     }
 
-    override fun onStop() {
-        super.onStop()
-        LogInfra.Log.d(TAG, "onStop")
-        camera_View.stop()
+    override fun onPause() {
+        super.onPause()
+        camera_View.onPause()
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_record -> {
                 // 调用录制视频
-                camera_View.recordVedio(6000, this)
+                camera_View.recordVedio(
+                    6000
+                ) { data ->
+                    // 拿到视频流，进行上传
+                    presenter?.uploadVedio(data)
+                }
+                // 先清除上一次的颜色效果
+                tv_change.clear()
                 // 播放数字码进度
                 tv_change.start(6000)
             }
         }
-    }
-
-    override fun onRecordComplete(vedioBytes: ByteArray?) {
-        // 拿到视频流，进行上传
-        presenter?.uploadVedio(vedioBytes)
     }
 
     override fun showUploading() {
