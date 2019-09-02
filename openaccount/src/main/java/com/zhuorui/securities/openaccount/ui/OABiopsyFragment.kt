@@ -16,14 +16,11 @@ import kotlinx.android.synthetic.main.fragment_oa_biopay.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/26
- * Desc:
+ * Desc: 活体检测页面
  */
 class OABiopsyFragment :
     AbsSwipeBackNetFragment<FragmentOaBiopayBinding, OABiopsyViewModel, OABiopsyView, OABiopsyPresenter>(),
     OABiopsyView ,View.OnClickListener{
-    override fun init() {
-
-    }
 
     override val layout: Int
         get() = R.layout.fragment_oa_biopay
@@ -39,7 +36,6 @@ class OABiopsyFragment :
 
     override val getView: OABiopsyView
         get() = this
-
 
     companion object {
         fun newInstance(): OABiopsyFragment {

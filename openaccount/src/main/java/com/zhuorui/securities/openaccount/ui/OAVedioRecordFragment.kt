@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_oa_vediorecord.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/28
- * Desc: 活体检测页面
+ * Desc: 活体检测录制视频页面
  */
 class OAVedioRecordFragment :
     AbsSwipeBackNetFragment<FragmentOaVediorecordBinding, OAVedioRecordViewModel, OAVedioRecordView, OAVedioRecordPresenter>(),
