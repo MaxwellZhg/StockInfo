@@ -20,14 +20,20 @@ import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 class OAPropertyStatusPresenter : AbsPresenter<OAPropertyStatusView, OAPropertyStatusViewModel>() {
 
     var incomePickerData: MutableList<String>? = null //财产状况
+    var incomeCode: MutableList<Int>? = null //财产状况Code
     var ratePickerData: MutableList<String>? = null //交易频率
+    var rateCode: MutableList<Int>? = null //交易频率Code
     var riskPickerData: MutableList<String>? = null//风险承受能力
+    var riskCode: MutableList<Int>? = null //风险承受能力Code
 
     override fun init() {
         super.init()
         incomePickerData = ResUtil.getStringArray(R.array.income_data)?.asList()?.toMutableList()
+        incomeCode = ResUtil.getIntArray(R.array.income_code)?.asList()?.toMutableList()
         ratePickerData = ResUtil.getStringArray(R.array.rate_data)?.asList()?.toMutableList()
+        rateCode = ResUtil.getIntArray(R.array.rate_code)?.asList()?.toMutableList()
         riskPickerData = ResUtil.getStringArray(R.array.risk_data)?.asList()?.toMutableList()
+        riskCode = ResUtil.getIntArray(R.array.risk_code)?.asList()?.toMutableList()
     }
 
     fun setDefData(){

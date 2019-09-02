@@ -91,4 +91,5 @@
     <string name="idcard_tips">温馨提示：\n1.请将身份证放平；\n2.请确保边框完整，文字清晰可见。</string>
     <string name="str_china">中华人民共和国</string>
     <string name="str_sources_funds">资金来源</string>
+    <string name="str_please_select_start_date">请选择开始日期</string>
 </resources>

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaSelectRegionBinding
@@ -26,7 +27,7 @@ class OASelectRegionFragment :
     OASeletRegionView, View.OnClickListener, OnOptionSelectedListener<String> {
 
     var dialog: OptionsPickerDialog<String>? = null
-    val regionData: MutableList<String> = mutableListOf("中国澳门", "中国香港", "中国内地", "中国台湾", "海外居民")
+    val regionData: MutableList<String> = ResUtil.getStringArray(R.array.account_region)?.asList()?.toMutableList()!!
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
@@ -42,8 +43,8 @@ class OASelectRegionFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.next -> {
-//                start(OADataTipsFragment.newInstance())
-                start(OAVedioRecordFragment.newInstance())
+                start(OADataTipsFragment.newInstance())
+//                start(OAVedioRecordFragment.newInstance())
             }
             R.id.region -> {
                 dialog?.setCurrentData(region.text.toString())

@@ -19,9 +19,12 @@ import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
  */
 class OAInvestmentExperiencePresenter : AbsPresenter<OAInvestmentExperienceView, OAInvestmentExperienceViewModel>() {
     var experienceTimePickerData: MutableList<String>? = null
+    var experienceTimeCode: MutableList<Int>? = null
+
     override fun init() {
         super.init()
         experienceTimePickerData = ResUtil.getStringArray(R.array.experience_time)?.asList()?.toMutableList()
+        experienceTimeCode = ResUtil.getIntArray(R.array.experience_time_code)?.asList()?.toMutableList()
     }
 
     fun setDefData(){

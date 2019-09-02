@@ -7,6 +7,7 @@ import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaConfirmDocumentsBinding
@@ -30,12 +31,8 @@ class OAConfirmDocumentsFragment :
 
 
     companion object {
-        fun newInstance(data: String): OAConfirmDocumentsFragment {
-            val fragment = OAConfirmDocumentsFragment()
-            val bundle = Bundle()
-            bundle.putString("data", data)
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance(): OAConfirmDocumentsFragment {
+            return OAConfirmDocumentsFragment()
         }
     }
 
@@ -106,9 +103,8 @@ class OAConfirmDocumentsFragment :
                 pop()
             }
             btn_next -> {
-//                start(OATakeBankCradPhotoFragment.newInstance())
-                start(OAVedioRecordFragment.newInstance())
-//                start(OAPersonalInformationFragment.newInstance())
+                start(OATakeBankCradPhotoFragment.newInstance())
+//                start(OAVedioRecordFragment.newInstance())
             }
             et_birthday -> {
                 mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())
@@ -127,6 +123,10 @@ class OAConfirmDocumentsFragment :
                 mDatePicker?.show()
             }
             et_e_expiry -> {
+                if (presenter?.endValidPickerData == null) {
+                    ToastUtil.instance.toast(R.string.str_please_select_start_date)
+                    return
+                }
                 mOptionsPicker?.setData(presenter?.endValidPickerData)
                 mOptionsPicker?.setOnOptionSelectedListener(presenter?.getValidEndDatePickerListener())
                 mOptionsPicker?.setCurrentData(et_e_expiry.text)

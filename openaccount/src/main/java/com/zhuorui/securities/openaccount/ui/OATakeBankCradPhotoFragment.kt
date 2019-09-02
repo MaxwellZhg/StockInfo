@@ -67,7 +67,7 @@ class OATakeBankCradPhotoFragment :
         when (p0) {
             btn_next -> {
                 // 跳转到下一步
-                start(OARiskDisclosureFragment.newInstance())
+                start(OAPersonalInformationFragment.newInstance())
             }
             tv_bank.vEt -> {
                 // 选择银行

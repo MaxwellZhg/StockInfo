@@ -56,7 +56,7 @@ class OAOhterNotesFragment :
                 pop()
             }
             R.id.btn_next -> {
-//                start(OAPropertyStatusFragment.newInstance())
+                start(OARiskDisclosureFragment.newInstance())
             }
 
         }

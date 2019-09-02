@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 性别 -->
     <string-array name="gender">
         <item>男</item>
         <item>女</item>
     </string-array>
-    <string-array name="gender_code">
+    <integer-array name="gender_code">
         <item>1</item>
         <item>2</item>
-    </string-array>
+    </integer-array>
+    <!-- 证件有效期年数 -->
     <string-array name="id_card_valid">
         <item>5年有效期</item>
         <item>10年有效期</item>
@@ -20,16 +22,31 @@
         <item>20</item>
         <item>-1</item>
     </integer-array>
+    <!-- 就业状态 -->
     <string-array name="occupation">
         <item>自雇</item>
         <item>受雇</item>
         <item>退休</item>
         <item>学生</item>
+        <item>其他</item>
     </string-array>
+    <integer-array name="occupation_code">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
+    <!-- 税务类型 -->
     <string-array name="tax_type">
         <item>我是单一国家/地区的税务居民</item>
         <item>我是多个国家/地区的税务居民</item>
     </string-array>
+    <integer-array name="tax_type_code">
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+    <!-- 财产状况 -->
     <string-array name="income_data">
         <item>0-10万</item>
         <item>10-50万</item>
@@ -38,22 +55,58 @@
         <item>500-1000万</item>
         <item>1000万以上</item>
     </string-array>
+    <integer-array name="income_code">
+        <item>6</item>
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </integer-array>
+    <!-- 交易频次 -->
     <string-array name="rate_data">
         <item>0-5次</item>
         <item>5-20次</item>
         <item>大于20次</item>
     </string-array>
+    <integer-array name="rate_code">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </integer-array>
+    <!-- 风险承受能力 -->
     <string-array name="risk_data">
         <item>高</item>
         <item>中</item>
         <item>低</item>
     </string-array>
+    <integer-array name="risk_code">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+    <!-- 经验 -->
     <string-array name="experience_time">
         <item>没有经验</item>
         <item>一年以内</item>
         <item>一至三年</item>
         <item>三至五年</item>
         <item>五年之上</item>
+    </string-array>
+    <integer-array name="experience_time_code">
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </integer-array>
+    <!-- 用户所在国家/地区 -->
+    <string-array name="account_region">
+        <item>中国澳门</item>
+        <item>中国香港</item>
+        <item>中国内地</item>
+        <item>中国台湾</item>
+        <item>海外居民</item>
     </string-array>
 
 </resources>

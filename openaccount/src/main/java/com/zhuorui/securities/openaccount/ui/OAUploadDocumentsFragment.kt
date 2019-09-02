@@ -96,8 +96,7 @@ class OAUploadDocumentsFragment :
                 data.cardValidStartDate = "2013-06-28"
                 data.cardValidEndDate = "2023-06-28"
                 data.cardValidYear = 10
-                val jsonData: String = JsonUtil.toJson(data)
-                start(OAConfirmDocumentsFragment.newInstance(jsonData))
+                start(OAConfirmDocumentsFragment.newInstance())
             }
             btn_sample.id -> {
                 showTipsDialog(btn_sample.text)

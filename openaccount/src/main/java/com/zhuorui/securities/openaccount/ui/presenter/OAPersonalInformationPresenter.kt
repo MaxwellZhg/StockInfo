@@ -18,14 +18,18 @@ import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
  */
 class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, OAPersonalInformationViewModel>() {
 
-    var occupationPickerData: MutableList<String>? = null
-    var taxTypePickerData: MutableList<String>? = null
+    var occupationPickerData: MutableList<String>? = null//就业状态数据
+    var occupationCode: MutableList<Int>? = null//就业状态code
+    var taxTypePickerData: MutableList<String>? = null//
+    var taxTypeCode: MutableList<Int>? = null//
 
 
     override fun init() {
         super.init()
         occupationPickerData = ResUtil.getStringArray(R.array.occupation)?.asList()?.toMutableList()
+        occupationCode = ResUtil.getIntArray(R.array.occupation_code)?.asList()?.toMutableList()
         taxTypePickerData = ResUtil.getStringArray(R.array.tax_type)?.asList()?.toMutableList()
+        taxTypeCode = ResUtil.getIntArray(R.array.tax_type_code)?.asList()?.toMutableList()
     }
 
     fun setDefData() {
