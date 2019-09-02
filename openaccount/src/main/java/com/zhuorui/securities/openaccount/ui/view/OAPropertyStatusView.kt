@@ -9,5 +9,9 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface OAPropertyStatusView :AbsView{
-    fun init()
+    fun setIncomeText(get: String?)
+
+    fun setRateText(get: String?)
+
+    fun setRiskText(get: String?)
 }

@@ -2,14 +2,17 @@ package com.zhuorui.securities.openaccount.ui
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.ZRUploadImageView
+import com.zhuorui.commonwidget.dialog.ConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.openaccount.BR
+import com.zhuorui.securities.openaccount.custom.UploadDocumentsTipsDialog
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
 import com.zhuorui.securities.openaccount.model.CardOcrData
 import com.zhuorui.securities.openaccount.ui.presenter.OAUploadDocumentsPresenter
@@ -28,6 +31,7 @@ class OAUploadDocumentsFragment :
     AbsSwipeBackNetFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
     OAUploadDocumentsView, View.OnClickListener, ZRUploadImageView.OnUploadImageListener {
 
+    var sampleSialog: UploadDocumentsTipsDialog? = null
 
     companion object {
         fun newInstance(): OAUploadDocumentsFragment {
@@ -63,11 +67,9 @@ class OAUploadDocumentsFragment :
     override fun onPicturePath(v: ZRUploadImageView?, path: String?) {
         when (v?.id) {
             idcard_portrait.id -> {
-//                ToastUtil.instance.toast(path.toString())
                 checkUpload()
             }
             idcard_national_emblem.id -> {
-//                ToastUtil.instance.toast(path.toString())
                 checkUpload()
             }
         }
@@ -82,8 +84,8 @@ class OAUploadDocumentsFragment :
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            com.zhuorui.securities.openaccount.R.id.btn_next -> {
-                var data = CardOcrData()
+            btn_next.id -> {
+                val data = CardOcrData()
                 data.cardNo = "430422199303121111"
                 data.cardName = "测试"
                 data.cardSex = "1"
@@ -94,14 +96,25 @@ class OAUploadDocumentsFragment :
                 data.cardValidStartDate = "2013-06-28"
                 data.cardValidEndDate = "2023-06-28"
                 data.cardValidYear = 10
-                var jsonData: String = JsonUtil.toJson(data)
-                start(OAConfirmDocumentsFragment.newInstance(jsonData))
+                start(OAConfirmDocumentsFragment.newInstance())
+            }
+            btn_sample.id -> {
+                showTipsDialog(btn_sample.text)
             }
         }
     }
 
-    override fun init() {
+    private fun showTipsDialog(text: CharSequence?) {
+        if (sampleSialog == null) {
+            sampleSialog = context?.let { UploadDocumentsTipsDialog(it) }
+        }
+        sampleSialog?.show(text.toString())
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         btn_next.setOnClickListener(this)
+        btn_sample.setOnClickListener(this)
         idcard_portrait.setOnUploadImageListener(this)
         idcard_national_emblem.setOnUploadImageListener(this)
     }

@@ -11,6 +11,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:checked="true"
             android:text="@string/str_salary"
     />
 
@@ -20,6 +21,7 @@
             app:layout_constraintTop_toTopOf="@+id/cb_salary"
             app:layout_constraintLeft_toRightOf="@+id/cb_salary"
             app:layout_constraintRight_toRightOf="parent"
+            android:checked="true"
             android:text="@string/str_deposit"
     />
     <CheckBox

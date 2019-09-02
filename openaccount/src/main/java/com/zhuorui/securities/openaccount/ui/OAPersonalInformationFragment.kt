@@ -3,15 +3,16 @@ package com.zhuorui.securities.openaccount.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
+import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.custom.EmailTipsView
 import com.zhuorui.securities.openaccount.databinding.FragmentOaPersonalInformationBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OAPersonalInformationPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel
-import kotlinx.android.synthetic.main.fragment_oa_property_status.*
+import kotlinx.android.synthetic.main.fragment_oa_personal_information.*
 
 /**
  *    author : liuwei
@@ -23,13 +24,14 @@ class OAPersonalInformationFragment :
     AbsSwipeBackFragment<FragmentOaPersonalInformationBinding, OAPersonalInformationViewModel, OAPersonalInformationView, OAPersonalInformationPresenter>(),
     OAPersonalInformationView, View.OnClickListener {
 
+    var mOptionsPicker: OptionsPickerDialog<String>? = null
+
     companion object {
         fun newInstance(): OAPersonalInformationFragment {
             val fragment = OAPersonalInformationFragment()
             return fragment
         }
     }
-
 
     override val layout: Int
         get() = R.layout.fragment_oa_personal_information
@@ -46,9 +48,28 @@ class OAPersonalInformationFragment :
     override val getView: OAPersonalInformationView
         get() = this
 
-    override fun init() {
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        mOptionsPicker = context?.let { OptionsPickerDialog(it) }
+        tv_employment_status.setOnClickListener(this)
+        tv_tax.setOnClickListener(this)
+        tv_tax_paying.setOnClickListener(this)
         btn_per.setOnClickListener(this)
         btn_next.setOnClickListener(this)
+        emiltips?.bindEditText(et_email)
+        presenter?.setDefData()
+    }
+
+    override fun setOccupation(txt: String?) {
+        tv_employment_status.text = txt
+    }
+
+    override fun setTaxType(txt: String?) {
+        tv_tax.text = txt
+    }
+
+    override fun setTaxState(txt: String?) {
+        tv_tax_paying.text = txt
     }
 
     override fun onClick(p0: View?) {
@@ -59,6 +80,22 @@ class OAPersonalInformationFragment :
             R.id.btn_next -> {
                 start(OAPropertyStatusFragment.newInstance())
             }
+            R.id.tv_employment_status -> {
+                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getOccupationPickerListener())
+                mOptionsPicker?.setData(presenter?.occupationPickerData)
+                mOptionsPicker?.setCurrentData(tv_employment_status.text)
+                mOptionsPicker?.show()
+            }
+            R.id.tv_tax -> {
+                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getTaxTypePickerListener())
+                mOptionsPicker?.setData(presenter?.taxTypePickerData)
+                mOptionsPicker?.setCurrentData(tv_tax.text)
+                mOptionsPicker?.show()
+            }
+            R.id.tv_tax_paying -> {
+
+            }
+
 
         }
     }

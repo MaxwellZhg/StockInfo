@@ -14,7 +14,6 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
 
     override fun init() {
         super.init()
-        view?.init()
     }
 
 

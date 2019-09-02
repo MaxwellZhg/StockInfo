@@ -1,22 +1,24 @@
 package com.zhuorui.securities.personal.ui
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
+import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
-
 import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
-import kotlinx.android.synthetic.main.login_and_register_fragment.tv_btn_login
-import kotlin.String as String
 import com.zhuorui.securities.personal.databinding.LoginAndRegisterFragmentBinding
 import com.zhuorui.securities.personal.ui.presenter.LoginRegisterPresenter
 import com.zhuorui.securities.personal.ui.view.LoginRegisterView
+import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
+import kotlinx.android.synthetic.main.login_and_register_fragment.*
+import me.jessyan.autosize.utils.LogUtils
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  * Created by Maxwell.
@@ -79,7 +81,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                 startWithPop(LoginPswFragment())
             }
             R.id.rl_country_disct->{
-                start(CountryDisctFragment())
+                startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)
             }
         }
     }
@@ -117,6 +119,19 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     companion object {
         fun newInstance(): LoginRegisterFragment {
             return LoginRegisterFragment()
+        }
+    }
+
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        when(requestCode){
+            ISupportFragment.RESULT_OK->{
+                var str=data?.get("str") as String
+                var code=data?.get("code") as String
+                  LogUtils.e(str)
+                 tv_login_contry.text=str
+                 tv_areaphone_tips.text=code
+            }
         }
     }
 }

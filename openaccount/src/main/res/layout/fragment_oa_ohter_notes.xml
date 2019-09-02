@@ -90,11 +90,13 @@
                         android:layout_marginEnd="20dp"
                 />
 
-                <Switch
+                <com.zhuorui.commonwidget.ZRSwitch
                         android:id="@+id/switch1"
                         android:layout_width="45dp"
                         android:layout_height="23dp"
                         android:layout_marginRight="16dp"
+                        app:zr_switchChecked="true"
+                        app:zr_switchShowIndicator="true"
                         app:layout_constraintLeft_toRightOf="@+id/tv_info1"
                         app:layout_constraintTop_toTopOf="@+id/tv_info1"
                         app:layout_constraintRight_toRightOf="parent"
@@ -125,11 +127,12 @@
                         android:layout_marginEnd="20dp"
                 />
 
-                <Switch
+                <com.zhuorui.commonwidget.ZRSwitch
                         android:id="@+id/switch2"
                         android:layout_width="45dp"
                         android:layout_height="23dp"
                         android:layout_marginRight="16dp"
+                        app:zr_switchShowIndicator="true"
                         app:layout_constraintLeft_toRightOf="@+id/tv_info2"
                         app:layout_constraintTop_toTopOf="@+id/tv_info2"
                         app:layout_constraintRight_toRightOf="parent"
@@ -160,11 +163,12 @@
                         android:layout_marginEnd="20dp"
                 />
 
-                <Switch
+                <com.zhuorui.commonwidget.ZRSwitch
                         android:id="@+id/switch3"
                         android:layout_width="45dp"
                         android:layout_height="23dp"
                         android:layout_marginRight="16dp"
+                        app:zr_switchShowIndicator="true"
                         app:layout_constraintLeft_toRightOf="@+id/tv_info3"
                         app:layout_constraintTop_toTopOf="@+id/tv_info3"
                         app:layout_constraintRight_toRightOf="parent"
@@ -196,7 +200,7 @@
                         android:layout_marginEnd="20dp"
                 />
 
-                <Switch
+                <com.zhuorui.commonwidget.ZRSwitch
                         android:id="@+id/switch4"
                         android:layout_width="45dp"
                         android:layout_height="23dp"
