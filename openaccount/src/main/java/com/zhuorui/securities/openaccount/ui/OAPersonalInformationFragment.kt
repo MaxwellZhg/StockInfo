@@ -3,8 +3,10 @@ package com.zhuorui.securities.openaccount.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaPersonalInformationBinding
@@ -71,13 +73,51 @@ class OAPersonalInformationFragment :
         tv_tax_paying.text = txt
     }
 
+    override fun setTaxNo(cardNo: String?) {
+        tv_tax_number.text = cardNo
+    }
+
+    override fun getTaxNo(): String? {
+        return tv_tax_number.text
+    }
+
+    override fun getEmail(): String? {
+        return et_email.text
+    }
+
+    override fun toNext() {
+        start(OAPropertyStatusFragment.newInstance())
+    }
+
+    override fun showToast(msg: String?) {
+        msg?.let { ToastUtil.instance.toast(it) }
+
+    }
+
+
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_per -> {
                 pop()
             }
             R.id.btn_next -> {
-                start(OAPropertyStatusFragment.newInstance())
+                if (!presenter?.checkData()!!) return
+                context?.let {
+                    ConfirmToCancelDialog.createWidth265Dialog(it, true, true)
+                        .setMsgText(presenter?.getDialogSpanned()!!)
+                        .setCancelText(R.string.cancle)
+                        .setConfirmText(R.string.ensure)
+                        .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                            override fun onCancel() {
+
+                            }
+
+                            override fun onConfirm() {
+                                presenter?.sub()
+                            }
+
+                        }).show()
+                }
             }
             R.id.tv_employment_status -> {
                 mOptionsPicker?.setOnOptionSelectedListener(presenter?.getOccupationPickerListener())

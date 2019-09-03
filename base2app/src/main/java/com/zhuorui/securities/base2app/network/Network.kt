@@ -105,7 +105,7 @@ object Network {
     class IHCallBack<T : BaseResponse>(private val request: BaseRequest) : Callback<T> {
 
         init {
-            LogInfra.Log.w(TAG, " Request: " + JsonUtil.toJson(request))
+//            LogInfra.Log.w(TAG, " Request: " + JsonUtil.toJson(request))
         }
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -122,7 +122,7 @@ object Network {
                 return
             }
             t.request = request
-            LogInfra.Log.w(TAG, "Response: " + JsonUtil.toJson(t))
+//            LogInfra.Log.w(TAG, "Response: " + JsonUtil.toJson(t))
             if (!t.isSuccess()) {
                 RxBus.getDefault().post(t.toError())
                 return

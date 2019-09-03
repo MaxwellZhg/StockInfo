@@ -38,5 +38,10 @@ interface OpenAccountApi {
          */
         const val SUB_IDENTITY = "as_user/api/open/v1/sub_identity"
 
+        /**
+         * 个人风险测评资料
+         */
+        const val SUB_BASICS_INFO = "as_user/api/open/v1/sub_basics_info"
+
     }
 }

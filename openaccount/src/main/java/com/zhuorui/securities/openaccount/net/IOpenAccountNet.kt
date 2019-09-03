@@ -41,5 +41,9 @@ interface IOpenAccountNet {
     @POST(OpenAccountApi.SUB_IDENTITY)
     fun subIdentity(@Body request: SubIdentityRequest): Call<SubIdentityResponse>
 
+    //个人风险测评资料
+    @POST(OpenAccountApi.SUB_BASICS_INFO)
+    fun subBasicsInfo(@Body request: SubBasicsInfoRequest): Call<SubBasicsInfoResponse>
+
 
 }

@@ -13,4 +13,5 @@ interface OAInvestmentExperienceView :AbsView{
     fun setInvestBondText(time: String?)
     fun setInvestGoldForeignText(time: String?)
     fun setInvestFundText(time: String?)
+    fun toNext()
 }

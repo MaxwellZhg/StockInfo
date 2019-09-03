@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaPropertyStatusBinding
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_oa_personal_information.*
 import kotlinx.android.synthetic.main.fragment_oa_property_status.*
 import kotlinx.android.synthetic.main.fragment_oa_property_status.btn_next
 import kotlinx.android.synthetic.main.fragment_oa_property_status.btn_per
+import kotlinx.android.synthetic.main.layout_oa_property_status_checkbox.*
 
 /**
  *    author : liuwei
@@ -62,6 +64,10 @@ class OAPropertyStatusFragment :
         presenter?.setDefData()
     }
 
+    override fun showToast(s: String) {
+        ToastUtil.instance.toast(s)
+    }
+
     override fun setIncomeText(txt: String?) {
         tv_income.text = txt
     }
@@ -74,13 +80,59 @@ class OAPropertyStatusFragment :
         tv_risk.text = txt
     }
 
+    /**
+     *  获取薪金box状态
+     */
+    override fun getSalaryBoxStatus(): Boolean? {
+        return cb_salary?.isChecked
+    }
+
+    /**
+     *  获取存款box状态
+     */
+    override fun getDepositBoxStatus(): Boolean? {
+        return cb_deposit.isChecked
+    }
+
+    /**
+     *  获取租金box状态
+     */
+    override fun getRentBoxStatus(): Boolean? {
+        return cb_rent.isChecked
+    }
+
+    /**
+     *  获取投资box状态
+     */
+    override fun getInvestmentBoxStatus(): Boolean? {
+        return cb_investment.isChecked
+    }
+
+    /**
+     *  获取借贷box状态
+     */
+    override fun getToLoanBoxStatus(): Boolean? {
+        return cb_to_loan.isChecked
+    }
+
+    /**
+     *  获取其他box状态
+     */
+    override fun getOtherBoxStatus(): Boolean? {
+        return cb_other.isChecked
+    }
+
+    override fun toNext() {
+        start(OAInvestmentExperienceFragment.newInstance())
+    }
+
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_per -> {
                 pop()
             }
             R.id.btn_next -> {
-                start(OAInvestmentExperienceFragment.newInstance())
+                presenter?.sub()
             }
             R.id.tv_income -> {
                 mOptionsPicker?.setOnOptionSelectedListener(presenter?.getIncomePickerListener())

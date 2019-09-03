@@ -91,8 +91,10 @@ class ConfirmToCancelDialog(
     override fun onClick(p0: View) {
         when (p0) {
             tv_cancel -> {
+                callBack?.onCancel()
             }
-            else -> {
+            tv_confirm -> {
+                callBack?.onConfirm()
             }
         }
         dialog?.dismiss()

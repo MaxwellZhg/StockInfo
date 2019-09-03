@@ -1,8 +1,11 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
+import android.text.TextUtils
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.R2.array.occupation
+import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
 import com.zhuorui.securities.openaccount.ui.view.OAPropertyStatusView
 import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
@@ -25,6 +28,10 @@ class OAPropertyStatusPresenter : AbsPresenter<OAPropertyStatusView, OAPropertyS
     var rateCode: MutableList<Int>? = null //交易频率Code
     var riskPickerData: MutableList<String>? = null//风险承受能力
     var riskCode: MutableList<Int>? = null //风险承受能力Code
+    var mIncome: String? = null
+    var mRate: String? = null
+    var mRisk: String? = null
+
 
     override fun init() {
         super.init()
@@ -36,35 +43,80 @@ class OAPropertyStatusPresenter : AbsPresenter<OAPropertyStatusView, OAPropertyS
         riskCode = ResUtil.getIntArray(R.array.risk_code)?.asList()?.toMutableList()
     }
 
-    fun setDefData(){
-        view?.setIncomeText(incomePickerData?.get(2))
-        view?.setRateText(ratePickerData?.get(0))
-        view?.setRiskText(ratePickerData?.get(1))
+    fun setDefData() {
+        mIncome = incomePickerData?.get(2)
+        view?.setIncomeText(mIncome)
+        mRate = ratePickerData?.get(0)
+        view?.setRateText(mRate)
+        mRisk = riskPickerData?.get(1)
+        view?.setRiskText(mRisk)
     }
 
-
     fun getIncomePickerListener(): OnOptionSelectedListener<String>? {
-        return object : OnOptionSelectedListener<String> {
-            override fun onOptionSelected(data: MutableList<String>?) {
-                view?.setIncomeText(data?.get(0))
-            }
+        return OnOptionSelectedListener { data ->
+            mIncome = data?.get(0)
+            view?.setIncomeText(mIncome)
         }
     }
 
     fun getRatePickerListener(): OnOptionSelectedListener<String>? {
-        return object : OnOptionSelectedListener<String> {
-            override fun onOptionSelected(data: MutableList<String>?) {
-                view?.setRateText(data?.get(0))
-            }
+        return OnOptionSelectedListener { data ->
+            mRate = data?.get(0)
+            view?.setRateText(mRate)
         }
     }
 
     fun getRiskPickerListener(): OnOptionSelectedListener<String>? {
-        return object : OnOptionSelectedListener<String> {
-            override fun onOptionSelected(data: MutableList<String>?) {
-                view?.setRiskText(data?.get(0))
-            }
+        return OnOptionSelectedListener { data ->
+            mRisk = data?.get(0)
+            view?.setRiskText(mRisk)
         }
+    }
+
+    fun sub() {
+        val capitalSource = getCapitalSource()
+        if (TextUtils.isEmpty(capitalSource)){
+            view?.showToast(ResUtil.getString(R.string.str_please_select)+ResUtil.getString(R.string.str_sources_funds))
+            return
+        }
+        val income = incomePickerData?.indexOf(mIncome)?.let { incomeCode?.get(it) }
+        val rate = ratePickerData?.indexOf(mRate)?.let { rateCode?.get(it) }
+        val risk = riskPickerData?.indexOf(mRisk)?.let { riskCode?.get(it) }
+        OpenInfoManager.getInstance()?.info?.income = income
+        OpenInfoManager.getInstance()?.info?.rate = rate
+        OpenInfoManager.getInstance()?.info?.risk = risk
+        OpenInfoManager.getInstance()?.info?.capitalSource = getCapitalSource()
+        view?.toNext()
+    }
+
+    private fun getCapitalSource(): String? {
+        var capitalSource = StringBuffer()
+        if (view?.getSalaryBoxStatus()!!) {
+            capitalSource.append(",")
+            capitalSource.append("1")
+        }
+        if (view?.getDepositBoxStatus()!!) {
+            capitalSource.append(",")
+            capitalSource.append("2")
+        }
+        if (view?.getRentBoxStatus()!!) {
+            capitalSource.append(",")
+            capitalSource.append("3")
+        }
+        if (view?.getInvestmentBoxStatus()!!) {
+            capitalSource.append(",")
+            capitalSource.append("4")
+        }
+        if (view?.getToLoanBoxStatus()!!) {
+            capitalSource.append(",")
+            capitalSource.append("5")
+        }
+        if (view?.getOtherBoxStatus()!!) {
+            capitalSource.append(",")
+            capitalSource.append("6")
+        }
+        val s = capitalSource.toString()
+        return if (s.length > 1) s.substring(1) else s
     }
 
 

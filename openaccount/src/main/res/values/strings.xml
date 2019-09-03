@@ -97,4 +97,5 @@
     <string name="str_documents_have_expired">证件已过期</string>
     <string name="back">返回</string>
     <string name="take_bank_photo_tips">请将银行卡置于四角边框内部，避免反光，保持清晰！</string>
+    <string name="str_i_see">我知道了</string>
 </resources>
