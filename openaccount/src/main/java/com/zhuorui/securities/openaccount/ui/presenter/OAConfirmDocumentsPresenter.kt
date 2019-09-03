@@ -3,14 +3,12 @@ package com.zhuorui.securities.openaccount.ui.presenter
 import android.text.TextUtils
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil.*
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo

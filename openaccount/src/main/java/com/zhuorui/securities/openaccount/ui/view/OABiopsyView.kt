@@ -8,6 +8,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Date: 2019/8/26
  * Desc:
  */
-interface OABiopsyView :AbsView{
-    fun init()
+interface OABiopsyView : AbsView {
+
 }

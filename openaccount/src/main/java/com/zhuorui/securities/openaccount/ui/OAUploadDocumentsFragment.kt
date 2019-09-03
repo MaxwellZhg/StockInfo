@@ -7,10 +7,8 @@ import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.ZRUploadImageView
-import com.zhuorui.commonwidget.dialog.ConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
-import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.custom.UploadDocumentsTipsDialog
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
@@ -31,6 +29,7 @@ class OAUploadDocumentsFragment :
     AbsSwipeBackNetFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
     OAUploadDocumentsView, View.OnClickListener, ZRUploadImageView.OnUploadImageListener {
 
+    val REQUEST_CODE = 100
     var sampleSialog: UploadDocumentsTipsDialog? = null
 
     companion object {
@@ -55,13 +54,11 @@ class OAUploadDocumentsFragment :
         get() = this
 
     override fun goCamera(requestCode: Int, uri: Uri?) {
-//        GetPhotoFromAlbumUtil.goCamera(this, requestCode, uri)
-
+        startForResult(TakePhotoFragment.newInstance(), REQUEST_CODE)
     }
 
     override fun goAlbum(requestCode: Int) {
         GetPhotoFromAlbumUtil.goAlbum(this, requestCode)
-
     }
 
     override fun setCardFrontUrl(cardFrontPhoto: String?) {

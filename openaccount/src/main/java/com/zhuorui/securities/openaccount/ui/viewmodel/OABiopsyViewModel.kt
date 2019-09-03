@@ -1,6 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.viewmodel
 
-import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -10,10 +10,11 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class OABiopsyViewModel : ViewModel() {
-    var str = ObservableField<String>()
+
+    val verifyCode:MutableLiveData<String> = MutableLiveData()
 
     init {
-        str.set("3458")
+        verifyCode.value = "----"
     }
 
 }

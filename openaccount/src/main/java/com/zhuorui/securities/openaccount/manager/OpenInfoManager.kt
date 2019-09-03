@@ -56,7 +56,7 @@ open class OpenInfoManager {
             }
             //上传身份信息完成
             11 -> {
-                fragment = OAVedioRecordFragment.newInstance()
+                fragment = OABiopsyFragment.newInstance()
             }
             //人脸核身通过
             12 -> {
