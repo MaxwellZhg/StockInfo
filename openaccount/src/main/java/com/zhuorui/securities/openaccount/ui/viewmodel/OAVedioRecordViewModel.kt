@@ -1,6 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.viewmodel
 
-import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel
  * Date: 2019/8/27
  * Desc:
  */
-class OAVedioRecordViewModel :ViewModel(){
-    var str= ObservableField<String>()
-    var idstr=ObservableField<String>()
-    var code=ObservableField<String>()
+class OAVedioRecordViewModel : ViewModel() {
+
+    val verifyCode: MutableLiveData<String> = MutableLiveData()
+
+    init {
+        verifyCode.value = "----"
+    }
 }

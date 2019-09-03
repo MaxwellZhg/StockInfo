@@ -58,7 +58,7 @@
                     android:padding="0dp"
                     android:minHeight="0dp"
                     android:gravity="center"
-                    android:text="@{viewModel.str}"
+                    android:text="@{viewModel.verifyCode}"
                     android:layout_gravity="center_horizontal"
                     android:enabled="false"
                     app:radius="8dp"

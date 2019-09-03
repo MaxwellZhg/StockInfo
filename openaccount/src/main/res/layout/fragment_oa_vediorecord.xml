@@ -64,7 +64,7 @@
                     app:text_size="37dp"
                     app:text_color_normal="@color/color_FFFFFFFF"
                     app:text_color_hightlight="@color/color_1A6ED2"
-                    app:text="@{viewModel.str}"
+                    app:text="@{viewModel.verifyCode}"
                     app:direction="left"
                     android:id="@+id/tv_change"
                     android:layout_gravity="center_horizontal"/>
