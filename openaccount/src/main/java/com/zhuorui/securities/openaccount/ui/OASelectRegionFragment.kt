@@ -43,8 +43,8 @@ class OASelectRegionFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.next -> {
-                start(OADataTipsFragment.newInstance())
-//                start(OAVedioRecordFragment.newInstance())
+//                start(OADataTipsFragment.newInstance())
+                start(OABiopsyFragment.newInstance())
             }
             R.id.region -> {
                 dialog?.setCurrentData(region.text.toString())

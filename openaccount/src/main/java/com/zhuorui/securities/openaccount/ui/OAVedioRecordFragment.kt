@@ -5,7 +5,6 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaVediorecordBinding
@@ -82,8 +81,6 @@ class OAVedioRecordFragment :
                         presenter?.uploadVedio(data)
                     }
                 }
-                // 先清除上一次的颜色效果
-                tv_change.clear()
                 // 播放数字码进度
                 tv_change.start(6000)
             }
@@ -104,10 +101,14 @@ class OAVedioRecordFragment :
         }
     }
 
-    /**
-     * 上传完成，调到下一步
-     */
-    override fun uploadComplete() {
-        start(OATakeBankCradPhotoFragment.newInstance())
+    override fun uploadComplete(isSuccessful: Boolean) {
+        if (isSuccessful) {
+            start(OATakeBankCradPhotoFragment.newInstance())
+        } else {
+            // 恢复画面
+            camera_view.resetCamera()
+            // 清除上一次的颜色效果
+            tv_change.clear()
+        }
     }
 }
