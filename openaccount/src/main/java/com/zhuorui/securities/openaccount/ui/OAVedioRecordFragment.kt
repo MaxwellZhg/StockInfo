@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaVediorecordBinding
@@ -55,7 +56,7 @@ class OAVedioRecordFragment :
         super.onViewCreated(view, savedInstanceState)
 
         presenter?.setVerifyCode(arguments?.getString("verifyCode"))
-        camera_view.init(false)
+        camera_view.init(true)
         btn_record.setOnClickListener(this)
     }
 
@@ -76,8 +77,10 @@ class OAVedioRecordFragment :
                 camera_view.recordVedio(
                     6000
                 ) { data ->
-                    // 拿到视频流，进行上传
-                    presenter?.uploadVedio(data)
+                    if (data != null && data.isNotEmpty()) {
+                        // 拿到视频流，进行上传
+                        presenter?.uploadVedio(data)
+                    }
                 }
                 // 先清除上一次的颜色效果
                 tv_change.clear()
