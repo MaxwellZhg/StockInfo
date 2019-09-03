@@ -11,9 +11,6 @@ import androidx.lifecycle.ViewModel
  */
 class TakePhotoViewModel : ViewModel() {
 
-    // 是否打开闪光灯
-    val lightOpen: MutableLiveData<Boolean> = MutableLiveData()
-
     // 是否拍摄了照片
     val takePhotoed: MutableLiveData<Boolean> = MutableLiveData()
 

@@ -3,6 +3,7 @@ package com.zhuorui.securities.openaccount.widget;
 import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 import com.qw.soul.permission.SoulPermission;
@@ -12,6 +13,8 @@ import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener;
 import com.zhuorui.securities.base2app.BaseApplication;
 import com.zhuorui.securities.base2app.util.ToastUtil;
 import com.zhuorui.securities.openaccount.camera.CameraHelper;
+
+import java.security.InvalidParameterException;
 
 /**
  * author : PengXianglin
@@ -28,6 +31,10 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
     // 拍摄结果回调
     private TakePhotoCallBack takePhotoCallBack;
     private RecordVedioCallBack recordVedioCallBack;
+    // 是否打开闪光灯
+    private boolean isOpenFlash;
+    // 是否是后置摄像头
+    private boolean backFacing;
 
     public CameraView(Context context) {
         super(context);
@@ -41,8 +48,16 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
         super(context, attrs, defStyleAttr);
     }
 
-    public void init() {
+    /**
+     * 初始化
+     *
+     * @param backFacing 使用哪个摄像头
+     *                   true 后置
+     *                   false 前置
+     */
+    public void init(boolean backFacing) {
         if (mInited) return;
+        this.backFacing = backFacing;
         // 请求权限
         SoulPermission.getInstance().checkAndRequestPermissions(
                 Permissions.build(
@@ -56,6 +71,8 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
         // 获得权限，初始化录制界面
         mInited = true;
         cameraHelper = new CameraHelper(getContext());
+        int cameraFacingType = backFacing ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_FRONT;
+        cameraHelper.setCameraPosition(cameraFacingType);
         cameraHelper.setSurfaceView(this);
         cameraHelper.setCompleteListener(this);
     }
@@ -134,7 +151,7 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
 
     public void onResume() {
         if (!mInited) {
-            init();
+            init(backFacing);
             return;
         }
         if (cameraHelper != null && cameraHelper.mOrientationListener != null) {
@@ -146,6 +163,19 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
         if (cameraHelper != null && cameraHelper.mOrientationListener != null) {
             cameraHelper.mOrientationListener.disable();
         }
+    }
+
+    /**
+     * 开关闪光灯
+     */
+    public boolean switchFlash() {
+        if (cameraHelper != null) {
+            cameraHelper.setOpenFlashMode(isOpenFlash ? Camera.Parameters.FLASH_MODE_ON : Camera.Parameters.FLASH_MODE_OFF);
+            isOpenFlash = !isOpenFlash;
+        } else {
+            return false;
+        }
+        return isOpenFlash;
     }
 
     /**

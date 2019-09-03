@@ -49,7 +49,7 @@ class OAVedioRecordFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        camera_View.init()
+        camera_view.init(false)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
@@ -60,19 +60,19 @@ class OAVedioRecordFragment :
 
     override fun onResume() {
         super.onResume()
-        camera_View.onResume()
+        camera_view.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        camera_View.onPause()
+        camera_view.onPause()
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_record -> {
                 // 调用录制视频
-                camera_View.recordVedio(
+                camera_view.recordVedio(
                     6000
                 ) { data ->
                     // 拿到视频流，进行上传

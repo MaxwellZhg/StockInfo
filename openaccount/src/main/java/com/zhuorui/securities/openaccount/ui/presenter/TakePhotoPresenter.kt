@@ -11,4 +11,11 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.TakePhotoViewModel
  *    desc   :
  */
 class TakePhotoPresenter : AbsPresenter<TakePhotoView, TakePhotoViewModel>() {
+
+    /**
+     * 是否拍摄了照片
+     */
+    fun takePhoto(takePhotoed: Boolean) {
+        viewModel?.takePhotoed?.value = takePhotoed
+    }
 }

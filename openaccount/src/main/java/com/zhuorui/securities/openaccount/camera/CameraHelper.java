@@ -89,6 +89,20 @@ public class CameraHelper implements SurfaceHolder.Callback {
     }
 
     /**
+     * 设置开启闪光灯(重新预览)
+     *
+     * @param flashMode Camera.Parameters.FLASH_MODE_AUTO // 自动模式
+     *                  Camera.Parameters.FLASH_MODE_ON // 总是开启
+     *                  Camera.Parameters.FLASH_MODE_OFF // 总是关闭
+     */
+    public void setOpenFlashMode(String flashMode) {
+        if (mCamera == null) return;
+        Camera.Parameters parameters = mCamera.getParameters();
+        //设置闪光灯模式
+        parameters.setFlashMode(flashMode);
+    }
+
+    /**
      * 拍照
      */
     public void capture() {
@@ -537,6 +551,10 @@ public class CameraHelper implements SurfaceHolder.Callback {
     public void resetCamera() {
         if (mSurfaceHolder != null)
             startPreView(mSurfaceHolder);
+    }
+
+    public void setCameraPosition(int cameraPosition) {
+        this.cameraPosition = cameraPosition;
     }
 
     public interface CompleteListener {

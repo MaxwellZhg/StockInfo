@@ -24,7 +24,7 @@
                 app:zr_topbarTitle="@string/zhuorui_openaccount"/>
 
         <com.zhuorui.securities.openaccount.widget.CameraView
-                android:id="@+id/camera_View"
+                android:id="@+id/camera_view"
                 android:layout_below="@+id/top_bar"
                 android:layout_width="match_parent"
                 android:layout_above="@+id/ll_record"
