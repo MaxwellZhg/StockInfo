@@ -14,6 +14,8 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.zhuorui.securities.base2app.BaseApplication.Companion.context
+import me.yokeyword.fragmentation.ISupportFragment
+import me.yokeyword.fragmentation.SupportFragment
 import java.io.File
 
 /**
@@ -28,12 +30,13 @@ object GetPhotoFromAlbumUtil {
      * 根据Uri获取图片的绝对路径
      * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
      */
-    fun getRealPathFromUri(context: Context, uri: Uri): String? {
+    fun getRealPathFromUri(context: Context?, uri: Uri?): String? {
+        if (context == null || uri == null)return null
         val sdkVersion = Build.VERSION.SDK_INT
         return if (sdkVersion >= 19) { // api >= 19
-            getRealPathFromUriAboveApi19(context, uri)
+            getRealPathFromUriAboveApi19(context!!, uri!!)
         } else { // api < 19
-            getRealPathFromUriBelowAPI19(context, uri)
+            getRealPathFromUriBelowAPI19(context!!, uri!!)
         }
     }
 

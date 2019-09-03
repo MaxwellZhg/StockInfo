@@ -3,8 +3,10 @@ package com.zhuorui.commonwidget.dialog
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.TextView
@@ -17,6 +19,7 @@ import com.zhuorui.securities.base2app.dialog.BaseBottomSheetsDialog
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.pickerview.date.DatePicker
 import me.jessyan.autosize.utils.LogUtils
+import me.yokeyword.fragmentation.ISupportFragment
 import java.io.File
 
 /**
@@ -50,8 +53,8 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
         when (p0?.id) {
             R.id.tv_shot -> {
                 hide()
-                var uri:Uri = GetPhotoFromAlbumUtil.getOutputMediaFileUri(listener?.getCameraSavePath(),p0.context)
-                listener?.goCamera(listener?.getToCameraRequestCode(),uri)
+                var uri: Uri = GetPhotoFromAlbumUtil.getOutputMediaFileUri(listener?.getCameraSavePath(), p0.context)
+                listener?.goCamera(listener?.getToCameraRequestCode(), uri)
             }
             R.id.tv_album -> {
                 hide()
@@ -65,22 +68,29 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
 
     //活动请求的回调，用requestCode来匹配
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        LogUtils.d(""+resultCode)
         if (resultCode != Activity.RESULT_OK) return
-        //图片路径
-        var photoPath: String = ""
         when (requestCode) {
             listener?.getToCameraRequestCode() -> {
-                var camerPath: String = listener?.getCameraSavePath().toString()
+                var camerPath: String? = listener?.getCameraSavePath()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     listener?.onPicturePath(camerPath)
                 } else {
-                    Uri.fromFile(File(camerPath)).encodedPath
+                    listener?.onPicturePath(Uri.fromFile(File(camerPath)).encodedPath)
                 }
             }
             listener?.getToAlbumRequestCode() -> {
-                var path:String = GetPhotoFromAlbumUtil.getRealPathFromUri(context!!, data?.data!!).toString()
+                var path: String? = GetPhotoFromAlbumUtil.getRealPathFromUri(context, data?.data)
                 listener?.onPicturePath(path)
+            }
+        }
+    }
+
+    fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle) {
+        if (resultCode != ISupportFragment.RESULT_OK) return
+        when (requestCode) {
+            listener?.getToCameraRequestCode() -> {
+                val bm = data.getParcelable<Bitmap>(Bitmap::javaClass.name)
+                listener?.onPictureBitmap(bm)
             }
         }
     }
@@ -106,13 +116,25 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
         fun getCameraSavePath(): String
 
         /**
-         * 返回图片地址（调用dialog的onActivityResult方法处理，此方法才会有结果返回）
+         * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）
          */
-        fun onPicturePath(path: String)
+        fun onPicturePath(path: String?)
 
-        fun goCamera(toCameraRequestCode: Int?,uri: Uri?)
+        /**
+         * 返回图片bitmap 调用dialog的回调方法处理，此方法才会有结果返回）
+         */
+        fun onPictureBitmap(bm: Bitmap?)
 
+        /**
+         * 去拍照
+         */
+        fun goCamera(toCameraRequestCode: Int?, uri: Uri?)
+
+        /**
+         * 去相册
+         */
         fun goAlbum(toAlbumRequestCode: Int?)
+
 
     }
 

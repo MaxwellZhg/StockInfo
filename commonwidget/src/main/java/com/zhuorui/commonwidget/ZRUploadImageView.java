@@ -3,8 +3,10 @@ package com.zhuorui.commonwidget;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -136,14 +138,35 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
 
     @Override
     public void onPicturePath(@NotNull String path) {
-        setFilePath(path);
+        setImagePath(path);
         if (mIUploader != null) {
             changeUi(1);
+            vBtn.setEnabled(false);
+            if (!TextUtils.isEmpty(mPath))
+                mListener.onPicturePath(this, "");
             mIUploader.upLoad(path);
         } else {
+            mPath = path;
             changeUi(2);
             mListener.onPicturePath(this, mPath);
         }
+    }
+
+    @Override
+    public void onPictureBitmap(@Nullable Bitmap bm) {
+        setImageBitmap(bm);
+        if (mIUploader != null) {
+            changeUi(1);
+            vBtn.setEnabled(false);
+            if (!TextUtils.isEmpty(mPath))
+                mListener.onPicturePath(this, "");
+            mIUploader.upLoad(bm);
+        } else {
+            mPath = bm.toString();
+            changeUi(2);
+            mListener.onPicturePath(this, mPath);
+        }
+
     }
 
     private void changeUi(int status) {
@@ -195,24 +218,31 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
         }
     }
 
-    private void setFilePath(String path) {
-        mPath = path;
+    private void setImagePath(String path) {
         vBtnText.setText(ResUtil.INSTANCE.getString(R.string.str_reshooting));
-        Glide.with(vImg).load(path).placeholder(mPlaceholder).error(mPlaceholder).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(vImg);
+        Glide.with(vImg).load(path).placeholder(mPlaceholder).error(mPlaceholder).diskCacheStrategy(DiskCacheStrategy.NONE).into(vImg);
     }
 
-    public void setUrl(String url){
-        if (!TextUtils.isEmpty(url)){
+    private void setImageBitmap(Bitmap bm) {
+        vBtnText.setText(ResUtil.INSTANCE.getString(R.string.str_reshooting));
+        vImg.setImageBitmap(bm);
+    }
+
+    public void setUrl(String url) {
+        if (!TextUtils.isEmpty(url)) {
             mPath = url;
-            vBtnText.setText(ResUtil.INSTANCE.getString(R.string.str_reshooting));
-            Glide.with(vImg).load(url).placeholder(mPlaceholder).error(mPlaceholder).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(vImg);
+            setImagePath(url);
             changeUi(2);
-            mListener.onPicturePath(this,mPath);
+            mListener.onPicturePath(this, mPath);
         }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (dialog != null) dialog.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onFragmentResult(int requestCode, int resultCode, @Nullable Bundle data) {
+        if (dialog != null) dialog.onFragmentResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -243,21 +273,25 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
 
     @Override
     public void onFail(String msg) {
-        changeUi(3,msg);
-        mListener.onPicturePath(this, null);
+        changeUi(3, msg);
+        vBtn.setEnabled(true);
+        mListener.onPicturePath(this, "");
     }
 
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(String url) {
+        mPath = url;
         changeUi(2);
+        vBtn.setEnabled(true);
         mListener.onPicturePath(this, mPath);
     }
 
     @NotNull
     public String getPath() {
-        return mStatus == 2 ? mPath : null;
+        return mStatus == 2 ? mPath : "";
     }
+
 
     public interface OnUploadImageListener {
         void goCamera(int requestCode, Uri uri);

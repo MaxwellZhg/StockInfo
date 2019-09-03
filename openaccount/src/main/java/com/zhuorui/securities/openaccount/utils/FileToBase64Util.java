@@ -48,7 +48,7 @@ public class FileToBase64Util {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             //进行Base64编码;
-            return base64Enum.getCode() + Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+            return base64Enum.getCode() + "base64," + Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
         } catch (Exception e) {
             return null;
         }
@@ -71,6 +71,7 @@ public class FileToBase64Util {
 
     /**
      * 根据路径获得图片并压缩，返回bitmap用于显示
+     *
      * @param filePath
      * @return
      */
@@ -87,18 +88,19 @@ public class FileToBase64Util {
 
     /**
      * 计算图片的缩放值
+     *
      * @param options
      * @param reqWidth
      * @param reqHeight
      * @return
      */
-    public static int calculateInSampleSize(BitmapFactory.Options options,int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height/ (float) reqHeight);
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
             final int widthRatio = Math.round((float) width / (float) reqWidth);
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
@@ -107,6 +109,7 @@ public class FileToBase64Util {
 
     /**
      * 图片文件转换成String
+     *
      * @param filePath
      * @return
      */
@@ -115,7 +118,7 @@ public class FileToBase64Util {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
-        Log.d("d", "压缩后的大小=" + (b.length/1024));
+        Log.d("d", "压缩后的大小=" + (b.length / 1024));
         return Base64Enum.JPEG.getCode() + "base64," + Base64.encodeToString(b, Base64.DEFAULT);
     }
 

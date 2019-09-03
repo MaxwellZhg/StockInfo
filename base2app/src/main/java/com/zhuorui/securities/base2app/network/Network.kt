@@ -74,7 +74,7 @@ object Network {
             /*若是debug；则添加Http日志打印的拦截器进行打印请求信息*/
             val logger = HttpLoggingInterceptor.Logger { message -> LogInfra.Log.w(TAG, message) }
             val interceptorLog = HttpLoggingInterceptor(logger)
-            interceptorLog.level = HttpLoggingInterceptor.Level.BASIC/*请求日志打印信息；基本信息*/
+            interceptorLog.level = HttpLoggingInterceptor.Level.BODY/*请求日志打印信息；基本信息*/
             builder.addInterceptor(interceptorLog)
         }
         /*添加动态修改BaseUrl*/

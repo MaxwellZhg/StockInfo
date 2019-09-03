@@ -29,7 +29,6 @@ class OAUploadDocumentsFragment :
     AbsSwipeBackNetFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
     OAUploadDocumentsView, View.OnClickListener, ZRUploadImageView.OnUploadImageListener {
 
-    val REQUEST_CODE = 100
     var sampleSialog: UploadDocumentsTipsDialog? = null
 
     companion object {
@@ -54,7 +53,7 @@ class OAUploadDocumentsFragment :
         get() = this
 
     override fun goCamera(requestCode: Int, uri: Uri?) {
-        startForResult(TakePhotoFragment.newInstance(), REQUEST_CODE)
+        startForResult(TakePhotoFragment.newInstance(), requestCode)
     }
 
     override fun goAlbum(requestCode: Int) {
@@ -116,10 +115,22 @@ class OAUploadDocumentsFragment :
         presenter?.setDefData()
     }
 
+    /**
+     * 调用系统返回
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         idcard_portrait.onActivityResult(requestCode, resultCode, data)
         idcard_national_emblem.onActivityResult(requestCode, resultCode, data)
+    }
+
+    /**
+     * 调用APP返回
+     */
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        idcard_portrait.onFragmentResult(requestCode, resultCode, data)
+        idcard_national_emblem.onFragmentResult(requestCode, resultCode, data)
     }
 
 }

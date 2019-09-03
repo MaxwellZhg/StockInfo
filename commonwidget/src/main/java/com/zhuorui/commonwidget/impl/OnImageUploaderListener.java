@@ -9,5 +9,5 @@ package com.zhuorui.commonwidget.impl;
 public interface OnImageUploaderListener {
     void onFail(String msg);
 
-    void onSuccess();
+    void onSuccess(String url);
 }

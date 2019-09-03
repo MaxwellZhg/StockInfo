@@ -35,7 +35,7 @@ interface IOpenAccountNet {
 
     //身份证OCR
     @POST(OpenAccountApi.ID_CARD_OCR)
-    fun idCardOcr(@Body request: IdCardOrcRequest): Observable<BaseResponse>
+    fun idCardOcr(@Body request: IdCardOrcRequest): Observable<IdCardOrcResponse>
 
     //上传身份信息
     @POST(OpenAccountApi.SUB_IDENTITY)
