@@ -44,7 +44,6 @@ class OASelectRegionFragment :
         when (p0?.id) {
             R.id.next -> {
                 start(OADataTipsFragment.newInstance())
-//                start(OAVedioRecordFragment.newInstance())
             }
             R.id.region -> {
                 dialog?.setCurrentData(region.text.toString())

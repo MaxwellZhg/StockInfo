@@ -14,8 +14,6 @@ import com.zhuorui.securities.base2app.BaseApplication;
 import com.zhuorui.securities.base2app.util.ToastUtil;
 import com.zhuorui.securities.openaccount.camera.CameraHelper;
 
-import java.security.InvalidParameterException;
-
 /**
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
@@ -33,8 +31,8 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
     private RecordVedioCallBack recordVedioCallBack;
     // 是否打开闪光灯
     private boolean isOpenFlash;
-    // 是否是后置摄像头
-    private boolean backFacing;
+    // 是否是录像
+    private boolean isRecord;
 
     public CameraView(Context context) {
         super(context);
@@ -51,19 +49,24 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
     /**
      * 初始化
      *
-     * @param backFacing 使用哪个摄像头
-     *                   true 后置
-     *                   false 前置
+     * @param isRecord 是否是录像来决定使用哪个摄像头
+     *                 true 后置
+     *                 false 前置
      */
-    public void init(boolean backFacing) {
+    public void init(boolean isRecord) {
         if (mInited) return;
-        this.backFacing = backFacing;
+        this.isRecord = isRecord;
         // 请求权限
-        SoulPermission.getInstance().checkAndRequestPermissions(
-                Permissions.build(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), this);
+        if (isRecord) {
+            SoulPermission.getInstance().checkAndRequestPermissions(
+                    Permissions.build(
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.RECORD_AUDIO,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), this);
+        } else {
+            SoulPermission.getInstance().checkAndRequestPermissions(Permissions.build(Manifest.permission.CAMERA), this);
+        }
     }
 
     @Override
@@ -71,7 +74,7 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
         // 获得权限，初始化录制界面
         mInited = true;
         cameraHelper = new CameraHelper(getContext());
-        int cameraFacingType = backFacing ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_FRONT;
+        int cameraFacingType = isRecord ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
         cameraHelper.setCameraPosition(cameraFacingType);
         cameraHelper.setSurfaceView(this);
         cameraHelper.setCompleteListener(this);
@@ -104,7 +107,7 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
      */
     public void resetCamera() {
         cameraHelper.resetCamera();
-        if (backFacing) {
+        if (!isRecord) {
             cameraHelper.setOpenFlashMode(isOpenFlash ? Camera.Parameters.FLASH_MODE_ON : Camera.Parameters.FLASH_MODE_OFF);
         }
     }
@@ -118,7 +121,7 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
     public void recordVedio(long duration, RecordVedioCallBack callBack) {
         this.recordVedioCallBack = callBack;
 
-        cameraHelper.setTargetDirAndTargetName(BaseApplication.Companion.getContext().getExternalCacheDir(), System.currentTimeMillis() + ".mp4");
+        cameraHelper.setTargetDir(BaseApplication.Companion.getContext().getExternalCacheDir());
 
         // 调用录制
         cameraHelper.record();
@@ -154,7 +157,7 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
 
     public void onResume() {
         if (!mInited) {
-            init(backFacing);
+            init(isRecord);
             return;
         }
         if (cameraHelper != null && cameraHelper.mOrientationListener != null) {

@@ -66,13 +66,14 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
         info?.validateCode = response.data.validateCode
 
         view?.hideUploading()
-        view?.uploadComplete()
+        view?.uploadComplete(true)
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
         if (response.request is LiveRecognRequest) {
             view?.hideUploading()
+            view?.uploadComplete(false)
         }
     }
 

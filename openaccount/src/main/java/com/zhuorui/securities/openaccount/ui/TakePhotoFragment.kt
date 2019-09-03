@@ -48,7 +48,7 @@ class TakePhotoFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        camera_view.init(true)
+        camera_view.init(false)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {

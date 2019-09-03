@@ -25,6 +25,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,11 +70,13 @@ public class CameraHelper implements SurfaceHolder.Callback {
         };
     }
 
-    public void setTargetDirAndTargetName(File targetDir, String targetFileName) {
+    public void setTargetDir(File targetDir) {
         if (!targetDir.exists()) {
             targetDir.mkdir();
         }
-        targetFile = new File(targetDir, targetFileName);
+        targetFile = new File(targetDir, "zr_record.mp4");
+        // 先删掉上一次拍过的文件
+        deleteTargetFile();
     }
 
     private void deleteTargetFile() {
@@ -335,10 +339,24 @@ public class CameraHelper implements SurfaceHolder.Callback {
                 releaseCamera();
                 Log.d("Recorder", targetFile.getPath());
                 if (completeListener != null) {
-                    // TODO 返回视频数据
-                    completeListener.onComplete((byte[]) null);
-                    // 删除文件
-                    deleteTargetFile();
+                    // 在子线程中计算视频文件的数据流
+                    Disposable disposable = Observable.create(new ObservableOnSubscribe<Object>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<Object> emitter) {
+                            byte[] data = getTargetFileByteArray();
+                            // 删除文件
+                            deleteTargetFile();
+                            emitter.onNext(data);
+                        }
+                    }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<Object>() {
+                                @Override
+                                public void accept(Object o) {
+                                    completeListener.onComplete((byte[]) o);
+                                }
+                            });
+                    disposables.add(disposable);
                 }
             } catch (RuntimeException r) {
                 Log.d("Recorder", "RuntimeException: stop() is called immediately after start()");
@@ -348,6 +366,35 @@ public class CameraHelper implements SurfaceHolder.Callback {
                 releaseMediaRecorder();
             }
         }
+    }
+
+    /**
+     * 计算视频文件的字节流
+     *
+     * @return
+     */
+    private byte[] getTargetFileByteArray() {
+        FileInputStream in = null;
+        byte[] buffer = null;
+        try {
+            in = new FileInputStream(targetFile);
+            long inSize = in.getChannel().size();
+            if (inSize == 0) return null;
+            buffer = new byte[in.available()];
+            in.read(buffer);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
+        return buffer;
     }
 
     /**

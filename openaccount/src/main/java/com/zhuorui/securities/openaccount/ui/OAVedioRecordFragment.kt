@@ -55,7 +55,7 @@ class OAVedioRecordFragment :
         super.onViewCreated(view, savedInstanceState)
 
         presenter?.setVerifyCode(arguments?.getString("verifyCode"))
-        camera_view.init(false)
+        camera_view.init(true)
         btn_record.setOnClickListener(this)
     }
 
@@ -76,11 +76,11 @@ class OAVedioRecordFragment :
                 camera_view.recordVedio(
                     6000
                 ) { data ->
-                    // 拿到视频流，进行上传
-                    presenter?.uploadVedio(data)
+                    if (data != null && data.isNotEmpty()) {
+                        // 拿到视频流，进行上传
+                        presenter?.uploadVedio(data)
+                    }
                 }
-                // 先清除上一次的颜色效果
-                tv_change.clear()
                 // 播放数字码进度
                 tv_change.start(6000)
             }
@@ -101,10 +101,14 @@ class OAVedioRecordFragment :
         }
     }
 
-    /**
-     * 上传完成，调到下一步
-     */
-    override fun uploadComplete() {
-        start(OATakeBankCradPhotoFragment.newInstance())
+    override fun uploadComplete(isSuccessful: Boolean) {
+        if (isSuccessful) {
+            start(OATakeBankCradPhotoFragment.newInstance())
+        } else {
+            // 恢复画面
+            camera_view.resetCamera()
+            // 清除上一次的颜色效果
+            tv_change.clear()
+        }
     }
 }
