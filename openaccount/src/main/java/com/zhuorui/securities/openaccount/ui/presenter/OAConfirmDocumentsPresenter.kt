@@ -241,8 +241,7 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
         } else if (TextUtils.isEmpty(idCardNo)) {
             t = ResUtil.getString(R.string.str_id_card_no) + ResUtil.getString(R.string.str_not_empty)
         } else if (TextUtils.isEmpty(cardValidStartDate)) {
-            t =
-                ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_beginning)
+            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_beginning)
         } else if (TextUtils.isEmpty(cardValidEndDate)) {
             t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_end)
         } else if (TextUtils.isEmpty(cardAddress)) {
