@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.custom;
+package com.zhuorui.securities.openaccount.widget;
 
 import android.content.Context;
 import android.text.Editable;

@@ -12,7 +12,6 @@ import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.custom.UploadDocumentsTipsDialog
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
-import com.zhuorui.securities.openaccount.model.CardOcrData
 import com.zhuorui.securities.openaccount.ui.presenter.OAUploadDocumentsPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel

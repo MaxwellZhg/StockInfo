@@ -7,7 +7,6 @@ import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
-import com.zhuorui.securities.openaccount.custom.EmailTipsView
 import com.zhuorui.securities.openaccount.databinding.FragmentOaPersonalInformationBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OAPersonalInformationPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView

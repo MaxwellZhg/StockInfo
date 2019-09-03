@@ -148,7 +148,7 @@
 
                 />
 
-                <com.zhuorui.securities.openaccount.custom.EmailTipsView
+                <com.zhuorui.securities.openaccount.widget.EmailTipsView
                         android:id="@+id/emiltips"
                         style="@style/openAccountItem"
                         android:visibility="visible"
