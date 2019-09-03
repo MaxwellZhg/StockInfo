@@ -7,6 +7,7 @@ import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_oa_confirm_documents.*
  *    desc   : 确认身份信息
  */
 class OAConfirmDocumentsFragment :
-    AbsSwipeBackFragment<FragmentOaConfirmDocumentsBinding, OAConfirmDocumentsViewModel, OAConfirmDocumentsView, OAConfirmDocumentsPresenter>(),
+    AbsSwipeBackNetFragment<FragmentOaConfirmDocumentsBinding, OAConfirmDocumentsViewModel, OAConfirmDocumentsView, OAConfirmDocumentsPresenter>(),
     OAConfirmDocumentsView, View.OnClickListener {
 
     var mDatePicker: DatePickerDialog? = null
@@ -79,6 +80,22 @@ class OAConfirmDocumentsFragment :
         et_address.setText(address)
     }
 
+    override fun getCardName(): String? {
+        return et_cn_name.text
+    }
+
+    override fun getIdCardNo(): String? {
+        return et_idcard_no.text
+    }
+
+    override fun getCardAddress(): String? {
+        return et_address.text
+    }
+
+    override fun showToast(t: String) {
+        ToastUtil.instance.toast(t)
+    }
+
 
     override fun init() {
         btn_per.setOnClickListener(this)
@@ -91,10 +108,17 @@ class OAConfirmDocumentsFragment :
         mOptionsPicker = context?.let { OptionsPickerDialog(it) }
     }
 
+    /**
+     * 下一步
+     */
+    override fun toNext() {
+        start(OATakeBankCradPhotoFragment.newInstance())
+//                start(OAVedioRecordFragment.newInstance())
+    }
+
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        var jsonData: String? = arguments?.getString("data")
-        presenter?.setIdCardData(jsonData)
+        presenter?.requestOpenInfo()
     }
 
     override fun onClick(p0: View?) {
@@ -103,8 +127,7 @@ class OAConfirmDocumentsFragment :
                 pop()
             }
             btn_next -> {
-                start(OATakeBankCradPhotoFragment.newInstance())
-//                start(OAVedioRecordFragment.newInstance())
+                presenter?.subIdentity()
             }
             et_birthday -> {
                 mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())

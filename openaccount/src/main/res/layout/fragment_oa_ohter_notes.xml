@@ -205,6 +205,7 @@
                         android:layout_width="45dp"
                         android:layout_height="23dp"
                         android:layout_marginRight="16dp"
+                        app:zr_switchShowIndicator="true"
                         app:layout_constraintLeft_toRightOf="@+id/tv_info4"
                         app:layout_constraintTop_toTopOf="@+id/tv_info4"
                         app:layout_constraintRight_toRightOf="parent"

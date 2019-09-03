@@ -68,6 +68,8 @@ object Network {
             .readTimeout(readTimeout_secs!!, TimeUnit.SECONDS)
             .connectTimeout(connectTimeout_secs!!, TimeUnit.SECONDS)
             .followRedirects(true)
+        /*添加Header头信息*/
+        builder.addInterceptor(header)
         if (debug!!) {
             /*若是debug；则添加Http日志打印的拦截器进行打印请求信息*/
             val logger = HttpLoggingInterceptor.Logger { message -> LogInfra.Log.w(TAG, message) }
@@ -75,8 +77,6 @@ object Network {
             interceptorLog.level = HttpLoggingInterceptor.Level.BASIC/*请求日志打印信息；基本信息*/
             builder.addInterceptor(interceptorLog)
         }
-        /*添加Header头信息*/
-        builder.addInterceptor(header)
         /*添加动态修改BaseUrl*/
 //        builder.addInterceptor(BaseUrlInterceptor())
         val client = builder.build()

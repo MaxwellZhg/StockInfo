@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
 import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
+import com.zhuorui.securities.openaccount.net.response.SubIdentityResponse
 import com.zhuorui.securities.openaccount.ui.*
 
 /**
@@ -29,6 +30,14 @@ open class OpenInfoManager {
             return instance
         }
 
+    }
+
+    fun readSubIdentityResponse(data: SubIdentityResponse.Data){
+        info?.openStatus = data.openStatus
+        info?.cardNo = data.cardNo
+        info?.cardName = data.cardName
+        info?.cardSex = data.cardSex
+        info?.cardNation = data.cardNation
     }
 
     /**

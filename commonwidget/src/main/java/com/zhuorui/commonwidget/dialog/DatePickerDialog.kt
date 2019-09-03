@@ -73,8 +73,8 @@ class DatePickerDialog(context: Context) : BaseBottomSheetsDialog(context),
     }
 
     fun setCurrentData(timeStr: String, format: String?) {
-        if (TextUtils.isEmpty(timeStr)) return
         this.format = format.toString()
+        if (TextUtils.isEmpty(timeStr)) return
         setCurrentData(SimpleDateFormat(format).parse(timeStr).time)
     }
 

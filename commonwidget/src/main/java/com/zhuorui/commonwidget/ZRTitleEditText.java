@@ -121,6 +121,10 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
         vEt.setText(text);
     }
 
+    public String getText() {
+        return vEt.getText().toString();
+    }
+
     public void setTitle(String title) {
         vTitle.setText(title);
     }

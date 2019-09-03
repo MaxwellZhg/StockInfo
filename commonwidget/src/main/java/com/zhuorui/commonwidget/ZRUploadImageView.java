@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -194,10 +195,20 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
         }
     }
 
-    public void setFilePath(String path) {
+    private void setFilePath(String path) {
         mPath = path;
         vBtnText.setText(ResUtil.INSTANCE.getString(R.string.str_reshooting));
         Glide.with(vImg).load(path).placeholder(mPlaceholder).error(mPlaceholder).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(vImg);
+    }
+
+    public void setUrl(String url){
+        if (!TextUtils.isEmpty(url)){
+            mPath = url;
+            vBtnText.setText(ResUtil.INSTANCE.getString(R.string.str_reshooting));
+            Glide.with(vImg).load(url).placeholder(mPlaceholder).error(mPlaceholder).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).into(vImg);
+            changeUi(2);
+            mListener.onPicturePath(this,mPath);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -232,7 +243,7 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
 
     @Override
     public void onFail(String msg) {
-        changeUi(3);
+        changeUi(3,msg);
         mListener.onPicturePath(this, null);
     }
 

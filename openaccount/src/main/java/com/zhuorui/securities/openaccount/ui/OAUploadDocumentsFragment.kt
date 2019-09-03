@@ -64,6 +64,14 @@ class OAUploadDocumentsFragment :
 
     }
 
+    override fun setCardFrontUrl(cardFrontPhoto: String?) {
+        idcard_portrait.setUrl(cardFrontPhoto)
+    }
+
+    override fun cardBackPhotoUrl(cardBackPhoto: String?) {
+        idcard_national_emblem.setUrl(cardBackPhoto)
+    }
+
     override fun onPicturePath(v: ZRUploadImageView?, path: String?) {
         when (v?.id) {
             idcard_portrait.id -> {
@@ -85,17 +93,6 @@ class OAUploadDocumentsFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             btn_next.id -> {
-                val data = CardOcrData()
-                data.cardNo = "430422199303121111"
-                data.cardName = "测试"
-                data.cardSex = "1"
-                data.cardNation = "汉"
-                data.cardBirth = "1993-03-12"
-                data.cardAddress = "深圳软件基地1A栋12F 1203"
-                data.cardAuthority = "深圳公安"
-                data.cardValidStartDate = "2013-06-28"
-                data.cardValidEndDate = "2023-06-28"
-                data.cardValidYear = 10
                 start(OAConfirmDocumentsFragment.newInstance())
             }
             btn_sample.id -> {
@@ -117,6 +114,9 @@ class OAUploadDocumentsFragment :
         btn_sample.setOnClickListener(this)
         idcard_portrait.setOnUploadImageListener(this)
         idcard_national_emblem.setOnUploadImageListener(this)
+        idcard_portrait.setUploader(presenter?.getUploader(0))
+        idcard_national_emblem.setUploader(presenter?.getUploader(1))
+        presenter?.setDefData()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
