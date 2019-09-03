@@ -21,7 +21,7 @@ class OpenAccountInfo {
     var cardAuthority: String? = null //证件发证机关
     var cardValidStartDate: String? = null //证件有效期起始日 (yyyy-mm-dd),小于等于当前时间
     var cardValidEndDate: String? = null //1、证件有效期结始日( yyyy-mm-dd),大于当前时间2、或者传入-1 表示长期
-    var cardValidYear: String? = null //证件有效期年数 5:五年有效期 ;10:十年有效期; 20:二十年有效期; -1:长期
+    var cardValidYear: Int? = null //证件有效期年数 5:五年有效期 ;10:十年有效期; 20:二十年有效期; -1:长期
     var cardFrontPhoto: String? = null //证件正面照url（有效期为一个小时）
     var cardBackPhoto: String? = null //证件背面照url（有效期为一个小时）
     var video: String? = null //活体视频url（有效期为一个小时）
