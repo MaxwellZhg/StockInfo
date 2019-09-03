@@ -85,11 +85,11 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
         }
     }
 
-    fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle) {
+    fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         if (resultCode != ISupportFragment.RESULT_OK) return
         when (requestCode) {
             listener?.getToCameraRequestCode() -> {
-                val bm = data.getParcelable<Bitmap>(Bitmap::javaClass.name)
+                val bm = data?.getParcelable<Bitmap>(Bitmap::javaClass.name)
                 listener?.onPictureBitmap(bm)
             }
         }
