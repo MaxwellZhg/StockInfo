@@ -100,6 +100,7 @@ public class CameraHelper implements SurfaceHolder.Callback {
         Camera.Parameters parameters = mCamera.getParameters();
         //设置闪光灯模式
         parameters.setFlashMode(flashMode);
+        mCamera.setParameters(parameters);
     }
 
     /**

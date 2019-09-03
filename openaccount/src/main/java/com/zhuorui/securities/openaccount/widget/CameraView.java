@@ -104,6 +104,9 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
      */
     public void resetCamera() {
         cameraHelper.resetCamera();
+        if (backFacing) {
+            cameraHelper.setOpenFlashMode(isOpenFlash ? Camera.Parameters.FLASH_MODE_ON : Camera.Parameters.FLASH_MODE_OFF);
+        }
     }
 
     /**
@@ -170,8 +173,8 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
      */
     public boolean switchFlash() {
         if (cameraHelper != null) {
-            cameraHelper.setOpenFlashMode(isOpenFlash ? Camera.Parameters.FLASH_MODE_ON : Camera.Parameters.FLASH_MODE_OFF);
             isOpenFlash = !isOpenFlash;
+            cameraHelper.setOpenFlashMode(isOpenFlash ? Camera.Parameters.FLASH_MODE_ON : Camera.Parameters.FLASH_MODE_OFF);
         } else {
             return false;
         }
