@@ -1,7 +1,6 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.graphics.Bitmap
-import android.hardware.Camera
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
