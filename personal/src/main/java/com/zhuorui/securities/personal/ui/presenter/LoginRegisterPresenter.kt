@@ -178,10 +178,4 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
         })
     }
 
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
-    fun onLoginStateChangeEvent(event: DisctCodeSelectEvent) {
-        // 传值
-        viewModel?.strdisct?.set(event.str)
-        viewModel?.code?.set(event.code)
-    }
 }
