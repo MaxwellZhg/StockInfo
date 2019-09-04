@@ -32,8 +32,7 @@ class OAPropertyStatusFragment :
 
     companion object {
         fun newInstance(): OAPropertyStatusFragment {
-            val fragment = OAPropertyStatusFragment()
-            return fragment
+            return OAPropertyStatusFragment()
         }
     }
 

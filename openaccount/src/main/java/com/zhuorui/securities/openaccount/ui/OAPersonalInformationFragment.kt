@@ -3,6 +3,7 @@ package com.zhuorui.securities.openaccount.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
@@ -14,6 +15,8 @@ import com.zhuorui.securities.openaccount.ui.presenter.OAPersonalInformationPres
 import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel
 import kotlinx.android.synthetic.main.fragment_oa_personal_information.*
+import me.yokeyword.fragmentation.ISupportActivity
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  *    author : liuwei
@@ -77,6 +80,10 @@ class OAPersonalInformationFragment :
         tv_tax_number.text = cardNo
     }
 
+    override fun getTaxState(): String? {
+        return tv_tax_paying.text
+    }
+
     override fun getTaxNo(): String? {
         return tv_tax_number.text
     }
@@ -132,10 +139,16 @@ class OAPersonalInformationFragment :
                 mOptionsPicker?.show()
             }
             R.id.tv_tax_paying -> {
-
+                startForResult(CommonCountryCodeFragment.newInstance(presenter?.getCommonType()), 100)
             }
-
-
         }
     }
+
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        if (resultCode == ISupportFragment.RESULT_OK && requestCode == 100) {
+            tv_tax_paying.text = data?.getString("str")
+        }
+    }
+
 }
