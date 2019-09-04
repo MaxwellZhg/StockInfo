@@ -71,7 +71,7 @@ class OAVedioRecordFragment :
                 btn_record.alpha = 0.5f
                 // 调用录制视频
                 camera_view.recordVedio(
-                    6000
+                    3000
                 ) { data ->
                     if (data != null && data.isNotEmpty()) {
                         // 拿到视频流，进行上传
@@ -79,7 +79,7 @@ class OAVedioRecordFragment :
                     }
                 }
                 // 播放数字码进度
-                tv_change.start(6000)
+                tv_change.start(3000)
             }
         }
     }

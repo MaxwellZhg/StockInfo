@@ -3,6 +3,7 @@ package com.zhuorui.securities.openaccount.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.AndroidBug5497Workaround
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
@@ -29,6 +30,7 @@ class OAConfirmDocumentsFragment :
 
     var mDatePicker: DatePickerDialog? = null
     var mOptionsPicker: OptionsPickerDialog<String>? = null
+    var mAndroidBug5497Workaround: AndroidBug5497Workaround? = null
 
 
     companion object {
@@ -106,6 +108,8 @@ class OAConfirmDocumentsFragment :
         et_e_expiry.setOnClickListener(this)
         mDatePicker = context?.let { DatePickerDialog(it) }
         mOptionsPicker = context?.let { OptionsPickerDialog(it) }
+        mAndroidBug5497Workaround = AndroidBug5497Workaround(root_layout)
+        mAndroidBug5497Workaround?.addOnGlobalLayoutListener()
     }
 
     /**
@@ -158,5 +162,8 @@ class OAConfirmDocumentsFragment :
         }
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mAndroidBug5497Workaround?.removeOnGlobalLayoutListener()
+    }
 }

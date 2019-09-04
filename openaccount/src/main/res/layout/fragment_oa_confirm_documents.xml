@@ -9,7 +9,9 @@
     </data>
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent" android:layout_height="match_parent">
+            android:id="@+id/root_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 style="@style/oaDataTipsToptxt"
                 app:zr_topbarTitle="@string/zhuorui_openaccount"

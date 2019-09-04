@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.databinding.FragmentOaBiopayBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OABiopsyPresenter
 import com.zhuorui.securities.openaccount.ui.view.OABiopsyView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OABiopsyViewModel
-import com.zhuorui.securities.openaccount.databinding.FragmentOaBiopayBinding
 import kotlinx.android.synthetic.main.fragment_oa_biopay.*
 
 /**
