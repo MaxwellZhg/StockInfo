@@ -40,6 +40,7 @@ class OABiopsyPresenter : AbsNetPresenter<OABiopsyView, OABiopsyViewModel>() {
     fun onVerifyLiveCode(response: LiveCodeResponse) {
         if (response.request is LiveCodeRequest) {
             viewModel?.verifyCode?.value = response.data.validateCode
+            OpenInfoManager.getInstance()?.info?.validateCode = response.data.validateCode
         }
     }
 

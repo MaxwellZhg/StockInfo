@@ -26,12 +26,8 @@ class OAVedioRecordFragment :
     private var progressDialog: ProgressDialog? = null
 
     companion object {
-        fun newInstance(verifyCode: String?): OAVedioRecordFragment {
-            val bundle = Bundle()
-            bundle.putString("verifyCode", verifyCode)
-            val fragment = OAVedioRecordFragment()
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance(): OAVedioRecordFragment {
+            return  OAVedioRecordFragment()
         }
     }
 
@@ -54,7 +50,6 @@ class OAVedioRecordFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter?.setVerifyCode(arguments?.getString("verifyCode"))
         camera_view.init(true)
         btn_record.setOnClickListener(this)
     }
