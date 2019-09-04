@@ -7,6 +7,8 @@ import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaConfirmDocumentsBinding
@@ -22,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_oa_confirm_documents.*
  *    desc   : 确认身份信息
  */
 class OAConfirmDocumentsFragment :
-    AbsSwipeBackFragment<FragmentOaConfirmDocumentsBinding, OAConfirmDocumentsViewModel, OAConfirmDocumentsView, OAConfirmDocumentsPresenter>(),
+    AbsSwipeBackNetFragment<FragmentOaConfirmDocumentsBinding, OAConfirmDocumentsViewModel, OAConfirmDocumentsView, OAConfirmDocumentsPresenter>(),
     OAConfirmDocumentsView, View.OnClickListener {
 
     var mDatePicker: DatePickerDialog? = null
@@ -30,12 +32,8 @@ class OAConfirmDocumentsFragment :
 
 
     companion object {
-        fun newInstance(data: String): OAConfirmDocumentsFragment {
-            val fragment = OAConfirmDocumentsFragment()
-            val bundle = Bundle()
-            bundle.putString("data", data)
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance(): OAConfirmDocumentsFragment {
+            return OAConfirmDocumentsFragment()
         }
     }
 
@@ -82,6 +80,22 @@ class OAConfirmDocumentsFragment :
         et_address.setText(address)
     }
 
+    override fun getCardName(): String? {
+        return et_cn_name.text
+    }
+
+    override fun getIdCardNo(): String? {
+        return et_idcard_no.text
+    }
+
+    override fun getCardAddress(): String? {
+        return et_address.text
+    }
+
+    override fun showToast(t: String) {
+        ToastUtil.instance.toast(t)
+    }
+
 
     override fun init() {
         btn_per.setOnClickListener(this)
@@ -94,10 +108,17 @@ class OAConfirmDocumentsFragment :
         mOptionsPicker = context?.let { OptionsPickerDialog(it) }
     }
 
+    /**
+     * 下一步
+     */
+    override fun toNext() {
+        start(OATakeBankCradPhotoFragment.newInstance())
+//                start(OAVedioRecordFragment.newInstance())
+    }
+
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        var jsonData: String? = arguments?.getString("data")
-        presenter?.setIdCardData(jsonData)
+        presenter?.requestOpenInfo()
     }
 
     override fun onClick(p0: View?) {
@@ -106,9 +127,7 @@ class OAConfirmDocumentsFragment :
                 pop()
             }
             btn_next -> {
-//                start(OATakeBankCradPhotoFragment.newInstance())
-                start(OAVedioRecordFragment.newInstance())
-//                start(OAPersonalInformationFragment.newInstance())
+                presenter?.subIdentity()
             }
             et_birthday -> {
                 mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())
@@ -127,6 +146,10 @@ class OAConfirmDocumentsFragment :
                 mDatePicker?.show()
             }
             et_e_expiry -> {
+                if (presenter?.endValidPickerData == null) {
+                    ToastUtil.instance.toast(R.string.str_please_select_start_date)
+                    return
+                }
                 mOptionsPicker?.setData(presenter?.endValidPickerData)
                 mOptionsPicker?.setOnOptionSelectedListener(presenter?.getValidEndDatePickerListener())
                 mOptionsPicker?.setCurrentData(et_e_expiry.text)

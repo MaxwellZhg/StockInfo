@@ -608,11 +608,11 @@ public class WheelPicker<T> extends View {
     }
 
     public void setDataList(@NonNull List<T> dataList) {
-        mDataList = dataList;
-        if (dataList.size() == 0) {
-            return;
-        }
-        computeTextSize();
+        if ( dataList == null || dataList.size() == 0) {
+			return;
+		}
+		mDataList = dataList;
+		computeTextSize();
         computeFlingLimitY();
         requestLayout();
         postInvalidate();

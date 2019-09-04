@@ -2,16 +2,16 @@ package com.zhuorui.securities.openaccount.ui
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.ZRUploadImageView
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
-import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.openaccount.BR
+import com.zhuorui.securities.openaccount.custom.UploadDocumentsTipsDialog
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
-import com.zhuorui.securities.openaccount.model.CardOcrData
 import com.zhuorui.securities.openaccount.ui.presenter.OAUploadDocumentsPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
@@ -28,6 +28,7 @@ class OAUploadDocumentsFragment :
     AbsSwipeBackNetFragment<FragmentOaUploadDocumentsBinding, OAUploadDocumentsViewModel, OAUploadDocumentsView, OAUploadDocumentsPresenter>(),
     OAUploadDocumentsView, View.OnClickListener, ZRUploadImageView.OnUploadImageListener {
 
+    var sampleSialog: UploadDocumentsTipsDialog? = null
 
     companion object {
         fun newInstance(): OAUploadDocumentsFragment {
@@ -51,23 +52,27 @@ class OAUploadDocumentsFragment :
         get() = this
 
     override fun goCamera(requestCode: Int, uri: Uri?) {
-//        GetPhotoFromAlbumUtil.goCamera(this, requestCode, uri)
-
+        startForResult(TakePhotoFragment.newInstance(), requestCode)
     }
 
     override fun goAlbum(requestCode: Int) {
         GetPhotoFromAlbumUtil.goAlbum(this, requestCode)
+    }
 
+    override fun setCardFrontUrl(cardFrontPhoto: String?) {
+        idcard_portrait.setUrl(cardFrontPhoto)
+    }
+
+    override fun cardBackPhotoUrl(cardBackPhoto: String?) {
+        idcard_national_emblem.setUrl(cardBackPhoto)
     }
 
     override fun onPicturePath(v: ZRUploadImageView?, path: String?) {
         when (v?.id) {
             idcard_portrait.id -> {
-//                ToastUtil.instance.toast(path.toString())
                 checkUpload()
             }
             idcard_national_emblem.id -> {
-//                ToastUtil.instance.toast(path.toString())
                 checkUpload()
             }
         }
@@ -82,34 +87,49 @@ class OAUploadDocumentsFragment :
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            com.zhuorui.securities.openaccount.R.id.btn_next -> {
-                var data = CardOcrData()
-                data.cardNo = "430422199303121111"
-                data.cardName = "测试"
-                data.cardSex = "1"
-                data.cardNation = "汉"
-                data.cardBirth = "1993-03-12"
-                data.cardAddress = "深圳软件基地1A栋12F 1203"
-                data.cardAuthority = "深圳公安"
-                data.cardValidStartDate = "2013-06-28"
-                data.cardValidEndDate = "2023-06-28"
-                data.cardValidYear = 10
-                var jsonData: String = JsonUtil.toJson(data)
-                start(OAConfirmDocumentsFragment.newInstance(jsonData))
+            btn_next.id -> {
+                start(OAConfirmDocumentsFragment.newInstance())
+            }
+            btn_sample.id -> {
+                showTipsDialog(btn_sample.text)
             }
         }
     }
 
-    override fun init() {
-        btn_next.setOnClickListener(this)
-        idcard_portrait.setOnUploadImageListener(this)
-        idcard_national_emblem.setOnUploadImageListener(this)
+    private fun showTipsDialog(text: CharSequence?) {
+        if (sampleSialog == null) {
+            sampleSialog = context?.let { UploadDocumentsTipsDialog(it) }
+        }
+        sampleSialog?.show(text.toString())
     }
 
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        btn_next.setOnClickListener(this)
+        btn_sample.setOnClickListener(this)
+        idcard_portrait.setOnUploadImageListener(this)
+        idcard_national_emblem.setOnUploadImageListener(this)
+        idcard_portrait.setUploader(presenter?.getUploader(0))
+        idcard_national_emblem.setUploader(presenter?.getUploader(1))
+        presenter?.setDefData()
+    }
+
+    /**
+     * 调用系统返回
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         idcard_portrait.onActivityResult(requestCode, resultCode, data)
         idcard_national_emblem.onActivityResult(requestCode, resultCode, data)
+    }
+
+    /**
+     * 调用APP返回
+     */
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        idcard_portrait.onFragmentResult(requestCode, resultCode, data)
+        idcard_national_emblem.onFragmentResult(requestCode, resultCode, data)
     }
 
 }

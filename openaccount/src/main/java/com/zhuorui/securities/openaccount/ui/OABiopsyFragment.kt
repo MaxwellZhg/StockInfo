@@ -1,6 +1,7 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -16,14 +17,11 @@ import kotlinx.android.synthetic.main.fragment_oa_biopay.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/26
- * Desc:
+ * Desc: 活体检测页面
  */
 class OABiopsyFragment :
     AbsSwipeBackNetFragment<FragmentOaBiopayBinding, OABiopsyViewModel, OABiopsyView, OABiopsyPresenter>(),
-    OABiopsyView ,View.OnClickListener{
-    override fun init() {
-
-    }
+    OABiopsyView, View.OnClickListener {
 
     override val layout: Int
         get() = R.layout.fragment_oa_biopay
@@ -40,7 +38,6 @@ class OABiopsyFragment :
     override val getView: OABiopsyView
         get() = this
 
-
     companion object {
         fun newInstance(): OABiopsyFragment {
             return OABiopsyFragment()
@@ -48,7 +45,9 @@ class OABiopsyFragment :
     }
 
     override fun onClick(p0: View?) {
-          startWithPop(OAVedioRecordFragment.newInstance())
+        val verifyCode = presenter?.getVerifyCode()
+        if (TextUtils.isEmpty(verifyCode)) return
+        start(OAVedioRecordFragment.newInstance(verifyCode))
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {

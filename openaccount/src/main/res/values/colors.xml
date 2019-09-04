@@ -14,4 +14,5 @@
     <color name="color_1a1a22" tools:ignore="MissingDefaultResource">#1A1A22</color>
     <color name="color_2F2F2F" tools:ignore="MissingDefaultResource">#2F2F2F</color>
     <color name="color_333333" tools:ignore="MissingDefaultResource">#333333</color>
+    <color name="color_211F2A" tools:ignore="MissingDefaultResource">#FF211F2A</color>
 </resources>

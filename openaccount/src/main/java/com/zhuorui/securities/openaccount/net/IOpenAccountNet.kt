@@ -1,14 +1,11 @@
 package com.zhuorui.securities.openaccount.net
 
+import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
 import com.zhuorui.securities.openaccount.net.api.OpenAccountApi
-import com.zhuorui.securities.openaccount.net.request.LiveCodeRequest
-import com.zhuorui.securities.openaccount.net.request.LiveRecognRequest
-import com.zhuorui.securities.openaccount.net.request.OpenInfoRequest
-import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
-import com.zhuorui.securities.openaccount.net.response.LiveCodeResponse
-import com.zhuorui.securities.openaccount.net.response.LiveRecognResponse
-import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
-import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
+import com.zhuorui.securities.openaccount.net.request.*
+import com.zhuorui.securities.openaccount.net.response.*
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -35,4 +32,18 @@ interface IOpenAccountNet {
 
     @POST(OpenAccountApi.SUB_SIGNATURE)
     fun subSignature(@Body request: SubSignatureRequest): Call<SubSignatureResponse>
+
+    //身份证OCR
+    @POST(OpenAccountApi.ID_CARD_OCR)
+    fun idCardOcr(@Body request: IdCardOrcRequest): Observable<IdCardOrcResponse>
+
+    //上传身份信息
+    @POST(OpenAccountApi.SUB_IDENTITY)
+    fun subIdentity(@Body request: SubIdentityRequest): Call<SubIdentityResponse>
+
+    //个人风险测评资料
+    @POST(OpenAccountApi.SUB_BASICS_INFO)
+    fun subBasicsInfo(@Body request: SubBasicsInfoRequest): Call<SubBasicsInfoResponse>
+
+
 }

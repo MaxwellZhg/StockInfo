@@ -10,5 +10,6 @@ import com.zhuorui.securities.openaccount.model.OADataTips
  *    desc   :
  */
 interface OAUploadDocumentsView : AbsView {
-    fun init()
+    fun setCardFrontUrl(cardFrontPhoto: String?)
+    fun cardBackPhotoUrl(cardBackPhoto: String?)
 }

@@ -1,5 +1,7 @@
 package com.zhuorui.commonwidget.impl;
 
+import android.graphics.Bitmap;
+
 /**
  * author : liuwei
  * e-mail : vsanliu@foxmail.com
@@ -11,4 +13,6 @@ public interface IImageUploader {
     void setOnUploaderListener(OnImageUploaderListener listener);
 
     void upLoad(String path);
+
+    void upLoad(Bitmap bitmap);
 }

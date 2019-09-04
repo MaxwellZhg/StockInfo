@@ -14,5 +14,5 @@ interface OAVedioRecordView : AbsView {
 
     fun hideUploading()
 
-    fun uploadComplete()
+    fun uploadComplete(isSuccessful: Boolean)
 }

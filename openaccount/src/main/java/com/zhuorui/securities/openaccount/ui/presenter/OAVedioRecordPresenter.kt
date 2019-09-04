@@ -32,27 +32,8 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
 
     private val disposables = LinkedList<Disposable>()
 
-    override fun init() {
-        super.init()
-        requestVedioVerifyCode()
-    }
-
-    /**
-     * 请求活体检查数字码
-     */
-    fun requestVedioVerifyCode() {
-        OpenInfoManager.getInstance()?.info?.id?.let {
-            val request = LiveCodeRequest(it, transactions.createTransaction())
-            Cache[IOpenAccountNet::class.java]?.getLiveCode(request)
-                ?.enqueue(Network.IHCallBack<LiveCodeResponse>(request))
-        }
-    }
-
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onVerifyLiveCode(response: LiveCodeResponse) {
-        if (response.request is LiveCodeRequest) {
-            viewModel?.str?.set(response.data.validateCode)
-        }
+    fun setVerifyCode(verifyCode: String?) {
+        viewModel?.verifyCode?.value = verifyCode
     }
 
     fun uploadVedio(vedioBytes: ByteArray?) {
@@ -66,7 +47,7 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
             .subscribe {
                 val request = LiveRecognRequest(
                     it,
-                    viewModel?.str?.get(),
+                    viewModel?.verifyCode?.value,
                     OpenInfoManager.getInstance()?.info?.id,
                     transactions.createTransaction()
                 )
@@ -85,13 +66,14 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
         info?.validateCode = response.data.validateCode
 
         view?.hideUploading()
-        view?.uploadComplete()
+        view?.uploadComplete(true)
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
         if (response.request is LiveRecognRequest) {
             view?.hideUploading()
+            view?.uploadComplete(false)
         }
     }
 

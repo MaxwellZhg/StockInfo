@@ -68,15 +68,15 @@ object Network {
             .readTimeout(readTimeout_secs!!, TimeUnit.SECONDS)
             .connectTimeout(connectTimeout_secs!!, TimeUnit.SECONDS)
             .followRedirects(true)
+        /*添加Header头信息*/
+        builder.addInterceptor(header)
         if (debug!!) {
             /*若是debug；则添加Http日志打印的拦截器进行打印请求信息*/
             val logger = HttpLoggingInterceptor.Logger { message -> LogInfra.Log.w(TAG, message) }
             val interceptorLog = HttpLoggingInterceptor(logger)
-            interceptorLog.level = HttpLoggingInterceptor.Level.BASIC/*请求日志打印信息；基本信息*/
+            interceptorLog.level = HttpLoggingInterceptor.Level.BODY/*请求日志打印信息；基本信息*/
             builder.addInterceptor(interceptorLog)
         }
-        /*添加Header头信息*/
-        builder.addInterceptor(header)
         /*添加动态修改BaseUrl*/
 //        builder.addInterceptor(BaseUrlInterceptor())
         val client = builder.build()
@@ -105,7 +105,7 @@ object Network {
     class IHCallBack<T : BaseResponse>(private val request: BaseRequest) : Callback<T> {
 
         init {
-            LogInfra.Log.w(TAG, " Request: " + JsonUtil.toJson(request))
+//            LogInfra.Log.w(TAG, " Request: " + JsonUtil.toJson(request))
         }
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -122,7 +122,7 @@ object Network {
                 return
             }
             t.request = request
-            LogInfra.Log.w(TAG, "Response: " + JsonUtil.toJson(t))
+//            LogInfra.Log.w(TAG, "Response: " + JsonUtil.toJson(t))
             if (!t.isSuccess()) {
                 RxBus.getDefault().post(t.toError())
                 return
