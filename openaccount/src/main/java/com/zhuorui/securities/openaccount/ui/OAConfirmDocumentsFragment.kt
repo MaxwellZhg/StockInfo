@@ -112,8 +112,8 @@ class OAConfirmDocumentsFragment :
      * 下一步
      */
     override fun toNext() {
-        start(OATakeBankCradPhotoFragment.newInstance())
-//                start(OAVedioRecordFragment.newInstance())
+//        start(OATakeBankCradPhotoFragment.newInstance())
+        start(OABiopsyFragment.newInstance())
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {

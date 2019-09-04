@@ -72,6 +72,8 @@ class OAVedioRecordFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_record -> {
+                btn_record.isEnabled = false
+                btn_record.alpha = 0.5f
                 // 调用录制视频
                 camera_view.recordVedio(
                     6000
@@ -102,6 +104,8 @@ class OAVedioRecordFragment :
     }
 
     override fun uploadComplete(isSuccessful: Boolean) {
+        btn_record.isEnabled = true
+        btn_record.alpha = 1.0f
         if (isSuccessful) {
             start(OATakeBankCradPhotoFragment.newInstance())
         } else {

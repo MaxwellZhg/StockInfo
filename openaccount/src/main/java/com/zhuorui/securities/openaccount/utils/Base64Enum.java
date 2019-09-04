@@ -10,32 +10,32 @@ public enum Base64Enum {
     /**
      * mp4
      */
-    MP4("data:video/mp4;","mp4"),
+    MP4("data:video/mp4;base64,","mp4"),
 
     /**
      * avi
      */
-    AVI("data:video/avi;","avi"),
+    AVI("data:video/avi;base64,","avi"),
 
     /**
      * flv
      */
-    FLV("data:video/flv;","flv"),
+    FLV("data:video/flv;base64,","flv"),
 
     /**
      * png
      */
-    PNG("data:image/png;","png"),
+    PNG("data:image/png;base64,","png"),
 
     /**
      * jpeg
      */
-    JPEG("data:image/jpeg;","jpeg"),
+    JPEG("data:image/jpeg;base64,","jpeg"),
 
     /**
      * jpg
      */
-    JPG("data:image/jpg;","jpg");
+    JPG("data:image/jpg;base64,","jpg");
 
 
 
