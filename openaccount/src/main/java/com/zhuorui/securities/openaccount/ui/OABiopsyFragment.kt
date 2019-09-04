@@ -47,7 +47,7 @@ class OABiopsyFragment :
     override fun onClick(p0: View?) {
         val verifyCode = presenter?.getVerifyCode()
         if (TextUtils.isEmpty(verifyCode)) return
-        start(OAVedioRecordFragment.newInstance(verifyCode))
+        start(OAVedioRecordFragment.newInstance())
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {

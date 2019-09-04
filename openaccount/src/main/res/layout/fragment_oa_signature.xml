@@ -28,17 +28,15 @@
 
             <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ZRCheckBox"
                     android:lines="1"
-                    android:layout_marginStart="77dp"
                     android:layout_marginTop="20dp"
-                    android:theme="@style/ZRCheckBox"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textColor="@color/color_333333"
                     android:textSize="14sp"
                     android:text="@string/read_risk_complete"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+            />
 
             <com.zhuorui.securities.openaccount.widget.SignatureView
                     android:id="@+id/signature_view"
@@ -46,35 +44,34 @@
                     android:layout_height="0dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@+id/cbox"
                     app:layout_constraintBottom_toTopOf="@+id/btn_next"/>
 
-                 <com.zhuorui.commonwidget.StateButton
+            <com.zhuorui.commonwidget.StateButton
                     android:id="@+id/btn_reset"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     style="@style/btnStrokeStyle.Bule"
                     android:layout_width="160dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btn_next"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginTop="22dp"
                     android:layout_height="40dp"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginStart="125dp"
                     android:text="@string/btn_resignature"/>
 
             <com.zhuorui.commonwidget.StateButton
                     android:id="@+id/btn_next"
                     style="@style/btnStyle"
                     android:layout_width="160dp"
-                    app:layout_constraintLeft_toRightOf="@+id/btn_per"
+                    android:layout_marginStart="33dp"
+                    app:layout_constraintLeft_toRightOf="@+id/btn_reset"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginTop="22dp"
                     android:layout_marginBottom="30dp"
                     android:enabled="@{viewModel.agreement}"
-                    android:layout_marginStart="33dp"
                     android:layout_height="40dp"
-                    android:layout_marginEnd="125dp"
                     android:text="@string/btn_confirm"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

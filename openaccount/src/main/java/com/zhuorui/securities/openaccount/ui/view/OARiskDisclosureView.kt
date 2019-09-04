@@ -9,4 +9,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface OARiskDisclosureView :AbsView{
+    fun toNext()
+    fun showToast(msg: String?)
 }

@@ -53,5 +53,10 @@ interface OpenAccountApi {
          */
         const val BANK_CARD_VERIFICATION = "as_user/api/open/v1/bank_card_verification"
 
+        /**
+         * 上传风险披露情况接口
+         */
+        const val SUB_RISK_DISCLOSURE = "as_user/api/open/v1/sub_risk_disclosure"
+
     }
 }

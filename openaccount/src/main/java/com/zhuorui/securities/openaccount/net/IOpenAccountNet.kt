@@ -54,5 +54,9 @@ interface IOpenAccountNet {
     @POST(OpenAccountApi.BANK_CARD_VERIFICATION)
     fun bankCardVerification(@Body request: BankCardVerificationRequest): Call<BankCardVerificationResponse>
 
+    //上传风险披露情况接口
+    @POST(OpenAccountApi.SUB_RISK_DISCLOSURE)
+    fun subRiskDisclosure(@Body request: SubRiskDisclosureRequest): Call<SubRiskDisclosureResponse>
+
 
 }

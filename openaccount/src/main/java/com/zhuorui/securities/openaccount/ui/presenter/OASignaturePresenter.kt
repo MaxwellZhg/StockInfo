@@ -6,6 +6,7 @@ import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
 import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
@@ -48,7 +49,7 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe {
-                val request = SubSignatureRequest(it, "", transactions.createTransaction())
+                val request = SubSignatureRequest(it, OpenInfoManager.getInstance()?.info?.id.toString(), transactions.createTransaction())
                 Cache[IOpenAccountNet::class.java]?.subSignature(request)
                     ?.enqueue(Network.IHCallBack<SubSignatureResponse>(request))
             }

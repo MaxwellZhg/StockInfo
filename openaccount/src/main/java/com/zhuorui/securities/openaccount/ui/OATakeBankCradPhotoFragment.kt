@@ -121,7 +121,7 @@ class OATakeBankCradPhotoFragment :
      * 去拍照
      */
     override fun goCamera(toCameraRequestCode: Int?, uri: Uri?) {
-        startForResult(TakePhotoFragment.newInstance(), toCameraRequestCode!!)
+        startForResult(TakePhotoFragment.newInstance(TakePhotoFragment.BANK_CRAD), toCameraRequestCode!!)
     }
 
     /**
