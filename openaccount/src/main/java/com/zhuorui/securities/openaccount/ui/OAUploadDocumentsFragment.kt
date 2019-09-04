@@ -52,7 +52,7 @@ class OAUploadDocumentsFragment :
         get() = this
 
     override fun goCamera(requestCode: Int, uri: Uri?) {
-        startForResult(TakePhotoFragment.newInstance(), requestCode)
+        startForResult(TakePhotoFragment.newInstance(TakePhotoFragment.ID_CRAD), requestCode)
     }
 
     override fun goAlbum(requestCode: Int) {

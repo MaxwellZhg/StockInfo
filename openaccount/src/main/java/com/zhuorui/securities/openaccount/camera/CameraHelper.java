@@ -434,7 +434,7 @@ public class CameraHelper implements SurfaceHolder.Callback {
                 profile.videoFrameWidth = previewWidth;
                 profile.videoFrameHeight = previewHeight;
                 // 这样设置 1080p的视频 大小在5M , 可根据自己需求调节
-                profile.videoBitRate = 3 * previewWidth * previewHeight;
+                profile.videoBitRate = 2 * previewWidth * previewHeight;
                 List<String> focusModes = parameters.getSupportedFocusModes();
                 if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
                     //支持连续自动对焦模式
@@ -497,8 +497,8 @@ public class CameraHelper implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        previewWidth = width;
-        previewHeight = height;
+//        previewWidth = width;
+//        previewHeight = height;
     }
 
     @Override

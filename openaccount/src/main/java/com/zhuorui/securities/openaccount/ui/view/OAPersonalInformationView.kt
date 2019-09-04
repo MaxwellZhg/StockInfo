@@ -17,4 +17,5 @@ interface OAPersonalInformationView : AbsView {
     fun getTaxNo(): String?
     fun showToast(msg: String?)
     fun setTaxNo(cardNo: String?)
+    fun getTaxState(): String?
 }

@@ -43,5 +43,20 @@ interface OpenAccountApi {
          */
         const val SUB_BASICS_INFO = "as_user/api/open/v1/sub_basics_info"
 
+        /**
+         * 银行卡OCR
+         */
+        const val BANK_OCR = "as_user/api/open/v1/bank_ocr"
+
+        /**
+         * 银行卡三要素认证+一类卡认证
+         */
+        const val BANK_CARD_VERIFICATION = "as_user/api/open/v1/bank_card_verification"
+
+        /**
+         * 上传风险披露情况接口
+         */
+        const val SUB_RISK_DISCLOSURE = "as_user/api/open/v1/sub_risk_disclosure"
+
     }
 }

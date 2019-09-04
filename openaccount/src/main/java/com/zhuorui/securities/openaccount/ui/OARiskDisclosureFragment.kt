@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.databinding.FragmentOaTakeBankCardPhotoBinding
@@ -50,11 +51,19 @@ class OARiskDisclosureFragment :
         btn_speech_risk.setOnClickListener(this)
     }
 
+    override fun toNext() {
+        // 跳转到下一步
+        start(OASignatureFragment.newInstance())
+    }
+
+    override fun showToast(msg: String?) {
+        ToastUtil.instance.toast(msg.toString())
+    }
+
     override fun onClick(p0: View?) {
         when (p0) {
             btn_next -> {
-                // 跳转到下一步
-                start(OASignatureFragment.newInstance())
+                presenter?.subRiskDisclosure()
             }
             btn_per -> {
                 // 跳转到上一步

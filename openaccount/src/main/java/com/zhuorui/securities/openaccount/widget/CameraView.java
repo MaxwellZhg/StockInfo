@@ -60,9 +60,7 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
         if (isRecord) {
             SoulPermission.getInstance().checkAndRequestPermissions(
                     Permissions.build(
-                            Manifest.permission.CAMERA,
-                            Manifest.permission.RECORD_AUDIO,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            Manifest.permission.CAMERA
                     ), this);
         } else {
             SoulPermission.getInstance().checkAndRequestPermissions(Permissions.build(Manifest.permission.CAMERA), this);

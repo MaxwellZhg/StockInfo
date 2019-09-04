@@ -11,8 +11,12 @@
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:background="@color/color_1a1a22"
             android:layout_height="match_parent">
+
+        <com.zhuorui.securities.openaccount.widget.CameraView
+                android:id="@+id/camera_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 android:id="@+id/top_bar"
@@ -22,13 +26,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:zr_topbarTitle="@string/zhuorui_openaccount"/>
-
-        <com.zhuorui.securities.openaccount.widget.CameraView
-                android:id="@+id/camera_view"
-                android:layout_below="@+id/top_bar"
-                android:layout_width="match_parent"
-                android:layout_above="@+id/ll_record"
-                android:layout_height="match_parent"/>
 
 
         <ImageView android:id="@+id/image_view" android:layout_width="100dp" android:layout_height="100dp"/>
@@ -74,6 +71,7 @@
                       android:id="@+id/ll_record"
                       android:gravity="center_horizontal"
                       android:layout_height="wrap_content"
+                      android:background="@color/color_1a1a22"
                       android:layout_alignParentBottom="true">
 
             <ImageView android:layout_width="40dp"

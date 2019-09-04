@@ -32,8 +32,8 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
 
     private val disposables = LinkedList<Disposable>()
 
-    fun setVerifyCode(verifyCode: String?) {
-        viewModel?.verifyCode?.value = verifyCode
+    fun setVerifyCode() {
+        viewModel?.verifyCode?.value = OpenInfoManager.getInstance()?.info?.validateCode
     }
 
     fun uploadVedio(vedioBytes: ByteArray?) {

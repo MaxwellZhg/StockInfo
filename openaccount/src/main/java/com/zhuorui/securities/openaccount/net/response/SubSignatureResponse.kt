@@ -11,7 +11,7 @@ import com.zhuorui.securities.base2app.network.BaseResponse
 class SubSignatureResponse(val data: Data) : BaseResponse() {
 
     data class Data(
-        val id: Int, // 开户id
+        val id: String, // 开户id
         val openStatus: Int, // 开户状态
         val signaturePhoto: String // 签名照片url
     )

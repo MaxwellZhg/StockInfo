@@ -1,7 +1,6 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.graphics.Bitmap
-import android.hardware.Camera
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
@@ -26,8 +25,17 @@ class TakePhotoFragment :
     TakePhotoView, View.OnClickListener {
 
     companion object {
-        fun newInstance(): TakePhotoFragment {
-            return TakePhotoFragment()
+        // 身份证
+        const val ID_CRAD = 1
+        // 银行卡
+        const val BANK_CRAD = 2
+
+        fun newInstance(photoType: Int): TakePhotoFragment {
+            val bundle = Bundle()
+            bundle.putInt("photoType", photoType)
+            val fragment = TakePhotoFragment()
+            fragment.arguments = bundle
+            return fragment
         }
     }
 
@@ -59,6 +67,15 @@ class TakePhotoFragment :
         iv_camera_close.setOnClickListener(this)
         iv_camera_ok.setOnClickListener(this)
         tv_back.setOnClickListener(this)
+
+        when (arguments?.get("photoType")) {
+            ID_CRAD -> {
+                presenter?.setTakePhotoTips(R.string.take_id_card_photo_tips)
+            }
+            BANK_CRAD -> {
+                presenter?.setTakePhotoTips(R.string.take_bank_card_photo_tips)
+            }
+        }
     }
 
     override fun onResume() {

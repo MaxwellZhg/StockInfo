@@ -30,6 +30,7 @@ interface IOpenAccountNet {
     @POST(OpenAccountApi.LIVENESS_RECOGNITION)
     fun getLiveRecogn(@Body request: LiveRecognRequest): Call<LiveRecognResponse>
 
+    //上传电子签名
     @POST(OpenAccountApi.SUB_SIGNATURE)
     fun subSignature(@Body request: SubSignatureRequest): Call<SubSignatureResponse>
 
@@ -44,6 +45,18 @@ interface IOpenAccountNet {
     //个人风险测评资料
     @POST(OpenAccountApi.SUB_BASICS_INFO)
     fun subBasicsInfo(@Body request: SubBasicsInfoRequest): Call<SubBasicsInfoResponse>
+
+    //银行卡OCR
+    @POST(OpenAccountApi.BANK_OCR)
+    fun bankOcr(@Body request: BankOrcRequest): Observable<BankOrcResponse>
+
+    //银行卡三要素认证+一类卡认证
+    @POST(OpenAccountApi.BANK_CARD_VERIFICATION)
+    fun bankCardVerification(@Body request: BankCardVerificationRequest): Call<BankCardVerificationResponse>
+
+    //上传风险披露情况接口
+    @POST(OpenAccountApi.SUB_RISK_DISCLOSURE)
+    fun subRiskDisclosure(@Body request: SubRiskDisclosureRequest): Call<SubRiskDisclosureResponse>
 
 
 }

@@ -26,12 +26,8 @@ class OAVedioRecordFragment :
     private var progressDialog: ProgressDialog? = null
 
     companion object {
-        fun newInstance(verifyCode: String?): OAVedioRecordFragment {
-            val bundle = Bundle()
-            bundle.putString("verifyCode", verifyCode)
-            val fragment = OAVedioRecordFragment()
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance(): OAVedioRecordFragment {
+            return OAVedioRecordFragment()
         }
     }
 
@@ -53,8 +49,7 @@ class OAVedioRecordFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        presenter?.setVerifyCode(arguments?.getString("verifyCode"))
+        presenter?.setVerifyCode()
         camera_view.init(true)
         btn_record.setOnClickListener(this)
     }
@@ -72,9 +67,11 @@ class OAVedioRecordFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_record -> {
+                btn_record.isEnabled = false
+                btn_record.alpha = 0.5f
                 // 调用录制视频
                 camera_view.recordVedio(
-                    6000
+                    3000
                 ) { data ->
                     if (data != null && data.isNotEmpty()) {
                         // 拿到视频流，进行上传
@@ -82,7 +79,7 @@ class OAVedioRecordFragment :
                     }
                 }
                 // 播放数字码进度
-                tv_change.start(6000)
+                tv_change.start(3000)
             }
         }
     }
@@ -102,6 +99,8 @@ class OAVedioRecordFragment :
     }
 
     override fun uploadComplete(isSuccessful: Boolean) {
+        btn_record.isEnabled = true
+        btn_record.alpha = 1.0f
         if (isSuccessful) {
             start(OATakeBankCradPhotoFragment.newInstance())
         } else {

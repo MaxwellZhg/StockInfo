@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
+import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.R
@@ -30,7 +31,6 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
     var taxTypeCode: MutableList<Int>? = null//
     var mOccupation: String? = null
     var mTaxType: String? = null
-    var mTaxState: String? = null
 
 
     override fun init() {
@@ -46,8 +46,7 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
         view?.setOccupation(mOccupation)
         mTaxType = taxTypePickerData?.get(0)
         view?.setTaxType(mTaxType)
-        mTaxState = ResUtil.getString(R.string.str_china)
-        view?.setTaxState(mTaxState)
+        view?.setTaxState(ResUtil.getString(R.string.str_china))
         view?.setTaxNo(OpenInfoManager.getInstance()?.info?.cardNo)
     }
 
@@ -79,6 +78,8 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
             msg = ResUtil.getString(R.string.str_email_address) + ResUtil.getString(R.string.str_not_empty)
         } else if (TextUtils.isEmpty(view?.getTaxNo())) {
             msg = ResUtil.getString(R.string.str_tax_number) + ResUtil.getString(R.string.str_not_empty)
+        }else if (TextUtils.isEmpty(view?.getTaxState())){
+            msg = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_tax_paying_countries_regions)
         }
         if (TextUtils.isEmpty(msg)) {
             return true
@@ -105,10 +106,14 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
         var taxType = taxTypePickerData?.indexOf(mTaxType)?.let { taxTypeCode?.get(it) }
         OpenInfoManager.getInstance()?.info?.occupation = occupation
         OpenInfoManager.getInstance()?.info?.taxType = taxType
-        OpenInfoManager.getInstance()?.info?.taxState = mTaxState
+        OpenInfoManager.getInstance()?.info?.taxState = view?.getTaxState()
         OpenInfoManager.getInstance()?.info?.mailbox = view?.getEmail()
         OpenInfoManager.getInstance()?.info?.taxNumber = view?.getTaxNo()
         view?.toNext()
+    }
+
+    fun getCommonType(): CommonEnum? {
+        return if (taxTypePickerData?.indexOf(mTaxType) == 0) CommonEnum.SINGLE else CommonEnum.ALL
     }
 
 

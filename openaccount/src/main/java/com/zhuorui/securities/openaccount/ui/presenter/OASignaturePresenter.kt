@@ -5,9 +5,13 @@ import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
+import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
 import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
 import com.zhuorui.securities.openaccount.ui.view.OASignatureView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OASignatureViewModel
@@ -48,19 +52,24 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe {
-                val request = SubSignatureRequest(it, "", transactions.createTransaction())
+                val request = SubSignatureRequest(
+                    it,
+                    OpenInfoManager.getInstance()?.info?.id.toString(),
+                    transactions.createTransaction()
+                )
                 Cache[IOpenAccountNet::class.java]?.subSignature(request)
                     ?.enqueue(Network.IHCallBack<SubSignatureResponse>(request))
             }
         disposables.add(disposable)
     }
 
-    override fun onBaseResponse(response: BaseResponse) {
-        if (response.request is SubSignatureRequest) {
-            view?.hideLoading()
-            // 跳转到下一步
-            view?.jumpToNext()
-        }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSubSignatureResponse(response: SubSignatureResponse) {
+        // 记录开户信息
+        OpenInfoManager.getInstance()?.info?.openStatus = response.data.openStatus
+        view?.hideLoading()
+        // 跳转到下一步
+        view?.jumpToNext()
     }
 
     override fun onErrorResponse(response: ErrorResponse) {

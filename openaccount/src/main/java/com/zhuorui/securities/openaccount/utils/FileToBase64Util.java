@@ -48,7 +48,7 @@ public class FileToBase64Util {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             //进行Base64编码;
-            return base64Enum.getCode() + "base64," + Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+            return base64Enum.getCode() + Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
         } catch (Exception e) {
             return null;
         }
@@ -119,7 +119,7 @@ public class FileToBase64Util {
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
         Log.d("d", "压缩后的大小=" + (b.length / 1024));
-        return Base64Enum.JPEG.getCode() + "base64," + Base64.encodeToString(b, Base64.DEFAULT);
+        return Base64Enum.JPEG.getCode() + Base64.encodeToString(b, Base64.DEFAULT);
     }
 
 }

@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.text.TextUtils
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -26,12 +27,14 @@ import java.io.File
  */
 object GetPhotoFromAlbumUtil {
 
+    val AUTHORITY = "com.zhuorui.securities.openaccount.fileprovider"//FileProvider方式或者ContentProvider 使用本地文件
+
     /**
      * 根据Uri获取图片的绝对路径
      * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
      */
     fun getRealPathFromUri(context: Context?, uri: Uri?): String? {
-        if (context == null || uri == null)return null
+        if (context == null || uri == null) return null
         val sdkVersion = Build.VERSION.SDK_INT
         return if (sdkVersion >= 19) { // api >= 19
             getRealPathFromUriAboveApi19(context!!, uri!!)
@@ -137,15 +140,17 @@ object GetPhotoFromAlbumUtil {
 
     }
 
-    fun getOutputMediaFileUri(cameraSavePath: String?,context: Context): Uri {
-        var mediaFile :File = File(cameraSavePath)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {// sdk >= 24  android7.0以上
-            var contentUri:Uri  = FileProvider.getUriForFile(context, "com.zhuorui.securities.openaccount.fileprovider",//与清单文件中android:authorities的值保持一致
-                    mediaFile)//FileProvider方式或者ContentProvider。也可使用VmPolicy方式
-            return contentUri
+    fun getOutputMediaFileUri(cameraSavePath: String?, context: Context): Uri? {
+        if (TextUtils.isEmpty(cameraSavePath)) return null
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {// sdk >= 24  android7.0以上
+            FileProvider.getUriForFile(
+                context,
+                AUTHORITY,
+                File(cameraSavePath)
+            )
+            //FileProvider方式或者ContentProvider。也可使用VmPolicy方式
         } else {
-            return Uri.fromFile(mediaFile)//或者 Uri.isPaise("file://"+file.toString()
-
+            Uri.fromFile(File(cameraSavePath))
         }
     }
 
@@ -162,7 +167,7 @@ object GetPhotoFromAlbumUtil {
         val intent = Intent()
         intent.action = Intent.ACTION_PICK
         intent.type = "image/*"
-        fragment.startActivityForResult(intent,requestCode)
+        fragment.startActivityForResult(intent, requestCode)
     }
 
 }

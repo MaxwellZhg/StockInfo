@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModel
  */
 class TakePhotoViewModel : ViewModel() {
 
+    // 提示文案
+    val takePhotoTipsString :MutableLiveData<String> = MutableLiveData()
     // 是否拍摄了照片
     val takePhotoed: MutableLiveData<Boolean> = MutableLiveData()
 
