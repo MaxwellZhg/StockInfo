@@ -36,7 +36,7 @@
                 android:paddingEnd="20dp"
                 android:gravity="center"
                 android:background="@drawable/take_photo_tips_bg"
-                android:text="@string/take_bank_photo_tips"
+                android:text="@{viewModel.takePhotoTipsString}"
                 android:textColor="@color/color_FFFFFFFF"
                 android:textSize="12sp"
                 android:layout_marginStart="0dp"

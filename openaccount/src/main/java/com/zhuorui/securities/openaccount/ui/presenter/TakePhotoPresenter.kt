@@ -1,6 +1,8 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
+import androidx.annotation.StringRes
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.ui.view.TakePhotoView
 import com.zhuorui.securities.openaccount.ui.viewmodel.TakePhotoViewModel
 
@@ -17,5 +19,9 @@ class TakePhotoPresenter : AbsPresenter<TakePhotoView, TakePhotoViewModel>() {
      */
     fun takePhoto(takePhotoed: Boolean) {
         viewModel?.takePhotoed?.value = takePhotoed
+    }
+
+    fun setTakePhotoTips(@StringRes stringId: Int) {
+        viewModel?.takePhotoTipsString?.value = ResUtil.getString(stringId)
     }
 }
