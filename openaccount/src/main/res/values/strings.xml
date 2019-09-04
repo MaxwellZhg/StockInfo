@@ -33,9 +33,7 @@
     <string name="bank_card_verify">银行卡验证</string>
     <string name="bank_card_verify_tips">根据合规要求，银行卡仅用于实名认证</string>
     <string name="bank_card_code">银行卡号</string>
-    <string name="bank_card_hint">请输入银行卡号</string>
     <string name="open_account_bank">开户银行</string>
-    <string name="open_account_bank_hint">请选择开户银行</string>
     <string name="take_sample">拍摄范例</string>
     <string name="openaccount_watermark" tools:ignore="ExtraTranslation">仅用于卓锐证券开户使用</string>
     <string name="risk_disclosure">风险披露</string>

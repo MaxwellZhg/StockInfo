@@ -61,7 +61,6 @@
                     app:zr_iconVisible="true"
                     android:layout_marginTop="10dp"
                     app:zr_teditTitle="@string/bank_card_code"
-                    app:zr_teditHint="@string/bank_card_hint"
                     app:zr_teditOrientation="VERTICAL"/>
 
 
@@ -84,7 +83,6 @@
                     android:layout_marginTop="10dp"
                     app:zr_ttextviewTitle="@string/open_account_bank"
                     style="@style/ZRTitleTextViewRightArrow"
-                    app:zr_ttextviewHint="@string/open_account_bank_hint"
                     app:zr_teditOrientation="VERTICAL"/>
 
             <com.zhuorui.commonwidget.StateButton

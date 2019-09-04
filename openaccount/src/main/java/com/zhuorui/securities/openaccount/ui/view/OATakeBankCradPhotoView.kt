@@ -9,4 +9,11 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface OATakeBankCradPhotoView : AbsView{
+    fun onBankOcrSuccess(bankCardNo: String, bankCardName: String)
+    fun showUpLoading()
+    fun hideUpLoading()
+    fun getBankCardNo(): String
+    fun getBankName(): String
+    fun toNext()
+    fun showToast(message: String?)
 }

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import butterknife.BindView
 import com.zhuorui.commonwidget.R
 import com.zhuorui.commonwidget.R2
+import com.zhuorui.commonwidget.R2.id.tv_album
 import com.zhuorui.securities.base2app.dialog.BaseBottomSheetsDialog
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.pickerview.date.DatePicker
@@ -32,6 +33,9 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
     View.OnClickListener {
 
     var listener: OnGetPicturesModeListener? = null
+
+    val TO_ALBUM_REQUEST_CODE = 1201
+    val TO_CAMERA_REQUEST_CODE = 1101
 
     @BindView(R2.id.tv_album)
     lateinit var tv_album: TextView
@@ -53,7 +57,7 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
         when (p0?.id) {
             R.id.tv_shot -> {
                 hide()
-                var uri: Uri = GetPhotoFromAlbumUtil.getOutputMediaFileUri(listener?.getCameraSavePath(), p0.context)
+                val uri: Uri? = GetPhotoFromAlbumUtil.getOutputMediaFileUri(listener?.getCameraSavePath(), p0.context)
                 listener?.goCamera(listener?.getToCameraRequestCode(), uri)
             }
             R.id.tv_album -> {
@@ -96,24 +100,29 @@ class GetPicturesModeDialog(context: Context) : BaseBottomSheetsDialog(context),
     }
 
     interface OnGetPicturesModeListener {
+
+
         /**
          * 获取相册图片RequestCode
          */
         fun getToAlbumRequestCode(): Int {
-            return 100
+            return 1201
         }
 
         /**
          * 获取拍照RequestCode
          */
         fun getToCameraRequestCode(): Int {
-            return 101
+            return 1101
         }
 
         /**
          * 获取拍照保存地址
+         * 调用APP拍照可不传地址
          */
-        fun getCameraSavePath(): String
+        fun getCameraSavePath(): String {
+            return ""
+        }
 
         /**
          * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）

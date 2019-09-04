@@ -3,6 +3,7 @@ package com.zhuorui.securities.openaccount.manager
 import androidx.fragment.app.Fragment
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
+import com.zhuorui.securities.openaccount.net.response.BankCardVerificationResponse
 import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
 import com.zhuorui.securities.openaccount.net.response.SubBasicsInfoResponse
 import com.zhuorui.securities.openaccount.net.response.SubIdentityResponse
@@ -33,7 +34,7 @@ open class OpenInfoManager {
 
     }
 
-    fun readSubIdentityResponse(data: SubIdentityResponse.Data){
+    fun readSubIdentityResponse(data: SubIdentityResponse.Data) {
         info?.openStatus = data.openStatus
         info?.cardNo = data.cardNo
         info?.cardName = data.cardName
@@ -41,8 +42,14 @@ open class OpenInfoManager {
         info?.cardNation = data.cardNation
     }
 
-    fun readSubBasicsInfoResponse(data: SubBasicsInfoResponse.Data){
+    fun readSubBasicsInfoResponse(data: SubBasicsInfoResponse.Data) {
         info?.openStatus = data.openStatus
+    }
+
+    fun readBankCardVerificationResponse(data: BankCardVerificationResponse.Data) {
+        info?.openStatus = data.openStatus
+        info?.bankCardNo = data.bankCardNo
+        info?.bankCardName = data.bankCardName
     }
 
     /**
