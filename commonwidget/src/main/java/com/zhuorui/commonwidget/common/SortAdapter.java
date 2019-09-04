@@ -20,7 +20,7 @@ public class SortAdapter extends BaseAdapter {
     private Context context;
     private CommonEnum commonEnum;
     private LinkedList<JsonBean> list=new LinkedList<>();
-
+    private OnItmeCodeClick itmeCodeClick;
     public SortAdapter(Context context,CommonEnum commonEnum) {
         this.context = context;
         this.commonEnum = commonEnum;
@@ -33,7 +33,9 @@ public class SortAdapter extends BaseAdapter {
         this.list.clear();
         notifyDataSetChanged();
     }
-
+  public void setOnItemCodeClick(OnItmeCodeClick itmeCodeClick){
+        this.itmeCodeClick=itmeCodeClick;
+  }
     public LinkedList<JsonBean> getList(){
         return  list;
     }
@@ -73,6 +75,9 @@ public class SortAdapter extends BaseAdapter {
             public void onClick(View view) {
                 if(commonEnum==CommonEnum.Code) {
                     list.get(position).setUsed(true);
+                    if(itmeCodeClick!=null){
+                        itmeCodeClick.ItemCodeClick(position);
+                    }
                 }
             }
         });
@@ -202,5 +207,8 @@ public class SortAdapter extends BaseAdapter {
             }
         }
         return str;
+    }
+    interface  OnItmeCodeClick{
+        public void ItemCodeClick(int position);
     }
 }

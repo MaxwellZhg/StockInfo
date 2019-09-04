@@ -1,10 +1,13 @@
 package com.zhuorui.securities.personal.ui
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
+import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
@@ -18,7 +21,11 @@ import kotlinx.android.synthetic.main.forget_psw_fragment.*
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
 import kotlinx.android.synthetic.main.forget_psw_fragment.rl_country_disct
+import kotlinx.android.synthetic.main.forget_psw_fragment.tv_areaphone_tips
 import kotlinx.android.synthetic.main.forget_psw_fragment.tv_send_code
+import kotlinx.android.synthetic.main.login_and_register_fragment.*
+import me.jessyan.autosize.utils.LogUtils
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  * Created by Maxwell.
@@ -55,7 +62,7 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
         phonecode = et_phone_code.text.toString().trim()
        when(p0?.id){
            R.id.rl_country_disct->{
-               start(CountryDisctFragment())
+               startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)
            }
            R.id.tv_send_code->{
                if (strphone == "") {
@@ -109,5 +116,17 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
         startWithPop(RestPswFragment.newInstance(strphone,phonecode))
     }
 
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        when(requestCode){
+            ISupportFragment.RESULT_OK->{
+                var str=data?.get("str") as String
+                var code=data?.get("code") as String
+                LogUtils.e(str)
+                tv_contry.text=str
+                tv_areaphone_tips.text=code
+            }
+        }
+    }
 
 }

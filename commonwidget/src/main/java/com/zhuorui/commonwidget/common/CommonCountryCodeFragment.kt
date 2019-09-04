@@ -7,7 +7,6 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProviders
@@ -15,7 +14,6 @@ import com.google.gson.Gson
 import com.zhuorui.commonwidget.BR
 import com.zhuorui.commonwidget.R
 import com.zhuorui.commonwidget.databinding.CommonCountryCodeFragmentBinding
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetJsonDataUtil
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -24,7 +22,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.common_country_code_fragment.*
-import kotlinx.android.synthetic.main.dialog_get_pictures_mode.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 import org.json.JSONArray
@@ -38,7 +35,7 @@ import java.util.*
  */
 class CommonCountryCodeFragment :
     AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding, CommonCountryViewModel, CommonCountryCodeView, CommonCountryCodePresenter>(),
-    CommonCountryCodeView, TextWatcher, View.OnClickListener,AdapterView.OnItemClickListener {
+    CommonCountryCodeView, TextWatcher, View.OnClickListener,SortAdapter.OnItmeCodeClick {
     private val MSG_LOAD_DATA = 0x0001
     private val MSG_LOAD_SUCCESS = 0x0002
     private val MSG_LOAD_FAILED = 0x0003
@@ -102,7 +99,6 @@ class CommonCountryCodeFragment :
             tv_detele.text = ResUtil.getString(R.string.cancle)
         }
         tv_detele.setOnClickListener (this)
-        lv_country.onItemClickListener = this
     }
 
     @SuppressLint("HandlerLeak")
@@ -195,6 +191,7 @@ class CommonCountryCodeFragment :
                             )
                             adapter?.addItems(it)
                             lv_country.adapter = adapter
+                            adapter?.setOnItemCodeClick(this@CommonCountryCodeFragment)
                             adapter?.notifyDataSetChanged()
                         }
                     isLoaded = true
@@ -300,15 +297,17 @@ class CommonCountryCodeFragment :
                 }
             }
     }
-    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-             var b = Bundle()
-            if(type==CommonEnum.Code) {
-                b.putString("str", jsonBean[p2].cn)
-                b.putString("code", jsonBean[p2].number)
-                setFragmentResult(ISupportFragment.RESULT_OK, b)
-                pop()
-            }
+
+    override fun ItemCodeClick(position: Int) {
+        var b = Bundle()
+        if(type==CommonEnum.Code) {
+            b.putString("str", jsonBean[position].cn)
+            b.putString("code", jsonBean[position].number)
+            setFragmentResult(ISupportFragment.RESULT_OK, b)
+            pop()
+        }
     }
+
 
 
 }

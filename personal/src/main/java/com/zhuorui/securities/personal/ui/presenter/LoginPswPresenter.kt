@@ -104,11 +104,5 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
         })
     }
 
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
-    fun onLoginStateChangeEvent(event: DisctCodeSelectEvent) {
-        // 传值
-        viewModel?.strdisct?.set(event.str)
-        viewModel?.code?.set(event.code)
-    }
 
 }
