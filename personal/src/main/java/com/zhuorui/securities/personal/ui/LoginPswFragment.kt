@@ -1,10 +1,13 @@
 package com.zhuorui.securities.personal.ui
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
+import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -14,10 +17,15 @@ import com.zhuorui.securities.personal.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
+import kotlinx.android.synthetic.main.forget_psw_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle
+import kotlinx.android.synthetic.main.login_psw_fragment.tv_areaphone_tips
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
+import kotlinx.android.synthetic.main.login_psw_fragment.tv_contry
+import me.jessyan.autosize.utils.LogUtils
+import me.yokeyword.fragmentation.ISupportFragment
 
 /*
  * Created by Maxwell.
@@ -59,7 +67,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                startWithPop(LoginRegisterFragment.newInstance())
            }
            R.id.ll_country_disct->{
-               start(CountryDisctFragment())
+               startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)
            }
            R.id.iv_cancle->{
                pop()
@@ -104,6 +112,19 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+    }
+
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        when(requestCode){
+            ISupportFragment.RESULT_OK->{
+                var str=data?.get("str") as String
+                var code=data?.get("code") as String
+                LogUtils.e(str)
+                tv_contry.text=str
+                tv_areaphone_tips.text=code
+            }
+        }
     }
 
 
