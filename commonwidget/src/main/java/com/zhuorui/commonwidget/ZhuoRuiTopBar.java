@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.base2app.util.StatusBarUtil;
 import me.yokeyword.fragmentation.ISupportActivity;
 
@@ -61,6 +62,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
                 }
             }
         });
+
     }
 
     public void setTitleView(View v) {
@@ -110,6 +112,10 @@ public class ZhuoRuiTopBar extends FrameLayout {
         if (mBackView != null) mBackView.setOnClickListener(l);
     }
 
+    public void setShareClickListener(OnClickListener l){
+        if(mShareView!=null) mShareView.setOnClickListener(l);
+    }
+
     public void setShareView(View v) {
         if (v == null) return;
         if (mShareView != null) removeView(mShareView);
@@ -124,6 +130,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
         int wh = (int) (density * 44f);
         int padding = (int) (density * 12);
         FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        lp.rightMargin=ResUtil.INSTANCE.getDimensionDp2Px(13);
         iv.setLayoutParams(lp);
         iv.setPadding(padding, padding, padding, padding);
         return iv;

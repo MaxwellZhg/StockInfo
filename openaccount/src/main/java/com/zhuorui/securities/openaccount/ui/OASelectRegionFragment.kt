@@ -1,13 +1,17 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
+import com.zhuorui.securities.base2app.infra.LogInfra
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.custom.ShareInfoPopupWindow
 import com.zhuorui.securities.openaccount.databinding.FragmentOaSelectRegionBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OASelectRegionPresenter
 import com.zhuorui.securities.openaccount.ui.view.OASeletRegionView
@@ -38,6 +42,23 @@ class OASelectRegionFragment :
         dialog = activity?.let { OptionsPickerDialog<String>(it) }
         dialog?.setData(regionData)
         dialog?.setOnOptionSelectedListener(this)
+        //获取需要在其上方显示的控件的位置信息
+        val location = IntArray(2)
+        top_bar?.getLocationOnScreen(location)
+        top_bar.setShareClickListener{
+            // 显示更多操作
+            context?.let {
+                ShareInfoPopupWindow.create(it, object : ShareInfoPopupWindow.CallBack {
+                    override fun onInfoMation() {
+
+                    }
+
+                    override fun onHelpCenter() {
+                      start(OAHelpCenterFragment.newInstance())
+                    }
+                }).showAsDropDown(top_bar,  location[0], location[1])
+            }
+        }
     }
 
     override fun onClick(p0: View?) {

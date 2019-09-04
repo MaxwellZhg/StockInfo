@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+          <LinearLayout android:layout_width="114dp"
+                        android:layout_height="117dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="vertical"
+                        android:background="@mipmap/share_info_bg">
+                       <TextView android:layout_width="match_parent"
+                                 android:id="@+id/tv_share_info"
+                                 android:layout_height="0dp"
+                                 android:layout_weight="1"
+                                 android:gravity="center_vertical"
+                                 android:layout_marginLeft="7dp"
+                                 android:drawablePadding="10dp"
+                                 android:drawableLeft="@mipmap/icon_share_info"
+                                 android:text="@string/share_info"
+                                 android:textSize="17sp"
+                                 android:textColor="@color/color_FFFFFFFF"
+                            />
+              <View android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_FFFFFFFF"/>
+              <TextView android:layout_width="match_parent"
+                        android:id="@+id/tv_share_helpcenter"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="7dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@mipmap/client"
+                        android:text="@string/help_center"
+                        android:textSize="17sp"
+                        android:textColor="@color/color_FFFFFFFF"
+              />
+          </LinearLayout>
+</LinearLayout>
