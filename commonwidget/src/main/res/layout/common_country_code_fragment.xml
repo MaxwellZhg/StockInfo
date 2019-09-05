@@ -10,7 +10,6 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
-                style="@style/oaDataTipsToptxt"
                 app:zr_topbarTitle="@string/country_disct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

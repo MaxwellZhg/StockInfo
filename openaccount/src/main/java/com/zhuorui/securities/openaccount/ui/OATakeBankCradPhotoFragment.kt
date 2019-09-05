@@ -21,11 +21,10 @@ import com.zhuorui.securities.openaccount.databinding.FragmentOaTakeBankCardPhot
 import com.zhuorui.securities.openaccount.ui.presenter.OATakeBankCradPhotoPresenter
 import com.zhuorui.securities.openaccount.ui.view.OATakeBankCradPhotoView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OATakeBankCradPhotoViewModel
-import com.zhuorui.securities.openaccount.widget.BankCardTextWatcher
+import com.zhuorui.commonwidget.CardTextWatcher
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import kotlinx.android.synthetic.main.fragment_oa_take_bank_card_photo.*
 import kotlinx.android.synthetic.main.fragment_oa_take_bank_card_photo.btn_next
-import kotlinx.android.synthetic.main.fragment_oa_upload_documents.*
 
 /**
  *    author : PengXianglin
@@ -65,14 +64,10 @@ class OATakeBankCradPhotoFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         tv_take_sample.setOnClickListener(this)
-        tv_bank.vEt.setOnClickListener(this)
+        tv_bank.setOnClickListener(this)
         tv_card_id?.vRightIcon?.setOnClickListener(this)
         btn_next.setOnClickListener(this)
-
-        tv_card_id.vEt.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_NORMAL
-        tv_card_id.vEt.filters = arrayOf(InputFilter.LengthFilter(26))
-        tv_card_id.vEt.maxLines = 1
-        BankCardTextWatcher.bind(tv_card_id.vEt)
+        presenter?.initBankList()
     }
 
     override fun onBankOcrSuccess(bankCardNo: String, bankCardName: String) {
@@ -96,7 +91,7 @@ class OATakeBankCradPhotoFragment :
     }
 
     override fun getBankName(): String {
-       return tv_bank.text
+        return tv_bank.text
     }
 
     override fun showToast(message: String?) {
@@ -141,13 +136,12 @@ class OATakeBankCradPhotoFragment :
             btn_next -> {
                 presenter?.bankCardVerification()
             }
-            tv_bank.vEt -> {
+            tv_bank -> {
                 // 选择银行
                 val dialog = context?.let { OptionsPickerDialog<String>(it) }
-                val regionData: MutableList<String> =
-                    mutableListOf("中国工商银行", "中国农业银行", "中国银行", "中国建设银行", "中国邮政储蓄银行", "交通银行", "招商银行")
-                dialog?.setData(regionData)
+                dialog?.setData(presenter?.getBankData())
                 dialog?.setOnOptionSelectedListener(this)
+                dialog?.setCurrentData(tv_bank.text)
                 dialog?.show()
             }
             tv_card_id.vRightIcon -> {
