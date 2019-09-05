@@ -52,16 +52,16 @@ class OAHelpCenterFragment :
     override fun onClick(p0: View?) {
         when(p0?.id){
             R.id.tv_openaccount_license->{
-                start(OAHelpCenterInfoFragment.newInstance())
+                start(OAHelpCenterInfoFragment.newInstance(1))
             }
             R.id.tv_openaccount_info->{
-                start(OAHelpCenterInfoFragment.newInstance())
+                start(OAHelpCenterInfoFragment.newInstance(2))
             }
             R.id.tv_openaccount_time->{
-                start(OAHelpCenterInfoFragment.newInstance())
+                start(OAHelpCenterInfoFragment.newInstance(3))
             }
             R.id.tv_openaccount_age->{
-                start(OAHelpCenterInfoFragment.newInstance())
+                start(OAHelpCenterInfoFragment.newInstance(4))
             }
         }
     }
