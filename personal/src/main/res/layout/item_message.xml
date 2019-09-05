@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:paddingBottom="14dp"
+              android:paddingTop="14dp"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="06-04 16:54"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/color_282828"
+            android:textSize="9sp"
+            tools:ignore="SmallSp"/>
+
+    <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="----"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/msg_item_bg"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/color_282828"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="14sp"/>
+</LinearLayout>
