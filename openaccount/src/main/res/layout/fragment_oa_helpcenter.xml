@@ -10,65 +10,75 @@
                   android:background="@color/color_f0f0f0"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
+
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 style="@style/oaDataTipsToptxt"
                 app:zr_topbarTitle="@string/help_center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-          <TextView android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:paddingLeft="14dp"
-                    android:textSize="18sp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/color_232323"
-                    android:text="@string/about_question"/>
-        <View android:layout_width="match_parent"
-              android:layout_height="1dp"/>
+
         <TextView android:layout_width="match_parent"
-                  android:layout_height="40dp"
+                  android:layout_height="41dp"
+                  android:paddingLeft="14dp"
                   android:textSize="18sp"
+                  android:gravity="center_vertical"
+                  android:textColor="@color/color_232323"
+                  android:text="@string/about_question"/>
+
+        <View android:layout_width="match_parent"
+              android:layout_height="0.5dp"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:textSize="16sp"
                   android:paddingLeft="14dp"
                   android:paddingEnd="13dp"
                   android:background="@color/color_FFFFFFFF"
                   android:drawableRight="@mipmap/icon_help_more"
                   android:gravity="center_vertical"
-                  android:textColor="@color/color_232323"
+                  android:textColor="@color/color_282828"
                   android:text="@string/openaccount_by_license"/>
+
         <View android:layout_width="match_parent"
-              android:layout_height="1dp"/>
+              android:layout_height="0.5dp"/>
+
         <TextView android:layout_width="match_parent"
-                  android:layout_height="40dp"
-                  android:textSize="18sp"
+                  android:layout_height="50dp"
+                  android:textSize="16sp"
                   android:paddingLeft="14dp"
                   android:paddingEnd="13dp"
                   android:background="@color/color_FFFFFFFF"
                   android:drawableRight="@mipmap/icon_help_more"
                   android:gravity="center_vertical"
-                  android:textColor="@color/color_232323"
+                  android:textColor="@color/color_282828"
                   android:text="@string/openaccount_by_info"/>
+
         <View android:layout_width="match_parent"
-              android:layout_height="1dp"/>
+              android:layout_height="0.5dp"/>
+
         <TextView android:layout_width="match_parent"
-                  android:layout_height="40dp"
-                  android:textSize="18sp"
+                  android:layout_height="50dp"
+                  android:textSize="16sp"
                   android:paddingLeft="14dp"
                   android:paddingEnd="13dp"
                   android:background="@color/color_FFFFFFFF"
                   android:drawableRight="@mipmap/icon_help_more"
                   android:gravity="center_vertical"
-                  android:textColor="@color/color_232323"
+                  android:textColor="@color/color_282828"
                   android:text="@string/openaccount_by_time"/>
+
         <View android:layout_width="match_parent"
-              android:layout_height="1dp"/>
+              android:layout_height="0.5dp"/>
+
         <TextView android:layout_width="match_parent"
-                  android:layout_height="40dp"
-                  android:textSize="18sp"
+                  android:layout_height="50dp"
+                  android:textSize="16sp"
                   android:paddingLeft="14dp"
                   android:paddingEnd="13dp"
                   android:background="@color/color_FFFFFFFF"
                   android:drawableRight="@mipmap/icon_help_more"
                   android:gravity="center_vertical"
-                  android:textColor="@color/color_232323"
+                  android:textColor="@color/color_282828"
                   android:text="@string/openaccount_by_age"/>
     </LinearLayout>
 

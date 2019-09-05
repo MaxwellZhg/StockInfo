@@ -14,17 +14,25 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterViewModel
  * Date: 2019/9/4
  * Desc:
  */
-class OAHelpCenterFragment : AbsSwipeBackFragment<com.zhuorui.securities.openaccount.databinding.FragmentOaHelpcenterBinding,OAHelpCenterViewModel,OAHelpCenterView,OAHelpCenterPresenter>(),OAHelpCenterView{
+class OAHelpCenterFragment :
+    AbsSwipeBackFragment<com.zhuorui.securities.openaccount.databinding.FragmentOaHelpcenterBinding, OAHelpCenterViewModel, OAHelpCenterView, OAHelpCenterPresenter>(),
+    OAHelpCenterView {
+
     override val layout: Int
         get() = R.layout.fragment_oa_helpcenter
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: OAHelpCenterPresenter
         get() = OAHelpCenterPresenter()
+
     override val createViewModel: OAHelpCenterViewModel?
-        get() =ViewModelProviders.of(this).get(OAHelpCenterViewModel::class.java)
+        get() = ViewModelProviders.of(this).get(OAHelpCenterViewModel::class.java)
+
     override val getView: OAHelpCenterView
         get() = this
+
     companion object {
         fun newInstance(): OAHelpCenterFragment {
             return OAHelpCenterFragment()
