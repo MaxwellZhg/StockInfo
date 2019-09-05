@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.widget;
+package com.zhuorui.commonwidget;
 
 import android.text.Editable;
 import android.text.Selection;
@@ -9,12 +9,12 @@ import android.widget.EditText;
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
  * date   : 2019/8/27 19:13
- * desc   : 自定义银行卡号每4位一空格
+ * desc   : 自定义卡号每4位一空格
  */
-public class BankCardTextWatcher implements TextWatcher {
+public class CardTextWatcher implements TextWatcher {
 
     //default max length = 21 + 5 space
-    private static final int DEFAULT_MAX_LENGTH = 21 + 5;
+    private static final int DEFAULT_MAX_LENGTH = 1000;
     //max input length
     private int maxLength = DEFAULT_MAX_LENGTH;
     private int beforeTextLength = 0;
@@ -27,14 +27,14 @@ public class BankCardTextWatcher implements TextWatcher {
     private EditText editText;
 
     public static void bind(EditText editText) {
-        new BankCardTextWatcher(editText, DEFAULT_MAX_LENGTH);
+        new CardTextWatcher(editText, DEFAULT_MAX_LENGTH);
     }
 
     public static void bind(EditText editText, int maxLength) {
-        new BankCardTextWatcher(editText, maxLength);
+        new CardTextWatcher(editText, maxLength);
     }
 
-    public BankCardTextWatcher(EditText editText, int maxLength) {
+    public CardTextWatcher(EditText editText, int maxLength) {
         this.editText = editText;
         this.maxLength = maxLength;
         editText.addTextChangedListener(this);

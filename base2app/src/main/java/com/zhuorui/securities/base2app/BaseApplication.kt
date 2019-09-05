@@ -14,7 +14,6 @@ import com.zhuorui.securities.base2app.infra.StorageInfra
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.util.AppActivityLifecycleImp
 import com.zhuorui.securities.base2app.util.AppUtil
-import com.qw.soul.permission.SoulPermission
 import me.jessyan.autosize.AutoSizeConfig
 import me.yokeyword.fragmentation.Fragmentation
 import okhttp3.Interceptor
@@ -69,7 +68,6 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
             initConfig()
             initInfra()
             initNetwork()
-            initPermission()
             initFragmentation()
 
             beforeInit()
@@ -110,10 +108,6 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
              */
             .handleException { e -> LogInfra.Log.e(logTag, e.message, e) }
             .install()
-    }
-
-    private fun initPermission() {
-        SoulPermission.init(this)
     }
 
     private fun initConfig() {

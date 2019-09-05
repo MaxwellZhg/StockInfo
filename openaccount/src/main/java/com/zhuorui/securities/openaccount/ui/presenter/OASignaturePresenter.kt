@@ -2,7 +2,6 @@ package com.zhuorui.securities.openaccount.ui.presenter
 
 import android.graphics.Bitmap
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -11,12 +10,11 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.SubSignatureRequest
-import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
 import com.zhuorui.securities.openaccount.net.response.SubSignatureResponse
 import com.zhuorui.securities.openaccount.ui.view.OASignatureView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OASignatureViewModel
-import com.zhuorui.securities.openaccount.utils.Base64Enum
-import com.zhuorui.securities.openaccount.utils.FileToBase64Util
+import com.zhuorui.securities.base2app.util.Base64Enum
+import com.zhuorui.securities.base2app.util.FileToBase64Util
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
@@ -48,7 +46,7 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
 
         // 转码后发起请求
         val disposable = Observable.create(ObservableOnSubscribe<String> { emitter ->
-            emitter.onNext(FileToBase64Util.bitMapBase64String(Base64Enum.PNG, bitmap))
+            emitter.onNext(FileToBase64Util.bitmapBase64String(Base64Enum.PNG, bitmap))
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe {

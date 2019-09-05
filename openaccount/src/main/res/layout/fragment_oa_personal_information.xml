@@ -90,6 +90,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_employment_status"
                         app:zr_teditTitle="@string/str_email_address"
                         app:zr_teditOrientation="HORIZONTAL"
+                        app:zr_teditType="EMAIL"
                         tools:ignore="MissingConstraints"/>
 
                 <com.zhuorui.commonwidget.ZRTitleTextView
@@ -117,6 +118,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_tax_paying"
                         app:zr_teditTitle="@string/str_tax_number"
                         app:zr_teditOrientation="HORIZONTAL"
+                        app:zr_teditType="FORMAT_NUMBER"
                         tools:ignore="MissingConstraints"/>
 
                 <com.zhuorui.commonwidget.StateButton

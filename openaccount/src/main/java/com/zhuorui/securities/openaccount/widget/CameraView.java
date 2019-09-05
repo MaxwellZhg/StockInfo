@@ -2,16 +2,20 @@ package com.zhuorui.securities.openaccount.widget;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.bean.Permissions;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener;
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog;
 import com.zhuorui.securities.base2app.BaseApplication;
-import com.zhuorui.securities.base2app.util.ToastUtil;
+import com.zhuorui.securities.openaccount.R;
 import com.zhuorui.securities.openaccount.camera.CameraHelper;
 
 /**
@@ -20,7 +24,7 @@ import com.zhuorui.securities.openaccount.camera.CameraHelper;
  * date   : 2019/8/30 16:48
  * desc   : 自定义相机View
  */
-public class CameraView extends SurfaceView implements CheckRequestPermissionsListener, CameraHelper.CompleteListener {
+public class CameraView extends SurfaceView implements CameraHelper.CompleteListener {
 
     // 初始化是否完成
     private boolean mInited;
@@ -57,32 +61,53 @@ public class CameraView extends SurfaceView implements CheckRequestPermissionsLi
         if (mInited) return;
         this.isRecord = isRecord;
         // 请求权限
+        final String[] permissions;
         if (isRecord) {
-            SoulPermission.getInstance().checkAndRequestPermissions(
-                    Permissions.build(
-                            Manifest.permission.CAMERA
-                    ), this);
+            permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         } else {
-            SoulPermission.getInstance().checkAndRequestPermissions(Permissions.build(Manifest.permission.CAMERA), this);
+            permissions = new String[]{Manifest.permission.CAMERA};
         }
-    }
+        SoulPermission.getInstance().checkAndRequestPermissions(
+                Permissions.build(
+                        permissions
+                ), new CheckRequestPermissionsListener() {
+                    @Override
+                    public void onAllPermissionOk(Permission[] allPermissions) {
+                        // 获得权限，初始化录制界面
+                        mInited = true;
+                        cameraHelper = new CameraHelper(getContext());
+                        int cameraFacingType = CameraView.this.isRecord ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
+                        cameraHelper.setCameraPosition(cameraFacingType);
+                        cameraHelper.setSurfaceView(CameraView.this);
+                        cameraHelper.setCompleteListener(CameraView.this);
+                        cameraHelper.surfaceCreated(CameraView.this.getHolder());
+                    }
 
-    @Override
-    public void onAllPermissionOk(Permission[] allPermissions) {
-        // 获得权限，初始化录制界面
-        mInited = true;
-        cameraHelper = new CameraHelper(getContext());
-        int cameraFacingType = isRecord ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
-        cameraHelper.setCameraPosition(cameraFacingType);
-        cameraHelper.setSurfaceView(this);
-        cameraHelper.setCompleteListener(this);
-    }
+                    @Override
+                    public void onPermissionDenied(Permission[] refusedPermissions) {
+                        // 没有权限
+                        mInited = false;
+                        String msgText = permissions.length == 3 ? getContext().getString(R.string.record_video_not_permission) : getContext().getString(R.string.take_photo_not_permission);
+                        ConfirmToCancelDialog.Companion.createWidth265Dialog(getContext(), false, true)
+                                .setMsgText(msgText)
+                                .setConfirmText(getContext().getString(R.string.go_to_setting))
+                                .setCancelText(getContext().getString(R.string.cancle))
+                                .setCallBack(new ConfirmToCancelDialog.CallBack() {
+                                    @Override
+                                    public void onCancel() {
 
-    @Override
-    public void onPermissionDenied(Permission[] refusedPermissions) {
-        // 没有权限
-        mInited = false;
-        ToastUtil.Companion.getInstance().toast("没有权限");
+                                    }
+
+                                    @Override
+                                    public void onConfirm() {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                        intent.setData(uri);
+                                        getContext().startActivity(intent);
+                                    }
+                                }).show();
+                    }
+                });
     }
 
     @Override

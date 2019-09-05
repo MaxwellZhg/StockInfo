@@ -24,6 +24,9 @@ class TakePhotoFragment :
     AbsFragment<FragmentTakePhotoBinding, TakePhotoViewModel, TakePhotoView, TakePhotoPresenter>(),
     TakePhotoView, View.OnClickListener {
 
+    private var onLazyInited = false
+    private var onStop = false
+
     companion object {
         // 身份证
         const val ID_CRAD = 1
@@ -54,11 +57,6 @@ class TakePhotoFragment :
     override val getView: TakePhotoView
         get() = this
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        camera_view.init(false)
-    }
-
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
@@ -76,16 +74,28 @@ class TakePhotoFragment :
                 presenter?.setTakePhotoTips(R.string.take_bank_card_photo_tips)
             }
         }
+
+        camera_view.init(false)
+
+        onLazyInited = true
     }
 
     override fun onResume() {
         super.onResume()
-        camera_view.onResume()
+        if (onLazyInited && onStop) {
+            onStop = false
+            camera_view.onResume()
+        }
     }
 
     override fun onPause() {
         super.onPause()
         camera_view.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onStop = true
     }
 
     override fun onClick(p0: View?) {

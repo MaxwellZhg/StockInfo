@@ -16,6 +16,10 @@
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:zr_right_icon="@mipmap/ic_serach"
+                app:zr_right_icon_width="20dp"
+                app:zr_right_icon_hight="20dp"
+                app:zr_right_icon_margin="13dp"
                 app:zr_topbarTitle="@string/system_message"/>
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout

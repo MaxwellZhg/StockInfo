@@ -47,7 +47,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
         if (resId != -1) {
             int width = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
             int hight = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
-            int margin = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_margin,13);
+            int margin = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_margin, 13);
             setRightView(getRightView(resId, width, hight, margin));
         }
         setBackgroundColor(Color.parseColor("#211F2A"));
@@ -101,7 +101,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
         float density = getResources().getDisplayMetrics().density;
         int wh = (int) (density * 44f);
         int padding = (int) (density * 12);
-        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.LEFT | Gravity.CENTER_VERTICAL);
+        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.START | Gravity.CENTER_VERTICAL);
         iv.setLayoutParams(lp);
         iv.setPadding(padding, padding, padding, padding);
         return iv;
@@ -121,11 +121,11 @@ public class ZhuoRuiTopBar extends FrameLayout {
         addView(v);
     }
 
-    private View getRightView(int resId, int width, int hight,int margin) {
+    private View getRightView(int resId, int width, int hight, int margin) {
         ImageView iv = new ImageView(getContext());
         iv.setImageResource(resId);
         FrameLayout.LayoutParams lp = new LayoutParams(width, hight, Gravity.END | Gravity.CENTER_VERTICAL);
-        lp.rightMargin = margin;
+        lp.setMarginEnd(margin);
         iv.setLayoutParams(lp);
         return iv;
     }

@@ -61,6 +61,7 @@
                     app:zr_iconVisible="true"
                     android:layout_marginTop="10dp"
                     app:zr_teditTitle="@string/bank_card_code"
+                    app:zr_teditType="BANK_CARD"
                     app:zr_teditOrientation="VERTICAL"/>
 
 

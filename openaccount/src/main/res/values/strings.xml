@@ -104,6 +104,9 @@
     <string name="openaccount_by_info">如何更新卓锐证券资料？</string>
     <string name="openaccount_by_time">账户开通需要多长时间？</string>
     <string name="openaccount_by_age">开通账户是否年龄限制？</string>
+    <string name="take_photo_not_permission">获取相机权限失败，将导致无法正常拍摄，请打开设置页面手动授权</string>
+    <string name="record_video_not_permission">获取相机、麦克风、存储空间权限失败，将导致无法正常拍摄，请打开设置页面手动授权</string>
+    <string name="go_to_setting">去设置</string>
     <string name="member_of_china">中国居民:</string>
     <string name="member_of_china_tips">1、中国内地身份证\n2、内地临时身份证（三个月有效期内）</string>
     <string name="member_of_hk">香港居民:</string>

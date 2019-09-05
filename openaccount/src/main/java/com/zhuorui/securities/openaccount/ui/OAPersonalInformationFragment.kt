@@ -32,8 +32,7 @@ class OAPersonalInformationFragment :
 
     companion object {
         fun newInstance(): OAPersonalInformationFragment {
-            val fragment = OAPersonalInformationFragment()
-            return fragment
+            return OAPersonalInformationFragment()
         }
     }
 

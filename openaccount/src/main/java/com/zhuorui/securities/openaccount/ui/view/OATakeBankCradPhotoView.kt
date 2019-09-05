@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.view
 
+import android.content.Context
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 
 /**
@@ -16,4 +17,5 @@ interface OATakeBankCradPhotoView : AbsView{
     fun getBankName(): String
     fun toNext()
     fun showToast(message: String?)
+    fun getContext(): Context?
 }
