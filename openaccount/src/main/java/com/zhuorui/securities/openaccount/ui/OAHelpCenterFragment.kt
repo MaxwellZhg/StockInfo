@@ -1,5 +1,7 @@
 package com.zhuorui.securities.openaccount.ui
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.openaccount.BR
@@ -7,16 +9,17 @@ import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.ui.presenter.OAHelpCenterPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAHelpCenterView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterViewModel
+import kotlinx.android.synthetic.main.fragment_oa_helpcenter.*
 
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/4
- * Desc:
+ * Desc: 帮助中心二级界面
  */
 class OAHelpCenterFragment :
     AbsSwipeBackFragment<com.zhuorui.securities.openaccount.databinding.FragmentOaHelpcenterBinding, OAHelpCenterViewModel, OAHelpCenterView, OAHelpCenterPresenter>(),
-    OAHelpCenterView {
+    OAHelpCenterView,View.OnClickListener {
 
     override val layout: Int
         get() = R.layout.fragment_oa_helpcenter
@@ -36,6 +39,30 @@ class OAHelpCenterFragment :
     companion object {
         fun newInstance(): OAHelpCenterFragment {
             return OAHelpCenterFragment()
+        }
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        tv_openaccount_license.setOnClickListener(this)
+        tv_openaccount_info.setOnClickListener(this)
+        tv_openaccount_time.setOnClickListener(this)
+        tv_openaccount_age.setOnClickListener(this)
+    }
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            R.id.tv_openaccount_license->{
+                start(OAHelpCenterInfoFragment.newInstance())
+            }
+            R.id.tv_openaccount_info->{
+                start(OAHelpCenterInfoFragment.newInstance())
+            }
+            R.id.tv_openaccount_time->{
+                start(OAHelpCenterInfoFragment.newInstance())
+            }
+            R.id.tv_openaccount_age->{
+                start(OAHelpCenterInfoFragment.newInstance())
+            }
         }
     }
 }

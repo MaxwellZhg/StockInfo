@@ -40,9 +40,17 @@
 
     <declare-styleable name="ZhuoRuiTopBar">
         <attr name="zr_topbarTitle" format="string|reference"/>
-        <attr name="zr_shareVisibility" format="boolean"/>
+        <attr name="zr_right_icon" format="reference"/>
+        <attr name="zr_right_icon_width" format="dimension"/>
+        <attr name="zr_right_icon_hight" format="dimension"/>
+        <attr name="zr_right_icon_margin" format="dimension"/>
     </declare-styleable>
-
+    <declare-styleable name="HelpCenterTitleBar">
+        <attr name="help_center_cancle_icon" format="reference"/>
+        <attr name="help_center_cancle_width" format="dimension"/>
+        <attr name="help_center_cancle_height" format="dimension"/>
+        <attr name="help_center_cancle_margin" format="dimension"/>
+    </declare-styleable>
 
     <attr name="zr_iconWidth" format="dimension"/>
     <attr name="zr_iconHight" format="dimension"/>

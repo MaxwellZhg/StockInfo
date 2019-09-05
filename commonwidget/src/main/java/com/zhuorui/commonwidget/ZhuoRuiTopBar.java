@@ -26,8 +26,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
 
     private View mTitleView;
     private View mBackView;
-    private View mShareView;
-    private Boolean mShare;
+    private View mRightView;
 
     public ZhuoRuiTopBar(Context context) {
         this(context, null);
@@ -41,18 +40,18 @@ public class ZhuoRuiTopBar extends FrameLayout {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZhuoRuiTopBar);
         String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zr_topbarTitle);
-        mShare= a.getBoolean(R.styleable.ZhuoRuiTopBar_zr_shareVisibility,false);
         setBackView(getBackView());
         setTitleView(getTitleView());
         setTitle(mTitle);
-        setShareView(getShareView());
+        int resId = a.getResourceId(R.styleable.ZhuoRuiTopBar_zr_right_icon, -1);
+        if (resId != -1) {
+            int width = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int hight = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int margin = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_margin,13);
+            setRightView(getRightView(resId, width, hight, margin));
+        }
         setBackgroundColor(Color.parseColor("#211F2A"));
         setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0);
-        if(mShare){
-            mShareView.setVisibility(VISIBLE);
-        }else{
-            mShareView.setVisibility(INVISIBLE);
-        }
         setBackClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +61,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
                 }
             }
         });
-
+        a.recycle();
     }
 
     public void setTitleView(View v) {
@@ -112,27 +111,22 @@ public class ZhuoRuiTopBar extends FrameLayout {
         if (mBackView != null) mBackView.setOnClickListener(l);
     }
 
-    public void setShareClickListener(OnClickListener l){
-        if(mShareView!=null) mShareView.setOnClickListener(l);
+    public void setRightClickListener(OnClickListener l) {
+        if (mRightView != null) mRightView.setOnClickListener(l);
     }
 
-    public void setShareView(View v) {
+    public void setRightView(View v) {
         if (v == null) return;
-        if (mShareView != null) removeView(mShareView);
-        mShareView = v;
-        addView(mShareView);
+        mRightView = v;
+        addView(v);
     }
 
-    private View getShareView() {
+    private View getRightView(int resId, int width, int hight,int margin) {
         ImageView iv = new ImageView(getContext());
-        iv.setImageResource(R.mipmap.share_more);
-        float density = getResources().getDisplayMetrics().density;
-        int wh = (int) (density * 44f);
-        int padding = (int) (density * 12);
-        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        lp.rightMargin=ResUtil.INSTANCE.getDimensionDp2Px(13);
+        iv.setImageResource(resId);
+        FrameLayout.LayoutParams lp = new LayoutParams(width, hight, Gravity.END | Gravity.CENTER_VERTICAL);
+        lp.rightMargin = margin;
         iv.setLayoutParams(lp);
-        iv.setPadding(padding, padding, padding, padding);
         return iv;
     }
 }

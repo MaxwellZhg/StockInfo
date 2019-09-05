@@ -45,7 +45,7 @@ class OASelectRegionFragment :
         //获取需要在其上方显示的控件的位置信息
         val location = IntArray(2)
         top_bar?.getLocationOnScreen(location)
-        top_bar.setShareClickListener{
+        top_bar.setRightClickListener {
             // 显示更多操作
             context?.let {
                 ShareInfoPopupWindow.create(it, object : ShareInfoPopupWindow.CallBack {
@@ -54,9 +54,9 @@ class OASelectRegionFragment :
                     }
 
                     override fun onHelpCenter() {
-                      start(OAHelpCenterFragment.newInstance())
+                        start(OAHelpCenterFragment.newInstance())
                     }
-                }).showAsDropDown(top_bar,  location[0], location[1])
+                }).showAsDropDown(top_bar, location[0], location[1])
             }
         }
     }
