@@ -8,14 +8,12 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
-import com.zhuorui.securities.openaccount.net.request.LiveCodeRequest
 import com.zhuorui.securities.openaccount.net.request.LiveRecognRequest
-import com.zhuorui.securities.openaccount.net.response.LiveCodeResponse
 import com.zhuorui.securities.openaccount.net.response.LiveRecognResponse
 import com.zhuorui.securities.openaccount.ui.view.OAVedioRecordView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel
-import com.zhuorui.securities.openaccount.utils.Base64Enum
-import com.zhuorui.securities.openaccount.utils.FileToBase64Util
+import com.zhuorui.securities.base2app.util.Base64Enum
+import com.zhuorui.securities.base2app.util.FileToBase64Util
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
