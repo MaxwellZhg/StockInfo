@@ -20,7 +20,7 @@ class HeaderInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
 
         val token = LocalAccountConfig.read().getAccountInfo().token
-        val lang = DeviceUtil.getSystemLanguage()
+//        val lang = DeviceUtil.getSystemLanguage()
         val osType = "android"
         val appVersion = BaseApplication.context?.let { AppUtil.getVersionName(it) }
         val osVersion = DeviceUtil.getSystemVersion()
@@ -28,7 +28,7 @@ class HeaderInterceptor : Interceptor {
 
         val builder = chain.request().newBuilder()
             .addHeader("token", if (token.isNullOrEmpty()) "" else token)
-            .addHeader("lang", lang)
+            .addHeader("lang", "zh_CN")
             .addHeader("osType", osType)
             .addHeader("osVersion", osVersion)
             .addHeader("appVersion", appVersion)
