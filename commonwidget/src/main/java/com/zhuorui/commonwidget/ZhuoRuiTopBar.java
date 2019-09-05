@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.base2app.util.StatusBarUtil;
 import me.yokeyword.fragmentation.ISupportActivity;
 
@@ -25,8 +26,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
 
     private View mTitleView;
     private View mBackView;
-    private View mShareView;
-    private Boolean mShare;
+    private View mRightView;
 
     public ZhuoRuiTopBar(Context context) {
         this(context, null);
@@ -40,18 +40,18 @@ public class ZhuoRuiTopBar extends FrameLayout {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZhuoRuiTopBar);
         String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zr_topbarTitle);
-        mShare= a.getBoolean(R.styleable.ZhuoRuiTopBar_zr_shareVisibility,false);
         setBackView(getBackView());
         setTitleView(getTitleView());
         setTitle(mTitle);
-        setShareView(getShareView());
+        int resId = a.getResourceId(R.styleable.ZhuoRuiTopBar_zr_right_icon, -1);
+        if (resId != -1) {
+            int width = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int hight = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int margin = a.getDimensionPixelOffset(R.styleable.ZhuoRuiTopBar_zr_right_icon_margin, 13);
+            setRightView(getRightView(resId, width, hight, margin));
+        }
         setBackgroundColor(Color.parseColor("#211F2A"));
         setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0);
-        if(mShare){
-            mShareView.setVisibility(VISIBLE);
-        }else{
-            mShareView.setVisibility(INVISIBLE);
-        }
         setBackClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +61,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
                 }
             }
         });
+        a.recycle();
     }
 
     public void setTitleView(View v) {
@@ -100,7 +101,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
         float density = getResources().getDisplayMetrics().density;
         int wh = (int) (density * 44f);
         int padding = (int) (density * 12);
-        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.LEFT | Gravity.CENTER_VERTICAL);
+        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.START | Gravity.CENTER_VERTICAL);
         iv.setLayoutParams(lp);
         iv.setPadding(padding, padding, padding, padding);
         return iv;
@@ -110,22 +111,22 @@ public class ZhuoRuiTopBar extends FrameLayout {
         if (mBackView != null) mBackView.setOnClickListener(l);
     }
 
-    public void setShareView(View v) {
-        if (v == null) return;
-        if (mShareView != null) removeView(mShareView);
-        mShareView = v;
-        addView(mShareView);
+    public void setRightClickListener(OnClickListener l) {
+        if (mRightView != null) mRightView.setOnClickListener(l);
     }
 
-    private View getShareView() {
+    public void setRightView(View v) {
+        if (v == null) return;
+        mRightView = v;
+        addView(v);
+    }
+
+    private View getRightView(int resId, int width, int hight, int margin) {
         ImageView iv = new ImageView(getContext());
-        iv.setImageResource(R.mipmap.share_more);
-        float density = getResources().getDisplayMetrics().density;
-        int wh = (int) (density * 44f);
-        int padding = (int) (density * 12);
-        FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        iv.setImageResource(resId);
+        FrameLayout.LayoutParams lp = new LayoutParams(width, hight, Gravity.END | Gravity.CENTER_VERTICAL);
+        lp.setMarginEnd(margin);
         iv.setLayoutParams(lp);
-        iv.setPadding(padding, padding, padding, padding);
         return iv;
     }
 }

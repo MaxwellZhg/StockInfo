@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -21,6 +21,10 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:zr_right_icon="@mipmap/share_more"
+                app:zr_right_icon_margin="13dp"
+                app:zr_right_icon_width="24dp"
+                app:zr_right_icon_hight="20dp"
                 app:zr_topbarTitle="@string/zhuorui_openaccount"/>
 
         <TextView

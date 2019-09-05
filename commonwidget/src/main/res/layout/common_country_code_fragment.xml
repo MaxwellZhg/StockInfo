@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-         xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewmodel"
                   type="com.zhuorui.commonwidget.common.CommonCountryViewModel"/>
     </data>
     <LinearLayout
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 app:zr_topbarTitle="@string/country_disct"
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                     android:layout_alignParentRight="true"
                     app:text_normal_color="@color/color_1A6ED2"
                     app:text_press_color="#000000"
-                    app:text_size="12sp" />
+                    app:text_size="12sp"/>
         </RelativeLayout>
     </LinearLayout>
 </layout>

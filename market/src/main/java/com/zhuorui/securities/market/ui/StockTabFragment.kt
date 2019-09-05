@@ -16,6 +16,7 @@ import com.zhuorui.securities.market.databinding.FragmentStockTabBinding
 import com.zhuorui.securities.market.ui.presenter.StockTabPresenter
 import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
+import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -68,6 +69,7 @@ class StockTabFragment :
         mfragment = fragments
 
         iv_serach.setOnClickListener(this)
+        iv_message.setOnClickListener(this)
         iv_list.setOnClickListener(this)
         tv_select_all.setOnClickListener(this)
         tv_select_hk.setOnClickListener(this)
@@ -148,6 +150,9 @@ class StockTabFragment :
         when (p0?.id) {
             R.id.iv_serach -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
+            }
+            R.id.iv_message -> {
+                (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())
             }
             R.id.iv_list -> {
                 presenter?.toggleStockTab()

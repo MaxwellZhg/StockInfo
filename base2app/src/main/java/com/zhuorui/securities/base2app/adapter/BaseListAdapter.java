@@ -3,12 +3,11 @@ package com.zhuorui.securities.base2app.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.ButterKnife;
+
+import java.util.List;
 
 /**
  * 基础的RecyclerView的Adapter
@@ -45,7 +44,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
-    public void clearItems(){
+    public void clearItems() {
         if (items == null) return;
         this.items.clear();
         notifyDataSetChanged();
@@ -65,7 +64,7 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items == null ? 0 : items.size();
     }
 
     @Override

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterInfoViewModel"/>
+    </data>
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <com.zhuorui.securities.openaccount.widget.HelpCenterTitleBar
+                style="@style/oaDataTipsToptxt"
+                app:zr_topbarTitle="@string/zhuorui_openaccount"
+                app:help_center_cancle_icon="@mipmap/cancle_help_info"
+                app:help_center_cancle_width="19dp"
+                app:help_center_cancle_height="19dp"
+                app:help_center_cancle_margin="55dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>

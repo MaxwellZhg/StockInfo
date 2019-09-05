@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.AndroidBug5497Workaround
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
-import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR

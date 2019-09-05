@@ -97,4 +97,11 @@
     <string name="take_bank_card_photo_tips">请将银行卡置于四角边框内部，避免反光，保持清晰！</string>
     <string name="take_id_card_photo_tips">请将身份证人像面置于四角边框内部，避免反光，保持清晰！</string>
     <string name="str_i_see">我知道了</string>
+    <string name="share_info">消息</string>
+    <string name="help_center">帮助中心</string>
+    <string name="about_question">开户相关问题</string>
+    <string name="openaccount_by_license">哪些证件可以用来开户？</string>
+    <string name="openaccount_by_info">如何更新卓锐证券资料？</string>
+    <string name="openaccount_by_time">账户开通需要多长时间？</string>
+    <string name="openaccount_by_age">开通账户是否年龄限制？</string>
 </resources>
