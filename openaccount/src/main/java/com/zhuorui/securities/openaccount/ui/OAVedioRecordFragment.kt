@@ -24,6 +24,8 @@ class OAVedioRecordFragment :
     OAVedioRecordView, View.OnClickListener {
 
     private var progressDialog: ProgressDialog? = null
+    private var onLazyInited = false
+    private var onStop = false
 
     companion object {
         fun newInstance(): OAVedioRecordFragment {
@@ -49,19 +51,33 @@ class OAVedioRecordFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         presenter?.setVerifyCode()
-        camera_view.init(true)
         btn_record.setOnClickListener(this)
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        camera_view.init(true)
+        onLazyInited = true
     }
 
     override fun onResume() {
         super.onResume()
-        camera_view.onResume()
+        if (onLazyInited && onStop) {
+            onStop = false
+            camera_view.onResume()
+        }
     }
 
     override fun onPause() {
         super.onPause()
         camera_view.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onStop = true
     }
 
     override fun onClick(p0: View?) {

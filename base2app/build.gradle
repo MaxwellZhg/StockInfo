@@ -60,8 +60,7 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.6.0'
     api 'com.squareup.retrofit2:converter-gson:2.6.0'
     // 动态权限申请处理库
-//    api 'com.github.tbruyelle:rxpermissions:0.10.2'
-    api 'com.qw:soulpermission:1.1.6'
+    api 'com.qw:soulpermission:1.2.1_x'
     // 配置读取Lib
     api 'com.github.fernandodev.androidproperties:androidproperties:1.0.0'
     // noinspection GradleDependency v4、v7、v13包
