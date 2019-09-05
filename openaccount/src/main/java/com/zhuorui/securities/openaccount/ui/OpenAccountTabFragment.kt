@@ -49,7 +49,7 @@ open class OpenAccountTabFragment :
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
             }
             true -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(OAVedioRecordFragment.newInstance())
+                (parentFragment as AbsFragment<*, *, *, *>).start(OASelectRegionFragment.newInstance())
             }
         }
     }
