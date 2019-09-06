@@ -8,6 +8,7 @@
                 type="com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel"/>
     </data>
     <LinearLayout
+            android:id="@+id/root_layout"
             android:orientation="vertical"
             android:layout_width="match_parent" android:layout_height="match_parent">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
