@@ -52,4 +52,17 @@
     <string name="new_psw_no_match" tools:ignore="MissingTranslation">*大、小写字母,数字或符号至少含有2种</string>
     <string name="loading" tools:ignore="MissingTranslation">正在加载</string>
     <string name="system_message">消息提醒</string>
+    <string name="my" tools:ignore="MissingTranslation">我的</string>
+    <string name="login_register" tools:ignore="MissingTranslation">登录/注册</string>
+    <string name="speed_open_account" tools:ignore="MissingTranslation">极速开户</string>
+    <string name="stock_model" tools:ignore="MissingTranslation">模拟炒股</string>
+    <string name="change_color" tools:ignore="MissingTranslation">涨跌颜色</string>
+    <string name="setting_language" tools:ignore="MissingTranslation">设置语言</string>
+    <string name="account_safe" tools:ignore="MissingTranslation">账户安全</string>
+    <string name="help_center" tools:ignore="MissingTranslation">帮助中心</string>
+    <string name="about_zr" tools:ignore="MissingTranslation">关于卓锐</string>
+    <string name="login_out" tools:ignore="MissingTranslation">退出登录</string>
+    <string name="change_color_tips_cn" tools:ignore="MissingTranslation">红涨绿跌</string>
+    <string name="change_color_tips_en" tools:ignore="MissingTranslation">绿涨红跌</string>
+    <string name="auto" tools:ignore="MissingTranslation">自动</string>
 </resources>
