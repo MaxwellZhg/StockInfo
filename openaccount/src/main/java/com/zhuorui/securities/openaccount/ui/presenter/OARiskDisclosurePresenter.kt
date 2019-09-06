@@ -47,9 +47,23 @@ class OARiskDisclosurePresenter : AbsNetPresenter<OARiskDisclosureView, OARiskDi
         }
     }
 
+    fun stopPlayingRisk() {
+        if (mediaPlayer != null && mediaPlayer?.isPlaying!!) {
+            viewModel?.playingRisk?.value = false
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+
+        }
+    }
+
     fun subRiskDisclosure() {
-        val request = SubRiskDisclosureRequest(OpenInfoManager.getInstance()?.info?.id.toString(),transactions.createTransaction())
-        Cache[IOpenAccountNet::class.java]?.subRiskDisclosure(request)?.enqueue(Network.IHCallBack<SubRiskDisclosureResponse>(request))
+        val request = SubRiskDisclosureRequest(
+            OpenInfoManager.getInstance()?.info?.id.toString(),
+            transactions.createTransaction()
+        )
+        Cache[IOpenAccountNet::class.java]?.subRiskDisclosure(request)
+            ?.enqueue(Network.IHCallBack<SubRiskDisclosureResponse>(request))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
