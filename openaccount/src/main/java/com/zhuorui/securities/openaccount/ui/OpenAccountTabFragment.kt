@@ -53,7 +53,7 @@ open class OpenAccountTabFragment :
             true -> {
                 val f = OpenInfoManager.getInstance()?.getNextFragment()
                 if (f != null)
-                    (parentFragment as AbsFragment<*, *, *, *>).start(f)
+                    (parentFragment as AbsFragment<*, *, *, *>).start(OAVedioRecordFragment.newInstance())
             }
         }
     }

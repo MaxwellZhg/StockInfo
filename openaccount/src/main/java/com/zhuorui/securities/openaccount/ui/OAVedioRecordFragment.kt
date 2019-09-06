@@ -60,6 +60,8 @@ class OAVedioRecordFragment :
         super.onLazyInitView(savedInstanceState)
         camera_view.init(true)
         onLazyInited = true
+        progressDialog = context?.let { ProgressDialog(it) }
+        progressDialog?.setCanceledOnTouchOutside(false)
     }
 
     override fun onResume() {
@@ -101,17 +103,15 @@ class OAVedioRecordFragment :
     }
 
     override fun showUploading() {
-        context?.let {
-            progressDialog = ProgressDialog(it)
-            progressDialog?.setCanceledOnTouchOutside(false)
-            progressDialog?.show()
-        }
+        progressDialog?.show()
     }
 
     override fun hideUploading() {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
-        }
+        progressDialog?.dismiss()
+    }
+
+    override fun setProgressText(msg: String?) {
+        progressDialog?.setMessage(msg)
     }
 
     override fun uploadComplete(isSuccessful: Boolean) {

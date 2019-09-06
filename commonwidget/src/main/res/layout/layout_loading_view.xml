@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:gravity="center"
+              android:layout_gravity="center"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
 
     <ImageView
             android:id="@+id/net_iv_loading"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@mipmap/loading"/>
 
     <androidx.appcompat.widget.AppCompatTextView

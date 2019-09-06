@@ -17,9 +17,7 @@
 
         <com.zhuorui.securities.openaccount.widget.CameraView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+                android:layout_height="match_parent"
                 android:id="@+id/camera_view"/>
 
         <com.zhuorui.securities.openaccount.widget.MaskView
@@ -44,9 +42,9 @@
                 android:textSize="12sp"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="175dp"
-                app:layout_constraintEnd_toEndOf="@+id/camera_view"
-                app:layout_constraintBottom_toBottomOf="@+id/camera_view"
-                app:layout_constraintTop_toTopOf="@+id/camera_view"/>
+                app:layout_constraintEnd_toEndOf="@+id/mask_view"
+                app:layout_constraintBottom_toBottomOf="@+id/mask_view"
+                app:layout_constraintTop_toTopOf="@+id/mask_view"/>
 
         <View
                 android:id="@+id/bottom_bar"
