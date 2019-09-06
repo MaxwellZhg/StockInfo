@@ -104,11 +104,12 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 if (intervalTime != null && !intervalTime?.isDisposed!!) {
-                    if (it >= 100) {
+                    val p = it + 1
+                    if (p >= 100) {
                         view?.setProgressText(ResUtil.getString(R.string.str_identifying))
                     } else {
                         val txtUpload = ResUtil.getString(R.string.str_upload)
-                        view?.setProgressText("$txtUpload$it%")
+                        view?.setProgressText("$txtUpload$p%")
                     }
                 }
             }
