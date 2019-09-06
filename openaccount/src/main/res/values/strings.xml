@@ -120,4 +120,7 @@
     <string name="age_range_tips">您好，年满18周岁至21周岁的客户，可以开立即现\n金账户；年龄21周岁以上的客户，可开立保证金账\n户。（暂时没有年龄高上限的的要求）</string>
     <string name="resolved">已解决</string>
     <string name="unresolved">未解决</string>
+    <string name="str_encrypting_video">正在加密视频</string>
+    <string name="str_identifying">正在识别</string>
+    <string name="str_upload">上传</string>
 </resources>

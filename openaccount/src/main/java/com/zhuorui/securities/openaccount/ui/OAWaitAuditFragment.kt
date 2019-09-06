@@ -49,9 +49,21 @@ class OAWaitAuditFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         return_to_main.setOnClickListener(this)
+        top_bar.setBackClickListener {
+           back()
+        }
     }
 
     override fun onClick(p0: View?) {
+        back()
+    }
+
+    override fun onBackPressedSupport(): Boolean {
+        back()
+        return true
+    }
+
+    fun back(){
         // 返回首页
         val homeFragment = (activity as AbsActivity).supportFragmentManager.fragments[0] as AbsFragment<*, *, *, *>
         popTo(homeFragment::class.java, false)

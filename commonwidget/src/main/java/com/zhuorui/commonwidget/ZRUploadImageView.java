@@ -183,7 +183,7 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
                 vMask.setBackgroundResource(MASK_BG_NORMAL);
                 vImg.setImageDrawable(mPlaceholder);
                 vLoading.setVisibility(GONE);
-                vLoading.stopAnimation();
+                vLoading.stop();
                 vWatermark.setVisibility(GONE);
                 vRBtn.setVisibility(GONE);
                 break;
@@ -191,7 +191,7 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
                 vMask.setVisibility(GONE);
                 vLoading.setVisibility(VISIBLE);
                 vLoading.setMessage(ResUtil.INSTANCE.getString(R.string.upload_waiting));
-                vLoading.startAnimation();
+                vLoading.start();
                 vWatermark.setVisibility(GONE);
                 vRBtn.setVisibility(GONE);
                 break;
@@ -200,7 +200,7 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
                 vMask.setText("");
                 vMask.setBackgroundResource(MASK_BG_SUCCESS);
                 vLoading.setVisibility(GONE);
-                vLoading.stopAnimation();
+                vLoading.stop();
                 vWatermark.setVisibility(VISIBLE);
                 vRBtn.setVisibility(VISIBLE);
                 vRBtn.setImageResource(R.mipmap.ic_select_bule);
@@ -210,7 +210,7 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
                 vMask.setText(msg);
                 vMask.setBackgroundResource(MASK_BG_ERROR);
                 vLoading.setVisibility(GONE);
-                vLoading.stopAnimation();
+                vLoading.stop();
                 vWatermark.setVisibility(GONE);
                 vRBtn.setVisibility(VISIBLE);
                 vRBtn.setImageResource(R.mipmap.ic_delete_red);

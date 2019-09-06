@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import com.zhuorui.commonwidget.R
+import com.zhuorui.commonwidget.ZRLoadingView
 
 /**
  * Created by Maxwell.
@@ -14,15 +15,15 @@ import com.zhuorui.commonwidget.R
  * Desc:
  */
 
-class ProgressDialog(context: Context): Dialog(context, R.style.loading_dialog_style){
+class ProgressDialog(context: Context) : Dialog(context, R.style.loading_dialog_style) {
 
+    var loadingView: ZRLoadingView? = null
     //dismiss回调
     private var dismissCallback: () -> Unit = {}
 
     init {
         setContentView(R.layout.layout_dialog_loading)
-        //旋转动画
-        startAnimation()
+        loadingView = findViewById(R.id.logind)
         // 设置居中
         window!!.attributes.gravity = Gravity.CENTER
         val lp = window!!.attributes
@@ -38,28 +39,23 @@ class ProgressDialog(context: Context): Dialog(context, R.style.loading_dialog_s
     override fun show() {
         super.show()
         // 启动动画
-        startAnimation()
+        loadingView?.start()
     }
 
-    override fun onStop() {
-        super.onStop()
-        //  停止动画
-        findViewById<View>(R.id.net_iv_loading).clearAnimation()
+    override fun dismiss() {
+        if (isShowing)
+            super.dismiss()
+        loadingView?.stop()
+    }
+
+    fun setMessage(msg: String?) {
+        loadingView?.setMessage(msg)
     }
 
     /**
      * 销毁
      */
-    fun setDismissCallback(callback: () -> Unit){
+    fun setDismissCallback(callback: () -> Unit) {
         dismissCallback = callback
-    }
-
-    /**
-     * 动画
-     */
-
-    private fun startAnimation() {
-        val rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
-        findViewById<View>(R.id.net_iv_loading).startAnimation(rotate)
     }
 }

@@ -15,4 +15,6 @@ interface OAVedioRecordView : AbsView {
     fun hideUploading()
 
     fun uploadComplete(isSuccessful: Boolean)
+
+    fun setProgressText(msg: String?)
 }
