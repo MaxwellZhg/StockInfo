@@ -1,10 +1,13 @@
 package com.zhuorui.securities.openaccount.manager
 
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import com.zhuorui.securities.base2app.infra.AbsConfig
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
 import com.zhuorui.securities.openaccount.net.response.*
 import com.zhuorui.securities.openaccount.ui.*
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  * Created by Maxwell.
@@ -56,20 +59,22 @@ open class OpenInfoManager {
     /**
      * 获取下一步步骤页面
      * */
-    fun getNextFragment(): Fragment? {
-        var fragment: Fragment? = null
-        when (info?.openStatus) {
+    fun getNextFragment(): ISupportFragment? {
+        return when (info?.openStatus) {
             //未开户
             0 -> {
-                fragment = OASelectRegionFragment.newInstance()
+                OASelectRegionFragment.newInstance()
             }
             //已做身份证ocr
             10 -> {
-                fragment = OAConfirmDocumentsFragment.newInstance()
+                if (TextUtils.isEmpty(info?.cardFrontPhoto) || TextUtils.isEmpty(info?.cardBackPhoto))
+                    OASelectRegionFragment.newInstance()
+                else
+                    OAConfirmDocumentsFragment.newInstance()
             }
             //上传身份信息完成
             11 -> {
-                fragment = OABiopsyFragment.newInstance()
+                OABiopsyFragment.newInstance()
             }
             //人脸核身通过
             12 -> {
@@ -92,15 +97,17 @@ open class OpenInfoManager {
             }
             //审核不通过
             22 -> {
-
+                null
             }
             //开户完成
             31 -> {
-
+                null
+            }
+            else -> {
+                null
             }
         }
 
-        return fragment
     }
 
     fun destroy() {

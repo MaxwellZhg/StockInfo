@@ -8,8 +8,8 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.GetJsonDataUtil
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
@@ -19,12 +19,13 @@ import com.zhuorui.securities.openaccount.net.response.BankCardVerificationRespo
 import com.zhuorui.securities.openaccount.net.response.BankOrcResponse
 import com.zhuorui.securities.openaccount.ui.view.OATakeBankCradPhotoView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OATakeBankCradPhotoViewModel
-import com.zhuorui.securities.openaccount.utils.Base64Enum
-import com.zhuorui.securities.openaccount.utils.FileToBase64Util
+import com.zhuorui.securities.base2app.util.Base64Enum
+import com.zhuorui.securities.base2app.util.FileToBase64Util
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.json.JSONArray
 
 /**
  *    author : PengXianglin
@@ -34,6 +35,11 @@ import io.reactivex.schedulers.Schedulers
  */
 class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OATakeBankCradPhotoViewModel>() {
 
+    init {
+        super.init()
+    }
+
+    var bankList: MutableList<String>? = null
 
     /**
      * 银行卡OCR识别
@@ -56,7 +62,7 @@ class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OA
      */
     fun bankOcr(bitmap: Bitmap?) {
         Observable.create(ObservableOnSubscribe<String> { emitter ->
-            emitter.onNext(FileToBase64Util.bitMapBase64String(Base64Enum.PNG, bitmap))
+            emitter.onNext(FileToBase64Util.bitmapBase64String(Base64Enum.PNG, bitmap))
             emitter.onComplete()
         })
             .flatMap { t -> getBankOcrObservable(t) }
@@ -103,7 +109,7 @@ class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OA
      * 银行卡三要素认证+一类卡认证
      */
     fun bankCardVerification() {
-        val bankCardNo = view?.getBankCardNo()?.replace(" ","")
+        val bankCardNo = view?.getBankCardNo()
         val bankName = view?.getBankName()
         if (!checkData(bankCardNo, bankName)) return
         val request = BankCardVerificationRequest(
@@ -146,5 +152,20 @@ class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OA
             view?.hideUpLoading()
             view?.showToast(response.msg)
         }
+    }
+
+    fun initBankList() {
+        val jsonData = GetJsonDataUtil().getJson(view?.getContext(), "banks.json")//获取assets目录下的json文件数据
+        val arr = JSONArray(jsonData)
+        bankList = mutableListOf()
+        for (i in 0 until arr.length()) {
+            val obj = arr.getJSONObject(i)
+            bankList?.add(obj.getString("name"))
+        }
+
+    }
+
+    fun getBankData(): MutableList<String>? {
+        return bankList
     }
 }

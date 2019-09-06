@@ -66,6 +66,12 @@
             <enum name="HORIZONTAL" value="0"/>
             <enum name="VERTICAL" value="1"/>
         </attr>
+        <attr name="zr_teditType" format="enum">
+            <enum name="ID_CARD" value="1"/>
+            <enum name="BANK_CARD" value="2"/>
+            <enum name="EMAIL" value="3"/>
+            <enum name="FORMAT_NUMBER" value="4"/>
+        </attr>
         <attr name="zr_iconWidth"/>
         <attr name="zr_iconHight"/>
         <attr name="zr_iconSrc"/>

@@ -1,6 +1,8 @@
 package com.zhuorui.securities.openaccount.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.openaccount.adapter.HelpCenterInfoAdapter
 
 /**
  * Created by Maxwell.
@@ -9,5 +11,5 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class OAHelpCenterInfoViewModel :ViewModel(){
-
+    var adapter: MutableLiveData<HelpCenterInfoAdapter> = MutableLiveData()
 }

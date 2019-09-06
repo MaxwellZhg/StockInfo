@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import com.zhuorui.commonwidget.impl.IImageUploader
 import com.zhuorui.commonwidget.impl.OnImageUploaderListener
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
@@ -13,8 +12,8 @@ import com.zhuorui.securities.openaccount.net.request.IdCardOrcRequest
 import com.zhuorui.securities.openaccount.net.response.IdCardOrcResponse
 import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
-import com.zhuorui.securities.openaccount.utils.Base64Enum
-import com.zhuorui.securities.openaccount.utils.FileToBase64Util
+import com.zhuorui.securities.base2app.util.Base64Enum
+import com.zhuorui.securities.base2app.util.FileToBase64Util
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -64,7 +63,7 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
 
             override fun upLoad(bitmap: Bitmap?) {
                 Observable.create(ObservableOnSubscribe<String> { emitter ->
-                    emitter.onNext(FileToBase64Util.bitMapBase64String(Base64Enum.PNG, bitmap))
+                    emitter.onNext(FileToBase64Util.bitmapBase64String(Base64Enum.PNG, bitmap))
                     emitter.onComplete()
                 }).flatMap { t ->
                     getIdCardOcrObservable(t)

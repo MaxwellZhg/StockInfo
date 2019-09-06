@@ -3,10 +3,9 @@ package com.zhuorui.commonwidget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.text.*;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -30,11 +29,9 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     private TextView vTitle;
     public EditText vEt;
     public ImageView vRightIcon;
-    //    private ImageView vRImg;
     private int mOrientation = -1;
-    private Drawable mRightBtnDraw;
     private boolean mTitleBaseline = false;
-
+    private int mEditType = 0;
 
     public ZRTitleEditText(Context context) {
         this(context, null);
@@ -51,6 +48,7 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
         String title = a.getString(R.styleable.ZRTitleEditText_zr_teditTitle);
         String text = a.getString(R.styleable.ZRTitleEditText_zr_teditText);
         String hiht = a.getString(R.styleable.ZRTitleEditText_zr_teditHint);
+        mEditType = a.getInt(R.styleable.ZRTitleEditText_zr_teditType, mEditType);
         mTitleBaseline = a.getBoolean(R.styleable.ZRTitleTextView_zr_titleWidthBaseline, mTitleBaseline);
         if (TextUtils.isEmpty(hiht)) {
             hiht = "请输入" + title;
@@ -122,7 +120,11 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
     }
 
     public String getText() {
-        return vEt.getText().toString();
+        String str = vEt.getText().toString();
+        if (mEditType != 0 && !TextUtils.isEmpty(str)) {
+            str = str.replace(" ", "");
+        }
+        return str;
     }
 
     public void setTitle(String title) {
@@ -139,13 +141,39 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
         String hint = vEt != null ? vEt.getHint().toString() : "";
         vTitle = findViewById(R.id.tv_title);
         vEt = findViewById(R.id.et_edittext);
-//        vRImg = findViewById(R.id.iv_image);
         vEt.setOnFocusChangeListener(this);
         vEt.addTextChangedListener(this);
         vEt.setText(title);
         vEt.setHint(hint);
         vEt.setText(text);
         vTitle.setText(title);
+        setEditTextType(mEditType);
+    }
+
+    private void setEditTextType(int mEditType) {
+        switch (mEditType) {
+            case 1:
+                vEt.setMaxLines(1);
+                vEt.setInputType(InputType.TYPE_TEXT_VARIATION_PHONETIC);
+                vEt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(22)});
+                CardTextWatcher.bind(vEt, 22);
+                break;
+            case 2:
+                vEt.setMaxLines(1);
+                vEt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+                vEt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
+                CardTextWatcher.bind(vEt, 26);
+                break;
+            case 3:
+                vEt.setMaxLines(1);
+                vEt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                break;
+            case 4:
+                CardTextWatcher.bind(vEt);
+                vEt.setMaxLines(1);
+                break;
+
+        }
     }
 
     @Override
@@ -155,16 +183,13 @@ public class ZRTitleEditText extends FrameLayout implements View.OnFocusChangeLi
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
-
     }
 }

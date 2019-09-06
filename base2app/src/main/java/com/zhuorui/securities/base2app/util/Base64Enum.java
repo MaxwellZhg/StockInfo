@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.utils;
+package com.zhuorui.securities.base2app.util;
 
 /**
  * base64 类型

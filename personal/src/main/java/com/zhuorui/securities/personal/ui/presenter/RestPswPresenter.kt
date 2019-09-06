@@ -35,24 +35,24 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         viewModel?.strnew?.set(strnew)
         viewModel?.strensure?.set(strensure)
     }
-    fun detailtips(strnewpsw:String,strensurepsw:String){
+    fun detailtips(strnewpsw:String,strensurepsw:String):Boolean{
         if (strnewpsw == "") {
             viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
-            return
+            return false
         }else{
             if (strnewpsw.length<6){
                 viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
                 if(strensurepsw != ""){
                     if(strnewpsw==strensurepsw){
                         viewModel?.strensure?.set(ResUtil.getString(R.string.input_new_pws_mix))
-                        return
+                        return false
                     }else{
                         viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-                        return
+                        return false
                     }
                 }
             }else {
-                val pattern = "^(?![A-Z]+$)(?![a-z]+$)(?!\\d+$)(?![\\W_]+$)\\S{6,20}$"
+                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(strnewpsw)
                 if (!matcher.find()) {
@@ -60,10 +60,10 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
                     if(strensurepsw != ""){
                         if(strnewpsw==strensurepsw){
                             viewModel?.strensure?.set(ResUtil.getString(R.string.new_psw_no_match))
-                            return
+                            return false
                         }else{
                             viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-                            return
+                            return false
                         }
                     }
                 }
@@ -71,26 +71,27 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         }
         if (strensurepsw == "") {
             viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-            return
+            return false
         }else{
             if(strnewpsw==strensurepsw){
-                val pattern = "^(?![A-Z]+$)(?![a-z]+$)(?!\\d+$)(?![\\W_]+$)\\S{6,20}$"
+                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(strnewpsw)
                 if (!matcher.find()) {
                     viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
                     viewModel?.strensure?.set(ResUtil.getString(R.string.new_psw_no_match))
-                    return
+                    return false
                 }else {
                     viewModel?.strnew?.set("")
                     viewModel?.strensure?.set("")
-                    return
+                    return true
                 }
             }else{
                 viewModel?.strnew?.set("")
                 viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
+                return  false
             }
-            return
+            return false
         }
     }
     fun requestRestLoginPsw(phone: kotlin.String?,newpsw:kotlin.String,code: kotlin.String?) {

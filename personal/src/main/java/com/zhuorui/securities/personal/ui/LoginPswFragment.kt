@@ -73,16 +73,10 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                pop()
            }
            R.id.tv_btn_login->{
-               if (strphone == "") {
-                   ToastUtil.instance.toast(R.string.phone_tips)
-                   return
-               }
-               if (password == "") {
-                   ToastUtil.instance.toast(R.string.input_psw_tips)
-                   return
-               }
                //fe008700f25cb28940ca8ed91b23b354
-               presenter?.requestLoginPwd(strphone,Md5Util.getMd5Str(password),"0086")
+               if(presenter?.detailTips(strphone,password)!!) {
+                   presenter?.requestLoginPwd(strphone, Md5Util.getMd5Str(password), "0086")
+               }
            }
            R.id.tv_forget_psw->{
                startWithPop(ForgetPswFragment())
@@ -123,6 +117,20 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                 LogUtils.e(str)
                 tv_contry.text=str
                 tv_areaphone_tips.text=code
+            }
+        }
+    }
+
+    override fun showTipsInfo(type: Int) {
+        when(type){
+            1->{
+                ToastUtil.instance.toast(R.string.phone_tips)
+            }
+            2->{
+                ToastUtil.instance.toast(R.string.input_psw_tips)
+            }
+            3->{
+                ToastUtil.instance.toast(R.string.new_psw_no_match)
             }
         }
     }
