@@ -1,13 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel"/>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel"/>
     </data>
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@color/color_f0f0f0">
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:zr_backview_is_visibity="false"
+                app:zr_right_icon_width="19dp"
+                app:zr_right_icon_hight="20dp"
+                app:zr_right_icon_margin="13dp"
+                app:zr_right_icon="@mipmap/icon_my_info"
+                app:zr_topbarTitle="@string/my">
+        </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="100dp"
+                      android:gravity="center_vertical"
+                      android:background="@color/color_FFFFFFFF"
+                      android:orientation="horizontal">
+            <ImageView android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:layout_marginLeft="13dp"
+                       android:src="@mipmap/icon_picture"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/login_register"
+                      android:textStyle="bold"
+                      android:layout_marginLeft="11dp"
+                      android:textColor="@color/color_232323"
+                      android:textSize="20sp"/>
+        </LinearLayout>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/speed_open_account"
+                android:layout_marginTop="10dp"
+                app:zr_cellbar_left_icon_width="20dp"
+                app:zr_cellbar_left_icon_height="17dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_left_icon="@mipmap/speed_open_account">
 
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/stock_model"
+                android:layout_marginTop="1dp"
+                app:zr_cellbar_left_icon_width="17dp"
+                app:zr_cellbar_left_icon_height="16dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_stock_model">
+
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/change_color"
+                app:zr_cellbar_right_tips="@string/change_color_tips_cn"
+                android:layout_marginTop="1dp"
+                app:zr_cellbar_left_icon_width="17dp"
+                app:zr_cellbar_left_icon_height="12dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_right_tips_margin="34dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_change_color">
+
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/setting_language"
+                app:zr_cellbar_right_tips="@string/auto"
+                android:layout_marginTop="1dp"
+                app:zr_cellbar_left_icon_width="17dp"
+                app:zr_cellbar_left_icon_height="17dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_right_tips_margin="34dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_setting_language">
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/account_safe"
+                android:layout_marginTop="1dp"
+                app:zr_cellbar_left_icon_width="17dp"
+                app:zr_cellbar_left_icon_height="20dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_account_safety">
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/help_center"
+                android:layout_marginTop="10dp"
+                app:zr_cellbar_left_icon_width="18dp"
+                app:zr_cellbar_left_icon_height="17dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_help_center">
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/about_zr"
+                android:layout_marginTop="1dp"
+                app:zr_cellbar_left_icon_width="20dp"
+                app:zr_cellbar_left_icon_height="20dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_about_zr">
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="50dp"
+                      android:layout_marginTop="10dp"
+                      android:gravity="center"
+                      android:background="@color/color_FFFFFFFF">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textSize="16sp"
+                      android:textColor="@color/color_232323"
+                      android:textStyle="bold"
+                      android:text="@string/login_out"/>
+        </LinearLayout>
     </LinearLayout>
 </layout>

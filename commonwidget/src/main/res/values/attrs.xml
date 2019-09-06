@@ -40,6 +40,7 @@
 
     <declare-styleable name="ZhuoRuiTopBar">
         <attr name="zr_topbarTitle" format="string|reference"/>
+        <attr name="zr_backview_is_visibity" format="boolean"/>
         <attr name="zr_right_icon" format="reference"/>
         <attr name="zr_right_icon_width" format="dimension"/>
         <attr name="zr_right_icon_hight" format="dimension"/>
@@ -140,5 +141,20 @@
             <enum name="right" value="3"/>
             <enum name="bottom" value="4"/>
         </attr>
+    </declare-styleable>
+
+    <!--ZRCellBar-->
+    <declare-styleable name="ZRCellBar">
+        <attr name="zr_cellbarTitle" format="string|reference"/>
+        <attr name="zr_cellbar_title_margin" format="dimension"/>
+        <attr name="zr_cellbar_left_icon" format="reference"/>
+        <attr name="zr_cellbar_left_icon_width" format="dimension"/>
+        <attr name="zr_cellbar_left_icon_height" format="dimension"/>
+        <attr name="zr_cellbar_left_icon_margin" format="dimension"/>
+        <attr name="zr_cellbar_righttips_icon_width" format="dimension"/>
+        <attr name="zr_cellbar_righttips_icon_height" format="dimension"/>
+        <attr name="zr_cellbar_righttips_icon_margin" format="dimension"/>
+        <attr name="zr_cellbar_right_tips" format="string|reference"/>
+        <attr name="zr_cellbar_right_tips_margin" format="dimension"/>
     </declare-styleable>
 </resources>
