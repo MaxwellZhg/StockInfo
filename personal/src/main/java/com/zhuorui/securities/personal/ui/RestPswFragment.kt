@@ -90,8 +90,9 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
                pop()
            }
            R.id.tv_btn_rest->{
-               presenter?.detailtips(strnewpsw,strensurepsw)
-               presenter?.requestRestLoginPsw(phone,Md5Util.getMd5Str(strensurepsw),code)
+               if(presenter?.detailtips(strnewpsw,strensurepsw)!!) {
+                   presenter?.requestRestLoginPsw(phone, Md5Util.getMd5Str(strensurepsw), code)
+               }
 
            }
            R.id.tv_phone_code_login->{

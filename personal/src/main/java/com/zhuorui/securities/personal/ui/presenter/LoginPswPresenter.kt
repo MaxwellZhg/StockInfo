@@ -10,6 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
@@ -20,6 +21,7 @@ import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
+import java.util.regex.Pattern
 
 /**
  * Created by Maxwell.
@@ -102,6 +104,27 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
                 }
             }
         })
+    }
+
+    fun detailTips(str:String,pass:String):Boolean{
+        val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
+        //用正则式匹配文本获取匹配器
+        val matcher = Pattern.compile(pattern).matcher(pass)
+        if (str == "") {
+            view?.showTipsInfo(1)
+            return false
+        }
+        if (pass == "") {
+            view?.showTipsInfo(2)
+            return false
+        }
+        if(!matcher.find()){
+            view?.showTipsInfo(3)
+            return  false
+        }
+
+        return true
+
     }
 
 

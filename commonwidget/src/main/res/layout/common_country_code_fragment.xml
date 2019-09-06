@@ -10,6 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:id="@+id/top_bar"
                 app:zr_topbarTitle="@string/country_disct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

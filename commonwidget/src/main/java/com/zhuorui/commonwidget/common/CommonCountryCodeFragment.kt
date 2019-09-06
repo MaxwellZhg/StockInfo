@@ -99,6 +99,19 @@ class CommonCountryCodeFragment :
             tv_detele.text = ResUtil.getString(R.string.cancle)
         }
         tv_detele.setOnClickListener (this)
+        top_bar.setBackClickListener{
+            var b = Bundle()
+            if (type == CommonEnum.SINGLE || type == CommonEnum.ALL) {
+                b.putString("str", adapter?.info)
+                setFragmentResult(ISupportFragment.RESULT_OK, b)
+            } else {
+                b.putString("str", jsonBean[0].cn)
+                b.putString("code", jsonBean[0].number)
+                setFragmentResult(ISupportFragment.RESULT_OK, b)
+
+            }
+            pop()
+        }
     }
 
     @SuppressLint("HandlerLeak")

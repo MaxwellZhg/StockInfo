@@ -16,8 +16,10 @@ import com.zhuorui.securities.openaccount.databinding.FragmentOaSelectRegionBind
 import com.zhuorui.securities.openaccount.ui.presenter.OASelectRegionPresenter
 import com.zhuorui.securities.openaccount.ui.view.OASeletRegionView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OASelectRegonViewModel
+import com.zhuorui.securities.personal.ui.MessageFragment
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import kotlinx.android.synthetic.main.fragment_oa_select_region.*
+import java.text.MessageFormat
 
 /**
  *    author : liuwei
@@ -50,7 +52,7 @@ class OASelectRegionFragment :
             context?.let {
                 ShareInfoPopupWindow.create(it, object : ShareInfoPopupWindow.CallBack {
                     override fun onInfoMation() {
-
+                        start(MessageFragment.newInstance())
                     }
 
                     override fun onHelpCenter() {
