@@ -28,8 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by pengxianglin on 2017/11/16.
@@ -40,6 +39,7 @@ public class CameraHelper implements SurfaceHolder.Callback {
     private MediaPlayer mediaPlayer;
     private CamcorderProfile profile;
     private Camera mCamera;
+    private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
     private File targetFile;
     private int previewWidth = 1280, previewHeight = 720;
@@ -87,6 +87,7 @@ public class CameraHelper implements SurfaceHolder.Callback {
     }
 
     public void setSurfaceView(SurfaceView surfaceView) {
+        mSurfaceView = surfaceView;
         mSurfaceHolder = surfaceView.getHolder();
         mSurfaceHolder.setFixedSize(previewWidth, previewHeight);
         mSurfaceHolder.addCallback(this);
@@ -345,7 +346,7 @@ public class CameraHelper implements SurfaceHolder.Callback {
                         public void subscribe(ObservableEmitter<Object> emitter) {
                             byte[] data = getTargetFileByteArray();
                             // 删除文件
-                            deleteTargetFile();
+//                            deleteTargetFile();
                             emitter.onNext(data);
                         }
                     }).subscribeOn(Schedulers.io())
@@ -397,6 +398,41 @@ public class CameraHelper implements SurfaceHolder.Callback {
         return buffer;
     }
 
+    private Comparator<Camera.Size> sizeComparator = new Comparator<Camera.Size>() {
+        @Override
+        public int compare(Camera.Size lhs, Camera.Size rhs) {
+            return Long.signum((long) lhs.width * lhs.height - (long) rhs.width * rhs.height);
+        }
+    };
+
+    private Camera.Size getOptimalSize(int surfaceViewWidth, int surfaceViewheight, List<Camera.Size> sizes) {
+        Camera.Size pictureSize = sizes.get(0);
+
+        List<Camera.Size> candidates = new ArrayList<>();
+
+        for (Camera.Size size : sizes) {
+            if (size.width >= surfaceViewWidth && size.height >= surfaceViewheight && size.width * surfaceViewheight == size.height * surfaceViewWidth) {
+                // 比例相同
+                candidates.add(size);
+            } else if (size.height >= surfaceViewWidth && size.width >= surfaceViewheight && size.width * surfaceViewWidth == size.height * surfaceViewheight) {
+                // 反比例
+                candidates.add(size);
+            }
+        }
+        if (!candidates.isEmpty()) {
+            return Collections.min(candidates, sizeComparator);
+        }
+
+        for (Camera.Size size : sizes) {
+            if (size.width > surfaceViewWidth && size.height > surfaceViewheight) {
+                return size;
+            }
+        }
+
+        return pictureSize;
+    }
+
+
     /**
      * 开始预览
      *
@@ -406,6 +442,10 @@ public class CameraHelper implements SurfaceHolder.Callback {
         if (mCamera == null) {
             //根据用户的切换选择摄像头
             mCamera = Camera.open(cameraPosition);
+            Camera.Parameters parameters = mCamera.getParameters();
+            Camera.Size size = getOptimalSize(mSurfaceView.getMeasuredWidth(), mSurfaceView.getMeasuredHeight(), parameters.getSupportedPreviewSizes());
+            previewWidth = size.width;
+            previewHeight = size.height;
         }
         if (mCamera != null) {
             Camera.CameraInfo info = new Camera.CameraInfo();
@@ -434,7 +474,7 @@ public class CameraHelper implements SurfaceHolder.Callback {
                 profile.videoFrameWidth = previewWidth;
                 profile.videoFrameHeight = previewHeight;
                 // 这样设置 1080p的视频 大小在5M , 可根据自己需求调节
-                profile.videoBitRate = 2 * previewWidth * previewHeight;
+                profile.videoBitRate = (int) (2 * (previewWidth / 1.5) * (previewHeight / 1.5));
                 List<String> focusModes = parameters.getSupportedFocusModes();
                 if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
                     //支持连续自动对焦模式
