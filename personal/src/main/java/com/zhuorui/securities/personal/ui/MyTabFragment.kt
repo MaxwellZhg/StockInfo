@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.personal.BR
@@ -68,22 +69,16 @@ class MyTabFragment :
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
     }
-
-/*    override fun onClick(p0: View?) {
-        when (p0) {
-            open_account -> {
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.open_account -> {
                 // 极速开户
                 RxBus.getDefault().post(JumpToOpenAccountEvent())
             }
-            simulation_trading_stocks -> {
+            R.id.simulation_trading_stocks -> {
                 // 模拟炒股
                 RxBus.getDefault().post(JumpToSimulationTradingStocksEvent())
             }
-        }
-    }*/
-
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
             R.id.help_center_bar -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(OAHelpCenterFragment.newInstance())
             }
