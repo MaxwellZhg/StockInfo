@@ -3,6 +3,7 @@ package com.zhuorui.securities.openaccount.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.AndroidBug5497Workaround
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
@@ -15,7 +16,8 @@ import com.zhuorui.securities.openaccount.ui.presenter.OAPersonalInformationPres
 import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel
 import kotlinx.android.synthetic.main.fragment_oa_personal_information.*
-import me.yokeyword.fragmentation.ISupportActivity
+import kotlinx.android.synthetic.main.fragment_oa_personal_information.btn_next
+import kotlinx.android.synthetic.main.fragment_oa_personal_information.btn_per
 import me.yokeyword.fragmentation.ISupportFragment
 
 /**
@@ -29,6 +31,7 @@ class OAPersonalInformationFragment :
     OAPersonalInformationView, View.OnClickListener {
 
     var mOptionsPicker: OptionsPickerDialog<String>? = null
+    var mAndroidBug5497Workaround: AndroidBug5497Workaround? = null
 
     companion object {
         fun newInstance(): OAPersonalInformationFragment {
@@ -54,6 +57,8 @@ class OAPersonalInformationFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         mOptionsPicker = context?.let { OptionsPickerDialog(it) }
+        mAndroidBug5497Workaround = AndroidBug5497Workaround(root_layout)
+        mAndroidBug5497Workaround?.addOnGlobalLayoutListener()
         tv_employment_status.setOnClickListener(this)
         tv_tax.setOnClickListener(this)
         tv_tax_paying.setOnClickListener(this)
@@ -148,6 +153,11 @@ class OAPersonalInformationFragment :
         if (resultCode == ISupportFragment.RESULT_OK && requestCode == 100) {
             tv_tax_paying.text = data?.getString("str")
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mAndroidBug5497Workaround?.removeOnGlobalLayoutListener()
     }
 
 }

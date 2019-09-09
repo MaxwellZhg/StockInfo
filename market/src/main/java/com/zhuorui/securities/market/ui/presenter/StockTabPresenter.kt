@@ -10,6 +10,7 @@ import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
+import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
 
 /**
  *    author : PengXianglin
@@ -53,5 +54,10 @@ class StockTabPresenter : AbsEventPresenter<StockTabView, StockTabViewModel>() {
             StockTsEnum.HK -> viewModel?.hkNum?.value = event.count
             else -> viewModel?.hsNum?.value = event.count
         }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onJumpToSimulationTradingStocksEvent(event: JumpToSimulationTradingStocksEvent) {
+        view?.onJumpToSimulationTradingStocksPage()
     }
 }

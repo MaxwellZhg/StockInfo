@@ -2,6 +2,7 @@ package com.zhuorui.commonwidget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +14,8 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import com.zhuorui.commonwidget.impl.IZRTitleView;
 
 /**
@@ -21,16 +24,20 @@ import com.zhuorui.commonwidget.impl.IZRTitleView;
  * date   : 2019-08-23 10:09
  * desc   :
  */
-public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeListener, TextWatcher , IZRTitleView {
+public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeListener, TextWatcher, IZRTitleView {
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
 
     private TextView vTitle;
     public TextView vEt;
-    private ImageView vRImg;
-    private int mOrientation = -1;
+    private int mOrientation = VERTICAL;
     private boolean mTitleBaseline = false;
+    private boolean mShowDivider = false;
+    private boolean mRightIconVisible = false;
+    private int mRightIconSrc = 0;
+    private int mRightIconWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
+    private int mRightIconHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
 
     public ZRTitleTextView(Context context) {
         this(context, null);
@@ -43,49 +50,81 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public ZRTitleTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZRTitleTextView);
-        int orientation = a.getInt(R.styleable.ZRTitleTextView_zr_ttextviewOrientation, VERTICAL);
+        mOrientation = a.getInt(R.styleable.ZRTitleTextView_zr_ttextviewOrientation, mOrientation);
+        mShowDivider = a.getBoolean(R.styleable.ZRTitleTextView_zr_dividerVisible, mShowDivider);
+        mRightIconVisible = a.getBoolean(R.styleable.ZRTitleTextView_zr_iconVisible, mRightIconVisible);
+        mRightIconWidth = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconWidth, mRightIconWidth);
+        mRightIconHeight = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconHight, mRightIconHeight);
+        mRightIconSrc = a.getResourceId(R.styleable.ZRTitleTextView_zr_iconSrc, mRightIconSrc);
+        mTitleBaseline = a.getBoolean(R.styleable.ZRTitleTextView_zr_titleWidthBaseline, mTitleBaseline);
         String title = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewTitle);
         String text = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewText);
         String hiht = a.getString(R.styleable.ZRTitleTextView_zr_ttextviewHint);
-        mTitleBaseline = a.getBoolean(R.styleable.ZRTitleTextView_zr_titleWidthBaseline, mTitleBaseline);
-        if (TextUtils.isEmpty(hiht)) {
-            hiht = "请选择" + title;
-        }
-        setOrientation(orientation);
-        setTitle(title);
-        setText(text);
-        setHint(hiht);
-        setRightIcon(a);
         a.recycle();
-        if (mTitleBaseline){
+        initView();
+        orientationChange(title, text, TextUtils.isEmpty(hiht) ? "请选择" + title : hiht);
+        if (mTitleBaseline) {
             post(new Runnable() {
                 @Override
                 public void run() {
                     titleBasel();
                 }
             });
-
         }
+    }
 
+    private void initView() {
+        removeAllViews();
+        inflate(getContext(), mOrientation == VERTICAL ? R.layout.layout_title_textview_vertical : R.layout.layout_title_textview_horizontal, this);
+        vTitle = findViewById(R.id.tv_title);
+        vEt = findViewById(R.id.et_edittext);
+        vEt.setOnFocusChangeListener(this);
+        vEt.addTextChangedListener(this);
+    }
+
+    private void orientationChange(String title, String text, String hint) {
+        setTitle(title);
+        setText(text);
+        setHint(hint);
+        setRightIcon();
+        setDivider();
+    }
+
+    private void setDivider() {
+        if (!mShowDivider) return;
+        ConstraintLayout rootView = findViewById(R.id.root_view);
+        View v = getDividerView(rootView.getChildCount());
+        rootView.addView(v);
+        ConstraintSet mConstraintSet = new ConstraintSet();
+        mConstraintSet.clone(rootView);
+        mConstraintSet.connect(v.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
+        mConstraintSet.connect(v.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
+        mConstraintSet.connect(v.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        mConstraintSet.applyTo(rootView);
+    }
+
+    private View getDividerView(int parentChildCount) {
+        View v = new View(getContext());
+        v.setId(parentChildCount + 1);
+        v.setBackgroundColor(Color.parseColor("#CCCCCC"));
+        int h = (int) (getResources().getDisplayMetrics().density * 0.6);
+        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(0, h);
+        v.setLayoutParams(lp);
+        return v;
     }
 
     private void titleBasel() {
-//        vTitle.post(new Runnable() {
-//            @Override
-//            public void run() {
-                ViewParent parent = getParent();
-                if (parent != null && parent instanceof ViewGroup) {
-                    ViewGroup group = (ViewGroup) parent;
-                    for (int i = 0, l = group.getChildCount(); i < l; i++) {
-                        View v = group.getChildAt(i);
-                        if (v != ZRTitleTextView.this && v instanceof IZRTitleView) {
-                            ((IZRTitleView) v).setTitleWidth(vTitle.getWidth());
-                        }
-                    }
-
+        ViewParent parent = getParent();
+        if (parent != null && parent instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) parent;
+            for (int i = 0, l = group.getChildCount(); i < l; i++) {
+                View v = group.getChildAt(i);
+                if (v != ZRTitleTextView.this && v instanceof IZRTitleView) {
+                    ((IZRTitleView) v).setTitleWidth(vTitle.getWidth());
                 }
-//            }
-//        });
+            }
+
+        }
     }
 
     public void setTitleWidth(int width) {
@@ -96,18 +135,19 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
         }
     }
 
-    private void setRightIcon(TypedArray a) {
-        vRImg = findViewById(R.id.iv_right_icon);
-        if (vRImg == null) return;
-        int width = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconWidth, 0);
-        int hight = a.getDimensionPixelOffset(R.styleable.ZRTitleTextView_zr_iconHight, 0);
-        int resId = a.getResourceId(R.styleable.ZRTitleTextView_zr_iconSrc, 0);
-        boolean visible = a.getBoolean(R.styleable.ZRTitleTextView_zr_iconVisible, false);
-        vRImg.setVisibility(visible ? VISIBLE : GONE);
-        ViewGroup.LayoutParams params = vRImg.getLayoutParams();
-        params.width = width;
-        params.height = hight;
-        vRImg.setImageResource(resId);
+    private void setRightIcon() {
+        ImageView vRightIcon = findViewById(R.id.iv_right_icon);
+        if (vRightIcon == null) return;
+        if (mRightIconVisible) {
+            vRightIcon.setVisibility(VISIBLE);
+            ViewGroup.LayoutParams params = vRightIcon.getLayoutParams();
+            params.width = mRightIconWidth;
+            params.height = mRightIconHeight;
+            vRightIcon.setImageResource(mRightIconSrc);
+        } else {
+            vRightIcon.setVisibility(GONE);
+        }
+
     }
 
     public void setHint(String hiht) {
@@ -125,20 +165,11 @@ public class ZRTitleTextView extends FrameLayout implements View.OnFocusChangeLi
     public void setOrientation(int orientation) {
         if (orientation == mOrientation) return;
         mOrientation = orientation;
-        removeAllViews();
-        inflate(getContext(), orientation == VERTICAL ? R.layout.layout_title_textview_vertical : R.layout.layout_title_textview_horizontal, this);
         String title = vTitle != null ? vTitle.getText().toString() : "";
         String text = vEt != null ? vEt.getText().toString() : "";
         String hint = vEt != null ? vEt.getHint().toString() : "";
-        vTitle = findViewById(R.id.tv_title);
-        vEt = findViewById(R.id.et_edittext);
-//        vRImg = findViewById(R.id.iv_image);
-        vEt.setOnFocusChangeListener(this);
-        vEt.addTextChangedListener(this);
-        vEt.setText(title);
-        vEt.setHint(hint);
-        vEt.setText(text);
-        vTitle.setText(title);
+        initView();
+        orientationChange(title, text, hint);
     }
 
     @Override

@@ -8,9 +8,13 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
+import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
+import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
 import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
+import kotlinx.android.synthetic.main.fragment_my_tab.*
+import kotlinx.android.synthetic.main.fragment_my_tab.*
 import kotlinx.android.synthetic.main.fragment_my_tab.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
@@ -61,7 +65,22 @@ class MyTabFragment :
         ll_cell_change_color.setOnClickListener(this)
         ll_setting_language.setOnClickListener(this)
         ll_account_safety.setOnClickListener(this)
+        open_account.setOnClickListener(this)
+        simulation_trading_stocks.setOnClickListener(this)
     }
+
+/*    override fun onClick(p0: View?) {
+        when (p0) {
+            open_account -> {
+                // 极速开户
+                RxBus.getDefault().post(JumpToOpenAccountEvent())
+            }
+            simulation_trading_stocks -> {
+                // 模拟炒股
+                RxBus.getDefault().post(JumpToSimulationTradingStocksEvent())
+            }
+        }
+    }*/
 
     override fun onClick(p0: View?) {
         when (p0?.id) {

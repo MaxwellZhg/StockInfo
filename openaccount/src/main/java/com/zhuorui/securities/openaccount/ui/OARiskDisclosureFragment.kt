@@ -74,4 +74,10 @@ class OARiskDisclosureFragment :
             }
         }
     }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        presenter?.stopPlayingRisk()
+    }
+
 }

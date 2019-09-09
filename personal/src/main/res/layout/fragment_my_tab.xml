@@ -39,6 +39,7 @@
                       android:textSize="20sp"/>
         </LinearLayout>
         <com.zhuorui.commonwidget.ZRCellBar
+                android:id="@+id/open_account"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/speed_open_account"
@@ -54,6 +55,7 @@
 
         </com.zhuorui.commonwidget.ZRCellBar>
         <com.zhuorui.commonwidget.ZRCellBar
+                android:id="@+id/simulation_trading_stocks"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/stock_model"

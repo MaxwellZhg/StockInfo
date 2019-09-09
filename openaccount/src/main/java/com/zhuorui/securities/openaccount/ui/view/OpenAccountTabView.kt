@@ -8,6 +8,8 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Date: 2019/8/20
  * Desc:
  */
-interface OpenAccountTabView :AbsView{
+interface OpenAccountTabView : AbsView {
     fun init()
+
+    fun onJumpToOpenAccountPage()
 }

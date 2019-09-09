@@ -90,7 +90,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_income"
                         app:zr_ttextviewTitle="@string/str_frequency_of_monthly_transactions"
                         app:zr_ttextviewOrientation="HORIZONTAL"
-                        app:zr_titleWidthBaseline="true"
                         tools:ignore="MissingConstraints"
                 />
 
@@ -101,6 +100,7 @@
                         app:zr_ttextviewTitle="@string/str_risk_following_ability"
                         app:zr_ttextviewOrientation="HORIZONTAL"
                         tools:ignore="MissingConstraints"
+                        app:zr_titleWidthBaseline="true"
                 />
 
                 <TextView
@@ -153,8 +153,6 @@
 
                 />
 
-
-                /
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
