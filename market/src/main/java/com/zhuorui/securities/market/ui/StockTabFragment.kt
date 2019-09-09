@@ -210,4 +210,8 @@ class StockTabFragment :
         }
         valueAnimator.start()
     }
+
+    override fun onJumpToSimulationTradingStocksPage() {
+        (parentFragment as AbsFragment<*, *, *, *>).start(SimulationTradingStocksFragment.newInstance())
+    }
 }

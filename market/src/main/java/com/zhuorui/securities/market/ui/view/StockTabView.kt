@@ -14,5 +14,13 @@ interface StockTabView : AbsView {
 
     fun init(fragments: ArrayList<StockTabViewModel.PageInfo>)
 
+    /**
+     * 切换选择列表
+     */
     fun toggleStockTab(show: Boolean)
+
+    /**
+     * 跳转到开户
+     */
+    fun onJumpToSimulationTradingStocksPage()
 }

@@ -12,7 +12,7 @@ import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import com.zhuorui.securities.personal.event.JumpToOpenAccountStepsEvent
+import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 
 /**
  * Created by Maxwell.
@@ -47,7 +47,7 @@ class OpenAccountTabPresenter : AbsNetPresenter<OpenAccountTabView, OpenAccountT
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onJumpToOpenAccountStepsEvent(event: JumpToOpenAccountStepsEvent) {
+    fun onJumpToOpenAccountStepsEvent(event: JumpToOpenAccountEvent) {
         view?.onJumpToOpenAccountPage()
     }
 }

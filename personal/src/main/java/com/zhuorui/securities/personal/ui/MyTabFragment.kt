@@ -9,7 +9,8 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
-import com.zhuorui.securities.personal.event.JumpToOpenAccountStepsEvent
+import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
+import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
 import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
@@ -54,15 +55,18 @@ class MyTabFragment :
             }
         }
         open_account.setOnClickListener(this)
+        simulation_trading_stocks.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
         when (p0) {
             open_account -> {
                 // 极速开户
-                RxBus.getDefault().post(JumpToOpenAccountStepsEvent())
+                RxBus.getDefault().post(JumpToOpenAccountEvent())
             }
-            else -> {
+            simulation_trading_stocks -> {
+                // 模拟炒股
+                RxBus.getDefault().post(JumpToSimulationTradingStocksEvent())
             }
         }
     }

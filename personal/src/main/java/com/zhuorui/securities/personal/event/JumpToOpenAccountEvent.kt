@@ -6,5 +6,5 @@ package com.zhuorui.securities.personal.event
  *    date   : 2019/9/9 16:22
  *    desc   : 用于传递事件，打开开户页面
  */
-class JumpToOpenAccountStepsEvent {
+class JumpToOpenAccountEvent {
 }
