@@ -1,15 +1,19 @@
 package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
+import com.zhuorui.securities.personal.event.JumpToOpenAccountStepsEvent
 import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
+import kotlinx.android.synthetic.main.fragment_my_tab.*
 
 /**
  *    author : PengXianglin
@@ -19,7 +23,7 @@ import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
  */
 class MyTabFragment :
     AbsBackFinishFragment<FragmentMyTabBinding, MyTabVierwModel, MyTabVierw, MyTabPresenter>(),
-    MyTabVierw {
+    MyTabVierw, View.OnClickListener {
 
     companion object {
         fun newInstance(): MyTabFragment {
@@ -47,6 +51,18 @@ class MyTabFragment :
         when (presenter?.getLoginStatus()) {
             false -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+            }
+        }
+        open_account.setOnClickListener(this)
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0) {
+            open_account -> {
+                // 极速开户
+                RxBus.getDefault().post(JumpToOpenAccountStepsEvent())
+            }
+            else -> {
             }
         }
     }
