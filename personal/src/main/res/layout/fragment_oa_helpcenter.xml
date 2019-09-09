@@ -3,7 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewModel"
-                  type="com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterViewModel"/>
+                  type="com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterViewModel"/>
     </data>
 
     <LinearLayout android:orientation="vertical"

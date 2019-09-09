@@ -1,12 +1,11 @@
-package com.zhuorui.securities.openaccount.ui.presenter
-
+package com.zhuorui.securities.personal.ui.presenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.openaccount.R
-import com.zhuorui.securities.openaccount.adapter.HelpCenterInfoAdapter
-import com.zhuorui.securities.openaccount.model.HelpCenterInfoData
-import com.zhuorui.securities.openaccount.ui.view.OAHelpCenterInfoView
-import com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterInfoViewModel
+import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.ui.adapter.HelpCenterInfoAdapter
+import com.zhuorui.securities.personal.ui.model.HelpCenterInfoData
+import com.zhuorui.securities.personal.ui.view.OAHelpCenterInfoView
+import com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterInfoViewModel
 import me.jessyan.autosize.utils.LogUtils
 
 /**
@@ -15,7 +14,7 @@ import me.jessyan.autosize.utils.LogUtils
  * Date: 2019/9/5
  * Desc:
  */
-class OAHelpCenterInfoPresenter :AbsNetPresenter<OAHelpCenterInfoView,OAHelpCenterInfoViewModel>(){
+class OAHelpCenterInfoPresenter :AbsNetPresenter<OAHelpCenterInfoView, OAHelpCenterInfoViewModel>(){
     var listinfo=ArrayList<HelpCenterInfoData>()
     override fun init() {
         super.init()

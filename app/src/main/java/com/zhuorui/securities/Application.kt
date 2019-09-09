@@ -3,6 +3,7 @@ package com.zhuorui.securities
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.net.header.HeaderInterceptor
+import com.zhuorui.securities.personal.util.MultiLanguageUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import okhttp3.Interceptor
 
@@ -27,5 +28,6 @@ class Application : BaseApplication() {
         // TODO 在App需要初始化的东西写在这里
         // 初始化RxBus
         RxBus.setMainScheduler(AndroidSchedulers.mainThread())
+        MultiLanguageUtil.init(this)
     }
 }

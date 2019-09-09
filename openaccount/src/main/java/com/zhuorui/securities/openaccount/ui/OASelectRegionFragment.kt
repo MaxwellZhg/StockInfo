@@ -1,12 +1,9 @@
 package com.zhuorui.securities.openaccount.ui
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.OptionsPickerDialog
-import com.zhuorui.securities.base2app.infra.LogInfra
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.BR
@@ -17,9 +14,9 @@ import com.zhuorui.securities.openaccount.ui.presenter.OASelectRegionPresenter
 import com.zhuorui.securities.openaccount.ui.view.OASeletRegionView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OASelectRegonViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
+import com.zhuorui.securities.personal.ui.OAHelpCenterFragment
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import kotlinx.android.synthetic.main.fragment_oa_select_region.*
-import java.text.MessageFormat
 
 /**
  *    author : liuwei

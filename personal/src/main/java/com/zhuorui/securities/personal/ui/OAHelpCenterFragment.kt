@@ -1,14 +1,15 @@
-package com.zhuorui.securities.openaccount.ui
+package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import ccom.zhuorui.securities.personal.ui.presenter.OAHelpCenterPresenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
-import com.zhuorui.securities.openaccount.BR
-import com.zhuorui.securities.openaccount.R
-import com.zhuorui.securities.openaccount.ui.presenter.OAHelpCenterPresenter
-import com.zhuorui.securities.openaccount.ui.view.OAHelpCenterView
-import com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterViewModel
+import com.zhuorui.securities.personal.BR
+import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.databinding.FragmentOaHelpcenterBinding
+import com.zhuorui.securities.personal.ui.view.OAHelpCenterView
+import com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterViewModel
 import kotlinx.android.synthetic.main.fragment_oa_helpcenter.*
 
 /**
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_oa_helpcenter.*
  * Desc: 帮助中心二级界面
  */
 class OAHelpCenterFragment :
-    AbsSwipeBackFragment<com.zhuorui.securities.openaccount.databinding.FragmentOaHelpcenterBinding, OAHelpCenterViewModel, OAHelpCenterView, OAHelpCenterPresenter>(),
+    AbsSwipeBackFragment<FragmentOaHelpcenterBinding, OAHelpCenterViewModel, OAHelpCenterView, OAHelpCenterPresenter>(),
     OAHelpCenterView,View.OnClickListener {
 
     override val layout: Int

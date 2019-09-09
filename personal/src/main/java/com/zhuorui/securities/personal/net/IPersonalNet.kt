@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.net
 import com.zhuorui.securities.personal.net.api.PersonalApi
 import com.zhuorui.securities.personal.net.request.*
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
+import com.zhuorui.securities.personal.net.response.UserInfoResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -39,4 +40,7 @@ interface IPersonalNet {
 
     @POST(PersonalApi.REST_LOGIN_PSW)
     fun restLoginPsw(@Body request: RestLoginPswRequest): Call<SendLoginCodeResponse>
+
+    @POST(PersonalApi.GET_USER_INFO)
+    fun getUserInfo(@Body request: UserInfoRequest): Call<UserInfoResponse>
 }

@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.adapter
+package com.zhuorui.securities.personal.ui.adapter
 
 import android.view.View
 import android.widget.TextView
@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.openaccount.R
-import com.zhuorui.securities.openaccount.R2
-import com.zhuorui.securities.openaccount.model.HelpCenterInfoData
+import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.R2
+import com.zhuorui.securities.personal.ui.model.HelpCenterInfoData
 
 /**
  * Created by Maxwell.
@@ -24,31 +24,31 @@ class HelpCenterInfoAdapter(type:Int) : BaseListAdapter<HelpCenterInfoData>() {
     var onResolveItemCallback: OnResolveItemCallback? = null
     var onUnResolveItemCallback: OnUnResolveItemCallback? = null
     override fun getLayout(viewType: Int): Int {
-          return when(viewType){
-              header->{
-                  R.layout.item_head_helpcenter_info
-              }
-              bottom->{
+        return when(viewType){
+            header->{
+                R.layout.item_head_helpcenter_info
+            }
+            bottom->{
                 R.layout.item_bottom_helpcenter_info
-              }
-              else->{
-                  R.layout.item_helpcenter_info
-              }
-          }
+            }
+            else->{
+                R.layout.item_helpcenter_info
+            }
+        }
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
-         return when (viewType){
-             header->{
-                 ViewHolderHeader(v,false,false)
-             }
-             bottom->{
-                 ViewHolderBottom(v,false,false)
-             }
-             else->{
-                 ViewHolderInfo(v,false,false)
-             }
-         }
+        return when (viewType){
+            header->{
+                ViewHolderHeader(v,false,false)
+            }
+            bottom->{
+                ViewHolderBottom(v,false,false)
+            }
+            else->{
+                ViewHolderInfo(v,false,false)
+            }
+        }
     }
 
     inner class ViewHolderHeader(v: View?, needClick: Boolean, needLongClick: Boolean) :
@@ -58,16 +58,16 @@ class HelpCenterInfoAdapter(type:Int) : BaseListAdapter<HelpCenterInfoData>() {
         override fun bind(item: HelpCenterInfoData?, position: Int) {
             when(type){
                 1->{
-                    tv_helpcenter_tips.text=ResUtil.getString(R.string.openaccount_by_license)
+                    tv_helpcenter_tips.text= ResUtil.getString(R.string.openaccount_by_license)
                 }
                 2->{
-                    tv_helpcenter_tips.text=ResUtil.getString(R.string.openaccount_by_info)
+                    tv_helpcenter_tips.text= ResUtil.getString(R.string.openaccount_by_info)
                 }
                 3->{
-                    tv_helpcenter_tips.text=ResUtil.getString(R.string.openaccount_by_time)
+                    tv_helpcenter_tips.text= ResUtil.getString(R.string.openaccount_by_time)
                 }
                 4->{
-                    tv_helpcenter_tips.text=ResUtil.getString(R.string.openaccount_by_age)
+                    tv_helpcenter_tips.text= ResUtil.getString(R.string.openaccount_by_age)
                 }
             }
         }
@@ -87,7 +87,7 @@ class HelpCenterInfoAdapter(type:Int) : BaseListAdapter<HelpCenterInfoData>() {
                     tv_tips_info.text=item?.tips
                 }
                 else->{
-                    tv_theme.visibility=View.GONE
+                    tv_theme.visibility= View.GONE
                     tv_tips_info.text=item?.tips
                 }
             }
@@ -109,13 +109,13 @@ class HelpCenterInfoAdapter(type:Int) : BaseListAdapter<HelpCenterInfoData>() {
             when(v){
                 tv_resolved->{
                     onResolveItemCallback?.onResolveItem(position, getItem(position), v)
-                    tv_resolved.background=ResUtil.getDrawable(R.drawable.bg_helpcenter_info_resolve)
+                    tv_resolved.background= ResUtil.getDrawable(R.drawable.bg_helpcenter_info_resolve)
                     tv_resolved.setCompoundDrawablesWithIntrinsicBounds(ResUtil.getDrawable(R.mipmap.resolve_blue),null,null,null)
                     ResUtil.getColor(R.color.color_1A6ED2)?.let { tv_resolved.setTextColor(it) }
                 }
                 tv_unresolved->{
                     onUnResolveItemCallback?.onUnresolveItem(position, getItem(position), v)
-                    tv_unresolved.background=ResUtil.getDrawable(R.drawable.bg_helpcenter_info_noresolve)
+                    tv_unresolved.background= ResUtil.getDrawable(R.drawable.bg_helpcenter_info_noresolve)
                     tv_unresolved.setCompoundDrawablesWithIntrinsicBounds(ResUtil.getDrawable(R.mipmap.unresolve_red),null,null,null)
                     ResUtil.getColor(R.color.color_ca0000)?.let { tv_unresolved.setTextColor(it) }
                 }
