@@ -8,6 +8,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.BR
+import com.zhuorui.securities.market.custom.TradingStocksOrderDialog
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
@@ -60,12 +61,12 @@ class SimulationTradingStocksFragment :
             }
             btn_buy -> {
                 // 买入
-                TitleMessageConfirmDialog.createWidth225Dialog(context!!, true, true).setTitleText("提示")
+                TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true).setTitleText("提示")
                     .setMsgText("下单成功").setConfirmText("查看详情").show()
             }
             btn_sell -> {
                 // 卖出
-                ToastUtil.instance.toastCenter("输入数量超出最大可卖数量")
+                TradingStocksOrderDialog.createDialog(context!!, false, true).show()
             }
         }
     }
