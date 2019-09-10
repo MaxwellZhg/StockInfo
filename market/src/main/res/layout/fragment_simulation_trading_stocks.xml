@@ -100,13 +100,15 @@
                     android:textColor="@color/color_ffce0019"
                     android:textSize="15sp"/>
 
-            <ImageView android:layout_width="14dp"
-                       app:layout_constraintEnd_toEndOf="parent"
-                       app:layout_constraintTop_toTopOf="parent"
-                       app:layout_constraintBottom_toBottomOf="parent"
-                       android:layout_marginEnd="13dp"
-                       android:layout_height="14dp"
-                       android:src="@mipmap/ic_chart"/>
+            <ImageView
+                    android:id="@+id/iv_chart"
+                    android:layout_width="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginEnd="13dp"
+                    android:layout_height="14dp"
+                    android:src="@mipmap/ic_chart"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -171,7 +173,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/stock_code_input_hint"
+                    android:background="@android:color/transparent"
                     android:layout_marginStart="26dp"
+                    android:textColor="@color/color_282828"
                     android:textColorHint="@color/color_FFA1A1A1"
                     android:textSize="15sp"/>
 
@@ -205,14 +209,13 @@
                     android:textColor="@color/color_232323"
                     android:textSize="17sp"/>
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-"
+            <View
+                    android:layout_width="13dp"
+                    android:layout_height="2.5dp"
                     android:layout_marginStart="26dp"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/tv_price"
-                    android:textColor="#ff282828"
+                    android:background="@color/color_282828"
                     android:textSize="25sp"/>
 
             <TextView
@@ -222,7 +225,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="16dp"
                     android:layout_centerVertical="true"
-                    android:textColor="#ff282828"
+                    android:textColor="@color/color_282828"
                     android:textSize="25sp"/>
 
         </RelativeLayout>
@@ -255,14 +258,13 @@
                     android:textColor="@color/color_232323"
                     android:textSize="17sp"/>
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-"
+            <View
+                    android:layout_width="13dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="26dp"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/tv_num"
-                    android:textColor="#ff282828"
+                    android:background="@color/color_282828"
                     android:textSize="25sp"/>
 
             <TextView
@@ -309,6 +311,7 @@
                     android:layout_height="wrap_content"
                     android:hint="--"
                     android:layout_marginStart="26dp"
+                    android:textColor="@color/color_282828"
                     android:textColorHint="@color/color_FFA1A1A1"
                     android:textSize="15sp"/>
 

@@ -48,12 +48,16 @@ class SimulationTradingStocksFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        iv_chart.setOnClickListener(this)
         btn_buy.setOnClickListener(this)
         btn_sell.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
         when (p0) {
+            iv_chart -> {
+                // 查看k线
+            }
             btn_buy -> {
                 // 买入
                 TitleMessageConfirmDialog.createWidth225Dialog(context!!, true, true).setTitleText("提示")
