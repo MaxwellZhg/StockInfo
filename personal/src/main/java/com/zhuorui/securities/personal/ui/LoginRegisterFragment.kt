@@ -92,14 +92,14 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
-                if(TextUtils.isEmpty(et_phone.text.toString())){
+                if(TextUtils.isEmpty(et_phone_code.text.toString())){
                     ToastUtil.instance.toast(R.string.phone_code_tips)
                 }else {
-                    presenter?.setState(0)
+                    tv_btn_login.isEnabled=true
                 }
              }
         } else {
-            presenter?.setState(1)
+            tv_btn_login.isEnabled=false
         }
     }
 
