@@ -54,7 +54,7 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
             spannableString?.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
-        var color = ResUtil.getColor(R.color.app_bule)
+        var color = ResUtil.getColor(R.color.color_1A6ED2)
         spannableString.setSpan(
             ForegroundColorSpan(color!!),
             text.length,

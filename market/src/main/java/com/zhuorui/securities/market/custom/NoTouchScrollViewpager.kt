@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.customer.view
+package com.zhuorui.securities.market.custom
 
 import android.content.Context
 import androidx.viewpager.widget.ViewPager

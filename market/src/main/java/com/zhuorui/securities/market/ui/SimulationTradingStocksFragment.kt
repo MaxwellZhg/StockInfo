@@ -1,6 +1,9 @@
 package com.zhuorui.securities.market.ui
 
+import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.BR
@@ -8,6 +11,7 @@ import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocks
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
+import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 
 /**
  *    author : PengXianglin
@@ -17,7 +21,7 @@ import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewMod
  */
 class SimulationTradingStocksFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingStocksBinding, SimulationTradingStocksViewModel, SimulationTradingStocksView, SimulationTradingStocksPresenter>(),
-    SimulationTradingStocksView {
+    SimulationTradingStocksView, View.OnClickListener {
 
     companion object {
         fun newInstance(): SimulationTradingStocksFragment {
@@ -40,4 +44,23 @@ class SimulationTradingStocksFragment :
     override val getView: SimulationTradingStocksView
         get() = this
 
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        btn_buy.setOnClickListener(this)
+        btn_sell.setOnClickListener(this)
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0) {
+            btn_buy -> {
+                // 买入
+                TitleMessageConfirmDialog.createWidth225Dialog(context!!, true, true).setTitleText("提示")
+                    .setMsgText("下单成功").setConfirmText("查看详情").show()
+            }
+            btn_sell -> {
+                // 卖出
+            }
+        }
+    }
 }

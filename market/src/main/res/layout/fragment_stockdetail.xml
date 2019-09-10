@@ -14,7 +14,7 @@
             app:tabIndicatorHeight="1dp"
             app:tabTextAppearance="@style/TabLayoutTextStyle"/>
 
-    <com.zhuorui.securities.market.customer.view.NoTouchScrollViewpager
+    <com.zhuorui.securities.market.custom.NoTouchScrollViewpager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

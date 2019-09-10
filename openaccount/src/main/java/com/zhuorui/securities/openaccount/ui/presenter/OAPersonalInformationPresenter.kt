@@ -9,12 +9,9 @@ import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.R
-import com.zhuorui.securities.openaccount.R2.array.gender
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
-import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel
-import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 
 /**
@@ -90,10 +87,10 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
 
     fun getDialogSpanned(): Spannable? {
         val email = view?.getEmail()
-        var txt = "邮箱将用于接收结单等重要操作请再次确认是否输入正确\n"
-        var spannable = SpannableString(txt + email)
+        val txt = "邮箱将用于接收结单等重要操作请再次确认是否输入正确\n"
+        val spannable = SpannableString(txt + email)
         spannable.setSpan(
-            ForegroundColorSpan(ResUtil.getColor(R.color.app_bule)!!),
+            ForegroundColorSpan(ResUtil.getColor(R.color.color_1A6ED2)!!),
             txt.length,
             spannable.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
@@ -102,8 +99,8 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
     }
 
     fun sub() {
-        var occupation = occupationPickerData?.indexOf(mOccupation)?.let { occupationCode?.get(it) }
-        var taxType = taxTypePickerData?.indexOf(mTaxType)?.let { taxTypeCode?.get(it) }
+        val occupation = occupationPickerData?.indexOf(mOccupation)?.let { occupationCode?.get(it) }
+        val taxType = taxTypePickerData?.indexOf(mTaxType)?.let { taxTypeCode?.get(it) }
         OpenInfoManager.getInstance()?.info?.occupation = occupation
         OpenInfoManager.getInstance()?.info?.taxType = taxType
         OpenInfoManager.getInstance()?.info?.taxState = view?.getTaxState()

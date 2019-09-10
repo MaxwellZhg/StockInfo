@@ -19,9 +19,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
  *    date   : 2019/8/29 10:27
- *    desc   : 确定对话框
+ *    desc   : 含有 标题、消息、确定按钮 对话框
  */
-class ConfirmDialog(
+class TitleMessageConfirmDialog(
     context: Context,
     width: Int,
     private val canceledOnTouchOutside: Boolean,
@@ -29,13 +29,15 @@ class ConfirmDialog(
 ) : BaseDialog(context, width, WindowManager.LayoutParams.WRAP_CONTENT),
     View.OnClickListener {
 
+    @BindView(R2.id.tv_title)
+    lateinit var tv_title: TextView
     @BindView(R2.id.tv_msg)
     lateinit var tv_msg: TextView
     @BindView(R2.id.tv_confirm)
     lateinit var tv_confirm: TextView
 
     override val layout: Int
-        get() = R.layout.dialog_confirm
+        get() = R.layout.dialog_title_message_confirm
 
     override fun init() {
         tv_confirm.setOnClickListener(this)
@@ -45,42 +47,52 @@ class ConfirmDialog(
             ignoreBackPressed()
     }
 
-    fun setMsgDrawableStart(drawable: Drawable): ConfirmDialog {
-        tv_msg.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+    fun setTitleText(str: String): TitleMessageConfirmDialog {
+        tv_title.text = str
         return this
     }
 
-    fun setMsgDrawableStart(@DrawableRes drawableId: Int): ConfirmDialog {
-        tv_msg.setCompoundDrawablesRelativeWithIntrinsicBounds(ResUtil.getDrawable(drawableId), null, null, null)
+    fun setTitleText(@StringRes strId: Int): TitleMessageConfirmDialog {
+        tv_title.text = ResUtil.getString(strId)
         return this
     }
 
-    fun setMsgText(str: String): ConfirmDialog {
+    fun setTitleText(str: Spanned): TitleMessageConfirmDialog {
+        tv_title.text = str
+        return this
+    }
+
+    fun setTitleText(str: Spannable): TitleMessageConfirmDialog {
+        tv_title.text = str
+        return this
+    }
+
+    fun setMsgText(str: String): TitleMessageConfirmDialog {
         tv_msg.text = str
         return this
     }
 
-    fun setMsgText(@StringRes strId: Int): ConfirmDialog {
+    fun setMsgText(@StringRes strId: Int): TitleMessageConfirmDialog {
         tv_msg.text = ResUtil.getString(strId)
         return this
     }
 
-    fun setMsgText(str: Spanned): ConfirmDialog {
+    fun setMsgText(str: Spanned): TitleMessageConfirmDialog {
         tv_msg.text = str
         return this
     }
 
-    fun setMsgText(str: Spannable): ConfirmDialog {
+    fun setMsgText(str: Spannable): TitleMessageConfirmDialog {
         tv_msg.text = str
         return this
     }
 
-    fun setConfirmText(str: String): ConfirmDialog {
+    fun setConfirmText(str: String): TitleMessageConfirmDialog {
         tv_confirm.text = str
         return this
     }
 
-    fun setConfirmText(@StringRes strId: Int): ConfirmDialog {
+    fun setConfirmText(@StringRes strId: Int): TitleMessageConfirmDialog {
         tv_confirm.text = ResUtil.getString(strId)
         return this
     }
@@ -93,25 +105,19 @@ class ConfirmDialog(
     companion object {
 
         /**
-         * 提供一个默认构造宽度为265dp方法
+         * 提供一个默认构造宽度为225dp方法
          */
-        fun createWidth265Dialog(
+        fun createWidth225Dialog(
             context: Context,
             canceledOnTouchOutside: Boolean,
             ignoreBack: Boolean
-        ): ConfirmDialog {
-            return ConfirmDialog(context, ResUtil.getDimensionDp2Px(265f), canceledOnTouchOutside, ignoreBack)
-        }
-
-        /**
-         * 提供一个默认构造宽度为290dp方法
-         */
-        fun createWidth290Dialog(
-            context: Context,
-            canceledOnTouchOutside: Boolean,
-            ignoreBack: Boolean
-        ): ConfirmDialog {
-            return ConfirmDialog(context, ResUtil.getDimensionDp2Px(290f), canceledOnTouchOutside, ignoreBack)
+        ): TitleMessageConfirmDialog {
+            return TitleMessageConfirmDialog(
+                context,
+                ResUtil.getDimensionDp2Px(225f),
+                canceledOnTouchOutside,
+                ignoreBack
+            )
         }
     }
 }
