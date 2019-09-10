@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
@@ -60,6 +61,7 @@ class SimulationTradingStocksFragment :
             }
             btn_sell -> {
                 // 卖出
+                ToastUtil.instance.toastCenter("输入数量超出最大可卖数量")
             }
         }
     }
