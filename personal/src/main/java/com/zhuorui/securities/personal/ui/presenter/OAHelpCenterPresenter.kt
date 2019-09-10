@@ -1,4 +1,4 @@
-package ccom.zhuorui.securities.personal.ui.presenter
+package com.zhuorui.securities.personal.ui.presenter
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.personal.ui.view.OAHelpCenterView
@@ -12,7 +12,5 @@ import com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterViewModel
  * Desc:
  */
 class OAHelpCenterPresenter :AbsNetPresenter<OAHelpCenterView, OAHelpCenterViewModel>(){
-    override fun init() {
-        super.init()
-    }
+
 }

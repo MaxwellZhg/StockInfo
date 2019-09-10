@@ -64,6 +64,13 @@ class SettingFragment : AbsSwipeBackFragment<FragmentSettingBinding, SettingView
             setFragmentResult(ISupportFragment.RESULT_OK, b)
             pop()
         }
+        title_bar.setBackClickListener{
+            var b = Bundle()
+            LogUtils.e(adapter?.getTips())
+            b.putString("str", adapter?.getTips())
+            setFragmentResult(ISupportFragment.RESULT_OK, b)
+            pop()
+        }
     }
 
     companion object {
