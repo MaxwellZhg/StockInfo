@@ -60,7 +60,7 @@ object Network {
      */
     fun initRetrofit(
         baseUrl: String?, debug: Boolean?, writeTimeout_secs: Long?, readTimeout_secs: Long?,
-        connectTimeout_secs: Long?, header: Interceptor?
+        connectTimeout_secs: Long?, header: Interceptor?, checkToken: Interceptor?
     ) {
         /*配置OkHttp属性*/
         val builder = unsafeOkHttpClient.newBuilder()
@@ -70,6 +70,8 @@ object Network {
             .followRedirects(true)
         /*添加Header头信息*/
         builder.addInterceptor(header)
+        /*添加检查Token状态*/
+        builder.addInterceptor(checkToken)
         if (debug!!) {
             /*若是debug；则添加Http日志打印的拦截器进行打印请求信息*/
             val logger = HttpLoggingInterceptor.Logger { message -> LogInfra.Log.w(TAG, message) }

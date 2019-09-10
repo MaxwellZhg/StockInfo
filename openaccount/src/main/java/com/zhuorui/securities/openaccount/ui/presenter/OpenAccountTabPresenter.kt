@@ -24,7 +24,9 @@ class OpenAccountTabPresenter : AbsNetPresenter<OpenAccountTabView, OpenAccountT
     override fun init() {
         super.init()
         view?.init()
-        requestOpenInfo()
+        if (getLoginStatus()) {
+            requestOpenInfo()
+        }
     }
 
     fun getLoginStatus(): Boolean {

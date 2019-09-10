@@ -13,6 +13,7 @@ import com.zhuorui.securities.market.ui.MarketTabFragment
 import com.zhuorui.securities.market.ui.StockTabFragment
 import com.zhuorui.securities.openaccount.ui.OABiopsyFragment
 import com.zhuorui.securities.openaccount.ui.OpenAccountTabFragment
+import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import com.zhuorui.securities.personal.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -130,5 +131,9 @@ class MainFragment :
             mFragments[FOUR] = findChildFragment(OABiopsyFragment::class.java)
             mFragments[FIVE] = findChildFragment(MyTabFragment::class.java)
         }
+    }
+
+    override fun jumpToLogin() {
+        start(LoginRegisterFragment.newInstance())
     }
 }

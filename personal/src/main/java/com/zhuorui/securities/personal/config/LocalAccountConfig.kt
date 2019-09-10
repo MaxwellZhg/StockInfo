@@ -58,5 +58,10 @@ class LocalAccountConfig : AbsConfig() {
             }
             return config
         }
+
+        fun clear(){
+            StorageInfra.remove(LocalAccountConfig::class.java.simpleName, LocalAccountConfig::class.java.name)
+        }
+
     }
 }

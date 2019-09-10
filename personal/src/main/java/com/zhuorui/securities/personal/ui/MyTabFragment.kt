@@ -15,9 +15,6 @@ import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
 import kotlinx.android.synthetic.main.fragment_my_tab.*
-import kotlinx.android.synthetic.main.fragment_my_tab.*
-import kotlinx.android.synthetic.main.fragment_my_tab.*
-import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 
 /**
@@ -52,11 +49,6 @@ class MyTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        when (presenter?.getLoginStatus()) {
-            false -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
-            }
-        }
         top_bar.setRightClickListener {
             (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())
         }

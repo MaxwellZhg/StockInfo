@@ -2,7 +2,8 @@ package com.zhuorui.securities
 
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.net.header.HeaderInterceptor
+import com.zhuorui.securities.net.HeaderInterceptor
+import com.zhuorui.securities.net.TokenInterceptor
 import com.zhuorui.securities.personal.util.MultiLanguageUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import okhttp3.Interceptor
@@ -23,6 +24,9 @@ class Application : BaseApplication() {
 
     override val header: Interceptor
         get() = HeaderInterceptor()
+
+    override val checkToken: Interceptor
+        get() = TokenInterceptor()
 
     override fun beforeInit() {
         // TODO 在App需要初始化的东西写在这里
