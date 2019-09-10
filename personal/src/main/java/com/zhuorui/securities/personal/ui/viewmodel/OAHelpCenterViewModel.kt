@@ -1,4 +1,4 @@
-package com.zhuorui.securities.openaccount.ui.viewmodel
+package com.zhuorui.securities.personal.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 

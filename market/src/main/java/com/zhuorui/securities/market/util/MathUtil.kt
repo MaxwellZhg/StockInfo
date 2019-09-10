@@ -14,6 +14,7 @@ object MathUtil {
      * 除法四舍五入保留两位小数
      */
     fun division(divisor: Double, dividend: Double): Double {
+        if (dividend <= 0) return 0.0
         val b = BigDecimal(divisor / dividend)
         return b.setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
     }

@@ -65,4 +65,33 @@
     <string name="change_color_tips_cn" tools:ignore="MissingTranslation">红涨绿跌</string>
     <string name="change_color_tips_en" tools:ignore="MissingTranslation">绿涨红跌</string>
     <string name="auto" tools:ignore="MissingTranslation">自动</string>
+    <string name="about_question" tools:ignore="MissingTranslation">开户相关问题</string>
+    <string name="openaccount_by_license" tools:ignore="MissingTranslation">哪些证件可以用来开户？</string>
+    <string name="openaccount_by_info" tools:ignore="MissingTranslation">如何更新卓锐证券资料？</string>
+    <string name="openaccount_by_time" tools:ignore="MissingTranslation">账户开通需要多长时间？</string>
+    <string name="openaccount_by_age" tools:ignore="MissingTranslation">开通账户是否年龄限制？</string>
+    <string name="take_photo_not_permission" tools:ignore="MissingTranslation">获取相机权限失败，将导致无法正常拍摄，请打开设置页面手动授权</string>
+    <string name="record_video_not_permission" tools:ignore="MissingTranslation">获取相机、麦克风、存储空间权限失败，将导致无法正常拍摄，请打开设置页面手动授权</string>
+    <string name="go_to_setting" tools:ignore="MissingTranslation">去设置</string>
+    <string name="member_of_china" tools:ignore="MissingTranslation">中国居民:</string>
+    <string name="member_of_china_tips" tools:ignore="MissingTranslation">1、中国内地身份证\n2、内地临时身份证（三个月有效期内）</string>
+    <string name="member_of_hk" tools:ignore="MissingTranslation">香港居民:</string>
+    <string name="member_of_hk_tips" tools:ignore="MissingTranslation">1、香港永久居民身份证+地址证明（三个月内发出）\n 2、香港居民身份证+香港签证身份书+地址证明（三个 月内发出）\n 3、香港居民身份证+中国内地身份证+地址证明（三个 月内发出）</string>
+    <string name="member_of_marcao" tools:ignore="MissingTranslation">澳门居民:</string>
+    <string name="member_of_marcao_tips" tools:ignore="MissingTranslation">1、澳门永久居民身份证+地址证明（三个月内发出）\n2、澳门非永久居民身份证+澳门旅行证+地址证明（三 个月内发出）\n 3、澳门非永久居民身份证+中国内地身份证+地址证明 (三个月内发出）</string>
+    <string name="member_of_other" tools:ignore="MissingTranslation">非中国内地、香港、澳门居民：</string>
+    <string name="member_of_other_tips" tools:ignore="MissingTranslation">1、护照（非中国内地护照）+地址证明（三个月内发出）</string>
+    <string name="update_zhuori_info" tools:ignore="MissingTranslation">如需更改，请联系卓锐证券客服（中国内地：400- \n820-4578；中国香港：+852-2541-8546）。如 \n您的姓名、国籍、证件号码、居民地址等信息有变更 \n、需提供相关材料。</string>
+    <string name="how_long_to_openaccount" tools:ignore="MissingTranslation">您好，账户完全开通一般需要1-2个工作日。从 \n注册到考通的各个阶段，均会有相应进度的短信提 \n示。</string>
+    <string name="age_range_tips" tools:ignore="MissingTranslation">您好，年满18周岁至21周岁的客户，可以开立即现\n金账户；年龄21周岁以上的客户，可开立保证金账\n户。（暂时没有年龄高上限的的要求）</string>
+    <string name="resolved"  tools:ignore="MissingTranslation">已解决</string>
+    <string name="unresolved" tools:ignore="MissingTranslation">未解决</string>
+    <string name="red_up_green_down" tools:ignore="MissingTranslation">红涨绿跌</string>
+    <string name="green_up_red_down" tools:ignore="MissingTranslation">绿涨红跌</string>
+    <string name="simple_cn" tools:ignore="MissingTranslation">简体中文</string>
+    <string name="unsimple_cn" tools:ignore="MissingTranslation">繁体中文</string>
+    <string name="english" tools:ignore="MissingTranslation">English</string>
+    <string name="phone_num" tools:ignore="MissingTranslation">手机号</string>
+    <string name="fix_login_pass" tools:ignore="MissingTranslation">修改登录密码</string>
+    <string name="fix_pay_pass" tools:ignore="MissingTranslation">修改交易密码</string>
 </resources>

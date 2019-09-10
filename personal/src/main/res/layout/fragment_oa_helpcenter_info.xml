@@ -3,15 +3,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewModel"
-                  type="com.zhuorui.securities.openaccount.ui.viewmodel.OAHelpCenterInfoViewModel"/>
+                  type="com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterInfoViewModel"/>
     </data>
     <LinearLayout android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:background="@color/color_f0f0f0">
-        <com.zhuorui.securities.openaccount.widget.HelpCenterTitleBar
+        <com.zhuorui.securities.personal.widget.HelpCenterTitleBar
                 style="@style/oaDataTipsToptxt"
-                android:id="@+id/title_bar"
+                android:id="@+id/top_bar"
                 app:zr_topbarTitle="@string/help_center"
                 app:help_center_cancle_icon="@mipmap/cancle_help_info"
                 app:help_center_cancle_width="19dp"

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:gravity="center"
+              android:paddingTop="40dp"
+              android:paddingBottom="88dp"
+              android:layout_height="wrap_content">
+               <TextView android:layout_width="101dp"
+                         android:layout_height="41dp"
+                         android:drawableLeft="@mipmap/resolve_gray"
+                         android:paddingLeft="15dp"
+                         android:drawablePadding="9dp"
+                         android:textSize="14sp"
+                         android:id="@+id/tv_resolved"
+                         android:gravity="center_vertical"
+                         android:text="@string/resolved"
+                         android:textColor="@color/color_A1A1A1"
+                         android:background="@drawable/bg_helpcenter_info_unresolve"/>
+               <TextView android:layout_width="101dp"
+                         android:layout_height="41dp"
+                         android:drawableLeft="@mipmap/unresolve_gray"
+                         android:id="@+id/tv_unresolved"
+                         android:paddingLeft="15dp"
+                         android:layout_gravity="right"
+                         android:drawablePadding="9dp"
+                         android:textSize="14sp"
+                         android:layout_marginLeft="50dp"
+                         android:gravity="center_vertical"
+                         android:text="@string/unresolved"
+                         android:textColor="@color/color_A1A1A1"
+                         android:background="@drawable/bg_helpcenter_info_unresolve"/>
+</LinearLayout>

@@ -1,8 +1,8 @@
-package com.zhuorui.securities.openaccount.ui.viewmodel
+package com.zhuorui.securities.personal.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zhuorui.securities.openaccount.adapter.HelpCenterInfoAdapter
+import com.zhuorui.securities.personal.ui.adapter.HelpCenterInfoAdapter
 
 /**
  * Created by Maxwell.

@@ -10,6 +10,7 @@
                   android:layout_height="match_parent"
                   android:background="@color/color_f0f0f0">
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:id="@+id/top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:zr_backview_is_visibity="false"
@@ -21,6 +22,7 @@
         </com.zhuorui.commonwidget.ZhuoRuiTopBar>
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="100dp"
+                      android:id="@+id/ll_login"
                       android:gravity="center_vertical"
                       android:background="@color/color_FFFFFFFF"
                       android:orientation="horizontal">
@@ -69,6 +71,7 @@
 
         </com.zhuorui.commonwidget.ZRCellBar>
         <com.zhuorui.commonwidget.ZRCellBar
+                android:id="@+id/ll_cell_change_color"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/change_color"
@@ -86,6 +89,7 @@
 
         </com.zhuorui.commonwidget.ZRCellBar>
         <com.zhuorui.commonwidget.ZRCellBar
+                android:id="@+id/ll_setting_language"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/setting_language"
@@ -102,6 +106,7 @@
                 app:zr_cellbar_left_icon="@mipmap/icon_setting_language">
         </com.zhuorui.commonwidget.ZRCellBar>
         <com.zhuorui.commonwidget.ZRCellBar
+                android:id="@+id/ll_account_safety"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/account_safe"
@@ -119,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/help_center"
+                android:id="@+id/help_center_bar"
                 android:layout_marginTop="10dp"
                 app:zr_cellbar_left_icon_width="18dp"
                 app:zr_cellbar_left_icon_height="17dp"
@@ -146,6 +152,7 @@
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="50dp"
                       android:layout_marginTop="10dp"
+                      android:id="@+id/ll_login_out"
                       android:gravity="center"
                       android:background="@color/color_FFFFFFFF">
             <TextView android:layout_width="wrap_content"

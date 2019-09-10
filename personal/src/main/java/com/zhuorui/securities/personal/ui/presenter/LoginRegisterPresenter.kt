@@ -107,7 +107,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
     }
 
     fun requestUserLoginOut() {
-        val request = UserLoginOutRequest("",transactions.createTransaction())
+        val request = UserLoginOutRequest(transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginOut(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.personal.ui.viewmodel.SettingViewModel"/>
+    </data>
+    <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/color_f0f0f0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.zhuorui.securities.personal.widget.SetTitleBar
+                android:id="@+id/title_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:zr_set_title_bar_text="保存"
+                app:zr_set_title_bar_margin="14dp">
+        </com.zhuorui.securities.personal.widget.SetTitleBar>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lv_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+</layout>
