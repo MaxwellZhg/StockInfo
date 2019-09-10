@@ -50,6 +50,16 @@ interface PersonalApi {
          *
          */
         const val GET_USER_INFO = "/as_user/api/user_account/v1/user_info"
+        /**
+         *修改手机号发送旧号码短信
+         *
+         */
+        const val SEND_OLD_REPLACE_CODE = "/as_user/api/sms/v1/send_old_replace_code"
+        /**
+         *验证旧手机号码
+         *
+         */
+        const val MODIFY_PHONE_OLD = "/as_user/api/user_account/v1/modify_phone_v1"
 
     }
 }

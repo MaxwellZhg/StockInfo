@@ -7,6 +7,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.UserLoginOutRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
@@ -46,6 +47,9 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
             }
         }
     }
-
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onLoginState(evnt: LoginStateChangeEvent) {
+           view?.loginStateChange()
+        }
 
 }

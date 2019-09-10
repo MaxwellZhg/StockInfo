@@ -8,11 +8,14 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.LoginAndRegisterFragmentBinding
+import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.ui.presenter.LoginRegisterPresenter
 import com.zhuorui.securities.personal.ui.view.LoginRegisterView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
@@ -113,6 +116,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     }
 
     override fun gotomain() {
+        RxBus.getDefault().post(LoginStateChangeEvent(true))
          pop()
     }
 

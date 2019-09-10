@@ -8,6 +8,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
@@ -68,6 +69,11 @@ class MyTabFragment :
         ll_account_safety.setOnClickListener(this)
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
+        if(LocalAccountConfig.read().getAccountInfo().token==""){
+            ll_login_out.visibility=View.INVISIBLE
+        }else{
+            ll_login_out.visibility=View.VISIBLE
+        }
     }
     override fun onClick(p0: View?) {
         when (p0?.id) {
@@ -101,6 +107,11 @@ class MyTabFragment :
     }
 
     override fun gotomain() {
+        if(LocalAccountConfig.read().getAccountInfo().token==""){
+            ll_login_out.visibility=View.INVISIBLE
+        }else{
+            ll_login_out.visibility=View.VISIBLE
+        }
         (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
     }
 
@@ -112,5 +123,13 @@ class MyTabFragment :
             ll_setting_language.setRightTips(data?.getString("str"))
         }
     }
+    override fun loginStateChange() {
+        if(LocalAccountConfig.read().getAccountInfo().token==""){
+            ll_login_out.visibility=View.INVISIBLE
+        }else{
+            ll_login_out.visibility=View.VISIBLE
+        }
+    }
+
 
 }

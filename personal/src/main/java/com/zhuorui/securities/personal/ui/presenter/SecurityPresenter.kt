@@ -24,7 +24,7 @@ class SecurityPresenter : AbsNetPresenter<SecurityView,SecurityViewModel>(){
         super.init()
     }
 
-    fun getUserInfo(){
+ /*   fun getUserInfo(){
         val request = UserInfoRequest(transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.getUserInfo(request)
             ?.enqueue(Network.IHCallBack<UserInfoResponse>(request))
@@ -32,6 +32,6 @@ class SecurityPresenter : AbsNetPresenter<SecurityView,SecurityViewModel>(){
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserInfoResponse(response: UserInfoResponse) {
 
-    }
+    }*/
 
 }
