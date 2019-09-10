@@ -94,4 +94,14 @@
     <string name="phone_num" tools:ignore="MissingTranslation">手机号</string>
     <string name="fix_login_pass" tools:ignore="MissingTranslation">修改登录密码</string>
     <string name="fix_pay_pass" tools:ignore="MissingTranslation">修改交易密码</string>
+    <string name="phone_num_verify" tools:ignore="MissingTranslation">手机号验证</string>
+    <string name="phone_tips_hide" tools:ignore="MissingTranslation">您当前的手机号为\n%1$s</string>
+    <string name="hide_phone_tips" tools:ignore="MissingTranslation">请输入您收到的验证码</string>
+    <string name="get_verify_code" tools:ignore="MissingTranslation">获取验证码</string>
+    <string name="next" tools:ignore="MissingTranslation">下一步</string>
+    <string name="repaire_phone" tools:ignore="MissingTranslation">修改手机号</string>
+    <string name="input_new_phone_code" tools:ignore="MissingTranslation">请输入新手机号码</string>
+    <string name="compelte" tools:ignore="MissingTranslation">完成</string>
+    <string name="verify_code_length" tools:ignore="MissingTranslation">验证码长度不正确</string>
+    <string name="login_ahead" tools:ignore="MissingTranslation">请先登录</string>
 </resources>

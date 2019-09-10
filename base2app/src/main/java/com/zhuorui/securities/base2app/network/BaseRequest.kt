@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.Transaction
 import com.zhuorui.securities.base2app.infra.LogInfra
-import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.base2app.util.SignUtil
 
 /**

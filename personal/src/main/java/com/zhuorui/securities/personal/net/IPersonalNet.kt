@@ -43,4 +43,11 @@ interface IPersonalNet {
 
     @POST(PersonalApi.GET_USER_INFO)
     fun getUserInfo(@Body request: UserInfoRequest): Call<UserInfoResponse>
+
+    @POST(PersonalApi.SEND_OLD_REPLACE_CODE)
+    fun sendOldPhoneRepaireCode(@Body request: SendOldRepalceCodeRequest): Call<SendLoginCodeResponse>
+
+
+    @POST(PersonalApi.MODIFY_PHONE_OLD)
+    fun sendModifyOldPhone(@Body request: ModifyOldPhoneRequest): Call<SendLoginCodeResponse>
 }

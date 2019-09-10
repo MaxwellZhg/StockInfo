@@ -1,6 +1,7 @@
 package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.personal.BR
@@ -9,6 +10,7 @@ import com.zhuorui.securities.personal.ui.presenter.SecurityPresenter
 import com.zhuorui.securities.personal.ui.view.SecurityView
 import com.zhuorui.securities.personal.ui.viewmodel.SecurityViewModel
 import com.zhuorui.securities.personal.databinding.FragmentSecurityBinding
+import kotlinx.android.synthetic.main.fragment_security.*
 
 /**
  * Created by Maxwell.
@@ -17,7 +19,7 @@ import com.zhuorui.securities.personal.databinding.FragmentSecurityBinding
  * Desc:
  */
 class SecurityFragment :
-    AbsSwipeBackFragment<FragmentSecurityBinding, SecurityViewModel, SecurityView, SecurityPresenter>(), SecurityView {
+    AbsSwipeBackFragment<FragmentSecurityBinding, SecurityViewModel, SecurityView, SecurityPresenter>(), SecurityView,View.OnClickListener {
     override val layout: Int
         get() = R.layout.fragment_security
     override val viewModelId: Int
@@ -37,6 +39,14 @@ class SecurityFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        presenter?.getUserInfo()
+        //presenter?.getUserInfo()
+        tv_change_phone.setOnClickListener(this)
+    }
+    override fun onClick(p0: View?) {
+       when(p0?.id){
+           R.id.tv_change_phone->{
+               start(ChangePhoneNumFragment.newInstance())
+           }
+       }
     }
 }
