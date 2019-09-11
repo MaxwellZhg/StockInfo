@@ -46,6 +46,7 @@
         <attr name="zr_right_icon_hight" format="dimension"/>
         <attr name="zr_right_icon_margin" format="dimension"/>
     </declare-styleable>
+
     <declare-styleable name="HelpCenterTitleBar">
         <attr name="help_center_cancle_icon" format="reference"/>
         <attr name="help_center_cancle_width" format="dimension"/>
