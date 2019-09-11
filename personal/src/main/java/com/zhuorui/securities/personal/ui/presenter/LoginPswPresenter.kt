@@ -34,9 +34,9 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
-    private val errorDialog by lazy {
-        ErrorTimesDialog(context,2)
-    }
+   private var errorDialog:ErrorTimesDialog?=null
+   private val con = context
+
     override fun init() {
         super.init()
         view?.init()
@@ -68,10 +68,9 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
     fun onErrorRes(response: ErrorResponse) {
         if (response.request is UserLoginPwdRequest) {
             dialogshow(0)
-            if(response.code=="010006"){
-                if(response.errordata?.loginCount==0) {
-                    showErrorDailog()
-                }
+            if(response.code=="010005"){
+                showErrorDailog(response.msg)
+
             }
         }
     }
@@ -95,12 +94,13 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
             }
         }
     }
-    fun showErrorDailog() {
-        errorDialog.show()
-        errorDialog.setOnclickListener( View.OnClickListener {
+    fun showErrorDailog(str:String?) {
+        errorDialog=ErrorTimesDialog(con,2,str)
+        errorDialog?.show()
+        errorDialog?.setOnclickListener( View.OnClickListener {
             when(it.id){
                 R.id.rl_complete_psw->{
-                    errorDialog.dismiss()
+                    errorDialog?.dismiss()
                 }
             }
         })

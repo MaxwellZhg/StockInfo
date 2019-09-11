@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -11,7 +12,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyOldPhoneRequest
+import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.SendOldRepalceCodeRequest
+import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangePhoneNumView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangePhoneNumViewModel
@@ -50,13 +53,22 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
 
     fun requestModifyOldPhone(str: kotlin.String?,verificationCode:String) {
         dialogshow(1)
-        val request = ModifyOldPhoneRequest(str, verificationCode, transactions.createTransaction())
+        val request = ModifyOldPhoneRequest(str, verificationCode,"0086", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendModifyOldPhone(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onModifyOldPhoneCode(response: SendLoginCodeResponse) {
-        if(response.request is SendOldRepalceCodeRequest){
+        if(response.request is ModifyOldPhoneRequest){
+            dialogshow(0)
+            view?.gotonext()
+        }
+    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onErrorRes(response: ErrorResponse) {
+        if (response.request is ModifyOldPhoneRequest) {
+            dialogshow(0)
+        }else if(response.request is SendOldRepalceCodeRequest){
             dialogshow(0)
         }
     }
@@ -99,7 +111,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
         }
     }
 
-    fun dialogshow(type:Int){
+    private fun dialogshow(type:Int){
         when(type){
             1->{
                 progressDialog.setCancelable(false)

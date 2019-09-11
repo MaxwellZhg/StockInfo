@@ -61,7 +61,7 @@ class MyTabFragment :
         ll_account_safety.setOnClickListener(this)
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
-        if(LocalAccountConfig.read().getAccountInfo().token==""){
+        if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
             ll_login_out.visibility=View.INVISIBLE
         }else{
             ll_login_out.visibility=View.VISIBLE
@@ -116,7 +116,7 @@ class MyTabFragment :
         }
     }
     override fun loginStateChange() {
-        if(LocalAccountConfig.read().getAccountInfo().token==""){
+        if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
             ll_login_out.visibility=View.INVISIBLE
         }else{
             ll_login_out.visibility=View.VISIBLE

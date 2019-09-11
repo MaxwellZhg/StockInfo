@@ -50,4 +50,16 @@ interface IPersonalNet {
 
     @POST(PersonalApi.MODIFY_PHONE_OLD)
     fun sendModifyOldPhone(@Body request: ModifyOldPhoneRequest): Call<SendLoginCodeResponse>
+
+    @POST(PersonalApi.SEND_NEW_REPLACE_CODE)
+    fun sendNewRepairedCode(@Body request: SendOldRepalceCodeRequest): Call<SendLoginCodeResponse>
+
+    @POST(PersonalApi.MODIFY_PHONE_NEW)
+    fun sendModifyNewPhone(@Body request: ModifyNewPhoneCodeRequest): Call<SendLoginCodeResponse>
+
+    @POST(PersonalApi.MODIFY_LOGIN_PASSWORD)
+    fun sendModifyNewLoginPsw(@Body request: ModifyLoginPswRequest): Call<SendLoginCodeResponse>
+
+    @POST(PersonalApi.MODIFY_CAPITAL_PASSWORD)
+    fun sendModifyCapitalPsw(@Body request: ModifyCapitalPswRequest): Call<SendLoginCodeResponse>
 }

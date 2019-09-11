@@ -40,7 +40,12 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        tv_hide_phone.text=ResUtil.getStringFormat(R.string.phone_tips_hide,PhoneHideUtils.hidePhoneNum(LocalAccountConfig.read().getAccountInfo().phone))
+        if(LocalAccountConfig.read().getAccountInfo().phone!=null) {
+            tv_hide_phone.text = ResUtil.getStringFormat(
+                R.string.phone_tips_hide,
+                PhoneHideUtils.hidePhoneNum(LocalAccountConfig.read().getAccountInfo().phone)
+            )
+        }
         tv_get_code.setOnClickListener(this)
         et_verify_code.addTextChangedListener(this)
         tv_btn_next.setOnClickListener(this)
@@ -91,6 +96,6 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
     }
 
     override fun gotonext() {
-     start(ChangeNewPhoneFragment.newInstance())
+     start(ChangeNewPhoneFragment.newInstance(LocalAccountConfig.read().getAccountInfo().phone,et_verify_code.text.toString()))
     }
 }

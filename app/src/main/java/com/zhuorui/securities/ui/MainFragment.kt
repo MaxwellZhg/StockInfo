@@ -133,6 +133,7 @@ class MainFragment :
     }
 
     override fun jumpToLogin() {
+        //设备下线
         start(LoginRegisterFragment.newInstance())
     }
 }

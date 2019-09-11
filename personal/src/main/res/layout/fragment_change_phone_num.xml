@@ -48,6 +48,7 @@
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:textColor="@color/color_8DB9E4"
+                          android:background="@color/color_FFFFFFFF"
                           android:hint="@string/hide_phone_tips"
                           android:textColorHint="@color/color_A1A1A1"
                           android:layout_toRightOf="@+id/iv_key"

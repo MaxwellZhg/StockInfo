@@ -7,6 +7,7 @@ import android.view.View
 import com.zhuorui.securities.personal.R
 import kotlinx.android.synthetic.main.item_error_dialog_info.*
 import kotlinx.android.synthetic.main.item_vrf_dialog_info.*
+import kotlinx.android.synthetic.main.item_error_dialog_info.tv_attention
 
 /**
  * Created by Maxwell.
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.item_vrf_dialog_info.*
  * Date: 2019/8/22
  * Desc:
  */
-class ErrorTimesDialog (context: Context,type:Int):Dialog(context, R.style.dialog){
+class ErrorTimesDialog (context: Context,type:Int,str:String?):Dialog(context, R.style.dialog){
     init {
         when(type){
             1-> {
@@ -22,6 +23,7 @@ class ErrorTimesDialog (context: Context,type:Int):Dialog(context, R.style.dialo
             }
             2->{
                 setContentView(R.layout.item_error_dialog_info)
+                setTipsValue(str)
             }
 
         }
@@ -40,6 +42,10 @@ class ErrorTimesDialog (context: Context,type:Int):Dialog(context, R.style.dialo
         if (rl_complete_psw !== null){
             rl_complete_psw.setOnClickListener(listener)
         }
+    }
+
+    fun setTipsValue(str:String?){
+        tv_attention_tips.text=str
     }
 
 }

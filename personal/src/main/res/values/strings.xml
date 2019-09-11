@@ -104,4 +104,23 @@
     <string name="compelte" tools:ignore="MissingTranslation">完成</string>
     <string name="verify_code_length" tools:ignore="MissingTranslation">验证码长度不正确</string>
     <string name="login_ahead" tools:ignore="MissingTranslation">请先登录</string>
+    <string name="same_phone_num" tools:ignore="MissingTranslation">修改的手机号不能与原来的相同</string>
+    <string name="old_pass_word" tools:ignore="MissingTranslation">原密码</string>
+    <string name="new_pass_word" tools:ignore="MissingTranslation">新密码</string>
+    <string name="en_sure_new_pass_word" tools:ignore="MissingTranslation">确认新密码</string>
+    <string name="input_old_pass_word" tools:ignore="MissingTranslation">请输入您的原密码</string>
+    <string name="input_new_pass_word" tools:ignore="MissingTranslation">请输入您的新密码</string>
+    <string name="input_ensur_new_pass_word" tools:ignore="MissingTranslation">请再次输入您的新密码</string>
+    <string name="pass_word_type_tips" tools:ignore="MissingTranslation">密码必须包含字母（大写或小写）、数字或符号至少两种</string>
+    <string name="old_trade_pass_word" tools:ignore="MissingTranslation">原交易密码</string>
+    <string name="input_old_trade_pass_tips" tools:ignore="MissingTranslation">请输入您的原交易密码</string>
+    <string name="forget_trade_pass" tools:ignore="MissingTranslation">忘记交易密码</string>
+    <string name="open_account_license_num" tools:ignore="MissingTranslation">开户证件号</string>
+    <string name="input_account_license_num" tools:ignore="MissingTranslation">请输入您开户时登记的证件号码</string>
+    <string name="input_receiver_code" tools:ignore="MissingTranslation">请输入您收到的验证码</string>
+    <string name="please_ensure_password" tools:ignore="MissingTranslation">请确认密码</string>
+    <string name="no_null_old_pass"  tools:ignore="MissingTranslation">原密码不能为空</string>
+    <string name="mix_length_old_pass"  tools:ignore="MissingTranslation">原密码长度不匹配</string>
+    <string name="old_pass_no_match"  tools:ignore="MissingTranslation">原密码大、小写字母,数字或符号至少含有2种</string>
+    <string name="please_input_ensure_capital_psw" tools:ignore="MissingTranslation">请输入确认交易密码内容</string>
 </resources>

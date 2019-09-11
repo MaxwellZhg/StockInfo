@@ -5,9 +5,9 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
- * Date: 2019/9/10
+ * Date: 2019/9/11
  * Desc:
  */
-interface ChangeNewPhoneView :AbsView{
-  fun gotomain()
+interface ForgetTradePassView :AbsView{
+
 }

@@ -31,7 +31,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
     private val errorDialog by lazy {
-        ErrorTimesDialog(context,1)
+        ErrorTimesDialog(context,1,"")
     }
     /* 加载进度条 */
     private val progressDialog by lazy {
