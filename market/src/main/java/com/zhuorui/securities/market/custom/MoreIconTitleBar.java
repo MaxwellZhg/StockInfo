@@ -56,11 +56,11 @@ public class MoreIconTitleBar extends ZhuoRuiTopBar {
         a.recycle();
     }
 
-    public void setLeftViewClickListener(OnClickListener l) {
+    public void setLeftClickListener(OnClickListener l) {
         if (mLeftView != null) mLeftView.setOnClickListener(l);
     }
 
-    public void setRight2ViewClickListener(OnClickListener l) {
+    public void setRight2ClickListener(OnClickListener l) {
         if (mRight2View != null) mRight2View.setOnClickListener(l);
     }
 
