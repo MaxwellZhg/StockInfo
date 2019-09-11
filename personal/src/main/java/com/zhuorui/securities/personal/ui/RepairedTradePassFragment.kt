@@ -54,7 +54,7 @@ class RepairedTradePassFragment :AbsSwipeBackNetFragment<FragmentRepairedTradePa
                 start(ForgetTradePassFragment.newInstance())
             }
             R.id.tv_btn_complete->{
-                start(ChangeTradePassFragment.newInstance())
+                start(ChangeTradePassFragment.newInstance(et_trade_psw.text.toString()))
             }
         }
     }

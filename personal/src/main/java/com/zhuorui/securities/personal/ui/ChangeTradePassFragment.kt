@@ -14,10 +14,7 @@ import com.zhuorui.securities.personal.databinding.FragmentChangeTradePassBindin
 import com.zhuorui.securities.personal.ui.presenter.ChangeTradePassPresenter
 import com.zhuorui.securities.personal.ui.view.ChangeTradePassView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangeTradePassViewModel
-import kotlinx.android.synthetic.main.fragment_change_new_phone_num.*
 import kotlinx.android.synthetic.main.fragment_change_trade_pass.*
-import kotlinx.android.synthetic.main.fragment_change_trade_pass.tv_btn_complete
-import kotlinx.android.synthetic.main.fragment_repaired_login_psw.*
 
 /**
  * Created by Maxwell.
@@ -28,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_repaired_login_psw.*
 class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBinding,ChangeTradePassViewModel,ChangeTradePassView,ChangeTradePassPresenter>(),ChangeTradePassView,TextWatcher,View.OnClickListener{
     private lateinit var strnewcapsw: String
     private lateinit var strencapsw: String
+    private var oldcapsw:String?=null
     override val layout: Int
         get() = R.layout.fragment_change_trade_pass
     override val viewModelId: Int
@@ -39,13 +37,20 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
     override val getView: ChangeTradePassView
         get() = this
     companion object {
-        fun newInstance(): ChangeTradePassFragment {
-            return ChangeTradePassFragment()
+        fun newInstance(oldcapsw:String): ChangeTradePassFragment {
+            val fragment = ChangeTradePassFragment()
+            if (oldcapsw != "") {
+                val bundle = Bundle()
+                bundle.putSerializable("oldcapsw", oldcapsw)
+                fragment.arguments = bundle
+            }
+            return fragment
         }
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        oldcapsw = arguments?.getSerializable("oldcapsw") as String
         et_ensure_new_capital_psw.addTextChangedListener(this)
         tv_btn_complete.setOnClickListener(this)
     }
@@ -78,7 +83,16 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
         strencapsw=et_ensure_new_capital_psw.text.toString().trim()
         when(p0?.id){
            R.id.tv_btn_complete->{
-                presenter?.detailTips(strnewcapsw,strencapsw)
+                presenter?.detailTips(strnewcapsw,strencapsw).let {
+                    when(it){
+                        true->{
+                            oldcapsw?.let { it1 -> presenter?.modifyCapitalPsw(it1,strencapsw) }
+                        }
+                        else->{
+
+                        }
+                    }
+                }
             }
         }
     }

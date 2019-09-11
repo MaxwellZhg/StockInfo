@@ -8,6 +8,9 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.Md5Util
+import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
+import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyCapitalPswRequest
 import com.zhuorui.securities.personal.net.request.ModifyLoginPswRequest
@@ -44,8 +47,20 @@ class ChangeTradePassPresenter(context: Context) :AbsNetPresenter<ChangeTradePas
 
     }
 
-    fun detailTips(oldstr:String,newStr:String):Boolean{
-        return false
+    fun detailTips(newStr:String,enStr:String):Boolean{
+        if(newStr==""){
+            ResUtil.getString(R.string.input_new_ca_psw)?.let { ToastUtil.instance.toast(it) }
+            return false
+        }
+        if(enStr==""){
+            ResUtil.getString(R.string.input_en_ca_psw)?.let { ToastUtil.instance.toast(it) }
+            return false
+        }
+        if(newStr!=enStr){
+            ResUtil.getString(R.string.input_en_ca_psw_no_match)?.let { ToastUtil.instance.toast(it) }
+           return false
+          }
+        return true
     }
 
     private fun dialogshow(type:Int){

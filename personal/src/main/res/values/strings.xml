@@ -123,4 +123,7 @@
     <string name="mix_length_old_pass"  tools:ignore="MissingTranslation">原密码长度不匹配</string>
     <string name="old_pass_no_match"  tools:ignore="MissingTranslation">原密码大、小写字母,数字或符号至少含有2种</string>
     <string name="please_input_ensure_capital_psw" tools:ignore="MissingTranslation">请输入确认交易密码内容</string>
+    <string name="input_new_ca_psw">请输入新的交易密码</string>
+    <string name="input_en_ca_psw">请确认交易密码</string>
+    <string name="input_en_ca_psw_no_match">两次输入的交易码不一致</string>
 </resources>
