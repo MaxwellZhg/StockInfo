@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
@@ -13,6 +15,7 @@ import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocks
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
+import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 import me.yokeyword.fragmentation.ISupportFragment
 
@@ -53,7 +56,17 @@ class SimulationTradingStocksFragment :
         iv_chart.setOnClickListener(this)
         btn_buy.setOnClickListener(this)
         btn_sell.setOnClickListener(this)
-        top_bar.setRight2ViewClickListener{
+        top_bar.setLeftClickListener {
+            // 返回首页
+            val homeFragment = (activity as AbsActivity).supportFragmentManager.fragments[0] as AbsFragment<*, *, *, *>
+            popTo(homeFragment::class.java, false)
+        }
+        top_bar.setRightClickListener {
+            // 消息
+            start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索
             startForResult(SimulationTradingSearchFragment.newInstance(),12)
         }
     }
