@@ -14,20 +14,13 @@
 
         <com.zhuorui.securities.market.custom.MoreIconTitleBar
                 android:id="@+id/top_bar"
+                style="@style/SimulationTradingTitleBar"
                 android:layout_width="match_parent"
                 app:zr_topbarTitle="@string/simulation_trading_stocks"
                 app:left_icon="@mipmap/cancle_help_info"
                 app:left_icon_width="19dp"
                 app:left_icon_height="19dp"
                 app:left_icon_margin="55dp"
-                app:zr_right_icon="@mipmap/ic_message"
-                app:zr_right_icon_width="19dp"
-                app:zr_right_icon_hight="20dp"
-                app:zr_right_icon_margin="13dp"
-                app:right2_icon="@mipmap/ic_serach"
-                app:right2_icon_width="20dp"
-                app:right2_icon_height="19dp"
-                app:right2_icon_margin="51dp"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_height="wrap_content"/>
 
@@ -182,6 +175,7 @@
                     android:textSize="17sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/tv_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/stock_code_input_hint"

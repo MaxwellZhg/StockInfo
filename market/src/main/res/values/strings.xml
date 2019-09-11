@@ -83,4 +83,8 @@
     <string name="max_sell_num">最大可卖 --</string>
     <string name="str_buy">买入</string>
     <string name="str_sell">卖出</string>
+    <string name="hint_stock_code_or_abbreviation">请输入股票代码/简称</string>
+    <string name="str_my_own_choice">我的自选</string>
+    <string name="str_search_history">搜索历史</string>
+    <string name="str_no_data">暂无数据</string>
 </resources>

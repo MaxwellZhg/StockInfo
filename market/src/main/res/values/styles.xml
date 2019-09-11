@@ -11,5 +11,15 @@
         <item name="android:textColor">#282828</item>
         <item name="android:textSize">14sp</item>
     </style>
+    <style name="SimulationTradingTitleBar">
+        <item name="zr_right_icon">@mipmap/ic_message</item>
+        <item name="zr_right_icon_width">19dp</item>
+        <item name="zr_right_icon_hight">20dp</item>
+        <item name="zr_right_icon_margin">13dp</item>
+        <item name="right2_icon">@mipmap/ic_serach</item>
+        <item name="right2_icon_width">20dp</item>
+        <item name="right2_icon_height">19dp</item>
+        <item name="right2_icon_margin">51dp</item>
+    </style>
 
 </resources>

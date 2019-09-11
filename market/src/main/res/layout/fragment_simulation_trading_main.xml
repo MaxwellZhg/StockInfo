@@ -14,7 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+        <com.zhuorui.securities.market.custom.MoreIconTitleBar
+                android:id="@+id/top_bar"
+                style="@style/SimulationTradingTitleBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:zr_topbarTitle="@string/simulation_trading_stocks"

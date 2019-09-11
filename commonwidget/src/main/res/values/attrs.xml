@@ -166,4 +166,10 @@
         <attr name="zr_set_title_bar_text" format="string|reference"/>
         <attr name="zr_set_title_bar_margin" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="ZRSearchView">
+        <attr name="zr_hint" format="string|reference"/>
+        <attr name="zr_clear_icon" format="reference"/>
+        <attr name="zr_left_icon" format="reference"/>
+        <attr name="zr_background" format="reference"/>
+    </declare-styleable>
 </resources>

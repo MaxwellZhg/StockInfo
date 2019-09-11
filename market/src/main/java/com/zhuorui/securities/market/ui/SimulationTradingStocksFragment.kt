@@ -14,6 +14,7 @@ import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresent
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  *    author : PengXianglin
@@ -52,6 +53,9 @@ class SimulationTradingStocksFragment :
         iv_chart.setOnClickListener(this)
         btn_buy.setOnClickListener(this)
         btn_sell.setOnClickListener(this)
+        top_bar.setRight2ViewClickListener{
+            startForResult(SimulationTradingSearchFragment.newInstance(),12)
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -68,6 +72,15 @@ class SimulationTradingStocksFragment :
                 // 卖出
                 TradingStocksOrderDialog.createDialog(context!!, false, true).show()
             }
+        }
+    }
+
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        if (resultCode == ISupportFragment.RESULT_OK && requestCode == 12){
+            val code = data?.getString("stock_code")!!
+            val name = data?.getString("stock_name")
+            tv_code.setText(code)
         }
     }
 }
