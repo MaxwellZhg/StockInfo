@@ -26,7 +26,7 @@ class ToastUtil private constructor() {
      * 采用系统的toast
      */
     @SuppressLint("ShowToast")
-    fun toast(@StringRes res: Int, duration: Int) {
+    private fun toast(@StringRes res: Int, duration: Int) {
         if (toast == null) {
             toast = Toast.makeText(BaseApplication.context, res, duration)
         }
@@ -38,7 +38,7 @@ class ToastUtil private constructor() {
      * 采用系统的toast
      */
     @SuppressLint("ShowToast")
-    fun toast(cs: CharSequence, duration: Int) {
+    private fun toast(cs: CharSequence, duration: Int) {
         if (toast == null) {
             toast = Toast.makeText(BaseApplication.context, cs, duration)
         }
@@ -66,7 +66,7 @@ class ToastUtil private constructor() {
      * 自定义居中的toast
      */
     @SuppressLint("ShowToast")
-    fun toastCenter(@StringRes res: Int, duration: Int) {
+    private fun toastCenter(@StringRes res: Int, duration: Int) {
         createToast()
         val tv = centerToast!!.view.findViewById<TextView>(R.id.toast_tv)
         tv.text = ResUtil.getString(res)
@@ -79,7 +79,7 @@ class ToastUtil private constructor() {
      * 自定义居中的toast
      */
     @SuppressLint("ShowToast")
-    fun toastCenter(cs: CharSequence, duration: Int) {
+    private fun toastCenter(cs: CharSequence, duration: Int) {
         createToast()
         val tv = centerToast!!.view.findViewById<TextView>(R.id.toast_tv)
         tv.text = cs
