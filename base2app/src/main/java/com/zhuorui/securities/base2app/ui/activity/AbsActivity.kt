@@ -1,5 +1,6 @@
 package com.zhuorui.securities.base2app.ui.activity
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Build
@@ -182,4 +183,5 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
     override fun clickToFast() {
 
     }
+
 }

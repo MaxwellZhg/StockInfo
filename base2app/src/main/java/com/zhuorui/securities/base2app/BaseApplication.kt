@@ -137,7 +137,7 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
         val writeTimeout = config?.writeTimeout()
         val readTimeout = config?.readTimeout()
         val connectTimeout = config?.connectTimeout()
-        Network.initRetrofit(domain, debug, writeTimeout?.toLong(), readTimeout?.toLong(), connectTimeout?.toLong(), header)
+        Network.initRetrofit(domain, debug, writeTimeout?.toLong(), readTimeout?.toLong(), connectTimeout?.toLong(), header, checkToken)
     }
 
     /**
@@ -146,6 +146,13 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
      * @return defaultSpName
      */
     protected abstract val header: Interceptor
+
+    /**
+     * 检查网络token状态
+     *
+     * @return defaultSpName
+     */
+    protected abstract val checkToken: Interceptor
 
     override fun appClose() {
 

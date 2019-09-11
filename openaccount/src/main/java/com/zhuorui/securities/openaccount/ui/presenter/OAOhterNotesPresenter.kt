@@ -10,23 +10,14 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.base2app.ui.fragment.AbsPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.SubBasicsInfoRequest
-import com.zhuorui.securities.openaccount.net.request.SubIdentityRequest
 import com.zhuorui.securities.openaccount.net.response.SubBasicsInfoResponse
-import com.zhuorui.securities.openaccount.net.response.SubIdentityResponse
-import com.zhuorui.securities.openaccount.ui.view.OAInvestmentExperienceView
 import com.zhuorui.securities.openaccount.ui.view.OAOhterNotesView
-import com.zhuorui.securities.openaccount.ui.view.OAPersonalInformationView
-import com.zhuorui.securities.openaccount.ui.view.OAUploadDocumentsView
-import com.zhuorui.securities.openaccount.ui.viewmodel.OAInvestmentExperienceViewModel
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAOhterNotesViewModel
-import com.zhuorui.securities.openaccount.ui.viewmodel.OAPersonalInformationViewModel
-import com.zhuorui.securities.openaccount.ui.viewmodel.OAUploadDocumentsViewModel
 
 /**
  *    author : liuwei
@@ -86,7 +77,7 @@ class OAOhterNotesPresenter : AbsNetPresenter<OAOhterNotesView, OAOhterNotesView
         val spannable = SpannableString(String.format(txt, tel))
         val start = spannable.indexOf(tel)
         spannable.setSpan(
-            ForegroundColorSpan(ResUtil.getColor(R.color.app_bule)!!),
+            ForegroundColorSpan(ResUtil.getColor(R.color.color_1A6ED2)!!),
             start,
             start + tel.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE

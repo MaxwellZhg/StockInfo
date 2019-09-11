@@ -13,7 +13,6 @@ import com.zhuorui.securities.openaccount.ui.presenter.OpenAccountTabPresenter
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
 import com.zhuorui.securities.personal.ui.LoginRegisterFragment
-import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  * Created by Maxwell.
@@ -46,6 +45,10 @@ open class OpenAccountTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        onJumpToOpenAccountPage()
+    }
+
+    override fun onJumpToOpenAccountPage() {
         when (presenter?.getLoginStatus()) {
             false -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())

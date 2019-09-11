@@ -56,7 +56,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     }
 
     private fun getDataCount(): Int {
-        return 100
+        return 2
     }
 
     override fun getItemViewType(position: Int): Int {

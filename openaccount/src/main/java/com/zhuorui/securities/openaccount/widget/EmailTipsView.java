@@ -52,7 +52,7 @@ public class EmailTipsView extends FrameLayout implements TextWatcher, View.OnFo
         listView = new RecyclerView(context);
         listView.setLayoutManager(new LinearLayoutManager(context));
         listView.setAdapter(adapter = new ListAdapter(context));
-        listView.setBackgroundResource(R.color.app_bule);
+        listView.setBackgroundResource(R.color.color_1A6ED2);
         addView(listView);
         setListH();
     }

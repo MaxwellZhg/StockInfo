@@ -8,11 +8,14 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.LoginAndRegisterFragmentBinding
+import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.ui.presenter.LoginRegisterPresenter
 import com.zhuorui.securities.personal.ui.view.LoginRegisterView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
@@ -89,14 +92,14 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
-                if(TextUtils.isEmpty(et_phone.text.toString())){
+                if(TextUtils.isEmpty(et_phone_code.text.toString())){
                     ToastUtil.instance.toast(R.string.phone_code_tips)
                 }else {
-                    presenter?.setState(0)
+                    tv_btn_login.isEnabled=true
                 }
              }
         } else {
-            presenter?.setState(1)
+            tv_btn_login.isEnabled=false
         }
     }
 
@@ -113,6 +116,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     }
 
     override fun gotomain() {
+        RxBus.getDefault().post(LoginStateChangeEvent(true))
          pop()
     }
 

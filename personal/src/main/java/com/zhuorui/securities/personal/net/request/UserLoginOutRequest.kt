@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/8/20
  * Desc:
  */
-class UserLoginOutRequest (token:String,transaction: String):
+class UserLoginOutRequest (transaction: String):
     BaseRequest(transaction){
     init {
         generateSign()

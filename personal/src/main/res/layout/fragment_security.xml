@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.personal.ui.viewmodel.SecurityViewModel"/>
+    </data>
+    <LinearLayout android:orientation="vertical"
+                  android:background="@color/color_f0f0f0"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:zr_topbarTitle="@string/account_safe">
+        </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/tv_change_phone"
+                  android:layout_height="50dp"
+                  android:text="@string/phone_num"
+                  android:textStyle="bold"
+                  android:textSize="16sp"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="13dp"
+                  android:paddingRight="13dp"
+                  android:drawableRight="@mipmap/right_tips_icon"
+                  android:textColor="@color/color_282828"
+                  android:background="@color/color_FFFFFFFF"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:layout_marginTop="10dp"
+                  android:text="@string/fix_login_pass"
+                  android:textStyle="bold"
+                  android:textSize="16sp"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="13dp"
+                  android:paddingRight="13dp"
+                  android:drawableRight="@mipmap/right_tips_icon"
+                  android:textColor="@color/color_282828"
+                  android:background="@color/color_FFFFFFFF"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:layout_marginTop="1dp"
+                  android:text="@string/fix_pay_pass"
+                  android:textStyle="bold"
+                  android:textSize="16sp"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="13dp"
+                  android:paddingRight="13dp"
+                  android:drawableRight="@mipmap/right_tips_icon"
+                  android:textColor="@color/color_282828"
+                  android:background="@color/color_FFFFFFFF"/>
+    </LinearLayout>
+</layout>

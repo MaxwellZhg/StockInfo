@@ -134,6 +134,9 @@ public class ZRCellBar extends FrameLayout {
         }
     }
 
+    public String getTipsValue(){
+        return  ((TextView) mRightTipsView).getText().toString();
+    }
 
 
 }

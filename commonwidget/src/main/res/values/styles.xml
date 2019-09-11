@@ -42,4 +42,41 @@
         <item name="android:shadowRadius">1</item>
     </style>
 
+    <style name="btnStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@null</item>
+        <item name="unableBackgroundColor">#8db9e4</item>
+        <item name="normalBackgroundColor">@color/color_1A6ED2</item>
+        <item name="pressedBackgroundColor">#145bb3</item>
+        <item name="radius">3dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="btnStrokeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@null</item>
+        <item name="unableStrokeColor">#666666</item>
+        <item name="normalStrokeColor">#333333</item>
+        <item name="pressedStrokeColor">#000000</item>
+        <item name="normalStrokeWidth">1dp</item>
+        <item name="pressedStrokeWidth">1dp</item>
+        <item name="unableStrokeWidth">1dp</item>
+        <item name="radius">3dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="btnStrokeStyle.Bule" parent="btnStrokeStyle">
+        <item name="unableStrokeColor">#8db9e4</item>
+        <item name="normalStrokeColor">@color/color_1A6ED2</item>
+        <item name="pressedStrokeColor">#145bb3</item>
+        <item name="radius">3dp</item>
+        <item name="android:textColor">@color/color_1A6ED2</item>
+    </style>
 </resources>

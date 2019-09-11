@@ -70,4 +70,17 @@
     <string name="str_click_view">点击查看</string>
     <string name="mock_stock_copyright">关于模拟炒股的最终解释权，归卓锐证券所有。</string>
     <string name="str_simulated_trading_rules">模拟交易规则</string>
+    <string name="simulation_trading_stocks">模拟炒股</string>
+    <string name="simulation_trading_stocks_tips">模拟炒港股练习</string>
+    <string name="str_type">类型</string>
+    <string name="price_limit">限价单（增强）</string>
+    <string name="stock_code">代码</string>
+    <string name="stock_code_input_hint">请输入股票代码或简称</string>
+    <string name="price">价格</string>
+    <string name="number">数量</string>
+    <string name="money">金额</string>
+    <string name="max_buy_num">最大可买 --</string>
+    <string name="max_sell_num">最大可卖 --</string>
+    <string name="str_buy">买入</string>
+    <string name="str_sell">卖出</string>
 </resources>

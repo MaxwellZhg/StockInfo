@@ -45,12 +45,12 @@ class ConfirmDialog(
             ignoreBackPressed()
     }
 
-    fun setMagDrawableStart(drawable: Drawable): ConfirmDialog {
+    fun setMsgDrawableStart(drawable: Drawable): ConfirmDialog {
         tv_msg.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
         return this
     }
 
-    fun setMagDrawableStart(@DrawableRes drawableId: Int): ConfirmDialog {
+    fun setMsgDrawableStart(@DrawableRes drawableId: Int): ConfirmDialog {
         tv_msg.setCompoundDrawablesRelativeWithIntrinsicBounds(ResUtil.getDrawable(drawableId), null, null, null)
         return this
     }

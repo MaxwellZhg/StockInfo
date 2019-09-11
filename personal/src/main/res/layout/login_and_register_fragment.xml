@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
      <data>
          <variable name="viewmodel"
                    type="com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel"/>
@@ -142,17 +142,24 @@
                        android:layout_marginTop="15dp"
                        android:background="@color/color_A1A1A1"/>
         </LinearLayout>
-        <Button android:layout_width="match_parent"
+        <com.zhuorui.commonwidget.StateButton
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="29dp"
                 android:layout_marginRight="29dp"
                 android:layout_marginTop="20dp"
-                android:textSize="23sp"
-                android:textStyle="bold"
                 android:id="@+id/tv_btn_login"
-                android:textColor="@color/color_FFFFFFFF"
+                android:layout_below="@+id/rl_login_tips"
+                android:textSize="23sp"
+                android:padding="0dp"
+                android:minHeight="0dp"
+                android:gravity="center"
                 android:text="@string/login"
-                android:background="@{viewmodel.state==1?@drawable/login_btn_unchecked:@drawable/login_btn_checked}"/>
+                android:enabled="false"
+                app:radius="3dp"
+                android:textColor="@color/color_FFFFFFFF"
+                app:normalBackgroundColor="@color/color_1A6ED2"
+                app:unableBackgroundColor="@color/color_8DB9E4"/>
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"

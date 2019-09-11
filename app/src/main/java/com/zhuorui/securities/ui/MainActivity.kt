@@ -1,8 +1,10 @@
 package com.zhuorui.securities.ui
 
+import android.content.Context
 import android.os.Bundle
 import com.zhuorui.securities.R
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
+import com.zhuorui.securities.personal.util.MultiLanguageUtil
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
@@ -34,5 +36,8 @@ class MainActivity : AbsActivity() {
 
     override fun statusBarLightMode(): Boolean {
         return false
+    }
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(MultiLanguageUtil.attachBaseContext(newBase))
     }
 }

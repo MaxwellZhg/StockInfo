@@ -8,6 +8,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -17,6 +18,7 @@ import com.zhuorui.securities.personal.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
@@ -84,6 +86,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
        }
     }
     override fun gotomain() {
+        RxBus.getDefault().post(LoginStateChangeEvent(true))
          pop()
     }
     override fun afterTextChanged(p0: Editable?) {

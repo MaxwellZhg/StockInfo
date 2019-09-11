@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@drawable/dialog_bg"
+        android:gravity="center_horizontal"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单明细"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/color_282828"
+            android:textSize="18sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="账号：港股模拟练习（1278178）"
+            android:textColor="@color/color_282828"
+            android:layout_marginTop="23dp"
+            android:textSize="15sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="方向：买入"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/color_282828"
+            android:textSize="15sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="名称：汇丰控股（00005.HK）"
+            android:textColor="@color/color_282828"
+            android:textSize="15sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="价格：56.850（港元）"
+            android:textColor="@color/color_282828"
+            android:textSize="15sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="数量：400"
+            android:textColor="@color/color_282828"
+            android:textSize="15sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="佣金：11.37"
+            android:textColor="@color/color_282828"
+            android:textSize="15sp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="金额：22,751.37（港元）"
+            android:textColor="@color/color_282828"
+            android:textSize="15sp"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="15dp"
+            android:layout_height="33dp">
+
+        <com.zhuorui.commonwidget.StateButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="@string/cancle"
+                android:gravity="center"
+                app:normalStrokeWidth="1dp"
+                app:pressedStrokeWidth="1dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                app:radius="3dp"
+                android:textStyle="bold"
+                app:normalStrokeColor="@color/color_616161"
+                app:pressedStrokeColor="@color/color_616161"
+                android:textColor="@color/color_000000"
+                android:textSize="17sp"/>
+
+        <com.zhuorui.commonwidget.StateButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="@string/ensure"
+                android:layout_marginStart="25dp"
+                style="@style/btnStyle"
+                android:textSize="17sp"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

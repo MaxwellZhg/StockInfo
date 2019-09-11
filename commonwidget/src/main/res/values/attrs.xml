@@ -46,6 +46,7 @@
         <attr name="zr_right_icon_hight" format="dimension"/>
         <attr name="zr_right_icon_margin" format="dimension"/>
     </declare-styleable>
+
     <declare-styleable name="HelpCenterTitleBar">
         <attr name="help_center_cancle_icon" format="reference"/>
         <attr name="help_center_cancle_width" format="dimension"/>
@@ -159,5 +160,10 @@
         <attr name="zr_cellbar_righttips_icon_margin" format="dimension"/>
         <attr name="zr_cellbar_right_tips" format="string|reference"/>
         <attr name="zr_cellbar_right_tips_margin" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="SettingTitleBar">
+        <attr name="zr_set_title_bar_text" format="string|reference"/>
+        <attr name="zr_set_title_bar_margin" format="dimension"/>
     </declare-styleable>
 </resources>
