@@ -3,15 +3,21 @@ package com.zhuorui.securities.market.ui
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.reflect.TypeToken
 import com.zhuorui.commonwidget.ZRSearchView
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingSearchBinding
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingSearchPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingSearchView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingSearchViewModel
@@ -62,6 +68,11 @@ class SimulationTradingSearchFragment :
 
     override val getView: SimulationTradingSearchView
         get() = this
+
+    override fun setSearchData(datas: List<SearchStockInfo>) {
+        searchAdapter?.setData(datas.toMutableList())
+        searchAdapter?.notifyDataSetChanged()
+    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
@@ -118,6 +129,9 @@ class SimulationTradingSearchFragment :
 
     override fun onKeyChange(key: String) {
         changeUi(key)
+        searchAdapter?.setData(null)
+        searchAdapter?.notifyDataSetChanged()
+        presenter?.search(key)
     }
 
     private fun changeUi(key: String) {
@@ -157,9 +171,24 @@ class SimulationTradingSearchFragment :
     private fun getSearchHistoryAdapter(): SimulationTradingSearchAdapter? {
         if (historyAdapter == null) {
             historyAdapter = SimulationTradingSearchAdapter(context!!)
+            historyAdapter?.setFooterView(getHistoryFooterView())
             historyAdapter?.listener = this
         }
         return historyAdapter
+    }
+
+    private fun getHistoryFooterView(): View {
+        val clear = TextView(context)
+        clear.setBackgroundResource(android.R.color.white)
+        clear.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
+        clear.setTextColor(ResUtil.getColor(R.color.color_232323)!!)
+        clear.setText(R.string.str_clear_record)
+        clear.gravity = Gravity.CENTER
+        clear.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ResUtil.getDimensionDp2Px(42f))
+        clear.setOnClickListener {
+            presenter?.clearSearchHistory()
+        }
+        return clear
     }
 
     override fun onItemClick(code: String, name: String) {

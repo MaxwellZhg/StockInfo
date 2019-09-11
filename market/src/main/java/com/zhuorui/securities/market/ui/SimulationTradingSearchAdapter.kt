@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
  *    author : liuwei
@@ -25,9 +26,10 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
     val context = context
     var vEmpty: TextView? = null
     var mEmptyMsg: String? = null
-
     var types: Array<Int?> = arrayOfNulls(2)
     var listener: OnSimulationTradingSearchListener? = null
+    var datas: MutableList<SearchStockInfo>? = null
+    var posOff = 0
 
 
     private var vHeader: View? = null
@@ -35,6 +37,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
 
 
     init {
+        datas = mutableListOf()
         initItemViewType()
     }
 
@@ -48,7 +51,9 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
         initItemViewType()
     }
 
-    fun addData() {
+    fun setData(list: MutableList<SearchStockInfo>?) {
+        datas?.clear()
+        list?.let { datas?.addAll(it) }
         initItemViewType()
     }
 
@@ -60,21 +65,27 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
     private fun initItemViewType() {
         types[1] = if (getDataCount() == 0) TYPE_EMPTY else TYPE_ITEM
         types[0] = if (vHeader != null) TYPE_HEADER else types[1]
+        posOff = if (vHeader == null) 0 else 1
+
     }
 
     override fun getItemCount(): Int {
         val dataCount = if (getDataCount() == 0) 1 else getDataCount()
         val hnum = if (vHeader == null) 0 else 1
-        val fnum = if (vFooter == null) 0 else 1
+        val fnum = if (getDataCount() == 0 || vFooter == null) 0 else 1
         return dataCount + hnum + fnum
     }
 
     private fun getDataCount(): Int {
-        return 2
+        return datas?.size!!
+    }
+
+    private fun getDataPosition(position: Int): Int {
+        return position - posOff
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (vFooter != null && position == itemCount - 1) {
+        return if (getDataCount() != 0 && vFooter != null && position == itemCount - 1) {
             TYPE_FOOTER
         } else {
             types[if (position > 1) 1 else position]!!
@@ -103,7 +114,8 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
                     )
                 itemViewHolder.itemView?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    listener?.onItemClick("00386.HK", "中国石油化工股份")
+                    val data = datas?.get(getDataPosition(pos))
+                    listener?.onItemClick(data?.code!!, data?.name!!)
                 }
                 itemViewHolder
             }
@@ -122,17 +134,24 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
         if (getItemViewType(position) == TYPE_ITEM) {
             val itemHolder = (holder as ItemViewHolder)
             itemHolder.itemView?.tag = position
+            val data = datas?.get(getDataPosition(position))
+            itemHolder.bindData(data!!)
         }
     }
 
     class ItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
+        var name: TextView? = null
+        var code: TextView? = null
+
         init {
+            name = itemView.findViewById(R.id.tv_name)
+            code = itemView.findViewById(R.id.tv_code)
         }
 
-
-        fun bindData(position: Int) {
-
+        fun bindData(data: SearchStockInfo) {
+            name?.text = data.name
+            code?.text = data.code + ".HK"
         }
 
     }

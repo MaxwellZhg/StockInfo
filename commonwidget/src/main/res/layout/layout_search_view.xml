@@ -28,7 +28,7 @@
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:padding="10dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@+id/search_view_et"
             app:layout_constraintBottom_toBottomOf="@+id/search_view_et"
             app:layout_constraintRight_toRightOf="@+id/search_view_et"
