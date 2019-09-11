@@ -52,6 +52,7 @@
 
         </com.zhuorui.commonwidget.ZRCellBar>
         <com.zhuorui.commonwidget.ZRCellBar
+                android:id="@+id/mock_stock"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/stock_model"

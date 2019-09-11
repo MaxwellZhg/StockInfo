@@ -28,4 +28,46 @@
     <string name="down_threshold">价格跌到</string>
     <string name="rise_range">涨幅超</string>
     <string name="down_range">跌幅超</string>
+    <string name="str_no_position_present">暂无持仓</string>
+    <string name="str_no_record_historical_transactions">暂无历史交易记录哦</string>
+    <string name="str_hold_positions">持仓</string>
+    <string name="str_today_orders">今日订单</string>
+    <string name="str_no_order">暂无订单</string>
+    <string name="str_agiotage">买卖股票</string>
+    <string name="str_quote">行情报价</string>
+    <string name="str_position_stock">持仓股票</string>
+    <string name="str_market_value_and_quantity">市值/数量</string>
+    <string name="str_present_price_and_cost">现价/成本</string>
+    <string name="str_opsition_gain_and_loss">持仓盈亏</string>
+    <string name="str_change_order">改单</string>
+    <string name="str_cancel_order">撤单</string>
+    <string name="str_order_status">订单状态</string>
+    <string name="str_name_code">名称代码</string>
+    <string name="str_quantity_and_order_price">数量/订单价</string>
+    <string name="str_order_time">下单时间</string>
+    <string name="str_total_account_assets_hkd">账户总资产（港元）</string>
+    <string name="str_today_profit_loss">当日盈亏</string>
+    <string name="str_market_capitalization">持仓市值</string>
+    <string name="str_available_funds">可用资金</string>
+    <string name="str_total_profit_loss">总盈亏金额</string>
+    <string name="str_historical_order">历史订单</string>
+    <string name="str_rule">规则</string>
+    <string name="str_zr_no">卓锐号</string>
+    <string name="str_create_immediately">立即创建</string>
+    <string name="str_Create_account">创建账户</string>
+    <string name="create_account_desc">立即获得100万元港币模拟资金</string>
+    <string name="create_account_desc_bule">100万</string>
+    <string name="str_create_account">创建账户</string>
+    <string name="mock_stock_rule">1、模拟交易只针对港股市场，初始资产为100万港元。\n
+        2、港股市场交易品种仅限于在香港交易所上市的正股， 其他品种暂时不可交易。\n
+        3、港股市场交易时间：9:30~12:00,13:00~16:00.\n
+        4、模拟交易暂不支持分红、送股、申购新股、供股和增发等操作。 \n
+        5、为避免出现虚假交易，模拟交易参照了实时行情量价撮合结果。\n
+        6、模拟交易系统与真实股市行情不完全一致，有关数据以模拟交易系统为准。\n
+        7、如上市公司因任何原因被除牌，但用户持有该公司的虚拟股票，用户不能再进行该股票的模拟交易，系统将按该股票的最后收市价，于第二个工作日将虚拟资金存入用户的模拟交易账户。\n
+        8、本交易系统为卓锐证券研发，每笔模拟交易将收取0.1097%成交额和每笔成交0.50港元的虚拟资金作为代收费(代收费项目，全部以交易所及政府收费为准，具体查看交易所网站点击查看)。若与真实市场有细微出入,以模拟盘交易系统为准。\n
+    </string>
+    <string name="str_click_view">点击查看</string>
+    <string name="mock_stock_copyright">关于模拟炒股的最终解释权，归卓锐证券所有。</string>
+    <string name="str_simulated_trading_rules">模拟交易规则</string>
 </resources>
