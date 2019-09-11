@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/not_fund_account"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="16dp"
+              android:gravity="center"
+              android:background="@android:color/white"
+              android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#232323"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:lineSpacingMultiplier="1.4"
+            android:text="@string/str_create_account"
+    />
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_lmsna_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#232323"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/create_account_desc"
+    />
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_lmsna_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_create_immediately"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/buttom_bule_radius_selector"
+    />
+
+
+</LinearLayout>

@@ -10,6 +10,7 @@ import com.zhuorui.securities.custom.view.BottomBarTab
 import com.zhuorui.securities.databinding.FragmentMainBinding
 import com.zhuorui.securities.infomation.ui.InfomationTabFragment
 import com.zhuorui.securities.market.ui.MarketTabFragment
+import com.zhuorui.securities.market.ui.SimulationTradingMainFragment
 import com.zhuorui.securities.market.ui.StockTabFragment
 import com.zhuorui.securities.openaccount.ui.OABiopsyFragment
 import com.zhuorui.securities.openaccount.ui.OpenAccountTabFragment
@@ -91,7 +92,6 @@ class MainFragment :
         bottomBar!!.setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
             override fun onTabSelected(position: Int, prePosition: Int) {
                 showHideFragment(mFragments[position], mFragments[prePosition])
-
             }
 
             override fun onTabUnselected(position: Int) {
@@ -99,7 +99,6 @@ class MainFragment :
             }
 
             override fun onTabReselected(position: Int) {
-
             }
 
         })

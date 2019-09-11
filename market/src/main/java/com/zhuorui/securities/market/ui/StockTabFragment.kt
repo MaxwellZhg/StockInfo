@@ -212,6 +212,6 @@ class StockTabFragment :
     }
 
     override fun onJumpToSimulationTradingStocksPage() {
-        (parentFragment as AbsFragment<*, *, *, *>).start(SimulationTradingStocksFragment.newInstance())
+        (parentFragment as AbsFragment<*, *, *, *>).start(SimulationTradingMainFragment.newInstance())
     }
 }
