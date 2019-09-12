@@ -136,15 +136,15 @@ class OAPersonalInformationFragment :
                 mOptionsPicker?.setCurrentData(tv_employment_status.text)
                 mOptionsPicker?.show()
             }
-            R.id.tv_tax -> {
-                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getTaxTypePickerListener())
-                mOptionsPicker?.setData(presenter?.taxTypePickerData)
-                mOptionsPicker?.setCurrentData(tv_tax.text)
-                mOptionsPicker?.show()
-            }
-            R.id.tv_tax_paying -> {
-                startForResult(CommonCountryCodeFragment.newInstance(presenter?.getCommonType()), 100)
-            }
+//            R.id.tv_tax -> {
+//                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getTaxTypePickerListener())
+//                mOptionsPicker?.setData(presenter?.taxTypePickerData)
+//                mOptionsPicker?.setCurrentData(tv_tax.text)
+//                mOptionsPicker?.show()
+//            }
+//            R.id.tv_tax_paying -> {
+//                startForResult(CommonCountryCodeFragment.newInstance(presenter?.getCommonType()), 100)
+//            }
         }
     }
 

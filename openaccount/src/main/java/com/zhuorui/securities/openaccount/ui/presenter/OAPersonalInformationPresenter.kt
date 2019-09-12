@@ -75,8 +75,9 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
             msg = ResUtil.getString(R.string.str_email_address) + ResUtil.getString(R.string.str_not_empty)
         } else if (TextUtils.isEmpty(view?.getTaxNo())) {
             msg = ResUtil.getString(R.string.str_tax_number) + ResUtil.getString(R.string.str_not_empty)
-        }else if (TextUtils.isEmpty(view?.getTaxState())){
-            msg = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_tax_paying_countries_regions)
+        } else if (TextUtils.isEmpty(view?.getTaxState())) {
+            msg =
+                ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_tax_paying_countries_regions)
         }
         if (TextUtils.isEmpty(msg)) {
             return true
@@ -87,11 +88,11 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
 
     fun getDialogSpanned(): Spannable? {
         val email = view?.getEmail()
-        val txt = "邮箱将用于接收结单等重要操作请再次确认是否输入正确\n"
+        val txt = ResUtil.getString(R.string.email_tips)
         val spannable = SpannableString(txt + email)
         spannable.setSpan(
             ForegroundColorSpan(ResUtil.getColor(R.color.color_1A6ED2)!!),
-            txt.length,
+            txt?.length!!,
             spannable.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
@@ -103,7 +104,7 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
         val taxType = taxTypePickerData?.indexOf(mTaxType)?.let { taxTypeCode?.get(it) }
         OpenInfoManager.getInstance()?.info?.occupation = occupation
         OpenInfoManager.getInstance()?.info?.taxType = taxType
-        OpenInfoManager.getInstance()?.info?.taxState = view?.getTaxState()
+        OpenInfoManager.getInstance()?.info?.taxState = "86"//中国内地
         OpenInfoManager.getInstance()?.info?.mailbox = view?.getEmail()
         OpenInfoManager.getInstance()?.info?.taxNumber = view?.getTaxNo()
         view?.toNext()

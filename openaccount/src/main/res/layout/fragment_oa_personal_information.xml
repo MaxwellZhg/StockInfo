@@ -96,7 +96,7 @@
 
                 <com.zhuorui.commonwidget.ZRTitleTextView
                         android:id="@+id/tv_tax"
-                        style="@style/ZRTitleTextViewRightArrow"
+                        style="@style/openAccountItem"
                         app:layout_constraintTop_toBottomOf="@+id/et_email"
                         app:zr_ttextviewTitle="@string/str_tax_information"
                         app:zr_ttextviewOrientation="HORIZONTAL"
@@ -105,7 +105,7 @@
 
                 <com.zhuorui.commonwidget.ZRTitleTextView
                         android:id="@+id/tv_tax_paying"
-                        style="@style/ZRTitleTextViewRightArrow"
+                        style="@style/openAccountItem"
                         app:layout_constraintTop_toBottomOf="@+id/tv_tax"
                         app:zr_ttextviewTitle="@string/str_tax_paying_countries_regions"
                         app:zr_ttextviewOrientation="HORIZONTAL"
