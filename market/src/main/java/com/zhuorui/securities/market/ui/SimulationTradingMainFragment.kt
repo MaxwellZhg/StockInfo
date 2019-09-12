@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.securities.base2app.BaseApplication.Companion.context
@@ -43,13 +45,16 @@ class SimulationTradingMainFragment :
     SimulationTradingMainView, SimulationTradingFundAccountView.OnMockStockFundAccountListener,
     SimulationTradingOrderAdapter.MockStockOrderListener, View.OnClickListener {
 
-    var vfundAccount: SimulationTradingFundAccountView? = null
-    var holdPositionsAdapter: HoldPositionsListAdapter? = null
-    var todayOrderAdapter: SimulationTradingOrderAdapter? = null
-    var magicIndicator: MagicIndicator? = null
-    var vHeader: View? = null
-    var vRule: View? = null
-    var tabTitle: Array<String>? = null
+    private var holdPositionsAdapter: HoldPositionsListAdapter? = null
+    private var todayOrderAdapter: SimulationTradingOrderAdapter? = null
+    private var magicIndicator: MagicIndicator? = null
+    private var vHeader: View? = null
+    private var vfundAccount: SimulationTradingFundAccountView? = null
+    private var vRule: View? = null
+    private var vUserHeader: ImageView? = null
+    private var vUserName: TextView? = null
+    private var vUserNo: TextView? = null
+    private var tabTitle: Array<String>? = null
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -106,21 +111,18 @@ class SimulationTradingMainFragment :
      * 改单
      */
     override fun toChangeOrder(id: String) {
-        LogInfra.Log.i("lw", id)
     }
 
     /**
      * 撤单
      */
     override fun toCancelOrder(id: String) {
-        LogInfra.Log.i("lw", id)
     }
 
     /**
      * 去行情
      */
     override fun toQuotation(id: String) {
-        LogInfra.Log.i("lw", id)
     }
 
     /**
@@ -131,6 +133,7 @@ class SimulationTradingMainFragment :
     }
 
     override fun createFundAccountSuccess() {
+        vfundAccount?.setData { true }
         vfundAccount?.createFundAccountSuccess()
     }
 
@@ -159,8 +162,8 @@ class SimulationTradingMainFragment :
         recycler_view.layoutManager = LinearLayoutManager(context)
         tabTitle = getTabTitleData()
         getHeaderView()
-        vfundAccount?.setData { false }
         onSelect(0)
+        vfundAccount?.setData { false }
     }
 
     private fun getTabTitleData(): Array<String>? {
@@ -206,6 +209,9 @@ class SimulationTradingMainFragment :
             vfundAccount?.setOnMockStockFundAccountListener(this)
             magicIndicator = vHeader?.findViewById(R.id.magic_indicator)
             magicIndicator?.navigator = getNavigator()
+            vUserHeader = vHeader?.findViewById(R.id.user_header)
+            vUserName = vHeader?.findViewById(R.id.user_name)
+            vUserNo = vHeader?.findViewById(R.id.zr_no)
         }
         val vp: ViewParent? = vHeader?.parent
         if (vp != null) {

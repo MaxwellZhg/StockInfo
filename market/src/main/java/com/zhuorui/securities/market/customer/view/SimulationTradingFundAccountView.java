@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.customer.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
+
+import java.text.DecimalFormat;
 
 /**
  * author : liuwei
@@ -26,6 +29,12 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     private View vOrder;
     private View vNotAcc;
     private ConstraintLayout vRootView;
+    private TextView vTotalAssets;
+    private TextView vTodayProfitLoss;
+    private TextView vTodayProfitLossB;
+    private TextView vMarketValue;
+    private TextView vAvailableFunds;
+    private TextView vTotalProfitLoss;
 
     public SimulationTradingFundAccountView(Context context) {
         this(context, null);
@@ -45,6 +54,12 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         inflate(getContext(), R.layout.layout_simulation_trading_fund_account, this);
         vRootView = findViewById(R.id.root_view);
         vBusiness = findViewById(R.id.business);
+        vTotalAssets = findViewById(R.id.total_assets);
+        vTodayProfitLoss = findViewById(R.id.today_profit_and_loss);
+        vTodayProfitLossB = findViewById(R.id.today_profit_and_loss_b);
+        vMarketValue = findViewById(R.id.market_value);
+        vAvailableFunds = findViewById(R.id.available_funds);
+        vTotalProfitLoss = findViewById(R.id.total_profit_and_loss);
         vOrder = findViewById(R.id.order);
         vBusiness.setOnClickListener(this);
         vOrder.setOnClickListener(this);
@@ -68,7 +83,25 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
             inflateNotAccount();
             return;
         }
-
+        vTotalAssets.setText("134459329.9");
+        vMarketValue.setText("1294829.98");
+        vAvailableFunds.setText("582838");
+        vTotalProfitLoss.setText("96632");
+        float todayPL = 35283.98f;
+        vTodayProfitLoss.setText(String.valueOf(todayPL));
+        if (todayPL > 0) {
+            vTodayProfitLossB.setTextColor(Color.parseColor("#D9001B"));
+            vTodayProfitLoss.setTextColor(Color.parseColor("#D9001B"));
+            vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(0.4562f));
+        } else if (todayPL < 0) {
+            vTodayProfitLossB.setTextColor(Color.GREEN);
+            vTodayProfitLoss.setTextColor(Color.GREEN);
+            vTodayProfitLossB.setText("-" + new DecimalFormat("0.00%").format(0.4562f));
+        } else {
+            vTodayProfitLossB.setTextColor(Color.parseColor("#282828"));
+            vTodayProfitLoss.setTextColor(Color.parseColor("#282828"));
+            vTodayProfitLossB.setText("--");
+        }
 
     }
 

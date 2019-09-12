@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +25,9 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     val context = context
     var vEmpty: TextView? = null
     var listener: HoldPositionsListListener? = null
-
     var types: Array<Int?> = arrayOfNulls(3)
     val selected: HashSet<Int> = HashSet()
+    var posOff = 0
 
 
     private var vHeader: View? = null
@@ -44,10 +45,21 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         vEmpty?.text = msg
     }
 
+    private fun getDataPosition(position: Int): Int {
+        return position - posOff
+    }
+
     private fun initItemViewType() {
-        types[0] = if (vHeader != null) TYPE_HEADER else TYPE_TITLE
-        types[1] = if (types[0] == TYPE_HEADER) TYPE_TITLE else if (getDataCount() == 0) TYPE_EMPTY else TYPE_ITEM
-        types[2] = if (types[1] != TYPE_TITLE) types[1] else if (getDataCount() == 0) TYPE_EMPTY else TYPE_ITEM
+        types[2] = if (getDataCount() == 0) TYPE_EMPTY else TYPE_ITEM
+        if (vHeader != null) {
+            types[0] = TYPE_HEADER
+            types[1] = TYPE_TITLE
+            posOff = 2
+        } else {
+            types[0] = TYPE_TITLE
+            types[1] = types[2]
+            posOff = 1
+        }
     }
 
     override fun getItemCount(): Int {
@@ -56,7 +68,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     }
 
     private fun getDataCount(): Int {
-        return 2
+        return 5
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -111,9 +123,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_ITEM) {
             val itemHolder = (holder as ItemViewHolder)
-            itemHolder.item?.tag = position
-            itemHolder.business?.tag = position
-            itemHolder.quotation?.tag = position
+            itemHolder.bindData(getDataPosition(position))
             itemHolder.btnGroup?.visibility = if (selected.contains(position)) View.VISIBLE else View.GONE
         }
     }
@@ -124,17 +134,46 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         var btnGroup: View? = null
         var business: View? = null
         var quotation: View? = null
+        var stockName: TextView? = null
+        var marketValue: TextView? = null
+        var presentPrice: TextView? = null
+        var holdPositions: TextView? = null
+        var stockTsCode: TextView? = null
+        var number: TextView? = null
+        var cost: TextView? = null
+        var profitAndLoss: TextView? = null
+        val color = Color.parseColor("#D9001B")
+
 
         init {
             item = v.findViewById(R.id.item_bg)
             btnGroup = v.findViewById(R.id.btn_group)
             business = v.findViewById(R.id.tv_business)
             quotation = v.findViewById(R.id.tv_quotation)
+            stockName = v.findViewById(R.id.tv_stock_name)
+            marketValue = v.findViewById(R.id.tv_market_value)
+            presentPrice = v.findViewById(R.id.tv_present_price)
+            holdPositions = v.findViewById(R.id.tv_hold_positions)
+            stockTsCode = v.findViewById(R.id.tv_stock_code)
+            number = v.findViewById(R.id.tv_number)
+            cost = v.findViewById(R.id.tv_cost)
+            profitAndLoss = v.findViewById(R.id.tv_profit_and_loss)
         }
 
-
         fun bindData(position: Int) {
-
+            item?.tag = position
+            business?.tag = position
+            quotation?.tag = position
+            stockName?.text = "翰森制药$position"
+            stockTsCode?.text = "03692$position.HK"
+            marketValue?.text = "54354333$position.8$position"
+            presentPrice?.text = "2$position.23"
+            number?.text = "273$position"
+            cost?.text = "1$position.21"
+            holdPositions?.text = "355223$position.35"
+            profitAndLoss?.text = "+$position.34%"
+            holdPositions?.setTextColor(color)
+            profitAndLoss?.setTextColor(color)
         }
     }
 

@@ -33,7 +33,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class SimulationTradingOrdersFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingOrdersBinding, SimulationTradingOrdersViewModel, SimulationTradingOrdersView, SimulationTradingOrdersPresenter>(),
-    SimulationTradingOrdersView, View.OnClickListener {
+    SimulationTradingOrdersView, View.OnClickListener, SimulationTradingOrderAdapter.MockStockOrderListener {
 
     val timeFormat = "yyyy-MM-dd"
     var todayOrderAdapter: SimulationTradingOrderAdapter? = null
@@ -60,6 +60,31 @@ class SimulationTradingOrdersFragment :
 
     override val getView: SimulationTradingOrdersView
         get() = this
+
+    /**
+     * 改单
+     */
+    override fun toChangeOrder(id: String) {
+    }
+
+    /**
+     * 撤单
+     */
+    override fun toCancelOrder(id: String) {
+    }
+
+    /**
+     * 去买卖
+     */
+    override fun toBusiness(id: String) {
+        start(SimulationTradingStocksFragment.newInstance())
+    }
+
+    /**
+     * 去行情
+     */
+    override fun toQuotation(id: String) {
+    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
@@ -124,6 +149,7 @@ class SimulationTradingOrdersFragment :
     fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
         if (todayOrderAdapter == null) {
             todayOrderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
+            todayOrderAdapter?.listener = this
         }
         todayOrderAdapter?.setEmptyMassge(ResUtil.getString(R.string.str_no_record_historical_transactions)!!)
         return todayOrderAdapter!!
