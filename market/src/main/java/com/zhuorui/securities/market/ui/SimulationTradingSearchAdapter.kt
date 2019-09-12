@@ -115,7 +115,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
                 itemViewHolder.itemView?.setOnClickListener {
                     val pos: Int = it.tag as Int
                     val data = datas?.get(getDataPosition(pos))
-                    listener?.onItemClick(data?.code!!, data?.name!!)
+                    listener?.onItemClick(data?.tsCode!!, data?.name!!)
                 }
                 itemViewHolder
             }
@@ -151,7 +151,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
 
         fun bindData(data: SearchStockInfo) {
             name?.text = data.name
-            code?.text = data.code + ".HK"
+            code?.text = data.tsCode
         }
 
     }
@@ -159,7 +159,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     interface OnSimulationTradingSearchListener {
-        fun onItemClick(id: String, name: String)
+        fun onItemClick(tsCode: String, name: String)
     }
 
 

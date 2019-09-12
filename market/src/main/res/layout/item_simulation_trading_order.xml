@@ -50,16 +50,17 @@
             app:layout_constraintRight_toLeftOf="@+id/tv_number"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_number"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="10,000"
+            android:text="10000"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#232323"
             android:textStyle="bold"
+            app:zr_decimalDigit="0"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintLeft_toRightOf="@+id/tv_stock_name"
             app:layout_constraintRight_toLeftOf="@+id/tv_order_date"
@@ -111,15 +112,17 @@
             app:layout_constraintRight_toRightOf="@+id/tv_stock_name"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_present_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="28.000"
+            android:text="28"
             android:gravity="center"
             android:textSize="13sp"
             android:textColor="#A1A1A1"
             android:textStyle="bold"
+            app:zr_decimalDigit="3"
+            app:zr_relativeDecimal="false"
             app:layout_constraintLeft_toLeftOf="@+id/tv_number"
             app:layout_constraintRight_toRightOf="@+id/tv_number"
             app:layout_constraintTop_toTopOf="@+id/tv_order_status"

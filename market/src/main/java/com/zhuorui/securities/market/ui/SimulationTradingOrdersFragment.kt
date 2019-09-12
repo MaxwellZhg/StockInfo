@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingOrdersBinding
@@ -34,6 +35,7 @@ class SimulationTradingOrdersFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingOrdersBinding, SimulationTradingOrdersViewModel, SimulationTradingOrdersView, SimulationTradingOrdersPresenter>(),
     SimulationTradingOrdersView, View.OnClickListener {
 
+    val timeFormat = "yyyy-MM-dd"
     var todayOrderAdapter: SimulationTradingOrderAdapter? = null
     var tabTitle: Array<String>? = null
     var datePicker: DatePickerDialog? = null
@@ -59,45 +61,6 @@ class SimulationTradingOrdersFragment :
     override val getView: SimulationTradingOrdersView
         get() = this
 
-
-    private fun onSelect(index: Int) {
-        when (index) {
-            0 -> {
-            }
-            1 -> {
-            }
-            2 -> {
-            }
-
-        }
-    }
-
-    override fun onClick(p0: View?) {
-        when (p0) {
-            start_date -> {
-                datePicker?.setOnDateSelectedListener(object : DatePickerDialog.OnDateSelectedListener {
-                    override fun onDateSelected(date: String) {
-                        start_date?.text = date
-                    }
-                })
-                datePicker?.setCurrentData(start_date.text.toString(), "yyyy-MM-dd")
-                datePicker?.show()
-            }
-            end_date -> {
-                datePicker?.setOnDateSelectedListener(object : DatePickerDialog.OnDateSelectedListener {
-                    override fun onDateSelected(date: String) {
-                        end_date?.text = date
-                    }
-                })
-                datePicker?.setCurrentData(end_date.text.toString(), "yyyy-MM-dd")
-                datePicker?.show()
-
-            }
-
-        }
-
-    }
-
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         datePicker = context?.let { DatePickerDialog(it) }
@@ -108,6 +71,54 @@ class SimulationTradingOrdersFragment :
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.adapter = getMockStockOrderAdapter()
         onSelect(0)
+    }
+
+    private fun onSelect(index: Int) {
+        val staTime = TimeZoneUtil.currentTime(timeFormat)
+        var endTime: String = staTime
+        when (index) {
+            0 -> {
+                endTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addDayByCurrentTime(7), timeFormat)
+            }
+            1 -> {
+                endTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addMonthByCurrentTime(1), timeFormat)
+            }
+            2 -> {
+                endTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addMonthByCurrentTime(3), timeFormat)
+            }
+        }
+        start_date?.text = staTime
+        end_date?.text = endTime
+        presenter?.getOrders(staTime, endTime)
+
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0) {
+            start_date -> {
+                datePicker?.setOnDateSelectedListener(object : DatePickerDialog.OnDateSelectedListener {
+                    override fun onDateSelected(date: String) {
+                        start_date?.text = date
+                        presenter?.getOrders(date, end_date?.text.toString())
+                    }
+                })
+                datePicker?.setCurrentData(start_date.text.toString(), "yyyy-MM-dd")
+                datePicker?.show()
+            }
+            end_date -> {
+                datePicker?.setOnDateSelectedListener(object : DatePickerDialog.OnDateSelectedListener {
+                    override fun onDateSelected(date: String) {
+                        end_date?.text = date
+                        presenter?.getOrders(start_date?.text.toString(), date)
+                    }
+                })
+                datePicker?.setCurrentData(end_date.text.toString(), "yyyy-MM-dd")
+                datePicker?.show()
+
+            }
+
+        }
+
     }
 
     fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {

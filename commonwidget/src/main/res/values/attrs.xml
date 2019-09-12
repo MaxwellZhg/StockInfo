@@ -172,4 +172,9 @@
         <attr name="zr_left_icon" format="reference"/>
         <attr name="zr_background" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="ZRAmountTextView">
+        <attr name="zr_showSymbol" format="boolean"/>
+        <attr name="zr_decimalDigit" format="integer"/>
+        <attr name="zr_relativeDecimal" format="boolean"/>
+    </declare-styleable>
 </resources>

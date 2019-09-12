@@ -34,48 +34,53 @@
             app:layout_constraintRight_toLeftOf="@+id/tv_market_value"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_market_value"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="22,740.00"
+            android:text="22740"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#232323"
             android:textStyle="bold"
+            app:zr_relativeDecimal="false"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@+id/tv_stock_name"
             app:layout_constraintLeft_toRightOf="@+id/tv_stock_name"
             app:layout_constraintRight_toLeftOf="@+id/tv_present_price"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_present_price"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="23.950"
+            android:text="23.34"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#232323"
             android:textStyle="bold"
+            app:zr_decimalDigit="3"
+            app:zr_relativeDecimal="false"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintLeft_toRightOf="@+id/tv_market_value"
             app:layout_constraintRight_toLeftOf="@+id/tv_hold_positions"
             app:layout_constraintTop_toTopOf="@+id/tv_stock_name"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_hold_positions"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="+25,828.00"
+            android:text="+25828.00"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#232323"
             android:textStyle="bold"
+            app:zr_relativeDecimal="false"
+            app:zr_showSymbol="true"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@+id/tv_stock_name"
             app:layout_constraintLeft_toRightOf="@+id/tv_present_price"
@@ -97,29 +102,31 @@
             app:layout_constraintRight_toRightOf="@+id/tv_stock_name"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="2,200"
+            android:text="2200"
             android:gravity="center"
             android:textSize="13sp"
             android:textColor="#A1A1A1"
             android:textStyle="bold"
+            app:zr_decimalDigit="0"
             app:layout_constraintTop_toTopOf="@+id/tv_stock_code"
             app:layout_constraintLeft_toLeftOf="@+id/tv_market_value"
             app:layout_constraintRight_toRightOf="@+id/tv_market_value"
     />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.zhuorui.commonwidget.ZRAmountTextView
             android:id="@+id/tv_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="23.00"
+            android:text="23"
             android:gravity="center"
             android:textSize="13sp"
             android:textColor="#A1A1A1"
             android:textStyle="bold"
+            app:zr_relativeDecimal="false"
             app:layout_constraintLeft_toLeftOf="@+id/tv_present_price"
             app:layout_constraintRight_toRightOf="@+id/tv_present_price"
             app:layout_constraintTop_toTopOf="@+id/tv_stock_code"

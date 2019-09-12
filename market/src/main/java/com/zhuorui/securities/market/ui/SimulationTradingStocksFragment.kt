@@ -91,7 +91,7 @@ class SimulationTradingStocksFragment :
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
         if (resultCode == ISupportFragment.RESULT_OK && requestCode == 12){
-            val code = data?.getString("stock_code")!!
+            val code = data?.getString("stock_tscode")!!
             val name = data?.getString("stock_name")
             tv_code.setText(code)
         }

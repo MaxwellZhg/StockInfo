@@ -1,6 +1,7 @@
 package com.zhuorui.securities.base2app.util;
 
 import android.text.TextUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,24 @@ import java.util.Date;
  */
 public class TimeZoneUtil {
     private TimeZoneUtil() {
+    }
+
+    /**
+     * 获取当前时间
+     *
+     * @return
+     */
+    public static long currentTimeMillis() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * 获取当前时间
+     *
+     * @return
+     */
+    public static String currentTime(String format) {
+        return timeFormat(currentTimeMillis(), format);
     }
 
     public static int getTimeOffset() {
@@ -43,6 +62,17 @@ public class TimeZoneUtil {
         return sDate == null ? time : new SimpleDateFormat(newFormat).format(sDate);
     }
 
+
+    /**
+     * 时间格式转化
+     *
+     * @param timeMillis 毫秒
+     * @param format     时间格式
+     * @return 返回新的时间格式，发生错误，原字符串返回
+     */
+    public static String timeFormat(long timeMillis, String format) {
+        return new SimpleDateFormat(format).format(new Date(timeMillis));
+    }
 
     /**
      * 和今天日期比较大小
@@ -102,6 +132,53 @@ public class TimeZoneUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 根据当前时间增减天数
+     *
+     * @param day
+     * @return
+     */
+    public static long addDayByCurrentTime(int day) {
+        return addDay(currentTimeMillis(), day);
+    }
+
+    /**
+     * 增减天
+     *
+     * @param startTimeMillis
+     * @param day
+     * @return
+     */
+    public static long addDay(long startTimeMillis, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTimeMillis);
+        calendar.add(Calendar.DAY_OF_MONTH, day);
+        return calendar.getTimeInMillis();
+    }
+
+    /**
+     * 根据当前时间增减月数
+     *
+     * @param month
+     * @return
+     */
+    public static long addMonthByCurrentTime(int month) {
+        return addMonth(currentTimeMillis(), month);
+    }
+
+    /**
+     * 增减月
+     *
+     * @param month
+     * @return
+     */
+    public static long addMonth(long startTimeMillis, int month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTimeMillis);
+        calendar.add(Calendar.MONTH, month);
+        return calendar.getTimeInMillis();
     }
 
 }

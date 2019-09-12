@@ -193,7 +193,7 @@ class SimulationTradingSearchFragment :
 
     override fun onItemClick(code: String, name: String) {
         var b = Bundle()
-        b.putString("stock_code", code)
+        b.putString("stock_tscode", code)
         b.putString("stock_name", name)
         setFragmentResult(ISupportFragment.RESULT_OK, b)
         pop()

@@ -7,8 +7,8 @@
 
     <ImageView
             android:layout_marginTop="35dp"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="74dp"
             android:src="@mipmap/ic_no_content"
     />
 
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textColor="#A1A1A1"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="35dp"
     />
 

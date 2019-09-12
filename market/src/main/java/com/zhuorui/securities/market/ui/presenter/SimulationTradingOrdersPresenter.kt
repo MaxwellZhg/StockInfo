@@ -10,7 +10,11 @@ import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingOrdersViewMod
  *    date   : 2019-09-09 16:03
  *    desc   :
  */
-class SimulationTradingOrdersPresenter : AbsNetPresenter<SimulationTradingOrdersView, SimulationTradingOrdersViewModel>() {
+class SimulationTradingOrdersPresenter :
+    AbsNetPresenter<SimulationTradingOrdersView, SimulationTradingOrdersViewModel>() {
+
+    fun getOrders(sDate: String?, eDate: String) {
+    }
 
 
 }

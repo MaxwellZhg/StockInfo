@@ -50,6 +50,7 @@ public class ZRSearchView extends FrameLayout implements TextWatcher, View.OnCli
         int clearIcon = a.getResourceId(R.styleable.ZRSearchView_zr_clear_icon, 0);
         int background = a.getResourceId(R.styleable.ZRSearchView_zr_background, 0);
         String hint = a.getString(R.styleable.ZRSearchView_zr_hint);
+        a.recycle();
         inflate(context, R.layout.layout_search_view, this);
         vEt = findViewById(R.id.search_view_et);
         vClear = findViewById(R.id.search_view_clear);
