@@ -107,7 +107,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
     }
 
     fun detailTips(str:String,pass:String):Boolean{
-        val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
+        val pattern = "^(?![\\d]+\$)(?![a-zA-Z]+\$)(?![^\\da-zA-Z]+\$).{6,20}\$"
         //用正则式匹配文本获取匹配器
         val matcher = Pattern.compile(pattern).matcher(pass)
         if (str == "") {

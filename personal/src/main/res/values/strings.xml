@@ -119,11 +119,26 @@
     <string name="input_account_license_num" tools:ignore="MissingTranslation">请输入您开户时登记的证件号码</string>
     <string name="input_receiver_code" tools:ignore="MissingTranslation">请输入您收到的验证码</string>
     <string name="please_ensure_password" tools:ignore="MissingTranslation">请确认密码</string>
-    <string name="no_null_old_pass"  tools:ignore="MissingTranslation">原密码不能为空</string>
-    <string name="mix_length_old_pass"  tools:ignore="MissingTranslation">原密码长度不匹配</string>
-    <string name="old_pass_no_match"  tools:ignore="MissingTranslation">原密码大、小写字母,数字或符号至少含有2种</string>
+    <string name="no_null_old_pass"  tools:ignore="MissingTranslation">原密码不正确</string>
     <string name="please_input_ensure_capital_psw" tools:ignore="MissingTranslation">请输入确认交易密码内容</string>
-    <string name="input_new_ca_psw">请输入新的交易密码</string>
-    <string name="input_en_ca_psw">请确认交易密码</string>
-    <string name="input_en_ca_psw_no_match">两次输入的交易码不一致</string>
+    <string name="input_new_ca_psw" tools:ignore="MissingTranslation">请输入您的新交易密码</string>
+    <string name="input_en_ca_psw" tools:ignore="MissingTranslation">请确认您的新交易密码</string>
+    <string name="en_sure_new_ca_psw" tools:ignore="MissingTranslation">确认新密码</string>
+    <string name="input_en_ca_psw_no_match" tools:ignore="MissingTranslation">两次输入的交易码不一致</string>
+    <string name="zr_user" tools:ignore="MissingTranslation">卓锐用户</string>
+    <string name="intro_pro" tools:ignore="MissingTranslation">产品介绍</string>
+    <string name="zr" tools:ignore="MissingTranslation">卓锐证券</string>
+    <string name="about_version" tools:ignore="MissingTranslation">版本说明</string>
+    <string name="about_law" tools:ignore="MissingTranslation">法律条款</string>
+    <string name="about_zr_this" tools:ignore="MissingTranslation">产品说明</string>
+    <string name="intro_tips_one" tools:ignore="MissingTranslation">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;卓锐证券是深圳卓锐科技有限公司开发的港股投资\n服务平台。致力于通过科技创新与金融结合，搭建一个\n自主研发的、一站式的、开放金融交易平台，为用户提\n供全方位、一站式的金融理财服务。</string>
+    <string name="intro_tips_two" tools:ignore="MissingTranslation">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;卓锐证券持有香港证监会授予的1、4、9号牌照，在\nSFC监管下，严格遵循《证券及期货条例》的要求为客户\n提供安全可靠的证券交易服务。</string>
+    <string name="phone_dev_verify" tools:ignore="MissingTranslation">手机验证</string>
+    <string name="phone_dev_verify_tips" tools:ignore="MissingTranslation">由于您的账号在新设备登录，请验证您的手机号</string>
+    <string name="phone_dev_verify_code" tools:ignore="MissingTranslation">发送短信验证码</string>
+    <string name="unable_verify_phone_tips" tools:ignore="MissingTranslation">无法验证此手机号</string>
+    <string name="input_dev_phone_code" tools:ignore="MissingTranslation">输入验证码</string>
+    <string name="unable_get_phone_code" tools:ignore="MissingTranslation">收不到验证码</string>
+    <string name="phone_dev_timer_phonenum_tips" tools:ignore="MissingTranslation">验证码已发送至：%1$s</string>
+    <string name="input_verify_code" tools:ignore="MissingTranslation">输入验证码</string>
 </resources>

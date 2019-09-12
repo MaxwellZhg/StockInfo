@@ -9,6 +9,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyLoginPswRequest
@@ -35,59 +36,63 @@ class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLogi
 
     fun detailPass(oldStr:String,newStr:String,enStr:String):Boolean{
         if(oldStr==""){
-            viewModel?.type?.set(1)
-            viewModel?.strnew?.set(ResUtil.getString(R.string.no_null_old_pass))
+            ResUtil.getString(R.string.no_null_old_pass)?.let { ToastUtil.instance.toastCenter(it) }
             return false
         }else{
             if (oldStr.length<6){
-                viewModel?.type?.set(1)
-                viewModel?.strnew?.set(ResUtil.getString(R.string.mix_length_old_pass))
+            ResUtil.getString(R.string.no_null_old_pass)?.let { ToastUtil.instance.toastCenter(it) }
                 return false
             }else{
-                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
+                val pattern = "^(?![\\d]+\$)(?![a-zA-Z]+\$)(?![^\\da-zA-Z]+\$).{6,20}\$"
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(oldStr)
                 if (!matcher.find()) {
-                    viewModel?.type?.set(1)
-                    viewModel?.strnew?.set(ResUtil.getString(R.string.old_pass_no_match))
+                    ResUtil.getString(R.string.no_null_old_pass)?.let {
+                        ToastUtil.instance.toastCenter(it)
+                    }
                     return false
                 }
             }
         }
         if (newStr == "") {
-            viewModel?.type?.set(1)
-            viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
+
+          ResUtil.getString(R.string.input_new_pws_mix)?.let {  ToastUtil.instance.toastCenter(it) }
             return false
         }else{
             if (newStr.length<6){
-                viewModel?.type?.set(1)
-                viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
+              ResUtil.getString(R.string.input_new_pws_mix)?.let {
+                  ToastUtil.instance.toastCenter(it)
+              }
                 if(enStr != ""){
                     if(newStr==enStr){
-                        viewModel?.type?.set(1)
-                        viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
+                      ResUtil.getString(R.string.input_new_pws_mix)?.let {
+                          ToastUtil.instance.toastCenter(it)
+                      }
                         return false
                     }else{
-                        viewModel?.type?.set(1)
-                        viewModel?.strnew?.set(ResUtil.getString(R.string.compare_no_match))
+                        ResUtil.getString(R.string.compare_no_match)?.let {
+                            ToastUtil.instance.toastCenter(it)
+                        }
                         return false
                     }
                 }
             }else {
-                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
+                val pattern = "^(?![\\d]+\$)(?![a-zA-Z]+\$)(?![^\\da-zA-Z]+\$).{6,20}\$"
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(newStr)
                 if (!matcher.find()) {
-                    viewModel?.type?.set(1)
-                    viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
+                    ResUtil.getString(R.string.new_psw_no_match)?.let {
+                        ToastUtil.instance.toastCenter(it)
+                    }
                     if(enStr != ""){
                         if(newStr==enStr){
-                            viewModel?.type?.set(1)
-                            viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
+
+                      ResUtil.getString(R.string.new_psw_no_match)?.let {
+                          ToastUtil.instance.toastCenter(it)
+                      }
                             return false
                         }else{
-                            viewModel?.type?.set(1)
-                            viewModel?.strnew?.set(ResUtil.getString(R.string.compare_no_match))
+                            ToastUtil.instance.toastCenter(ResUtil.getString(R.string.compare_no_match).toString())
                             return false
                         }
                     }
@@ -95,26 +100,24 @@ class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLogi
             }
         }
         if (enStr == "") {
-            viewModel?.type?.set(1)
-            viewModel?.strnew?.set(ResUtil.getString(R.string.compare_no_match))
+            ToastUtil.instance.toastCenter(ResUtil.getString(R.string.compare_no_match).toString())
             return false
         }else{
             if(newStr==enStr){
-                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
+                val pattern = "^(?![\\d]+\$)(?![a-zA-Z]+\$)(?![^\\da-zA-Z]+\$).{6,20}\$"
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(newStr)
                 if (!matcher.find()) {
-                    viewModel?.type?.set(1)
-                    viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
+                    ToastUtil.instance.toastCenter(ResUtil.getString(R.string.new_psw_no_match).toString())
+
                     return false
                 }else {
-                    viewModel?.type?.set(0)
-                    viewModel?.strnew?.set("")
                     return true
                 }
             }else{
-                viewModel?.type?.set(1)
-                viewModel?.strnew?.set(ResUtil.getString(R.string.compare_no_match))
+
+               ToastUtil.instance.toastCenter(ResUtil.getString(R.string.compare_no_match).toString())
+
                 return  false
             }
             return false

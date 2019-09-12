@@ -94,9 +94,9 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
             return false
         }
     }
-    fun requestRestLoginPsw(phone: kotlin.String?,newpsw:kotlin.String,code: kotlin.String?) {
+    fun requestRestLoginPsw(phone: String?,newpsw:String,code: String?) {
         dialogshow(1)
-        val request = RestLoginPswRequest(phone, newpsw,code,"0086", transactions.createTransaction())
+        val request = RestLoginPswRequest(phone, newpsw,code,"0086",transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.restLoginPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

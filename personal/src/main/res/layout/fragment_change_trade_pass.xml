@@ -23,7 +23,7 @@
                 android:id="@+id/rl_new_pass"
                 android:gravity="center_vertical"
                 android:layout_marginTop="1dp"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:background="@color/color_FFFFFFFF">
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -37,13 +37,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="44dp"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
                     android:id="@+id/et_new_capital_psw"
                     android:background="@color/color_FFFFFFFF"
                     android:textColor="@color/color_8DB9E4"
                     android:layout_toRightOf="@+id/tv_new_psw_tips"
                     android:textColorHint="@color/color_A1A1A1"
-                    android:hint="@string/input_new_pass_word"
+                    android:hint="@string/input_new_ca_psw"
             />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -52,7 +53,7 @@
                 android:id="@+id/rl_ensure_new_pass"
                 android:gravity="center_vertical"
                 android:layout_marginTop="1dp"
-                android:layout_height="45dp"
+                android:layout_height="50dp"
                 android:background="@color/color_FFFFFFFF">
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -61,18 +62,19 @@
                       android:textSize="15sp"
                       android:layout_marginLeft="13dp"
                       android:textColor="@color/color_282828"
-                      android:text="@string/en_sure_new_pass_word"/>
+                      android:text="@string/en_sure_new_ca_psw"/>
             <androidx.appcompat.widget.AppCompatEditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
                     android:id="@+id/et_ensure_new_capital_psw"
                     android:background="@color/color_FFFFFFFF"
                     android:textColor="@color/color_8DB9E4"
                     android:layout_toRightOf="@+id/tv_ensure_new_pass_tips"
                     android:textColorHint="@color/color_A1A1A1"
-                    android:hint="@string/input_ensur_new_pass_word"
+                    android:hint="@string/input_en_ca_psw"
             />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <com.zhuorui.commonwidget.StateButton
@@ -87,7 +89,7 @@
                 app:radius="3dp"
                 android:textSize="23sp"
                 android:textStyle="bold"
-                android:layout_marginTop="95dp"
+                android:layout_marginTop="40dp"
                 app:layout_constraintTop_toBottomOf="@+id/rl_ensure_new_pass"
                 android:layout_marginStart="29dp"
                 android:layout_marginEnd="29dp"

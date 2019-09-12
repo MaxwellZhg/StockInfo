@@ -61,6 +61,7 @@ class MyTabFragment :
         ll_account_safety.setOnClickListener(this)
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
+        ll_about_us.setOnClickListener(this)
         if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
             ll_login_out.visibility=View.INVISIBLE
         }else{
@@ -94,6 +95,9 @@ class MyTabFragment :
             }
             R.id.ll_account_safety->{
                 (parentFragment as AbsFragment<*, *, *, *>).start(SecurityFragment.newInstance())
+            }
+            R.id.ll_about_us->{
+                (parentFragment as AbsFragment<*, *, *, *>).start(PhoneDevVerifyCodeFragment.newInstance())
             }
         }
     }

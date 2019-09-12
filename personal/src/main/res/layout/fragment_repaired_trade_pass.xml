@@ -17,11 +17,39 @@
                    android:layout_height="wrap_content">
            </com.zhuorui.commonwidget.ZhuoRuiTopBar>
         <androidx.appcompat.widget.LinearLayoutCompat
-                       app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                android:id="@+id/ll_info_tips"
+                android:background="@color/color_FFFFFFFF"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+           <androidx.appcompat.widget.AppCompatTextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textStyle="bold"
+                   android:textSize="15sp"
+                   android:layout_marginStart="13dp"
+                   android:text="@string/zr_user"
+                   android:textColor="@color/color_282828"
+           />
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_marginStart="30dp"
+                    android:text="1278178"
+                    android:textColor="@color/color_282828"
+            />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+                       app:layout_constraintTop_toBottomOf="@+id/ll_info_tips"
                         android:layout_width="match_parent"
                        android:gravity="center_vertical"
                         android:id="@+id/rl_old_pass"
-                        android:layout_height="45dp"
+                        android:layout_height="50dp"
+                       android:layout_marginTop="1dp"
                         android:background="@color/color_FFFFFFFF">
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -36,7 +64,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dp"
                     android:id="@+id/et_trade_psw"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
                     android:background="@color/color_FFFFFFFF"
                     android:textColor="@color/color_8DB9E4"
                     android:layout_toRightOf="@+id/tv_old_pass_tips"
@@ -51,6 +80,7 @@
                   app:layout_constraintTop_toBottomOf="@+id/rl_old_pass"
                   android:layout_width="wrap_content"
                   android:textColor="@color/color_1A6ED2"
+                  android:textStyle="bold"
                   android:textSize="13sp"
                   android:text="@string/forget_psw"
                   android:layout_height="wrap_content"/>

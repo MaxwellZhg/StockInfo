@@ -139,6 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/about_zr"
+                android:id="@+id/ll_about_us"
                 android:layout_marginTop="1dp"
                 app:zr_cellbar_left_icon_width="20dp"
                 app:zr_cellbar_left_icon_height="20dp"

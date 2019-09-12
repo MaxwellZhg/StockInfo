@@ -106,7 +106,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
         dialogshow(1)
-        val request = VerifForgetCodeRequest(str, code, transactions.createTransaction())
+        val request = VerifForgetCodeRequest(str, code,"0086",transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
