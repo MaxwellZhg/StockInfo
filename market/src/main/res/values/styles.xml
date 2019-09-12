@@ -3,14 +3,17 @@
     <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">6sp</item>
     </style>
+
     <style name="MockStockFundAccountTitle">
         <item name="android:textColor">#A1A1A1</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="MockStockFundAccountContent">
         <item name="android:textColor">#282828</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="SimulationTradingTitleBar">
         <item name="zr_right_icon">@mipmap/ic_message</item>
         <item name="zr_right_icon_width">19dp</item>

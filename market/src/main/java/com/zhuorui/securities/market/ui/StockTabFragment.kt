@@ -61,15 +61,17 @@ class StockTabFragment :
     override val getView: StockTabView
         get() = this
 
-    override fun rootViewFitsSystemWindowsPadding(): Boolean {
-        return true
-    }
-
     override fun init(fragments: ArrayList<StockTabViewModel.PageInfo>) {
         mfragment = fragments
 
-        iv_serach.setOnClickListener(this)
-        iv_message.setOnClickListener(this)
+        top_bar.setRightClickListener {
+            // 消息
+            (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索
+            (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance())
+        }
         iv_list.setOnClickListener(this)
         tv_select_all.setOnClickListener(this)
         tv_select_hk.setOnClickListener(this)
@@ -148,12 +150,6 @@ class StockTabFragment :
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.iv_serach -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance())
-            }
-            R.id.iv_message -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())
-            }
             R.id.iv_list -> {
                 presenter?.toggleStockTab()
             }

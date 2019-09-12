@@ -40,7 +40,7 @@ public class ZhuoRuiTopBar extends FrameLayout {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZhuoRuiTopBar);
         String mTitle = a.getString(R.styleable.ZhuoRuiTopBar_zr_topbarTitle);
-        boolean isback=a.getBoolean(R.styleable.ZhuoRuiTopBar_zr_backview_is_visibity,true);
+        boolean isback = a.getBoolean(R.styleable.ZhuoRuiTopBar_zr_backview_is_visibity, true);
         setBackView(getBackView(isback));
         setTitleView(getTitleView());
         setTitle(mTitle);
@@ -100,12 +100,12 @@ public class ZhuoRuiTopBar extends FrameLayout {
         ImageView iv = new ImageView(getContext());
         iv.setImageResource(R.mipmap.ic_arrow_left_white);
         float density = getResources().getDisplayMetrics().density;
-        int wh = (int) (density * 44f);
-        int padding = (int) (density * 12);
+        int wh = (int) (density * 48f);
+        int padding = (int) (density * 14);
         FrameLayout.LayoutParams lp = new LayoutParams(wh, wh, Gravity.START | Gravity.CENTER_VERTICAL);
         iv.setLayoutParams(lp);
-        iv.setPadding(padding, padding, padding, padding);
-        if(!isback){
+        iv.setPadding((int) (density * 4), padding, padding, padding);
+        if (!isback) {
             iv.setVisibility(INVISIBLE);
         }
         return iv;
