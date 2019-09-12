@@ -41,11 +41,19 @@ class SecurityFragment :
         super.onLazyInitView(savedInstanceState)
         //presenter?.getUserInfo()
         tv_change_phone.setOnClickListener(this)
+        tv_repaired_login_pass.setOnClickListener(this)
+        repaired_trade_pass.setOnClickListener(this)
     }
     override fun onClick(p0: View?) {
        when(p0?.id){
            R.id.tv_change_phone->{
                start(ChangePhoneNumFragment.newInstance())
+           }
+           R.id.tv_repaired_login_pass->{
+               start(RepairedLoginPassFragment.newInstance())
+           }
+           R.id.repaired_trade_pass->{
+               start(RepairedTradePassFragment.newInstance())
            }
        }
     }

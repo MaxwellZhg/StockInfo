@@ -29,7 +29,10 @@ class StockSearchFragment :
     StockSearchView, TextWatcher, SearchStocksAdapter.OnAddTopicClickItemCallback,
     BaseListAdapter.OnClickItemCallback<SearchStockInfo> {
 
-    private var type: Int = 0
+    private val min = 1 // 列表1-5
+    private val max = 2 // 列表>5
+
+    private var type: Int = min
     private lateinit var tips: String
     private var adapter: SearchStocksAdapter? = null
 
@@ -38,15 +41,8 @@ class StockSearchFragment :
 
     companion object {
 
-        const val min = 1 // 列表1-5
-        const val max = 2 // 列表>5
-
-        fun newInstance(type: Int): StockSearchFragment {
-            val fragment = StockSearchFragment()
-            val bundle = Bundle()
-            bundle.putInt("type", type)
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance(): StockSearchFragment {
+            return StockSearchFragment()
         }
     }
 
@@ -109,7 +105,7 @@ class StockSearchFragment :
         (search_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         adapter = presenter?.getAdapter()
         adapter?.setClickItemCallback(this)
-        adapter?.onAddTopicClickItemCallback=this
+        adapter?.onAddTopicClickItemCallback = this
         search_list.adapter = adapter
 
     }

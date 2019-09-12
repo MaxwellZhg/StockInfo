@@ -14,41 +14,13 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
 
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@color/tab_bar_bg">
-
-            <ImageView android:layout_width="25dp"
-                       android:layout_height="25dp"
-                       android:id="@+id/user_logo"
-                       android:layout_centerVertical="true"
-                       android:layout_marginStart="22dp"
-                       android:background="@mipmap/ic_prof"/>
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="@string/choose_stock"
-                      android:layout_centerInParent="true"
-                      android:textColor="@color/title_bar_color"
-                      android:textSize="18sp"/>
-
-            <ImageView android:layout_width="20dp"
-                       android:layout_height="20dp"
-                       android:id="@+id/iv_message"
-                       android:layout_centerVertical="true"
-                       android:layout_alignParentEnd="true"
-                       android:layout_marginEnd="13dp"
-                       android:background="@mipmap/ic_message"/>
-
-            <ImageView android:layout_width="20dp"
-                       android:layout_toStartOf="@+id/iv_message"
-                       android:layout_marginEnd="20dp"
-                       android:id="@+id/iv_serach"
-                       android:layout_height="20dp"
-                       android:layout_centerVertical="true"
-                       android:background="@mipmap/ic_serach"/>
-
-        </RelativeLayout>
+        <com.zhuorui.securities.market.custom.MoreIconTitleBar
+                android:id="@+id/top_bar"
+                style="@style/SimulationTradingTitleBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:zr_backview_is_visibity="false"
+                app:zr_topbarTitle="@string/choose_stock"/>
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"

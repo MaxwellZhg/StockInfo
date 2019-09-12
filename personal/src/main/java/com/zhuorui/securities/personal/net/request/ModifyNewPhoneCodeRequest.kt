@@ -8,7 +8,8 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/9/10
  * Desc:
  */
-class ModifyOldPhoneRequest (val phone: String?,val verificationCode:String , val phoneArea:String,transaction: String) : BaseRequest(transaction){
+class ModifyNewPhoneCodeRequest(val phone: String?,val verificationCode:String? ,val newPhone:String, val newVerificationCode:String,val oldPhoneArea:String,val newPhoneArea:String,transaction: String ) :BaseRequest(transaction){
+
     init {
         generateSign()
     }

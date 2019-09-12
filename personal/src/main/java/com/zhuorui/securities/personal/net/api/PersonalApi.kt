@@ -60,6 +60,26 @@ interface PersonalApi {
          *
          */
         const val MODIFY_PHONE_OLD = "/as_user/api/user_account/v1/modify_phone_v1"
+        /**
+         *获取新手机号码验证码
+         *
+         */
+        const val SEND_NEW_REPLACE_CODE = "/as_user/api/sms/v1/send_new_replace_code"
+        /**
+         *验证新手机号验证码
+         *
+         */
+        const val MODIFY_PHONE_NEW = "/as_user/api/user_account/v1/modify_phone_v2"
+        /**
+         *验证新的登录密码
+         *
+         */
+        const val MODIFY_LOGIN_PASSWORD = "/as_user/api/user_account/v1/modify_login_password"
+        /**
+         *验证新的交易密码
+         *
+         */
+        const val MODIFY_CAPITAL_PASSWORD = "/as_user/api/user_account/v1/modify_capital_password"
 
     }
 }

@@ -19,7 +19,10 @@ import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBi
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
+import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
+import kotlinx.android.synthetic.main.fragment_simulation_trading_main.top_bar
+import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -145,13 +148,19 @@ class SimulationTradingMainFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        top_bar.setRightClickListener {
+            // 消息
+            start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索
+            start(SimulationTradingSearchFragment.newInstance())
+        }
         recycler_view.layoutManager = LinearLayoutManager(context)
         tabTitle = getTabTitleData()
         getHeaderView()
         vfundAccount?.setData { false }
         onSelect(0)
-
-
     }
 
     private fun getTabTitleData(): Array<String>? {

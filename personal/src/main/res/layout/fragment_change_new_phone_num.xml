@@ -38,6 +38,7 @@
                       android:layout_height="wrap_content"
                       android:layout_centerInParent="true"
                       android:textSize="14sp"
+                      android:id="@+id/tv_choosearea"
                       android:textStyle="bold"
                       android:textColor="@color/color_282828"
                       android:text="@string/china_mother_land"/>
@@ -67,6 +68,7 @@
                       android:layout_height="wrap_content"
                       android:textSize="14sp"
                       android:textStyle="bold"
+                      android:id="@+id/tv_choosearea_tips"
                       android:layout_marginLeft="10dp"
                       android:textColor="@color/color_282828"
                       android:text="+86"/>
@@ -76,6 +78,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_8DB9E4"
                     android:hint="@string/input_new_phone_code"
+                    android:background="@color/color_FFFFFFFF"
                     android:textColorHint="@color/color_A1A1A1"
                     android:layout_toRightOf="@+id/iv_key"
                     android:layout_centerVertical="true"
@@ -103,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_8DB9E4"
                     android:hint="@string/hide_phone_tips"
+                    android:background="@color/color_FFFFFFFF"
                     android:textColorHint="@color/color_A1A1A1"
                     android:layout_toRightOf="@+id/iv_key"
                     android:layout_centerVertical="true"

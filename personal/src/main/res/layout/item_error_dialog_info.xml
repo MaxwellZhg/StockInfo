@@ -26,6 +26,7 @@
                       android:layout_marginTop="15dp"
                       android:layout_centerHorizontal="true"
                       android:textSize="15sp"
+                      android:id="@+id/tv_attention_tips"
                       android:textColor="@color/color_282828"
                       android:text="@string/error_psw_input_times"/>
             <ImageView android:layout_width="match_parent"

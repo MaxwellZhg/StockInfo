@@ -41,7 +41,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
         ProgressDialog(context)
     }
     private val errorDialog by lazy {
-        ErrorTimesDialog(context,1)
+        ErrorTimesDialog(context,1,"")
     }
     override fun init() {
         super.init()

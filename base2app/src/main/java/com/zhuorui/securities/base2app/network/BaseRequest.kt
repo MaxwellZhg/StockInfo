@@ -62,6 +62,10 @@ open class BaseRequest : Transaction {
         }
     }
 
+    override fun toString(): String {
+        return "BaseRequest(timeStamp=$timeStamp, sign=$sign, view=$view, key='$key')"
+    }
+
     companion object {
 
         fun instance(transaction: String): BaseRequest {
@@ -72,4 +76,6 @@ open class BaseRequest : Transaction {
             return BaseRequest(transaction, view)
         }
     }
+
+
 }
