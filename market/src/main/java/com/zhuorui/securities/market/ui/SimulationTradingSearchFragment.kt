@@ -21,6 +21,7 @@ import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingSearchPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingSearchView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingSearchViewModel
+import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_search.*
 import me.yokeyword.fragmentation.ISupportFragment
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -76,6 +77,14 @@ class SimulationTradingSearchFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        top_bar.setRightClickListener {
+            // 消息
+            start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索自选股
+            start(StockSearchFragment.newInstance(StockSearchFragment.min))
+        }
         initMagicIndicator()
         search.setOnKeyChangeListener(this)
         recycler_view.layoutManager = LinearLayoutManager(context)

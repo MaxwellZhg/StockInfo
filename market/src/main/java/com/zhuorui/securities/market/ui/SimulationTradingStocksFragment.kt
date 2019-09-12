@@ -16,7 +16,9 @@ import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresent
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
+import kotlinx.android.synthetic.main.fragment_simulation_trading_search.*
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
+import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.top_bar
 import me.yokeyword.fragmentation.ISupportFragment
 
 /**
@@ -56,18 +58,13 @@ class SimulationTradingStocksFragment :
         iv_chart.setOnClickListener(this)
         btn_buy.setOnClickListener(this)
         btn_sell.setOnClickListener(this)
-        top_bar.setLeftClickListener {
-            // 返回首页
-            val homeFragment = (activity as AbsActivity).supportFragmentManager.fragments[0] as AbsFragment<*, *, *, *>
-            popTo(homeFragment::class.java, false)
-        }
         top_bar.setRightClickListener {
             // 消息
             start(MessageFragment.newInstance())
         }
         top_bar.setRight2ClickListener {
-            // 搜索
-            startForResult(SimulationTradingSearchFragment.newInstance(),12)
+            // 搜索自选股
+            start(StockSearchFragment.newInstance(StockSearchFragment.min))
         }
     }
 
