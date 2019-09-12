@@ -149,7 +149,7 @@ class StockTabFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.iv_serach -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance(1))
+                (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance())
             }
             R.id.iv_message -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())

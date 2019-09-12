@@ -83,7 +83,7 @@ class SimulationTradingSearchFragment :
         }
         top_bar.setRight2ClickListener {
             // 搜索自选股
-            start(StockSearchFragment.newInstance(StockSearchFragment.min))
+            start(StockSearchFragment.newInstance())
         }
         initMagicIndicator()
         search.setOnKeyChangeListener(this)
