@@ -83,8 +83,23 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             pageSize,
             transactions.createTransaction()
         )
-        Cache[IStockNet::class.java]?.list(request)
-            ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            emitter.onNext(LocalAccountConfig.read().isLogin())
+            emitter.onComplete()
+        }).subscribeOn(Schedulers.io())
+            .subscribe {
+                if (it) {
+                    // 已登录
+                    Cache[IStockNet::class.java]?.myList(request)
+                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+                } else {
+                    // 未登录
+                    Cache[IStockNet::class.java]?.list(request)
+                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+                }
+            }
+        disposables.add(disposable)
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
