@@ -92,8 +92,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
           startTimeCountDown()
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onErrorRes(response: ErrorResponse) {
+    override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
             if(response.msg=="当天短信验证码超过次"){

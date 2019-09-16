@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
@@ -64,8 +65,10 @@ class MyTabFragment :
         ll_about_us.setOnClickListener(this)
         if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
             ll_login_out.visibility=View.INVISIBLE
+            tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().userId
         }
     }
     override fun onClick(p0: View?) {
@@ -85,7 +88,9 @@ class MyTabFragment :
                 presenter?.requestUserLoginOut()
             }
             R.id.ll_login -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+                if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null) {
+                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+                }
             }
             R.id.ll_cell_change_color -> {
                 startForResult(SettingFragment.newInstance(1,ll_cell_change_color.tipsValue), 100)
@@ -97,16 +102,18 @@ class MyTabFragment :
                 (parentFragment as AbsFragment<*, *, *, *>).start(SecurityFragment.newInstance())
             }
             R.id.ll_about_us->{
-                (parentFragment as AbsFragment<*, *, *, *>).start(PhoneDevVerifyCodeFragment.newInstance())
+                (parentFragment as AbsFragment<*, *, *, *>).start(IntroProFragment.newInstance())
             }
         }
     }
 
     override fun gotomain() {
-        if(LocalAccountConfig.read().getAccountInfo().token==""){
+        if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
             ll_login_out.visibility=View.INVISIBLE
+            tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().userId
         }
         (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
     }
@@ -122,8 +129,10 @@ class MyTabFragment :
     override fun loginStateChange() {
         if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
             ll_login_out.visibility=View.INVISIBLE
+            tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().userId
         }
     }
 

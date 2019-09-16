@@ -4,6 +4,7 @@ import com.zhuorui.securities.TokenOverdueEvent
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
+import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 
 /**
  *    author : PengXianglin
@@ -14,6 +15,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
 class MainFramgentPresenter : AbsEventPresenter<MainFragmentView, MainFragmentViewModel>() {
 
     override fun init() {
+        super.init()
         view?.init()
     }
 

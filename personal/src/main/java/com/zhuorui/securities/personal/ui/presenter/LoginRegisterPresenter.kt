@@ -91,10 +91,10 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
             view?.gotomain()
         }
     }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onErrorRes(response: ErrorResponse) {
+
+    override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginCodeRequest) {
-             dialogshow(0)
+            dialogshow(0)
             if(response.code=="010003"){
                 view?.gotopsw()
             }
@@ -102,7 +102,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                 showErrorDailog()
             }
         }else if(response.request is SendLoginCodeRequest){
-              dialogshow(0)
+            dialogshow(0)
         }
     }
 

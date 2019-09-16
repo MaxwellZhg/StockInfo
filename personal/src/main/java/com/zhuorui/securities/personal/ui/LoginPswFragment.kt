@@ -137,6 +137,9 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
             }
         }
     }
+    override fun showVerify() {
+       start(PhoneDevVerifyFragment.newInstance(strphone))
+    }
 
 
 }

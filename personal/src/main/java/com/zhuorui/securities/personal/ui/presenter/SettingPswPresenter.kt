@@ -68,8 +68,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onErrorRes(response: ErrorResponse) {
+    override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginRegisterRequest) {
             dialogshow(0)
         }

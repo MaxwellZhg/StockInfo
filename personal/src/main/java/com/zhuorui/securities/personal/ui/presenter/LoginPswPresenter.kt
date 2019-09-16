@@ -64,13 +64,16 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
             }
         }
     }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onErrorRes(response: ErrorResponse) {
+
+
+    override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginPwdRequest) {
             dialogshow(0)
             if(response.code=="010005"){
                 showErrorDailog(response.msg)
-
+            }
+            if(response.code=="010007"){
+                view?.showVerify()
             }
         }
     }

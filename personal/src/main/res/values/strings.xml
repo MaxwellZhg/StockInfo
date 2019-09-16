@@ -20,7 +20,7 @@
     <string name="complete" tools:ignore="MissingTranslation">完成</string>
     <string name="psw_conbine" tools:ignore="MissingTranslation">6-20位组合密码</string>
     <string name="ensure_psw_again" tools:ignore="MissingTranslation">请再次确认</string>
-    <string name="login_tips1" tools:ignore="MissingTranslation">登录即表示阅读并同意 </string>
+    <string name="login_tips1" tools:ignore="MissingTranslation">登录即表示阅读并同意</string>
     <string name="login_tips2" tools:ignore="MissingTranslation">服务协议</string>
     <string name="login_tips3" tools:ignore="MissingTranslation">和</string>
     <string name="login_tips4" tools:ignore="MissingTranslation">隐私政策</string>
@@ -40,7 +40,7 @@
     <string name="error_input_times" tools:ignore="MissingTranslation">密码输入有误，您还有%d次机会</string>
     <string name="error_psw_input_times" tools:ignore="MissingTranslation">密码错误超10次，请明天再试</string>
     <string name="ensure" tools:ignore="MissingTranslation">确定</string>
-    <string name="vrf_code_time" tools:ignore="MissingTranslation">验证码已超过10次\n 请明天再试 </string>
+    <string name="vrf_code_time" tools:ignore="MissingTranslation">验证码已超过10次\n 请明天再试</string>
     <string name="commit" tools:ignore="MissingTranslation">提交</string>
     <string name="phone_code_vrf_login" tools:ignore="MissingTranslation">短信验证码登录</string>
     <string name="rest_psw" tools:ignore="MissingTranslation">重置密码</string>
@@ -71,20 +71,32 @@
     <string name="openaccount_by_time" tools:ignore="MissingTranslation">账户开通需要多长时间？</string>
     <string name="openaccount_by_age" tools:ignore="MissingTranslation">开通账户是否年龄限制？</string>
     <string name="take_photo_not_permission" tools:ignore="MissingTranslation">获取相机权限失败，将导致无法正常拍摄，请打开设置页面手动授权</string>
-    <string name="record_video_not_permission" tools:ignore="MissingTranslation">获取相机、麦克风、存储空间权限失败，将导致无法正常拍摄，请打开设置页面手动授权</string>
+    <string name="record_video_not_permission" tools:ignore="MissingTranslation">
+        获取相机、麦克风、存储空间权限失败，将导致无法正常拍摄，请打开设置页面手动授权
+    </string>
     <string name="go_to_setting" tools:ignore="MissingTranslation">去设置</string>
     <string name="member_of_china" tools:ignore="MissingTranslation">中国居民:</string>
     <string name="member_of_china_tips" tools:ignore="MissingTranslation">1、中国内地身份证\n2、内地临时身份证（三个月有效期内）</string>
     <string name="member_of_hk" tools:ignore="MissingTranslation">香港居民:</string>
-    <string name="member_of_hk_tips" tools:ignore="MissingTranslation">1、香港永久居民身份证+地址证明（三个月内发出）\n 2、香港居民身份证+香港签证身份书+地址证明（三个 月内发出）\n 3、香港居民身份证+中国内地身份证+地址证明（三个 月内发出）</string>
+    <string name="member_of_hk_tips" tools:ignore="MissingTranslation">1、香港永久居民身份证+地址证明（三个月内发出）\n
+        2、香港居民身份证+香港签证身份书+地址证明（三个 月内发出）\n 3、香港居民身份证+中国内地身份证+地址证明（三个 月内发出）
+    </string>
     <string name="member_of_marcao" tools:ignore="MissingTranslation">澳门居民:</string>
-    <string name="member_of_marcao_tips" tools:ignore="MissingTranslation">1、澳门永久居民身份证+地址证明（三个月内发出）\n2、澳门非永久居民身份证+澳门旅行证+地址证明（三 个月内发出）\n 3、澳门非永久居民身份证+中国内地身份证+地址证明 (三个月内发出）</string>
+    <string name="member_of_marcao_tips" tools:ignore="MissingTranslation">
+        1、澳门永久居民身份证+地址证明（三个月内发出）\n2、澳门非永久居民身份证+澳门旅行证+地址证明（三 个月内发出）\n 3、澳门非永久居民身份证+中国内地身份证+地址证明 (三个月内发出）
+    </string>
     <string name="member_of_other" tools:ignore="MissingTranslation">非中国内地、香港、澳门居民：</string>
     <string name="member_of_other_tips" tools:ignore="MissingTranslation">1、护照（非中国内地护照）+地址证明（三个月内发出）</string>
-    <string name="update_zhuori_info" tools:ignore="MissingTranslation">如需更改，请联系卓锐证券客服（中国内地：400- \n820-4578；中国香港：+852-2541-8546）。如 \n您的姓名、国籍、证件号码、居民地址等信息有变更 \n、需提供相关材料。</string>
-    <string name="how_long_to_openaccount" tools:ignore="MissingTranslation">您好，账户完全开通一般需要1-2个工作日。从 \n注册到考通的各个阶段，均会有相应进度的短信提 \n示。</string>
-    <string name="age_range_tips" tools:ignore="MissingTranslation">您好，年满18周岁至21周岁的客户，可以开立即现\n金账户；年龄21周岁以上的客户，可开立保证金账\n户。（暂时没有年龄高上限的的要求）</string>
-    <string name="resolved"  tools:ignore="MissingTranslation">已解决</string>
+    <string name="update_zhuori_info" tools:ignore="MissingTranslation">如需更改，请联系卓锐证券客服（中国内地：400-
+        \n820-4578；中国香港：+852-2541-8546）。如 \n您的姓名、国籍、证件号码、居民地址等信息有变更 \n、需提供相关材料。
+    </string>
+    <string name="how_long_to_openaccount" tools:ignore="MissingTranslation">您好，账户完全开通一般需要1-2个工作日。从
+        \n注册到考通的各个阶段，均会有相应进度的短信提 \n示。
+    </string>
+    <string name="age_range_tips" tools:ignore="MissingTranslation">
+        您好，年满18周岁至21周岁的客户，可以开立即现\n金账户；年龄21周岁以上的客户，可开立保证金账\n户。（暂时没有年龄高上限的的要求）
+    </string>
+    <string name="resolved" tools:ignore="MissingTranslation">已解决</string>
     <string name="unresolved" tools:ignore="MissingTranslation">未解决</string>
     <string name="red_up_green_down" tools:ignore="MissingTranslation">红涨绿跌</string>
     <string name="green_up_red_down" tools:ignore="MissingTranslation">绿涨红跌</string>
@@ -119,7 +131,7 @@
     <string name="input_account_license_num" tools:ignore="MissingTranslation">请输入您开户时登记的证件号码</string>
     <string name="input_receiver_code" tools:ignore="MissingTranslation">请输入您收到的验证码</string>
     <string name="please_ensure_password" tools:ignore="MissingTranslation">请确认密码</string>
-    <string name="no_null_old_pass"  tools:ignore="MissingTranslation">原密码不正确</string>
+    <string name="no_null_old_pass" tools:ignore="MissingTranslation">原密码不正确</string>
     <string name="please_input_ensure_capital_psw" tools:ignore="MissingTranslation">请输入确认交易密码内容</string>
     <string name="input_new_ca_psw" tools:ignore="MissingTranslation">请输入您的新交易密码</string>
     <string name="input_en_ca_psw" tools:ignore="MissingTranslation">请确认您的新交易密码</string>
@@ -141,4 +153,8 @@
     <string name="unable_get_phone_code" tools:ignore="MissingTranslation">收不到验证码</string>
     <string name="phone_dev_timer_phonenum_tips" tools:ignore="MissingTranslation">验证码已发送至：%1$s</string>
     <string name="input_verify_code" tools:ignore="MissingTranslation">输入验证码</string>
+    <string name="other_dev_login_tips" tools:ignore="MissingTranslation">您的账号已在其他设备登录,\n从本设备下线。如果不是您本\n人操作，请及时联系卓锐客服\n400-788-190。</string>
+    <string name="notice" tools:ignore="MissingTranslation">通知</string>
+    <string name="dev_login_problem_tips" tools:ignore="MissingTranslation">请拨打卓锐证券客服电话\n解决登录问题 </string>
+    <string name="phone_call" tools:ignore="MissingTranslation">电话</string>
 </resources>

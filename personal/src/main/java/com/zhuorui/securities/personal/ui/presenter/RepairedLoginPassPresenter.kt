@@ -125,14 +125,14 @@ class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLogi
     }
 
     fun modifyNewLoginPsw(oldstr:String,newStr:String){
-        dialogshow(1)
+        //dialogshow(1)
         val request = ModifyLoginPswRequest(Md5Util.getMd5Str(oldstr),Md5Util.getMd5Str(newStr),transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendModifyNewLoginPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onmodifyNewLoginPsw(response: SendLoginCodeResponse) {
-            dialogshow(0)
+            //dialogshow(0)
             view?.gotomain()
 
     }
