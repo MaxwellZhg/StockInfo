@@ -1,7 +1,7 @@
 package com.zhuorui.securities.market.net.api
 
 /**
- * 测试
+ * 股票行情
  */
 interface StockApi {
     companion object {
