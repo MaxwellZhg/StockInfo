@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
@@ -70,6 +71,9 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
     override fun onClick(p0: View?) {
        when(p0?.id){
            R.id.tv_btn_complete->{
+               phone?.let {
+                       it -> presenter?.requestSendLoginCode(it)
+               }
 
            }
            R.id.unable_verify_phone->{
@@ -82,21 +86,18 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
     }
 
     override fun gotoPhone() {
-        //todo
-        var intent: Intent =  Intent()
-        intent.action = Intent.ACTION_CALL
-        intent.data = Uri.parse("tel:" + "400-788-190")
-        startActivity(intent)
-        SoulPermission.getInstance().checkAndRequestPermissions(
-            Permissions.build(
-                Manifest.permission.CALL_PHONE
-            ),this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            SoulPermission.getInstance().checkAndRequestPermissions(
+                Permissions.build(
+                    Manifest.permission.CALL_PHONE
+                ), this
+            )
+        }else{
+            presenter?.luanchCall()
+        }
     }
     override fun onAllPermissionOk(allPermissions: Array<out Permission>?) {
-        var intent: Intent =  Intent()
-        intent.action = Intent.ACTION_CALL
-        intent.data = Uri.parse("tel:" + "400-788-190")
-        startActivity(intent)
+           presenter?.luanchCall()
     }
 
     override fun onPermissionDenied(refusedPermissions: Array<out Permission>?) {

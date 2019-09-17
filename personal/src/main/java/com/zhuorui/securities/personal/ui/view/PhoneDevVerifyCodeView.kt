@@ -9,5 +9,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface PhoneDevVerifyCodeView :AbsView{
-
+    fun gotoPhone()
+    fun gotomain()
 }

@@ -27,7 +27,7 @@ import me.yokeyword.fragmentation.ISupportFragment
  */
 class MyTabFragment :
     AbsBackFinishFragment<FragmentMyTabBinding, MyTabVierwModel, MyTabVierw, MyTabPresenter>(),
-    MyTabVierw, View.OnClickListener {
+    MyTabVierw, View.OnClickListener{
     companion object {
         fun newInstance(): MyTabFragment {
             return MyTabFragment()
