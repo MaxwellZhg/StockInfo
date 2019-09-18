@@ -69,7 +69,9 @@ class MyTabFragment :
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
         ll_about_us.setOnClickListener(this)
-        if(LocalAccountConfig.read().isLogin()){
+        ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
+        ll_setting_language.setRightTips(presenter?.setConfigValue(2))
+        if(!LocalAccountConfig.read().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
@@ -126,7 +128,7 @@ class MyTabFragment :
         }
     }
     override fun loginStateChange() {
-        if(LocalAccountConfig.read().isLogin()){
+        if(!LocalAccountConfig.read().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
@@ -135,7 +137,7 @@ class MyTabFragment :
         }
     }
     override fun changeMyTabInfoView() {
-        if(LocalAccountConfig.read().isLogin()){
+        if(!LocalAccountConfig.read().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
