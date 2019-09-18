@@ -64,8 +64,8 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
             view?.gotonext()
         }
     }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onErrorRes(response: ErrorResponse) {
+
+    override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is ModifyOldPhoneRequest) {
             dialogshow(0)
         }else if(response.request is SendOldRepalceCodeRequest){

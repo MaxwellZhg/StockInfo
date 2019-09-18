@@ -107,7 +107,7 @@ object Network {
     class IHCallBack<T : BaseResponse>(private val request: BaseRequest) : Callback<T> {
 
         init {
-//            LogInfra.Log.w(TAG, " Request: " + JsonUtil.toJson(request))
+            LogInfra.Log.w(TAG, " Request: " + JsonUtil.toJson(request))
         }
 
         override fun onResponse(call: Call<T>, response: Response<T>) {

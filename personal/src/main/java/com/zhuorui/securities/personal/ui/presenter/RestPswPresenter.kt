@@ -109,8 +109,8 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onErrorRes(response: ErrorResponse) {
+
+    override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is RestLoginPswRequest) {
             dialogshow(0)
         }

@@ -138,14 +138,14 @@ public class PasswordView extends View {
         inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         paint = new Paint();
         paint.setAntiAlias(true);
-        timerTask = new TimerTask() {
+/*        timerTask = new TimerTask() {
             @Override
             public void run() {
                 isCursorShowing = !isCursorShowing;
                 postInvalidate();
             }
         };
-        timer = new Timer();
+        timer = new Timer();*/
     }
 
     @Override
@@ -191,7 +191,7 @@ public class PasswordView extends View {
             drawRect(canvas, paint);
         }
         //绘制光标
-        drawCursor(canvas, paint);
+        //drawCursor(canvas, paint);
         //绘制密码文本
         drawCipherText(canvas, paint);
     }
@@ -419,13 +419,16 @@ public class PasswordView extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         //cursorFlashTime为光标闪动的间隔时间
-        timer.scheduleAtFixedRate(timerTask, 0, cursorFlashTime);
+   /*     if(timer!=null) {
+            timer.scheduleAtFixedRate(timerTask, 0, cursorFlashTime);
+        }*/
     }
 
     @Override
-    protected void onDetachedFromWindow() {
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        timer.cancel();
+    /*    timer.cancel();
+        timer=null;*/
     }
 
     private int dp2px(float dp) {

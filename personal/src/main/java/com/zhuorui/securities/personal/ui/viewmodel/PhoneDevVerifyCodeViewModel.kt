@@ -1,6 +1,9 @@
 package com.zhuorui.securities.personal.ui.viewmodel
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.personal.R
 
 /**
  * Created by Maxwell.
@@ -9,5 +12,8 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class PhoneDevVerifyCodeViewModel :ViewModel(){
-
+    var str= ObservableField<String>()
+    init {
+        str.set("60s")
+    }
 }

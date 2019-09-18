@@ -12,4 +12,5 @@ interface LoginPswView :AbsView{
     fun init()
     fun gotomain()
     fun showTipsInfo(type:Int)
+    fun showVerify()
 }

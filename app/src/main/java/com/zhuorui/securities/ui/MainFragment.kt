@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.BR
 import com.zhuorui.securities.R
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.custom.view.BottomBar
 import com.zhuorui.securities.custom.view.BottomBarTab
 import com.zhuorui.securities.databinding.FragmentMainBinding
@@ -134,6 +135,7 @@ class MainFragment :
 
     override fun jumpToLogin() {
         //设备下线
+        ToastUtil.instance.toastCenter(R.string.other_dev_login_tips)
         start(LoginRegisterFragment.newInstance())
     }
 }
