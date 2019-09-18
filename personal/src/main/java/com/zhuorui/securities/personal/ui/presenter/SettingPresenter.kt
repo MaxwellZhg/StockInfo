@@ -1,12 +1,18 @@
 package com.zhuorui.securities.personal.ui.presenter
 
+import android.os.Bundle
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalSettingsConfig
+import com.zhuorui.securities.personal.model.AppLanguage
+import com.zhuorui.securities.personal.model.StocksThemeColor
 import com.zhuorui.securities.personal.ui.adapter.SettingDataAdapter
 import com.zhuorui.securities.personal.ui.model.SettingData
 import com.zhuorui.securities.personal.ui.view.SettingView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingViewModel
+import me.jessyan.autosize.utils.LogUtils
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  * Created by Maxwell.
@@ -54,4 +60,33 @@ class SettingPresenter : AbsNetPresenter<SettingView, SettingViewModel>() {
         }
         return viewModel?.adapter?.value
     }
+
+    fun detailSaveState(type:Int ,str:String?){
+        when(type){
+            1->{
+               if(str.equals(ResUtil.getString(R.string.red_up_green_down))){
+                   LocalSettingsConfig.read().saveStockColor(StocksThemeColor.redUpGreenDown)
+               }else{
+                   LocalSettingsConfig.read().saveStockColor(StocksThemeColor.greenUpRedDown)
+               }
+            }
+            2->{
+             when(str){
+                   ResUtil.getString(R.string.auto)->{
+                       LocalSettingsConfig.read().saveLanguage(AppLanguage.auto)
+                   }
+                   ResUtil.getString(R.string.simple_cn)->{
+                       LocalSettingsConfig.read().saveLanguage(AppLanguage.zh_CN)
+                   }
+                   ResUtil.getString(R.string.unsimple_cn)->{
+                       LocalSettingsConfig.read().saveLanguage(AppLanguage.zh_HK)
+                   }
+                   ResUtil.getString(R.string.english)->{
+                       LocalSettingsConfig.read().saveLanguage(AppLanguage.en_US)
+                   }
+               }
+            }
+        }
+    }
+
 }

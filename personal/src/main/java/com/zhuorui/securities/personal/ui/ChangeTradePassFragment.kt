@@ -79,6 +79,7 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
 
     }
     override fun onClick(p0: View?) {
+        //todo 操作交易密码待验证
         strnewcapsw=et_new_capital_psw.text.toString().trim()
         strencapsw=et_ensure_new_capital_psw.text.toString().trim()
         when(p0?.id){

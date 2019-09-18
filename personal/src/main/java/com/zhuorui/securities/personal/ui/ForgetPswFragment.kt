@@ -84,7 +84,7 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                presenter?.requestVerifyForgetCode(strphone,phonecode)
            }
            R.id.tv_phone_code_login->{
-               startWithPop(LoginRegisterFragment.newInstance())
+               startWithPop(LoginRegisterFragment.newInstance(1))
            }
            R.id.iv_back->{
                pop()

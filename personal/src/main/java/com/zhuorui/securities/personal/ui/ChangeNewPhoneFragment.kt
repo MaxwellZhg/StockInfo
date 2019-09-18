@@ -88,6 +88,7 @@ class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumB
     }
 
     override fun onClick(p0: View?) {
+        //todo 修改手机号待验证
         strnewphone=et_new_phone.text.toString().trim()
         strnewphonecode=et_verify_code.text.toString().trim()
        when(p0?.id){

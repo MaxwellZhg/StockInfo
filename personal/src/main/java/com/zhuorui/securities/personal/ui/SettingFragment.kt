@@ -9,6 +9,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import com.zhuorui.securities.personal.databinding.FragmentSettingBinding
 import com.zhuorui.securities.personal.ui.adapter.HelpCenterInfoAdapter
 import com.zhuorui.securities.personal.ui.adapter.SettingDataAdapter
@@ -58,6 +59,8 @@ class SettingFragment : AbsSwipeBackFragment<FragmentSettingBinding, SettingView
         presenter?.getData(type,tips)
         lv_info.adapter = adapter
         title_bar.setRightTextViewClickListener{
+            //todo 国际化语言和颜色涨跌post设置
+            presenter?.detailSaveState(type,adapter?.getTips())
             var b = Bundle()
             LogUtils.e(adapter?.getTips())
             b.putString("str", adapter?.getTips())

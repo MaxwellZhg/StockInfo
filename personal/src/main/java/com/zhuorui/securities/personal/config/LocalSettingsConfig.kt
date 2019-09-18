@@ -14,21 +14,35 @@ import com.zhuorui.securities.personal.model.StocksThemeColor
 class LocalSettingsConfig : AbsConfig() {
 
     // 默认为红涨绿跌
-    private var stocksThemeColor: StocksThemeColor = StocksThemeColor.redUpGreenDown
-        set(value) {
+    var stocksThemeColor: StocksThemeColor = StocksThemeColor.redUpGreenDown
+       set(value) {
             field = value
             write()
         }
 
+
     // 默认为自动语言
-    private var appLanguage: AppLanguage = AppLanguage.auto
-        set(value) {
+    var appLanguage: AppLanguage = AppLanguage.auto
+       set(value) {
             field = value
             write()
         }
 
     override fun write() {
         StorageInfra.put(LocalSettingsConfig::class.java.simpleName, this)
+    }
+    fun saveStockColor(enum:StocksThemeColor){
+        stocksThemeColor=enum
+        write()
+    }
+
+    fun saveLanguage(enum: AppLanguage){
+        appLanguage=enum
+        write()
+    }
+
+    override fun toString(): String {
+        return "LocalSettingsConfig(stocksThemeColor=$stocksThemeColor, appLanguage=$appLanguage)"
     }
 
     companion object {
@@ -47,4 +61,5 @@ class LocalSettingsConfig : AbsConfig() {
             StorageInfra.remove(LocalSettingsConfig::class.java.simpleName, LocalSettingsConfig::class.java.name)
         }
     }
+
 }

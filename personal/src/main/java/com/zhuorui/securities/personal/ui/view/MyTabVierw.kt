@@ -11,4 +11,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
 interface MyTabVierw : AbsView {
     fun gotomain()
     fun loginStateChange()
+    fun  changeMyTabInfoView()
 }

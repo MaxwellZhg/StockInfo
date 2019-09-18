@@ -136,6 +136,6 @@ class MainFragment :
     override fun jumpToLogin() {
         //设备下线
         ToastUtil.instance.toastCenter(R.string.other_dev_login_tips)
-        start(LoginRegisterFragment.newInstance())
+        start(LoginRegisterFragment.newInstance(1))
     }
 }
