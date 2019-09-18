@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.BaseApplication.Companion.context
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -25,6 +27,7 @@ import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.top_bar
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
+import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -47,13 +50,6 @@ class SimulationTradingMainFragment :
 
     private var holdPositionsAdapter: HoldPositionsListAdapter? = null
     private var todayOrderAdapter: SimulationTradingOrderAdapter? = null
-    private var magicIndicator: MagicIndicator? = null
-    private var vHeader: View? = null
-    private var vfundAccount: SimulationTradingFundAccountView? = null
-    private var vRule: View? = null
-    private var vUserHeader: ImageView? = null
-    private var vUserName: TextView? = null
-    private var vUserNo: TextView? = null
     private var tabTitle: Array<String>? = null
 
     companion object {
@@ -79,7 +75,7 @@ class SimulationTradingMainFragment :
 
     override fun onClick(p0: View?) {
         when (p0) {
-            vRule -> {
+            zr_rule -> {
                 start(SimulationTradingRuleFragment.newInstance())
             }
 
@@ -111,6 +107,7 @@ class SimulationTradingMainFragment :
      * 改单
      */
     override fun toChangeOrder(id: String) {
+        start(SimulationTradingStocksFragment.newInstance())
     }
 
     /**
@@ -133,8 +130,8 @@ class SimulationTradingMainFragment :
     }
 
     override fun createFundAccountSuccess() {
-        vfundAccount?.setData { true }
-        vfundAccount?.createFundAccountSuccess()
+        fund_account?.setData { true }
+        fund_account?.createFundAccountSuccess()
     }
 
     private fun onSelect(index: Int) {
@@ -159,11 +156,26 @@ class SimulationTradingMainFragment :
             // 搜索
             start(SimulationTradingSearchFragment.newInstance())
         }
-        recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+        }
+        //解决数据加载不完的问题
+        recycler_view.isNestedScrollingEnabled = false
+        recycler_view.setHasFixedSize(true)
+        //解决数据加载完成后, 没有停留在顶部的问题
+        recycler_view.isFocusable = false
         tabTitle = getTabTitleData()
-        getHeaderView()
+        zr_rule.setOnClickListener(this)
+        fund_account.setOnMockStockFundAccountListener(this)
+        magic_indicator.navigator = getNavigator()
+    }
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
         onSelect(0)
-        vfundAccount?.setData { false }
+        fund_account?.setData { false }
     }
 
     private fun getTabTitleData(): Array<String>? {
@@ -177,7 +189,7 @@ class SimulationTradingMainFragment :
 
     private fun notifyTitleTab() {
         tabTitle = getTabTitleData()
-        magicIndicator?.navigator?.notifyDataSetChanged()
+        magic_indicator.navigator?.notifyDataSetChanged()
     }
 
     fun getHoldpositionsAdapter(): HoldPositionsListAdapter {
@@ -185,8 +197,6 @@ class SimulationTradingMainFragment :
             holdPositionsAdapter = context?.let { HoldPositionsListAdapter(it) }
             holdPositionsAdapter?.listener = this
         }
-        todayOrderAdapter?.setHeaderView(null)
-        holdPositionsAdapter?.setHeaderView(getHeaderView())
         return holdPositionsAdapter!!
     }
 
@@ -195,29 +205,7 @@ class SimulationTradingMainFragment :
             todayOrderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
             todayOrderAdapter?.listener = this
         }
-        holdPositionsAdapter?.setHeaderView(null)
-        todayOrderAdapter?.setHeaderView(getHeaderView())
         return todayOrderAdapter!!
-    }
-
-    fun getHeaderView(): View {
-        if (vHeader == null) {
-            vHeader = LayoutInflater.from(context).inflate(R.layout.layout_simulation_trading_main_top, null)
-            vRule = vHeader?.findViewById(R.id.zr_rule)
-            vRule?.setOnClickListener(this)
-            vfundAccount = vHeader?.findViewById(R.id.fund_account)
-            vfundAccount?.setOnMockStockFundAccountListener(this)
-            magicIndicator = vHeader?.findViewById(R.id.magic_indicator)
-            magicIndicator?.navigator = getNavigator()
-            vUserHeader = vHeader?.findViewById(R.id.user_header)
-            vUserName = vHeader?.findViewById(R.id.user_name)
-            vUserNo = vHeader?.findViewById(R.id.zr_no)
-        }
-        val vp: ViewParent? = vHeader?.parent
-        if (vp != null) {
-            (vp as ViewGroup).removeView(vHeader)
-        }
-        return vHeader!!
     }
 
     /**
@@ -240,8 +228,8 @@ class SimulationTradingMainFragment :
                 colorTransitionPagerTitleView.textSize = 18f
                 colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
-                    magicIndicator?.onPageSelected(index)
-                    magicIndicator?.onPageScrolled(index, 0.0F, 0)
+                    magic_indicator.onPageSelected(index)
+                    magic_indicator.onPageScrolled(index, 0.0F, 0)
                     onSelect(index)
                 }
                 return colorTransitionPagerTitleView

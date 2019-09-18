@@ -6,6 +6,8 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.market.config.LocalStocksConfig
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
@@ -41,6 +43,13 @@ class SimulationTradingSearchPresenter :
         if (datas.isNullOrEmpty()) return
         view?.setSearchData(datas)
 
+    }
+
+    /**
+     * 获取自选股
+     */
+    fun getStocks(): MutableList<StockMarketInfo> {
+        return LocalStocksConfig.read().getStocks()
     }
 
 }

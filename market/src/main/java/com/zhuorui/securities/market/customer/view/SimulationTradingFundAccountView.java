@@ -35,6 +35,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     private TextView vMarketValue;
     private TextView vAvailableFunds;
     private TextView vTotalProfitLoss;
+    private TextView vTips;
 
     public SimulationTradingFundAccountView(Context context) {
         this(context, null);
@@ -61,6 +62,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         vAvailableFunds = findViewById(R.id.available_funds);
         vTotalProfitLoss = findViewById(R.id.total_profit_and_loss);
         vOrder = findViewById(R.id.order);
+        vTips = findViewById(R.id.tips);
         vBusiness.setOnClickListener(this);
         vOrder.setOnClickListener(this);
     }
@@ -79,12 +81,13 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     }
 
     public void setData(IFundAccountData data) {
+        vTips.setVisibility(GONE  );
         if (!data.isCreate()) {
             inflateNotAccount();
             return;
         }
         vTotalAssets.setText("134459329.9");
-        vMarketValue.setText("1294829.98");
+        vMarketValue.setText("129482974.98");
         vAvailableFunds.setText("582838");
         vTotalProfitLoss.setText("96632");
         float todayPL = 35283.98f;

@@ -10,14 +10,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.reflect.TypeToken
 import com.zhuorui.commonwidget.ZRSearchView
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.config.LocalStocksConfig
+import com.zhuorui.securities.market.config.SimulationTradingSearchConfig
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingSearchBinding
+import com.zhuorui.securities.market.model.IStocks
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingSearchPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingSearchView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingSearchViewModel
@@ -35,12 +38,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
  *    date   : 2019-09-09 14:05
- *    desc   : 模拟炒股规则
+ *    desc   : 模拟炒股搜索
  */
 class SimulationTradingSearchFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingSearchBinding, SimulationTradingSearchViewModel, SimulationTradingSearchView, SimulationTradingSearchPresenter>(),
-    SimulationTradingSearchView, ZRSearchView.OnKeyChangeListener,
-    SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
+    SimulationTradingSearchView, ZRSearchView.OnKeyChangeListener {
 
     var tabTitle: Array<String>? = null
     var selectIndex = 0
@@ -154,7 +156,7 @@ class SimulationTradingSearchFragment :
                 magic_indicator.visibility = View.VISIBLE
                 recycler_view.adapter = getMyOwnChoiceAdapter()
             } else if (selectIndex == 1 && uiStatus != 1) {
-                uiStatus = 0
+                uiStatus = 1
                 magic_indicator.visibility = View.VISIBLE
                 recycler_view.adapter = getSearchHistoryAdapter()
             }
@@ -164,7 +166,12 @@ class SimulationTradingSearchFragment :
     private fun getSearchDataAdapter(): SimulationTradingSearchAdapter? {
         if (searchAdapter == null) {
             searchAdapter = SimulationTradingSearchAdapter(context!!)
-            searchAdapter?.listener = this
+            searchAdapter?.listener = object : SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
+                override fun onItemClick(data: IStocks) {
+                    SimulationTradingSearchConfig.read().add(data as SearchStockInfo)
+                    onClickStock(data)
+                }
+            }
         }
         return searchAdapter
     }
@@ -172,7 +179,13 @@ class SimulationTradingSearchFragment :
     private fun getMyOwnChoiceAdapter(): SimulationTradingSearchAdapter? {
         if (choiceAdapter == null) {
             choiceAdapter = SimulationTradingSearchAdapter(context!!)
-            choiceAdapter?.listener = this
+            choiceAdapter?.listener = object : SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
+                override fun onItemClick(data: IStocks) {
+                    onClickStock(data)
+                }
+            }
+            val list: MutableList<StockMarketInfo> = LocalStocksConfig.read().getStocks()
+            choiceAdapter?.setData(list.toMutableList())
         }
         return choiceAdapter
     }
@@ -181,7 +194,13 @@ class SimulationTradingSearchFragment :
         if (historyAdapter == null) {
             historyAdapter = SimulationTradingSearchAdapter(context!!)
             historyAdapter?.setFooterView(getHistoryFooterView())
-            historyAdapter?.listener = this
+            historyAdapter?.listener = object : SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
+                override fun onItemClick(data: IStocks) {
+                    onClickStock(data)
+                }
+            }
+            val list: MutableList<SearchStockInfo> = SimulationTradingSearchConfig.read().getStocks()
+            historyAdapter?.setData(list.toMutableList())
         }
         return historyAdapter
     }
@@ -195,18 +214,25 @@ class SimulationTradingSearchFragment :
         clear.gravity = Gravity.CENTER
         clear.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ResUtil.getDimensionDp2Px(42f))
         clear.setOnClickListener {
+            SimulationTradingSearchConfig.read().clear()
+            historyAdapter?.setData(null)
+            historyAdapter?.notifyDataSetChanged()
             presenter?.clearSearchHistory()
         }
         return clear
     }
 
-    override fun onItemClick(code: String, name: String) {
+    fun onClickStock(data: IStocks) {
         var b = Bundle()
-        b.putString("stock_tscode", code)
-        b.putString("stock_name", name)
+        b.putString("stock_tscode", data.getITsCode())
+        b.putString("stock_name", data.getIName())
         setFragmentResult(ISupportFragment.RESULT_OK, b)
         pop()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideSoftInput()
+    }
 
 }

@@ -29,6 +29,10 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     val selected: HashSet<Int> = HashSet()
     var posOff = 0
 
+    init {
+        initItemViewType()
+    }
+
 
     private var vHeader: View? = null
 
@@ -164,13 +168,13 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             item?.tag = position
             business?.tag = position
             quotation?.tag = position
-            stockName?.text = "翰森制药$position"
+            stockName?.text = "翰森制药制药"
             stockTsCode?.text = "03692$position.HK"
-            marketValue?.text = "54354333$position.8$position"
+            marketValue?.text = "55435333$position.8$position"
             presentPrice?.text = "2$position.23"
             number?.text = "273$position"
             cost?.text = "1$position.21"
-            holdPositions?.text = "355223$position.35"
+            holdPositions?.text = "34223678$position.35"
             profitAndLoss?.text = "+$position.34%"
             holdPositions?.setTextColor(color)
             profitAndLoss?.setTextColor(color)

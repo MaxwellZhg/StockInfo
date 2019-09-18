@@ -95,6 +95,10 @@ class SimulationTradingOrdersFragment :
         magic_indicator.navigator = getNavigator()
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.adapter = getMockStockOrderAdapter()
+    }
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
         onSelect(0)
     }
 
