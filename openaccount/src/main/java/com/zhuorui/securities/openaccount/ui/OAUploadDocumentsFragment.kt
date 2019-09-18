@@ -10,6 +10,7 @@ import com.zhuorui.commonwidget.ZRUploadImageView
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.openaccount.BR
+import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.custom.UploadDocumentsTipsDialog
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OAUploadDocumentsPresenter
@@ -68,16 +69,16 @@ class OAUploadDocumentsFragment :
     }
 
     override fun onPicturePath(v: ZRUploadImageView?, path: String?) {
-        when (v?.id) {
-            idcard_portrait.id -> {
-                checkUpload()
-            }
-            idcard_national_emblem.id -> {
-                checkUpload()
-            }
-        }
-
+        checkUpload()
     }
+
+    override fun onUploadError(v: ZRUploadImageView?, code: String?, msg: String?) {
+        checkUpload()
+        if (!TextUtils.equals("000301",code)){//000301 当天调用次数已用完
+            showTipsDialog(getString(R.string.str_upload_err))
+        }
+    }
+
 
     private fun checkUpload() {
         var idPath1: String? = idcard_portrait.path

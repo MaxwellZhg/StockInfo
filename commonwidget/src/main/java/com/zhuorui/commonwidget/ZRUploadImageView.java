@@ -220,21 +220,6 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
 
     private void setImagePath(final String path) {
         vBtnText.setText(ResUtil.INSTANCE.getString(R.string.str_reshooting));
-//        BitmapTransformation transformation = new BitmapTransformation() {
-//            @Override
-//            protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
-//                int degree = FileToBase64Util.readPictureDegree(path);
-//                if (degree != 0){
-//                    return FileToBase64Util.rotateImage(degree,toTransform);
-//                }
-//                return toTransform;
-//            }
-//
-//            @Override
-//            public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
-//
-//            }
-//        };
         Glide.with(vImg).load(path).placeholder(mPlaceholder).error(mPlaceholder).diskCacheStrategy(DiskCacheStrategy.NONE).into(vImg);
     }
 
@@ -287,10 +272,10 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
     }
 
     @Override
-    public void onFail(String msg) {
+    public void onFail(String code ,String msg) {
         changeUi(3, msg);
         vBtn.setEnabled(true);
-        mListener.onPicturePath(this, "");
+        mListener.onUploadError(this,code,msg);
     }
 
 
@@ -320,6 +305,8 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
          * @param path
          */
         void onPicturePath(ZRUploadImageView v, String path);
+
+        void onUploadError(ZRUploadImageView v, String code,String msg);
     }
 
 

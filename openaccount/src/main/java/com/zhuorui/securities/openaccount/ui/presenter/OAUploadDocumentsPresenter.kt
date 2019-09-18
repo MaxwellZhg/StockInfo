@@ -82,14 +82,14 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
                     if (it.isSuccess()) {
                         listener?.onSuccess(if (tp == 0) it.data.cardFrontPhoto else it.data.cardBackPhoto)
                     } else {
-                        listener?.onFail(it.msg)
+                        listener?.onFail(it.code,it.msg)
                     }
                 }
             }
 
             fun getErrorConsumer(): io.reactivex.functions.Consumer<Throwable> {
                 return io.reactivex.functions.Consumer {
-                    listener?.onFail(it.message)
+                    listener?.onFail("-1",it.message)
 
                 }
             }
