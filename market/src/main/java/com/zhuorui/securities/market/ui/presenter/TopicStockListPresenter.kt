@@ -38,6 +38,7 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -162,8 +163,11 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                     // 更新数据
                     val item = datas[index]
                     item.price = sub.price!!
-                    item.diffRate =
-                        MathUtil.division((sub.price!! - sub.openPrice!!) * 100, sub.openPrice!!)
+                    item.diffPrice = sub.price!!.subtract(sub.openPrice)
+                    item.diffRate = MathUtil.divide2(
+                        item.diffPrice!!.multiply(BigDecimal.valueOf(100)),
+                        sub.openPrice!!
+                    )
                     view?.notifyItemChanged(index)
                     break
                 }

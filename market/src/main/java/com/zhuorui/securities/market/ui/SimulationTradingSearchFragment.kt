@@ -200,10 +200,9 @@ class SimulationTradingSearchFragment :
         return clear
     }
 
-    override fun onItemClick(code: String, name: String) {
-        var b = Bundle()
-        b.putString("stock_tscode", code)
-        b.putString("stock_name", name)
+    override fun onItemClick(stockInfo: SearchStockInfo?) {
+        val b = Bundle()
+        b.putParcelable(SearchStockInfo::class.java.simpleName, stockInfo)
         setFragmentResult(ISupportFragment.RESULT_OK, b)
         pop()
     }

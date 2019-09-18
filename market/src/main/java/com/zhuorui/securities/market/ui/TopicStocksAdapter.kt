@@ -8,14 +8,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
+import com.zhuorui.commonwidget.StateButton
+import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
-import com.zhuorui.securities.base2app.adapter.BaseListAdapter
-import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.securities.market.util.MathUtil
+import java.math.RoundingMode
 
 /**
  * Created by Maxwell.
@@ -82,6 +83,8 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         lateinit var stock_up_down: StateButton
         @BindView(R2.id.tv_price)
         lateinit var tv_price: TextView
+        @BindView(R2.id.tv_diff_pirce)
+        lateinit var tv_diff_pirce: TextView
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockMarketInfo?, position: Int) {
@@ -104,15 +107,23 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                     iv_stock_ts.setImageResource(R.mipmap.ic_ts_sz)
                 }
             }
-            tv_price.text = item?.price?.let { MathUtil.rounded2(it).toString() }
 
-            if (item?.diffRate!! > 0 || item.diffRate == 0.0) {
+            tv_price.text = if (item?.price == null) "0.00" else item.price.toString()
+
+            // 跌涨幅是否大于0或者等于0
+            if (item?.diffRate == null || MathUtil.rounded(item.diffRate!!).toInt() > 0) {
                 tv_price.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
 
+                tv_diff_pirce.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
+                tv_diff_pirce.text = "+" + (if (item?.diffPrice == null) "0.00" else item.diffPrice!!)
+
                 stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.up_stock_color)!!)
-                stock_up_down.text = "+" + item.diffRate + "%"
+                stock_up_down.text = "+" + (if (item?.diffRate == null) "0.00" else item.diffRate!!) + "%"
             } else {
                 tv_price.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
+
+                tv_diff_pirce.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
+                tv_diff_pirce.text = item.diffPrice.toString()
 
                 stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
                 stock_up_down.text = item.diffRate.toString() + "%"

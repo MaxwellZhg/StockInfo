@@ -3,7 +3,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewModel" type="com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel"/>
+        <import type="android.view.View"/>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,56 +51,57 @@
                 app:layout_constraintTop_toBottomOf="@+id/ll_title"
                 android:layout_marginTop="10dp"
                 android:background="@color/color_FFFFFFFF"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:visibility="@{viewModel.stockInfo == null ? View.GONE : View.VISIBLE}">
 
             <TextView
                     android:id="@+id/tv_stock_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="翰森制药"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="13dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/color_ffa4b2cb"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp"
+                    android:text="@{viewModel.stockInfo.name}"/>
 
             <TextView
-                    android:id="@+id/text1"
+                    android:id="@+id/tv_stock_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="23.950"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="21dp"
                     app:layout_constraintStart_toEndOf="@id/tv_stock_name"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:drawableEnd="@mipmap/ic_up_arrow"
+                    android:drawableEnd="@mipmap/ic_stock_up_arrow"
                     android:drawablePadding="6dp"
                     android:textColor="@color/color_ffce0019"
+                    android:text="---"
                     android:textSize="15sp"/>
 
             <TextView
-                    android:id="@+id/text2"
+                    android:id="@+id/tv_diff_pirce"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+0.550"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toEndOf="@id/text1"
+                    app:layout_constraintStart_toEndOf="@id/tv_stock_price"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/color_ffce0019"
+                    android:text="---"
                     android:textSize="15sp"/>
 
             <TextView
-                    android:id="@+id/text3"
+                    android:id="@+id/tv_diff_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+2.35%"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="21dp"
-                    app:layout_constraintStart_toEndOf="@id/text2"
+                    app:layout_constraintStart_toEndOf="@id/tv_diff_pirce"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/color_ffce0019"
+                    android:text="---"
                     android:textSize="15sp"/>
 
             <ImageView
@@ -170,11 +173,12 @@
                     android:textColor="@color/color_232323"
                     android:textSize="17sp"/>
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <TextView
                     android:id="@+id/tv_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/stock_code_input_hint"
+                    android:text="@{viewModel.stockInfo.tsCode}"
                     android:background="@android:color/transparent"
                     android:layout_marginStart="26dp"
                     android:textColor="@color/color_282828"
