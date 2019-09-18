@@ -50,7 +50,7 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        oldcapsw = arguments?.getSerializable("oldcapsw") as String
+        oldcapsw = arguments?.getSerializable("oldcapsw") as String?
         et_ensure_new_capital_psw.addTextChangedListener(this)
         tv_btn_complete.setOnClickListener(this)
     }

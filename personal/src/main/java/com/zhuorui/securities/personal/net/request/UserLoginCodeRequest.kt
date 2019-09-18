@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/8/16
  * Desc:
  */
-class UserLoginCodeRequest (val phone: String,val verificationCode:String ,val phoneArea:String, transaction: String):BaseRequest(transaction){
+class UserLoginCodeRequest (val phone: String?,val verificationCode:String? ,val phoneArea:String?, transaction: String):BaseRequest(transaction){
     init {
         generateSign()
     }

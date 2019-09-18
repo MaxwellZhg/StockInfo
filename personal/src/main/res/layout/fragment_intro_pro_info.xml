@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.personal.ui.viewmodel.IntroProInfoViewModel"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+                  android:orientation="vertical"
+                  android:background="@color/color_f0f0f0"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:id="@+id/top_bar"
+                android:layout_height="wrap_content"
+                app:zr_topbarTitle="@string/intro_pro">
+        </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+        <androidx.appcompat.widget.AppCompatTextView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                android:id="@+id/tv_intro_tips_one"
+                android:text="@string/intro_tips_one"
+                android:textSize="14sp"
+                android:layout_marginStart="21dp"
+                android:layout_marginEnd="21dp"
+                android:layout_marginTop="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/color_282828"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatTextView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_intro_tips_one"
+                android:layout_marginStart="21dp"
+                android:layout_marginEnd="21dp"
+                android:text="@string/intro_tips_two"
+                android:layout_marginTop="19dp"
+                android:textColor="@color/color_282828"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

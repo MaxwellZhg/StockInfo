@@ -14,6 +14,9 @@ interface IStockNet {
     @POST(StockApi.LIST)
     fun list(@Body request: RecommendStocklistRequest): Call<RecommendStocklistResponse>
 
+    @POST(StockApi.MY_LIST)
+    fun myList(@Body request: RecommendStocklistRequest): Call<RecommendStocklistResponse>
+
     @POST(StockApi.SEARCH_TOPIC)
     fun search(@Body request: StockSearchRequest): Call<StockSearchResponse>
 

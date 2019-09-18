@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/8/21
  * Desc:
  */
-class RestLoginPswRequest (val phone:String?,val newLoginPassword: String, val verificationCode: String?, val phoneArea: String,transaction: String):BaseRequest(transaction){
+class RestLoginPswRequest (val phone:String?,val newLoginPassword: String, val verificationCode: String?, val phoneArea:String,transaction: String):BaseRequest(transaction){
     init {
         generateSign()
     }
