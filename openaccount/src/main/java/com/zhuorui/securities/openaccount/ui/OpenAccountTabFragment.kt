@@ -51,7 +51,7 @@ open class OpenAccountTabFragment :
     override fun onJumpToOpenAccountPage() {
         when (presenter?.getLoginStatus()) {
             false -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
             }
             true -> {
                 val f = OpenInfoManager.getInstance()?.getNextFragment()

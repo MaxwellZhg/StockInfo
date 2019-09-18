@@ -103,7 +103,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
 
            }
            R.id.tv_phone_code_login->{
-               startWithPop(LoginRegisterFragment.newInstance())
+               startWithPop(LoginRegisterFragment.newInstance(1))
            }
        }
     }

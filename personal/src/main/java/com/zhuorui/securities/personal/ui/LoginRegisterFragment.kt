@@ -32,6 +32,7 @@ import me.yokeyword.fragmentation.ISupportFragment
 class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(), View.OnClickListener, TextWatcher,LoginRegisterView {
     private lateinit var strphone: String
     private lateinit var phonecode: String
+    private var type:Int = 0
     override val layout: Int
         get() = R.layout.login_and_register_fragment
     override val viewModelId: Int
@@ -121,8 +122,14 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     }
 
     companion object {
-        fun newInstance(): LoginRegisterFragment {
-            return LoginRegisterFragment()
+        fun newInstance(type:Int): LoginRegisterFragment {
+            val fragment = LoginRegisterFragment()
+            if (type!= null) {
+                val bundle = Bundle()
+                bundle.putSerializable("type", type)
+                fragment.arguments = bundle
+            }
+            return fragment
         }
     }
 
@@ -136,6 +143,14 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                  tv_login_contry.text=str
                  tv_areaphone_tips.text=code
             }
+        }
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        type = arguments?.getSerializable("type") as Int
+        if(type==2){
+            presenter?.postChangeMytabInfo()
         }
     }
 }

@@ -1,11 +1,11 @@
 package com.zhuorui.securities.openaccount.manager
 
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
-import com.zhuorui.securities.base2app.infra.AbsConfig
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
-import com.zhuorui.securities.openaccount.net.response.*
+import com.zhuorui.securities.openaccount.net.response.BankCardVerificationResponse
+import com.zhuorui.securities.openaccount.net.response.SubBasicsInfoResponse
+import com.zhuorui.securities.openaccount.net.response.SubIdentityResponse
+import com.zhuorui.securities.openaccount.net.response.SubRiskDisclosureResponse
 import com.zhuorui.securities.openaccount.ui.*
 import me.yokeyword.fragmentation.ISupportFragment
 
