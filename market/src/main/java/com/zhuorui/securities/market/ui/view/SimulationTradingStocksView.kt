@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -9,4 +10,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface SimulationTradingStocksView : AbsView {
+
+    fun updateStockPrice(price: BigDecimal, diffPrice: BigDecimal, diffRate: BigDecimal)
 }

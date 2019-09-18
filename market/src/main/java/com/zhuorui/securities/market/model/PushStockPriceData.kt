@@ -1,5 +1,7 @@
 package com.zhuorui.securities.market.model
 
+import java.math.BigDecimal
+
 /**
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
@@ -10,15 +12,15 @@ class PushStockPriceData  : BaseStockMarket() {
     /**
      * 开盘价格
      */
-    var openPrice: Double? = null
+    var openPrice: BigDecimal? = null
     /**
      * 昨日收盘价格
      */
-    var closePrice: Double? = null
+    var closePrice: BigDecimal? = null
     /**
      * 当前价格
      */
-    var price: Double? = null
+    var price: BigDecimal? = null
     /**
      * 日期时间
      */

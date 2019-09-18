@@ -1,25 +1,25 @@
 package com.zhuorui.securities.market.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
-import com.zhuorui.securities.base2app.ui.activity.AbsActivity
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.ToastUtil
-import com.zhuorui.securities.market.R
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
+import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.custom.TradingStocksOrderDialog
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
+import com.zhuorui.securities.market.util.MathUtil
 import com.zhuorui.securities.personal.ui.MessageFragment
-import kotlinx.android.synthetic.main.fragment_simulation_trading_search.*
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
-import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.top_bar
 import me.yokeyword.fragmentation.ISupportFragment
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -30,6 +30,8 @@ import me.yokeyword.fragmentation.ISupportFragment
 class SimulationTradingStocksFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingStocksBinding, SimulationTradingStocksViewModel, SimulationTradingStocksView, SimulationTradingStocksPresenter>(),
     SimulationTradingStocksView, View.OnClickListener {
+
+    val SEARCH_STOCK_CODE = 1000
 
     companion object {
         fun newInstance(): SimulationTradingStocksFragment {
@@ -58,6 +60,7 @@ class SimulationTradingStocksFragment :
         iv_chart.setOnClickListener(this)
         btn_buy.setOnClickListener(this)
         btn_sell.setOnClickListener(this)
+        tv_code.setOnClickListener(this)
         top_bar.setRightClickListener {
             // 消息
             start(MessageFragment.newInstance())
@@ -72,6 +75,11 @@ class SimulationTradingStocksFragment :
         when (p0) {
             iv_chart -> {
                 // 查看k线
+
+            }
+            tv_code -> {
+                // 模拟炒股搜索
+                startForResult(SimulationTradingSearchFragment.newInstance(), SEARCH_STOCK_CODE)
             }
             btn_buy -> {
                 // 买入
@@ -85,12 +93,39 @@ class SimulationTradingStocksFragment :
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    override fun updateStockPrice(price: BigDecimal, diffPrice: BigDecimal, diffRate: BigDecimal) {
+        tv_stock_price.text = price.toString()
+        val diffValue = MathUtil.rounded(diffPrice).toInt()
+        if (diffValue == 0 || diffValue > 0) {
+            ResUtil.getColor(R.color.color_ffce0019)?.let {
+                tv_stock_price.setTextColor(it)
+                tv_diff_pirce.setTextColor(it)
+                tv_diff_rate.setTextColor(it)
+            }
+
+            tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_stock_up_arrow, 0)
+            tv_diff_pirce.text = "+$diffPrice"
+            tv_diff_rate.text = "+$diffRate%"
+        } else {
+            ResUtil.getColor(R.color.color_FF23803A)?.let {
+                tv_stock_price.setTextColor(it)
+                tv_diff_pirce.setTextColor(it)
+                tv_diff_rate.setTextColor(it)
+            }
+
+            tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_stock_down_arrow, 0)
+            tv_diff_pirce.text = diffPrice.toString()
+            tv_diff_rate.text = "$diffRate%"
+        }
+    }
+
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
-        if (resultCode == ISupportFragment.RESULT_OK && requestCode == 12){
-            val code = data?.getString("stock_tscode")!!
-            val name = data?.getString("stock_name")
-            tv_code.setText(code)
+        if (resultCode == ISupportFragment.RESULT_OK && requestCode == SEARCH_STOCK_CODE) {
+            // 设置搜索返回的自选股
+            data?.getParcelable<SearchStockInfo>(SearchStockInfo::class.java.simpleName)
+                ?.let { presenter?.setStock(it) }
         }
     }
 }
