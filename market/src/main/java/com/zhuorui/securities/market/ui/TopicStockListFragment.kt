@@ -153,7 +153,7 @@ class TopicStockListFragment :
         when (p0?.id) {
             R.id.tv_opne_account -> {
                 //TODO 开户
-                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+                (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
             }
         }
     }

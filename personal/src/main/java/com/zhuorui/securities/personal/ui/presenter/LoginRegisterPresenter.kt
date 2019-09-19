@@ -15,6 +15,7 @@ import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.DisctCodeSelectEvent
+import com.zhuorui.securities.personal.event.MyTabInfoEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
@@ -176,6 +177,10 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                 }
             }
         })
+    }
+
+    fun postChangeMytabInfo(){
+        RxBus.getDefault().post(MyTabInfoEvent())
     }
 
 }

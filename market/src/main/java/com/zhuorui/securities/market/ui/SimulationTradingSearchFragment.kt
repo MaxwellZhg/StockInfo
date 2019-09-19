@@ -224,8 +224,14 @@ class SimulationTradingSearchFragment :
 
     fun onClickStock(data: IStocks) {
         var b = Bundle()
-        b.putString("stock_tscode", data.getITsCode())
-        b.putString("stock_name", data.getIName())
+        val stockInfo = SearchStockInfo()
+        stockInfo.id = data.getIID()
+        stockInfo.name = data.getIName()
+        stockInfo.ts = data.getITs()
+        stockInfo.code = data.getICode()
+        stockInfo.tsCode = data.getITsCode()
+        stockInfo.type = data.getIType()
+        b.putParcelable(SearchStockInfo::class.java.simpleName, stockInfo)
         setFragmentResult(ISupportFragment.RESULT_OK, b)
         pop()
     }

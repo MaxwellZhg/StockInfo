@@ -66,7 +66,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         password = et_password.text.toString().trim()
        when(p0?.id){
            R.id.tv_code_login_register->{
-               startWithPop(LoginRegisterFragment.newInstance())
+               startWithPop(LoginRegisterFragment.newInstance(1))
            }
            R.id.ll_country_disct->{
                startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)

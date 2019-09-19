@@ -15,4 +15,10 @@
         <attr name="right2_icon_height" format="dimension"/>
         <attr name="right2_icon_margin" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="StockTransDataView">
+        <attr name="title_text" format="string|reference"/>
+        <attr name="title_background" format="color"/>
+        <attr name="price_text_color" format="color"/>
+    </declare-styleable>
 </resources>

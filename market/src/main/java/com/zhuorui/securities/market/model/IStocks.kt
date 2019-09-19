@@ -11,4 +11,6 @@ interface IStocks {
     fun getICode():String
     fun getITs():String
     fun getITsCode():String
+    fun getIID():String
+    fun getIType():Int
 }

@@ -3,20 +3,26 @@ package com.zhuorui.securities.personal.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
+import com.zhuorui.securities.personal.event.MyTabInfoEvent
 import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
 import kotlinx.android.synthetic.main.fragment_my_tab.*
+import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 
 /**
@@ -63,12 +69,14 @@ class MyTabFragment :
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
         ll_about_us.setOnClickListener(this)
-        if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
+        ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
+        ll_setting_language.setRightTips(presenter?.setConfigValue(2))
+        if(!LocalAccountConfig.read().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().userId
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
         }
     }
     override fun onClick(p0: View?) {
@@ -89,7 +97,7 @@ class MyTabFragment :
             }
             R.id.ll_login -> {
                 if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null) {
-                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
                 }
             }
             R.id.ll_cell_change_color -> {
@@ -108,33 +116,34 @@ class MyTabFragment :
     }
 
     override fun gotomain() {
-        if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
-            ll_login_out.visibility=View.INVISIBLE
-            tv_login_tips.text=ResUtil.getString(R.string.login_register)
-        }else{
-            ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().userId
-        }
-        (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance())
+        (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(2))
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
         if (resultCode == ISupportFragment.RESULT_OK && requestCode == 100) {
-            ll_cell_change_color.setRightTips(data?.getString("str"))
+            ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
         } else {
-            ll_setting_language.setRightTips(data?.getString("str"))
+            ll_setting_language.setRightTips(presenter?.setConfigValue(2))
         }
     }
     override fun loginStateChange() {
-        if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null){
+        if(!LocalAccountConfig.read().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().userId
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
         }
     }
-
+    override fun changeMyTabInfoView() {
+        if(!LocalAccountConfig.read().isLogin()){
+            ll_login_out.visibility=View.INVISIBLE
+            tv_login_tips.text=ResUtil.getString(R.string.login_register)
+        }else{
+            ll_login_out.visibility=View.VISIBLE
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
+        }
+    }
 
 }

@@ -187,8 +187,8 @@ class SimulationTradingMainFragment :
             start(MessageFragment.newInstance())
         }
         top_bar.setRight2ClickListener {
-            // 搜索
-            start(SimulationTradingSearchFragment.newInstance())
+            // 搜索自选股
+            start(StockSearchFragment.newInstance())
         }
         recycler_view.layoutManager = object : LinearLayoutManager(context) {
             override fun canScrollVertically(): Boolean {

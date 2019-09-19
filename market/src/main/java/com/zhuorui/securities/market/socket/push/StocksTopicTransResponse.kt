@@ -1,6 +1,6 @@
 package com.zhuorui.securities.market.socket.push
 
-import com.zhuorui.securities.market.model.PushStockMarketData
+import com.zhuorui.securities.market.model.PushStockTransData
 import com.zhuorui.securities.market.socket.request.SocketHeader
 
 /**
@@ -11,5 +11,5 @@ import com.zhuorui.securities.market.socket.request.SocketHeader
  */
 class StocksTopicTransResponse(
     val header: SocketHeader,
-    val body: PushStockMarketData
+    val body: PushStockTransData
 )
