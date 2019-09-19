@@ -75,11 +75,20 @@ abstract class AbsFragment<D : ViewDataBinding, VM : ViewModel, V : AbsView, P :
         context?.let { presenter?.bindContext(it) }
         presenter?.bindView(getView)
         presenter?.bindViewModel(viewModel)
-        //关联ViewModel
+        // 关联ViewModel
         dataBinding?.setVariable(viewModelId, viewModel)
+        // 增加额外的变量
+        setAdditionalVariable(dataBinding!!)
         // 让xml内绑定的LiveData和Observer建立连接，让LiveData能感知Fragment的生命周期
         dataBinding?.lifecycleOwner = this
         return dataBinding?.root
+    }
+
+    /**
+     * 用于添加额外的变量
+     */
+    open fun setAdditionalVariable(dataBinding: ViewDataBinding) {
+
     }
 
     /**

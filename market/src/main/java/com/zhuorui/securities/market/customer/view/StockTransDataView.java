@@ -66,6 +66,7 @@ public class StockTransDataView extends RelativeLayout {
         params.addRule(CENTER_VERTICAL);
         params.setMarginStart((int) (density * 28));
         priceText.setLayoutParams(params);
+        priceText.setText("--");
         addView(priceText);
 
         // 创建交易量 如：116.80K(8)、1.23M(455)
@@ -77,6 +78,7 @@ public class StockTransDataView extends RelativeLayout {
         params.addRule(CENTER_VERTICAL);
         params.setMarginEnd((int) (density * 5));
         volumeText.setLayoutParams(params);
+        volumeText.setText("--");
         addView(volumeText);
     }
 

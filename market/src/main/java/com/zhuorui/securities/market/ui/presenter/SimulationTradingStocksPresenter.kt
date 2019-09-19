@@ -3,6 +3,8 @@ package com.zhuorui.securities.market.ui.presenter
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ToastUtil
+import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
@@ -19,6 +21,7 @@ import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
 import java.util.*
 
+
 /**
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
@@ -33,10 +36,32 @@ class SimulationTradingStocksPresenter :
     private val disposables = LinkedList<Disposable>()
 
     /**
+     * 加减数量
+     * @param type 1：加 2：减
+     */
+    fun addOrSubBuyCount(type: Int) {
+        if (viewModel?.stockInfo?.value == null) {
+            ToastUtil.instance.toast(R.string.stock_code_input_hint)
+            return
+        }
+        var count = viewModel?.buyCount?.value
+        if (count == null) {
+            count = 0
+        }
+        if (type == 1) {
+            viewModel?.buyCount?.value = count!! + 1
+        } else {
+            if (count == 0) return
+            viewModel?.buyCount?.value = count!! - 1
+        }
+    }
+
+    /**
      * 设置选择的自选股
      */
     fun setStock(stockInfo: SearchStockInfo) {
         viewModel?.stockInfo?.value = stockInfo
+        viewModel?.buyCount?.value = null
         // 清除上一次的价格信息
         view?.updateStockPrice(BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00))
         // 取消上一次的订阅

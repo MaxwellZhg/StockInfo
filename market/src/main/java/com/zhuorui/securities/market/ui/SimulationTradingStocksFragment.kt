@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -41,6 +42,8 @@ class SimulationTradingStocksFragment :
         }
     }
 
+    private val mPresenter = SimulationTradingStocksPresenter()
+
     override val layout: Int
         get() = R.layout.fragment_simulation_trading_stocks
 
@@ -48,7 +51,7 @@ class SimulationTradingStocksFragment :
         get() = BR.viewModel
 
     override val createPresenter: SimulationTradingStocksPresenter
-        get() = SimulationTradingStocksPresenter()
+        get() = mPresenter
 
     override val createViewModel: SimulationTradingStocksViewModel?
         get() = ViewModelProviders.of(this).get(SimulationTradingStocksViewModel::class.java)
@@ -56,6 +59,9 @@ class SimulationTradingStocksFragment :
     override val getView: SimulationTradingStocksView
         get() = this
 
+    override fun setAdditionalVariable(dataBinding: ViewDataBinding) {
+        dataBinding.setVariable(BR.presenter, mPresenter)
+    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)

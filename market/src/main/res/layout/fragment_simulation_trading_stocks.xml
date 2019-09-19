@@ -4,8 +4,12 @@
 
     <data>
         <import type="android.view.View"/>
+
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel"/>
+
+        <variable name="presenter"
+                  type="com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -292,12 +296,13 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginStart="26dp"
                     android:paddingEnd="10dp"
+                    android:onClick="@{() -> presenter.addOrSubBuyCount(2)}"
                     app:layout_constraintStart_toEndOf="@+id/tv_num"/>
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100"
+                    android:text="@{viewModel.buyCount.toString()}"
                     app:layout_constraintStart_toEndOf="@+id/iv_num_sub"
                     app:layout_constraintEnd_toStartOf="@+id/iv_num_add"
                     app:layout_constraintTop_toTopOf="parent"
@@ -314,6 +319,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"
+                    android:onClick="@{() -> presenter.addOrSubBuyCount(1)}"
                     android:padding="5dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -560,8 +566,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/ll_money"
                 android:layout_marginStart="13dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/btn_buy"/>
-
+                android:id="@+id/btn_buy"
+                android:enabled="@{viewModel.buyCount > 0 ? true : false}"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -591,6 +597,7 @@
                 android:layout_marginTop="72dp"
                 app:layout_constraintTop_toBottomOf="@+id/ll_money"
                 android:layout_marginEnd="13dp"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:enabled="false"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

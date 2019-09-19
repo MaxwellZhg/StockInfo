@@ -24,6 +24,8 @@ class SimulationTradingStocksViewModel : ViewModel() {
     val buyRate = MutableLiveData<BigDecimal>()
     // 卖出比例
     val sellRate = MutableLiveData<BigDecimal>()
+    // 买入股票数量
+    val buyCount = MutableLiveData<Int>()
 
     init {
         buyRate.value = BigDecimal.valueOf(50.00)
