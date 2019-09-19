@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.Spanned
+import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
@@ -49,21 +50,25 @@ class TitleMessageConfirmDialog(
 
     fun setTitleText(str: String): TitleMessageConfirmDialog {
         tv_title.text = str
+        tv_title.visibility = if (TextUtils.isEmpty(str)) View.GONE else View.VISIBLE
         return this
     }
 
     fun setTitleText(@StringRes strId: Int): TitleMessageConfirmDialog {
         tv_title.text = ResUtil.getString(strId)
+        tv_title.visibility = if (strId == 0) View.GONE else View.VISIBLE
         return this
     }
 
     fun setTitleText(str: Spanned): TitleMessageConfirmDialog {
         tv_title.text = str
+        tv_title.visibility = if (TextUtils.isEmpty(str)) View.GONE else View.VISIBLE
         return this
     }
 
     fun setTitleText(str: Spannable): TitleMessageConfirmDialog {
         tv_title.text = str
+        tv_title.visibility = if (TextUtils.isEmpty(str)) View.GONE else View.VISIBLE
         return this
     }
 

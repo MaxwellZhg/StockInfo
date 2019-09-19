@@ -1,11 +1,11 @@
 package com.zhuorui.securities.market.net
 
+import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.market.net.api.SimulationTradeApi
-import com.zhuorui.securities.market.net.request.FeeComputeRequest
-import com.zhuorui.securities.market.net.request.GetStockInfoRequest
-import com.zhuorui.securities.market.net.request.UpdateStockDataRequest
-import com.zhuorui.securities.market.net.response.GetStockInfoResponse
+import com.zhuorui.securities.market.net.request.*
+import com.zhuorui.securities.market.net.response.*
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -18,6 +18,12 @@ import retrofit2.http.POST
  */
 interface ISimulationTradeNet {
 
+    @POST(SimulationTradeApi.FUND_ACCOUNT)
+    fun getFundAccount(@Body request: FundAccountRequest): Observable<FundAccountResponse>
+
+    @POST(SimulationTradeApi.CREATE_FUND_ACCOUNT)
+    fun createFundAccount(@Body request: FundAccountRequest): Observable<BaseResponse>
+
     @POST(SimulationTradeApi.STOCK_INFO)
     fun getStockInfo(@Body request: GetStockInfoRequest): Call<GetStockInfoResponse>
 
@@ -26,4 +32,18 @@ interface ISimulationTradeNet {
 
     @POST(SimulationTradeApi.FEE_COMPUTE)
     fun feeCompute(@Body request: FeeComputeRequest): Call<BaseResponse>
+
+    @POST(SimulationTradeApi.CREATE_FUND_ACCOUNT)
+    fun getPosition(@Body request: GetPositionRequest): Call<GetPositionResponse>
+
+    @POST(SimulationTradeApi.CREATE_FUND_ACCOUNT)
+    fun orderList(@Body request: OrderListRequest): Call<OrderListResponse>
+
+    @POST(SimulationTradeApi.STOCKS_INFO)
+    fun getStocksInfo(@Body request: BaseRequest): Call<GetStocksInfoResponse>
+
+    @POST(SimulationTradeApi.CANCEL_TRUST_ORDER)
+    fun cancelTrustOrder(@Body request: BaseRequest): Call<BaseResponse>
+
+
 }

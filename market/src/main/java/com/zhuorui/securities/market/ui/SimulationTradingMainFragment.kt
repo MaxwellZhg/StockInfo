@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
+import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.BaseApplication.Companion.context
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -20,6 +21,9 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
+import com.zhuorui.securities.market.model.STFundAccountData
+import com.zhuorui.securities.market.model.STOrderData
+import com.zhuorui.securities.market.model.STPositionData
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
@@ -51,6 +55,7 @@ class SimulationTradingMainFragment :
     private var holdPositionsAdapter: HoldPositionsListAdapter? = null
     private var todayOrderAdapter: SimulationTradingOrderAdapter? = null
     private var tabTitle: Array<String>? = null
+    private var mIndex: Int = 0
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -130,11 +135,39 @@ class SimulationTradingMainFragment :
     }
 
     override fun createFundAccountSuccess() {
-        fund_account?.setData { true }
         fund_account?.createFundAccountSuccess()
+        TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
+            .setTitleText("")
+            .setMsgText("恭喜您已获得100万港币模拟资金开始模拟炒股吧！")
+            .setConfirmText("已了解")
+            .show()
+    }
+
+    override fun onFundAccountData(data: STFundAccountData) {
+        fund_account?.setData(data)
+    }
+
+    override fun onPositionDatas(list: List<STPositionData>) {
+        val adapter = getHoldpositionsAdapter()
+        adapter.setData(list)
+        if (mIndex == 0) {
+            adapter.notifyDataSetChanged()
+        }
+        notifyTitleTab()
+    }
+
+    override fun onOrderDatas(list: List<STOrderData>) {
+        val adapter = getMockStockOrderAdapter()
+        adapter.clear()
+        adapter.addDatas(list)
+        if (mIndex == 0) {
+            adapter.notifyDataSetChanged()
+        }
+        notifyTitleTab()
     }
 
     private fun onSelect(index: Int) {
+        mIndex = index
         when (index) {
             0 -> {
                 recycler_view.adapter = getHoldpositionsAdapter()
@@ -148,6 +181,7 @@ class SimulationTradingMainFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        presenter?.setLifecycleOwner(this)
         top_bar.setRightClickListener {
             // 消息
             start(MessageFragment.newInstance())
@@ -170,17 +204,18 @@ class SimulationTradingMainFragment :
         zr_rule.setOnClickListener(this)
         fund_account.setOnMockStockFundAccountListener(this)
         magic_indicator.navigator = getNavigator()
+        presenter?.getFundAccount()
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
         onSelect(0)
-        fund_account?.setData { false }
+        fund_account?.setData(STFundAccountData())
     }
 
     private fun getTabTitleData(): Array<String>? {
-        val hpNum = 0
-        val toNum = 0
+        val hpNum = getHoldpositionsAdapter().datas?.size
+        val toNum = getMockStockOrderAdapter().datas?.size
         return arrayOf(
             ResUtil.getString(R.string.str_hold_positions) + "($hpNum)",
             ResUtil.getString(R.string.str_today_orders) + "($toNum)"

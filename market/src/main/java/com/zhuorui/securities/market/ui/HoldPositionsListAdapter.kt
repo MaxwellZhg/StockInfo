@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.model.STPositionData
+import java.text.DecimalFormat
 
 /**
  *    author : liuwei
@@ -28,8 +30,10 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     var types: Array<Int?> = arrayOfNulls(3)
     val selected: HashSet<Int> = HashSet()
     var posOff = 0
+    var datas: MutableList<STPositionData>? = null
 
     init {
+        datas = mutableListOf()
         initItemViewType()
     }
 
@@ -41,7 +45,9 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         initItemViewType()
     }
 
-    fun addData() {
+    fun setData(list: List<STPositionData>?) {
+        datas?.clear()
+        if (list != null) datas?.addAll(list)
         initItemViewType()
     }
 
@@ -72,7 +78,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     }
 
     private fun getDataCount(): Int {
-        return 5
+        return datas?.size!!
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -97,8 +103,10 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                     val pos: Int = it.tag as Int
                     if (selected.contains(pos)) {
                         selected.remove(pos)
+                        datas?.get(pos)?.selected = false
                         itemViewHolder.btnGroup?.visibility = View.GONE
                     } else {
+                        datas?.get(pos)?.selected = true
                         selected.add(pos)
                         itemViewHolder.btnGroup?.visibility = View.VISIBLE
                     }
@@ -127,8 +135,11 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_ITEM) {
             val itemHolder = (holder as ItemViewHolder)
-            itemHolder.bindData(getDataPosition(position))
-            itemHolder.btnGroup?.visibility = if (selected.contains(position)) View.VISIBLE else View.GONE
+            val dataPos = getDataPosition(position)
+            val data = datas?.get(dataPos)!!
+            if (data?.selected == null)
+                data?.selected = selected.contains(dataPos)
+            itemHolder.bindData(dataPos, data)
         }
     }
 
@@ -141,11 +152,11 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         var stockName: TextView? = null
         var marketValue: TextView? = null
         var presentPrice: TextView? = null
-        var holdPositions: TextView? = null
         var stockTsCode: TextView? = null
         var number: TextView? = null
         var cost: TextView? = null
         var profitAndLoss: TextView? = null
+        var profitAndLossPercentage: TextView? = null
         val color = Color.parseColor("#D9001B")
 
 
@@ -157,27 +168,43 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             stockName = v.findViewById(R.id.tv_stock_name)
             marketValue = v.findViewById(R.id.tv_market_value)
             presentPrice = v.findViewById(R.id.tv_present_price)
-            holdPositions = v.findViewById(R.id.tv_hold_positions)
+            profitAndLoss = v.findViewById(R.id.tv_profit_and_loss)
             stockTsCode = v.findViewById(R.id.tv_stock_code)
             number = v.findViewById(R.id.tv_number)
             cost = v.findViewById(R.id.tv_cost)
-            profitAndLoss = v.findViewById(R.id.tv_profit_and_loss)
+            profitAndLossPercentage = v.findViewById(R.id.tv_profit_and_loss_percentage)
         }
 
-        fun bindData(position: Int) {
+        fun bindData(position: Int, data: STPositionData) {
             item?.tag = position
             business?.tag = position
             quotation?.tag = position
-            stockName?.text = "翰森制药制药"
-            stockTsCode?.text = "03692$position.HK"
-            marketValue?.text = "55435333$position.8$position"
-            presentPrice?.text = "2$position.23"
-            number?.text = "273$position"
-            cost?.text = "1$position.21"
-            holdPositions?.text = "34223678$position.35"
-            profitAndLoss?.text = "+$position.34%"
-            holdPositions?.setTextColor(color)
-            profitAndLoss?.setTextColor(color)
+            stockName?.text = data?.stockName
+            stockTsCode?.text = data?.stockCode + "." + data?.stockType
+            marketValue?.text = data?.marketValue.toString()
+            presentPrice?.text = data?.presentPrice.toString()
+            number?.text = data?.holdStockCount.toString()
+            cost?.text = data?.holeCost.toString()
+            profitAndLoss?.text = data?.profitAndLoss.toString()
+            btnGroup?.visibility = if (data?.selected!!) View.VISIBLE else View.GONE
+            when {
+                data?.profitAndLoss!! > 0 -> {
+                    profitAndLoss?.setTextColor(color)
+                    profitAndLossPercentage?.text = "+" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
+                    profitAndLossPercentage?.setTextColor(color)
+                }
+                data?.profitAndLoss!! < 0 -> {
+                    profitAndLoss?.setTextColor(color)
+                    profitAndLossPercentage?.text = "-" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
+                    profitAndLossPercentage?.setTextColor(color)
+                }
+                else -> {
+                    profitAndLoss?.setTextColor(color)
+                    profitAndLossPercentage?.text = "---"
+                    profitAndLossPercentage?.setTextColor(color)
+                }
+            }
+
         }
     }
 
