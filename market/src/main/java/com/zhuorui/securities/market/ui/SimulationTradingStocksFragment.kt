@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -11,6 +12,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.custom.TradingStocksOrderDialog
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
+import com.zhuorui.securities.market.model.PushStockTransData
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
@@ -31,7 +33,7 @@ class SimulationTradingStocksFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingStocksBinding, SimulationTradingStocksViewModel, SimulationTradingStocksView, SimulationTradingStocksPresenter>(),
     SimulationTradingStocksView, View.OnClickListener {
 
-    val SEARCH_STOCK_CODE = 1000
+    private val SEARCH_STOCK_CODE = 1000
 
     companion object {
         fun newInstance(): SimulationTradingStocksFragment {
@@ -118,6 +120,33 @@ class SimulationTradingStocksFragment :
             tv_diff_pirce.text = diffPrice.toString()
             tv_diff_rate.text = "$diffRate%"
         }
+    }
+
+    override fun updateStockTrans(transData: PushStockTransData, buyRate: Double, sellRate: Double) {
+        // 更新买入卖出交易量
+        trans_buy1.setPriceText(transData.bid1.toString())
+        trans_buy1.setVolumeText(transData.bid1Volume.toString())
+        trans_buy2.setPriceText(transData.bid2.toString())
+        trans_buy2.setVolumeText(transData.bid2Volume.toString())
+        trans_buy3.setPriceText(transData.bid3.toString())
+        trans_buy3.setVolumeText(transData.bid3Volume.toString())
+        trans_buy4.setPriceText(transData.bid4.toString())
+        trans_buy4.setVolumeText(transData.bid4Volume.toString())
+        trans_buy5.setPriceText(transData.bid5.toString())
+        trans_buy5.setVolumeText(transData.bid5Volume.toString())
+        trans_sell1.setPriceText(transData.ask1.toString())
+        trans_sell1.setVolumeText(transData.ask1Volume.toString())
+        trans_sell2.setPriceText(transData.ask2.toString())
+        trans_sell2.setVolumeText(transData.ask2Volume.toString())
+        trans_sell3.setPriceText(transData.ask3.toString())
+        trans_sell3.setVolumeText(transData.ask3Volume.toString())
+        trans_sell4.setPriceText(transData.ask4.toString())
+        trans_sell4.setVolumeText(transData.ask4Volume.toString())
+        trans_sell5.setPriceText(transData.ask5.toString())
+        trans_sell5.setVolumeText(transData.ask5Volume.toString())
+        // 更新比例
+        (trans_buy_rate.layoutParams as ConstraintLayout.LayoutParams).horizontalWeight = buyRate.toFloat()
+        (trans_sell_rate.layoutParams as ConstraintLayout.LayoutParams).horizontalWeight = sellRate.toFloat()
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {

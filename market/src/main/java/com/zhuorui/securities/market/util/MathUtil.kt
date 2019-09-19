@@ -66,6 +66,9 @@ object MathUtil {
      * 除法保留两位小数
      */
     fun divide2(number1: BigDecimal, number2: BigDecimal): BigDecimal {
+        if (rounded(number1).toInt() == 0 || rounded(number2).toInt() == 0) {
+            return rounded2(BigDecimal.ZERO)
+        }
         return number1.divide(number2, 2, RoundingMode.DOWN)
     }
 
@@ -73,6 +76,9 @@ object MathUtil {
      * 除法保留三位小数
      */
     fun divide3(number1: BigDecimal, number2: BigDecimal): BigDecimal {
+        if (rounded(number1).toInt() == 0 || rounded(number2).toInt() == 0) {
+            return rounded3(BigDecimal.ZERO)
+        }
         return number1.divide(number2, 3, RoundingMode.DOWN)
     }
 }

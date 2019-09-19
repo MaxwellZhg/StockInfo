@@ -20,4 +20,13 @@ class SimulationTradingStocksViewModel : ViewModel() {
     val diffPrice = MutableLiveData<BigDecimal>()
     // 涨跌幅：如-0.0018（-0.18%）
     val diffRate = MutableLiveData<BigDecimal>()
+    // 买入比例
+    val buyRate = MutableLiveData<BigDecimal>()
+    // 卖出比例
+    val sellRate = MutableLiveData<BigDecimal>()
+
+    init {
+        buyRate.value = BigDecimal.valueOf(50.00)
+        sellRate.value = BigDecimal.valueOf(50.00)
+    }
 }

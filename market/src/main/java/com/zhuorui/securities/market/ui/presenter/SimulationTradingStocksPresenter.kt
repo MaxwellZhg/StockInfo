@@ -8,6 +8,7 @@ import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
+import com.zhuorui.securities.market.socket.push.StocksTopicTransResponse
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
 import com.zhuorui.securities.market.util.MathUtil
@@ -27,7 +28,8 @@ import java.util.*
 class SimulationTradingStocksPresenter :
     AbsNetPresenter<SimulationTradingStocksView, SimulationTradingStocksViewModel>() {
 
-    private var stockTopic: StockTopic? = null
+    private var stockTopicPrice: StockTopic? = null
+    private var stockTopicTrans: StockTopic? = null
     private val disposables = LinkedList<Disposable>()
 
     /**
@@ -38,12 +40,13 @@ class SimulationTradingStocksPresenter :
         // 清除上一次的价格信息
         view?.updateStockPrice(BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00))
         // 取消上一次的订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().unBindTopic(stockTopic)
+        if (stockTopicPrice != null && stockTopicTrans != null) {
+            SocketClient.getInstance().unBindTopic(stockTopicPrice, stockTopicTrans)
         }
         // 订阅当前的自选股
-        stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
-        SocketClient.getInstance().bindTopic(stockTopic)
+        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+        stockTopicTrans = StockTopic(StockTopicDataTypeEnum.trans, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+        SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
     }
 
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
@@ -74,11 +77,32 @@ class SimulationTradingStocksPresenter :
         }
     }
 
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStocksTopicTransResponse(response: StocksTopicTransResponse) {
+        val transData = response.body
+        if (transData.ts.equals(stockTopicTrans?.ts) && transData.code.equals(stockTopicTrans?.code)) {
+            // 买入挂单比例 = 买一挂单量 / 买一挂单量 + 卖一挂单量
+            viewModel?.buyRate?.value =
+                MathUtil.divide2(
+                    transData.bid1Volume!!,
+                    transData.bid1Volume!!.add(transData.ask1Volume)
+                ).multiply(BigDecimal.valueOf(100))
+            // 卖出挂单比例 = 100 - 买入挂单比例
+            viewModel?.sellRate?.value = BigDecimal.valueOf(100).subtract(viewModel?.buyRate?.value!!)
+            // 更新界面
+            view?.updateStockTrans(
+                transData,
+                viewModel?.buyRate?.value!!.toDouble(),
+                viewModel?.sellRate?.value!!.toDouble()
+            )
+        }
+    }
+
     override fun destroy() {
         super.destroy()
         // 取消订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().unBindTopic(stockTopic)
+        if (stockTopicPrice != null && stockTopicTrans != null) {
+            SocketClient.getInstance().unBindTopic(stockTopicPrice, stockTopicTrans)
         }
 
         // 释放disposable
