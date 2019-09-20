@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.util
 
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.DecimalFormat
 
 /**
  * author : PengXianglin
@@ -56,6 +57,13 @@ object MathUtil {
     }
 
     /**
+     * 乘法保留两位小数
+     */
+    fun multiply2(number1: BigDecimal, number2: BigDecimal): BigDecimal {
+        return rounded2(number1.multiply(number2))
+    }
+
+    /**
      * 乘法保留三位小数
      */
     fun multiply3(number1: BigDecimal, number2: BigDecimal): BigDecimal {
@@ -80,5 +88,13 @@ object MathUtil {
             return rounded3(BigDecimal.ZERO)
         }
         return number1.divide(number2, 3, RoundingMode.DOWN)
+    }
+
+    /**
+     * 转换成带有逗号的字符串
+     */
+    fun convertToString(number: Long): String {
+        val df = DecimalFormat("#,###")
+        return df.format(number)
     }
 }

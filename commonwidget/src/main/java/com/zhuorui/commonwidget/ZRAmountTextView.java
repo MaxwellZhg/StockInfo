@@ -9,6 +9,8 @@ import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import java.math.BigDecimal;
+
 /**
  * author : liuwei
  * e-mail : vsanliu@foxmail.com
@@ -51,7 +53,7 @@ public class ZRAmountTextView extends AppCompatTextView {
             return;
         }
         try {
-            final float amt = Float.parseFloat(text.toString());
+            final BigDecimal amt = new BigDecimal(text.toString());
             final String format = (showSymbol ? "%+" : "%") + ",." + decimalDigit + "f";
             final String tx = String.format(format, amt);
             super.setText(relativeDecimal ? changTVsize(tx) : tx, type);
