@@ -1,8 +1,12 @@
 package com.zhuorui.securities.market.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.ViewDataBinding
@@ -80,15 +84,17 @@ class SimulationTradingStocksFragment :
             start(StockSearchFragment.newInstance())
         }
         // 监听价格输入
-        tv_buy_price.addTextChangedListener(object : SimpleTextWatcher(){
+        tv_buy_price.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
-                presenter?.onEditBuyPrice(s.toString())
+                presenter?.onEditBuyPrice(s?.toString())
+                tv_buy_price.setSelection(s?.toString()?.length!!)
             }
         })
         // 监听数量输入
-        tv_buy_count.addTextChangedListener(object : SimpleTextWatcher(){
+        tv_buy_count.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
-                presenter?.onEditBuyCount(s.toString())
+                presenter?.onEditBuyCount(s?.toString())
+                tv_buy_count.setSelection(s?.toString()?.length!!)
             }
         })
     }
@@ -167,6 +173,22 @@ class SimulationTradingStocksFragment :
         // 更新比例
         (trans_buy_rate.layoutParams as ConstraintLayout.LayoutParams).horizontalWeight = buyRate.toFloat()
         (trans_sell_rate.layoutParams as ConstraintLayout.LayoutParams).horizontalWeight = sellRate.toFloat()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun updateMaxBuyNum(maxBuyCount: Long?) {
+        if (maxBuyCount == null) {
+            tv_max_buy_num.text = getString(R.string.max_buy_num) + " --"
+        } else {
+            val spannableString = SpannableString(getString(R.string.max_buy_num) + " $maxBuyCount")
+            spannableString.setSpan(
+                ForegroundColorSpan(ResUtil.getColor(R.color.color_ff1a6ed2)!!),
+                spannableString.length - maxBuyCount.toString().length,
+                spannableString.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            tv_max_buy_num.text = spannableString
+        }
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {

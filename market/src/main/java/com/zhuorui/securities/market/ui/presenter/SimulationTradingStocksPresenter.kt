@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.presenter
 
+import android.text.TextUtils
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -25,6 +26,7 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 /**
@@ -48,15 +50,72 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.buyPrice?.observe(fragment, androidx.lifecycle.Observer<BigDecimal> {
             calculateBuyMoney()
         })
+        view?.updateMaxBuyNum(null)
     }
 
     /**
-     * 计算金额
+     * 计算金额和最大可买数量
      */
     private fun calculateBuyMoney() {
         viewModel?.buyCount?.value?.let { it1 ->
             viewModel?.buyPrice?.value?.let { it2 ->
-                viewModel?.buyMoney?.value = BigDecimal.valueOf(it1).multiply(it2)
+                // 交易金额
+                val buyMoney = BigDecimal.valueOf(it1).multiply(it2)
+                viewModel?.buyMoney?.value = buyMoney
+                // 印花税
+                val stampTax = MathUtil.rounded(buyMoney.multiply(BigDecimal.valueOf(0.01))!!)
+                // 佣金
+                var commission = MathUtil.rounded(buyMoney?.multiply(BigDecimal.valueOf(0.03))!!)
+                // 最低佣金为3元
+                if (commission.toLong() < 3) {
+                    commission = BigDecimal.valueOf(3)
+                }
+                // 平台使用费
+                val platformFee = BigDecimal.valueOf(15)
+                /* 代收费 */
+                // 交易征费
+                var tradingRequisitionFee = buyMoney.multiply(BigDecimal.valueOf(0.000027))!!
+                // 最低交易征费为0.01元
+                val minTradingRequisitionFee = BigDecimal.valueOf(0.01)
+                // -1表示小于 0表示等于 1表示大于
+                if (tradingRequisitionFee.compareTo(minTradingRequisitionFee) == -1) {
+                    tradingRequisitionFee = minTradingRequisitionFee
+                }
+                // 交易系统使用费
+                val tradingSystemFee = BigDecimal.valueOf(0.05)
+                // 交易费
+                var tradingFee = buyMoney.multiply(BigDecimal.valueOf(0.00005))!!
+                // 最低交易费为0.01元
+                val minTradingFee = BigDecimal.valueOf(0.01)
+                // -1表示小于 0表示等于 1表示大于
+                if (tradingFee.compareTo(minTradingFee) == -1) {
+                    tradingFee = minTradingFee
+                }
+                // 中央结算系统交收费
+                var systemPaysFee = buyMoney.multiply(BigDecimal.valueOf(0.00002))!!
+                // 中央结算系统交收费最低为2元，最高为100元
+                if (systemPaysFee.toLong() < 2) {
+                    systemPaysFee = BigDecimal.valueOf(2)
+                } else if (systemPaysFee.toLong() >= 100) {
+                    systemPaysFee = BigDecimal.valueOf(100)
+                }
+                // 代收费 = 交易征费 + 交易系统使用费 + 交易费 + 中央结算系统交收费
+                val agentFee = tradingRequisitionFee.add(tradingSystemFee).add(tradingFee).add(systemPaysFee)
+                /* 代收费 */
+                /* 最大可买 */
+                // 一手价格
+                val buyPrice = viewModel?.buyPrice?.value
+                // 一手股数
+                val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
+                // 最大可卖 =（（可用资金 - 印花税 - 佣金 - 平台使用费 - 代收费）/ 一手价格）* 一手股数
+                // TODO 可用资金测试为1000000
+                viewModel?.maxBuyCount?.value =
+                    ((BigDecimal.valueOf(1000000).subtract(stampTax).subtract(commission).subtract(platformFee).subtract(
+                        agentFee
+                    )).divide(buyPrice, 0, RoundingMode.DOWN)).multiply(perShareNumber).toLong()
+                /* 最大可买 */
+                // 更新界面最大可买数量
+                view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
             }
         }
     }
@@ -64,15 +123,17 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     /**
      * 收到输入价格
      */
-    fun onEditBuyPrice(price: String) {
-        viewModel?.buyPrice?.value = price.toBigDecimal()
+    fun onEditBuyPrice(price: String?) {
+        if (TextUtils.isEmpty(price)) return
+        viewModel?.buyPrice?.value = price?.toBigDecimal()
     }
 
     /**
      * 手动输入数量
      */
-    fun onEditBuyCount(count: String) {
-        viewModel?.buyCount?.value = count.toLong()
+    fun onEditBuyCount(count: String?) {
+        if (TextUtils.isEmpty(count)) return
+        viewModel?.buyCount?.value = count?.toLong()
     }
 
     /**

@@ -21,4 +21,9 @@ interface SimulationTradingStocksView : AbsView {
      * 更新盘口
      */
     fun updateStockTrans(transData: PushStockTransData, buyRate: Double, sellRate: Double)
+
+    /**
+     * 更新最大可买
+     */
+    fun updateMaxBuyNum(maxBuyCount: Long?)
 }

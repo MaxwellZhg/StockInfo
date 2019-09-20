@@ -552,6 +552,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+                android:id="@+id/tv_max_buy_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/max_buy_num"
