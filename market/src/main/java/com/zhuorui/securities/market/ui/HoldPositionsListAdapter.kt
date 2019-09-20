@@ -188,12 +188,12 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             profitAndLoss?.text = data?.profitAndLoss.toString()
             btnGroup?.visibility = if (data?.selected!!) View.VISIBLE else View.GONE
             when {
-                data?.profitAndLoss!! > 0 -> {
+                data?.profitAndLoss!!.toFloat() > 0 -> {
                     profitAndLoss?.setTextColor(color)
                     profitAndLossPercentage?.text = "+" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(color)
                 }
-                data?.profitAndLoss!! < 0 -> {
+                data?.profitAndLoss!!.toFloat() < 0 -> {
                     profitAndLoss?.setTextColor(color)
                     profitAndLossPercentage?.text = "-" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(color)

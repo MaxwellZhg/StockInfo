@@ -1,7 +1,8 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -12,6 +13,8 @@ import com.zhuorui.securities.market.net.request.FundAccountRequest
 import com.zhuorui.securities.market.net.request.GetPositionRequest
 import com.zhuorui.securities.market.net.request.OrderListRequest
 import com.zhuorui.securities.market.net.response.*
+import com.zhuorui.securities.market.socket.SocketClient
+import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
 import com.zhuorui.securities.market.util.MathUtil
@@ -20,6 +23,8 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.lang.RuntimeException
+import java.math.BigDecimal
+import kotlin.collections.HashMap
 
 /**
  *    author : liuwei
@@ -29,26 +34,22 @@ import java.lang.RuntimeException
  */
 class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView, SimulationTradingMainViewModel>() {
 
-    var positionDatas: List<STPositionData>? = null
-    var stocksInfo: HashMap<String, GetStockInfoResponse.Data>? = null
+    /**
+     * 服务端获取的持仓原始数据
+     */
+    private var positionDatas: List<STPositionData>? = null
+    /**
+     * 服务端获取的订单原始数据
+     */
+    private var orderDatas: List<STOrderData>? = null
+    /**
+     * 服务端推送股票价格实时数据
+     */
+    private val stocksInfo: HashMap<String, PushStockPriceData> = HashMap()
+    private var availableFunds: BigDecimal = BigDecimal(0)
+    private var count: Int = 0
 
-    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
-        // 监听datas的变化
-        lifecycleOwner.let {
-            viewModel?.positionDatas?.observe(it,
-                androidx.lifecycle.Observer<List<STPositionData>> { t ->
-                    view?.onPositionDatas(t)
-                })
-            viewModel?.orderDatas?.observe(it,
-                androidx.lifecycle.Observer<List<STOrderData>> { t ->
-                    view?.onOrderDatas(t)
-                })
-            viewModel?.fundAccountData?.observe(it,
-                androidx.lifecycle.Observer<STFundAccountData> { t ->
-                    view?.onFundAccountData(t)
-                })
-        }
-    }
+
 
     /**
      * 查询资金账户接口
@@ -61,13 +62,20 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             )
             ?.subscribe(io.reactivex.functions.Consumer {
                 if (it.isSuccess()) {
-                    getPosition()
+                    if (true) {
+                        count = 0
+                        getPosition()
+                        getTodayOrders()
+                    } else {
+                        val fundAccount = STFundAccountData()
+                        view?.onUpData(null, null, fundAccount)
+                    }
                 } else {
+                    view?.onGetFundAccountError(it.code, it.msg)
                 }
             }, io.reactivex.functions.Consumer {
-
+                view?.onGetFundAccountError("-1", it.message)
             })
-
     }
 
     /**
@@ -89,64 +97,31 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(io.reactivex.functions.Consumer {
                 if (it.isSuccess()) {
-                    getPosition()
                     view?.createFundAccountSuccess()
+                    val fundAccount = STFundAccountData()
+                    view?.onUpData(null, null, fundAccount)
                 } else {
-
+                    view?.onGetFundAccountError(it.code, it.msg)
                 }
             }, io.reactivex.functions.Consumer {
-
+                view?.onCreateFundAccountError("-1", it.message)
             })
-
     }
 
     /**
      * 获取持仓
      */
-    fun getPosition() {
+    private fun getPosition() {
         val request = GetPositionRequest("", "", transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getPosition(request)
             ?.enqueue(Network.IHCallBack<GetPositionResponse>(request))
         view?.createFundAccountSuccess()
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onGetPositionResponse(response: GetPositionResponse) {
-        positionDatas = response.data
-        getStocksInfo()
-    }
-
-    /**
-     * 获取批量股票详情
-     */
-    fun getStocksInfo() {
-        val request = GetPositionRequest("", "", transactions.createTransaction())
-        Cache[ISimulationTradeNet::class.java]?.getStocksInfo(request)
-            ?.enqueue(Network.IHCallBack<GetStocksInfoResponse>(request))
-        view?.createFundAccountSuccess()
-
-    }
-
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onGetStocksInfoResponse(response: GetStocksInfoResponse) {
-        stocksInfo = HashMap()
-        val datas: List<GetStockInfoResponse.Data> = response.data
-        for (data in datas) {
-            stocksInfo?.put(data.tsCode, data)
-        }
-        var totalMarketValue: Float = 0.0f
-        for (data in positionDatas!!) {
-            val tsCode = data.stockCode + "." + data.stockType
-            val stockInfo: GetStockInfoResponse.Data? = stocksInfo?.get(tsCode)
-            //data.marketValue =stockInfo?.realPrice * data?.holdStockCount
-        }
-        var totalAssets: Float = 0.0f
-    }
-
     /**
      * 获取今日订单
      */
-    fun getTodayOrders() {
+    private fun getTodayOrders() {
         val request = OrderListRequest("", "", "", "", transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
@@ -155,7 +130,141 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onOrderListResponse(response: OrderListResponse) {
+        count++
+        orderDatas = response.records
+        topicPrice()
+    }
 
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onGetPositionResponse(response: GetPositionResponse) {
+        count++
+        positionDatas = response.data
+        topicPrice()
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+        if (response.request is GetPositionRequest) {
+            count++
+        } else if (response.request is OrderListRequest) {
+            count++
+        }
+        topicPrice()
+    }
+
+    /**
+     *  发起价格订阅
+     */
+    private fun topicPrice() {
+        if (count >= 2 && (positionDatas == null || orderDatas == null)) {
+            view?.onGetFundAccountError("-1", "获取数据失败")
+            return
+        } else if (count < 2) {
+            return
+        }
+        stocksInfo.clear()
+        val list: MutableList<StockTopic> = mutableListOf()
+        //过虑持仓重复订阅股票
+        for (data in positionDatas!!) {
+            val tsCode = data.stockType!! + "." + data.stockCode!!
+            if (!stocksInfo.containsKey(tsCode)) {
+                stocksInfo[tsCode] = PushStockPriceData()
+                list.add(StockTopic(StockTopicDataTypeEnum.price, data.stockType!!, data.stockCode!!, 2))
+            }
+        }
+        //筛选订单需要订阅的股票
+        for (data in orderDatas!!) {
+            if (data.status == 2 && !stocksInfo.containsKey(data.stockType!! + "." + data.stockCode!!)) {
+                list.add(StockTopic(StockTopicDataTypeEnum.price, data.stockType!!, data.stockCode!!, 2))
+            }
+        }
+        SocketClient.getInstance().bindTopic(*list.toTypedArray())
+    }
+
+    /**
+     * 股票价格变化
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
+        val prices: List<PushStockPriceData> = response.body
+        for (price in prices) {
+            val tsCode = price.ts + "." + price.code
+            if (stocksInfo.containsKey(tsCode)) {
+                stocksInfo[tsCode] = price
+            }
+        }
+        calculation()
+    }
+
+    /**
+     * 计算
+     */
+    private fun calculation() {
+        var totalMarketValue = BigDecimal(0)//总市值
+        var totalProfitAndLoss = BigDecimal(0)//总盈亏 ∑个股持仓盈亏金额+卖出股票的持仓盈亏金额
+        var todayProfitAndLoss = BigDecimal(0)//今日盈亏 (今日市值 - 昨日收盘市值）+（今日卖出成交额 - 今日买入成交额）
+        for (data in positionDatas!!) {
+            val tsCode = data.stockCode + "." + data.stockType
+            val stockInfo = stocksInfo?.get(tsCode)
+            data.presentPrice = stockInfo?.price!!
+            //持仓市值=现价*持仓数
+            data.marketValue = MathUtil.multiply3(data.presentPrice!!, data?.holdStockCount!!)
+            //持仓盈亏金额=（现价-成本价) * 持有数量
+            data.profitAndLoss = MathUtil.multiply3(
+                MathUtil.subtract3(data.presentPrice!!, data.holeCost!!), data.holdStockCount!!
+            )
+            //持仓盈亏比例=盈亏金额/（成本价 * 持有数量）
+            data.profitAndLossPercentage = MathUtil.divide3(
+                data.profitAndLoss!!,
+                MathUtil.multiply3(data.holeCost!!, data.holdStockCount!!)
+            )
+            totalMarketValue = MathUtil.add3(data.marketValue!!, totalMarketValue)
+            //总盈亏 -- 累计持仓盈亏金额
+            totalProfitAndLoss = MathUtil.add3(data.profitAndLoss!!, totalProfitAndLoss)
+            //今日盈亏 -- 累计持仓今日市值变化 (今日市值 - 昨日收盘市值）
+            todayProfitAndLoss = MathUtil.add3(
+                MathUtil.subtract3(
+                    data.marketValue!!,
+                    MathUtil.multiply3(stockInfo.closePrice!!, data?.holdStockCount!!)
+                ), todayProfitAndLoss
+            )
+        }
+        //账户总资产=持仓市值+可用资金
+        val totalAssets: BigDecimal = MathUtil.add3(totalMarketValue, availableFunds)
+        for (data in orderDatas!!) {
+            if (data?.status!! == 2) {
+                val amt = MathUtil.multiply3(data.holdStockCount!!, data.holeCost!!)
+                when (data.trustType) {
+                    1 -> {
+                        //今日盈亏 -- 减今日买入成交额
+                        todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, amt)
+                    }
+                    2 -> {
+                        //今日盈亏 -- 加今日卖出成交额
+                        todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, amt)
+                        //总盈亏 -- 加卖出股票的持仓盈亏金额
+                        val tsCode = data.stockCode + "." + data.stockType
+                        val stockInfo = stocksInfo?.get(tsCode)!!
+                        val profitAndLoss = MathUtil.multiply3(
+                            MathUtil.subtract3(stockInfo.price!!, data.holeCost!!),
+                            data.holdStockCount!!
+                        )
+                        totalProfitAndLoss = MathUtil.add3(totalProfitAndLoss, profitAndLoss)
+                    }
+                }
+            }
+        }
+        //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
+        val todayProfitAndLossPercentage =
+            MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
+        val fundAccount = STFundAccountData()
+        fundAccount.marketValue = totalMarketValue.toFloat()
+        fundAccount.availableFunds = availableFunds.toFloat()
+        fundAccount.totalAssets = totalAssets.toFloat()
+        fundAccount.totalProfitAndLoss = totalProfitAndLoss.toFloat()
+        fundAccount.todayProfitAndLoss = todayProfitAndLoss.toFloat()
+        fundAccount.todayProfitAndLossPercentage = todayProfitAndLossPercentage.toFloat()
+        view?.onUpData(positionDatas, orderDatas, fundAccount)
     }
 
 }

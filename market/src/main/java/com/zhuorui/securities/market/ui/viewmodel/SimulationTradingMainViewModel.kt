@@ -1,10 +1,6 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zhuorui.securities.market.model.STFundAccountData
-import com.zhuorui.securities.market.model.STPositionData
-import com.zhuorui.securities.market.model.STOrderData
 
 /**
  *    author : liuwei
@@ -13,7 +9,4 @@ import com.zhuorui.securities.market.model.STOrderData
  *    desc   :
  */
 class SimulationTradingMainViewModel : ViewModel() {
-    var positionDatas: MutableLiveData<MutableList<STPositionData>> = MutableLiveData()
-    var orderDatas: MutableLiveData<MutableList<STOrderData>> = MutableLiveData()
-    var fundAccountData: MutableLiveData<STFundAccountData> = MutableLiveData()
 }

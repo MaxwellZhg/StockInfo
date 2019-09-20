@@ -10,7 +10,7 @@ import java.math.BigDecimal
  */
 class STPositionData : STOrderData() {
     var marketValue: BigDecimal? = null
-    var presentPrice: Float? = null
-    var profitAndLoss: Float? = null
-    var profitAndLossPercentage: Float? = null
+    var presentPrice: BigDecimal? = null
+    var profitAndLoss: BigDecimal? = null
+    var profitAndLossPercentage: BigDecimal? = null
 }

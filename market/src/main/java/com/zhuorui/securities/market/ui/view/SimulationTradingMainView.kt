@@ -13,7 +13,7 @@ import com.zhuorui.securities.market.model.STPositionData
  */
 interface SimulationTradingMainView : AbsView {
     fun createFundAccountSuccess()
-    fun onFundAccountData(data:STFundAccountData)
-    fun onPositionDatas(list:List<STPositionData>)
-    fun onOrderDatas(list:List<STOrderData>)
+    fun onUpData(positionDatas: List<STPositionData>?, orderDatas: List<STOrderData>?, fundAccount: STFundAccountData)
+    fun onGetFundAccountError(code: String?, msg: String?)
+    fun onCreateFundAccountError(code: String, message: String?)
 }

@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.BaseApplication.Companion.context
 import com.zhuorui.securities.base2app.infra.LogInfra
@@ -56,6 +57,7 @@ class SimulationTradingMainFragment :
     private var todayOrderAdapter: SimulationTradingOrderAdapter? = null
     private var tabTitle: Array<String>? = null
     private var mIndex: Int = 0
+    private var loading: ProgressDialog? = null
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -85,6 +87,40 @@ class SimulationTradingMainFragment :
             }
 
         }
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        top_bar.setRightClickListener {
+            // 消息
+            start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索自选股
+            start(StockSearchFragment.newInstance())
+        }
+        recycler_view.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+        }
+        //解决数据加载不完的问题
+        recycler_view.isNestedScrollingEnabled = false
+        recycler_view.setHasFixedSize(true)
+        //解决数据加载完成后, 没有停留在顶部的问题
+        recycler_view.isFocusable = false
+        tabTitle = getTabTitleData()
+        zr_rule.setOnClickListener(this)
+        fund_account.setOnMockStockFundAccountListener(this)
+        magic_indicator.navigator = getNavigator()
+    }
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
+//        showUpLoading()
+//        presenter?.getFundAccount()
+        onSelect(0)
+        fund_account?.setData(STFundAccountData())
     }
 
     /**
@@ -131,6 +167,7 @@ class SimulationTradingMainFragment :
      * 去创建资金账号
      */
     override fun toCreateFundAccount() {
+        showUpLoading()
         presenter?.createFundAccount()
     }
 
@@ -143,27 +180,63 @@ class SimulationTradingMainFragment :
             .show()
     }
 
-    override fun onFundAccountData(data: STFundAccountData) {
-        fund_account?.setData(data)
-    }
-
-    override fun onPositionDatas(list: List<STPositionData>) {
-        val adapter = getHoldpositionsAdapter()
-        adapter.setData(list)
+    override fun onUpData(
+        positionDatas: List<STPositionData>?,
+        orderDatas: List<STOrderData>?,
+        fundAccount: STFundAccountData
+    ) {
+        hideUpLoading()
+        val postiosAdapter = getHoldpositionsAdapter()
+        postiosAdapter.setData(positionDatas)
+        val orderAdapter = getMockStockOrderAdapter()
+        orderAdapter.clear()
+        orderAdapter.addDatas(orderDatas)
         if (mIndex == 0) {
-            adapter.notifyDataSetChanged()
+            postiosAdapter.notifyDataSetChanged()
+        } else if (mIndex == 1) {
+            orderAdapter.notifyDataSetChanged()
         }
         notifyTitleTab()
+        fund_account?.setData(fundAccount)
     }
 
-    override fun onOrderDatas(list: List<STOrderData>) {
-        val adapter = getMockStockOrderAdapter()
-        adapter.clear()
-        adapter.addDatas(list)
-        if (mIndex == 0) {
-            adapter.notifyDataSetChanged()
-        }
-        notifyTitleTab()
+    override fun onGetFundAccountError(code: String?, msg: String?) {
+        hideUpLoading()
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, false)
+            //  .setTitleText("提示")
+            .setMsgText(msg.toString())
+            .setConfirmText("重试")
+            .setCancelText("返回")
+            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                override fun onCancel() {
+                    pop()
+                }
+
+                override fun onConfirm() {
+                    showUpLoading()
+                    presenter?.getFundAccount()
+                }
+            })
+            .show()
+    }
+
+    override fun onCreateFundAccountError(code: String, message: String?) {
+        hideUpLoading()
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, false)
+            //.setTitleText("提示")
+            .setMsgText(message.toString())
+            .setConfirmText("重试")
+            .setCancelText("返回")
+            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                override fun onCancel() {
+                }
+
+                override fun onConfirm() {
+                    showUpLoading()
+                    presenter?.createFundAccount()
+                }
+            })
+            .show()
     }
 
     private fun onSelect(index: Int) {
@@ -177,40 +250,6 @@ class SimulationTradingMainFragment :
             }
 
         }
-    }
-
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
-        presenter?.setLifecycleOwner(this)
-        top_bar.setRightClickListener {
-            // 消息
-            start(MessageFragment.newInstance())
-        }
-        top_bar.setRight2ClickListener {
-            // 搜索自选股
-            start(StockSearchFragment.newInstance())
-        }
-        recycler_view.layoutManager = object : LinearLayoutManager(context) {
-            override fun canScrollVertically(): Boolean {
-                return false
-            }
-        }
-        //解决数据加载不完的问题
-        recycler_view.isNestedScrollingEnabled = false
-        recycler_view.setHasFixedSize(true)
-        //解决数据加载完成后, 没有停留在顶部的问题
-        recycler_view.isFocusable = false
-        tabTitle = getTabTitleData()
-        zr_rule.setOnClickListener(this)
-        fund_account.setOnMockStockFundAccountListener(this)
-        magic_indicator.navigator = getNavigator()
-        presenter?.getFundAccount()
-    }
-
-    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
-        super.onEnterAnimationEnd(savedInstanceState)
-        onSelect(0)
-        fund_account?.setData(STFundAccountData())
     }
 
     private fun getTabTitleData(): Array<String>? {
@@ -227,7 +266,7 @@ class SimulationTradingMainFragment :
         magic_indicator.navigator?.notifyDataSetChanged()
     }
 
-    fun getHoldpositionsAdapter(): HoldPositionsListAdapter {
+    private fun getHoldpositionsAdapter(): HoldPositionsListAdapter {
         if (holdPositionsAdapter == null) {
             holdPositionsAdapter = context?.let { HoldPositionsListAdapter(it) }
             holdPositionsAdapter?.listener = this
@@ -235,12 +274,23 @@ class SimulationTradingMainFragment :
         return holdPositionsAdapter!!
     }
 
-    fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
+    private fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
         if (todayOrderAdapter == null) {
             todayOrderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
             todayOrderAdapter?.listener = this
         }
         return todayOrderAdapter!!
+    }
+
+    private fun showUpLoading() {
+        if (loading == null) {
+            loading = context?.let { ProgressDialog(it) }
+        }
+        loading?.show()
+    }
+
+    private fun hideUpLoading() {
+        loading?.dismiss()
     }
 
     /**
