@@ -363,12 +363,14 @@
                     android:textColor="@color/color_232323"
                     android:textSize="17sp"/>
 
-            <TextView
+            <com.zhuorui.commonwidget.ZRAmountTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="--"
                     android:text="@{viewModel.buyMoney.toString()}"
                     android:layout_marginStart="26dp"
+                    app:zr_decimalDigit="2"
+                    app:zr_relativeDecimal="false"
                     android:textColor="@color/color_282828"
                     android:textColorHint="@color/color_FFA1A1A1"
                     android:textSize="15sp"/>

@@ -125,7 +125,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      */
     fun onEditBuyPrice(price: String?) {
         if (TextUtils.isEmpty(price)) return
-        viewModel?.buyPrice?.value = price?.toBigDecimal()
+        viewModel?.buyPrice?.value = MathUtil.rounded3(price?.toBigDecimal()!!)
     }
 
     /**
@@ -197,9 +197,9 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     emitter.onComplete()
                 }).subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        viewModel?.price?.value = sub.price!!
+                        viewModel?.price?.value = MathUtil.rounded3(sub.price!!)
                         // 计算跌涨价格
-                        val diffPrice = sub.price!!.subtract(sub.openPrice!!)
+                        val diffPrice = MathUtil.rounded3(sub.price!!.subtract(sub.openPrice!!))
                         viewModel?.diffPrice?.value = diffPrice
                         // 计算跌涨幅百分比
                         viewModel?.diffRate?.value =
@@ -245,7 +245,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         val stockInfoData = response.data
         viewModel?.stockInfoData?.value = stockInfoData
 
-        viewModel?.buyPrice?.value = stockInfoData.realPrice
+        viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
         viewModel?.buyCount?.value = stockInfoData.perShareNumber.toLong()
     }
 
