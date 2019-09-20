@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:background="@color/color_211F2A"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/ll_tips"
+            android:paddingTop="28dp"
+            android:paddingBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:textSize="17sp"
+                android:layout_marginStart="13dp"
+                android:textColor="@color/color_FFFFFFFF"
+                android:text="@string/search_history_stock"
+                android:layout_height="wrap_content"/>
+        <ImageView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@mipmap/ic_detele"
+                android:layout_marginEnd="13dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="16dp"
+                android:layout_height="15dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View app:layout_constraintBottom_toBottomOf="@+id/ll_tips"
+          android:id="@+id/view"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/color_191821"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_history"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    </androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>

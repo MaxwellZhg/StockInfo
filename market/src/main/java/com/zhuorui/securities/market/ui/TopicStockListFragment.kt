@@ -96,7 +96,7 @@ class TopicStockListFragment :
             startActivity(Intent(context, StockDetailLandActivity::class.java))
         } else {
             // 跳转到搜索
-            (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance())
+            (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
         }
     }
 

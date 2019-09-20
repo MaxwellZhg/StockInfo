@@ -98,4 +98,11 @@
     <string name="trans_sell3">卖3</string>
     <string name="trans_sell4">卖4</string>
     <string name="trans_sell5">卖5</string>
+    <string name="hot_search_stock" tools:ignore="MissingTranslation">热搜股</string>
+    <string name="search_history_stock" tools:ignore="MissingTranslation">历史搜索股票</string>
+    <string name="cancle" tools:ignore="MissingTranslation">取消</string>
+    <string name="search_tips" tools:ignore="MissingTranslation">请输入股票名称/代码/全拼</string>
+    <string name="stock_search_all"  tools:ignore="MissingTranslation">综合</string>
+    <string name="stock_search_topic"  tools:ignore="MissingTranslation">股票</string>
+    <string name="stock_search_info"  tools:ignore="MissingTranslation">咨询</string>
 </resources>

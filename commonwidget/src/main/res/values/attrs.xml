@@ -177,4 +177,11 @@
         <attr name="zr_decimalDigit" format="integer"/>
         <attr name="zr_relativeDecimal" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="ZREmptyView">
+        <attr name="empty_img_width" format="dimension"/>
+        <attr name="empty_img_height" format="dimension"/>
+        <attr name="empty_img_tips"  format="string|reference"/>
+        <attr name="empty_img_tips_margin" format="dimension"/>
+        <attr name="empty_img_src" format="reference"/>
+    </declare-styleable>
 </resources>

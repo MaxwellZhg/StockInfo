@@ -12,4 +12,5 @@ interface MyTabVierw : AbsView {
     fun gotomain()
     fun loginStateChange()
     fun  changeMyTabInfoView()
+    fun changeSetChooseSet(type:Int,str:String?)
 }
