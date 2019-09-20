@@ -44,9 +44,11 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
 
     override fun init() {
         super.init()
+        // 监听购买数量变化
         viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Long> {
             calculateBuyMoney()
         })
+        // 监听购买价格变化
         viewModel?.buyPrice?.observe(fragment, androidx.lifecycle.Observer<BigDecimal> {
             calculateBuyMoney()
         })
@@ -124,16 +126,19 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      * 收到输入价格
      */
     fun onEditBuyPrice(price: String?) {
-        if (TextUtils.isEmpty(price)) return
-        viewModel?.buyPrice?.value = MathUtil.rounded3(price?.toBigDecimal()!!)
+        if (TextUtils.isEmpty(price) || price?.endsWith(".")!!) return
+        viewModel?.buyPrice?.value = price.toBigDecimal()
     }
 
     /**
      * 手动输入数量
      */
     fun onEditBuyCount(count: String?) {
-        if (TextUtils.isEmpty(count)) return
-        viewModel?.buyCount?.value = count?.toLong()
+        if (TextUtils.isEmpty(count)) {
+            viewModel?.buyCount?.value = 0
+        }else{
+            viewModel?.buyCount?.value = count?.toLong()
+        }
     }
 
     /**
