@@ -2,10 +2,12 @@ package com.zhuorui.securities.market.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.SimpleTextWatcher
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -42,7 +44,7 @@ class SimulationTradingStocksFragment :
         }
     }
 
-    private val mPresenter = SimulationTradingStocksPresenter()
+    private val mPresenter = SimulationTradingStocksPresenter(this)
 
     override val layout: Int
         get() = R.layout.fragment_simulation_trading_stocks
@@ -77,6 +79,18 @@ class SimulationTradingStocksFragment :
             // 搜索自选股
             start(StockSearchFragment.newInstance())
         }
+        // 监听价格输入
+        tv_buy_price.addTextChangedListener(object : SimpleTextWatcher(){
+            override fun afterTextChanged(s: Editable?) {
+                presenter?.onEditBuyPrice(s.toString())
+            }
+        })
+        // 监听数量输入
+        tv_buy_count.addTextChangedListener(object : SimpleTextWatcher(){
+            override fun afterTextChanged(s: Editable?) {
+                presenter?.onEditBuyCount(s.toString())
+            }
+        })
     }
 
     override fun onClick(p0: View?) {
