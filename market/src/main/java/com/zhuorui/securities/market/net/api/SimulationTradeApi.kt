@@ -31,7 +31,7 @@ object SimulationTradeApi {
     /**
      * 获取单支股票详情
      */
-    const val STOCK_INFO = "http://192.168.1.212:1105/as_market/api/hk/stock/basic/v1/get/one/by/tscode"
+    const val STOCK_INFO = "as_market/api/hk_stock_basic/v1/get_one_by_tscode"
 
     /**
      * 获取批量股票详情

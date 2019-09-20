@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.net.response.GetStockInfoResponse
 import java.math.BigDecimal
 
 /**
@@ -14,6 +15,7 @@ import java.math.BigDecimal
 class SimulationTradingStocksViewModel : ViewModel() {
     // 股票信息
     val stockInfo = MutableLiveData<SearchStockInfo>()
+    val stockInfoData = MutableLiveData<GetStockInfoResponse.Data>()
     // 当前价格：如13.75
     val price = MutableLiveData<BigDecimal>()
     // 跌涨价格：如-1.26、+1.68
@@ -24,8 +26,14 @@ class SimulationTradingStocksViewModel : ViewModel() {
     val buyRate = MutableLiveData<BigDecimal>()
     // 卖出比例
     val sellRate = MutableLiveData<BigDecimal>()
+    // 买入股票的价格
+    val buyPrice = MutableLiveData<BigDecimal>()
     // 买入股票数量
-    val buyCount = MutableLiveData<Int>()
+    val buyCount = MutableLiveData<Long>()
+    // 买入股票的金额
+    val buyMoney = MutableLiveData<BigDecimal>()
+    // 最大可买数量
+    val maxBuyCount = MutableLiveData<Long>()
 
     init {
         buyRate.value = BigDecimal.valueOf(50.00)
