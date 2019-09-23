@@ -1,2 +1,2 @@
-include ':fragmentation_swipeback', ':fragmentation', ':fragmentation_core', ':pickerview',
+include ':fragmentation_swipeback', ':fragmentation', ':fragmentation_core', ':pickerview', ':aliosssdk',
         ':base2app', ':MPChartLib', ':commonwidget', ':app', ':market', ':infomation', ':openaccount', ':personal'
