@@ -115,7 +115,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         val request = GetPositionRequest("", "", transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getPosition(request)
             ?.enqueue(Network.IHCallBack<GetPositionResponse>(request))
-        view?.createFundAccountSuccess()
     }
 
     /**
@@ -125,7 +124,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         val request = OrderListRequest("", "", "", "", transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
-        view?.createFundAccountSuccess()
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)

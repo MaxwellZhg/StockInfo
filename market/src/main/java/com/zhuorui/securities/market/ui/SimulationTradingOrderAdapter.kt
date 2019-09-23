@@ -22,18 +22,19 @@ import com.zhuorui.securities.market.model.STOrderData
  */
 class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val TYPE_HEADER = 0
-    val TYPE_TITLE = 1
-    val TYPE_EMPTY = 2
-    val TYPE_ITEM = 3
-    val context = context
-    var vEmpty: TextView? = null
-    var mEmptyMsg: String? = null
-    var types: Array<Int?> = arrayOfNulls(3)
-    val selected: HashSet<Int> = HashSet()
-    var listener: MockStockOrderListener? = null
-    var posOff = 0
+    private val TYPE_HEADER = 0
+    private val TYPE_TITLE = 1
+    private val TYPE_EMPTY = 2
+    private val TYPE_ITEM = 3
+    private val context = context
+    private var vEmpty: TextView? = null
+    private var mEmptyMsg: String? = null
+    private var types: Array<Int?> = arrayOfNulls(3)
+    private val selected: HashSet<Int> = HashSet()
+    private var posOff = 0
     var datas: MutableList<STOrderData>? = null
+    var listener: MockStockOrderListener? = null
+    var canClick = true
 
     private var vHeader: View? = null
 
@@ -117,38 +118,41 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                             false
                         )
                     )
-                itemViewHolder.item?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    if (selected.contains(pos)) {
-                        itemViewHolder.hideBtn()
-                        selected.remove(pos)
-                        datas?.get(pos)?.selected = false
-                    } else {
-                        itemViewHolder.showBtn()
-                        selected.add(pos)
-                        datas?.get(pos)?.selected = true
+                if (canClick) {
+                    itemViewHolder.item?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        if (selected.contains(pos)) {
+                            itemViewHolder.hideBtn()
+                            selected.remove(pos)
+                            datas?.get(pos)?.selected = false
+                        } else {
+                            itemViewHolder.showBtn()
+                            selected.add(pos)
+                            datas?.get(pos)?.selected = true
+                        }
+                    }
+                    itemViewHolder.business?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toBusiness("Business:$pos")
+                    }
+                    itemViewHolder.quotation?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toQuotation("Quotation:$pos")
+                    }
+                    itemViewHolder.orderQuotation?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toQuotation("OrderQuotation$pos")
+                    }
+                    itemViewHolder.change?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toChangeOrder("change$pos")
+                    }
+                    itemViewHolder.cancel?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toCancelOrder("CancelOrder:$pos")
                     }
                 }
-                itemViewHolder.business?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toBusiness("Business:$pos")
-                }
-                itemViewHolder.quotation?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toQuotation("Quotation:$pos")
-                }
-                itemViewHolder.orderQuotation?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toQuotation("OrderQuotation$pos")
-                }
-                itemViewHolder.change?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toChangeOrder("change$pos")
-                }
-                itemViewHolder.cancel?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toCancelOrder("CancelOrder:$pos")
-                }
+                itemViewHolder.canClick = canClick
                 itemViewHolder
             }
         }
@@ -191,7 +195,8 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         var presentPrice: TextView? = null
         var orderDate: TextView? = null
         var orderTime: TextView? = null
-        var isend: Boolean = false
+        var menuType: Int = 0 //0 无菜单 1订单菜单 2购买菜单
+        var canClick: Boolean = true
 
         init {
             item = v.findViewById(R.id.item_bg)
@@ -229,21 +234,36 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             orderType?.setTextColor(data?.trustColor!!)
             orderStatus?.text = data?.statusName
             orderStatus?.setCompoundDrawablesWithIntrinsicBounds(data?.statusLogo!!, 0, 0, 0)
-            isend = data?.status != 1 && data?.status != 3
-            if (data?.selected!!) {
-                showBtn()
-            } else {
-                hideBtn()
+            if (canClick) {
+                val status = data?.status
+                menuType = if (status == 1 || status == 3) {
+                    1
+                } else if (status == 4 || status == 5 || status == 6) {
+                    2
+                } else {
+                    0
+                }
+                if (data?.selected!!) {
+                    showBtn()
+                } else {
+                    hideBtn()
+                }
             }
         }
 
         fun showBtn() {
-            if (isend) {
-                orderBtnGroup?.visibility = View.VISIBLE
-                businessBtnGroup?.visibility = View.GONE
-            } else {
-                orderBtnGroup?.visibility = View.GONE
-                businessBtnGroup?.visibility = View.VISIBLE
+            when (menuType) {
+                1 -> {
+                    orderBtnGroup?.visibility = View.VISIBLE
+                    businessBtnGroup?.visibility = View.GONE
+                }
+                2 -> {
+                    orderBtnGroup?.visibility = View.GONE
+                    businessBtnGroup?.visibility = View.VISIBLE
+                }
+                else -> {
+                    hideBtn()
+                }
             }
         }
 
