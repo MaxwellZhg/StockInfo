@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.util
 
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.DecimalFormat
 
 /**
  * author : PengXianglin
@@ -56,6 +57,13 @@ object MathUtil {
     }
 
     /**
+     * 乘法保留两位小数
+     */
+    fun multiply2(number1: BigDecimal, number2: BigDecimal): BigDecimal {
+        return rounded2(number1.multiply(number2))
+    }
+
+    /**
      * 乘法保留三位小数
      */
     fun multiply3(number1: BigDecimal, number2: BigDecimal): BigDecimal {
@@ -80,5 +88,32 @@ object MathUtil {
             return rounded3(BigDecimal.ZERO)
         }
         return number1.divide(number2, 3, RoundingMode.DOWN)
+    }
+
+    /**
+     * 转换成带有逗号的字符串
+     */
+    fun convertToString(number: Long): String {
+        val df = DecimalFormat("#,###")
+        return df.format(number)
+    }
+
+    /**
+     * k代表千，M代表百万，B代表十亿
+     */
+    private val K = BigDecimal.valueOf(1000)
+    private val M = BigDecimal.valueOf(1000000)
+    private val B = BigDecimal.valueOf(1000000000)
+
+    fun convertToUnitString(number: BigDecimal): String {
+        return when {
+            // 是否大于十亿
+            number.compareTo(B) == 1 -> divide2(number, B).toString() + "B"
+            // 是否大于百万
+            number.compareTo(M) == 1 -> divide2(number, M).toString() + "M"
+            // 是否大于一千
+            number.compareTo(K) == 1 -> divide2(number, K).toString() + "K"
+            else -> number.toString()
+        }
     }
 }

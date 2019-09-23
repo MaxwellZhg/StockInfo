@@ -12,6 +12,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.event.MyTabInfoEvent
+import com.zhuorui.securities.personal.event.SettingChooseEvent
 import com.zhuorui.securities.personal.model.AppLanguage
 import com.zhuorui.securities.personal.model.StocksThemeColor
 import com.zhuorui.securities.personal.net.IPersonalNet
@@ -95,6 +96,10 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
             }
         }
         return null
+    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSettingChangeEvent(event: SettingChooseEvent) {
+        view?.changeSetChooseSet(event.type,event.str)
     }
 
 }

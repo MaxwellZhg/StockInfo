@@ -101,10 +101,10 @@ class MyTabFragment :
                 }
             }
             R.id.ll_cell_change_color -> {
-                startForResult(SettingFragment.newInstance(1,ll_cell_change_color.tipsValue), 100)
+                (parentFragment as AbsFragment<*, *, *, *>).start(SettingFragment.newInstance(1,ll_cell_change_color.tipsValue))
             }
             R.id.ll_setting_language -> {
-                startForResult(SettingFragment.newInstance(2,ll_setting_language.tipsValue), 101)
+                (parentFragment as AbsFragment<*, *, *, *>).start(SettingFragment.newInstance(2,ll_setting_language.tipsValue))
             }
             R.id.ll_account_safety->{
                 (parentFragment as AbsFragment<*, *, *, *>).start(SecurityFragment.newInstance())
@@ -119,14 +119,14 @@ class MyTabFragment :
         (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(2))
     }
 
-    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+/*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
         if (resultCode == ISupportFragment.RESULT_OK && requestCode == 100) {
             ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
         } else {
             ll_setting_language.setRightTips(presenter?.setConfigValue(2))
         }
-    }
+    }*/
     override fun loginStateChange() {
         if(!LocalAccountConfig.read().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
@@ -144,6 +144,16 @@ class MyTabFragment :
             ll_login_out.visibility=View.VISIBLE
             tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
         }
+    }
+    override fun changeSetChooseSet(type: Int, str: String?) {
+       when(type){
+           1->{
+               ll_cell_change_color.setRightTips(str)
+           }
+           2->{
+               ll_setting_language.setRightTips(str)
+           }
+       }
     }
 
 }

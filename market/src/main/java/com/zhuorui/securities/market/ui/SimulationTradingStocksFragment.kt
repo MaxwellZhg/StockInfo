@@ -1,7 +1,6 @@
 package com.zhuorui.securities.market.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
@@ -87,14 +86,12 @@ class SimulationTradingStocksFragment :
         tv_buy_price.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 presenter?.onEditBuyPrice(s?.toString())
-                tv_buy_price.setSelection(s?.toString()?.length!!)
             }
         })
         // 监听数量输入
         tv_buy_count.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 presenter?.onEditBuyCount(s?.toString())
-                tv_buy_count.setSelection(s?.toString()?.length!!)
             }
         })
     }
@@ -150,26 +147,26 @@ class SimulationTradingStocksFragment :
 
     override fun updateStockTrans(transData: PushStockTransData, buyRate: Double, sellRate: Double) {
         // 更新买入卖出交易量
-        trans_buy1.setPriceText(transData.bid1.toString())
-        trans_buy1.setVolumeText(transData.bid1Volume.toString())
-        trans_buy2.setPriceText(transData.bid2.toString())
-        trans_buy2.setVolumeText(transData.bid2Volume.toString())
-        trans_buy3.setPriceText(transData.bid3.toString())
-        trans_buy3.setVolumeText(transData.bid3Volume.toString())
-        trans_buy4.setPriceText(transData.bid4.toString())
-        trans_buy4.setVolumeText(transData.bid4Volume.toString())
-        trans_buy5.setPriceText(transData.bid5.toString())
-        trans_buy5.setVolumeText(transData.bid5Volume.toString())
-        trans_sell1.setPriceText(transData.ask1.toString())
-        trans_sell1.setVolumeText(transData.ask1Volume.toString())
-        trans_sell2.setPriceText(transData.ask2.toString())
-        trans_sell2.setVolumeText(transData.ask2Volume.toString())
-        trans_sell3.setPriceText(transData.ask3.toString())
-        trans_sell3.setVolumeText(transData.ask3Volume.toString())
-        trans_sell4.setPriceText(transData.ask4.toString())
-        trans_sell4.setVolumeText(transData.ask4Volume.toString())
-        trans_sell5.setPriceText(transData.ask5.toString())
-        trans_sell5.setVolumeText(transData.ask5Volume.toString())
+        trans_buy1.setPriceText(MathUtil.rounded3(transData.bid1!!).toString())
+        trans_buy1.setVolumeText(MathUtil.convertToUnitString(transData.bid1Volume!!))
+        trans_buy2.setPriceText(MathUtil.rounded3(transData.bid2!!).toString())
+        trans_buy2.setVolumeText(MathUtil.convertToUnitString(transData.bid2Volume!!))
+        trans_buy3.setPriceText(MathUtil.rounded3(transData.bid3!!).toString())
+        trans_buy3.setVolumeText(MathUtil.convertToUnitString(transData.bid3Volume!!))
+        trans_buy4.setPriceText(MathUtil.rounded3(transData.bid4!!).toString())
+        trans_buy4.setVolumeText(MathUtil.convertToUnitString(transData.bid4Volume!!))
+        trans_buy5.setPriceText(MathUtil.rounded3(transData.bid5!!).toString())
+        trans_buy5.setVolumeText(MathUtil.convertToUnitString(transData.bid5Volume!!))
+        trans_sell1.setPriceText(MathUtil.rounded3(transData.ask1!!).toString())
+        trans_sell1.setVolumeText(MathUtil.convertToUnitString(transData.ask1Volume!!))
+        trans_sell2.setPriceText(MathUtil.rounded3(transData.ask2!!).toString())
+        trans_sell2.setVolumeText(MathUtil.convertToUnitString(transData.ask2Volume!!))
+        trans_sell3.setPriceText(MathUtil.rounded3(transData.ask3!!).toString())
+        trans_sell3.setVolumeText(MathUtil.convertToUnitString(transData.ask3Volume!!))
+        trans_sell4.setPriceText(MathUtil.rounded3(transData.ask4!!).toString())
+        trans_sell4.setVolumeText(MathUtil.convertToUnitString(transData.ask4Volume!!))
+        trans_sell5.setPriceText(MathUtil.rounded3(transData.ask5!!).toString())
+        trans_sell5.setVolumeText(MathUtil.convertToUnitString(transData.ask5Volume!!))
         // 更新比例
         (trans_buy_rate.layoutParams as ConstraintLayout.LayoutParams).horizontalWeight = buyRate.toFloat()
         (trans_sell_rate.layoutParams as ConstraintLayout.LayoutParams).horizontalWeight = sellRate.toFloat()
@@ -180,10 +177,12 @@ class SimulationTradingStocksFragment :
         if (maxBuyCount == null) {
             tv_max_buy_num.text = getString(R.string.max_buy_num) + " --"
         } else {
-            val spannableString = SpannableString(getString(R.string.max_buy_num) + " $maxBuyCount")
+            val formatCount = MathUtil.convertToString(maxBuyCount)
+            val spannableString =
+                SpannableString(getString(R.string.max_buy_num) + " $formatCount")
             spannableString.setSpan(
                 ForegroundColorSpan(ResUtil.getColor(R.color.color_ff1a6ed2)!!),
-                spannableString.length - maxBuyCount.toString().length,
+                spannableString.length - formatCount.length,
                 spannableString.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )

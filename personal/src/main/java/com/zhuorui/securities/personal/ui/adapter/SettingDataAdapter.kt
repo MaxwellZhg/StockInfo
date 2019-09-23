@@ -5,9 +5,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.R2
+import com.zhuorui.securities.personal.event.SettingChooseEvent
 import com.zhuorui.securities.personal.ui.model.SettingData
 
 /**
