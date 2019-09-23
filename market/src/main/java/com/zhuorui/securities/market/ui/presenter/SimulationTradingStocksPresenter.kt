@@ -9,6 +9,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.StockPrice
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.net.ISimulationTradeNet
@@ -110,6 +111,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 // 一手股数
                 val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
                 // 最大可卖 =（（可用资金 - 印花税 - 佣金 - 平台使用费 - 代收费）/ 一手价格）* 一手股数
+                // 可用资金 -（（（可用资金/每手股票价格）取整）* 每手股票价格）- 佣金 - 平台使用费 - 代收费 > 0
                 // TODO 可用资金测试为1000000
                 viewModel?.maxBuyCount?.value =
                     ((BigDecimal.valueOf(1000000).subtract(stampTax).subtract(commission).subtract(platformFee).subtract(
@@ -123,7 +125,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     }
 
     /**
-     * 收到输入价格
+     * 手动输入价格
      */
     fun onEditBuyPrice(price: String?) {
         if (TextUtils.isEmpty(price) || price?.endsWith(".")!!) return
@@ -136,8 +138,31 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun onEditBuyCount(count: String?) {
         if (TextUtils.isEmpty(count)) {
             viewModel?.buyCount?.value = 0
-        }else{
+        } else {
             viewModel?.buyCount?.value = count?.toLong()
+        }
+    }
+
+    /**
+     * 加减价格
+     * @param type 1：加 2：减
+     */
+    fun addOrSubBuyPrice(type: Int) {
+        val buyPrice = viewModel?.buyPrice?.value
+        if (buyPrice == null) {
+            ToastUtil.instance.toastCenter(R.string.stock_code_input_hint)
+            return
+        }
+        if (type == 1) {
+            viewModel?.buyPrice?.value = buyPrice.add(viewModel?.minChangesPrice?.value)
+        } else {
+            val value = buyPrice.subtract(viewModel?.minChangesPrice?.value)
+            // 判断是否小于0
+            if (value.compareTo(BigDecimal.ZERO) == -1) {
+                viewModel?.buyPrice?.value = BigDecimal.ZERO
+            } else {
+                viewModel?.buyPrice?.value = value
+            }
         }
     }
 
@@ -146,13 +171,10 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      * @param type 1：加 2：减
      */
     fun addOrSubBuyCount(type: Int) {
-        if (viewModel?.stockInfo?.value == null) {
-            ToastUtil.instance.toast(R.string.stock_code_input_hint)
-            return
-        }
-        var count = viewModel?.buyCount?.value
+        val count = viewModel?.buyCount?.value
         if (count == null) {
-            count = 0
+            ToastUtil.instance.toastCenter(R.string.stock_code_input_hint)
+            return
         }
         if (type == 1) {
             viewModel?.buyCount?.value = count + viewModel?.stockInfoData?.value?.perShareNumber?.toInt()!!
@@ -169,6 +191,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.stockInfo?.value = stockInfo
         viewModel?.stockInfoData?.value = null
         viewModel?.buyPrice?.value = null
+        viewModel?.minChangesPrice?.value = null
         viewModel?.buyCount?.value = null
         viewModel?.buyMoney?.value = null
         // 清除上一次的价格信息
@@ -251,6 +274,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.stockInfoData?.value = stockInfoData
 
         viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
+        viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.realPrice)
         viewModel?.buyCount?.value = stockInfoData.perShareNumber.toLong()
     }
 

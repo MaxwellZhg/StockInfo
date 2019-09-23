@@ -97,4 +97,23 @@ object MathUtil {
         val df = DecimalFormat("#,###")
         return df.format(number)
     }
+
+    /**
+     * k代表千，M代表百万，B代表十亿
+     */
+    private val K = BigDecimal.valueOf(1000)
+    private val M = BigDecimal.valueOf(1000000)
+    private val B = BigDecimal.valueOf(1000000000)
+
+    fun convertToUnitString(number: BigDecimal): String {
+        return when {
+            // 是否大于十亿
+            number.compareTo(B) == 1 -> divide2(number, B).toString() + "B"
+            // 是否大于百万
+            number.compareTo(M) == 1 -> divide2(number, M).toString() + "M"
+            // 是否大于一千
+            number.compareTo(K) == 1 -> divide2(number, K).toString() + "K"
+            else -> number.toString()
+        }
+    }
 }
