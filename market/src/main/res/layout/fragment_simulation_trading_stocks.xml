@@ -585,7 +585,7 @@
                 android:layout_marginStart="13dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/btn_buy"
-                android:enabled="@{viewModel.buyCount > 0 ? true : false}"/>
+                android:enabled="@{viewModel.enableBuy}"/>
 
         <TextView
                 android:layout_width="wrap_content"

@@ -1,7 +1,6 @@
 package com.zhuorui.securities.market.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString

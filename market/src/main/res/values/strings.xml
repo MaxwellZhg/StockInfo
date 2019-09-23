@@ -24,41 +24,41 @@
     <string name="unable_notice" translatable="false">消息通知已关闭，无法接收提醒推送</string>
     <string name="open_notice" translatable="false">去开启</string>
     <string name="setting_remind" translatable="false">设置提醒</string>
-    <string name="rise_threshold">价格涨到</string>
-    <string name="down_threshold">价格跌到</string>
-    <string name="rise_range">涨幅超</string>
-    <string name="down_range">跌幅超</string>
-    <string name="str_no_position_present">暂无持仓</string>
-    <string name="str_no_record_historical_transactions">暂无历史交易记录哦</string>
-    <string name="str_hold_positions">持仓</string>
-    <string name="str_today_orders">今日订单</string>
-    <string name="str_no_order">暂无订单</string>
-    <string name="str_agiotage">买卖股票</string>
-    <string name="str_quote">行情报价</string>
-    <string name="str_position_stock">持仓股票</string>
-    <string name="str_market_value_and_quantity">市值/数量</string>
-    <string name="str_present_price_and_cost">现价/成本</string>
-    <string name="str_opsition_gain_and_loss">持仓盈亏</string>
-    <string name="str_change_order">改单</string>
-    <string name="str_cancel_order">撤单</string>
-    <string name="str_order_status">订单状态</string>
-    <string name="str_name_code">名称代码</string>
-    <string name="str_quantity_and_order_price">数量/订单价</string>
-    <string name="str_order_time">下单时间</string>
-    <string name="str_total_account_assets_hkd">账户总资产（港元）</string>
-    <string name="str_today_profit_loss">当日盈亏</string>
-    <string name="str_market_capitalization">持仓市值</string>
-    <string name="str_available_funds">可用资金</string>
-    <string name="str_total_profit_loss">总盈亏金额</string>
-    <string name="str_historical_order">历史订单</string>
-    <string name="str_rule">规则</string>
-    <string name="str_zr_no">卓锐号</string>
-    <string name="str_create_immediately">立即创建</string>
-    <string name="str_Create_account">创建账户</string>
-    <string name="create_account_desc">立即获得100万元港币模拟资金</string>
-    <string name="create_account_desc_bule">100万</string>
-    <string name="str_create_account">创建账户</string>
-    <string name="mock_stock_rule">1、模拟交易只针对港股市场，初始资产为100万港元。\n
+    <string name="rise_threshold" translatable="false">价格涨到</string>
+    <string name="down_threshold" translatable="false">价格跌到</string>
+    <string name="rise_range" translatable="false">涨幅超</string>
+    <string name="down_range" translatable="false">跌幅超</string>
+    <string name="str_no_position_present" translatable="false">暂无持仓</string>
+    <string name="str_no_record_historical_transactions" translatable="false">暂无历史交易记录哦</string>
+    <string name="str_hold_positions" translatable="false">持仓</string>
+    <string name="str_today_orders" translatable="false">今日订单</string>
+    <string name="str_no_order" translatable="false">暂无订单</string>
+    <string name="str_agiotage" translatable="false">买卖股票</string>
+    <string name="str_quote" translatable="false">行情报价</string>
+    <string name="str_position_stock" translatable="false">持仓股票</string>
+    <string name="str_market_value_and_quantity" translatable="false">市值/数量</string>
+    <string name="str_present_price_and_cost" translatable="false">现价/成本</string>
+    <string name="str_opsition_gain_and_loss" translatable="false">持仓盈亏</string>
+    <string name="str_change_order" translatable="false">改单</string>
+    <string name="str_cancel_order" translatable="false">撤单</string>
+    <string name="str_order_status" translatable="false">订单状态</string>
+    <string name="str_name_code" translatable="false">名称代码</string>
+    <string name="str_quantity_and_order_price" translatable="false">数量/订单价</string>
+    <string name="str_order_time" translatable="false">下单时间</string>
+    <string name="str_total_account_assets_hkd" translatable="false">账户总资产（港元）</string>
+    <string name="str_today_profit_loss" translatable="false">当日盈亏</string>
+    <string name="str_market_capitalization" translatable="false">持仓市值</string>
+    <string name="str_available_funds" translatable="false">可用资金</string>
+    <string name="str_total_profit_loss" translatable="false">总盈亏金额</string>
+    <string name="str_historical_order" translatable="false">历史订单</string>
+    <string name="str_rule" translatable="false">规则</string>
+    <string name="str_zr_no" translatable="false">卓锐号</string>
+    <string name="str_create_immediately" translatable="false">立即创建</string>
+    <string name="str_Create_account" translatable="false">创建账户</string>
+    <string name="create_account_desc" translatable="false">立即获得100万元港币模拟资金</string>
+    <string name="create_account_desc_bule" translatable="false">100万</string>
+    <string name="str_create_account" translatable="false">创建账户</string>
+    <string name="mock_stock_rule" translatable="false">1、模拟交易只针对港股市场，初始资产为100万港元。\n
         2、港股市场交易品种仅限于在香港交易所上市的正股， 其他品种暂时不可交易。\n
         3、港股市场交易时间：9:30~12:00,13:00~16:00.\n
         4、模拟交易暂不支持分红、送股、申购新股、供股和增发等操作。 \n
@@ -67,37 +67,38 @@
         7、如上市公司因任何原因被除牌，但用户持有该公司的虚拟股票，用户不能再进行该股票的模拟交易，系统将按该股票的最后收市价，于第二个工作日将虚拟资金存入用户的模拟交易账户。\n
         8、本交易系统为卓锐证券研发，每笔模拟交易将收取0.1097%成交额和每笔成交0.50港元的虚拟资金作为代收费(代收费项目，全部以交易所及政府收费为准，具体查看交易所网站点击查看)。若与真实市场有细微出入,以模拟盘交易系统为准。\n
     </string>
-    <string name="str_click_view">点击查看</string>
-    <string name="mock_stock_copyright">关于模拟炒股的最终解释权，归卓锐证券所有。</string>
-    <string name="str_simulated_trading_rules">模拟交易规则</string>
-    <string name="simulation_trading_stocks">模拟炒股</string>
-    <string name="simulation_trading_stocks_tips">模拟炒港股练习</string>
-    <string name="str_type">类型</string>
-    <string name="price_limit">限价单（增强）</string>
-    <string name="stock_code">代码</string>
-    <string name="stock_code_input_hint">请输入股票代码或简称</string>
-    <string name="price">价格</string>
-    <string name="number">数量</string>
-    <string name="money">金额</string>
-    <string name="max_buy_num">最大可买 --</string>
-    <string name="max_sell_num">最大可卖 --</string>
-    <string name="str_buy">买入</string>
-    <string name="str_sell">卖出</string>
-    <string name="hint_stock_code_or_abbreviation">请输入股票代码/简称</string>
-    <string name="str_my_own_choice">我的自选</string>
-    <string name="str_search_history">搜索历史</string>
-    <string name="str_no_data">暂无数据</string>
-    <string name="str_clear_record">清除记录</string>
-    <string name="trans_buy1">买1</string>
-    <string name="trans_buy2">买2</string>
-    <string name="trans_buy3">买3</string>
-    <string name="trans_buy4">买4</string>
-    <string name="trans_buy5">买5</string>
-    <string name="trans_sell1">卖1</string>
-    <string name="trans_sell2">卖2</string>
-    <string name="trans_sell3">卖3</string>
-    <string name="trans_sell4">卖4</string>
-    <string name="trans_sell5">卖5</string>
+    <string name="str_click_view" translatable="false">点击查看</string>
+    <string name="mock_stock_copyright" translatable="false">关于模拟炒股的最终解释权，归卓锐证券所有。</string>
+    <string name="str_simulated_trading_rules" translatable="false">模拟交易规则</string>
+    <string name="simulation_trading_stocks" translatable="false">模拟炒股</string>
+    <string name="simulation_trading_stocks_tips" translatable="false">模拟炒港股练习</string>
+    <string name="str_type" translatable="false">类型</string>
+    <string name="price_limit" translatable="false">限价单（增强）</string>
+    <string name="stock_code" translatable="false">代码</string>
+    <string name="stock_code_input_hint" translatable="false">请输入股票代码或简称</string>
+    <string name="buy_count_more_than_max" translatable="false">买入数量超出最大可买数量</string>
+    <string name="price" translatable="false">价格</string>
+    <string name="number" translatable="false">数量</string>
+    <string name="money" translatable="false">金额</string>
+    <string name="max_buy_num" translatable="false">最大可买</string>
+    <string name="max_sell_num" translatable="false">最大可卖</string>
+    <string name="str_buy" translatable="false">买入</string>
+    <string name="str_sell" translatable="false">卖出</string>
+    <string name="hint_stock_code_or_abbreviation" translatable="false">请输入股票代码/简称</string>
+    <string name="str_my_own_choice" translatable="false">我的自选</string>
+    <string name="str_search_history" translatable="false">搜索历史</string>
+    <string name="str_no_data" translatable="false">暂无数据</string>
+    <string name="str_clear_record" translatable="false">清除记录</string>
+    <string name="trans_buy1" translatable="false">买1</string>
+    <string name="trans_buy2" translatable="false">买2</string>
+    <string name="trans_buy3" translatable="false">买3</string>
+    <string name="trans_buy4" translatable="false">买4</string>
+    <string name="trans_buy5" translatable="false">买5</string>
+    <string name="trans_sell1" translatable="false">卖1</string>
+    <string name="trans_sell2" translatable="false">卖2</string>
+    <string name="trans_sell3" translatable="false">卖3</string>
+    <string name="trans_sell4" translatable="false">卖4</string>
+    <string name="trans_sell5" translatable="false">卖5</string>
     <string name="hot_search_stock" tools:ignore="MissingTranslation">热搜股</string>
     <string name="search_history_stock" tools:ignore="MissingTranslation">历史搜索股票</string>
     <string name="cancle" tools:ignore="MissingTranslation">取消</string>
