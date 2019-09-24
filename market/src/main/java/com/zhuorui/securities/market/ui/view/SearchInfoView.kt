@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import java.util.ArrayList
@@ -12,5 +13,4 @@ import java.util.ArrayList
  * Desc:
  */
 interface SearchInfoView :AbsView{
-    fun initViewPager(fragments: ArrayList<SearchInfoViewModel.StockPageInfo>,str:String)
 }

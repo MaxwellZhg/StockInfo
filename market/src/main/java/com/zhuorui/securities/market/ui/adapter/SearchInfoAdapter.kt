@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui
+package com.zhuorui.securities.market.ui.adapter
 
 import android.content.Context
 import android.view.View
@@ -60,10 +60,16 @@ class SearchInfoAdapter(context:Context?) :BaseListAdapter<SearchDeafaultData>()
         @BindView(R2.id.rl_hot)
         lateinit var rl_hot:RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
-          var adapter=HotSearchAdapter()
+          var adapter= HotSearchAdapter()
             rl_hot.adapter=adapter
             rl_hot.layoutManager=GridLayoutManager(context,2)
-            rl_hot.addItemDecoration(SpaceItemDecoration(ResUtil.getDimensionDp2Px(25f)))
+            rl_hot.addItemDecoration(
+                SpaceItemDecoration(
+                    ResUtil.getDimensionDp2Px(
+                        25f
+                    )
+                )
+            )
             if (adapter.items == null) {
                 adapter.items = ArrayList()
             }
@@ -74,7 +80,7 @@ class SearchInfoAdapter(context:Context?) :BaseListAdapter<SearchDeafaultData>()
         @BindView(R2.id.rv_history)
         lateinit var rv_history:RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
-            var adapter=SearchHistoryAdapter()
+            var adapter= SearchHistoryAdapter()
             rv_history.adapter=adapter
             if (adapter.items == null) {
                 adapter.items = ArrayList()

@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui
+package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
 import android.widget.*

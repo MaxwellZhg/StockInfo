@@ -13,6 +13,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentTopicStockSearchBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.ui.adapter.SearchStocksAdapter
 import com.zhuorui.securities.market.ui.presenter.StockSearchPresenter
 import com.zhuorui.securities.market.ui.view.StockSearchView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel

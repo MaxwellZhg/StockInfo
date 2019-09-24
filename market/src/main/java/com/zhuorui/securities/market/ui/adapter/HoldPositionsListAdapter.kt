@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui
+package com.zhuorui.securities.market.ui.adapter
 
 import android.content.Context
 import android.graphics.Color
@@ -81,14 +81,24 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 ViewHolder(vHeader!!)
             }
             TYPE_TITLE -> {
-                ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_hold_positions_title, parent, false))
+                ViewHolder(
+                    LayoutInflater.from(context).inflate(
+                        R.layout.item_hold_positions_title,
+                        parent,
+                        false
+                    )
+                )
             }
             TYPE_EMPTY -> {
                 ViewHolder(getEmptyView(parent))
             }
             else -> {
                 val itemViewHolder =
-                    ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_hold_positions, parent, false))
+                    ItemViewHolder(
+                        LayoutInflater.from(
+                            context
+                        ).inflate(R.layout.item_hold_positions, parent, false)
+                    )
                 itemViewHolder.item?.setOnClickListener {
                     val pos: Int = it.tag as Int
                     if (selected.contains(pos)) {
