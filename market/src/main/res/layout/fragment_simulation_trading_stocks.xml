@@ -585,6 +585,7 @@
                 android:layout_marginStart="13dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/btn_buy"
+                android:onClick="@{() -> presenter.transactionStocks(1)}"
                 android:enabled="@{viewModel.enableBuy}"/>
 
         <TextView

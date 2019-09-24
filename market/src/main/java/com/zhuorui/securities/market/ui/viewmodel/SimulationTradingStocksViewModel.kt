@@ -35,7 +35,7 @@ class SimulationTradingStocksViewModel : ViewModel() {
     // 买入股票的最小变动价格
     val minChangesPrice = MutableLiveData<BigDecimal>()
     // 买入股票数量
-    val buyCount = MutableLiveData<Long>()
+    val buyCount = MutableLiveData<Int>()
     // 买入股票的金额
     val buyMoney = MutableLiveData<BigDecimal>()
     // 最大可买数量

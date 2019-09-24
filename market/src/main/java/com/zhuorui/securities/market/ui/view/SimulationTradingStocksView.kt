@@ -36,4 +36,31 @@ interface SimulationTradingStocksView : AbsView {
      * 取消数量焦点
      */
     fun clearBuyCountFocus()
+
+    /**
+     * 查看订单交易明细
+     * @param accountId 账户id
+     * @param chargeType 1买入 2卖出
+     * @param stockName 股票名称
+     * @param tsCode 股票代码
+     * @param price 价格
+     * @param count 数量
+     * @param commission 佣金
+     * @param money 金额
+     */
+    fun showTradingStocksOrderDetail(
+        accountId: String,
+        chargeType: Int,
+        stockName: String,
+        tsCode: String,
+        price: String,
+        count: Int,
+        commission: Double,
+        money: String
+    )
+
+    /**
+     * 买入成功
+     */
+    fun buyStocksSuccessful()
 }

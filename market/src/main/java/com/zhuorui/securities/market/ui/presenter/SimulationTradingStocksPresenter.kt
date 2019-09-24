@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.presenter
 
 import android.text.TextUtils
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -13,8 +14,11 @@ import com.zhuorui.securities.market.model.StockPrice
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.net.ISimulationTradeNet
+import com.zhuorui.securities.market.net.request.FeeComputeRequest
 import com.zhuorui.securities.market.net.request.GetFeeTemplateRequest
 import com.zhuorui.securities.market.net.request.GetStockInfoRequest
+import com.zhuorui.securities.market.net.request.StockBuyRequest
+import com.zhuorui.securities.market.net.response.FeeComputeResponse
 import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
 import com.zhuorui.securities.market.net.response.GetStockInfoResponse
 import com.zhuorui.securities.market.socket.SocketClient
@@ -47,8 +51,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     override fun init() {
         super.init()
         // 监听购买数量变化
-        viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Long> {
-            val maxBuyCount = viewModel?.maxBuyCount?.value?.toLong()
+        viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Int> {
+            val maxBuyCount = viewModel?.maxBuyCount?.value?.toInt()
             if (it != null && maxBuyCount != null && it > maxBuyCount) {
                 ToastUtil.instance.toastCenter(R.string.buy_count_more_than_max)
             }
@@ -69,7 +73,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             viewModel?.buyCount?.value?.let { buyCount ->
                 viewModel?.buyPrice?.value?.let { buyPrice ->
                     // 交易金额
-                    val buyMoney = BigDecimal.valueOf(buyCount).multiply(buyPrice)
+                    val buyMoney = BigDecimal.valueOf(buyCount.toLong()).multiply(buyPrice)
                     viewModel?.buyMoney?.value = buyMoney
                     // 印花税
                     val stampTax = viewModel?.getFee(buyMoney, stockFeeRules.getValue(5))
@@ -91,7 +95,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     ///////////////////////////////////////////////////////////////////////////////////////////
                     // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
                     val accountMoney = 1000000.00
-                    var maxBuyCount = (accountMoney / buyPrice!!.toDouble() / perShareNumber!!).toLong()
+                    var maxBuyCount = (accountMoney / buyPrice.toDouble() / perShareNumber!!).toLong()
                     // 二、判断可用资金是否够交易费用 + 手续费
                     while (true) {
                         if (
@@ -136,7 +140,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         if (TextUtils.isEmpty(count)) {
             viewModel?.buyCount?.value = null
         } else {
-            viewModel?.buyCount?.value = count?.toLong()
+            viewModel?.buyCount?.value = count?.toInt()
         }
     }
 
@@ -177,7 +181,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         if (type == 1) {
             viewModel?.buyCount?.value = count + viewModel?.stockInfoData?.value?.perShareNumber!!
         } else {
-            if (count == 0L) return
+            if (count == 0) return
             viewModel?.buyCount?.value = count - viewModel?.stockInfoData?.value?.perShareNumber!!
         }
         view?.clearBuyCountFocus()
@@ -276,7 +280,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
 
         viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
         viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.realPrice)
-        viewModel?.buyCount?.value = stockInfoData.perShareNumber.toLong()
+        viewModel?.buyCount?.value = stockInfoData.perShareNumber
     }
 
     /**
@@ -292,6 +296,65 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             GetStockInfoRequest(stockInfo?.ts!!, stockInfo.code!!, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getStockInfo(getStockInfoRequest)
             ?.enqueue(Network.IHCallBack<GetStockInfoResponse>(getStockInfoRequest))
+    }
+
+    /**
+     * 买入股票
+     * @param chargeType 1买入 2卖出
+     */
+    fun transactionStocks(chargeType: Int) {
+        // 计算交易费用 TODO accountId暂时写1
+        val request =
+            FeeComputeRequest(1, "1", chargeType, viewModel?.buyMoney?.value!!, transactions.createTransaction())
+        Cache[ISimulationTradeNet::class.java]?.feeCompute(request)
+            ?.enqueue(Network.IHCallBack<FeeComputeResponse>(request))
+    }
+
+    /**
+     * 返回计算交易费用
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onFeeComputeResponse(response: FeeComputeResponse) {
+        // 获取当支股票信息
+        val stockInfo = viewModel?.stockInfo?.value
+        // 展示交易明细
+        view?.showTradingStocksOrderDetail(
+            "1",
+            (response.request as FeeComputeRequest).chargeType,
+            stockInfo?.name!!,
+            stockInfo?.tsCode!!,
+            viewModel!!.buyPrice.value.toString() + "（港元）",
+            viewModel!!.buyCount.value!!,
+            response.data.totalFee.toDouble(),
+            MathUtil.convertToString(viewModel?.buyMoney?.value?.add(response.data.totalFee)!!)  + "（港元）"
+        )
+    }
+
+    /**
+     * 确定买入股票
+     */
+    fun confirmBuyStocks() {
+        // 获取当支股票信息
+        val stockInfo = viewModel?.stockInfo?.value
+        // TODO accountId暂时写1
+        val request = StockBuyRequest(
+            "1",
+            stockInfo?.ts!!,
+            stockInfo.code!!,
+            viewModel?.buyPrice?.value!!,
+            viewModel?.buyCount?.value?.toLong()!!,
+            BigDecimal.ZERO,
+            BigDecimal.ZERO,
+            transactions.createTransaction()
+        )
+        Cache[ISimulationTradeNet::class.java]?.stockBuy(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
+    }
+
+    override fun onBaseResponse(response: BaseResponse) {
+        if (response.request is StockBuyRequest) {
+            // 买入股票成功
+            view?.buyStocksSuccessful()
+        }
     }
 
     override fun destroy() {

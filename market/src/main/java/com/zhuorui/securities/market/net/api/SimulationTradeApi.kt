@@ -46,10 +46,15 @@ object SimulationTradeApi {
     /**
      * 计算交易费用
      */
-    const val FEE_COMPUTE="as_sims/api/fee/v1/fee_compute"
+    const val FEE_COMPUTE="as_sims/api/cost/v1/fee_compute"
 
     /**
      * 交易费用规则模版规则
      */
     const val FEE_TEMPLATE = "as_sims/api/cost/v1/fee_template"
+
+    /**
+     * 买入股票
+     */
+    const val STOCK_BUY = "as_sims/api/trade/v1/buy"
 }

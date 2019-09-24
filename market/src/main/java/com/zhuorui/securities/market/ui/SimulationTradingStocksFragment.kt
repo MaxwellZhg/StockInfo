@@ -72,7 +72,6 @@ class SimulationTradingStocksFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         iv_chart.setOnClickListener(this)
-        btn_buy.setOnClickListener(this)
         btn_sell.setOnClickListener(this)
         tv_code.setOnClickListener(this)
         top_bar.setRightClickListener {
@@ -107,14 +106,8 @@ class SimulationTradingStocksFragment :
                 // 模拟炒股搜索
                 startForResult(SimulationTradingSearchFragment.newInstance(), SEARCH_STOCK_CODE)
             }
-            btn_buy -> {
-                // 买入
-                TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true).setTitleText("提示")
-                    .setMsgText("下单成功").setConfirmText("查看详情").show()
-            }
             btn_sell -> {
                 // 卖出
-                TradingStocksOrderDialog.createDialog(context!!, false, true).show()
             }
         }
     }
@@ -200,6 +193,35 @@ class SimulationTradingStocksFragment :
         tv_buy_price.clearFocus()
         SupportHelper.hideSoftInput(tv_buy_price)
     }
+
+    override fun showTradingStocksOrderDetail(
+        accountId: String,
+        chargeType: Int,
+        stockName: String,
+        tsCode: String,
+        price: String,
+        count: Int,
+        commission: Double,
+        money: String
+    ) {
+        TradingStocksOrderDialog.createDialog(context!!, false, true)
+            .setInfo(accountId, chargeType, stockName, tsCode, price, count, commission, money)
+            .setCallBack(object : TradingStocksOrderDialog.CallBack {
+
+                override fun onCancel() {
+
+                }
+
+                override fun onConfirm() {
+                    presenter?.confirmBuyStocks()
+                }
+
+            }).show()
+    }
+
+    override fun buyStocksSuccessful() =
+        TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true).setTitleText(getString(R.string.tips))
+            .setMsgText(getString(R.string.buy_stocks_successful)).setConfirmText(getString(R.string.see_details)).show()
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)

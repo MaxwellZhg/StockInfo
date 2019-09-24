@@ -99,6 +99,14 @@ object MathUtil {
     }
 
     /**
+     * 转换成带有逗号的字符串
+     */
+    fun convertToString(number: BigDecimal): String {
+        val df = DecimalFormat("#,###")
+        return df.format(number)
+    }
+
+    /**
      * k代表千，M代表百万，B代表十亿
      */
     private val K = BigDecimal.valueOf(1000)
