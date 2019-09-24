@@ -26,4 +26,14 @@ interface SimulationTradingStocksView : AbsView {
      * 更新最大可买
      */
     fun updateMaxBuyNum(maxBuyCount: Long?)
+
+    /**
+     * 取消价格焦点
+     */
+    fun clearBuyPriceFocus()
+
+    /**
+     * 取消数量焦点
+     */
+    fun clearBuyCountFocus()
 }

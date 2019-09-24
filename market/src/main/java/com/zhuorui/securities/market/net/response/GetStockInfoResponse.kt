@@ -16,7 +16,7 @@ class GetStockInfoResponse(val data: Data) : BaseResponse() {
         val id: String,
         val tsCode: String, // 代码，如： 股票代码.股票市场 例：00001.HK
         val name: String, // 证券名称
-        val perShareNumber: BigDecimal, // 每手股数
+        val perShareNumber: Int, // 每手股数
         val industry: String, // 行业类别
         val market: String, // 上市板
         val realPrice: BigDecimal // 实时股价

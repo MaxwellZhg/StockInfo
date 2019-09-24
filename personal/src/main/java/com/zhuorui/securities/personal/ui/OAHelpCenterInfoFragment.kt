@@ -2,7 +2,6 @@ package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
@@ -15,26 +14,31 @@ import com.zhuorui.securities.personal.ui.view.OAHelpCenterInfoView
 import com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterInfoViewModel
 import kotlinx.android.synthetic.main.fragment_oa_helpcenter_info.*
 
-
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/5
- * Desc:
+ * Desc: 帮助中心问题详情页面
  */
 class OAHelpCenterInfoFragment :
     AbsSwipeBackFragment<FragmentOaHelpcenterInfoBinding, OAHelpCenterInfoViewModel, OAHelpCenterInfoView, OAHelpCenterInfoPresenter>(),
     OAHelpCenterInfoView {
+
     private var type: Int = 0
     private var adapter: HelpCenterInfoAdapter? = null
+
     override val layout: Int
         get() = R.layout.fragment_oa_helpcenter_info
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: OAHelpCenterInfoPresenter
         get() = OAHelpCenterInfoPresenter()
+
     override val createViewModel: OAHelpCenterInfoViewModel?
         get() = ViewModelProviders.of(this).get(OAHelpCenterInfoViewModel::class.java)
+
     override val getView: OAHelpCenterInfoView
         get() = this
 
@@ -65,5 +69,4 @@ class OAHelpCenterInfoFragment :
         }
         rv_helpcenter_info.adapter = adapter
     }
-
 }
