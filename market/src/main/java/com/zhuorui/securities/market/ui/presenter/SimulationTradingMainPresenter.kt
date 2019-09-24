@@ -201,6 +201,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
+        if (stocksInfo.isNullOrEmpty()) return
         val prices: List<PushStockPriceData> = response.body
         for (price in prices) {
             val tsCode = price.ts + "." + price.code

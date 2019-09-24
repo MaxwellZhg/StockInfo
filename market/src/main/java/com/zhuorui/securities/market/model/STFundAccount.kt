@@ -18,7 +18,7 @@ class STFundAccountData(accountId: String?, availableFunds: Float?) :
     var totalProfitAndLoss: Float? = null
     var todayProfitAndLoss: Float? = null
     var todayProfitAndLossPercentage: Float? = null
-    var accountId: String? = null
+    var accountId: String? = accountId
 
     /**
      * 是否创建

@@ -13,5 +13,5 @@ android {
 
 dependencies {
     // noinspection GradleDependency
-    api "androidx.appcompat:appcompat:$androidx_version"
+    api "androidx.appcompat:appcompat:$appcompat_version"
 }
