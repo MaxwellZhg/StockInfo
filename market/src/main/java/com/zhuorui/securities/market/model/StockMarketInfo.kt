@@ -8,7 +8,8 @@ import java.math.BigDecimal
  *    date   : 2019/8/8 14:08
  *    desc   : 自选股行情信息
  */
-class StockMarketInfo : BaseStockMarket() {
+class StockMarketInfo : BaseStockMarket(), IStocks {
+
     // 登录后拉取列表会返回id
     var id: String? = null
     // 名称
@@ -27,4 +28,28 @@ class StockMarketInfo : BaseStockMarket() {
     var createTime: Long = 0
     // 长按
     var longClick: Boolean = false
+
+    override fun getIID(): String {
+        return if (id == null) "" else id!!
+    }
+
+    override fun getIType(): Int {
+        return if (type == null) 0 else type!!
+    }
+
+    override fun getIName(): String {
+        return if (name == null) "" else name!!
+    }
+
+    override fun getICode(): String {
+        return if (code == null) "" else code!!
+    }
+
+    override fun getITs(): String {
+        return if (ts == null) "" else ts!!
+    }
+
+    override fun getITsCode(): String {
+        return if (tsCode == null) "" else tsCode!!
+    }
 }

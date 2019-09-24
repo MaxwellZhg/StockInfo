@@ -35,6 +35,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     private TextView vMarketValue;
     private TextView vAvailableFunds;
     private TextView vTotalProfitLoss;
+    private TextView vTips;
 
     public SimulationTradingFundAccountView(Context context) {
         this(context, null);
@@ -61,6 +62,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         vAvailableFunds = findViewById(R.id.available_funds);
         vTotalProfitLoss = findViewById(R.id.total_profit_and_loss);
         vOrder = findViewById(R.id.order);
+        vTips = findViewById(R.id.tips);
         vBusiness.setOnClickListener(this);
         vOrder.setOnClickListener(this);
     }
@@ -79,24 +81,25 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     }
 
     public void setData(IFundAccountData data) {
+        vTips.setVisibility(GONE);
         if (!data.isCreate()) {
             inflateNotAccount();
             return;
         }
-        vTotalAssets.setText("134459329.9");
-        vMarketValue.setText("1294829.98");
-        vAvailableFunds.setText("582838");
-        vTotalProfitLoss.setText("96632");
-        float todayPL = 35283.98f;
+        vTotalAssets.setText(String.valueOf(data.getTotalAssets()));
+        vMarketValue.setText(String.valueOf(data.getMarketValue()));
+        vAvailableFunds.setText(String.valueOf(data.getAvailableFunds()));
+        vTotalProfitLoss.setText(String.valueOf(data.getTotalProfitAndLoss()));
+        float todayPL = data.getTodayProfitAndLoss();
         vTodayProfitLoss.setText(String.valueOf(todayPL));
         if (todayPL > 0) {
             vTodayProfitLossB.setTextColor(Color.parseColor("#D9001B"));
             vTodayProfitLoss.setTextColor(Color.parseColor("#D9001B"));
-            vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(0.4562f));
+            vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
         } else if (todayPL < 0) {
             vTodayProfitLossB.setTextColor(Color.GREEN);
             vTodayProfitLoss.setTextColor(Color.GREEN);
-            vTodayProfitLossB.setText("-" + new DecimalFormat("0.00%").format(0.4562f));
+            vTodayProfitLossB.setText("-" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
         } else {
             vTodayProfitLossB.setTextColor(Color.parseColor("#282828"));
             vTodayProfitLoss.setTextColor(Color.parseColor("#282828"));
@@ -113,7 +116,55 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     }
 
     public interface IFundAccountData {
+        /**
+         * 是否创建
+         *
+         * @return
+         */
         boolean isCreate();
+
+        /**
+         * 帐户总资产
+         *
+         * @return
+         */
+        float getTotalAssets();
+
+        /**
+         * 持仓市值
+         *
+         * @return
+         */
+        float getMarketValue();
+
+        /**
+         * 可用资金
+         *
+         * @return
+         */
+        float getAvailableFunds();
+
+        /**
+         * 总盈亏金额
+         *
+         * @return
+         */
+        float getTotalProfitAndLoss();
+
+        /**
+         * 当日盈亏
+         *
+         * @return
+         */
+        float getTodayProfitAndLoss();
+
+        /**
+         * 当日盈亏比例
+         *
+         * @return
+         */
+        float getTodayProfitAndLossPercentage();
+
     }
 
     public interface OnMockStockFundAccountListener {

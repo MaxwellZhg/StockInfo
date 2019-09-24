@@ -11,12 +11,12 @@ object SimulationTradeApi {
     /**
      * 查询资金账户接口
      */
-    const val FUND_ACCOUNT = "api/mock/fund_account"
+    const val FUND_ACCOUNT = "as_sims/api/fund_account/v1/get_fund_account"
 
     /**
      * 创建资金账号
      */
-    const val CREATE_FUND_ACCOUNT = "api/mock/create_fund_account"
+    const val CREATE_FUND_ACCOUNT = "as_sims/api/fund_account/v1/create_fund_account"
 
     /**
      * 修改委托订单
@@ -46,8 +46,16 @@ object SimulationTradeApi {
     /**
      * 计算交易费用
      */
-    const val FEE_COMPUTE="as_sims/api/cost/v1/fee_compute"
+    const val FEE_COMPUTE = "as_sims/api/cost/v1/fee_compute"
+    /**
+     * 持仓
+     */
+    const val GET_POSITION = "api/stock_hold/v1/hold"
 
+    /**
+     * 今日订单/历史订单
+     */
+    const val ORDER_LIST = "api/trust/v1/order/list"
     /**
      * 交易费用规则模版规则
      */

@@ -15,7 +15,7 @@ class KlinePagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentSt
     }
 
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         when (position) {
             0 -> {
                 return ChartOneDayFragment.newInstance(true)
@@ -39,7 +39,7 @@ class KlinePagerAdapter(fm: FragmentManager, titles: Array<String>) : FragmentSt
                 return ChartKLineFragment.newInstance(365, true)
             }
         }
-        return null
+        return Fragment()
     }
 
     override fun getCount(): Int {

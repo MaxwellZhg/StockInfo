@@ -2,20 +2,23 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewParent
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
+import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog
+import com.zhuorui.commonwidget.dialog.ProgressDialog
+import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
+import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
+import com.zhuorui.securities.market.model.STFundAccountData
+import com.zhuorui.securities.market.model.STOrderData
+import com.zhuorui.securities.market.model.STPositionData
 import com.zhuorui.securities.market.ui.adapter.HoldPositionsListAdapter
 import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
@@ -23,8 +26,7 @@ import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
-import kotlinx.android.synthetic.main.fragment_simulation_trading_main.top_bar
-import net.lucode.hackware.magicindicator.MagicIndicator
+import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -46,14 +48,9 @@ class SimulationTradingMainFragment :
 
     private var holdPositionsAdapter: HoldPositionsListAdapter? = null
     private var todayOrderAdapter: SimulationTradingOrderAdapter? = null
-    private var magicIndicator: MagicIndicator? = null
-    private var vHeader: View? = null
-    private var vfundAccount: SimulationTradingFundAccountView? = null
-    private var vRule: View? = null
-    private var vUserHeader: ImageView? = null
-    private var vUserName: TextView? = null
-    private var vUserNo: TextView? = null
     private var tabTitle: Array<String>? = null
+    private var mIndex: Int = 0
+    private var loading: ProgressDialog? = null
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -78,17 +75,88 @@ class SimulationTradingMainFragment :
 
     override fun onClick(p0: View?) {
         when (p0) {
-            vRule -> {
+            zr_rule -> {
                 start(SimulationTradingRuleFragment.newInstance())
             }
 
         }
     }
 
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        top_bar.setRightClickListener {
+            // 消息
+            start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索自选股
+            start(StockSearchFragment.newInstance())
+        }
+        recycler_view.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+        }
+        //解决数据加载不完的问题
+        recycler_view.isNestedScrollingEnabled = false
+        recycler_view.setHasFixedSize(true)
+        //解决数据加载完成后, 没有停留在顶部的问题
+        recycler_view.isFocusable = false
+        tabTitle = getTabTitleData()
+        zr_rule.setOnClickListener(this)
+        fund_account.setOnMockStockFundAccountListener(this)
+        magic_indicator.navigator = getNavigator()
+    }
+
+    var dialog: GetPicturesModeDialog? = null
+    var oss: OssService? = null
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
+        showUpLoading()
+        presenter?.getFundAccount()
+        onSelect(0)
+//        oss = OssService(context!!.applicationContext)
+//        dialog = context?.let { GetPicturesModeDialog(it) }
+//        dialog!!.listener = object : GetPicturesModeDialog.OnGetPicturesModeListener {
+//            /**
+//             * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）
+//             */
+//            override fun onPicturePath(path: String?) {
+//                oss?.getPutObjectObservable(path)?.subscribeOn(Schedulers.io())
+//                    ?.observeOn(AndroidSchedulers.mainThread())
+//                    ?.subscribe(Consumer {
+//
+//                    }, Consumer {
+//
+//                    })
+//            }
+//            /**
+//             * 返回图片bitmap 调用dialog的回调方法处理，此方法才会有结果返回）
+//             */
+//            override fun onPictureBitmap(bm: Bitmap?) {
+//            }
+//
+//            /**
+//             * 去拍照
+//             */
+//            override fun goCamera(toCameraRequestCode: Int?, uri: Uri?) {
+//            }
+//
+//            /**
+//             * 去相册
+//             */
+//            override fun goAlbum(toAlbumRequestCode: Int?) {
+//                GetPhotoFromAlbumUtil.goAlbum(this@SimulationTradingMainFragment, toAlbumRequestCode!!)
+//            }
+//
+//        }
+    }
+
     /**
      * 去买卖
      */
     override fun toBusiness() {
+//        dialog!!.show()
         start(SimulationTradingStocksFragment.newInstance())
     }
 
@@ -110,6 +178,7 @@ class SimulationTradingMainFragment :
      * 改单
      */
     override fun toChangeOrder(id: String) {
+        start(SimulationTradingStocksFragment.newInstance())
     }
 
     /**
@@ -128,15 +197,80 @@ class SimulationTradingMainFragment :
      * 去创建资金账号
      */
     override fun toCreateFundAccount() {
+        showUpLoading()
         presenter?.createFundAccount()
     }
 
     override fun createFundAccountSuccess() {
-        vfundAccount?.setData { true }
-        vfundAccount?.createFundAccountSuccess()
+        fund_account?.createFundAccountSuccess()
+        TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
+            .setTitleText("")
+            .setMsgText(R.string.create_fund_account_success)
+            .setConfirmText(R.string.str_understood)
+            .show()
+    }
+
+    override fun onUpData(
+        positionDatas: List<STPositionData>?,
+        orderDatas: List<STOrderData>?,
+        fundAccount: STFundAccountData
+    ) {
+        hideUpLoading()
+        val postiosAdapter = getHoldpositionsAdapter()
+        postiosAdapter.setData(positionDatas)
+        val orderAdapter = getMockStockOrderAdapter()
+        orderAdapter.clear()
+        orderAdapter.addDatas(orderDatas)
+        if (mIndex == 0) {
+            postiosAdapter.notifyDataSetChanged()
+        } else if (mIndex == 1) {
+            orderAdapter.notifyDataSetChanged()
+        }
+        notifyTitleTab()
+        fund_account?.setData(fundAccount)
+    }
+
+    override fun onGetFundAccountError(code: String?, msg: String?) {
+        hideUpLoading()
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
+            .setMsgText(msg.toString())
+            .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
+            .setCancelText(ResUtil.getString(R.string.str_back)!!)
+            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                override fun onCancel() {
+                    pop()
+                }
+
+                override fun onConfirm() {
+                    showUpLoading()
+                    presenter?.getFundAccount()
+                }
+            })
+            .show()
+    }
+
+    override fun onCreateFundAccountError(code: String, message: String?) {
+        hideUpLoading()
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
+            .setMsgText(message.toString())
+            .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
+            .setCancelText(ResUtil.getString(R.string.str_back)!!)
+            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                override fun onCancel() {
+                }
+
+                override fun onConfirm() {
+                    showUpLoading()
+                    presenter?.createFundAccount()
+                }
+            })
+            .show()
     }
 
     private fun onSelect(index: Int) {
+        mIndex = index
         when (index) {
             0 -> {
                 recycler_view.adapter = getHoldpositionsAdapter()
@@ -148,26 +282,9 @@ class SimulationTradingMainFragment :
         }
     }
 
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
-        top_bar.setRightClickListener {
-            // 消息
-            start(MessageFragment.newInstance())
-        }
-        top_bar.setRight2ClickListener {
-            // 搜索自选股
-            start(StockSearchFragment.newInstance())
-        }
-        recycler_view.layoutManager = LinearLayoutManager(context)
-        tabTitle = getTabTitleData()
-        getHeaderView()
-        onSelect(0)
-        vfundAccount?.setData { false }
-    }
-
     private fun getTabTitleData(): Array<String>? {
-        val hpNum = 0
-        val toNum = 0
+        val hpNum = getHoldpositionsAdapter().datas?.size
+        val toNum = getMockStockOrderAdapter().datas?.size
         return arrayOf(
             ResUtil.getString(R.string.str_hold_positions) + "($hpNum)",
             ResUtil.getString(R.string.str_today_orders) + "($toNum)"
@@ -176,47 +293,34 @@ class SimulationTradingMainFragment :
 
     private fun notifyTitleTab() {
         tabTitle = getTabTitleData()
-        magicIndicator?.navigator?.notifyDataSetChanged()
+        magic_indicator.navigator?.notifyDataSetChanged()
     }
 
-    fun getHoldpositionsAdapter(): HoldPositionsListAdapter {
+    private fun getHoldpositionsAdapter(): HoldPositionsListAdapter {
         if (holdPositionsAdapter == null) {
             holdPositionsAdapter = context?.let { HoldPositionsListAdapter(it) }
             holdPositionsAdapter?.listener = this
         }
-        todayOrderAdapter?.setHeaderView(null)
-        holdPositionsAdapter?.setHeaderView(getHeaderView())
         return holdPositionsAdapter!!
     }
 
-    fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
+    private fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
         if (todayOrderAdapter == null) {
             todayOrderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
             todayOrderAdapter?.listener = this
         }
-        holdPositionsAdapter?.setHeaderView(null)
-        todayOrderAdapter?.setHeaderView(getHeaderView())
         return todayOrderAdapter!!
     }
 
-    fun getHeaderView(): View {
-        if (vHeader == null) {
-            vHeader = LayoutInflater.from(context).inflate(R.layout.layout_simulation_trading_main_top, null)
-            vRule = vHeader?.findViewById(R.id.zr_rule)
-            vRule?.setOnClickListener(this)
-            vfundAccount = vHeader?.findViewById(R.id.fund_account)
-            vfundAccount?.setOnMockStockFundAccountListener(this)
-            magicIndicator = vHeader?.findViewById(R.id.magic_indicator)
-            magicIndicator?.navigator = getNavigator()
-            vUserHeader = vHeader?.findViewById(R.id.user_header)
-            vUserName = vHeader?.findViewById(R.id.user_name)
-            vUserNo = vHeader?.findViewById(R.id.zr_no)
+    private fun showUpLoading() {
+        if (loading == null) {
+            loading = context?.let { ProgressDialog(it) }
         }
-        val vp: ViewParent? = vHeader?.parent
-        if (vp != null) {
-            (vp as ViewGroup).removeView(vHeader)
-        }
-        return vHeader!!
+        loading?.show()
+    }
+
+    private fun hideUpLoading() {
+        loading?.dismiss()
     }
 
     /**
@@ -239,8 +343,8 @@ class SimulationTradingMainFragment :
                 colorTransitionPagerTitleView.textSize = 18f
                 colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
-                    magicIndicator?.onPageSelected(index)
-                    magicIndicator?.onPageScrolled(index, 0.0F, 0)
+                    magic_indicator.onPageSelected(index)
+                    magic_indicator.onPageScrolled(index, 0.0F, 0)
                     onSelect(index)
                 }
                 return colorTransitionPagerTitleView

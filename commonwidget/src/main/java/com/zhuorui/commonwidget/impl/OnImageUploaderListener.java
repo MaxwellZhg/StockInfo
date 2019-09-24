@@ -7,7 +7,7 @@ package com.zhuorui.commonwidget.impl;
  * desc   :
  */
 public interface OnImageUploaderListener {
-    void onFail(String msg);
+    void onFail(String code,String msg);
 
     void onSuccess(String url);
 }

@@ -20,6 +20,7 @@
             android:textColor="#232323"
             android:textColorHint="#616161"
             android:textSize="14sp"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
     />
 

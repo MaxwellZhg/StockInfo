@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.BR
-import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingOrdersBinding
 import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingOrdersPresenter
@@ -26,6 +26,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
+
 /**
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
@@ -34,7 +35,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class SimulationTradingOrdersFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingOrdersBinding, SimulationTradingOrdersViewModel, SimulationTradingOrdersView, SimulationTradingOrdersPresenter>(),
-    SimulationTradingOrdersView, View.OnClickListener, SimulationTradingOrderAdapter.MockStockOrderListener {
+    SimulationTradingOrdersView, View.OnClickListener {
 
     val timeFormat = "yyyy-MM-dd"
     var todayOrderAdapter: SimulationTradingOrderAdapter? = null
@@ -48,7 +49,7 @@ class SimulationTradingOrdersFragment :
     }
 
     override val layout: Int
-        get() = R.layout.fragment_simulation_trading_orders
+        get() = com.zhuorui.securities.market.R.layout.fragment_simulation_trading_orders
 
     override val viewModelId: Int
         get() = BR.viewModel
@@ -62,40 +63,49 @@ class SimulationTradingOrdersFragment :
     override val getView: SimulationTradingOrdersView
         get() = this
 
-    /**
-     * 改单
-     */
-    override fun toChangeOrder(id: String) {
-    }
-
-    /**
-     * 撤单
-     */
-    override fun toCancelOrder(id: String) {
-    }
-
-    /**
-     * 去买卖
-     */
-    override fun toBusiness(id: String) {
-        start(SimulationTradingStocksFragment.newInstance())
-    }
-
-    /**
-     * 去行情
-     */
-    override fun toQuotation(id: String) {
-    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         datePicker = context?.let { DatePickerDialog(it) }
         start_date.setOnClickListener(this)
         end_date.setOnClickListener(this)
-        tabTitle = ResUtil.getStringArray(R.array.order_screen_time)
+        tabTitle = ResUtil.getStringArray(com.zhuorui.securities.market.R.array.order_screen_time)
         magic_indicator.navigator = getNavigator()
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.adapter = getMockStockOrderAdapter()
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            //用来标记是否正在向最后一个滑动
+            var isSlidingToLast = false
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val manager = recyclerView.layoutManager as LinearLayoutManager
+                // 当不滚动时
+                if (newState === RecyclerView.SCROLL_STATE_IDLE) {
+                    //获取最后一个完全显示的ItemPosition
+                    val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
+                    val totalItemCount = manager.itemCount
+
+                    // 判断是否滚动到底部
+                    if (lastVisibleItem == totalItemCount - 1 && isSlidingToLast) {
+                        onLoadMore()
+                    }
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                isSlidingToLast = dy > 0
+            }
+        })
+    }
+
+    private fun onLoadMore() {
+        presenter?.getOrdersMore()
+    }
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
         onSelect(0)
     }
 
@@ -150,9 +160,9 @@ class SimulationTradingOrdersFragment :
     fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
         if (todayOrderAdapter == null) {
             todayOrderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
-            todayOrderAdapter?.listener = this
+            todayOrderAdapter?.canClick = false
         }
-        todayOrderAdapter?.setEmptyMassge(ResUtil.getString(R.string.str_no_record_historical_transactions)!!)
+        todayOrderAdapter?.setEmptyMassge(ResUtil.getString(com.zhuorui.securities.market.R.string.str_no_record_historical_transactions)!!)
         return todayOrderAdapter!!
     }
 
@@ -171,8 +181,10 @@ class SimulationTradingOrdersFragment :
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
-                colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.color_232323)!!
-                colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
+                colorTransitionPagerTitleView.normalColor =
+                    ResUtil.getColor(com.zhuorui.securities.market.R.color.color_232323)!!
+                colorTransitionPagerTitleView.selectedColor =
+                    ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 14f
                 colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
@@ -186,7 +198,7 @@ class SimulationTradingOrdersFragment :
             override fun getIndicator(context: Context): IPagerIndicator {
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(R.color.tab_select))
+                indicator.setColors(ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select))
                 indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
                 indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator
@@ -197,3 +209,5 @@ class SimulationTradingOrdersFragment :
 
 
 }
+
+

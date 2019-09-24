@@ -3,6 +3,7 @@ package com.zhuorui.commonwidget.dialog
 import android.content.Context
 import android.text.Spannable
 import android.text.Spanned
+import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
@@ -33,6 +34,8 @@ class ConfirmToCancelDialog(
     lateinit var tv_cancel: TextView
     @BindView(R2.id.tv_confirm)
     lateinit var tv_confirm: TextView
+    @BindView(R2.id.tv_notice)
+    lateinit var tv_title: TextView
 
     private var callBack: CallBack? = null
 
@@ -102,6 +105,12 @@ class ConfirmToCancelDialog(
 
     fun setCallBack(callBack: CallBack): ConfirmToCancelDialog {
         this.callBack = callBack
+        return this
+    }
+
+    fun setTitleText(title: String): ConfirmToCancelDialog {
+        tv_title.text = title
+        tv_title.visibility = if (TextUtils.isEmpty(title)) View.GONE else View.VISIBLE
         return this
     }
 

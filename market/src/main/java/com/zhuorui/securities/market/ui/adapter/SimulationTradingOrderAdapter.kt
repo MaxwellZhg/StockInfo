@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.model.STOrderData
 
 /**
  *    author : liuwei
@@ -20,22 +21,24 @@ import com.zhuorui.securities.market.R
  */
 class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val TYPE_HEADER = 0
-    val TYPE_TITLE = 1
-    val TYPE_EMPTY = 2
-    val TYPE_ITEM = 3
-    val context = context
-    var vEmpty: TextView? = null
-    var mEmptyMsg: String? = null
-    var types: Array<Int?> = arrayOfNulls(3)
-    val selected: HashSet<Int> = HashSet()
+    private val TYPE_HEADER = 0
+    private val TYPE_TITLE = 1
+    private val TYPE_EMPTY = 2
+    private val TYPE_ITEM = 3
+    private val context = context
+    private var vEmpty: TextView? = null
+    private var mEmptyMsg: String? = null
+    private var types: Array<Int?> = arrayOfNulls(3)
+    private val selected: HashSet<Int> = HashSet()
+    private var posOff = 0
+    var datas: MutableList<STOrderData>? = null
     var listener: MockStockOrderListener? = null
-    var posOff = 0
+    var canClick = true
 
     private var vHeader: View? = null
 
-
     init {
+        datas = mutableListOf()
         initItemViewType()
     }
 
@@ -44,7 +47,13 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         initItemViewType()
     }
 
-    fun addData() {
+    fun clear() {
+        datas?.clear()
+    }
+
+    fun addDatas(list: List<STOrderData>?) {
+        if (list != null)
+            datas?.addAll(list)
         initItemViewType()
     }
 
@@ -58,7 +67,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         if (vHeader != null) {
             types[0] = TYPE_HEADER
             types[1] = TYPE_TITLE
-            posOff = 2;
+            posOff = 2
         } else {
             types[0] = TYPE_TITLE
             types[1] = types[2]
@@ -71,7 +80,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
     }
 
     private fun getDataCount(): Int {
-        return 10
+        return datas?.size!!
     }
 
     private fun getDataPosition(position: Int): Int {
@@ -108,36 +117,41 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                             false
                         )
                     )
-                itemViewHolder.item?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    if (selected.contains(pos)) {
-                        itemViewHolder.hideBtn(pos)
-                        selected.remove(pos)
-                    } else {
-                        itemViewHolder.showBtn(pos)
-                        selected.add(pos)
+                if (canClick) {
+                    itemViewHolder.item?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        if (selected.contains(pos)) {
+                            itemViewHolder.hideBtn()
+                            selected.remove(pos)
+                            datas?.get(pos)?.selected = false
+                        } else {
+                            itemViewHolder.showBtn()
+                            selected.add(pos)
+                            datas?.get(pos)?.selected = true
+                        }
+                    }
+                    itemViewHolder.business?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toBusiness("Business:$pos")
+                    }
+                    itemViewHolder.quotation?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toQuotation("Quotation:$pos")
+                    }
+                    itemViewHolder.orderQuotation?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toQuotation("OrderQuotation$pos")
+                    }
+                    itemViewHolder.change?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toChangeOrder("change$pos")
+                    }
+                    itemViewHolder.cancel?.setOnClickListener {
+                        val pos: Int = it.tag as Int
+                        listener?.toCancelOrder("CancelOrder:$pos")
                     }
                 }
-                itemViewHolder.business?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toBusiness("Business:$pos")
-                }
-                itemViewHolder.quotation?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toQuotation("Quotation:$pos")
-                }
-                itemViewHolder.orderQuotation?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toQuotation("OrderQuotation$pos")
-                }
-                itemViewHolder.change?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toChangeOrder("change$pos")
-                }
-                itemViewHolder.cancel?.setOnClickListener {
-                    val pos: Int = it.tag as Int
-                    listener?.toCancelOrder("CancelOrder:$pos")
-                }
+                itemViewHolder.canClick = canClick
                 itemViewHolder
             }
         }
@@ -154,12 +168,11 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_ITEM) {
             val itemHolder = (holder as ItemViewHolder)
-            itemHolder.bindData(getDataPosition(position))
-            if (selected.contains(position)) {
-                itemHolder.showBtn(position)
-            } else {
-                itemHolder.hideBtn(position)
-            }
+            val dataPos = getDataPosition(position)
+            val data = datas?.get(dataPos)!!
+            if (data?.selected == null) data?.selected = selected.contains(dataPos)
+            itemHolder.bindData(dataPos, data)
+
         }
     }
 
@@ -181,9 +194,8 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         var presentPrice: TextView? = null
         var orderDate: TextView? = null
         var orderTime: TextView? = null
-        var purchaseColor: Int = Color.parseColor("#1A6ED2")
-        var sellColor: Int = Color.parseColor("#FF8E1B")
-
+        var menuType: Int = 0 //0 无菜单 1订单菜单 2购买菜单
+        var canClick: Boolean = true
 
         init {
             item = v.findViewById(R.id.item_bg)
@@ -204,65 +216,57 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             orderTime = v.findViewById(R.id.tv_order_time)
         }
 
-
-        fun bindData(position: Int) {
-            stockName?.text = "汇丰控股$position"
-            stockTsCode?.text = "0000$position.HK"
-            number?.text = "1000$position"
-            presentPrice?.text = "123$position.1$position"
-            orderDate?.text = TimeZoneUtil.currentTime("MM-dd")
-            orderTime?.text = TimeZoneUtil.currentTime("HH:mm:ss")
+        fun bindData(position: Int, data: STOrderData) {
+            stockName?.text = data.stockName
+            stockTsCode?.text = data.stockCode + "." + data.stockType
+            number?.text = data.holdStockCount.toString()
+            presentPrice?.text = data.holeCost.toString()
+            orderDate?.text = TimeZoneUtil.timeFormat(data.createDate!!, "MM-dd")
+            orderTime?.text = TimeZoneUtil.timeFormat(data.createDate!!, "HH:mm:ss")
             item?.tag = position
             business?.tag = position
             quotation?.tag = position
             orderQuotation?.tag = position
             change?.tag = position
             cancel?.tag = position
-            when (position % 5) {
-                0 -> {
-                    orderType?.text = "买入"
-                    orderType?.setTextColor(purchaseColor)
-                    orderStatus?.text = "等待成交"
-                    orderStatus?.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_history_blue_circle_small, 0, 0, 0)
+            orderType?.text = data?.trustName
+            orderType?.setTextColor(data?.trustColor!!)
+            orderStatus?.text = data?.statusName
+            orderStatus?.setCompoundDrawablesWithIntrinsicBounds(data?.statusLogo!!, 0, 0, 0)
+            if (canClick) {
+                val status = data?.status
+                menuType = if (status == 1 || status == 3) {
+                    1
+                } else if (status == 4 || status == 5 || status == 6) {
+                    2
+                } else {
+                    0
                 }
+                if (data?.selected!!) {
+                    showBtn()
+                } else {
+                    hideBtn()
+                }
+            }
+        }
+
+        fun showBtn() {
+            when (menuType) {
                 1 -> {
-                    orderType?.text = "买入"
-                    orderType?.setTextColor(purchaseColor)
-                    orderStatus?.text = "系统撤单"
-                    orderStatus?.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_warningic_red_circle, 0, 0, 0)
+                    orderBtnGroup?.visibility = View.VISIBLE
+                    businessBtnGroup?.visibility = View.GONE
                 }
                 2 -> {
-                    orderType?.text = "买入"
-                    orderType?.setTextColor(purchaseColor)
-                    orderStatus?.text = "已成交"
-                    orderStatus?.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_checklist_green_circle, 0, 0, 0)
+                    orderBtnGroup?.visibility = View.GONE
+                    businessBtnGroup?.visibility = View.VISIBLE
                 }
-                3 -> {
-                    orderType?.text = "卖出"
-                    orderType?.setTextColor(sellColor)
-                    orderStatus?.text = "已成交"
-                    orderStatus?.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_checklist_green_circle, 0, 0, 0)
-                }
-                4 -> {
-                    orderType?.text = "买入"
-                    orderType?.setTextColor(purchaseColor)
-                    orderStatus?.text = "用户撤单"
-                    orderStatus?.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_warningic_red_circle, 0, 0, 0)
+                else -> {
+                    hideBtn()
                 }
             }
         }
 
-        fun showBtn(pos: Int) {
-            if (pos % 5 == 0) {
-                orderBtnGroup?.visibility = View.VISIBLE
-                businessBtnGroup?.visibility = View.GONE
-            } else {
-                orderBtnGroup?.visibility = View.GONE
-                businessBtnGroup?.visibility = View.VISIBLE
-            }
-        }
-
-        fun hideBtn(pos: Int) {
+        fun hideBtn() {
             orderBtnGroup?.visibility = View.GONE
             businessBtnGroup?.visibility = View.GONE
         }

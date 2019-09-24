@@ -44,6 +44,14 @@ class LocalAccountConfig : AbsConfig() {
         write()
     }
 
+    /**
+     * 设置资金帐号ID
+     */
+    fun setAccountId(id:String){
+        accountInfo.accountId = id
+        write()
+    }
+
     override fun write() {
         StorageInfra.put(LocalAccountConfig::class.java.simpleName, this)
     }

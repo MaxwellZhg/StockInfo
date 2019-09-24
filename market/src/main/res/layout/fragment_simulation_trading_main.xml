@@ -19,13 +19,27 @@
                 style="@style/SimulationTradingTitleBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:zr_topbarTitle="@string/simulation_trading_stocks"
-        />
+                app:zr_topbarTitle="@string/simulation_trading_stocks"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+        <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                <include layout="@layout/layout_simulation_trading_main_top"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
 
     </LinearLayout>
 
