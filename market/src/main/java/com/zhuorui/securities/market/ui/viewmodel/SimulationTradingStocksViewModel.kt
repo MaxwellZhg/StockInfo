@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
 import com.zhuorui.securities.market.net.response.GetStockInfoResponse
 import java.math.BigDecimal
 
@@ -13,9 +14,12 @@ import java.math.BigDecimal
  *    desc   :
  */
 class SimulationTradingStocksViewModel : ViewModel() {
-    // 股票信息
+    // 股票基础信息
     val stockInfo = MutableLiveData<SearchStockInfo>()
+    // 股票价格信息
     val stockInfoData = MutableLiveData<GetStockInfoResponse.Data>()
+    // 股票交易收费规则
+    val stockFeeRules = MutableLiveData<Map<Int, GetFeeTemplateResponse.Data>>()
     // 当前价格：如13.75
     val price = MutableLiveData<BigDecimal>()
     // 跌涨价格：如-1.26、+1.68
@@ -42,5 +46,32 @@ class SimulationTradingStocksViewModel : ViewModel() {
     init {
         buyRate.value = BigDecimal.valueOf(50.00)
         sellRate.value = BigDecimal.valueOf(50.00)
+    }
+
+    fun getFee(number: BigDecimal, feeRule: GetFeeTemplateResponse.Data): BigDecimal {
+        when (feeRule.chargeMode) {
+            // 按百分比收费
+            1 -> {
+                // 计算费用
+                val fee = number.multiply(feeRule.feeRuleDto.percentage)
+                // 是否低于最低收费
+                if (feeRule.feeRuleDto.min != null && fee.compareTo(feeRule.feeRuleDto.min) == -1) {
+                    return feeRule.feeRuleDto.min
+                }
+                // 是否高于最高收费
+                else if (feeRule.feeRuleDto.max != null && fee.compareTo(feeRule.feeRuleDto.max) == 1) {
+                    return feeRule.feeRuleDto.max
+                }
+                return fee
+            }
+            // 固定收费
+            2 -> {
+                return feeRule.feeRuleDto.fixed
+            }
+            // 免费
+            else -> {
+                return BigDecimal.ZERO
+            }
+        }
     }
 }

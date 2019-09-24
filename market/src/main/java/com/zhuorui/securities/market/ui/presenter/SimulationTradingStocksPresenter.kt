@@ -65,82 +65,58 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      * 计算金额和最大可买数量
      */
     private fun calculateBuyMoney() {
-        viewModel?.buyCount?.value?.let { it1 ->
-            viewModel?.buyPrice?.value?.let { it2 ->
-                // 交易金额
-                val buyMoney = BigDecimal.valueOf(it1).multiply(it2)
-                viewModel?.buyMoney?.value = buyMoney
-                // 印花税
-                var stampTax = MathUtil.rounded(buyMoney.multiply(BigDecimal.valueOf(0.001))!!)
-                if (stampTax.compareTo(BigDecimal.ONE) == -1) {
-                    stampTax = BigDecimal.ONE
-                }
-                // 交易佣金
-                var commission = buyMoney?.multiply(BigDecimal.valueOf(0.0003))
-                // 最低佣金为3元
-                if (commission!!.toLong() < 3) {
-                    commission = BigDecimal.valueOf(3)
-                }
-                // 平台使用费
-                val platformFee = BigDecimal.valueOf(15)
-                // 交易征费
-                var tradingRequisitionFee = buyMoney.multiply(BigDecimal.valueOf(0.000027))!!
-                // 最低交易征费为0.01元
-                val minTradingRequisitionFee = BigDecimal.valueOf(0.01)
-                // -1表示小于 0表示等于 1表示大于
-                if (tradingRequisitionFee.compareTo(minTradingRequisitionFee) == -1) {
-                    tradingRequisitionFee = minTradingRequisitionFee
-                }
-                // 交易系统使用费
-                val tradingSystemFee = BigDecimal.valueOf(0.5)
-                // 交易费
-                var tradingFee = buyMoney.multiply(BigDecimal.valueOf(0.00005))!!
-                // 最低交易费为0.01元
-                val minTradingFee = BigDecimal.valueOf(0.01)
-                // -1表示小于 0表示等于 1表示大于
-                if (tradingFee.compareTo(minTradingFee) == -1) {
-                    tradingFee = minTradingFee
-                }
-                // 中央结算系统交收费
-                var systemPaysFee = buyMoney.multiply(BigDecimal.valueOf(0.00002))!!
-                // 中央结算系统交收费最低为2元，最高为100元
-                if (systemPaysFee.toLong() < 2) {
-                    systemPaysFee = BigDecimal.valueOf(2)
-                } else if (systemPaysFee.toLong() >= 100) {
-                    systemPaysFee = BigDecimal.valueOf(100)
-                }
-                // 一手价格
-                val buyPrice = viewModel?.buyPrice?.value
-                // 一手股数
-                val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
-                val accountMoney = 1000000.00
-                var maxBuyCount = (accountMoney / buyPrice!!.toDouble() / perShareNumber!!).toLong()
-                // 二、判断可用资金是否够交易费用 + 手续费
-                while (true) {
-                    if (
-                        accountMoney
-                        - maxBuyCount * buyPrice.toDouble() * perShareNumber
-                        - commission!!.toDouble()
-                        - platformFee.toInt()
-                        - stampTax.toDouble()
-                        - tradingRequisitionFee.toDouble()
-                        - tradingSystemFee.toDouble()
-                        - tradingFee.toDouble()
-                        - systemPaysFee.toDouble()
-                        >= 0
-                    ) {
-                        break
+        viewModel?.stockFeeRules?.value?.let { stockFeeRules ->
+            viewModel?.buyCount?.value?.let { buyCount ->
+                viewModel?.buyPrice?.value?.let { buyPrice ->
+                    // 交易金额
+                    val buyMoney = BigDecimal.valueOf(buyCount).multiply(buyPrice)
+                    viewModel?.buyMoney?.value = buyMoney
+                    // 印花税
+                    val stampTax = viewModel?.getFee(buyMoney, stockFeeRules.getValue(5))
+                    // 交易佣金
+                    val commission = viewModel?.getFee(buyMoney, stockFeeRules.getValue(1))
+                    // 平台使用费
+                    val platformFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(2))
+                    // 交易征费
+                    val tradingRequisitionFee =
+                        viewModel?.getFee(buyMoney, stockFeeRules.getValue(7))
+                    // 交易系统使用费
+                    val tradingSystemFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(3))
+                    // 交易费
+                    val tradingFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(6))
+                    // 中央结算系统交收费
+                    val systemPaysFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(4))
+                    // 一手股数
+                    val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
+                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
+                    val accountMoney = 1000000.00
+                    var maxBuyCount = (accountMoney / buyPrice!!.toDouble() / perShareNumber!!).toLong()
+                    // 二、判断可用资金是否够交易费用 + 手续费
+                    while (true) {
+                        if (
+                            accountMoney
+                            - maxBuyCount * buyPrice.toDouble() * perShareNumber
+                            - commission!!.toDouble()
+                            - platformFee!!.toDouble()
+                            - stampTax!!.toDouble()
+                            - tradingRequisitionFee!!.toDouble()
+                            - tradingSystemFee!!.toDouble()
+                            - tradingFee!!.toDouble()
+                            - systemPaysFee!!.toDouble()
+                            >= 0
+                        ) {
+                            break
+                        }
+                        maxBuyCount -= 1
                     }
-                    maxBuyCount -= 1
-                }
 
-                maxBuyCount *= perShareNumber
-                viewModel?.maxBuyCount?.value = maxBuyCount
-                viewModel?.enableBuy?.value = it1 in 1..maxBuyCount
-                // 更新界面最大可买数量
-                view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
+                    maxBuyCount *= perShareNumber
+                    viewModel?.maxBuyCount?.value = maxBuyCount
+                    viewModel?.enableBuy?.value = buyCount in 1..maxBuyCount
+                    // 更新界面最大可买数量
+                    view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
+                }
             }
         }
     }
@@ -229,13 +205,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         stockTopicPrice = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
         stockTopicTrans = StockTopic(StockTopicDataTypeEnum.trans, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
         SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
-        // 获取当支股票信息
-        val getStockInfoRequest =
-            GetStockInfoRequest(stockInfo.ts!!, stockInfo.code!!, transactions.createTransaction())
-        Cache[ISimulationTradeNet::class.java]?.getStockInfo(getStockInfoRequest)
-            ?.enqueue(Network.IHCallBack<GetStockInfoResponse>(getStockInfoRequest))
         // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股） TODO accountId暂时写1
-        val getFeeTemplateRequest = GetFeeTemplateRequest("1", "1", transactions.createTransaction())
+        val getFeeTemplateRequest = GetFeeTemplateRequest("1", "1", 1, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.feeTemplate(getFeeTemplateRequest)
             ?.enqueue(Network.IHCallBack<GetFeeTemplateResponse>(getFeeTemplateRequest))
     }
@@ -306,6 +277,21 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
         viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.realPrice)
         viewModel?.buyCount?.value = stockInfoData.perShareNumber.toLong()
+    }
+
+    /**
+     * 返回股票计算交易费用规则
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onGetFeeTemplateResponse(response: GetFeeTemplateResponse) {
+        viewModel?.stockFeeRules?.value = response.data
+
+        // 获取当支股票信息
+        val stockInfo = viewModel?.stockInfo?.value
+        val getStockInfoRequest =
+            GetStockInfoRequest(stockInfo?.ts!!, stockInfo.code!!, transactions.createTransaction())
+        Cache[ISimulationTradeNet::class.java]?.getStockInfo(getStockInfoRequest)
+            ?.enqueue(Network.IHCallBack<GetStockInfoResponse>(getStockInfoRequest))
     }
 
     override fun destroy() {
