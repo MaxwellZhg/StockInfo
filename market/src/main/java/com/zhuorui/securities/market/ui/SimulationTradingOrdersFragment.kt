@@ -12,6 +12,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingOrdersBinding
+import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingOrdersPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingOrdersView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingOrdersViewModel

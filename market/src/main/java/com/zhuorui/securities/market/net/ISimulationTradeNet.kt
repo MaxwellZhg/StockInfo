@@ -6,6 +6,12 @@ import com.zhuorui.securities.market.net.api.SimulationTradeApi
 import com.zhuorui.securities.market.net.request.*
 import com.zhuorui.securities.market.net.response.*
 import io.reactivex.Observable
+import com.zhuorui.securities.market.net.request.FeeComputeRequest
+import com.zhuorui.securities.market.net.request.GetFeeTemplateRequest
+import com.zhuorui.securities.market.net.request.GetStockInfoRequest
+import com.zhuorui.securities.market.net.request.UpdateStockDataRequest
+import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
+import com.zhuorui.securities.market.net.response.GetStockInfoResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -45,5 +51,6 @@ interface ISimulationTradeNet {
     @POST(SimulationTradeApi.CANCEL_TRUST_ORDER)
     fun cancelTrustOrder(@Body request: BaseRequest): Call<BaseResponse>
 
-
+    @POST(SimulationTradeApi.FEE_TEMPLATE)
+    fun feeTemplate(@Body request: GetFeeTemplateRequest): Call<GetFeeTemplateResponse>
 }

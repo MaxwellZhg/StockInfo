@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:orientation="vertical"
+                                                   android:paddingBottom="25dp"
+                                                   android:background="@color/color_211F2A"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content">
+    <TextView app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+             android:background="@color/color_2D2C35"
+              android:text="@string/stock_search_topic"
+              android:id="@+id/tv_stock_tips"
+              android:textSize="17sp"
+              android:paddingLeft="13dp"
+              android:paddingTop="12dp"
+              android:paddingBottom="13dp"
+              android:textColor="@color/color_FFFFFFFF"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"/>
+    <View android:layout_width="match_parent"
+          android:id="@+id/view_cent"
+          app:layout_constraintTop_toBottomOf="@+id/tv_stock_tips"
+          android:background="@color/color_191821"
+          android:layout_height="1dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+            app:layout_constraintTop_toBottomOf="@+id/view_cent"
+            android:id="@+id/rv_stock_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>

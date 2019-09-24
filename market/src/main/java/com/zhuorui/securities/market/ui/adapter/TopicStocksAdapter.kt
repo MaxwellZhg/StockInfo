@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui
+package com.zhuorui.securities.market.ui.adapter
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -16,7 +16,6 @@ import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.util.MathUtil
-import java.math.RoundingMode
 
 /**
  * Created by Maxwell.

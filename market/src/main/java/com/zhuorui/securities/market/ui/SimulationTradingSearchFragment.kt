@@ -21,6 +21,7 @@ import com.zhuorui.securities.market.databinding.FragmentSimulationTradingSearch
 import com.zhuorui.securities.market.model.IStocks
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
+import com.zhuorui.securities.market.ui.adapter.SimulationTradingSearchAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingSearchPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingSearchView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingSearchViewModel

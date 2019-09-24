@@ -1,10 +1,11 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.market.event.SearchAllEvent
 import com.zhuorui.securities.market.model.SearchDeafaultData
-import com.zhuorui.securities.market.ui.SearchInfoAdapter
+import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
 import me.jessyan.autosize.utils.LogUtils
@@ -47,11 +48,7 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
     }
 
     fun initViewPager(str:String){
-        viewModel?.fragments.let {
-            if (it != null) {
-                view?.initViewPager(it,str)
-            }
-        }
+        RxBus.getDefault().post(SearchAllEvent(str))
     }
 
 

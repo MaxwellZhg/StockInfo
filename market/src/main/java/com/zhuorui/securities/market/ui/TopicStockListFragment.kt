@@ -17,6 +17,7 @@ import com.zhuorui.securities.market.custom.StockPopupWindow
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
+import com.zhuorui.securities.market.ui.adapter.TopicStocksAdapter
 import com.zhuorui.securities.market.ui.detail.StockDetailLandActivity
 import com.zhuorui.securities.market.ui.presenter.TopicStockListPresenter
 import com.zhuorui.securities.market.ui.view.TopicStockListView

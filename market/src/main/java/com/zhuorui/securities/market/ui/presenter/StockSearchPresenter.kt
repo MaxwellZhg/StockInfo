@@ -15,7 +15,7 @@ import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
-import com.zhuorui.securities.market.ui.SearchStocksAdapter
+import com.zhuorui.securities.market.ui.adapter.SearchStocksAdapter
 import com.zhuorui.securities.market.ui.view.StockSearchView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel
 import me.jessyan.autosize.utils.LogUtils

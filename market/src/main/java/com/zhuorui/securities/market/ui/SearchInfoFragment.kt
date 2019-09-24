@@ -10,18 +10,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
+import com.zhuorui.securities.market.model.StockPageInfo
+import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.SearchInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
 import kotlinx.android.synthetic.main.fragment_search_info.*
 import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
-import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -29,7 +30,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
-import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Maxwell.
@@ -38,9 +39,10 @@ import java.util.*
  * Desc:
  */
 class SearchInfoFragment :
-    AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),SearchInfoView,View.OnClickListener,TextWatcher{
-    private var mfragment: ArrayList<SearchInfoViewModel.StockPageInfo>? = null
-    private  var adapter:SearchInfoAdapter?=null
+    AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
+    SearchInfoView, View.OnClickListener, TextWatcher {
+    var mfragment=ArrayList<StockPageInfo>()
+    private var adapter: SearchInfoAdapter? = null
     override val layout: Int
         get() = R.layout.fragment_search_info
     override val viewModelId: Int
@@ -48,7 +50,7 @@ class SearchInfoFragment :
     override val createPresenter: SearchInfoPresenter
         get() = SearchInfoPresenter(requireContext())
     override val createViewModel: SearchInfoViewModel?
-        get() =ViewModelProviders.of(this).get(SearchInfoViewModel::class.java)
+        get() = ViewModelProviders.of(this).get(SearchInfoViewModel::class.java)
     override val getView: SearchInfoView
         get() = this
     private var handler = Handler()
@@ -56,7 +58,8 @@ class SearchInfoFragment :
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
-    companion object{
+
+    companion object {
         fun newInstance(): SearchInfoFragment {
             return SearchInfoFragment()
         }
@@ -64,26 +67,33 @@ class SearchInfoFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        adapter=presenter?.getAdapter()
-        search_info.adapter=adapter
+        adapter = presenter?.getAdapter()
+        search_info.adapter = adapter
         presenter?.getData()
+        mfragment.add(StockPageInfo(ResUtil.getString(R.string.stock_search_all), SearchStokcInfoEnum.All))
+        mfragment.add(StockPageInfo(ResUtil.getString(R.string.stock_search_topic), SearchStokcInfoEnum.Stock))
+        mfragment.add(StockPageInfo(ResUtil.getString(R.string.stock_search_info), SearchStokcInfoEnum.Info))
+        mfragment?.let { initViewPager(it) }
         tv_cancle.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
     }
+
     override fun onClick(p0: View?) {
-      when(p0?.id){
-          R.id.tv_cancle->{
-              pop()
-          }
-      }
+        when (p0?.id) {
+            R.id.tv_cancle -> {
+                pop()
+            }
+        }
     }
+
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
-                    handler.removeCallbacks(getTopicStockDataRunnable)
-                    getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
-                    handler.postDelayed(getTopicStockDataRunnable, 500)
+                    //  handler.removeCallbacks(getTopicStockDataRunnable)
+                    // getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
+                    //  handler.postDelayed(getTopicStockDataRunnable, 500)
+                    presenter?.initViewPager(it)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
                 } else {
@@ -108,14 +118,13 @@ class SearchInfoFragment :
 
     private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
         override fun run() {
-              presenter?.initViewPager(keyWord)
+            presenter?.initViewPager(keyWord)
         }
     }
 
-    inner class ViewPagerAdapter(fm: FragmentManager,str:String) : FragmentPagerAdapter(fm) {
-        var str=str
+    inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): SearchResultInfoFragment {
-            return SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type,str)
+            return SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
         }
 
         override fun getCount(): Int {
@@ -126,59 +135,62 @@ class SearchInfoFragment :
             return mfragment?.get(position)?.title
         }
     }
-    override fun initViewPager(fragments: ArrayList<SearchInfoViewModel.StockPageInfo>, str: String) {
-        mfragment = fragments
-        // 设置viewpager指示器
-        val commonNavigator = CommonNavigator(requireContext())
-        commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
-            override fun getCount(): Int {
-                return mfragment!!.size
-            }
+   private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
+        if (viewpager.adapter == null) {
+            mfragment = fragments
+            // 设置viewpager指示器
+            val commonNavigator = CommonNavigator(requireContext())
+            commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
-            override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
-                colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.un_tab_select)!!
-                colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
-                colorTransitionPagerTitleView.text = mfragment!![index].title
-                colorTransitionPagerTitleView.textSize = 18f
-                colorTransitionPagerTitleView.setOnClickListener {
-                    viewpager.currentItem = index
+                override fun getCount(): Int {
+                    return mfragment!!.size
                 }
-                return colorTransitionPagerTitleView
+
+                override fun getTitleView(context: Context, index: Int): IPagerTitleView {
+                    val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
+                    colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.un_tab_select)!!
+                    colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
+                    colorTransitionPagerTitleView.text = mfragment!![index].title
+                    colorTransitionPagerTitleView.textSize = 18f
+                    colorTransitionPagerTitleView.setOnClickListener {
+                        viewpager.currentItem = index
+                    }
+                    return colorTransitionPagerTitleView
+                }
+
+                override fun getIndicator(context: Context): IPagerIndicator {
+                    val indicator = LinePagerIndicator(context)
+                    indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
+                    indicator.setColors(ResUtil.getColor(R.color.tab_select))
+                    indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
+                    indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
+                    return indicator
+                }
             }
 
-            override fun getIndicator(context: Context): IPagerIndicator {
-                val indicator = LinePagerIndicator(context)
-                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(R.color.tab_select))
-                indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
-                indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
-                return indicator
-            }
+            // 设置viewpager页面缓存数量
+            viewpager.offscreenPageLimit = 3
+            // 设置viewpager适配器
+            viewpager.adapter = childFragmentManager?.let { ViewPagerAdapter(it) }
+            viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+                    magic_indicator.onPageScrollStateChanged(state)
+                }
+
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                    magic_indicator.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                }
+
+                override fun onPageSelected(position: Int) {
+                    magic_indicator.onPageSelected(position)
+                }
+            })
+
+            // 指示器绑定viewpager
+            magic_indicator.navigator = commonNavigator
+            ViewPagerHelper.bind(magic_indicator, viewpager)
         }
-
-        // 设置viewpager页面缓存数量
-        viewpager.offscreenPageLimit = mfragment!!.size
-        // 设置viewpager适配器
-        viewpager.adapter = childFragmentManager?.let { ViewPagerAdapter(it,str) }
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-                magic_indicator.onPageScrollStateChanged(state)
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                magic_indicator.onPageScrolled(position, positionOffset, positionOffsetPixels)
-            }
-
-            override fun onPageSelected(position: Int) {
-                magic_indicator.onPageSelected(position)
-            }
-        })
-
-        // 指示器绑定viewpager
-        magic_indicator.navigator = commonNavigator
-        ViewPagerHelper.bind(magic_indicator, viewpager)
     }
 
 

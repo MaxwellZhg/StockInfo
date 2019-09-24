@@ -112,4 +112,7 @@
     <string name="create_fund_account_success">恭喜您已获得100万港币模拟资金开始模拟炒股吧！</string>
     <string name="str_understood">已了解</string>
     <string name="getdata_err">获取数据失败</string>
+    <string name="stock_search_info"  tools:ignore="MissingTranslation">咨讯</string>
+    <string name="see_more_stock" tools:ignore="MissingTranslation">查看更多股票</string>
+    <string name="see_more_infomation" tools:ignore="MissingTranslation">查看更多相关资讯</string>
 </resources>

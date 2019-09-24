@@ -27,6 +27,7 @@ import com.zhuorui.securities.market.util.MathUtil
 import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 import me.yokeyword.fragmentation.ISupportFragment
+import me.yokeyword.fragmentation.SupportHelper
 import java.math.BigDecimal
 
 /**
@@ -188,6 +189,16 @@ class SimulationTradingStocksFragment :
             )
             tv_max_buy_num.text = spannableString
         }
+    }
+
+    override fun clearBuyCountFocus() {
+        tv_buy_count.clearFocus()
+        SupportHelper.hideSoftInput(tv_buy_count)
+    }
+
+    override fun clearBuyPriceFocus() {
+        tv_buy_price.clearFocus()
+        SupportHelper.hideSoftInput(tv_buy_price)
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {

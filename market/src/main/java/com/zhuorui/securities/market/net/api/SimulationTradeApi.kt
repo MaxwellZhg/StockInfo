@@ -47,7 +47,6 @@ object SimulationTradeApi {
      * 计算交易费用
      */
     const val FEE_COMPUTE = "as_sims/api/fee/v1/fee_compute"
-
     /**
      * 持仓
      */
@@ -57,5 +56,8 @@ object SimulationTradeApi {
      * 今日订单/历史订单
      */
     const val ORDER_LIST = "api/trust/v1/order/list"
-
+    /**
+     * 交易费用规则模版规则
+     */
+    const val FEE_TEMPLATE = "as_sims/api/cost/v1/fee_template"
 }

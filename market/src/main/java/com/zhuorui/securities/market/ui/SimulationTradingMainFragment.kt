@@ -1,8 +1,6 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
@@ -13,7 +11,6 @@ import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -22,13 +19,12 @@ import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBi
 import com.zhuorui.securities.market.model.STFundAccountData
 import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.STPositionData
+import com.zhuorui.securities.market.ui.adapter.HoldPositionsListAdapter
+import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
 import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
