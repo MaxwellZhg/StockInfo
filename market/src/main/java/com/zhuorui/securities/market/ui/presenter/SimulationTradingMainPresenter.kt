@@ -8,6 +8,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
@@ -92,7 +93,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
             ?.flatMap { t ->
                 if (t.isSuccess()) {
-                    LocalAccountConfig.read().setAccountId("id")
                     val request = FundAccountRequest(1, transactions.createTransaction())
                     Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
                 } else {
@@ -106,6 +106,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 if (it.isSuccess()) {
                     accountId = it.data.id!!
                     availableFunds = it.data.availableAmount!!
+                    LocalAccountConfig.read().setAccountId(accountId!!)
                     view?.createFundAccountSuccess()
                     view?.onUpData(null, null, STFundAccountData(accountId, availableFunds.toFloat()))
                 } else {
@@ -131,8 +132,15 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      */
     private fun getTodayOrders() {
         val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val todayTime = TimeZoneUtil.currentTime("yyyy-MM-dd")
         val request =
-            OrderListRequest(accountInfo.accountId!!, "", "", accountInfo.token!!, transactions.createTransaction())
+            OrderListRequest(
+                accountInfo.accountId!!,
+                todayTime,
+                todayTime,
+                accountInfo.token!!,
+                transactions.createTransaction()
+            )
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
     }
