@@ -1,14 +1,11 @@
 package com.zhuorui.securities.market.net
 
+import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.market.net.api.SimulationTradeApi
 import com.zhuorui.securities.market.net.request.*
 import com.zhuorui.securities.market.net.response.*
 import io.reactivex.Observable
-import com.zhuorui.securities.market.net.request.*
-import com.zhuorui.securities.market.net.response.FeeComputeResponse
-import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
-import com.zhuorui.securities.market.net.response.GetStockInfoResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

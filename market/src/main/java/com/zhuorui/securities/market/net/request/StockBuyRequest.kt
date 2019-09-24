@@ -18,4 +18,8 @@ class StockBuyRequest(
     val commissionFee: BigDecimal,// 佣金（包含各种收费）
     val totalFee: BigDecimal,// 股票总价格和佣金之和
     transaction: String
-) : BaseRequest(transaction)
+) : BaseRequest(transaction) {
+    init {
+        generateSign()
+    }
+}
