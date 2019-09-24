@@ -11,12 +11,12 @@ object SimulationTradeApi {
     /**
      * 查询资金账户接口
      */
-    const val FUND_ACCOUNT = "api/fund_account/v1/get_fund_account"
+    const val FUND_ACCOUNT = "as_sims/api/fund_account/v1/get_fund_account"
 
     /**
      * 创建资金账号
      */
-    const val CREATE_FUND_ACCOUNT = "api/mock/create_fund_account"
+    const val CREATE_FUND_ACCOUNT = "as_sims/api/fund_account/v1/create_fund_account"
 
     /**
      * 修改委托订单
@@ -51,11 +51,11 @@ object SimulationTradeApi {
     /**
      * 持仓
      */
-    const val GET_POSITION = "api/stock_hold/v1/get_position"
+    const val GET_POSITION = "api/stock_hold/v1/hold"
 
     /**
      * 今日订单/历史订单
      */
-    const val order_list = "api/trust_record/v1/order/list"
+    const val ORDER_LIST = "api/trust/v1/order/list"
 
 }

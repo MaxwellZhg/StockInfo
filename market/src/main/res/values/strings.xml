@@ -106,4 +106,10 @@
     <string name="stock_search_all"  tools:ignore="MissingTranslation">综合</string>
     <string name="stock_search_topic"  tools:ignore="MissingTranslation">股票</string>
     <string name="stock_search_info"  tools:ignore="MissingTranslation">咨询</string>
+    <string name="str_tips">提示</string>
+    <string name="str_retry">重试</string>
+    <string name="str_back">返回</string>
+    <string name="create_fund_account_success">恭喜您已获得100万港币模拟资金开始模拟炒股吧！</string>
+    <string name="str_understood">已了解</string>
+    <string name="getdata_err">获取数据失败</string>
 </resources>

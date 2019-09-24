@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.model
 
+import android.text.TextUtils
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 
 /**
@@ -8,14 +9,16 @@ import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountV
  *    date   : 2019-09-18 18:12
  *    desc   : 资金帐户数据
  */
-class STFundAccountData : SimulationTradingFundAccountView.IFundAccountData {
+class STFundAccountData(accountId: String?, availableFunds: Float?) :
+    SimulationTradingFundAccountView.IFundAccountData {
 
     var totalAssets: Float? = null
     var marketValue: Float? = null
-    var availableFunds: Float? = null
+    var availableFunds: Float? = availableFunds
     var totalProfitAndLoss: Float? = null
     var todayProfitAndLoss: Float? = null
     var todayProfitAndLossPercentage: Float? = null
+    var accountId: String? = null
 
     /**
      * 是否创建
@@ -23,7 +26,7 @@ class STFundAccountData : SimulationTradingFundAccountView.IFundAccountData {
      * @return
      */
     override fun isCreate(): Boolean {
-        return false
+        return !TextUtils.isEmpty(accountId)
     }
 
     /**

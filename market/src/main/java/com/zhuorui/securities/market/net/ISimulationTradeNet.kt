@@ -33,10 +33,10 @@ interface ISimulationTradeNet {
     @POST(SimulationTradeApi.FEE_COMPUTE)
     fun feeCompute(@Body request: FeeComputeRequest): Call<BaseResponse>
 
-    @POST(SimulationTradeApi.CREATE_FUND_ACCOUNT)
+    @POST(SimulationTradeApi.GET_POSITION)
     fun getPosition(@Body request: GetPositionRequest): Call<GetPositionResponse>
 
-    @POST(SimulationTradeApi.CREATE_FUND_ACCOUNT)
+    @POST(SimulationTradeApi.ORDER_LIST)
     fun orderList(@Body request: OrderListRequest): Call<OrderListResponse>
 
     @POST(SimulationTradeApi.STOCKS_INFO)

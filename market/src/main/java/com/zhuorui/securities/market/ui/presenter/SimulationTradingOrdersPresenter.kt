@@ -13,6 +13,7 @@ import com.zhuorui.securities.market.net.response.GetPositionResponse
 import com.zhuorui.securities.market.net.response.OrderListResponse
 import com.zhuorui.securities.market.ui.view.SimulationTradingOrdersView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingOrdersViewModel
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 
 /**
  *    author : liuwei
@@ -38,7 +39,8 @@ class SimulationTradingOrdersPresenter :
     }
 
     private fun getOrders(sDate: String, eDate: String, page: Int) {
-        val request = OrderListRequest("", sDate, eDate, "", page, 20, transactions.createTransaction())
+        val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val request = OrderListRequest(accountInfo.accountId!!, sDate, eDate, accountInfo.token!!, page, 20, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
     }

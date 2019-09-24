@@ -1,12 +1,14 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import com.zhuorui.commonwidget.dialog.ProgressDialog
+import android.text.TextUtils
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
 import com.zhuorui.securities.market.net.request.FundAccountRequest
@@ -18,6 +20,7 @@ import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
 import com.zhuorui.securities.market.util.MathUtil
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -48,30 +51,33 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     private val stocksInfo: HashMap<String, PushStockPriceData> = HashMap()
     private var availableFunds: BigDecimal = BigDecimal(0)
     private var count: Int = 0
-
+    private var accountId: String? = null
 
 
     /**
      * 查询资金账户接口
      */
     fun getFundAccount() {
-        val request = FundAccountRequest("", transactions.createTransaction())
+        val request = FundAccountRequest(1, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
             ?.subscribeOn(Schedulers.io())?.observeOn(
                 AndroidSchedulers.mainThread()
             )
             ?.subscribe(io.reactivex.functions.Consumer {
-                if (it.isSuccess()) {
-                    if (true) {
+                when {
+                    it.isSuccess() -> {
+                        accountId = it.data.id!!
+                        availableFunds = it.data.availableAmount!!
                         count = 0
                         getPosition()
                         getTodayOrders()
-                    } else {
-                        val fundAccount = STFundAccountData()
-                        view?.onUpData(null, null, fundAccount)
                     }
-                } else {
-                    view?.onGetFundAccountError(it.code, it.msg)
+                    TextUtils.equals("060003", it.code) -> {
+                        view?.onUpData(null, null, STFundAccountData(null, 0f))
+                    }
+                    else -> {
+                        view?.onGetFundAccountError(it.code, it.msg)
+                    }
                 }
             }, io.reactivex.functions.Consumer {
                 view?.onGetFundAccountError("-1", it.message)
@@ -82,11 +88,12 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 创建资金账号
      */
     fun createFundAccount() {
-        val request = FundAccountRequest("", transactions.createTransaction())
+        val request = FundAccountRequest(1, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
             ?.flatMap { t ->
                 if (t.isSuccess()) {
-                    val request = FundAccountRequest("", transactions.createTransaction())
+                    LocalAccountConfig.read().setAccountId("id")
+                    val request = FundAccountRequest(1, transactions.createTransaction())
                     Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
                 } else {
                     Observable.create(ObservableOnSubscribe<FundAccountResponse> { emitter ->
@@ -97,9 +104,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(io.reactivex.functions.Consumer {
                 if (it.isSuccess()) {
+                    accountId = it.data.id!!
+                    availableFunds = it.data.availableAmount!!
                     view?.createFundAccountSuccess()
-                    val fundAccount = STFundAccountData()
-                    view?.onUpData(null, null, fundAccount)
+                    view?.onUpData(null, null, STFundAccountData(accountId, availableFunds.toFloat()))
                 } else {
                     view?.onGetFundAccountError(it.code, it.msg)
                 }
@@ -112,7 +120,8 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 获取持仓
      */
     private fun getPosition() {
-        val request = GetPositionRequest("", "", transactions.createTransaction())
+        val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val request = GetPositionRequest(accountInfo.token!!, accountInfo.accountId!!, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getPosition(request)
             ?.enqueue(Network.IHCallBack<GetPositionResponse>(request))
     }
@@ -121,7 +130,9 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 获取今日订单
      */
     private fun getTodayOrders() {
-        val request = OrderListRequest("", "", "", "", transactions.createTransaction())
+        val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val request =
+            OrderListRequest(accountInfo.accountId!!, "", "", accountInfo.token!!, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
     }
@@ -144,8 +155,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         super.onErrorResponse(response)
         if (response.request is GetPositionRequest) {
             count++
+            positionDatas = mutableListOf()
         } else if (response.request is OrderListRequest) {
             count++
+            orderDatas = mutableListOf()
         }
         topicPrice()
     }
@@ -155,7 +168,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      */
     private fun topicPrice() {
         if (count >= 2 && (positionDatas == null || orderDatas == null)) {
-            view?.onGetFundAccountError("-1", "获取数据失败")
+            view?.onGetFundAccountError("-1", ResUtil.getString(R.string.getdata_err))
             return
         } else if (count < 2) {
             return
@@ -176,7 +189,11 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 list.add(StockTopic(StockTopicDataTypeEnum.price, data.stockType!!, data.stockCode!!, 2))
             }
         }
-        SocketClient.getInstance().bindTopic(*list.toTypedArray())
+        if (list.isNullOrEmpty()) {
+            view?.onUpData(null, null, STFundAccountData(accountId, availableFunds.toFloat()))
+        } else {
+            SocketClient.getInstance().bindTopic(*list.toTypedArray())
+        }
     }
 
     /**
@@ -255,9 +272,8 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
         val todayProfitAndLossPercentage =
             MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
-        val fundAccount = STFundAccountData()
+        val fundAccount = STFundAccountData(accountId, availableFunds.toFloat())
         fundAccount.marketValue = totalMarketValue.toFloat()
-        fundAccount.availableFunds = availableFunds.toFloat()
         fundAccount.totalAssets = totalAssets.toFloat()
         fundAccount.totalProfitAndLoss = totalProfitAndLoss.toFloat()
         fundAccount.todayProfitAndLoss = todayProfitAndLoss.toFloat()

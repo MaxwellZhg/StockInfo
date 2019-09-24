@@ -117,10 +117,10 @@ class SimulationTradingMainFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
-//        showUpLoading()
-//        presenter?.getFundAccount()
-        onSelect(0)
-        fund_account?.setData(STFundAccountData())
+        showUpLoading()
+        presenter?.getFundAccount()
+//        onSelect(0)
+//        fund_account?.setData(STFundAccountData())
     }
 
     /**
@@ -175,8 +175,8 @@ class SimulationTradingMainFragment :
         fund_account?.createFundAccountSuccess()
         TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
             .setTitleText("")
-            .setMsgText("恭喜您已获得100万港币模拟资金开始模拟炒股吧！")
-            .setConfirmText("已了解")
+            .setMsgText(R.string.create_fund_account_success)
+            .setConfirmText(R.string.str_understood)
             .show()
     }
 
@@ -202,11 +202,11 @@ class SimulationTradingMainFragment :
 
     override fun onGetFundAccountError(code: String?, msg: String?) {
         hideUpLoading()
-        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, false)
-            //  .setTitleText("提示")
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(msg.toString())
-            .setConfirmText("重试")
-            .setCancelText("返回")
+            .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
+            .setCancelText(ResUtil.getString(R.string.str_back)!!)
             .setCallBack(object : ConfirmToCancelDialog.CallBack {
                 override fun onCancel() {
                     pop()
@@ -222,11 +222,11 @@ class SimulationTradingMainFragment :
 
     override fun onCreateFundAccountError(code: String, message: String?) {
         hideUpLoading()
-        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, false)
-            //.setTitleText("提示")
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(message.toString())
-            .setConfirmText("重试")
-            .setCancelText("返回")
+            .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
+            .setCancelText(ResUtil.getString(R.string.str_back)!!)
             .setCallBack(object : ConfirmToCancelDialog.CallBack {
                 override fun onCancel() {
                 }
