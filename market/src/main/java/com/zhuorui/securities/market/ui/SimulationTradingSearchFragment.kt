@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.reflect.TypeToken
 import com.zhuorui.commonwidget.ZRSearchView
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -18,6 +17,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingSearchBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.ui.adapter.SimulationTradingSearchAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingSearchPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingSearchView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingSearchViewModel

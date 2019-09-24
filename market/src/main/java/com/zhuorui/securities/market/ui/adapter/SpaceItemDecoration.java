@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui;
+package com.zhuorui.securities.market.ui.adapter;
 
 import android.graphics.Rect;
 import android.view.View;

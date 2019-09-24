@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui
+package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -11,19 +11,19 @@ import com.zhuorui.securities.market.R
  * Date: 2019/9/20
  * Desc:
  */
-class SearchHistoryAdapter :BaseListAdapter<Int>(){
+class HotSearchAdapter :BaseListAdapter<Int>(){
     override fun getLayout(viewType: Int): Int {
-        return R.layout.item_serach_history_info
+        return R.layout.item_search_hot_stock
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(v, needClick = true, needLongClick = false)
+      return ViewHolder(v,needClick = true,needLongClick = false)
     }
-
-    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) : ListItemViewHolder<Int>(v, needClick, needLongClick) {
+    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean):ListItemViewHolder<Int>(v, needClick, needLongClick){
         override fun bind(item: Int?, position: Int) {
 
         }
 
     }
+
 }
