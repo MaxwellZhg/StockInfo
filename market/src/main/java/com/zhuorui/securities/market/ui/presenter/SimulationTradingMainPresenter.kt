@@ -152,7 +152,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
-        super.onErrorResponse(response)
+//        super.onErrorResponse(response)
         if (response.request is GetPositionRequest) {
             count++
             positionDatas = mutableListOf()
