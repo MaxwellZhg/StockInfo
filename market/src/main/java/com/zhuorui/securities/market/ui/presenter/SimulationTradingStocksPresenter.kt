@@ -315,6 +315,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onFeeComputeResponse(response: FeeComputeResponse) {
+        viewModel?.totalFee?.value = response.data.totalFee
+
         // 获取当支股票信息
         val stockInfo = viewModel?.stockInfo?.value
         // 展示交易明细
@@ -326,7 +328,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             viewModel!!.buyPrice.value.toString() + "（港元）",
             viewModel!!.buyCount.value!!,
             response.data.totalFee.toDouble(),
-            MathUtil.convertToString(viewModel?.buyMoney?.value?.add(response.data.totalFee)!!)  + "（港元）"
+            MathUtil.convertToString(viewModel?.buyMoney?.value?.add(response.data.totalFee)!!) + "（港元）"
         )
     }
 
@@ -343,8 +345,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             stockInfo.code!!,
             viewModel?.buyPrice?.value!!,
             viewModel?.buyCount?.value?.toLong()!!,
-            BigDecimal.ZERO,
-            BigDecimal.ZERO,
+            viewModel?.totalFee?.value!!,
+            viewModel?.buyMoney?.value?.add(viewModel?.totalFee?.value!!)!!,
             transactions.createTransaction()
         )
         Cache[ISimulationTradeNet::class.java]?.stockBuy(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))

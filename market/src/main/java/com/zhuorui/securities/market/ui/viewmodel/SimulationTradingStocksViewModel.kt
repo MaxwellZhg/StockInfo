@@ -42,6 +42,8 @@ class SimulationTradingStocksViewModel : ViewModel() {
     val maxBuyCount = MutableLiveData<Long>()
     // 是否可买
     val enableBuy = MutableLiveData<Boolean>()
+    // 交易总费用
+    val totalFee = MutableLiveData<BigDecimal>()
 
     init {
         buyRate.value = BigDecimal.valueOf(50.00)
