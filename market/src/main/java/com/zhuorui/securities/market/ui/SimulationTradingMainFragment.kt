@@ -1,22 +1,19 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewParent
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
+import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
-import com.zhuorui.securities.base2app.BaseApplication.Companion.context
-import com.zhuorui.securities.base2app.infra.LogInfra
+import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -29,11 +26,11 @@ import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
-import kotlinx.android.synthetic.main.fragment_simulation_trading_main.top_bar
-import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
-import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -115,18 +112,55 @@ class SimulationTradingMainFragment :
         magic_indicator.navigator = getNavigator()
     }
 
+    var dialog: GetPicturesModeDialog? = null
+    var oss: OssService? = null
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
         showUpLoading()
         presenter?.getFundAccount()
-//        onSelect(0)
-//        fund_account?.setData(STFundAccountData())
+        onSelect(0)
+//        oss = OssService(context!!.applicationContext)
+//        dialog = context?.let { GetPicturesModeDialog(it) }
+//        dialog!!.listener = object : GetPicturesModeDialog.OnGetPicturesModeListener {
+//            /**
+//             * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）
+//             */
+//            override fun onPicturePath(path: String?) {
+//                oss?.getPutObjectObservable(path)?.subscribeOn(Schedulers.io())
+//                    ?.observeOn(AndroidSchedulers.mainThread())
+//                    ?.subscribe(Consumer {
+//
+//                    }, Consumer {
+//
+//                    })
+//            }
+//            /**
+//             * 返回图片bitmap 调用dialog的回调方法处理，此方法才会有结果返回）
+//             */
+//            override fun onPictureBitmap(bm: Bitmap?) {
+//            }
+//
+//            /**
+//             * 去拍照
+//             */
+//            override fun goCamera(toCameraRequestCode: Int?, uri: Uri?) {
+//            }
+//
+//            /**
+//             * 去相册
+//             */
+//            override fun goAlbum(toAlbumRequestCode: Int?) {
+//                GetPhotoFromAlbumUtil.goAlbum(this@SimulationTradingMainFragment, toAlbumRequestCode!!)
+//            }
+//
+//        }
     }
 
     /**
      * 去买卖
      */
     override fun toBusiness() {
+//        dialog!!.show()
         start(SimulationTradingStocksFragment.newInstance())
     }
 
