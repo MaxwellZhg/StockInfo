@@ -110,17 +110,17 @@ class SimulationTradingOrdersFragment :
     }
 
     private fun onSelect(index: Int) {
-        val staTime = TimeZoneUtil.currentTime(timeFormat)
-        var endTime: String = staTime
+        val endTime = TimeZoneUtil.currentTime(timeFormat)
+        var staTime: String = endTime
         when (index) {
             0 -> {
-                endTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addDayByCurrentTime(7), timeFormat)
+                staTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addDayByCurrentTime(-7), timeFormat)
             }
             1 -> {
-                endTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addMonthByCurrentTime(1), timeFormat)
+                staTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addMonthByCurrentTime(-1), timeFormat)
             }
             2 -> {
-                endTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addMonthByCurrentTime(3), timeFormat)
+                staTime = TimeZoneUtil.timeFormat(TimeZoneUtil.addMonthByCurrentTime(-3), timeFormat)
             }
         }
         start_date?.text = staTime

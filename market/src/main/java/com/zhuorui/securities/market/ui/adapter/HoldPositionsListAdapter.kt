@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.STPositionData
 import java.text.DecimalFormat
 
@@ -123,7 +124,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 }
                 itemViewHolder.business?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    listener?.toBusiness("HP_business:$pos")
+                    listener?.toBusiness(datas!![pos])
                 }
                 itemViewHolder.quotation?.setOnClickListener {
                     val pos: Int = it.tag as Int
@@ -226,7 +227,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         /**
          * 去买卖
          */
-        fun toBusiness(id: String)
+        fun toBusiness(data: STOrderData)
 
         /**
          * 去行情

@@ -48,6 +48,7 @@ class SimulationTradingOrdersPresenter :
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onOrderListResponse(response: OrderListResponse) {
         page++
+
     }
 
 

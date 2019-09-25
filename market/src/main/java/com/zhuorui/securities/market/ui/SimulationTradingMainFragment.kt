@@ -198,15 +198,15 @@ class SimulationTradingMainFragment :
     /**
      * 去买卖
      */
-    override fun toBusiness(id: String) {
-        start(SimulationTradingStocksFragment.newInstance())
+    override fun toBusiness(data: STOrderData) {
+        start(SimulationTradingStocksFragment.newInstance(data))
     }
 
     /**
      * 改单
      */
-    override fun toChangeOrder(id: String) {
-        start(SimulationTradingStocksFragment.newInstance())
+    override fun toChangeOrder(data: STOrderData) {
+        start(SimulationTradingStocksFragment.newInstance(data))
     }
 
     /**

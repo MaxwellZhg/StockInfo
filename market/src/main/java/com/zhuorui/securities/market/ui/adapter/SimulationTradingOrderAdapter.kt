@@ -132,7 +132,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     }
                     itemViewHolder.business?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toBusiness("Business:$pos")
+                        listener?.toBusiness(datas!![pos])
                     }
                     itemViewHolder.quotation?.setOnClickListener {
                         val pos: Int = it.tag as Int
@@ -144,11 +144,11 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     }
                     itemViewHolder.change?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toChangeOrder("change$pos")
+                        listener?.toChangeOrder(datas!![pos])
                     }
                     itemViewHolder.cancel?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toCancelOrder("CancelOrder:$pos")
+                        listener?.toCancelOrder(datas!![pos].id!!)
                     }
                 }
                 itemViewHolder.canClick = canClick
@@ -278,7 +278,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         /**
          * 改单
          */
-        fun toChangeOrder(id: String)
+        fun toChangeOrder(data: STOrderData)
 
         /**
          * 撤单
