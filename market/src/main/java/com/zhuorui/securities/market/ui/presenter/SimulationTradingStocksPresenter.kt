@@ -97,6 +97,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             // 买入未成交
             else if (orderData.trustType == 1 && orderData.status == 1) {
                 viewModel?.updateOrderId?.value = orderData.id
+                viewModel?.updateType?.value = 1
                 // 显示订单委托价格、委托股数
                 viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
                 viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
@@ -104,10 +105,15 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 view?.changeTrustType(1)
             } else if (orderData.trustType == 2 && orderData.status == 1) {
                 viewModel?.updateOrderId?.value = orderData.id
+                viewModel?.updateType?.value = 2
                 // 显示订单委托价格、委托股数
                 viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
                 viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
-                updateMaxBuySell(orderData.holdStockCount!!.toLong())
+                if (orderData.saleStockCount != null) {
+                    updateMaxBuySell(orderData.saleStockCount!!.toLong())
+                } else {
+                    updateMaxBuySell(orderData.holdStockCount!!.toLong())
+                }
                 // 显示卖出改单状态
                 view?.changeTrustType(2)
             }
@@ -138,58 +144,60 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     // 交易金额
                     val buyMoney = BigDecimal.valueOf(buyCount.toLong()).multiply(buyPrice)
                     viewModel?.buyMoney?.value = buyMoney
-                    // 印花税
-                    val stampTax = viewModel?.getFee(buyMoney, stockFeeRules.getValue(5))
-                    // 交易佣金
-                    val commission = viewModel?.getFee(buyMoney, stockFeeRules.getValue(1))
-                    // 平台使用费
-                    val platformFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(2))
-                    // 交易征费
-                    val tradingRequisitionFee =
-                        viewModel?.getFee(buyMoney, stockFeeRules.getValue(7))
-                    // 交易系统使用费
-                    val tradingSystemFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(3))
-                    // 交易费
-                    val tradingFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(6))
-                    // 中央结算系统交收费
-                    val systemPaysFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(4))
-                    // 一手股数
-                    val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
-                    ///////////////////////////////////////////////////////////////////////////////////////////
-                    // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
-                    val accountMoney = 1000000.00
-                    var maxBuyCount = (accountMoney / buyPrice.toDouble() / perShareNumber!!).toLong()
-                    // 二、判断可用资金是否够交易费用 + 手续费
-                    while (true) {
-                        if (
-                            accountMoney
-                            - maxBuyCount * buyPrice.toDouble() * perShareNumber
-                            - commission!!.toDouble()
-                            - platformFee!!.toDouble()
-                            - stampTax!!.toDouble()
-                            - tradingRequisitionFee!!.toDouble()
-                            - tradingSystemFee!!.toDouble()
-                            - tradingFee!!.toDouble()
-                            - systemPaysFee!!.toDouble()
-                            >= 0
-                        ) {
-                            break
+                    // 判断改单类型
+                    val updateType = viewModel?.updateType?.value
+                    // 默认买入或修改买入订单
+                    if (updateType == null || updateType == 1) {
+                        // 印花税
+                        val stampTax = viewModel?.getFee(buyMoney, stockFeeRules.getValue(5))
+                        // 交易佣金
+                        val commission = viewModel?.getFee(buyMoney, stockFeeRules.getValue(1))
+                        // 平台使用费
+                        val platformFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(2))
+                        // 交易征费
+                        val tradingRequisitionFee =
+                            viewModel?.getFee(buyMoney, stockFeeRules.getValue(7))
+                        // 交易系统使用费
+                        val tradingSystemFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(3))
+                        // 交易费
+                        val tradingFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(6))
+                        // 中央结算系统交收费
+                        val systemPaysFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(4))
+                        // 一手股数
+                        val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
+                        ///////////////////////////////////////////////////////////////////////////////////////////
+                        // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
+                        val accountMoney = 1000000.00
+                        var maxBuyCount = (accountMoney / buyPrice.toDouble() / perShareNumber!!).toLong()
+                        // 二、判断可用资金是否够交易费用 + 手续费
+                        while (true) {
+                            if (
+                                accountMoney
+                                - maxBuyCount * buyPrice.toDouble() * perShareNumber
+                                - commission!!.toDouble()
+                                - platformFee!!.toDouble()
+                                - stampTax!!.toDouble()
+                                - tradingRequisitionFee!!.toDouble()
+                                - tradingSystemFee!!.toDouble()
+                                - tradingFee!!.toDouble()
+                                - systemPaysFee!!.toDouble()
+                                >= 0
+                            ) {
+                                break
+                            }
+                            maxBuyCount -= 1
                         }
-                        maxBuyCount -= 1
-                    }
 
-                    maxBuyCount *= perShareNumber
-                    viewModel?.maxBuyCount?.value = maxBuyCount
-                    // 判断是否超过最大可买
-                    viewModel?.enableBuy?.value = buyCount in 1..maxBuyCount
-                    // 判断是否超过最大可卖
-                    val maxSaleCount = viewModel?.maxSaleCount?.value
-                    if (maxSaleCount != null) {
-                        viewModel?.enableSell?.value = buyCount in 1..maxSaleCount
+                        maxBuyCount *= perShareNumber
+                        viewModel?.maxBuyCount?.value = maxBuyCount
+                        // 判断是否超过最大可买
+                        viewModel?.enableBuy?.value = buyCount in 1..maxBuyCount
+                        // 更新界面最大可买数量
+                        view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
+                    } else {
+                        // 判断是否超过最大可卖
+                        viewModel?.maxSaleCount?.value?.let { viewModel?.enableSell?.value = buyCount in 1..it }
                     }
-
-                    // 更新界面最大可买数量
-                    view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
                 }
             }
         }
