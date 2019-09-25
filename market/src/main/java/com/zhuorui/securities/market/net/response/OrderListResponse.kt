@@ -9,11 +9,14 @@ import com.zhuorui.securities.market.model.STOrderData
  *    date   : 2019-09-19 16:11
  *    desc   :
  */
-class OrderListResponse : BaseResponse() {
-    var records: List<STOrderData>? = null
-    var total: Int? = null//总数
-    var size: Int? = null//返回的数据大小
-    var current: Int? = null//起始页数
-    var pages: Int? = null//一页查询多少条
-    var searchCount: Boolean? = null
+class OrderListResponse(val data: Data) : BaseResponse(){
+
+    data class Data(
+        val records: List<STOrderData>?,
+        val total: Int?,//总数
+        val size: Int?,//返回的数据大小
+        val current: Int?,//起始页数
+        val pages: Int?,//一页查询多少条
+        val searchCount: Boolean?
+    )
 }

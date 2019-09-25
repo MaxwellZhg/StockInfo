@@ -9,6 +9,5 @@ import com.zhuorui.securities.market.model.STPositionData
  *    date   : 2019-09-19 16:09
  *    desc   :
  */
-class GetPositionResponse : BaseResponse() {
-    var data: List<STPositionData>? = null
+class GetPositionResponse(val data: List<STPositionData>?) : BaseResponse() {
 }
