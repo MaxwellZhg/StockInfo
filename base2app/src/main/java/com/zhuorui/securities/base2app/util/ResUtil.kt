@@ -24,7 +24,7 @@ object ResUtil {
         return BaseApplication.context?.getString(stringResId)
     }
 
-    fun getStringFormat(@StringRes stringResId: Int, formatArgs: Any): String? {
+    fun getStringFormat(@StringRes stringResId: Int, vararg formatArgs: Any): String? {
         return BaseApplication.context?.getString(stringResId, formatArgs)
     }
 

@@ -103,15 +103,27 @@
     <string name="search_history_stock" tools:ignore="MissingTranslation">历史搜索股票</string>
     <string name="cancle" tools:ignore="MissingTranslation">取消</string>
     <string name="search_tips" tools:ignore="MissingTranslation">请输入股票名称/代码/全拼</string>
-    <string name="stock_search_all"  tools:ignore="MissingTranslation">综合</string>
-    <string name="stock_search_topic"  tools:ignore="MissingTranslation">股票</string>
-    <string name="stock_search_info"  tools:ignore="MissingTranslation">咨询</string>
-    <string name="str_tips">提示</string>
-    <string name="str_retry">重试</string>
-    <string name="str_back">返回</string>
-    <string name="create_fund_account_success">恭喜您已获得100万港币模拟资金开始模拟炒股吧！</string>
-    <string name="str_understood">已了解</string>
-    <string name="getdata_err">获取数据失败</string>
+    <string name="stock_search_all" tools:ignore="MissingTranslation">综合</string>
+    <string name="stock_search_topic" tools:ignore="MissingTranslation">股票</string>
+    <string name="stock_search_info" tools:ignore="MissingTranslation">咨询</string>
+    <string name="str_tips" translatable="false">提示</string>
+    <string name="str_retry" translatable="false">重试</string>
+    <string name="str_back" translatable="false">返回</string>
+    <string name="create_fund_account_success" translatable="false">恭喜您已获得100万港币模拟资金开始模拟炒股吧！</string>
+    <string name="str_understood" translatable="false">已了解</string>
+    <string name="getdata_err" translatable="false">获取数据失败</string>
     <string name="see_more_stock" tools:ignore="MissingTranslation">查看更多股票</string>
     <string name="see_more_infomation" tools:ignore="MissingTranslation">查看更多相关资讯</string>
+    <string name="order_detail_title" translatable="false">订单明细</string>
+    <string name="order_detail_account" translatable="false">账号：港股模拟练习（%1$s）</string>
+    <string name="order_detail_type_buy" translatable="false">方向：买入</string>
+    <string name="order_detail_type_sell" translatable="false">方向：卖出</string>
+    <string name="order_detail_stock" translatable="false">名称：%s</string>
+    <string name="order_detail_price" translatable="false">价格：%s</string>
+    <string name="order_detail_count" translatable="false">数量：%s</string>
+    <string name="order_detail_commission" translatable="false">佣金：%s</string>
+    <string name="order_detail_money" translatable="false">金额：%s</string>
+    <string name="buy_stocks_successful" translatable="false">下单成功</string>
+    <string name="see_details" translatable="false">查看详情</string>
+    <string name="tips" translatable="false">提示</string>
 </resources>
