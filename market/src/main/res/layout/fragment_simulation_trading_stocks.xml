@@ -48,7 +48,6 @@
                     android:textSize="17sp"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ll_stock"
                 android:layout_width="match_parent"
@@ -586,9 +585,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/btn_buy"
                 android:onClick="@{() -> presenter.transactionStocks(1)}"
+                android:visibility="invisible"
                 android:enabled="@{viewModel.enableBuy}"/>
 
         <TextView
+                android:id="@+id/tv_max_sell_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/max_sell_num"
@@ -618,5 +619,53 @@
                 android:layout_marginEnd="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:enabled="false"/>
+
+
+        <com.zhuorui.commonwidget.StateButton
+                android:id="@+id/btn_cancel_change_order"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:textColor="@color/color_ff1a6ed2"
+                app:normalBackgroundColor="@android:color/transparent"
+                app:pressedBackgroundColor="@android:color/transparent"
+                app:normalStrokeWidth="1dp"
+                app:pressedStrokeWidth="1dp"
+                app:normalStrokeColor="@color/color_ff1a6ed2"
+                app:pressedStrokeColor="@color/color_ff1a6ed2"
+                android:text="@string/str_cancel_change_order"
+                android:gravity="center"
+                app:radius="5dp"
+                android:padding="0dp"
+                android:minHeight="0dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="72dp"
+                app:layout_constraintTop_toBottomOf="@+id/ll_money"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:onClick="@{() -> presenter.cancelChangeOrders()}"/>
+
+        <com.zhuorui.commonwidget.StateButton
+                android:id="@+id/btn_confirm_change_order"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:textColor="@color/color_FFFFFFFF"
+                app:normalBackgroundColor="@color/color_1A6ED2"
+                app:pressedBackgroundColor="@color/color_145bb3"
+                app:unableBackgroundColor="@color/color_FFA1A1A1"
+                android:text="@string/str_confirm_change_order"
+                android:gravity="center"
+                app:radius="5dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="0dp"
+                android:minHeight="0dp"
+                android:layout_marginTop="72dp"
+                app:layout_constraintTop_toBottomOf="@+id/ll_money"
+                android:layout_marginEnd="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:enabled="@{viewModel.enableBuy}"
+                android:onClick="@{() -> presenter.transactionStocks(1)}"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

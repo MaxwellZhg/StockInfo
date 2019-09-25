@@ -64,6 +64,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             calculateBuyMoney()
         })
         view?.updateMaxBuyNum(null)
+        view?.updateMaxBuySell(null)
     }
 
     /**

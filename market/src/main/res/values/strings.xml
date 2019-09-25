@@ -84,6 +84,8 @@
     <string name="max_sell_num" translatable="false">最大可卖</string>
     <string name="str_buy" translatable="false">买入</string>
     <string name="str_sell" translatable="false">卖出</string>
+    <string name="str_cancel_change_order" translatable="false">取消改单</string>
+    <string name="str_confirm_change_order" translatable="false">确定改单</string>
     <string name="hint_stock_code_or_abbreviation" translatable="false">请输入股票代码/简称</string>
     <string name="str_my_own_choice" translatable="false">我的自选</string>
     <string name="str_search_history" translatable="false">搜索历史</string>

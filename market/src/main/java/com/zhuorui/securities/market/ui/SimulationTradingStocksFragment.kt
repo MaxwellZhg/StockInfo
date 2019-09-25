@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
@@ -19,6 +20,7 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.custom.TradingStocksOrderDialog
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
 import com.zhuorui.securities.market.model.PushStockTransData
+import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
@@ -27,7 +29,6 @@ import com.zhuorui.securities.market.util.MathUtil
 import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 import me.yokeyword.fragmentation.ISupportFragment
-import me.yokeyword.fragmentation.SupportHelper
 import java.math.BigDecimal
 
 /**
@@ -43,8 +44,17 @@ class SimulationTradingStocksFragment :
     private val SEARCH_STOCK_CODE = 1000
 
     companion object {
+
         fun newInstance(): SimulationTradingStocksFragment {
             return SimulationTradingStocksFragment()
+        }
+
+        fun newInstance(order: STOrderData): SimulationTradingStocksFragment {
+            val fragment = SimulationTradingStocksFragment()
+            val arguments = Bundle()
+            arguments.putParcelable(STOrderData::class.java.simpleName, order)
+            fragment.arguments = arguments
+            return fragment
         }
     }
 
@@ -171,27 +181,41 @@ class SimulationTradingStocksFragment :
         if (maxBuyCount == null) {
             tv_max_buy_num.text = getString(R.string.max_buy_num) + " --"
         } else {
-            val formatCount = MathUtil.convertToString(maxBuyCount.toBigDecimal())
-            val spannableString =
-                SpannableString(getString(R.string.max_buy_num) + " $formatCount")
-            spannableString.setSpan(
-                ForegroundColorSpan(ResUtil.getColor(R.color.color_ff1a6ed2)!!),
-                spannableString.length - formatCount.length,
-                spannableString.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            tv_max_buy_num.text = spannableString
+            tv_max_buy_num.text =
+                getSpannableString(R.string.max_buy_num, MathUtil.convertToString(maxBuyCount.toBigDecimal()))
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun updateMaxBuySell(maxSellCount: Long?) {
+        if (maxSellCount == null) {
+            tv_max_sell_num.text = getString(R.string.max_sell_num) + " --"
+        } else {
+            tv_max_sell_num.text =
+                getSpannableString(R.string.max_sell_num, MathUtil.convertToString(maxSellCount.toBigDecimal()))
+        }
+    }
+
+    private fun getSpannableString(@StringRes strId: Int, formatStr: String): SpannableString {
+        val spannableString =
+            SpannableString(getString(strId) + " $formatStr")
+        spannableString.setSpan(
+            ForegroundColorSpan(ResUtil.getColor(R.color.color_ff1a6ed2)!!),
+            spannableString.length - formatStr.length,
+            spannableString.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        return spannableString
     }
 
     override fun clearBuyCountFocus() {
         tv_buy_count.clearFocus()
-        SupportHelper.hideSoftInput(tv_buy_count)
+        hideSoftInput()
     }
 
     override fun clearBuyPriceFocus() {
         tv_buy_price.clearFocus()
-        SupportHelper.hideSoftInput(tv_buy_price)
+        hideSoftInput()
     }
 
     override fun showTradingStocksOrderDetail(
