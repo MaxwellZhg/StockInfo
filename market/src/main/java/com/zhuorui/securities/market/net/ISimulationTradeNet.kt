@@ -49,7 +49,10 @@ interface ISimulationTradeNet {
     fun feeTemplate(@Body request: GetFeeTemplateRequest): Call<GetFeeTemplateResponse>
 
     @POST(SimulationTradeApi.STOCK_BUY)
-    fun stockBuy(@Body request: StockBuyRequest): Call<BaseResponse>
+    fun stockBuy(@Body request: StockTradRequest): Call<BaseResponse>
+
+    @POST(SimulationTradeApi.STOCK_SELL)
+    fun stockSell(@Body request: StockTradRequest): Call<BaseResponse>
 
     @POST(SimulationTradeApi.CANCEL_BUY_TRUST)
     fun cancelBuyTrust(@Body request: CancelBuyTrustRequest): Call<BaseResponse>

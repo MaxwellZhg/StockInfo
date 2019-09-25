@@ -566,6 +566,7 @@
                 app:layout_constraintStart_toStartOf="@+id/btn_buy"/>
 
         <com.zhuorui.commonwidget.StateButton
+                android:id="@+id/btn_buy"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
                 android:textColor="@color/color_FFFFFFFF"
@@ -583,9 +584,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ll_money"
                 android:layout_marginStart="13dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/btn_buy"
                 android:onClick="@{() -> presenter.transactionStocks(1)}"
-                android:visibility="invisible"
                 android:enabled="@{viewModel.enableBuy}"/>
 
         <TextView
@@ -600,6 +599,7 @@
                 app:layout_constraintStart_toStartOf="@+id/btn_sell"/>
 
         <com.zhuorui.commonwidget.StateButton
+                android:id="@+id/btn_sell"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
                 android:textColor="@color/color_FFFFFFFF"
@@ -610,7 +610,6 @@
                 android:gravity="center"
                 app:radius="5dp"
                 android:textSize="18sp"
-                android:id="@+id/btn_sell"
                 android:textStyle="bold"
                 android:padding="0dp"
                 android:minHeight="0dp"
@@ -618,7 +617,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/ll_money"
                 android:layout_marginEnd="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:enabled="false"/>
+                android:onClick="@{() -> presenter.transactionStocks(2)}"
+                android:enabled="@{viewModel.enableSell}"/>
 
 
         <com.zhuorui.commonwidget.StateButton

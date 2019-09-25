@@ -13,6 +13,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.SimpleTextWatcher
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
+import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -82,7 +83,6 @@ class SimulationTradingStocksFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         iv_chart.setOnClickListener(this)
-        btn_sell.setOnClickListener(this)
         tv_code.setOnClickListener(this)
         top_bar.setRightClickListener {
             // 消息
@@ -116,8 +116,39 @@ class SimulationTradingStocksFragment :
                 // 模拟炒股搜索
                 startForResult(SimulationTradingSearchFragment.newInstance(), SEARCH_STOCK_CODE)
             }
-            btn_sell -> {
-                // 卖出
+        }
+    }
+
+    override fun changeTrustType(trustType: Int) {
+        // 0默认购买 1买入改单 2卖出改单 3可买买卖
+        tv_code.isClickable = false
+        when (trustType) {
+            0 -> {
+                btn_buy.visibility = View.VISIBLE
+                btn_sell.visibility = View.VISIBLE
+
+                btn_cancel_change_order.visibility = View.GONE
+                btn_confirm_change_order.visibility = View.GONE
+
+                tv_code.isClickable = true
+            }
+            1 -> {
+                btn_cancel_change_order.visibility = View.VISIBLE
+                btn_confirm_change_order.visibility = View.VISIBLE
+
+                btn_buy.visibility = View.INVISIBLE
+                btn_sell.visibility = View.INVISIBLE
+            }
+            2 -> {
+                btn_buy.visibility = View.INVISIBLE
+                btn_sell.visibility = View.INVISIBLE
+            }
+            3 -> {
+                btn_buy.visibility = View.VISIBLE
+                btn_sell.visibility = View.VISIBLE
+
+                btn_cancel_change_order.visibility = View.GONE
+                btn_confirm_change_order.visibility = View.GONE
             }
         }
     }
@@ -231,21 +262,29 @@ class SimulationTradingStocksFragment :
         TradingStocksOrderDialog.createDialog(context!!, false, true)
             .setInfo(accountId, chargeType, stockName, tsCode, price, count, commission, money)
             .setCallBack(object : TradingStocksOrderDialog.CallBack {
-
                 override fun onCancel() {
 
                 }
 
                 override fun onConfirm() {
-                    presenter?.confirmBuyStocks()
+                    presenter?.confirmTradingStocks(chargeType)
                 }
 
             }).show()
     }
 
-    override fun buyStocksSuccessful() =
+    override fun tradStocksSuccessful() =
         TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true).setTitleText(getString(R.string.tips))
-            .setMsgText(getString(R.string.buy_stocks_successful)).setConfirmText(getString(R.string.see_details)).show()
+            .setMsgText(getString(R.string.buy_stocks_successful)).setConfirmText(getString(R.string.see_details)).setLifeCycle(
+                object : BaseDialog.DialogLifeCycle {
+                    override fun onDialogDismiss(dialogName: String) {
+                        pop()
+                    }
+
+                    override fun onDialogShow(dialogName: String) {
+
+                    }
+                }).show()
 
     override fun exit() {
         pop()

@@ -77,6 +77,8 @@
     <string name="stock_code" translatable="false">代码</string>
     <string name="stock_code_input_hint" translatable="false">请输入股票代码或简称</string>
     <string name="buy_count_more_than_max" translatable="false">买入数量超出最大可买数量</string>
+    <string name="sell_count_more_than_max" translatable="false">输入数量超出最大可卖数量</string>
+    <string name="count_more_than_max" translatable="false">输入数量超出最大可买可卖数量</string>
     <string name="price" translatable="false">价格</string>
     <string name="number" translatable="false">数量</string>
     <string name="money" translatable="false">金额</string>

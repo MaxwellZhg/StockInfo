@@ -9,15 +9,12 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.model.SearchStockInfo
-import com.zhuorui.securities.market.model.StockPrice
-import com.zhuorui.securities.market.model.StockTopic
-import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
+import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
 import com.zhuorui.securities.market.net.request.FeeComputeRequest
 import com.zhuorui.securities.market.net.request.GetFeeTemplateRequest
 import com.zhuorui.securities.market.net.request.GetStockInfoRequest
-import com.zhuorui.securities.market.net.request.StockBuyRequest
+import com.zhuorui.securities.market.net.request.StockTradRequest
 import com.zhuorui.securities.market.net.response.FeeComputeResponse
 import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
 import com.zhuorui.securities.market.net.response.GetStockInfoResponse
@@ -51,11 +48,60 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
 
     override fun init() {
         super.init()
+
+        view?.updateMaxBuyNum(null)
+        view?.updateMaxBuySell(null)
+
+        // 获取传递订单参数
+        val arguments = fragment.arguments
+        val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
+        if (orderData != null) {
+            // 已持仓
+            if (orderData.saleStockCount?.compareTo(BigDecimal.ZERO) == 1) {
+                val saleStockCount = orderData.saleStockCount!!.toLong()
+                viewModel?.maxSaleCount?.value = saleStockCount
+                viewModel?.enableSell?.value = true
+                // 显示最大可卖
+                view?.updateMaxBuySell(saleStockCount)
+                // 显示已持仓状态
+                view?.changeTrustType(3)
+            }
+            // 买入未成交
+            else if (orderData.trustType == 1 && orderData.status == 1) {
+                // 显示买入改单状态
+                view?.changeTrustType(1)
+            } else if (orderData.trustType == 2 && orderData.status == 1) {
+                // 显示卖出改单状态
+                view?.changeTrustType(2)
+            }
+            // 设置股票信息
+            val stockInfo = SearchStockInfo()
+            stockInfo.ts = orderData.ts
+            stockInfo.code = orderData.code
+            stockInfo.tsCode = orderData.code + "." + orderData.ts
+            stockInfo.name = orderData.stockName
+            setStock(stockInfo)
+        } else {
+            // 显示默认购买状态
+            view?.changeTrustType(0)
+        }
+
         // 监听购买数量变化
         viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Int> {
             val maxBuyCount = viewModel?.maxBuyCount?.value?.toInt()
-            if (it != null && maxBuyCount != null && it > maxBuyCount) {
-                ToastUtil.instance.toastCenter(R.string.buy_count_more_than_max)
+            val maxSaleCount = viewModel?.maxSaleCount?.value?.toInt()
+            if (it != null) {
+                // 是否超出可买
+                val moreBuyCount = maxBuyCount != null && it > maxBuyCount
+                // 是否超出可卖
+                val moreSaleCount = maxSaleCount != null && it > maxSaleCount
+                if (moreBuyCount && moreSaleCount) {
+                    ToastUtil.instance.toastCenter(R.string.count_more_than_max)
+                } else if (moreBuyCount) {
+                    ToastUtil.instance.toastCenter(R.string.buy_count_more_than_max)
+                } else if (moreSaleCount) {
+                    ToastUtil.instance.toastCenter(R.string.sell_count_more_than_max)
+                }
             }
             calculateBuyMoney()
         })
@@ -63,8 +109,6 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.buyPrice?.observe(fragment, androidx.lifecycle.Observer<BigDecimal> {
             calculateBuyMoney()
         })
-        view?.updateMaxBuyNum(null)
-        view?.updateMaxBuySell(null)
     }
 
     /**
@@ -119,7 +163,14 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
 
                     maxBuyCount *= perShareNumber
                     viewModel?.maxBuyCount?.value = maxBuyCount
+                    // 判断是否超过最大可买
                     viewModel?.enableBuy?.value = buyCount in 1..maxBuyCount
+                    // 判断是否超过最大可卖
+                    val maxSaleCount = viewModel?.maxSaleCount?.value
+                    if (maxSaleCount != null) {
+                        viewModel?.enableSell?.value = buyCount in 1..maxSaleCount
+                    }
+
                     // 更新界面最大可买数量
                     view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
                 }
@@ -201,6 +252,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.buyMoney?.value = null
         viewModel?.maxBuyCount?.value = null
         viewModel?.enableBuy?.value = false
+        viewModel?.enableSell?.value = false
         // 清除上一次的价格信息
         view?.updateStockPrice(BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00))
         // 取消上一次的订阅
@@ -208,8 +260,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             SocketClient.getInstance().unBindTopic(stockTopicPrice, stockTopicTrans)
         }
         // 订阅当前的自选股
-        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
-        stockTopicTrans = StockTopic(StockTopicDataTypeEnum.trans, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
+        stockTopicTrans = StockTopic(StockTopicDataTypeEnum.trans, stockInfo.ts!!, stockInfo.code!!, 2)
         SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
         // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股）
         val getFeeTemplateRequest = GetFeeTemplateRequest(
@@ -333,48 +385,62 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         // 获取当支股票信息
         val stockInfo = viewModel?.stockInfo?.value
         // 展示交易明细
+        val chargeType = (response.request as FeeComputeRequest).chargeType
         view?.showTradingStocksOrderDetail(
             "1",
-            (response.request as FeeComputeRequest).chargeType,
+            chargeType,
             stockInfo?.name!!,
             stockInfo.tsCode!!,
             viewModel!!.buyPrice.value.toString() + "（港元）",
             MathUtil.convertToString(viewModel!!.buyCount.value!!.toBigDecimal()),
             response.data.totalFee.toDouble(),
-            MathUtil.convertToString(viewModel?.buyMoney?.value?.add(response.data.totalFee)!!) + "（港元）"
+            if (chargeType == 1) MathUtil.convertToString(viewModel?.buyMoney?.value?.add(response.data.totalFee)!!) else MathUtil.convertToString(
+                viewModel?.buyMoney?.value?.subtract(response.data.totalFee)!!
+            ) + "（港元）"
         )
     }
 
     /**
-     * 确定买入股票
+     * 确定买入、卖出股票
+     * @param chargeType 1买入 2卖出
      */
-    fun confirmBuyStocks() {
+    fun confirmTradingStocks(chargeType: Int) {
         // 获取当支股票信息
         val stockInfo = viewModel?.stockInfo?.value
-        val request = StockBuyRequest(
+        val request = StockTradRequest(
             LocalAccountConfig.read().getAccountInfo().accountId!!,
             stockInfo?.ts!!,
             stockInfo.code!!,
             viewModel?.buyPrice?.value!!,
             viewModel?.buyCount?.value?.toLong()!!,
             viewModel?.totalFee?.value!!,
-            viewModel?.buyMoney?.value?.add(viewModel?.totalFee?.value!!)!!,
+            if (chargeType == 1) viewModel?.buyMoney?.value?.add(viewModel?.totalFee?.value!!)!!
+            else viewModel?.buyMoney?.value?.subtract(viewModel?.totalFee?.value!!)!!,
+            chargeType,
             transactions.createTransaction()
         )
-        Cache[ISimulationTradeNet::class.java]?.stockBuy(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
+        if (chargeType == 1) {
+            // 买入
+            Cache[ISimulationTradeNet::class.java]?.stockBuy(request)
+                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+        } else {
+            // 卖出
+            Cache[ISimulationTradeNet::class.java]?.stockSell(request)
+                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+        }
     }
 
     /**
      * 取消改单
      */
-    fun cancelChangeOrders(){
+    fun cancelChangeOrders() {
         view?.exit()
     }
 
     override fun onBaseResponse(response: BaseResponse) {
-        if (response.request is StockBuyRequest) {
-            // 买入股票成功
-            view?.buyStocksSuccessful()
+        if (response.request is StockTradRequest) {
+            // 买入/卖出股票成功
+            view?.tradStocksSuccessful()
         }
     }
 

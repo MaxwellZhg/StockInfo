@@ -23,6 +23,12 @@ interface SimulationTradingStocksView : AbsView {
     fun updateStockTrans(transData: PushStockTransData, buyRate: Double, sellRate: Double)
 
     /**
+     * 根据不同的交易类型显示界面
+     * @param trustType 0默认购买 1买入改单 2卖出改单 3可买买卖
+     */
+    fun changeTrustType(trustType: Int)
+
+    /**
      * 更新最大可买
      */
     fun updateMaxBuyNum(maxBuyCount: Long?)
@@ -65,9 +71,9 @@ interface SimulationTradingStocksView : AbsView {
     )
 
     /**
-     * 买入成功
+     * 买入/卖出成功
      */
-    fun buyStocksSuccessful()
+    fun tradStocksSuccessful()
 
     /**
      * 退出界面
