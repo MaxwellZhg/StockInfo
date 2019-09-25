@@ -148,7 +148,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onOrderListResponse(response: OrderListResponse) {
         count++
-        orderDatas = response.records
+        orderDatas = response.data.records
         topicPrice()
     }
 
@@ -156,6 +156,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     fun onGetPositionResponse(response: GetPositionResponse) {
         count++
         positionDatas = response.data
+        if (positionDatas == null) positionDatas = mutableListOf()
         topicPrice()
     }
 
@@ -227,7 +228,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         var totalMarketValue = BigDecimal(0)//总市值
         var totalProfitAndLoss = BigDecimal(0)//总盈亏 ∑个股持仓盈亏金额+卖出股票的持仓盈亏金额
         var todayProfitAndLoss = BigDecimal(0)//今日盈亏 (今日市值 - 昨日收盘市值）+（今日卖出成交额 - 今日买入成交额）
-        if (!positionDatas.isNullOrEmpty()){
+        if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
                 val tsCode = data.stockCode + "." + data.stockType
                 val stockInfo = stocksInfo?.get(tsCode)
@@ -257,7 +258,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         }
         //账户总资产=持仓市值+可用资金
         val totalAssets: BigDecimal = MathUtil.add3(totalMarketValue, availableFunds)
-        if (orderDatas.isNullOrEmpty()){
+        if (orderDatas.isNullOrEmpty()) {
             for (data in orderDatas!!) {
                 if (data?.status!! == 2) {
                     val amt = MathUtil.multiply3(data.holdStockCount!!, data.holeCost!!)
@@ -285,7 +286,8 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
         val todayProfitAndLossPercentage =
             MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
-        val fundAccount = STFundAccountData(LocalAccountConfig.read().getAccountInfo().accountId, availableFunds.toFloat())
+        val fundAccount =
+            STFundAccountData(LocalAccountConfig.read().getAccountInfo().accountId, availableFunds.toFloat())
         fundAccount.marketValue = totalMarketValue.toFloat()
         fundAccount.totalAssets = totalAssets.toFloat()
         fundAccount.totalProfitAndLoss = totalProfitAndLoss.toFloat()
