@@ -52,37 +52,6 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         view?.updateMaxBuyNum(null)
         view?.updateMaxBuySell(null)
 
-        // 获取传递订单参数
-        val arguments = fragment.arguments
-        val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
-        if (orderData != null) {
-            // 已持仓
-            if (orderData.saleStockCount?.compareTo(BigDecimal.ZERO) == 1) {
-                updateMaxBuySell(orderData.saleStockCount!!.toLong())
-                // 显示已持仓状态
-                view?.changeTrustType(3)
-            }
-            // 买入未成交
-            else if (orderData.trustType == 1 && orderData.status == 1) {
-                // 显示买入改单状态
-                view?.changeTrustType(1)
-            } else if (orderData.trustType == 2 && orderData.status == 1) {
-                updateMaxBuySell(orderData.holdStockCount!!.toLong())
-                // 显示卖出改单状态
-                view?.changeTrustType(2)
-            }
-            // 设置股票信息
-            val stockInfo = SearchStockInfo()
-            stockInfo.ts = orderData.ts
-            stockInfo.code = orderData.code
-            stockInfo.tsCode = orderData.code + "." + orderData.ts
-            stockInfo.name = orderData.stockName
-            setStock(stockInfo)
-        } else {
-            // 显示默认购买状态
-            view?.changeTrustType(0)
-        }
-
         // 监听购买数量变化
         viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Int> {
             val maxBuyCount = viewModel?.maxBuyCount?.value?.toInt()
@@ -106,6 +75,44 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.buyPrice?.observe(fragment, androidx.lifecycle.Observer<BigDecimal> {
             calculateBuyMoney()
         })
+
+        // 获取传递订单参数
+        val arguments = fragment.arguments
+        val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
+        if (orderData != null) {
+            // 设置股票信息
+            val stockInfo = SearchStockInfo()
+            stockInfo.ts = orderData.ts
+            stockInfo.code = orderData.code
+            stockInfo.tsCode = orderData.code + "." + orderData.ts
+            stockInfo.name = orderData.stockName
+            setStock(stockInfo)
+
+            // 已持仓
+            if (orderData.saleStockCount?.compareTo(BigDecimal.ZERO) == 1) {
+                updateMaxBuySell(orderData.saleStockCount!!.toLong())
+                // 显示已持仓状态
+                view?.changeTrustType(3)
+            }
+            // 买入未成交
+            else if (orderData.trustType == 1 && orderData.status == 1) {
+                // 显示订单委托价格、委托股数
+                viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
+                viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
+                // 显示买入改单状态
+                view?.changeTrustType(1)
+            } else if (orderData.trustType == 2 && orderData.status == 1) {
+                // 显示订单委托价格、委托股数
+                viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
+                viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
+                updateMaxBuySell(orderData.holdStockCount!!.toLong())
+                // 显示卖出改单状态
+                view?.changeTrustType(2)
+            }
+        } else {
+            // 显示默认购买状态
+            view?.changeTrustType(0)
+        }
     }
 
     /**
@@ -344,10 +351,14 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun onGetStockInfoResponse(response: GetStockInfoResponse) {
         val stockInfoData = response.data
         viewModel?.stockInfoData?.value = stockInfoData
-
-        viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
         viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.realPrice)
-        viewModel?.buyCount?.value = stockInfoData.perShareNumber
+        // 当改单时不取最新的实时股价和每手股数
+        if (viewModel?.buyPrice?.value == null && viewModel?.buyPrice?.value == null) {
+            viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
+            viewModel?.buyCount?.value = stockInfoData.perShareNumber
+        } else {
+            calculateBuyMoney()
+        }
     }
 
     /**
