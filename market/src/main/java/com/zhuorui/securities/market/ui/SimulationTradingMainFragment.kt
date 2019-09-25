@@ -124,56 +124,56 @@ class SimulationTradingMainFragment :
         showUpLoading()
         presenter?.getFundAccount()
         onSelect(0)
-        oss = OssService(context!!.applicationContext)
-        dialog = context?.let { GetPicturesModeDialog(it) }
-        dialog!!.listener = object : GetPicturesModeDialog.OnGetPicturesModeListener {
-            /**
-             * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）
-             */
-            override fun onPicturePath(path: String?) {
-                oss?.getPutObjectObservable(path.toString())?.subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe(Consumer {
-                        LogInfra.Log.i("lw",it)
-                    }, Consumer {
-                        LogInfra.Log.i("lw",it)
-                        ToastUtil.instance.toast(it.message.toString())
-                    })
-            }
-
-            /**
-             * 返回图片bitmap 调用dialog的回调方法处理，此方法才会有结果返回）
-             */
-            override fun onPictureBitmap(bm: Bitmap?) {
-            }
-
-            /**
-             * 去拍照
-             */
-            override fun goCamera(toCameraRequestCode: Int?, uri: Uri?) {
-            }
-
-            /**
-             * 去相册
-             */
-            override fun goAlbum(toAlbumRequestCode: Int?) {
-                GetPhotoFromAlbumUtil.goAlbum(this@SimulationTradingMainFragment, toAlbumRequestCode!!)
-            }
-
-        }
+//        oss = OssService(context!!.applicationContext)
+//        dialog = context?.let { GetPicturesModeDialog(it) }
+//        dialog!!.listener = object : GetPicturesModeDialog.OnGetPicturesModeListener {
+//            /**
+//             * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）
+//             */
+//            override fun onPicturePath(path: String?) {
+//                oss?.getPutObjectObservable(path.toString())?.subscribeOn(Schedulers.io())
+//                    ?.observeOn(AndroidSchedulers.mainThread())
+//                    ?.subscribe(Consumer {
+//                        LogInfra.Log.i("lw",it)
+//                    }, Consumer {
+//                        LogInfra.Log.i("lw",it)
+//                        ToastUtil.instance.toast(it.message.toString())
+//                    })
+//            }
+//
+//            /**
+//             * 返回图片bitmap 调用dialog的回调方法处理，此方法才会有结果返回）
+//             */
+//            override fun onPictureBitmap(bm: Bitmap?) {
+//            }
+//
+//            /**
+//             * 去拍照
+//             */
+//            override fun goCamera(toCameraRequestCode: Int?, uri: Uri?) {
+//            }
+//
+//            /**
+//             * 去相册
+//             */
+//            override fun goAlbum(toAlbumRequestCode: Int?) {
+//                GetPhotoFromAlbumUtil.goAlbum(this@SimulationTradingMainFragment, toAlbumRequestCode!!)
+//            }
+//
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        dialog?.onActivityResult(requestCode,resultCode,data)
+//        dialog?.onActivityResult(requestCode,resultCode,data)
     }
 
     /**
      * 去买卖
      */
     override fun toBusiness() {
-        dialog!!.show()
-//        start(SimulationTradingStocksFragment.newInstance())
+//        dialog!!.show()
+        start(SimulationTradingStocksFragment.newInstance())
     }
 
     /**
