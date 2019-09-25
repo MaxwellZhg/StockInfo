@@ -28,6 +28,7 @@ import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
 import com.zhuorui.securities.market.util.MathUtil
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -209,8 +210,13 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         stockTopicPrice = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
         stockTopicTrans = StockTopic(StockTopicDataTypeEnum.trans, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
         SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
-        // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股） TODO accountId暂时写1
-        val getFeeTemplateRequest = GetFeeTemplateRequest("1", "1", 1, transactions.createTransaction())
+        // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股）
+        val getFeeTemplateRequest = GetFeeTemplateRequest(
+            "1",
+            LocalAccountConfig.read().getAccountInfo().accountId!!,
+            1,
+            transactions.createTransaction()
+        )
         Cache[ISimulationTradeNet::class.java]?.feeTemplate(getFeeTemplateRequest)
             ?.enqueue(Network.IHCallBack<GetFeeTemplateResponse>(getFeeTemplateRequest))
     }
@@ -303,9 +309,15 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      * @param chargeType 1买入 2卖出
      */
     fun transactionStocks(chargeType: Int) {
-        // 计算交易费用 TODO accountId暂时写1
+        // 计算交易费用
         val request =
-            FeeComputeRequest(1, "1", chargeType, viewModel?.buyMoney?.value!!, transactions.createTransaction())
+            FeeComputeRequest(
+                1,
+                LocalAccountConfig.read().getAccountInfo().accountId!!,
+                chargeType,
+                viewModel?.buyMoney?.value!!,
+                transactions.createTransaction()
+            )
         Cache[ISimulationTradeNet::class.java]?.feeCompute(request)
             ?.enqueue(Network.IHCallBack<FeeComputeResponse>(request))
     }
@@ -324,7 +336,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             "1",
             (response.request as FeeComputeRequest).chargeType,
             stockInfo?.name!!,
-            stockInfo?.tsCode!!,
+            stockInfo.tsCode!!,
             viewModel!!.buyPrice.value.toString() + "（港元）",
             MathUtil.convertToString(viewModel!!.buyCount.value!!.toBigDecimal()),
             response.data.totalFee.toDouble(),
@@ -338,9 +350,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun confirmBuyStocks() {
         // 获取当支股票信息
         val stockInfo = viewModel?.stockInfo?.value
-        // TODO accountId暂时写1
         val request = StockBuyRequest(
-            "1",
+            LocalAccountConfig.read().getAccountInfo().accountId!!,
             stockInfo?.ts!!,
             stockInfo.code!!,
             viewModel?.buyPrice?.value!!,
