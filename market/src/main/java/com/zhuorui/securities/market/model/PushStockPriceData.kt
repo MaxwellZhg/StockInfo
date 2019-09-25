@@ -16,7 +16,7 @@ class PushStockPriceData  : BaseStockMarket() {
     /**
      * 昨日收盘价格
      */
-    var closePrice: BigDecimal? = null
+    var preClosePrice: BigDecimal? = null
     /**
      * 当前价格
      */

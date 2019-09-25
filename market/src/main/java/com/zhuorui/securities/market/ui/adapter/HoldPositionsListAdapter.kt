@@ -190,7 +190,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             business?.tag = position
             quotation?.tag = position
             stockName?.text = data?.stockName
-            stockTsCode?.text = data?.stockCode + "." + data?.stockType
+            stockTsCode?.text = data?.code + "." + data?.ts
             marketValue?.text = data?.marketValue.toString()
             presentPrice?.text = data?.presentPrice.toString()
             number?.text = data?.holdStockCount.toString()
@@ -205,7 +205,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 }
                 data?.profitAndLoss!!.toFloat() < 0 -> {
                     profitAndLoss?.setTextColor(color)
-                    profitAndLossPercentage?.text = "-" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
+                    profitAndLossPercentage?.text = DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(color)
                 }
                 else -> {

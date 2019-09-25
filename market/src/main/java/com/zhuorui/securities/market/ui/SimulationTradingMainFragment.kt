@@ -60,6 +60,7 @@ class SimulationTradingMainFragment :
     private var tabTitle: Array<String>? = null
     private var mIndex: Int = 0
     private var loading: ProgressDialog? = null
+    private var fist:Boolean = true
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -88,6 +89,14 @@ class SimulationTradingMainFragment :
                 start(SimulationTradingRuleFragment.newInstance())
             }
 
+        }
+    }
+
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        if (!fist){
+            showUpLoading()
+            presenter?.getFundAccount()
         }
     }
 
@@ -121,9 +130,12 @@ class SimulationTradingMainFragment :
     var oss: OssService? = null
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
-        showUpLoading()
-        presenter?.getFundAccount()
-        onSelect(0)
+        if (fist){
+            fist = false
+            showUpLoading()
+            presenter?.getFundAccount()
+            onSelect(0)
+        }
 //        oss = OssService(context!!.applicationContext)
 //        dialog = context?.let { GetPicturesModeDialog(it) }
 //        dialog!!.listener = object : GetPicturesModeDialog.OnGetPicturesModeListener {

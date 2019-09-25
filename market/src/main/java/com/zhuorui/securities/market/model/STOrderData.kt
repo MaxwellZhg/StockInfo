@@ -12,12 +12,13 @@ import java.math.BigDecimal
  */
 open class STOrderData {
     var id: String? = null //委托/持仓记录id
-    var stockType: String? = null //股票类型(SZ-深圳,SH-上海.HK-港股,US-美股)
-    var stockCode: String? = null //股票代码
+    var ts: String? = null //股票类型(SZ-深圳,SH-上海.HK-港股,US-美股)
+    var code: String? = null //股票代码
     var stockName: String? = null //股票名称
     var holdStockCount: BigDecimal? = null //股票数量
+    var saleStockCount: BigDecimal? = null //可卖股票数量
     var holeCost: BigDecimal? = null //股票价格/成本/订单价
-    var createDate: Long? = null //下单日期
+    var createTime: String? = null //下单日期
     var trustType: Int? = null //委托类型1-买入 2-卖出 11-撤买入 12-撤卖出 21-申购新股
     var status: Int? = null //交易状态(1未成交 2已成交 3部分成交 4场内撤单 5场外撤单 6 系统撤单  11撤单已成 21申购新股已报)
     var statusName: String? = null

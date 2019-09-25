@@ -218,11 +218,11 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
 
         fun bindData(position: Int, data: STOrderData) {
             stockName?.text = data.stockName
-            stockTsCode?.text = data.stockCode + "." + data.stockType
+            stockTsCode?.text = data.code + "." + data.ts
             number?.text = data.holdStockCount.toString()
             presentPrice?.text = data.holeCost.toString()
-            orderDate?.text = TimeZoneUtil.timeFormat(data.createDate!!, "MM-dd")
-            orderTime?.text = TimeZoneUtil.timeFormat(data.createDate!!, "HH:mm:ss")
+//            orderDate?.text = TimeZoneUtil.timeFormat(data.createTime!!, "yyyy-MM-ddTHH:mm:ss","MM-dd")
+//            orderTime?.text = TimeZoneUtil.timeFormat(data.createTime!!, "yyyy-MM-ddTHH:mm:ss","HH:mm:ss")
             item?.tag = position
             business?.tag = position
             quotation?.tag = position
