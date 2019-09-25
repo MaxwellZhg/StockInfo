@@ -12,7 +12,7 @@ import com.zhuorui.securities.market.model.STOrderData
 class OrderListResponse(val data: Data) : BaseResponse(){
 
     data class Data(
-        val records: List<STOrderData>?,
+        val list: List<STOrderData>?,
         val total: Int?,//总数
         val size: Int?,//返回的数据大小
         val current: Int?,//起始页数
