@@ -326,7 +326,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             stockInfo?.name!!,
             stockInfo?.tsCode!!,
             viewModel!!.buyPrice.value.toString() + "（港元）",
-            viewModel!!.buyCount.value!!,
+            MathUtil.convertToString(viewModel!!.buyCount.value!!.toBigDecimal()),
             response.data.totalFee.toDouble(),
             MathUtil.convertToString(viewModel?.buyMoney?.value?.add(response.data.totalFee)!!) + "（港元）"
         )

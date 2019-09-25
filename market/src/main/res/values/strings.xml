@@ -120,7 +120,7 @@
     <string name="order_detail_type_sell" translatable="false">方向：卖出</string>
     <string name="order_detail_stock" translatable="false">名称：%s</string>
     <string name="order_detail_price" translatable="false">价格：%s</string>
-    <string name="order_detail_count" translatable="false">数量：%d</string>
+    <string name="order_detail_count" translatable="false">数量：%s</string>
     <string name="order_detail_commission" translatable="false">佣金：%s</string>
     <string name="order_detail_money" translatable="false">金额：%s</string>
     <string name="buy_stocks_successful" translatable="false">下单成功</string>

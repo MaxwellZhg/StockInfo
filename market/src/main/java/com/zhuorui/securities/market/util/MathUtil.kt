@@ -93,17 +93,24 @@ object MathUtil {
     /**
      * 转换成带有逗号的字符串
      */
-    fun convertToString(number: Long): String {
-        val df = DecimalFormat("#,###")
-        return df.format(number)
+    fun convertToString(number: BigDecimal): String {
+        val scale = number.scale()
+        val format = "%" + ",." + scale + "f"
+        return format.format(number)
     }
 
     /**
-     * 转换成带有逗号的字符串
+     * 使用java正则表达式去掉多余的.与0
+     * @param s
+     * @return
      */
-    fun convertToString(number: BigDecimal): String {
-        val df = DecimalFormat("#,###")
-        return df.format(number)
+    fun subZeroAndDot(s: String): String {
+        var s = s
+        if (s.indexOf(".") > 0) {
+            s = s.replace("0+?$".toRegex(), "")//去掉多余的0
+            s = s.replace("[.]$".toRegex(), "")//如最后一位是.则去掉
+        }
+        return s
     }
 
     /**

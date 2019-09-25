@@ -83,7 +83,7 @@ class TradingStocksOrderDialog(
         stockName: String,
         tsCode: String,
         price: String,
-        count: Int,
+        count: String,
         commission: Double,
         money: String
     ): TradingStocksOrderDialog {

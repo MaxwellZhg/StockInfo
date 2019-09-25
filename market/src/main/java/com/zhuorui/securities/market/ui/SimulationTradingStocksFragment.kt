@@ -171,7 +171,7 @@ class SimulationTradingStocksFragment :
         if (maxBuyCount == null) {
             tv_max_buy_num.text = getString(R.string.max_buy_num) + " --"
         } else {
-            val formatCount = MathUtil.convertToString(maxBuyCount)
+            val formatCount = MathUtil.convertToString(maxBuyCount.toBigDecimal())
             val spannableString =
                 SpannableString(getString(R.string.max_buy_num) + " $formatCount")
             spannableString.setSpan(
@@ -200,7 +200,7 @@ class SimulationTradingStocksFragment :
         stockName: String,
         tsCode: String,
         price: String,
-        count: Int,
+        count: String,
         commission: Double,
         money: String
     ) {
