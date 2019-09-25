@@ -24,11 +24,6 @@ object SimulationTradeApi {
     const val UPDATE_TRUST_ORDER = "api/mock/update_trust_order"
 
     /**
-     * 撤销订单
-     */
-    const val CANCEL_TRUST_ORDER = "as_sims/api/mock/cancel_trust_order"
-
-    /**
      * 获取单支股票详情
      */
     const val STOCK_INFO = "as_market/api/hk_stock_basic/v1/get_one_by_tscode"
@@ -70,4 +65,9 @@ object SimulationTradeApi {
      * 撤消买入订单
      */
     const val CANCEL_BUY_TRUST = "as_sims/api/trade/v1/cancel_buy_trust"
+
+    /**
+     * 撤销卖出委托订单
+     */
+    const val CANCEL_SELL_TRUST = "as_sims/api/trade/v1/cancel_sell_trust"
 }

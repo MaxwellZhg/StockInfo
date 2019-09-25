@@ -60,7 +60,7 @@ class SimulationTradingMainFragment :
     private var tabTitle: Array<String>? = null
     private var mIndex: Int = 0
     private var loading: ProgressDialog? = null
-    private var fist:Boolean = true
+    private var fist: Boolean = true
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -92,14 +92,6 @@ class SimulationTradingMainFragment :
         }
     }
 
-    override fun onSupportVisible() {
-        super.onSupportVisible()
-        if (!fist){
-            showUpLoading()
-            presenter?.getFundAccount()
-        }
-    }
-
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         top_bar.setRightClickListener {
@@ -126,65 +118,26 @@ class SimulationTradingMainFragment :
         magic_indicator.navigator = getNavigator()
     }
 
-    var dialog: GetPicturesModeDialog? = null
-    var oss: OssService? = null
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
-        if (fist){
+        if (fist) {
             fist = false
-            showUpLoading()
             presenter?.getFundAccount()
             onSelect(0)
         }
-//        oss = OssService(context!!.applicationContext)
-//        dialog = context?.let { GetPicturesModeDialog(it) }
-//        dialog!!.listener = object : GetPicturesModeDialog.OnGetPicturesModeListener {
-//            /**
-//             * 返回图片地址（调用dialog的回调方法处理，此方法才会有结果返回）
-//             */
-//            override fun onPicturePath(path: String?) {
-//                oss?.getPutObjectObservable(path.toString())?.subscribeOn(Schedulers.io())
-//                    ?.observeOn(AndroidSchedulers.mainThread())
-//                    ?.subscribe(Consumer {
-//                        LogInfra.Log.i("lw",it)
-//                    }, Consumer {
-//                        LogInfra.Log.i("lw",it)
-//                        ToastUtil.instance.toast(it.message.toString())
-//                    })
-//            }
-//
-//            /**
-//             * 返回图片bitmap 调用dialog的回调方法处理，此方法才会有结果返回）
-//             */
-//            override fun onPictureBitmap(bm: Bitmap?) {
-//            }
-//
-//            /**
-//             * 去拍照
-//             */
-//            override fun goCamera(toCameraRequestCode: Int?, uri: Uri?) {
-//            }
-//
-//            /**
-//             * 去相册
-//             */
-//            override fun goAlbum(toAlbumRequestCode: Int?) {
-//                GetPhotoFromAlbumUtil.goAlbum(this@SimulationTradingMainFragment, toAlbumRequestCode!!)
-//            }
-//
-//        }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        dialog?.onActivityResult(requestCode,resultCode,data)
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        if (!fist) {
+            presenter?.getFundAccount()
+        }
     }
 
     /**
      * 去买卖
      */
     override fun toBusiness() {
-//        dialog!!.show()
         start(SimulationTradingStocksFragment.newInstance())
     }
 
@@ -212,7 +165,30 @@ class SimulationTradingMainFragment :
     /**
      * 撤单
      */
-    override fun toCancelOrder(id: String) {
+    override fun toCancelOrder(data: STOrderData) {
+        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
+            .setMsgText(R.string.str_confirm_withdrawal)
+            .setConfirmText(ResUtil.getString(R.string.str_confirm)!!)
+            .setCancelText(ResUtil.getString(R.string.str_cancel)!!)
+            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                override fun onCancel() {
+                }
+
+                override fun onConfirm() {
+                    val trustId = data.id!!
+                    when (data.trustType) {
+                        1 -> {
+                            presenter?.cancelBuyTrust(trustId)
+                        }
+                        2 -> {
+                            presenter?.cancelSellTrust(trustId)
+                        }
+                    }
+
+                }
+            })
+            .show()
     }
 
     /**
@@ -225,8 +201,15 @@ class SimulationTradingMainFragment :
      * 去创建资金账号
      */
     override fun toCreateFundAccount() {
-        showUpLoading()
         presenter?.createFundAccount()
+    }
+
+    override fun cancelTrustSuccess() {
+        presenter?.getFundAccount()
+    }
+
+    override fun cancelTrustError(msg: String?) {
+        ToastUtil.instance.toast(msg.toString())
     }
 
     override fun createFundAccountSuccess() {
@@ -243,7 +226,6 @@ class SimulationTradingMainFragment :
         orderDatas: List<STOrderData>?,
         fundAccount: STFundAccountData
     ) {
-        hideUpLoading()
         val postiosAdapter = getHoldpositionsAdapter()
         postiosAdapter.setData(positionDatas)
         val orderAdapter = getMockStockOrderAdapter()
@@ -259,7 +241,6 @@ class SimulationTradingMainFragment :
     }
 
     override fun onGetFundAccountError(code: String?, msg: String?) {
-        hideUpLoading()
         ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
             .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(msg.toString())
@@ -271,7 +252,6 @@ class SimulationTradingMainFragment :
                 }
 
                 override fun onConfirm() {
-                    showUpLoading()
                     presenter?.getFundAccount()
                 }
             })
@@ -279,7 +259,6 @@ class SimulationTradingMainFragment :
     }
 
     override fun onCreateFundAccountError(code: String, message: String?) {
-        hideUpLoading()
         ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
             .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(message.toString())
@@ -290,7 +269,6 @@ class SimulationTradingMainFragment :
                 }
 
                 override fun onConfirm() {
-                    showUpLoading()
                     presenter?.createFundAccount()
                 }
             })
@@ -340,14 +318,14 @@ class SimulationTradingMainFragment :
         return todayOrderAdapter!!
     }
 
-    private fun showUpLoading() {
+    override fun showLoading() {
         if (loading == null) {
             loading = context?.let { ProgressDialog(it) }
         }
         loading?.show()
     }
 
-    private fun hideUpLoading() {
+    override fun hideLoading() {
         loading?.dismiss()
     }
 

@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  *    date   : 2019/9/25 11:01
  *    desc   : 撤销买入订单
  */
-class CancelBuyTrustRequest(
+class CancelTrustRequest(
     val trustId: String,// 主委托表的订单id
     transaction: String
 ) : BaseRequest(transaction) {

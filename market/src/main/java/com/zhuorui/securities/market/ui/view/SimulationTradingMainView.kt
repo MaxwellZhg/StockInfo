@@ -16,4 +16,8 @@ interface SimulationTradingMainView : AbsView {
     fun onUpData(positionDatas: List<STPositionData>?, orderDatas: List<STOrderData>?, fundAccount: STFundAccountData)
     fun onGetFundAccountError(code: String?, msg: String?)
     fun onCreateFundAccountError(code: String, message: String?)
+    fun cancelTrustSuccess()
+    fun cancelTrustError(msg: String?)
+    fun showLoading()
+    fun hideLoading()
 }
