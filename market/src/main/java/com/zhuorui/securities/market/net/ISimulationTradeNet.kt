@@ -42,9 +42,6 @@ interface ISimulationTradeNet {
     @POST(SimulationTradeApi.STOCKS_INFO)
     fun getStocksInfo(@Body request: BaseRequest): Call<GetStocksInfoResponse>
 
-    @POST(SimulationTradeApi.CANCEL_TRUST_ORDER)
-    fun cancelTrustOrder(@Body request: BaseRequest): Call<BaseResponse>
-
     @POST(SimulationTradeApi.FEE_TEMPLATE)
     fun feeTemplate(@Body request: GetFeeTemplateRequest): Call<GetFeeTemplateResponse>
 
@@ -55,5 +52,9 @@ interface ISimulationTradeNet {
     fun stockSell(@Body request: StockTradRequest): Call<BaseResponse>
 
     @POST(SimulationTradeApi.CANCEL_BUY_TRUST)
-    fun cancelBuyTrust(@Body request: CancelBuyTrustRequest): Call<BaseResponse>
+    fun cancelBuyTrust(@Body request: CancelTrustRequest): Call<BaseResponse>
+
+    @POST(SimulationTradeApi.CANCEL_SELL_TRUST)
+    fun cancelSellTrust(@Body request: CancelTrustRequest): Call<BaseResponse>
+
 }

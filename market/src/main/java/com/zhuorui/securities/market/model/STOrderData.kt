@@ -30,7 +30,7 @@ open class STOrderData : Parcelable {
     @IgnoredOnParcel
     var holeCost: BigDecimal? = null //股票价格/成本/订单价
     @IgnoredOnParcel
-    var createTime: String? = null //下单日期
+    var createTime: Long? = null //下单日期
     @IgnoredOnParcel
     var trustType: Int? = null //委托类型1-买入 2-卖出 11-撤买入 12-撤卖出 21-申购新股
     @IgnoredOnParcel

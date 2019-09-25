@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.presenter
 
 import android.text.TextUtils
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -12,6 +13,7 @@ import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
+import com.zhuorui.securities.market.net.request.CancelTrustRequest
 import com.zhuorui.securities.market.net.request.FundAccountRequest
 import com.zhuorui.securities.market.net.request.GetPositionRequest
 import com.zhuorui.securities.market.net.request.OrderListRequest
@@ -58,6 +60,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 查询资金账户接口
      */
     fun getFundAccount() {
+        view?.showLoading()
         val request = FundAccountRequest(1, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
             ?.subscribeOn(Schedulers.io())?.observeOn(
@@ -74,13 +77,16 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                         getTodayOrders()
                     }
                     TextUtils.equals("060003", it.code) -> {
+                        view?.hideLoading()
                         view?.onUpData(null, null, STFundAccountData(null, 0f))
                     }
                     else -> {
+                        view?.hideLoading()
                         view?.onGetFundAccountError(it.code, it.msg)
                     }
                 }
             }, io.reactivex.functions.Consumer {
+                view?.hideLoading()
                 view?.onGetFundAccountError("-1", it.message)
             })
     }
@@ -89,6 +95,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 创建资金账号
      */
     fun createFundAccount() {
+        view?.showLoading()
         val request = FundAccountRequest(1, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
             ?.flatMap { t ->
@@ -103,6 +110,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 }
             }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(io.reactivex.functions.Consumer {
+                view?.hideLoading()
                 if (it.isSuccess()) {
                     val accountId = it.data.id!!
                     availableFunds = it.data.availableAmount!!
@@ -113,6 +121,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                     view?.onGetFundAccountError(it.code, it.msg)
                 }
             }, io.reactivex.functions.Consumer {
+                view?.hideLoading()
                 view?.onCreateFundAccountError("-1", it.message)
             })
     }
@@ -145,11 +154,24 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onOrderListResponse(response: OrderListResponse) {
-        count++
-        orderDatas = response.data.list
-        topicPrice()
+    /**
+     * 撤销买入订单
+     */
+    fun cancelBuyTrust(trustId: String) {
+        view?.showLoading()
+        val request = CancelTrustRequest(trustId, transactions.createTransaction())
+        Cache[ISimulationTradeNet::class.java]?.cancelBuyTrust(request)
+            ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+    }
+
+    /**
+     * 撤销卖出订单
+     */
+    fun cancelSellTrust(trustId: String) {
+        view?.showLoading()
+        val request = CancelTrustRequest(trustId, transactions.createTransaction())
+        Cache[ISimulationTradeNet::class.java]?.cancelSellTrust(request)
+            ?.enqueue(Network.IHCallBack<BaseResponse>(request))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
@@ -160,16 +182,39 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         topicPrice()
     }
 
-    override fun onErrorResponse(response: ErrorResponse) {
-//        super.onErrorResponse(response)
-        if (response.request is GetPositionRequest) {
-            count++
-            positionDatas = mutableListOf()
-        } else if (response.request is OrderListRequest) {
-            count++
-            orderDatas = mutableListOf()
-        }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onOrderListResponse(response: OrderListResponse) {
+        count++
+        orderDatas = response.data.list
         topicPrice()
+    }
+
+    override fun onBaseResponse(response: BaseResponse) {
+        super.onBaseResponse(response)
+        when (response.request) {
+            is CancelTrustRequest -> {
+                view?.hideLoading()
+                view?.cancelTrustSuccess()
+            }
+        }
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        when (response.request) {
+            is GetPositionRequest -> {
+                count++
+                topicPrice()
+            }
+            is OrderListRequest -> {
+                count++
+                topicPrice()
+            }
+            is CancelTrustRequest -> {
+                view?.hideLoading()
+                view?.cancelTrustError(response.msg)
+            }
+
+        }
     }
 
     /**
@@ -177,6 +222,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      */
     private fun topicPrice() {
         if (count >= 2 && (positionDatas == null || orderDatas == null)) {
+            view?.hideLoading()
             view?.onGetFundAccountError("-1", ResUtil.getString(R.string.getdata_err))
             return
         } else if (count < 2) {
@@ -187,10 +233,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         //过虑持仓重复订阅股票
         for (data in positionDatas!!) {
             val tsCode = data.code!! + "." + data.ts!!
-            if (!stocksInfo.containsKey(tsCode)) {
-                stocksInfo[tsCode] = PushStockPriceData()
-                list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
-            }
+//            if (!stocksInfo.containsKey(tsCode)) {
+            stocksInfo[tsCode] = PushStockPriceData()
+            list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
+//            }
         }
         //筛选订单需要订阅的股票
         for (data in orderDatas!!) {
@@ -212,13 +258,17 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
         if (stocksInfo.isNullOrEmpty()) return
         val prices: List<PushStockPriceData> = response.body
+        var change = false
         for (price in prices) {
             val tsCode = price.code + "." + price.ts
             if (stocksInfo.containsKey(tsCode)) {
                 stocksInfo[tsCode] = price
+                change = true
             }
         }
-        calculation()
+        if (change) {
+            calculation()
+        }
     }
 
     /**
@@ -293,7 +343,9 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         fundAccount.totalProfitAndLoss = totalProfitAndLoss.toFloat()
         fundAccount.todayProfitAndLoss = todayProfitAndLoss.toFloat()
         fundAccount.todayProfitAndLossPercentage = todayProfitAndLossPercentage.toFloat()
+        view?.hideLoading()
         view?.onUpData(positionDatas, orderDatas, fundAccount)
     }
+
 
 }

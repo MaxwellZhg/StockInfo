@@ -31,6 +31,7 @@ class SimulationTradingOrdersPresenter :
         this.sDate = sDate
         this.eDate = eDate
         page = 0
+        view?.onRefreshData()
         getOrders(sDate, eDate, 1)
     }
 
@@ -48,13 +49,14 @@ class SimulationTradingOrdersPresenter :
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onOrderListResponse(response: OrderListResponse) {
         page++
-
+        view?.addData(response.data.total!!,response.data.list)
     }
 
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
         if (response.request is OrderListRequest) {
+            view?.getDataError(response.msg!!)
         }
     }
 

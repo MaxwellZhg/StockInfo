@@ -11,7 +11,9 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.BR
+import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingOrdersBinding
+import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingOrdersPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingOrdersView
@@ -38,9 +40,10 @@ class SimulationTradingOrdersFragment :
     SimulationTradingOrdersView, View.OnClickListener {
 
     val timeFormat = "yyyy-MM-dd"
-    var todayOrderAdapter: SimulationTradingOrderAdapter? = null
+    var orderAdapter: SimulationTradingOrderAdapter? = null
     var tabTitle: Array<String>? = null
     var datePicker: DatePickerDialog? = null
+    var canLoadMore = false
 
     companion object {
         fun newInstance(): SimulationTradingOrdersFragment {
@@ -49,7 +52,7 @@ class SimulationTradingOrdersFragment :
     }
 
     override val layout: Int
-        get() = com.zhuorui.securities.market.R.layout.fragment_simulation_trading_orders
+        get() = R.layout.fragment_simulation_trading_orders
 
     override val viewModelId: Int
         get() = BR.viewModel
@@ -87,7 +90,7 @@ class SimulationTradingOrdersFragment :
                     val totalItemCount = manager.itemCount
 
                     // 判断是否滚动到底部
-                    if (lastVisibleItem == totalItemCount - 1 && isSlidingToLast) {
+                    if (canLoadMore && lastVisibleItem == totalItemCount - 1 && isSlidingToLast) {
                         onLoadMore()
                     }
                 }
@@ -98,6 +101,25 @@ class SimulationTradingOrdersFragment :
                 isSlidingToLast = dy > 0
             }
         })
+    }
+
+    override fun addData(total: Int, list: List<STOrderData>?) {
+        orderAdapter?.addDatas(list)
+        orderAdapter?.notifyDataSetChanged()
+        val dataSize = orderAdapter!!.datas!!.size
+        canLoadMore =  dataSize < total
+        orderAdapter?.setEmptyMassge(ResUtil.getString(R.string.str_no_record_historical_transactions)!!)
+    }
+
+    override fun onRefreshData() {
+        orderAdapter?.clear()
+        orderAdapter?.setEmptyMassge(ResUtil.getString(R.string.loading_data)!!)
+        orderAdapter?.notifyDataSetChanged()
+        canLoadMore = false
+    }
+
+    override fun getDataError(msg: String) {
+        orderAdapter?.setEmptyMassge(msg)
     }
 
     private fun onLoadMore() {
@@ -126,7 +148,6 @@ class SimulationTradingOrdersFragment :
         start_date?.text = staTime
         end_date?.text = endTime
         presenter?.getOrders(staTime, endTime)
-
     }
 
     override fun onClick(p0: View?) {
@@ -158,12 +179,11 @@ class SimulationTradingOrdersFragment :
     }
 
     fun getMockStockOrderAdapter(): SimulationTradingOrderAdapter {
-        if (todayOrderAdapter == null) {
-            todayOrderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
-            todayOrderAdapter?.canClick = false
+        if (orderAdapter == null) {
+            orderAdapter = context?.let { SimulationTradingOrderAdapter(it) }
+            orderAdapter?.canClick = false
         }
-        todayOrderAdapter?.setEmptyMassge(ResUtil.getString(com.zhuorui.securities.market.R.string.str_no_record_historical_transactions)!!)
-        return todayOrderAdapter!!
+        return orderAdapter!!
     }
 
 

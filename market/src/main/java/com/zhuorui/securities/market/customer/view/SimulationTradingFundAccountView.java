@@ -93,12 +93,12 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         float todayPL = data.getTodayProfitAndLoss();
         vTodayProfitLoss.setText(String.valueOf(todayPL));
         if (todayPL > 0) {
-            vTodayProfitLossB.setTextColor(Color.parseColor("#D9001B"));
-            vTodayProfitLoss.setTextColor(Color.parseColor("#D9001B"));
-            vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
-        } else if (todayPL < 0) {
             vTodayProfitLossB.setTextColor(Color.GREEN);
             vTodayProfitLoss.setTextColor(Color.GREEN);
+            vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
+        } else if (todayPL < 0) {
+            vTodayProfitLossB.setTextColor(Color.parseColor("#D9001B"));
+            vTodayProfitLoss.setTextColor(Color.parseColor("#D9001B"));
             vTodayProfitLossB.setText("-" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
         } else {
             vTodayProfitLossB.setTextColor(Color.parseColor("#282828"));

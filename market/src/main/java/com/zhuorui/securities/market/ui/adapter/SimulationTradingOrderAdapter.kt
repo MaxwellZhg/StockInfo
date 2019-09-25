@@ -49,6 +49,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
 
     fun clear() {
         datas?.clear()
+        initItemViewType()
     }
 
     fun addDatas(list: List<STOrderData>?) {
@@ -148,7 +149,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     }
                     itemViewHolder.cancel?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toCancelOrder(datas!![pos].id!!)
+                        listener?.toCancelOrder(datas!![pos])
                     }
                 }
                 itemViewHolder.canClick = canClick
@@ -221,8 +222,8 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             stockTsCode?.text = data.code + "." + data.ts
             number?.text = data.holdStockCount.toString()
             presentPrice?.text = data.holeCost.toString()
-//            orderDate?.text = TimeZoneUtil.timeFormat(data.createTime!!, "yyyy-MM-ddTHH:mm:ss","MM-dd")
-//            orderTime?.text = TimeZoneUtil.timeFormat(data.createTime!!, "yyyy-MM-ddTHH:mm:ss","HH:mm:ss")
+            orderDate?.text = TimeZoneUtil.timeFormat(data.createTime!!, "MM-dd")
+            orderTime?.text = TimeZoneUtil.timeFormat(data.createTime!!, "HH:mm:ss")
             item?.tag = position
             business?.tag = position
             quotation?.tag = position
@@ -283,7 +284,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         /**
          * 撤单
          */
-        fun toCancelOrder(id: String)
+        fun toCancelOrder(data: STOrderData)
     }
 
 }
