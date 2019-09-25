@@ -49,6 +49,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
 
     fun clear() {
         datas?.clear()
+        initItemViewType()
     }
 
     fun addDatas(list: List<STOrderData>?) {

@@ -187,10 +187,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         //过虑持仓重复订阅股票
         for (data in positionDatas!!) {
             val tsCode = data.code!! + "." + data.ts!!
-            if (!stocksInfo.containsKey(tsCode)) {
-                stocksInfo[tsCode] = PushStockPriceData()
-                list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
-            }
+//            if (!stocksInfo.containsKey(tsCode)) {
+            stocksInfo[tsCode] = PushStockPriceData()
+            list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
+//            }
         }
         //筛选订单需要订阅的股票
         for (data in orderDatas!!) {
@@ -212,13 +212,17 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
         if (stocksInfo.isNullOrEmpty()) return
         val prices: List<PushStockPriceData> = response.body
+        var change = false
         for (price in prices) {
             val tsCode = price.code + "." + price.ts
             if (stocksInfo.containsKey(tsCode)) {
                 stocksInfo[tsCode] = price
+                change = true
             }
         }
-        calculation()
+        if (change) {
+            calculation()
+        }
     }
 
     /**

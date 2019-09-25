@@ -128,4 +128,5 @@
     <string name="buy_stocks_successful" translatable="false">下单成功</string>
     <string name="see_details" translatable="false">查看详情</string>
     <string name="tips" translatable="false">提示</string>
+    <string name="loading_data">正在加载数据..</string>
 </resources>
