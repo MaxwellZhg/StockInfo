@@ -96,12 +96,14 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             }
             // 买入未成交
             else if (orderData.trustType == 1 && orderData.status == 1) {
+                viewModel?.updateOrderId?.value = orderData.id
                 // 显示订单委托价格、委托股数
                 viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
                 viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
                 // 显示买入改单状态
                 view?.changeTrustType(1)
             } else if (orderData.trustType == 2 && orderData.status == 1) {
+                viewModel?.updateOrderId?.value = orderData.id
                 // 显示订单委托价格、委托股数
                 viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
                 viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
@@ -353,7 +355,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.stockInfoData?.value = stockInfoData
         viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.realPrice)
         // 当改单时不取最新的实时股价和每手股数
-        if (viewModel?.buyPrice?.value == null && viewModel?.buyPrice?.value == null) {
+        if (viewModel?.updateOrderId?.value == null) {
             viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
             viewModel?.buyCount?.value = stockInfoData.perShareNumber
         } else {
@@ -426,9 +428,10 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun confirmTradingStocks(chargeType: Int) {
         // 获取当支股票信息
         val stockInfo = viewModel?.stockInfo?.value
+        val updateOrderId = viewModel?.updateOrderId?.value
         val request = StockTradRequest(
             LocalAccountConfig.read().getAccountInfo().accountId!!,
-            null,
+            updateOrderId,
             stockInfo?.ts!!,
             stockInfo.code!!,
             viewModel?.buyPrice?.value!!,
@@ -440,24 +443,26 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             transactions.createTransaction()
         )
 
-//        val updateType = 1
-
         if (chargeType == 1) {
-            // 买入股票
-            Cache[ISimulationTradeNet::class.java]?.stockBuy(request)
-                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
-
-            // 修改买入订单
-//            Cache[ISimulationTradeNet::class.java]?.updateBuyTrust(request)
-//                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            if (updateOrderId == null) {
+                // 买入股票
+                Cache[ISimulationTradeNet::class.java]?.stockBuy(request)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            } else {
+                // 修改买入订单
+                Cache[ISimulationTradeNet::class.java]?.updateBuyTrust(request)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            }
         } else {
-            // 卖出股票
-            Cache[ISimulationTradeNet::class.java]?.stockSell(request)
-                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
-
-            // 修改卖出订单
-//            Cache[ISimulationTradeNet::class.java]?.updateSellTrust(request)
-//                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            if (updateOrderId == null) {
+                // 卖出股票
+                Cache[ISimulationTradeNet::class.java]?.stockSell(request)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            } else {
+                // 修改卖出订单
+                Cache[ISimulationTradeNet::class.java]?.updateSellTrust(request)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            }
         }
     }
 

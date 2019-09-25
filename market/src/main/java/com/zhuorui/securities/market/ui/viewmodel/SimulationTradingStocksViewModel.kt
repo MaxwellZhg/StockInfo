@@ -48,6 +48,8 @@ class SimulationTradingStocksViewModel : ViewModel() {
     val enableSell = MutableLiveData<Boolean>()
     // 交易总费用
     val totalFee = MutableLiveData<BigDecimal>()
+    // 修改订单的id
+    val updateOrderId = MutableLiveData<String>()
 
     init {
         buyRate.value = BigDecimal.valueOf(50.00)
