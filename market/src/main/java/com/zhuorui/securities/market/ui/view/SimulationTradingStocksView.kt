@@ -63,4 +63,9 @@ interface SimulationTradingStocksView : AbsView {
      * 买入成功
      */
     fun buyStocksSuccessful()
+
+    /**
+     * 退出界面
+     */
+    fun exit()
 }

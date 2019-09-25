@@ -223,6 +223,10 @@ class SimulationTradingStocksFragment :
         TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true).setTitleText(getString(R.string.tips))
             .setMsgText(getString(R.string.buy_stocks_successful)).setConfirmText(getString(R.string.see_details)).show()
 
+    override fun exit() {
+        pop()
+    }
+
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
         if (resultCode == ISupportFragment.RESULT_OK && requestCode == SEARCH_STOCK_CODE) {

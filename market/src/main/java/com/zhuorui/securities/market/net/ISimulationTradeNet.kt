@@ -50,4 +50,7 @@ interface ISimulationTradeNet {
 
     @POST(SimulationTradeApi.STOCK_BUY)
     fun stockBuy(@Body request: StockBuyRequest): Call<BaseResponse>
+
+    @POST(SimulationTradeApi.CANCEL_BUY_TRUST)
+    fun cancelBuyTrust(@Body request: CancelBuyTrustRequest): Call<BaseResponse>
 }

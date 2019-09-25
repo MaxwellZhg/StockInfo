@@ -363,6 +363,13 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         Cache[ISimulationTradeNet::class.java]?.stockBuy(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
     }
 
+    /**
+     * 取消改单
+     */
+    fun cancelChangeOrders(){
+        view?.exit()
+    }
+
     override fun onBaseResponse(response: BaseResponse) {
         if (response.request is StockBuyRequest) {
             // 买入股票成功
