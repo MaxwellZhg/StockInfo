@@ -51,6 +51,12 @@ interface ISimulationTradeNet {
     @POST(SimulationTradeApi.STOCK_SELL)
     fun stockSell(@Body request: StockTradRequest): Call<BaseResponse>
 
+    @POST(SimulationTradeApi.UPDATE_BUY_TRUST)
+    fun updateBuyTrust(@Body request: StockTradRequest): Call<BaseResponse>
+
+    @POST(SimulationTradeApi.UPDATE_SELL_TRUST)
+    fun updateSellTrust(@Body request: StockTradRequest): Call<BaseResponse>
+
     @POST(SimulationTradeApi.CANCEL_BUY_TRUST)
     fun cancelBuyTrust(@Body request: CancelTrustRequest): Call<BaseResponse>
 

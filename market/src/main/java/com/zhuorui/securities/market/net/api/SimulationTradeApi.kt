@@ -67,6 +67,16 @@ object SimulationTradeApi {
     const val STOCK_SELL = "as_sims/api/trade/v1/sell"
 
     /**
+     * 修改买入订单
+     */
+    const val UPDATE_BUY_TRUST = "as_sims/api/trade/v1/update_buy_trust"
+
+    /**
+     * 修改卖出订单
+     */
+    const val UPDATE_SELL_TRUST = "as_sims/api/trade/v1/update_sell_trust"
+
+    /**
      * 撤消买入订单
      */
     const val CANCEL_BUY_TRUST = "as_sims/api/trade/v1/cancel_buy_trust"

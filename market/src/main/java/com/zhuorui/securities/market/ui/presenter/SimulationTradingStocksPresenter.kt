@@ -58,11 +58,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         if (orderData != null) {
             // 已持仓
             if (orderData.saleStockCount?.compareTo(BigDecimal.ZERO) == 1) {
-                val saleStockCount = orderData.saleStockCount!!.toLong()
-                viewModel?.maxSaleCount?.value = saleStockCount
-                viewModel?.enableSell?.value = true
-                // 显示最大可卖
-                view?.updateMaxBuySell(saleStockCount)
+                updateMaxBuySell(orderData.saleStockCount!!.toLong())
                 // 显示已持仓状态
                 view?.changeTrustType(3)
             }
@@ -71,6 +67,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 // 显示买入改单状态
                 view?.changeTrustType(1)
             } else if (orderData.trustType == 2 && orderData.status == 1) {
+                updateMaxBuySell(orderData.holdStockCount!!.toLong())
                 // 显示卖出改单状态
                 view?.changeTrustType(2)
             }
@@ -109,6 +106,17 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.buyPrice?.observe(fragment, androidx.lifecycle.Observer<BigDecimal> {
             calculateBuyMoney()
         })
+    }
+
+    /**
+     * 更新已持仓股数
+     * @param count 已持仓的股数
+     */
+    private fun updateMaxBuySell(count: Long) {
+        viewModel?.maxSaleCount?.value = count
+        viewModel?.enableSell?.value = true
+        // 显示最大可卖
+        view?.updateMaxBuySell(count)
     }
 
     /**
@@ -409,6 +417,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         val stockInfo = viewModel?.stockInfo?.value
         val request = StockTradRequest(
             LocalAccountConfig.read().getAccountInfo().accountId!!,
+            null,
             stockInfo?.ts!!,
             stockInfo.code!!,
             viewModel?.buyPrice?.value!!,
@@ -419,14 +428,25 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             chargeType,
             transactions.createTransaction()
         )
+
+//        val updateType = 1
+
         if (chargeType == 1) {
-            // 买入
+            // 买入股票
             Cache[ISimulationTradeNet::class.java]?.stockBuy(request)
                 ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+
+            // 修改买入订单
+//            Cache[ISimulationTradeNet::class.java]?.updateBuyTrust(request)
+//                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
         } else {
-            // 卖出
+            // 卖出股票
             Cache[ISimulationTradeNet::class.java]?.stockSell(request)
                 ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+
+            // 修改卖出订单
+//            Cache[ISimulationTradeNet::class.java]?.updateSellTrust(request)
+//                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
         }
     }
 
@@ -439,7 +459,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
 
     override fun onBaseResponse(response: BaseResponse) {
         if (response.request is StockTradRequest) {
-            // 买入/卖出股票成功
+            // 买入/卖出/修改买入/修改卖出股票成功
             view?.tradStocksSuccessful()
         }
     }

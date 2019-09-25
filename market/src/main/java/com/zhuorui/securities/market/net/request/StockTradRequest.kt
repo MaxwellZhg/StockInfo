@@ -7,10 +7,11 @@ import java.math.BigDecimal
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
  *    date   : 2019/9/24 15:49
- *    desc   : 买入、卖出股票
+ *    desc   : 买入、卖出、修改买入、修改卖出股票
  */
 class StockTradRequest(
     val accountId: String,// 账号id
+    val trustId:String?,// 订单id，修改订单时需要传此参数
     val ts: String,// 股票类型 ：SZ, SH, HK, US
     val code: String,// 股票编码
     val price: BigDecimal,// 单价，最多三位小数

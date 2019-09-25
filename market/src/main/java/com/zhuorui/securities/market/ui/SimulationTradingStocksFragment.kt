@@ -140,8 +140,12 @@ class SimulationTradingStocksFragment :
                 btn_sell.visibility = View.INVISIBLE
             }
             2 -> {
+                btn_cancel_change_order.visibility = View.VISIBLE
+                btn_sell.visibility = View.VISIBLE
+                btn_sell.text = getString(R.string.str_confirm_change_order)
+
                 btn_buy.visibility = View.INVISIBLE
-                btn_sell.visibility = View.INVISIBLE
+                btn_confirm_change_order.visibility = View.GONE
             }
             3 -> {
                 btn_buy.visibility = View.VISIBLE
