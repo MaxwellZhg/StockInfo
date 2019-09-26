@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.openaccount.ui.viewmodel.OAConfirmDocumentsViewModel"/>
+    </data>
+    <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/root_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                app:zr_topbarTitle="@string/zhuorui_openaccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <ImageView android:layout_width="146dp"
+                   android:layout_height="146dp"
+                   android:src="@mipmap/ic_warnings"
+                   android:layout_margin="22dp"
+                   android:layout_gravity="center_horizontal"
+        />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_232323"
+                android:textSize="19sp"
+                android:text="@string/str_supplementary_tips"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+
+        />
+
+        <com.zhuorui.commonwidget.StateButton
+                android:id="@+id/btn_next"
+                style="@style/btnStyle"
+                android:layout_width="match_parent"
+                android:layout_marginTop="38dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="@string/str_continue_open_accounts"
+        />
+
+
+    </LinearLayout>
+</layout>

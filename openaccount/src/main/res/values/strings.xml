@@ -103,4 +103,8 @@
     <string name="str_upload">上传</string>
     <string name="email_tips">邮箱将用于接收结单等重要操作请再次确认是否输入正确\n</string>
     <string name="str_upload_err">上传失败</string>
+    <string name="str_supplementary_tips">您提交的开户信息不完整\n请继续补充</string>
+    <string name="str_continue_open_accounts">继续开户</string>
+    <string name="str_reasons_fail_tips">很抱歉，开户审核未通过，未通过原因：\n</string>
+    <string name="btn_edit_open_data">修改开户资料</string>
 </resources>
