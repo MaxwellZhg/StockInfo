@@ -106,7 +106,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 view?.changeTrustType(3)
             }
             // 买入未成交
-            else if (orderData.trustType == 1 && orderData.status == 1) {
+            else if (orderData.trustType == 1 && orderData.majorStatus == 1) {
                 viewModel?.updateOrderId?.value = orderData.id
                 viewModel?.updateType?.value = 1
                 // 显示订单委托价格、委托股数
@@ -116,7 +116,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 view?.changeTrustType(1)
             }
             // 卖出未成交
-            else if (orderData.trustType == 2 && orderData.status == 1) {
+            else if (orderData.trustType == 2 && orderData.majorStatus == 1) {
                 viewModel?.updateOrderId?.value = orderData.id
                 viewModel?.updateType?.value = 2
                 // 显示订单委托价格、委托股数

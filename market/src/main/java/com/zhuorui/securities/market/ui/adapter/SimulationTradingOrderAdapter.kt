@@ -238,7 +238,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             orderStatus?.text = data?.statusName
             orderStatus?.setCompoundDrawablesWithIntrinsicBounds(data?.statusLogo!!, 0, 0, 0)
             if (canClick) {
-                val status = data?.status
+                val status = data?.majorStatus
                 menuType = if (status == 1 || status == 3) {
                     1
                 } else if (status == 4 || status == 5 || status == 6) {

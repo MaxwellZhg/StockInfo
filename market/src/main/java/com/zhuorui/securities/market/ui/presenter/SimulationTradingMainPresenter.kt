@@ -258,7 +258,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         }
         //筛选订单需要订阅的股票
         for (data in orderDatas!!) {
-            if (data.status == 2 && !stocksInfo.containsKey(data.code!! + "." + data.ts!!)) {
+            if (data.majorStatus == 2 && !stocksInfo.containsKey(data.code!! + "." + data.ts!!)) {
                 list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
             }
         }
@@ -330,7 +330,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         val totalAssets: BigDecimal = MathUtil.add3(totalMarketValue, availableFunds)
         if (!orderDatas.isNullOrEmpty()) {
             for (data in orderDatas!!) {
-                if (data?.status!! == 2) {
+                if (data?.majorStatus == 2) {
                     val amt = MathUtil.multiply3(data.holdStockCount!!, data.holeCost!!)
                     when (data.trustType) {
                         1 -> {
