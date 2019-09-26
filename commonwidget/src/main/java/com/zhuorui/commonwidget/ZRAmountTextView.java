@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  * author : liuwei
  * e-mail : vsanliu@foxmail.com
  * date   : 2019-09-12 10:44
- * desc   : 金额显示控件
+ * desc   : 金额显示控件 支持逗号分割、缩放显示小数、指定显示几位小数
  */
 public class ZRAmountTextView extends AppCompatTextView {
 
