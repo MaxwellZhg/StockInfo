@@ -62,7 +62,7 @@ class SearchInfoAdapter(context:Context?) :BaseListAdapter<SearchDeafaultData>()
         override fun bind(item: SearchDeafaultData?, position: Int) {
           var adapter= HotSearchAdapter()
             rl_hot.adapter=adapter
-            rl_hot.layoutManager=GridLayoutManager(context,2)
+            rl_hot.layoutManager= GridLayoutManager(context,2) as RecyclerView.LayoutManager?
             rl_hot.addItemDecoration(
                 SpaceItemDecoration(
                     ResUtil.getDimensionDp2Px(

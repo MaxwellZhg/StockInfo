@@ -59,7 +59,7 @@ class StockPopupWindow(contentView: View, width: Int, height: Int) : PopupWindow
     }
 
     override fun showAtLocation(parent: View?, gravity: Int, x: Int, y: Int) {
-        super.showAtLocation(parent, gravity, x, y - ResUtil.getDimensionDp2Px(60f))
+        super.showAtLocation(parent, gravity, x, y - ResUtil.getDimensionDp2Px(58f))
     }
 
     companion object {

@@ -11,9 +11,9 @@ import android.view.ViewStub;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
-import com.zhuorui.securities.personal.config.LocalSettingsConfig;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

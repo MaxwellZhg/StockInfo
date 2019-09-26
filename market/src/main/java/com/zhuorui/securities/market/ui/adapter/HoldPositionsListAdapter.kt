@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.STPositionData
 import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
-import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import java.text.DecimalFormat
 
 /**

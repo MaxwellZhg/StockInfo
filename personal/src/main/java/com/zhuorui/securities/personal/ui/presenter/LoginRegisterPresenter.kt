@@ -129,6 +129,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                         task = null
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
+                        viewModel?.getcodeState?.set(0)
                     }
                 }
             }
@@ -181,6 +182,10 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
 
     fun postChangeMytabInfo(){
         RxBus.getDefault().post(MyTabInfoEvent())
+    }
+
+    fun getGetCodeColor(state:Int){
+        viewModel?.getcodeState?.set(state)
     }
 
 }
