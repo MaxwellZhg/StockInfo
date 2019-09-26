@@ -12,6 +12,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.STOrderData
+import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 
 /**
  *    author : liuwei
@@ -133,15 +134,17 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     }
                     itemViewHolder.business?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toBusiness(2,datas!![pos])
+                        listener?.toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_UPDATE_ORDER, datas!![pos])
                     }
                     itemViewHolder.quotation?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toQuotation("Quotation:$pos")
+                        val data = datas!![pos]
+                        listener?.toQuotation(data.code.toString(), data.ts.toString())
                     }
                     itemViewHolder.orderQuotation?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toQuotation("OrderQuotation$pos")
+                        val data = datas!![pos]
+                        listener?.toQuotation(data.code.toString(), data.ts.toString())
                     }
                     itemViewHolder.change?.setOnClickListener {
                         val pos: Int = it.tag as Int

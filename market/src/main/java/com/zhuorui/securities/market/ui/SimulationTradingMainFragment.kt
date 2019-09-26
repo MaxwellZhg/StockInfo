@@ -160,7 +160,7 @@ class SimulationTradingMainFragment :
      * 改单
      */
     override fun toChangeOrder(data: STOrderData) {
-        start(SimulationTradingStocksFragment.newInstance(2,data))
+        start(SimulationTradingStocksFragment.newInstance(SimulationTradingStocksFragment.TRAD_TYPE_UPDATE_ORDER,data))
     }
 
     /**

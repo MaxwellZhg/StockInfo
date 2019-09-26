@@ -11,6 +11,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.STPositionData
+import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 import java.text.DecimalFormat
 
 /**
@@ -124,11 +125,12 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 }
                 itemViewHolder.business?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    listener?.toBusiness(1,datas!![pos])
+                    listener?.toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT,datas!![pos])
                 }
                 itemViewHolder.quotation?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    listener?.toQuotation("HP_quotation:$pos")
+                    val data = datas!![pos]
+                    listener?.toQuotation(data.code.toString(),data.ts.toString())
                 }
                 itemViewHolder
             }
@@ -232,7 +234,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         /**
          * 去行情
          */
-        fun toQuotation(id: String)
+        fun toQuotation(code: String,ts:String)
     }
 
 }
