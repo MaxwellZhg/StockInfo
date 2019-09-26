@@ -1,19 +1,22 @@
 package com.zhuorui.securities.alioss.service
 
 import android.content.Context
-import android.util.Log
-import com.alibaba.sdk.android.oss.*
-import com.alibaba.sdk.android.oss.callback.OSSProgressCallback
+import android.text.TextUtils
+import com.alibaba.sdk.android.oss.ClientConfiguration
+import com.alibaba.sdk.android.oss.ClientException
+import com.alibaba.sdk.android.oss.OSS
+import com.alibaba.sdk.android.oss.OSSClient
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationToken
-import com.alibaba.sdk.android.oss.model.*
+import com.alibaba.sdk.android.oss.model.OSSRequest
+import com.alibaba.sdk.android.oss.model.PutObjectRequest
 import com.zhuorui.securities.alioss.net.IOssNet
 import com.zhuorui.securities.alioss.net.response.TokenResponse
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.Transactions
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import io.reactivex.Observable
 import retrofit2.Call
 import java.util.HashSet as HashSet1
 
@@ -22,11 +25,11 @@ import java.util.HashSet as HashSet1
  * Created by mOss on 2015/12/7 0007.
  * 支持普通上传，普通下载
  */
-class OssService(applicationContext: Context) {
+class OssService(applicationContext: Context, endpoint: String, bucketName: String) {
 
     var mOss: OSS
-    private var mBucket = "zhuorui-dev"
-    private var mEndpoint = "http://oss-cn-shenzhen.aliyuncs.com"
+    private var mBucket = if (TextUtils.isEmpty(endpoint)) "zhuorui-dev" else bucketName
+    private var mEndpoint = if (TextUtils.isEmpty(endpoint)) "http://oss-cn-shenzhen.aliyuncs.com" else endpoint
 
     private val credentialProvider = object : OSSFederationCredentialProvider() {
         @Throws(ClientException::class)
@@ -67,48 +70,42 @@ class OssService(applicationContext: Context) {
         mOss = OSSClient(applicationContext, mEndpoint, credentialProvider, conf)
     }
 
-    fun getPutObjectObservable(uploadFilePath: String): io.reactivex.Observable<String> {
+    fun getPutObjectObservable(objectName: String, uploadData: ByteArray): Observable<String> {
+        return Observable.create { emitter ->
+            val put = PutObjectRequest(mBucket, objectName, uploadData)
+            put.crC64 = OSSRequest.CRC64Config.YES
+//            put.progressCallback = OSSProgressCallback { request, currentSize, totalSize ->
+//                LogInfra.Log.i("lw", "currentSize:$currentSize totalSize:$totalSize")
+//            }
+            val putResult = mOss.putObject(put)
+            if (putResult.statusCode == 200) {
+                emitter.onNext(objectName)
+                emitter.onComplete()
+            } else {
+                emitter.onError(RuntimeException(putResult.statusCode.toString()))
+            }
+        }
+    }
+
+    fun getPutObjectObservable(uploadFilePath: String): Observable<String> {
         val suffix = uploadFilePath.substring(uploadFilePath.lastIndexOf("."))
         val name = if (VIDEO_SUFFIX.contains(suffix)) createUpVideoName(suffix) else createUpImageName(suffix)
         return getPutObjectObservable(name, uploadFilePath)
     }
 
-    fun getPutObjectObservable(objectName: String, uploadFilePath: String): io.reactivex.Observable<String> {
-        return io.reactivex.Observable.create { emitter ->
+    fun getPutObjectObservable(objectName: String, uploadFilePath: String): Observable<String> {
+        return Observable.create { emitter ->
             val put = PutObjectRequest(mBucket, objectName, uploadFilePath)
             put.crC64 = OSSRequest.CRC64Config.YES
-            put.progressCallback = OSSProgressCallback { request, currentSize, totalSize ->
-                LogInfra.Log.i("lw", "currentSize:$currentSize totalSize:$totalSize")
-            }
-            try {
-                val putResult = mOss.putObject(put)
+//            put.progressCallback = OSSProgressCallback { request, currentSize, totalSize ->
+//                LogInfra.Log.i("lw", "currentSize:$currentSize totalSize:$totalSize")
+//            }
+            val putResult = mOss.putObject(put)
+            if (putResult.statusCode == 200) {
                 emitter.onNext(objectName)
                 emitter.onComplete()
-            } catch (e: ClientException) {
-                // 本地异常，如网络异常等。
-                e.printStackTrace()
-                emitter.onError(e)
-            } catch (e: ServiceException) {
-                emitter.onError(e)
-            }
-        }
-    }
-
-    fun getPutObjectObservable(objectName: String, uploadData: ByteArray): io.reactivex.Observable<String> {
-        return io.reactivex.Observable.create {
-            val put = PutObjectRequest(mBucket, objectName, uploadData)
-            put.progressCallback = OSSProgressCallback { request, currentSize, totalSize -> }
-            try {
-                val putResult = mOss.putObject(put)
-            } catch (e: ClientException) {
-                // 本地异常，如网络异常等。
-                e.printStackTrace()
-            } catch (e: ServiceException) {
-                // 服务异常。
-                Log.e("RequestId", e.requestId)
-                Log.e("ErrorCode", e.errorCode)
-                Log.e("HostId", e.hostId)
-                Log.e("RawMessage", e.rawMessage)
+            } else {
+                emitter.onError(RuntimeException(putResult.statusCode.toString()))
             }
         }
     }
@@ -136,5 +133,6 @@ class OssService(applicationContext: Context) {
             suffix
         )
     }
+
 
 }

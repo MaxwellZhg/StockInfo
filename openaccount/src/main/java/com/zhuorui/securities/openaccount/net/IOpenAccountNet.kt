@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.net
 
+import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
 import com.zhuorui.securities.openaccount.net.api.OpenAccountApi
@@ -57,6 +58,10 @@ interface IOpenAccountNet {
     //上传风险披露情况接口
     @POST(OpenAccountApi.SUB_RISK_DISCLOSURE)
     fun subRiskDisclosure(@Body request: SubRiskDisclosureRequest): Call<SubRiskDisclosureResponse>
+
+    //获取所有aliyun OSS存储空间
+    @POST(OpenAccountApi.BUCKET_NAME)
+    fun bucketName(@Body request: BaseRequest): Call<BucketResponse>
 
 
 }

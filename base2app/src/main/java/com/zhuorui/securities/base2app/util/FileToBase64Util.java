@@ -100,6 +100,23 @@ public class FileToBase64Util {
     }
 
     /**
+     * 根压bitmap
+     *
+     * @return
+     */
+    public static byte[] getSmallBitmap(Bitmap bitmap) {
+        //缩放压缩
+        float scale = calculateScale(bitmap.getWidth(), bitmap.getHeight(), 480, 800);
+        Matrix matrix = new Matrix();
+        matrix.setScale(scale, scale);
+        Bitmap bm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        //质量压缩
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        return baos.toByteArray();
+    }
+
+    /**
      * 计算图片的缩放值
      *
      * @param reqWidth
@@ -181,26 +198,10 @@ public class FileToBase64Util {
         return resizedBitmap;
     }
 
-//    /**
-//     //     * 图片文件转Base64字符串
-//     //     *
-//     //     * @param path 文件所在的绝对路径加文件名
-//     //     */
-//    public static String fileBase64String(String path) {
-//        try {
-//            FileInputStream fis = new FileInputStream(path);//转换成输入流
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            byte[] buffer = new byte[1024];
-//            int count = 0;
-//            while ((count = fis.read(buffer)) >= 0) {
-//                baos.write(buffer, 0, count);//读取输入流并写入输出字节流中
-//            }
-//            fis.close();//关闭文件输入流
-//            String uploadBuffer = "data:video/avi;base64," + Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);  //进行Base64编码
-//            return uploadBuffer;
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
+    public static byte[] bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 50, baos);
+        return baos.toByteArray();
+    }
 
 }

@@ -58,5 +58,10 @@ interface OpenAccountApi {
          */
         const val SUB_RISK_DISCLOSURE = "as_user/api/open/v1/sub_risk_disclosure"
 
+        /**
+         * 获取所有存储空间
+         */
+        const val BUCKET_NAME = "as_common/api/sts/v1/bucket_name"
+
     }
 }

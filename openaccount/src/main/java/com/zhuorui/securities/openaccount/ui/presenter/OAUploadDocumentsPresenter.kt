@@ -3,6 +3,7 @@ package com.zhuorui.securities.openaccount.ui.presenter
 import android.graphics.Bitmap
 import com.zhuorui.commonwidget.impl.IImageUploader
 import com.zhuorui.commonwidget.impl.OnImageUploaderListener
+import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
@@ -16,6 +17,7 @@ import com.zhuorui.securities.base2app.util.Base64Enum
 import com.zhuorui.securities.base2app.util.FileToBase64Util
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
+import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -27,9 +29,11 @@ import io.reactivex.schedulers.Schedulers
  */
 class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUploadDocumentsViewModel>() {
 
+    var oss:OssService? = null
 
     override fun init() {
         super.init()
+        oss = view?.getContext()?.let { OssService(it,OpenInfoManager.getInstance()!!.bucket.endpoint,OpenInfoManager.getInstance()!!.bucket.bucketName) }
     }
 
     fun setDefData() {
@@ -52,28 +56,32 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
             }
 
             override fun upLoad(path: String?) {
-                Observable.create(ObservableOnSubscribe<String> { emitter ->
-                    emitter.onNext(FileToBase64Util.bitmapBase64String(path))
+                Observable.create(ObservableOnSubscribe<ByteArray> { emitter ->
+                    emitter.onNext(FileToBase64Util.getSmallBitmap(FileToBase64Util.getSmallBitmap(path)))
                     emitter.onComplete()
-                }).flatMap { t ->
+                }).flatMap {
+                    oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+                }.flatMap { t ->
                     getIdCardOcrObservable(t)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe(getSuccessConsumer(), getErrorConsumer())
             }
 
             override fun upLoad(bitmap: Bitmap?) {
-                Observable.create(ObservableOnSubscribe<String> { emitter ->
-                    emitter.onNext(FileToBase64Util.bitmapBase64String(Base64Enum.PNG, bitmap))
+                Observable.create(ObservableOnSubscribe<ByteArray> { emitter ->
+                    emitter.onNext(FileToBase64Util.getSmallBitmap(bitmap))
                     emitter.onComplete()
-                }).flatMap { t ->
+                }).flatMap {
+                    oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+                }.flatMap { t ->
                     getIdCardOcrObservable(t)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe(getSuccessConsumer(), getErrorConsumer())
             }
 
-            fun getIdCardOcrObservable(ba64Data: String): Observable<IdCardOrcResponse> {
+            fun getIdCardOcrObservable(url: String): Observable<IdCardOrcResponse> {
                 val id: String = OpenInfoManager.getInstance()?.info?.id.toString()
-                val request = IdCardOrcRequest(tp, ba64Data, id, transactions.createTransaction())
+                val request = IdCardOrcRequest(tp, "2", url, id, transactions.createTransaction())
                 return Cache[IOpenAccountNet::class.java]?.idCardOcr(request)!!
             }
 
@@ -82,14 +90,14 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
                     if (it.isSuccess()) {
                         listener?.onSuccess(if (tp == 0) it.data.cardFrontPhoto else it.data.cardBackPhoto)
                     } else {
-                        listener?.onFail(it.code,it.msg)
+                        listener?.onFail(it.code, it.msg)
                     }
                 }
             }
 
             fun getErrorConsumer(): io.reactivex.functions.Consumer<Throwable> {
                 return io.reactivex.functions.Consumer {
-                    listener?.onFail("-1",it.message)
+                    listener?.onFail("-1", it.message)
 
                 }
             }

@@ -1,11 +1,9 @@
 package com.zhuorui.securities.openaccount.manager
 
 import android.text.TextUtils
+import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
-import com.zhuorui.securities.openaccount.net.response.BankCardVerificationResponse
-import com.zhuorui.securities.openaccount.net.response.SubBasicsInfoResponse
-import com.zhuorui.securities.openaccount.net.response.SubIdentityResponse
-import com.zhuorui.securities.openaccount.net.response.SubRiskDisclosureResponse
+import com.zhuorui.securities.openaccount.net.response.*
 import com.zhuorui.securities.openaccount.ui.*
 import me.yokeyword.fragmentation.ISupportFragment
 
@@ -17,6 +15,7 @@ import me.yokeyword.fragmentation.ISupportFragment
  */
 open class OpenInfoManager {
     var info: OpenAccountInfo? = null
+    var bucket: BucketResponse.Data = BucketResponse.Data("", "", "")
 
     companion object {
         private var instance: OpenInfoManager? = null
@@ -136,7 +135,7 @@ open class OpenInfoManager {
             //已做身份证ocr
             10 -> {
                 if (TextUtils.isEmpty(info?.cardFrontPhoto) || TextUtils.isEmpty(info?.cardBackPhoto))
-                    OASelectRegionFragment.newInstance()
+                    OAUploadDocumentsFragment.newInstance()
                 else
                     OAConfirmDocumentsFragment.newInstance()
             }

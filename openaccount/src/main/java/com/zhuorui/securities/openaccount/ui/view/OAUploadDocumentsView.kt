@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.view
 
+import android.content.Context
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 import com.zhuorui.securities.openaccount.model.OADataTips
 
@@ -12,4 +13,5 @@ import com.zhuorui.securities.openaccount.model.OADataTips
 interface OAUploadDocumentsView : AbsView {
     fun setCardFrontUrl(cardFrontPhoto: String?)
     fun cardBackPhotoUrl(cardBackPhoto: String?)
+    fun getContext(): Context?
 }
