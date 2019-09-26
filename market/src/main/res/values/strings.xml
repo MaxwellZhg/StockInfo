@@ -79,6 +79,7 @@
     <string name="buy_count_more_than_max" translatable="false">买入数量超出最大可买数量</string>
     <string name="sell_count_more_than_max" translatable="false">输入数量超出最大可卖数量</string>
     <string name="count_more_than_max" translatable="false">输入数量超出最大可买可卖数量</string>
+    <string name="count_invalid" translatable="false">每手数量不匹配</string>
     <string name="price" translatable="false">价格</string>
     <string name="number" translatable="false">数量</string>
     <string name="money" translatable="false">金额</string>

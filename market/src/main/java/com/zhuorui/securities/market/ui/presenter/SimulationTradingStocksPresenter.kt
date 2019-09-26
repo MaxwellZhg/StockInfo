@@ -53,14 +53,16 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         view?.updateMaxBuySell(null)
 
         // 监听购买数量变化
-        viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Int> {
+        viewModel?.buyCount?.observe(fragment, androidx.lifecycle.Observer<Int> { buyCount ->
+            calculateBuyMoney()
+
             val maxBuyCount = viewModel?.maxBuyCount?.value?.toInt()
             val maxSaleCount = viewModel?.maxSaleCount?.value?.toInt()
-            if (it != null) {
+            if (buyCount != null) {
                 // 是否超出可买
-                val moreBuyCount = maxBuyCount != null && it > maxBuyCount
+                val moreBuyCount = maxBuyCount != null && buyCount > maxBuyCount
                 // 是否超出可卖
-                val moreSaleCount = maxSaleCount != null && it > maxSaleCount
+                val moreSaleCount = maxSaleCount != null && buyCount > maxSaleCount
                 if (moreBuyCount && moreSaleCount) {
                     ToastUtil.instance.toastCenter(R.string.count_more_than_max)
                 } else if (moreBuyCount) {
@@ -68,8 +70,16 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 } else if (moreSaleCount) {
                     ToastUtil.instance.toastCenter(R.string.sell_count_more_than_max)
                 }
+
+                // 是否与每手股数不匹配
+                viewModel?.stockInfoData?.value?.perShareNumber?.let {
+                    if (buyCount % it != 0) {
+                        ToastUtil.instance.toastCenter(R.string.count_invalid)
+                        viewModel?.enableBuy?.value = false
+                        viewModel?.enableSell?.value = false
+                    }
+                }
             }
-            calculateBuyMoney()
         })
         // 监听购买价格变化
         viewModel?.buyPrice?.observe(fragment, androidx.lifecycle.Observer<BigDecimal> {
@@ -251,7 +261,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      * @param type 1：加 2：减
      */
     fun addOrSubBuyCount(type: Int) {
-        val count = viewModel?.buyCount?.value
+        var count = viewModel?.buyCount?.value
         if (count == null) {
             ToastUtil.instance.toastCenter(R.string.stock_code_input_hint)
             return
@@ -260,7 +270,9 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             viewModel?.buyCount?.value = count + viewModel?.stockInfoData?.value?.perShareNumber!!
         } else {
             if (count == 0) return
-            viewModel?.buyCount?.value = count - viewModel?.stockInfoData?.value?.perShareNumber!!
+            count -= viewModel?.stockInfoData?.value?.perShareNumber!!
+            if (count < 0) count = 0
+            viewModel?.buyCount?.value = count
         }
         view?.clearBuyCountFocus()
     }
