@@ -42,6 +42,8 @@ class OpenAccountInfo {
     var investBond: Int? = null//债券投资经验：(具体值同股票)
     var investGoldForeign: Int? = null//外币/黄金投资经验：(具体值同股票)
     var investFund: Int? = null//基金/理财投资经验：(具体值同股票)
+    var reasonsFail: String? = null//审核不通过原因
+    var openStatusFail: Int? = null //审核不通用户修改资料从哪个流程开始 10 身份证ocr 11 上传身份信息 12 人脸核身 13 银行卡验证 14 完善资料 15 风险披露 16 电子签名
 
 
 }
