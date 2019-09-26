@@ -152,15 +152,15 @@ class SimulationTradingMainFragment :
     /**
      * 去买卖
      */
-    override fun toBusiness(type:Int,data: STOrderData) {
-        start(SimulationTradingStocksFragment.newInstance(type,data))
+    override fun toBusiness(type: Int, data: STOrderData) {
+        start(SimulationTradingStocksFragment.newInstance(type, data))
     }
 
     /**
      * 改单
      */
     override fun toChangeOrder(data: STOrderData) {
-        start(SimulationTradingStocksFragment.newInstance(SimulationTradingStocksFragment.TRAD_TYPE_UPDATE_ORDER,data))
+        start(SimulationTradingStocksFragment.newInstance(SimulationTradingStocksFragment.TRAD_TYPE_UPDATE_ORDER, data))
     }
 
     /**
@@ -195,7 +195,7 @@ class SimulationTradingMainFragment :
     /**
      * 去行情
      */
-    override fun toQuotation(id: String) {
+    override fun toQuotation(code: String, ts: String) {
     }
 
     /**
