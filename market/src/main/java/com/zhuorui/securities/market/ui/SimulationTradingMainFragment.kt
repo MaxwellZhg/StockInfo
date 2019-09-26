@@ -1,21 +1,14 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
-import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
-import com.zhuorui.securities.alioss.service.OssService
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
@@ -31,9 +24,6 @@ import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
 import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
@@ -206,7 +196,7 @@ class SimulationTradingMainFragment :
     }
 
     override fun cancelTrustSuccess() {
-        presenter?.getFundAccount()
+        ToastUtil.instance.toast(R.string.str_trust_success)
     }
 
     override fun cancelTrustError(msg: String?) {
@@ -323,7 +313,9 @@ class SimulationTradingMainFragment :
         if (loading == null) {
             loading = context?.let { ProgressDialog(it) }
         }
-        loading?.show()
+        if (!loading!!.isShowing) {
+            loading?.show()
+        }
     }
 
     override fun hideLoading() {

@@ -12,6 +12,7 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.STPositionData
 import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
+import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import java.text.DecimalFormat
 
 /**
@@ -125,12 +126,12 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 }
                 itemViewHolder.business?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    listener?.toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT,datas!![pos])
+                    listener?.toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT, datas!![pos])
                 }
                 itemViewHolder.quotation?.setOnClickListener {
                     val pos: Int = it.tag as Int
                     val data = datas!![pos]
-                    listener?.toQuotation(data.code.toString(),data.ts.toString())
+                    listener?.toQuotation(data.code.toString(), data.ts.toString())
                 }
                 itemViewHolder
             }
@@ -170,7 +171,10 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         var cost: TextView? = null
         var profitAndLoss: TextView? = null
         var profitAndLossPercentage: TextView? = null
-        val color = Color.parseColor("#D9001B")
+        val color1 = Color.parseColor("#232323")
+        val color2 = Color.parseColor("#A1A1A1")
+        val upColor = LocalSettingsConfig.read().getUpColor()
+        val downColor = LocalSettingsConfig.read().getDownColor()
 
 
         init {
@@ -202,19 +206,19 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             btnGroup?.visibility = if (data?.selected!!) View.VISIBLE else View.GONE
             when {
                 data?.profitAndLoss!!.toFloat() > 0 -> {
-                    profitAndLoss?.setTextColor(color)
+                    profitAndLoss?.setTextColor(upColor)
                     profitAndLossPercentage?.text = "+" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
-                    profitAndLossPercentage?.setTextColor(color)
+                    profitAndLossPercentage?.setTextColor(upColor)
                 }
                 data?.profitAndLoss!!.toFloat() < 0 -> {
-                    profitAndLoss?.setTextColor(color)
+                    profitAndLoss?.setTextColor(downColor)
                     profitAndLossPercentage?.text = DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
-                    profitAndLossPercentage?.setTextColor(color)
+                    profitAndLossPercentage?.setTextColor(downColor)
                 }
                 else -> {
-                    profitAndLoss?.setTextColor(color)
+                    profitAndLoss?.setTextColor(color1)
                     profitAndLossPercentage?.text = "---"
-                    profitAndLossPercentage?.setTextColor(color)
+                    profitAndLossPercentage?.setTextColor(color2)
                 }
             }
 
@@ -229,12 +233,12 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         /**
          * 去买卖
          */
-        fun toBusiness(type:Int,data: STOrderData)
+        fun toBusiness(type: Int, data: STOrderData)
 
         /**
          * 去行情
          */
-        fun toQuotation(code: String,ts:String)
+        fun toQuotation(code: String, ts: String)
     }
 
 }

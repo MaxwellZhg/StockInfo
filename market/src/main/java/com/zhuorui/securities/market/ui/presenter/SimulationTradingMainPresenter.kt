@@ -210,7 +210,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         super.onBaseResponse(response)
         when (response.request) {
             is CancelTrustRequest -> {
-                view?.hideLoading()
+                getFundAccount()
                 view?.cancelTrustSuccess()
             }
         }

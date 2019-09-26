@@ -1,9 +1,12 @@
 package com.zhuorui.securities.personal.config
 
+import android.graphics.Color
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
+import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.model.AppLanguage
 import com.zhuorui.securities.personal.model.StocksThemeColor
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -12,18 +15,55 @@ import com.zhuorui.securities.personal.model.StocksThemeColor
  *    desc   : 保存本地设置信息
  */
 class LocalSettingsConfig : AbsConfig() {
+    val sorckColorRed = Color.parseColor("#FFce0019")
+    val sorckColorGreen = Color.parseColor("#FF23803A")
+    val sorckColor = Color.parseColor("#FFA4B2CB")
 
     // 默认为红涨绿跌
     var stocksThemeColor: StocksThemeColor = StocksThemeColor.redUpGreenDown
-       set(value) {
+        set(value) {
             field = value
             write()
         }
 
+    fun getUpColor(): Int {
+        return when (stocksThemeColor) {
+            StocksThemeColor.redUpGreenDown -> sorckColorRed
+            else -> sorckColorGreen
+        }
+    }
+
+    fun getDownColor(): Int {
+        return when (stocksThemeColor) {
+            StocksThemeColor.redUpGreenDown -> sorckColorGreen
+            else -> sorckColorRed
+        }
+    }
+
+    fun getUpDownColor(number: BigDecimal): Int {
+        return getUpDownColor(number, sorckColor)
+    }
+
+    fun getUpDownColor(number: Double): Int {
+        return getUpDownColor(number, sorckColor)
+    }
+
+    fun getUpDownColor(number: Double, defColor: Int): Int {
+        return getUpDownColor(BigDecimal(number), defColor)
+    }
+
+    fun getUpDownColor(number: BigDecimal, defColor: Int): Int {
+        return when (number.compareTo(BigDecimal(0))) {
+            1 -> getUpColor()
+            -1 -> getDownColor()
+            else -> defColor
+        }
+    }
+
 
     // 默认为自动语言
     var appLanguage: AppLanguage = AppLanguage.auto
-       set(value) {
+        set(value) {
             field = value
             write()
         }
@@ -31,13 +71,14 @@ class LocalSettingsConfig : AbsConfig() {
     override fun write() {
         StorageInfra.put(LocalSettingsConfig::class.java.simpleName, this)
     }
-    fun saveStockColor(enum:StocksThemeColor){
-        stocksThemeColor=enum
+
+    fun saveStockColor(enum: StocksThemeColor) {
+        stocksThemeColor = enum
         write()
     }
 
-    fun saveLanguage(enum: AppLanguage){
-        appLanguage=enum
+    fun saveLanguage(enum: AppLanguage) {
+        appLanguage = enum
         write()
     }
 

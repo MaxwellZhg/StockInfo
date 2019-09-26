@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.personal.config.LocalSettingsConfig;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -93,19 +94,19 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         vTotalProfitLoss.setText(String.valueOf(data.getTotalProfitAndLoss()));
         float todayPL = data.getTodayProfitAndLoss();
         vTodayProfitLoss.setText(String.valueOf(todayPL));
+        int color;
         if (todayPL > 0) {
-            vTodayProfitLossB.setTextColor(Color.GREEN);
-            vTodayProfitLoss.setTextColor(Color.GREEN);
+            color = LocalSettingsConfig.Companion.read().getUpColor();
             vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
         } else if (todayPL < 0) {
-            vTodayProfitLossB.setTextColor(Color.parseColor("#D9001B"));
-            vTodayProfitLoss.setTextColor(Color.parseColor("#D9001B"));
-            vTodayProfitLossB.setText("-" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
+            color = LocalSettingsConfig.Companion.read().getDownColor();
+            vTodayProfitLossB.setText(new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
         } else {
-            vTodayProfitLossB.setTextColor(Color.parseColor("#282828"));
-            vTodayProfitLoss.setTextColor(Color.parseColor("#282828"));
+            color = Color.parseColor("#282828");
             vTodayProfitLossB.setText("--");
         }
+        vTodayProfitLossB.setTextColor(color);
+        vTodayProfitLoss.setTextColor(color);
 
     }
 

@@ -54,10 +54,9 @@
     <string name="str_rule" translatable="false">规则</string>
     <string name="str_zr_no" translatable="false">卓锐号</string>
     <string name="str_create_immediately" translatable="false">立即创建</string>
-    <string name="str_Create_account" translatable="false">创建账户</string>
+    <string name="str_create_account" translatable="false">创建账户</string>
     <string name="create_account_desc" translatable="false">立即获得100万元港币模拟资金</string>
     <string name="create_account_desc_bule" translatable="false">100万</string>
-    <string name="str_create_account" translatable="false">创建账户</string>
     <string name="mock_stock_rule" translatable="false">1、模拟交易只针对港股市场，初始资产为100万港元。\n
         2、港股市场交易品种仅限于在香港交易所上市的正股， 其他品种暂时不可交易。\n
         3、港股市场交易时间：9:30~12:00,13:00~16:00.\n
@@ -135,4 +134,5 @@
     <string name="str_confirm">确认</string>
     <string name="str_cancel">取消</string>
     <string name="str_confirm_withdrawal">请您确认是否撤单</string>
+    <string name="str_trust_success">撤单成功</string>
 </resources>
