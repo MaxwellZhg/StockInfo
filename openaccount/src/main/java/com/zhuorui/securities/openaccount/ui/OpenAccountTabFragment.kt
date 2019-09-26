@@ -54,7 +54,7 @@ open class OpenAccountTabFragment :
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
             }
             true -> {
-                val f = OpenInfoManager.getInstance()?.getNextFragment()
+                val f = OpenInfoManager.getInstance()?.getStartFragment()
                 if (f != null)
                     (parentFragment as AbsFragment<*, *, *, *>).start(f)
             }

@@ -57,7 +57,75 @@ open class OpenInfoManager {
     }
 
     /**
-     * 获取下一步步骤页面
+     * 开户流程开始页面
+     *
+     */
+    fun getStartFragment(): ISupportFragment? {
+        return when (info?.openStatus) {
+            //未开户
+            0 -> {
+                OASelectRegionFragment.newInstance()
+            }
+            //审核中
+            21 -> {
+                OAWaitAuditFragment.newInstance()
+            }
+            //审核不通过
+            22 -> {
+                OAWaitAuditFragment.newInstance(info?.reasonsFail.toString())
+            }
+            //开户完成
+            31 -> {
+                //目前不确实要做什么操作
+                null
+            }
+            else -> {
+                OADataSupplementaryTispFragment.newInstance()
+            }
+        }
+    }
+
+    /**
+     * 审核不通用户修改资料流程开始页面
+     *
+     */
+    fun getFailStartFragment(): ISupportFragment? {
+        return when (info?.openStatus) {
+            //身份证ocr
+            10 -> {
+                OAUploadDocumentsFragment.newInstance()
+            }
+            //上传身份信息
+            11 -> {
+                OAConfirmDocumentsFragment.newInstance()
+            }
+            //人脸核身
+            12 -> {
+                OABiopsyFragment.newInstance()
+            }
+            //银行卡验证
+            13 -> {
+                OATakeBankCradPhotoFragment.newInstance()
+            }
+            //完善资料
+            14 -> {
+                OAPersonalInformationFragment.newInstance()
+            }
+            //风险披露
+            15 -> {
+                OARiskDisclosureFragment.newInstance()
+            }
+            16 -> {
+                OASignatureFragment.newInstance()
+            }
+            else -> {
+                null
+            }
+        }
+    }
+
+    /**
+     * 获取继续开户下一步页面
      * */
     fun getNextFragment(): ISupportFragment? {
         return when (info?.openStatus) {
@@ -91,17 +159,6 @@ open class OpenInfoManager {
             //风险披露完成
             15 -> {
                 OASignatureFragment.newInstance()
-            }
-            21 -> {
-                OAWaitAuditFragment.newInstance()
-            }
-            //审核不通过
-            22 -> {
-                null
-            }
-            //开户完成
-            31 -> {
-                null
             }
             else -> {
                 null
