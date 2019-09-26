@@ -319,7 +319,13 @@ class SimulationTradingMainFragment :
     }
 
     override fun hideLoading() {
-        loading?.dismiss()
+        if (loading != null && loading!!.isShowing)
+            loading?.dismiss()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideLoading()
     }
 
     /**
