@@ -26,7 +26,6 @@ import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
 import com.zhuorui.securities.market.util.MathUtil
-import com.zhuorui.securities.personal.config.LocalAccountConfig
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -68,7 +67,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     ToastUtil.instance.toastCenter(R.string.count_more_than_max)
                 } else if (moreBuyCount) {
                     ToastUtil.instance.toastCenter(R.string.buy_count_more_than_max)
-                } else if (moreSaleCount) {
+                } else if (moreSaleCount && maxSaleCount!! > 0) {
                     ToastUtil.instance.toastCenter(R.string.sell_count_more_than_max)
                 }
 
@@ -90,6 +89,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         // 获取传递订单参数
         val arguments = fragment.arguments
         val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
+        val tradType = arguments?.getInt(SimulationTradingStocksFragment.TRAD_TYPE_KEY)
         if (orderData != null) {
             // 设置股票信息
             val stockInfo = SearchStockInfo()
@@ -100,7 +100,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             setStock(stockInfo)
 
             // 已持仓
-            if (orderData.saleStockCount?.compareTo(BigDecimal.ZERO) == 1) {
+            if (tradType == SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT && orderData.saleStockCount != null) {
                 updateMaxBuySell(orderData.saleStockCount!!.toLong())
                 // 显示已持仓状态
                 view?.changeTrustType(3)
@@ -114,17 +114,15 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
                 // 显示买入改单状态
                 view?.changeTrustType(1)
-            } else if (orderData.trustType == 2 && orderData.status == 1) {
+            }
+            // 卖出未成交
+            else if (orderData.trustType == 2 && orderData.status == 1) {
                 viewModel?.updateOrderId?.value = orderData.id
                 viewModel?.updateType?.value = 2
                 // 显示订单委托价格、委托股数
                 viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
                 viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
-                if (orderData.saleStockCount != null) {
-                    updateMaxBuySell(orderData.saleStockCount!!.toLong())
-                } else {
-                    updateMaxBuySell(orderData.holdStockCount!!.toLong())
-                }
+                updateMaxBuySell(orderData.saleStockCount!!.toLong())
                 // 显示卖出改单状态
                 view?.changeTrustType(2)
             }
@@ -178,7 +176,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                         val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
                         ///////////////////////////////////////////////////////////////////////////////////////////
                         // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
-                        val accountMoney = 1000000.00
+                        val accountMoney = STInfoManager.getInstance().getSTFundAccountData().availableFund.toDouble()
                         var maxBuyCount = (accountMoney / buyPrice.toDouble() / perShareNumber!!).toLong()
                         // 二、判断可用资金是否够交易费用 + 手续费
                         while (true) {
@@ -205,10 +203,9 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                         viewModel?.enableBuy?.value = buyCount in 1..maxBuyCount
                         // 更新界面最大可买数量
                         view?.updateMaxBuyNum(viewModel?.maxBuyCount?.value!!.toLong())
-                    } else {
-                        // 判断是否超过最大可卖
-                        viewModel?.maxSaleCount?.value?.let { viewModel?.enableSell?.value = buyCount in 1..it }
                     }
+                    // 判断是否超过最大可卖
+                    viewModel?.maxSaleCount?.value?.let { viewModel?.enableSell?.value = buyCount in 1..it }
                 }
             }
         }
