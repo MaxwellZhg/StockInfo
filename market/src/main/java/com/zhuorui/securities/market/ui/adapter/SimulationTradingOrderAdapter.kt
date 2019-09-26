@@ -133,7 +133,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     }
                     itemViewHolder.business?.setOnClickListener {
                         val pos: Int = it.tag as Int
-                        listener?.toBusiness(datas!![pos])
+                        listener?.toBusiness(2,datas!![pos])
                     }
                     itemViewHolder.quotation?.setOnClickListener {
                         val pos: Int = it.tag as Int

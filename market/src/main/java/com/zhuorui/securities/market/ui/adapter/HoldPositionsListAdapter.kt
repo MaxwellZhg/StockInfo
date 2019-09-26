@@ -124,7 +124,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 }
                 itemViewHolder.business?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    listener?.toBusiness(datas!![pos])
+                    listener?.toBusiness(1,datas!![pos])
                 }
                 itemViewHolder.quotation?.setOnClickListener {
                     val pos: Int = it.tag as Int
@@ -227,7 +227,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         /**
          * 去买卖
          */
-        fun toBusiness(data: STOrderData)
+        fun toBusiness(type:Int,data: STOrderData)
 
         /**
          * 去行情

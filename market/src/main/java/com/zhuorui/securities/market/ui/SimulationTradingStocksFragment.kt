@@ -45,14 +45,18 @@ class SimulationTradingStocksFragment :
     private val SEARCH_STOCK_CODE = 1000
 
     companion object {
+        const val TRAD_TYPE_KEY = "trad_type"
+        const val TRAD_TYPE_DEFAULT = 1 // 已持仓买卖
+        const val TRAD_TYPE_UPDATE_ORDER = 2 // 改单
 
         fun newInstance(): SimulationTradingStocksFragment {
             return SimulationTradingStocksFragment()
         }
 
-        fun newInstance(order: STOrderData): SimulationTradingStocksFragment {
+        fun newInstance(tradType: Int, order: STOrderData): SimulationTradingStocksFragment {
             val fragment = SimulationTradingStocksFragment()
             val arguments = Bundle()
+            arguments.putInt(TRAD_TYPE_KEY, tradType)
             arguments.putParcelable(STOrderData::class.java.simpleName, order)
             fragment.arguments = arguments
             return fragment

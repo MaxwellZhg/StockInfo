@@ -152,15 +152,15 @@ class SimulationTradingMainFragment :
     /**
      * 去买卖
      */
-    override fun toBusiness(data: STOrderData) {
-        start(SimulationTradingStocksFragment.newInstance(data))
+    override fun toBusiness(type:Int,data: STOrderData) {
+        start(SimulationTradingStocksFragment.newInstance(type,data))
     }
 
     /**
      * 改单
      */
     override fun toChangeOrder(data: STOrderData) {
-        start(SimulationTradingStocksFragment.newInstance(data))
+        start(SimulationTradingStocksFragment.newInstance(2,data))
     }
 
     /**

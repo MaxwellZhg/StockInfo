@@ -27,7 +27,7 @@ import me.yokeyword.fragmentation.ISupportFragment
 class OAWaitAuditFragment :
     AbsSwipeBackFragment<FragmentOaWaitAuditBinding, OAWaitAuditViewModel, OAWaitAuditView, OAWaitAuditPresenter>(),
     OAWaitAuditView, View.OnClickListener {
-    private var errMsg = ""
+    private var errMsg:String? = null
 
     companion object {
         fun newInstance(): OAWaitAuditFragment {
@@ -60,8 +60,7 @@ class OAWaitAuditFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        var b = arguments!!
-        errMsg = b.getString("errMsg")!!
+        errMsg = arguments?.getString("errMsg")
         if (TextUtils.isEmpty(errMsg)) {
             iv_wait_audit.setImageResource(R.mipmap.ic_wait_audit)
             tv_wait_audit.setText(R.string.str_wait_audit)
