@@ -86,6 +86,13 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             calculateBuyMoney()
         })
 
+        setTradType()
+    }
+
+    /**
+     * 根据交易类型设置界面
+     */
+    private fun setTradType() {
         // 获取传递订单参数
         val arguments = fragment.arguments
         val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
@@ -100,31 +107,69 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             setStock(stockInfo)
 
             // 已持仓
-            if (tradType == SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT && orderData.saleStockCount != null) {
+            if (tradType == SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT) {
+                // 更新最大可卖
                 updateMaxBuySell(orderData.saleStockCount!!.toLong())
                 // 显示已持仓状态
                 view?.changeTrustType(3)
-            }
-            // 买入未成交
-            else if (orderData.trustType == 1 && orderData.majorStatus == 1) {
-                viewModel?.updateOrderId?.value = orderData.id
-                viewModel?.updateType?.value = 1
-                // 显示订单委托价格、委托股数
-                viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
-                viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
-                // 显示买入改单状态
-                view?.changeTrustType(1)
-            }
-            // 卖出未成交
-            else if (orderData.trustType == 2 && orderData.majorStatus == 1) {
-                viewModel?.updateOrderId?.value = orderData.id
-                viewModel?.updateType?.value = 2
-                // 显示订单委托价格、委托股数
-                viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
-                viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
-                updateMaxBuySell(orderData.saleStockCount!!.toLong())
-                // 显示卖出改单状态
-                view?.changeTrustType(2)
+            } else {
+                // 买入未成交或买入已撤单
+                if (orderData.trustType == 1) {
+                    // 买入未成交
+                    if (orderData.majorStatus == 1) {
+                        viewModel?.updateOrderId?.value = orderData.id
+                        viewModel?.updateType?.value = 1
+                        // 显示订单委托价格、委托股数
+                        viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
+                        viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
+                        // 显示买入改单状态
+                        view?.changeTrustType(1)
+                    }
+                    // 买入已撤单
+                    else if (orderData.majorStatus == 4 || orderData.majorStatus == 5) {
+                        // TODO 是否已持仓
+                        val saleStockCount = orderData.saleStockCount
+                        if (orderData.saleStockCount != null) {
+                            // 更新最大可卖
+                            updateMaxBuySell(saleStockCount!!.toLong())
+                            // 显示已持仓状态
+                            view?.changeTrustType(3)
+                        } else {
+                            // 未持仓，显示未持仓购买
+                            view?.changeTrustType(4)
+                        }
+                        // TODO 是否已持仓
+                    }
+                }
+                // 卖出未成交或卖出已撤单
+                else if (orderData.trustType == 2) {
+                    // 卖出未成交
+                    if (orderData.majorStatus == 1) {
+                        viewModel?.updateOrderId?.value = orderData.id
+                        viewModel?.updateType?.value = 2
+                        // 显示订单委托价格、委托股数
+                        viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
+                        viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
+                        updateMaxBuySell(orderData.saleStockCount!!.toLong())
+                        // 显示卖出改单状态
+                        view?.changeTrustType(2)
+                    }
+                    // 卖出已撤单
+                    else if (orderData.majorStatus == 4 || orderData.majorStatus == 5) {
+                        // TODO 是否已持仓
+                        val saleStockCount = orderData.saleStockCount
+                        if (orderData.saleStockCount != null) {
+                            // 更新最大可卖
+                            updateMaxBuySell(saleStockCount!!.toLong())
+                            // 显示已持仓状态
+                            view?.changeTrustType(3)
+                        } else {
+                            // 未持仓，显示未持仓购买
+                            view?.changeTrustType(4)
+                        }
+                        // TODO 是否已持仓
+                    }
+                }
             }
         } else {
             // 显示默认购买状态

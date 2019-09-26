@@ -158,6 +158,13 @@ class SimulationTradingStocksFragment :
                 btn_cancel_change_order.visibility = View.GONE
                 btn_confirm_change_order.visibility = View.GONE
             }
+            4 -> {
+                btn_buy.visibility = View.VISIBLE
+                btn_sell.visibility = View.VISIBLE
+
+                btn_cancel_change_order.visibility = View.GONE
+                btn_confirm_change_order.visibility = View.GONE
+            }
         }
     }
 
