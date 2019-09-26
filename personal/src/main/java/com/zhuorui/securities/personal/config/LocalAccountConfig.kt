@@ -40,15 +40,6 @@ class LocalAccountConfig : AbsConfig() {
      * 更新用户信息
      */
     fun savaUserInfo() {
-
-        write()
-    }
-
-    /**
-     * 设置资金帐号ID
-     */
-    fun setAccountId(id:String){
-        accountInfo.accountId = id
         write()
     }
 

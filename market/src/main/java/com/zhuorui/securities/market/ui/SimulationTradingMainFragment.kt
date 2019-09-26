@@ -116,6 +116,7 @@ class SimulationTradingMainFragment :
         zr_rule.setOnClickListener(this)
         fund_account.setOnMockStockFundAccountListener(this)
         magic_indicator.navigator = getNavigator()
+        presenter?.setLifecycleOwner(this)
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {

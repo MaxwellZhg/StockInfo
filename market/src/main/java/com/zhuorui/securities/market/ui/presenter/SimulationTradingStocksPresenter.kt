@@ -9,6 +9,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.manager.STInfoManager
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
 import com.zhuorui.securities.market.net.request.FeeComputeRequest
@@ -291,7 +292,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股）
         val getFeeTemplateRequest = GetFeeTemplateRequest(
             "1",
-            LocalAccountConfig.read().getAccountInfo().accountId!!,
+            STInfoManager.getInstance().getSTFundAccountData().accountId,
             1,
             transactions.createTransaction()
         )
@@ -395,7 +396,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         val request =
             FeeComputeRequest(
                 1,
-                LocalAccountConfig.read().getAccountInfo().accountId!!,
+                STInfoManager.getInstance().getSTFundAccountData().accountId,
                 chargeType,
                 viewModel?.buyMoney?.value!!,
                 transactions.createTransaction()
@@ -438,7 +439,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         val stockInfo = viewModel?.stockInfo?.value
         val updateOrderId = viewModel?.updateOrderId?.value
         val request = StockTradRequest(
-            LocalAccountConfig.read().getAccountInfo().accountId!!,
+            STInfoManager.getInstance().getSTFundAccountData().accountId,
             updateOrderId,
             stockInfo?.ts!!,
             stockInfo.code!!,

@@ -1,16 +1,20 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.text.TextUtils
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.event.NotifyStockCountEvent
+import com.zhuorui.securities.market.manager.STInfoManager
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
 import com.zhuorui.securities.market.net.request.CancelTrustRequest
@@ -27,6 +31,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.RuntimeException
 import java.math.BigDecimal
@@ -52,33 +57,45 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 服务端推送股票价格实时数据
      */
     private val stocksInfo: HashMap<String, PushStockPriceData> = HashMap()
+    private var stockTopics: MutableList<StockTopic>? = null
     private var availableFunds: BigDecimal = BigDecimal(0)
     private var count: Int = 0
+    private var accountId: String = ""
+    private var disposable: Disposable? = null
 
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.fundAccount?.observe(it,
+                androidx.lifecycle.Observer<STFundAccountData> { t ->
+                    view?.onUpData(viewModel?.positionDatas?.value, viewModel?.orderDatas?.value, t)
+                })
+        }
+    }
 
     /**
      * 查询资金账户接口
      */
     fun getFundAccount() {
+        if (disposable != null && !disposable!!.isDisposed) disposable?.dispose()
         view?.showLoading()
         val request = FundAccountRequest(1, transactions.createTransaction())
-        Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
+        disposable = Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
             ?.subscribeOn(Schedulers.io())?.observeOn(
                 AndroidSchedulers.mainThread()
             )
             ?.subscribe(io.reactivex.functions.Consumer {
                 when {
                     it.isSuccess() -> {
-                        val accountId = it.data.id!!
+                        accountId = it.data.id!!
                         availableFunds = it.data.availableAmount!!
-                        LocalAccountConfig.read().setAccountId(accountId)
                         count = 0
                         getPosition()
                         getTodayOrders()
                     }
                     TextUtils.equals("060003", it.code) -> {
                         view?.hideLoading()
-                        view?.onUpData(null, null, STFundAccountData(null, 0f))
+                        viewModel?.fundAccount?.value = STFundAccountData("", BigDecimal(0))
                     }
                     else -> {
                         view?.hideLoading()
@@ -95,9 +112,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 创建资金账号
      */
     fun createFundAccount() {
+        if (disposable != null && !disposable!!.isDisposed) disposable?.dispose()
         view?.showLoading()
         val request = FundAccountRequest(1, transactions.createTransaction())
-        Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
+        disposable = Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
             ?.flatMap { t ->
                 if (t.isSuccess()) {
                     val request = FundAccountRequest(1, transactions.createTransaction())
@@ -110,14 +128,13 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 }
             }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(io.reactivex.functions.Consumer {
-                view?.hideLoading()
                 if (it.isSuccess()) {
-                    val accountId = it.data.id!!
+                    accountId = it.data.id!!
                     availableFunds = it.data.availableAmount!!
-                    LocalAccountConfig.read().setAccountId(accountId)
+                    calculation()
                     view?.createFundAccountSuccess()
-                    view?.onUpData(null, null, STFundAccountData(accountId, availableFunds.toFloat()))
                 } else {
+                    view?.hideLoading()
                     view?.onGetFundAccountError(it.code, it.msg)
                 }
             }, io.reactivex.functions.Consumer {
@@ -131,7 +148,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      */
     private fun getPosition() {
         val accountInfo = LocalAccountConfig.read().getAccountInfo()
-        val request = GetPositionRequest(accountInfo.token!!, accountInfo.accountId!!, transactions.createTransaction())
+        val request = GetPositionRequest(accountInfo.token!!, accountId, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getPosition(request)
             ?.enqueue(Network.IHCallBack<GetPositionResponse>(request))
     }
@@ -144,7 +161,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         val todayTime = TimeZoneUtil.currentTime("yyyy-MM-dd")
         val request =
             OrderListRequest(
-                accountInfo.accountId!!,
+                accountId,
                 todayTime,
                 todayTime,
                 accountInfo.token!!,
@@ -245,8 +262,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             }
         }
         if (list.isNullOrEmpty()) {
+            stockTopics = null
             calculation()
         } else {
+            stockTopics = list
             SocketClient.getInstance().bindTopic(*list.toTypedArray())
         }
     }
@@ -308,7 +327,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         }
         //账户总资产=持仓市值+可用资金
         val totalAssets: BigDecimal = MathUtil.add3(totalMarketValue, availableFunds)
-        if (orderDatas.isNullOrEmpty()) {
+        if (!orderDatas.isNullOrEmpty()) {
             for (data in orderDatas!!) {
                 if (data?.status!! == 2) {
                     val amt = MathUtil.multiply3(data.holdStockCount!!, data.holeCost!!)
@@ -337,14 +356,27 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         val todayProfitAndLossPercentage =
             MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
         val fundAccount =
-            STFundAccountData(LocalAccountConfig.read().getAccountInfo().accountId, availableFunds.toFloat())
+            STFundAccountData(accountId, availableFunds)
         fundAccount.marketValue = totalMarketValue.toFloat()
         fundAccount.totalAssets = totalAssets.toFloat()
         fundAccount.totalProfitAndLoss = totalProfitAndLoss.toFloat()
         fundAccount.todayProfitAndLoss = todayProfitAndLoss.toFloat()
         fundAccount.todayProfitAndLossPercentage = todayProfitAndLossPercentage.toFloat()
+        STInfoManager.getInstance().setSTFundAccountData(fundAccount)
         view?.hideLoading()
-        view?.onUpData(positionDatas, orderDatas, fundAccount)
+        viewModel?.positionDatas?.value = positionDatas
+        viewModel?.orderDatas?.value = orderDatas
+        viewModel?.fundAccount?.value = fundAccount
+    }
+
+    override fun destroy() {
+        super.destroy()
+        // 取消订阅
+        if (stockTopics != null) {
+            SocketClient.getInstance().unBindTopic(*stockTopics!!.toTypedArray())
+        }
+        STInfoManager.getInstance().destroy()
+        if (disposable != null && !disposable!!.isDisposed) disposable?.dispose()
     }
 
 

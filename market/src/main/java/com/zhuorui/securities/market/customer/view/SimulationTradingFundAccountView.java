@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
@@ -142,7 +143,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
          *
          * @return
          */
-        float getAvailableFunds();
+        BigDecimal getAvailableFunds();
 
         /**
          * 总盈亏金额

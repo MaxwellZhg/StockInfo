@@ -6,11 +6,13 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.market.manager.STInfoManager
 import com.zhuorui.securities.market.net.ISimulationTradeNet
 import com.zhuorui.securities.market.net.request.GetPositionRequest
 import com.zhuorui.securities.market.net.request.OrderListRequest
 import com.zhuorui.securities.market.net.response.GetPositionResponse
 import com.zhuorui.securities.market.net.response.OrderListResponse
+import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.view.SimulationTradingOrdersView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingOrdersViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
@@ -41,7 +43,7 @@ class SimulationTradingOrdersPresenter :
 
     private fun getOrders(sDate: String, eDate: String, page: Int) {
         val accountInfo = LocalAccountConfig.read().getAccountInfo()
-        val request = OrderListRequest(accountInfo.accountId!!, sDate, eDate, accountInfo.token!!, page, 20, transactions.createTransaction())
+        val request = OrderListRequest(STInfoManager.getInstance().getSTFundAccountData().accountId, sDate, eDate, accountInfo.token!!, page, 20, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
             ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
     }
@@ -59,6 +61,5 @@ class SimulationTradingOrdersPresenter :
             view?.getDataError(response.msg!!)
         }
     }
-
 
 }
