@@ -67,7 +67,7 @@ class OADataSupplementaryTispFragment :
             R.id.btn_next -> {
                 val f = OpenInfoManager.getInstance()?.getNextFragment()
                 if (f != null) {
-                    start(f)
+                    startWithPop(f)
                 }
             }
         }

@@ -91,7 +91,7 @@ open class OpenInfoManager {
      *
      */
     fun getFailStartFragment(): ISupportFragment? {
-        return when (info?.openStatus) {
+        return when (info?.openStatusFail) {
             //身份证ocr
             10 -> {
                 OAUploadDocumentsFragment.newInstance()

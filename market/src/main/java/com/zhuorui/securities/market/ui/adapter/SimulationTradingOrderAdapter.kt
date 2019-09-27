@@ -123,13 +123,14 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     itemViewHolder.item?.setOnClickListener {
                         val pos: Int = it.tag as Int
                         if (selected.contains(pos)) {
-                            itemViewHolder.hideBtn()
                             selected.remove(pos)
                             datas?.get(pos)?.selected = false
+                            itemViewHolder.hideBtn()
+                            listener?.onItemClick(posOff + pos, false)
                         } else {
-                            itemViewHolder.showBtn()
                             selected.add(pos)
                             datas?.get(pos)?.selected = true
+                            listener?.onItemClick(posOff + pos, itemViewHolder.showBtn())
                         }
                     }
                     itemViewHolder.business?.setOnClickListener {
@@ -241,7 +242,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                 val status = data?.majorStatus
                 menuType = if (status == 1 || status == 3) {
                     1
-                } else if (status == 4 || status == 5 || status == 6) {
+                } else if (status == 4 || status == 5) {
                     2
                 } else {
                     0
@@ -251,21 +252,26 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                 } else {
                     hideBtn()
                 }
+            } else {
+                hideBtn()
             }
         }
 
-        fun showBtn() {
-            when (menuType) {
+        fun showBtn(): Boolean {
+            return when (menuType) {
                 1 -> {
                     orderBtnGroup?.visibility = View.VISIBLE
                     businessBtnGroup?.visibility = View.GONE
+                    true
                 }
                 2 -> {
                     orderBtnGroup?.visibility = View.GONE
                     businessBtnGroup?.visibility = View.VISIBLE
+                    true
                 }
                 else -> {
                     hideBtn()
+                    false
                 }
             }
         }
@@ -288,6 +294,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
          * 撤单
          */
         fun toCancelOrder(data: STOrderData)
+
     }
 
 }

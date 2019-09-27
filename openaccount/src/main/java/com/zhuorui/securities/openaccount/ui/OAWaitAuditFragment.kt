@@ -64,10 +64,12 @@ class OAWaitAuditFragment :
         if (TextUtils.isEmpty(errMsg)) {
             iv_wait_audit.setImageResource(R.mipmap.ic_wait_audit)
             tv_wait_audit.setText(R.string.str_wait_audit)
+            str_wait_audit_tips.setText(R.string.str_wait_audit_tips)
             return_to_main.setText(R.string.btn_return_to_main)
         } else {
             iv_wait_audit.setImageResource(R.mipmap.ic_warnings_red)
-            tv_wait_audit.text = ResUtil.getString(R.string.str_reasons_fail_tips) + errMsg
+            tv_wait_audit.setText(R.string.str_audit_failed)
+            str_wait_audit_tips.text = ResUtil.getString(R.string.str_reasons_fail_tips) + errMsg
             return_to_main.setText(R.string.btn_edit_open_data)
         }
         return_to_main.setOnClickListener(this)
@@ -83,7 +85,7 @@ class OAWaitAuditFragment :
             } else {
                 val fragment = OpenInfoManager.getInstance()?.getFailStartFragment()
                 if (fragment != null)
-                    popTo(fragment::class.java, false)
+                    startWithPop(fragment)
             }
         }
 
