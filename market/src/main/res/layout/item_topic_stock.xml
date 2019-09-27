@@ -12,11 +12,16 @@
                     android:layout_marginStart="13dp"
                     android:layout_centerVertical="true">
 
-        <TextView android:layout_width="wrap_content"
+        <TextView android:layout_width="90dp"
                   android:layout_height="wrap_content"
                   android:textColor="@color/un_tab_select"
                   android:id="@+id/tv_stock_tile"
                   android:textSize="17sp"
+                  android:lines="1"
+                  android:gravity="center_vertical"
+                  android:autoSizeMaxTextSize="17sp"
+                  android:autoSizeMinTextSize="1sp"
+                  android:autoSizeTextType="uniform"
                   android:text="恒生指数"/>
 
         <ImageView android:layout_width="15dp"
@@ -50,30 +55,24 @@
             android:minHeight="0dp"
             android:gravity="center"
             android:text="+3.41%"
+            android:lines="1"
+            android:autoSizeMaxTextSize="18sp"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeTextType="uniform"
             android:enabled="false"
             app:radius="2dp"
             android:textColor="@color/un_tab_select"
             app:unableBackgroundColor="@color/up_stock_color"/>
 
-    <TextView android:layout_width="wrap_content"
+    <com.zhuorui.commonwidget.ZRStockTextView
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="27498.77"
               android:layout_centerVertical="true"
-              android:layout_marginEnd="25dp"
+              android:layout_marginEnd="12dp"
               android:id="@+id/tv_price"
-              android:textColor="@color/up_price_color"
-              android:textSize="18sp"
-              android:layout_toStartOf="@+id/tv_diff_pirce"/>
-
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="+2.11"
-              android:layout_centerVertical="true"
-              android:layout_marginEnd="10dp"
-              android:id="@+id/tv_diff_pirce"
-              android:textColor="@color/up_price_color"
               android:textSize="18sp"
               android:layout_toStartOf="@+id/stock_up_down"/>
+
 
     <ImageView android:layout_width="match_parent"
                android:layout_height="1dp"
