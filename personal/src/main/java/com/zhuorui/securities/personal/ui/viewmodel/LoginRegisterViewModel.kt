@@ -16,7 +16,9 @@ class LoginRegisterViewModel : ViewModel() {
     var str=ObservableField<String>()
     var strdisct = ObservableField<String>()
     var code = ObservableField<String>()
+    var getcodeState=ObservableField<Int>()
     init {
+        getcodeState.set(0)
         state.set(1)
         str.set(ResUtil.getString(R.string.send_verification_code))
         strdisct.set(ResUtil.getString(R.string.china_mother_land))

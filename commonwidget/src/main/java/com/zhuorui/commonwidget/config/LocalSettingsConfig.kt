@@ -1,11 +1,8 @@
-package com.zhuorui.securities.personal.config
+package com.zhuorui.commonwidget.config
 
 import android.graphics.Color
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
-import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.model.AppLanguage
-import com.zhuorui.securities.personal.model.StocksThemeColor
 import java.math.BigDecimal
 
 /**
@@ -87,6 +84,7 @@ class LocalSettingsConfig : AbsConfig() {
     }
 
     companion object {
+
 
         fun read(): LocalSettingsConfig {
             var config: LocalSettingsConfig? =

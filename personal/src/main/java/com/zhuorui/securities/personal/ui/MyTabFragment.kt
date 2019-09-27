@@ -12,7 +12,6 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent

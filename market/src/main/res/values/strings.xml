@@ -26,8 +26,8 @@
     <string name="setting_remind" translatable="false">设置提醒</string>
     <string name="rise_threshold" translatable="false">价格涨到</string>
     <string name="down_threshold" translatable="false">价格跌到</string>
-    <string name="rise_range" translatable="false">涨幅超</string>
-    <string name="down_range" translatable="false">跌幅超</string>
+    <string name="rise_range" translatable="false">&#160; 涨幅超</string>
+    <string name="down_range" translatable="false">&#160; 跌幅超</string>
     <string name="str_no_position_present" translatable="false">暂无持仓</string>
     <string name="str_no_record_historical_transactions" translatable="false">暂无历史交易记录哦</string>
     <string name="str_hold_positions" translatable="false">持仓</string>
@@ -107,15 +107,15 @@
     <string name="search_history_stock" tools:ignore="MissingTranslation">历史搜索股票</string>
     <string name="cancle" tools:ignore="MissingTranslation">取消</string>
     <string name="search_tips" tools:ignore="MissingTranslation">请输入股票名称/代码/全拼</string>
-    <string name="stock_search_all" tools:ignore="MissingTranslation">综合</string>
-    <string name="stock_search_topic" tools:ignore="MissingTranslation">股票</string>
-    <string name="stock_search_info" tools:ignore="MissingTranslation">咨询</string>
-    <string name="str_tips" translatable="false">提示</string>
-    <string name="str_retry" translatable="false">重试</string>
-    <string name="str_back" translatable="false">返回</string>
-    <string name="create_fund_account_success" translatable="false">恭喜您已获得100万港币模拟资金开始模拟炒股吧！</string>
-    <string name="str_understood" translatable="false">已了解</string>
-    <string name="getdata_err" translatable="false">获取数据失败</string>
+    <string name="stock_search_all"  tools:ignore="MissingTranslation">综合</string>
+    <string name="stock_search_topic"  tools:ignore="MissingTranslation">股票</string>
+    <string name="stock_search_info"  tools:ignore="MissingTranslation">咨讯</string>
+    <string name="str_tips">提示</string>
+    <string name="str_retry">重试</string>
+    <string name="str_back">返回</string>
+    <string name="create_fund_account_success">恭喜您已获得100万港币模拟资金开始模拟炒股吧！</string>
+    <string name="str_understood">已了解</string>
+    <string name="getdata_err">获取数据失败</string>
     <string name="see_more_stock" tools:ignore="MissingTranslation">查看更多股票</string>
     <string name="see_more_infomation" tools:ignore="MissingTranslation">查看更多相关资讯</string>
     <string name="order_detail_title" translatable="false">订单明细</string>
@@ -135,4 +135,12 @@
     <string name="str_cancel">取消</string>
     <string name="str_confirm_withdrawal">请您确认是否撤单</string>
     <string name="str_trust_success">撤单成功</string>
+    <string name="save_set" tools:ignore="MissingTranslation">保存</string>
+    <string name="down_setting_tips" tools:ignore="MissingTranslation">目标价要低于现价</string>
+    <string name="up_setting_tips" tools:ignore="MissingTranslation">目标价要高于现价</string>
+    <string name="up_rate_tips" tools:ignore="MissingTranslation">目标涨幅要大于0</string>
+    <string name="down_rate_tips" tools:ignore="MissingTranslation">目标跌幅要大于0</string>
+    <string name="compare_price_up" tools:ignore="MissingTranslation">较当前价上涨</string>
+    <string name="compare_price_down" tools:ignore="MissingTranslation">较当前价下跌</string>
+    <string name="compare_price_to" tools:ignore="MissingTranslation">股价到</string>
 </resources>

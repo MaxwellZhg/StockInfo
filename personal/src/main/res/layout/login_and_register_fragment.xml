@@ -135,7 +135,7 @@
                           android:layout_centerVertical="true"
                           android:textStyle="bold"
                           android:text="@{viewmodel.str}"
-                          android:textColor="@color/color_8DB9E4"/>
+                          android:textColor="@{viewmodel.getcodeState==0?@color/color_8DB9E4:@color/color_1A6ED2}"/>
             </RelativeLayout>
             <ImageView android:layout_width="match_parent"
                        android:layout_height="1dp"

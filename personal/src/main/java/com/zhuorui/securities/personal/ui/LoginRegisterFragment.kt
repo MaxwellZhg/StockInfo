@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
@@ -47,6 +48,8 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         tv_send_code.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
+        et_phone.addTextChangedListener(PhoneEtChange())
+
         et_phone_code.addTextChangedListener(this)
         tv_phone_num_login.setOnClickListener(this)
         rl_country_disct.setOnClickListener(this)
@@ -152,6 +155,25 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         if(type==2){
             presenter?.postChangeMytabInfo()
         }
+    }
+
+    inner class PhoneEtChange : TextWatcher{
+        override fun afterTextChanged(p0: Editable?) {
+          if(!TextUtils.isEmpty(p0.toString())){
+              presenter?.getGetCodeColor(1)
+          }else{
+              presenter?.getGetCodeColor(0)
+          }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
     }
 }
 
