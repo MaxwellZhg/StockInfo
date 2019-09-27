@@ -115,13 +115,15 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 itemViewHolder.item?.setOnClickListener {
                     val pos: Int = it.tag as Int
                     if (selected.contains(pos)) {
+                        itemViewHolder.btnGroup?.visibility = View.GONE
                         selected.remove(pos)
                         datas?.get(pos)?.selected = false
-                        itemViewHolder.btnGroup?.visibility = View.GONE
+                        listener?.onItemClick(posOff + pos, false)
                     } else {
+                        itemViewHolder.btnGroup?.visibility = View.VISIBLE
                         datas?.get(pos)?.selected = true
                         selected.add(pos)
-                        itemViewHolder.btnGroup?.visibility = View.VISIBLE
+                        listener?.onItemClick(posOff + pos, true)
                     }
                 }
                 itemViewHolder.business?.setOnClickListener {
@@ -239,6 +241,11 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
          * 去行情
          */
         fun toQuotation(code: String, ts: String)
+
+        /**
+         * 选择监听
+         */
+        fun onItemClick(position: Int, selected: Boolean)
     }
 
 }

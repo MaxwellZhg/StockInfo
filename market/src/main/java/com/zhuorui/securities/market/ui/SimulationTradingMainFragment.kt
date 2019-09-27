@@ -3,8 +3,10 @@ package com.zhuorui.securities.market.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ScrollView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
@@ -13,7 +15,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
-import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
 import com.zhuorui.securities.market.model.STFundAccountData
@@ -34,6 +35,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
+
 
 /**
  *    author : liuwei
@@ -61,7 +63,7 @@ class SimulationTradingMainFragment :
     }
 
     override val layout: Int
-        get() = R.layout.fragment_simulation_trading_main
+        get() = com.zhuorui.securities.market.R.layout.fragment_simulation_trading_main
 
     override val viewModelId: Int
         get() = BR.viewModel
@@ -166,10 +168,10 @@ class SimulationTradingMainFragment :
      */
     override fun toCancelOrder(data: STOrderData) {
         confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
-            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
-            .setMsgText(R.string.str_confirm_withdrawal)
-            .setConfirmText(ResUtil.getString(R.string.str_confirm)!!)
-            .setCancelText(ResUtil.getString(R.string.str_cancel)!!)
+            .setTitleText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_tips)!!)
+            .setMsgText(com.zhuorui.securities.market.R.string.str_confirm_withdrawal)
+            .setConfirmText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_confirm)!!)
+            .setCancelText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_cancel)!!)
             .setCallBack(object : ConfirmToCancelDialog.CallBack {
                 override fun onCancel() {
                 }
@@ -204,7 +206,7 @@ class SimulationTradingMainFragment :
     }
 
     override fun cancelTrustSuccess() {
-        ToastUtil.instance.toast(R.string.str_trust_success)
+        ToastUtil.instance.toast(com.zhuorui.securities.market.R.string.str_trust_success)
     }
 
     override fun cancelTrustError(msg: String?) {
@@ -215,8 +217,8 @@ class SimulationTradingMainFragment :
         fund_account?.createFundAccountSuccess()
         TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
             .setTitleText("")
-            .setMsgText(R.string.create_fund_account_success)
-            .setConfirmText(R.string.str_understood)
+            .setMsgText(com.zhuorui.securities.market.R.string.create_fund_account_success)
+            .setConfirmText(com.zhuorui.securities.market.R.string.str_understood)
             .show()
     }
 
@@ -241,10 +243,10 @@ class SimulationTradingMainFragment :
 
     override fun onGetFundAccountError(code: String?, msg: String?) {
         confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
-            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
+            .setTitleText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_tips)!!)
             .setMsgText(msg.toString())
-            .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
-            .setCancelText(ResUtil.getString(R.string.str_back)!!)
+            .setConfirmText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_retry)!!)
+            .setCancelText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_back)!!)
             .setCallBack(object : ConfirmToCancelDialog.CallBack {
                 override fun onCancel() {
                     pop()
@@ -259,10 +261,10 @@ class SimulationTradingMainFragment :
 
     override fun onCreateFundAccountError(code: String, message: String?) {
         confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
-            .setTitleText(ResUtil.getString(R.string.str_tips)!!)
+            .setTitleText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_tips)!!)
             .setMsgText(message.toString())
-            .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
-            .setCancelText(ResUtil.getString(R.string.str_back)!!)
+            .setConfirmText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_retry)!!)
+            .setCancelText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_back)!!)
             .setCallBack(object : ConfirmToCancelDialog.CallBack {
                 override fun onCancel() {
                 }
@@ -272,6 +274,24 @@ class SimulationTradingMainFragment :
                 }
             })
         confirmDialog?.show()
+    }
+
+    /**
+     * 选择监听
+     */
+    override fun onItemClick(position: Int, selected: Boolean) {
+        if (selected) {
+            when (mIndex) {
+                0 -> {
+                    if (getHoldpositionsAdapter().itemCount - 1 == position)
+                        recycler_view.post { scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                }
+                1 -> {
+                    if (getMockStockOrderAdapter().itemCount - 1 == position)
+                        recycler_view.post { scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                }
+            }
+        }
     }
 
     private fun onSelect(index: Int) {
@@ -291,8 +311,8 @@ class SimulationTradingMainFragment :
         val hpNum = getHoldpositionsAdapter().datas?.size
         val toNum = getMockStockOrderAdapter().datas?.size
         return arrayOf(
-            ResUtil.getString(R.string.str_hold_positions) + "($hpNum)",
-            ResUtil.getString(R.string.str_today_orders) + "($toNum)"
+            ResUtil.getString(com.zhuorui.securities.market.R.string.str_hold_positions) + "($hpNum)",
+            ResUtil.getString(com.zhuorui.securities.market.R.string.str_today_orders) + "($toNum)"
         )
     }
 
@@ -346,8 +366,10 @@ class SimulationTradingMainFragment :
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
-                colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.color_232323)!!
-                colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
+                colorTransitionPagerTitleView.normalColor =
+                    ResUtil.getColor(com.zhuorui.securities.market.R.color.color_232323)!!
+                colorTransitionPagerTitleView.selectedColor =
+                    ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 18f
                 colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
@@ -361,7 +383,7 @@ class SimulationTradingMainFragment :
             override fun getIndicator(context: Context): IPagerIndicator {
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(R.color.tab_select))
+                indicator.setColors(ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select))
                 indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
                 indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator
