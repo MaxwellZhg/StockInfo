@@ -248,17 +248,15 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         }
         stocksInfo.clear()
         val list: MutableList<StockTopic> = mutableListOf()
-        //过虑持仓重复订阅股票
         for (data in positionDatas!!) {
-            val tsCode = data.code!! + "." + data.ts!!
-//            if (!stocksInfo.containsKey(tsCode)) {
-            stocksInfo[tsCode] = PushStockPriceData()
+            stocksInfo[data.getTsCode()] = PushStockPriceData()
             list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
-//            }
         }
-        //筛选订单需要订阅的股票
+        //过虑订单需要订阅的股票
         for (data in orderDatas!!) {
-            if (data.majorStatus == 2 && !stocksInfo.containsKey(data.code!! + "." + data.ts!!)) {
+            val tsCode = data.getTsCode()
+            if (!stocksInfo.containsKey(tsCode)) {
+                stocksInfo[tsCode] = PushStockPriceData()
                 list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
             }
         }
@@ -300,8 +298,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         var todayProfitAndLoss = BigDecimal(0)//今日盈亏 (今日市值 - 昨日收盘市值）+（今日卖出成交额 - 今日买入成交额）
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
-                val tsCode = data.code + "." + data.ts
-                val stockInfo = stocksInfo?.get(tsCode)
+                val stockInfo = stocksInfo?.get(data.getTsCode())
                 data.presentPrice = stockInfo?.price!!
                 //持仓市值=现价*持仓数
                 data.marketValue = MathUtil.multiply3(data.presentPrice!!, data?.holdStockCount!!)
@@ -341,10 +338,9 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                             //今日盈亏 -- 加今日卖出成交额
                             todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, amt)
                             //总盈亏 -- 加卖出股票的持仓盈亏金额
-                            val tsCode = data.code + "." + data.ts
-                            val stockInfo = stocksInfo?.get(tsCode)!!
+                            val stockInfo = stocksInfo?.get(data.getTsCode())
                             val profitAndLoss = MathUtil.multiply3(
-                                MathUtil.subtract3(stockInfo.price!!, data.holeCost!!),
+                                MathUtil.subtract3(stockInfo?.price!!, data.holeCost!!),
                                 data.holdStockCount!!
                             )
                             totalProfitAndLoss = MathUtil.add3(totalProfitAndLoss, profitAndLoss)

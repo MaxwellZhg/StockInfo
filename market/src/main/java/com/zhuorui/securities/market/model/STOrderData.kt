@@ -107,4 +107,8 @@ open class STOrderData : Parcelable {
             }
         }
     }
+
+    fun getTsCode():String{
+        return "$code.$ts"
+    }
 }
