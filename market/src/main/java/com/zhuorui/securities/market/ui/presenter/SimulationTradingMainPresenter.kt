@@ -56,6 +56,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     /**
      * 服务端推送股票价格实时数据
      */
+    private var mTodayProfitAndLoss: TodayProfitAndLossResponse.Data? = null
     private val stocksInfo: HashMap<String, PushStockPriceData> = HashMap()
     private var stockTopics: MutableList<StockTopic>? = null
     private var availableFunds: BigDecimal = BigDecimal(0)
@@ -81,6 +82,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         view?.showLoading()
         val request = FundAccountRequest(1, transactions.createTransaction())
         disposable = Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
+            ?.flatMap { Cache[ISimulationTradeNet::class.java]?.getFundAccount(request) }
             ?.subscribeOn(Schedulers.io())?.observeOn(
                 AndroidSchedulers.mainThread()
             )
@@ -89,9 +91,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                     it.isSuccess() -> {
                         accountId = it.data.id!!
                         availableFunds = it.data.availableAmount!!
-                        count = 0
-                        getPosition()
-                        getTodayOrders()
+                        getTodayProfitAndLoss()
                     }
                     TextUtils.equals("060003", it.code) -> {
                         view?.hideLoading()
@@ -143,6 +143,12 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             })
     }
 
+    private fun getTodayProfitAndLoss() {
+        val request = FundAccountRequest(1, transactions.createTransaction())
+        Cache[ISimulationTradeNet::class.java]?.todayProfitAndLoss(request)
+            ?.enqueue(Network.IHCallBack<TodayProfitAndLossResponse>(request))
+    }
+
     /**
      * 获取持仓
      */
@@ -192,6 +198,15 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onTodayProfitAndLossResponse(response: TodayProfitAndLossResponse) {
+        if (!transactions.isMyTransaction(response)) return
+        mTodayProfitAndLoss = response.data
+        count = 0
+        getPosition()
+        getTodayOrders()
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetPositionResponse(response: GetPositionResponse) {
         count++
         positionDatas = response.data
@@ -206,6 +221,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         orderDatas = response.data.list
         topicPrice()
     }
+
 
     override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
@@ -230,6 +246,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             is CancelTrustRequest -> {
                 view?.hideLoading()
                 view?.cancelTrustError(response.msg)
+            }
+            is FundAccountRequest -> {
+                view?.hideLoading()
+                view?.onGetFundAccountError(response.code, response.msg)
             }
 
         }
@@ -295,7 +315,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     private fun calculation() {
         var totalMarketValue = BigDecimal(0)//总市值
         var totalProfitAndLoss = BigDecimal(0)//总盈亏 ∑个股持仓盈亏金额+卖出股票的持仓盈亏金额
-        var todayProfitAndLoss = BigDecimal(0)//今日盈亏 (今日市值 - 昨日收盘市值）+（今日卖出成交额 - 今日买入成交额）
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
                 val stockInfo = stocksInfo?.get(data.getTsCode())
@@ -314,41 +333,45 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 totalMarketValue = MathUtil.add3(data.marketValue!!, totalMarketValue)
                 //总盈亏 -- 累计持仓盈亏金额
                 totalProfitAndLoss = MathUtil.add3(data.profitAndLoss!!, totalProfitAndLoss)
-                //今日盈亏 -- 累计持仓今日市值变化 (今日市值 - 昨日收盘市值）
-                todayProfitAndLoss = MathUtil.add3(
-                    MathUtil.subtract3(
-                        data.marketValue!!,
-                        MathUtil.multiply3(stockInfo.preClosePrice!!, data?.holdStockCount!!)
-                    ), todayProfitAndLoss
-                )
+//                //今日盈亏 -- 累计持仓今日市值变化 (今日市值 - 昨日收盘市值）
+//                todayProfitAndLoss = MathUtil.add3(
+//                    MathUtil.subtract3(
+//                        data.marketValue!!,
+//                        MathUtil.multiply3(stockInfo.preClosePrice!!, data?.holdStockCount!!)
+//                    ), todayProfitAndLoss
+//                )
             }
         }
+//        if (!orderDatas.isNullOrEmpty()) {
+//            for (data in orderDatas!!) {
+//                if (data?.majorStatus == 2) {
+//                    val amt = MathUtil.multiply3(data.holdStockCount!!, data.holeCost!!)
+//                    when (data.trustType) {
+//                        1 -> {
+//                            //今日盈亏 -- 减今日买入成交额
+//                            todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, amt)
+//                        }
+//                        2 -> {
+//                            //今日盈亏 -- 加今日卖出成交额
+//                            todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, amt)
+//                            //总盈亏 -- 加卖出股票的持仓盈亏金额
+//                            val stockInfo = stocksInfo?.get(data.getTsCode())
+//                            val profitAndLoss = MathUtil.multiply3(
+//                                MathUtil.subtract3(stockInfo?.price!!, data.holeCost!!),
+//                                data.holdStockCount!!
+//                            )
+//                            totalProfitAndLoss = MathUtil.add3(totalProfitAndLoss, profitAndLoss)
+//                        }
+//                    }
+//                }
+//            }
+//        }
         //账户总资产=持仓市值+可用资金
         val totalAssets: BigDecimal = MathUtil.add3(totalMarketValue, availableFunds)
-        if (!orderDatas.isNullOrEmpty()) {
-            for (data in orderDatas!!) {
-                if (data?.majorStatus == 2) {
-                    val amt = MathUtil.multiply3(data.holdStockCount!!, data.holeCost!!)
-                    when (data.trustType) {
-                        1 -> {
-                            //今日盈亏 -- 减今日买入成交额
-                            todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, amt)
-                        }
-                        2 -> {
-                            //今日盈亏 -- 加今日卖出成交额
-                            todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, amt)
-                            //总盈亏 -- 加卖出股票的持仓盈亏金额
-                            val stockInfo = stocksInfo?.get(data.getTsCode())
-                            val profitAndLoss = MathUtil.multiply3(
-                                MathUtil.subtract3(stockInfo?.price!!, data.holeCost!!),
-                                data.holdStockCount!!
-                            )
-                            totalProfitAndLoss = MathUtil.add3(totalProfitAndLoss, profitAndLoss)
-                        }
-                    }
-                }
-            }
-        }
+        //今日盈亏 (今日市值 - 昨日收盘市值）+（今日卖出成交额 - 今日买入成交额）
+        var todayProfitAndLoss = MathUtil.subtract3(totalMarketValue, mTodayProfitAndLoss!!.yesterdayTotalAmount)
+        todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, mTodayProfitAndLoss!!.todaySellAmount)
+        todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, mTodayProfitAndLoss!!.todayBuyAmount)
         //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
         val todayProfitAndLossPercentage =
             MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
