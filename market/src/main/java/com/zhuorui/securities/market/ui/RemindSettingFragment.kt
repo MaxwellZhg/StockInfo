@@ -80,13 +80,13 @@ class RemindSettingFragment :
         // 跌涨幅是否大于0或者等于0
         val diffPriceVal = if (stockInfo?.diffPrice == null) 0 else MathUtil.rounded(stockInfo?.diffPrice!!).toInt()
         if (diffPriceVal == 0 || diffPriceVal > 0) {
-            tv_price.text = if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString()
-            tv_diff_price_count.text =  if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString()
-            tv_diff_rate_count.text = if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate .toString()
+            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(),diffPriceVal)
+            tv_diff_price_count.setText(if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),diffPriceVal)
+            tv_diff_rate_count.setText (if(stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate .toString(),diffPriceVal)
         } else {
-            tv_price.text = if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString()
-            tv_diff_price_count.text = stockInfo?.diffPrice.toString()
-            tv_diff_rate_count.text = stockInfo?.diffRate.toString()
+            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(),2)
+            tv_diff_price_count.setText(if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),2)
+            tv_diff_rate_count.setText (if(stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate .toString(),2)
         }
 
     }
