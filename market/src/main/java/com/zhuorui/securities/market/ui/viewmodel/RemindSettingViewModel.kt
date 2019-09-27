@@ -1,6 +1,8 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.ui.adapter.SettingNoticeAdapter
 
 /**
  *    author : PengXianglin
@@ -9,4 +11,5 @@ import androidx.lifecycle.ViewModel
  *    desc   :
  */
 class RemindSettingViewModel :ViewModel() {
+    var adapter: MutableLiveData<SettingNoticeAdapter> = MutableLiveData()
 }

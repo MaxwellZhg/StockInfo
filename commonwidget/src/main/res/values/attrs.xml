@@ -184,4 +184,8 @@
         <attr name="empty_img_tips_margin" format="dimension"/>
         <attr name="empty_img_src" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="ZRStockTextView">
+     <attr name="zr_showPrecentSymbol" format="boolean"/>
+    </declare-styleable>
 </resources>

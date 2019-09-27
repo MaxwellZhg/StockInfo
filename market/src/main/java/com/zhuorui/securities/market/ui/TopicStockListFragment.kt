@@ -116,7 +116,7 @@ class TopicStockListFragment :
                 }
 
                 override fun onRemind() {
-                    (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance())
+                    (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance(item))
                 }
 
                 override fun onDelete() {

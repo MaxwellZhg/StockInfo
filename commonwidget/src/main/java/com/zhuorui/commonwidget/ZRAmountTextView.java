@@ -38,12 +38,12 @@ public class ZRAmountTextView extends AppCompatTextView {
         showSymbol = a.getBoolean(R.styleable.ZRAmountTextView_zr_showSymbol, showSymbol);
         relativeDecimal = a.getBoolean(R.styleable.ZRAmountTextView_zr_relativeDecimal, relativeDecimal);
         decimalDigit = a.getInt(R.styleable.ZRAmountTextView_zr_decimalDigit, decimalDigit);
-        a.recycle();
         isInit = true;
         String tx = getText().toString();
         if (!TextUtils.isEmpty(tx)) {
             setText(tx);
         }
+        a.recycle();
     }
 
     @Override

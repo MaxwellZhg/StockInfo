@@ -11,7 +11,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.config.LocalSettingsConfig
 import com.zhuorui.securities.personal.databinding.FragmentSettingBinding
 import com.zhuorui.securities.personal.event.SettingChooseEvent
 import com.zhuorui.securities.personal.ui.adapter.HelpCenterInfoAdapter

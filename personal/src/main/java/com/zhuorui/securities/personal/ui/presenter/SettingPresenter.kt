@@ -1,18 +1,15 @@
 package com.zhuorui.securities.personal.ui.presenter
 
-import android.os.Bundle
+import com.zhuorui.commonwidget.config.AppLanguage
+import com.zhuorui.commonwidget.config.LocalSettingsConfig
+import com.zhuorui.commonwidget.config.StocksThemeColor
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.config.LocalSettingsConfig
-import com.zhuorui.securities.personal.model.AppLanguage
-import com.zhuorui.securities.personal.model.StocksThemeColor
 import com.zhuorui.securities.personal.ui.adapter.SettingDataAdapter
 import com.zhuorui.securities.personal.ui.model.SettingData
 import com.zhuorui.securities.personal.ui.view.SettingView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingViewModel
-import me.jessyan.autosize.utils.LogUtils
-import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  * Created by Maxwell.

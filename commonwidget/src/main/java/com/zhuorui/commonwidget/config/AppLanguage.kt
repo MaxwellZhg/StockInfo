@@ -1,4 +1,4 @@
-package com.zhuorui.securities.personal.model
+package com.zhuorui.commonwidget.config
 
 /**
  *    author : PengXianglin

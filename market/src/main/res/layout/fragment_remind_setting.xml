@@ -30,6 +30,14 @@
                       android:layout_centerInParent="true"
                       android:textColor="@color/color_FFFFFFFF"
                       android:text="@string/setting_remind"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textSize="16sp"
+                      android:layout_alignParentRight="true"
+                      android:textColor="@color/color_53A0FD"
+                      android:layout_centerVertical="true"
+                      android:layout_marginRight="13dp"
+                      android:text="@string/save_set"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -98,13 +106,14 @@
                     app:layout_constraintTop_toTopOf="@+id/imageView"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView"
                     android:layout_marginStart="3dp"
-                    tools:ignore="SmallSp" android:id="@+id/textView2"/>
+                    tools:ignore="SmallSp"
+                    android:id="@+id/textView2"/>
 
             <TextView
                     android:id="@+id/tv_now_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/diff_price"
+                    android:text="@string/newly_price"
                     android:layout_marginTop="10dp"
                     android:includeFontPadding="false"
                     app:layout_constraintTop_toTopOf="parent"
@@ -113,16 +122,16 @@
                     android:layout_marginEnd="38dp"
                     app:layout_constraintEnd_toStartOf="@id/tv_diff_pirce"/>
 
-            <TextView
+            <com.zhuorui.commonwidget.ZRStockTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="86.50"
-                    android:textColor="@color/color_FF0000"
                     android:textSize="14sp"
+                    app:zr_showPrecentSymbol="false"
                     android:layout_marginBottom="7dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:includeFontPadding="false"
                     tools:ignore="MissingConstraints"
+                    android:id="@+id/tv_price"
                     app:layout_constraintEnd_toEndOf="@+id/tv_now_price"
                     app:layout_constraintStart_toStartOf="@+id/tv_now_price"/>
 
@@ -147,6 +156,7 @@
                     android:textSize="14sp"
                     android:includeFontPadding="false"
                     android:layout_marginBottom="7dp"
+                    android:id="@+id/tv_diff_price_count"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:ignore="MissingConstraints"
                     app:layout_constraintEnd_toEndOf="@+id/tv_diff_pirce"
@@ -170,6 +180,7 @@
                     android:text="2.55%"
                     android:textColor="@color/color_FF0000"
                     android:textSize="14sp"
+                    android:id="@+id/tv_diff_rate_count"
                     android:layout_marginBottom="7dp"
                     android:includeFontPadding="false"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -177,8 +188,16 @@
                     app:layout_constraintEnd_toEndOf="@+id/tv_diff_rate"
                     app:layout_constraintStart_toStartOf="@+id/tv_diff_rate"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_setting"
+                android:layout_marginTop="13dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <RelativeLayout
+        </androidx.recyclerview.widget.RecyclerView>
+
+      <!--  <RelativeLayout
                 android:layout_marginTop="13dp"
                 android:layout_width="match_parent"
                 android:background="@color/color_35373E"
@@ -356,6 +375,6 @@
                          android:layout_alignParentEnd="true"
                          android:layout_marginEnd="13dp"
                          android:src="@mipmap/ic_switch_open"/>
-        </RelativeLayout>
+        </RelativeLayout>-->
     </LinearLayout>
 </layout>

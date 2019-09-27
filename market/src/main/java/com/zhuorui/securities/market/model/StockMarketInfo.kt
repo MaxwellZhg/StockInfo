@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.model
 
+import java.io.Serializable
 import java.math.BigDecimal
 
 /**
@@ -8,7 +9,7 @@ import java.math.BigDecimal
  *    date   : 2019/8/8 14:08
  *    desc   : 自选股行情信息
  */
-class StockMarketInfo : BaseStockMarket(), IStocks {
+class StockMarketInfo : BaseStockMarket(), IStocks, Serializable {
 
     // 登录后拉取列表会返回id
     var id: String? = null
@@ -52,4 +53,10 @@ class StockMarketInfo : BaseStockMarket(), IStocks {
     override fun getITsCode(): String {
         return if (tsCode == null) "" else tsCode!!
     }
+
+    override fun toString(): String {
+        return "StockMarketInfo(id=$id, name=$name, sort=$sort, tsCode=$tsCode, price=$price, diffPrice=$diffPrice, diffRate=$diffRate, createTime=$createTime, longClick=$longClick)"
+    }
+
+
 }
