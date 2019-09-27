@@ -127,7 +127,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     }
                     // 买入已撤单
                     else if (orderData.majorStatus == 4 || orderData.majorStatus == 5) {
-                        // TODO 是否已持仓
+                        // 是否已持仓
                         val saleStockCount = orderData.saleStockCount
                         if (orderData.saleStockCount != null) {
                             // 更新最大可卖
@@ -138,7 +138,6 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                             // 未持仓，显示未持仓购买
                             view?.changeTrustType(4)
                         }
-                        // TODO 是否已持仓
                     }
                 }
                 // 卖出未成交或卖出已撤单
@@ -156,7 +155,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     }
                     // 卖出已撤单
                     else if (orderData.majorStatus == 4 || orderData.majorStatus == 5) {
-                        // TODO 是否已持仓
+                        // 是否已持仓
                         val saleStockCount = orderData.saleStockCount
                         if (orderData.saleStockCount != null) {
                             // 更新最大可卖
@@ -167,7 +166,6 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                             // 未持仓，显示未持仓购买
                             view?.changeTrustType(4)
                         }
-                        // TODO 是否已持仓
                     }
                 }
             }
