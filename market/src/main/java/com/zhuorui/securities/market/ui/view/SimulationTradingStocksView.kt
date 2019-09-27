@@ -24,7 +24,7 @@ interface SimulationTradingStocksView : AbsView {
 
     /**
      * 根据不同的交易类型显示界面
-     * @param trustType 0默认购买 1买入改单 2卖出改单 3可买买卖
+     * @param trustType 0默认购买 1买入改单 2卖出改单 3已持仓可买买卖 4未持仓购买
      */
     fun changeTrustType(trustType: Int)
 
