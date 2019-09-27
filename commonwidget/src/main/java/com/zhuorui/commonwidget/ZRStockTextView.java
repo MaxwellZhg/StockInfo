@@ -112,7 +112,7 @@ public class ZRStockTextView extends AppCompatTextView {
 
         int color;
         if (diffState == 0) {
-            color = LocalSettingsConfig.Companion.read().getUpDownColor(new BigDecimal(value));
+            color = LocalSettingsConfig.Companion.read().getUpDownColor(new BigDecimal(0));
         } else if (diffState == 1) {
             color = LocalSettingsConfig.Companion.read().getUpColor();
         } else {
