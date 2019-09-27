@@ -21,6 +21,9 @@ interface ISimulationTradeNet {
     @POST(SimulationTradeApi.FUND_ACCOUNT)
     fun getFundAccount(@Body request: FundAccountRequest): Observable<FundAccountResponse>
 
+    @POST(SimulationTradeApi.TODAY_PROFIT_AND_LOSS)
+    fun todayProfitAndLoss(@Body request: FundAccountRequest): Call<TodayProfitAndLossResponse>
+
     @POST(SimulationTradeApi.CREATE_FUND_ACCOUNT)
     fun createFundAccount(@Body request: FundAccountRequest): Observable<BaseResponse>
 

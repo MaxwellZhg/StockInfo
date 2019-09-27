@@ -142,6 +142,7 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
      * 是否要屏蔽返回键来取消对话框
      */
     protected fun ignoreBackPressed() {
+        dialog?.setCancelable(false)
         /*设置onKeyListener*/
         dialog!!.setOnKeyListener { dialog, keyCode, event -> keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0 }
     }

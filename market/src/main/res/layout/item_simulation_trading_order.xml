@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -264,8 +265,7 @@
             android:textSize="14sp"
             android:textColor="#232323"
             android:textStyle="bold"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="28dp"
             android:drawablePadding="10dp"
             android:drawableStart="@mipmap/ic_modify"
             app:layout_constraintTop_toTopOf="@+id/tv_order_quotation"
@@ -284,8 +284,7 @@
             android:textSize="14sp"
             android:textColor="#232323"
             android:textStyle="bold"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="28dp"
             android:drawablePadding="10dp"
             android:drawableStart="@mipmap/ic_undo"
             app:layout_constraintTop_toTopOf="@+id/tv_business"

@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
@@ -167,7 +166,7 @@ class SimulationTradingMainFragment :
      * 撤单
      */
     override fun toCancelOrder(data: STOrderData) {
-        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, true, false)
             .setTitleText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_tips)!!)
             .setMsgText(com.zhuorui.securities.market.R.string.str_confirm_withdrawal)
             .setConfirmText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_confirm)!!)
@@ -196,6 +195,7 @@ class SimulationTradingMainFragment :
      * 去行情
      */
     override fun toQuotation(code: String, ts: String) {
+        ToastUtil.instance.toast("行情功能待开发")
     }
 
     /**
@@ -214,12 +214,12 @@ class SimulationTradingMainFragment :
     }
 
     override fun createFundAccountSuccess() {
-        fund_account?.createFundAccountSuccess()
-        TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
+        val dailog = TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
             .setTitleText("")
             .setMsgText(com.zhuorui.securities.market.R.string.create_fund_account_success)
             .setConfirmText(com.zhuorui.securities.market.R.string.str_understood)
-            .show()
+        dailog.listener = View.OnClickListener { fund_account?.createFundAccountSuccess() }
+        dailog.show()
     }
 
     override fun onUpData(
@@ -229,8 +229,10 @@ class SimulationTradingMainFragment :
     ) {
         val postiosAdapter = getHoldpositionsAdapter()
         postiosAdapter.setData(positionDatas)
+        postiosAdapter.clearSelectd()
         val orderAdapter = getMockStockOrderAdapter()
         orderAdapter.clear()
+        orderAdapter.clearSelectd()
         orderAdapter.addDatas(orderDatas)
         if (mIndex == 0) {
             postiosAdapter.notifyDataSetChanged()
@@ -284,11 +286,11 @@ class SimulationTradingMainFragment :
             when (mIndex) {
                 0 -> {
                     if (getHoldpositionsAdapter().itemCount - 1 == position)
-                        recycler_view.post { scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                        scroll_view.postDelayed({ scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 320)
                 }
                 1 -> {
                     if (getMockStockOrderAdapter().itemCount - 1 == position)
-                        recycler_view.post { scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                        scroll_view.postDelayed({ scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 320)
                 }
             }
         }
@@ -311,8 +313,8 @@ class SimulationTradingMainFragment :
         val hpNum = getHoldpositionsAdapter().datas?.size
         val toNum = getMockStockOrderAdapter().datas?.size
         return arrayOf(
-            ResUtil.getString(com.zhuorui.securities.market.R.string.str_hold_positions) + "($hpNum)",
-            ResUtil.getString(com.zhuorui.securities.market.R.string.str_today_orders) + "($toNum)"
+            ResUtil.getString(com.zhuorui.securities.market.R.string.str_hold_positions) + " ($hpNum)",
+            ResUtil.getString(com.zhuorui.securities.market.R.string.str_today_orders) + " ($toNum)"
         )
     }
 

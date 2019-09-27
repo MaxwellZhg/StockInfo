@@ -14,6 +14,11 @@ object SimulationTradeApi {
     const val FUND_ACCOUNT = "as_sims/api/fund_account/v1/get_fund_account"
 
     /**
+     * 计算盈亏和总盈亏所需参数接口
+     */
+    const val TODAY_PROFIT_AND_LOSS = "as_sims/api/account_asset_stat/v1/statistical/todayProfitAndLoss"
+
+    /**
      * 创建资金账号
      */
     const val CREATE_FUND_ACCOUNT = "as_sims/api/fund_account/v1/create_fund_account"
