@@ -242,6 +242,7 @@
                       android:textColor="@color/color_FFFFFFFF"
                       android:textSize="12sp"
                       android:gravity="center"
+                      android:lines="1"
                       android:id="@+id/tips_up_info"
                       android:visibility="invisible"
                       android:layout_centerVertical="true"
@@ -249,6 +250,7 @@
                       android:background="@mipmap/icon_tips_bg"/>
             <ImageButton android:layout_width="46dp"
                          android:layout_height="26dp"
+                         android:id="@+id/iv_up_price"
                          android:layout_centerVertical="true"
                          android:layout_alignParentEnd="true"
                          android:layout_marginEnd="13dp"
@@ -293,7 +295,7 @@
                     android:paddingRight="5dp"
                     android:inputType="numberDecimal"
                     android:textColorHint="@color/color_A1A1A1"
-                    android:textColor="@color/color_A1A1A1"
+                    android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_down_threshold"
                     android:layout_height="17dp"/>
             <TextView android:layout_width="wrap_content"
@@ -310,6 +312,7 @@
                       android:textColor="@color/color_FFFFFFFF"
                       android:textSize="12sp"
                       android:gravity="center"
+                      android:lines="1"
                       android:visibility="invisible"
                       android:id="@+id/tips_down_info"
                       android:layout_centerVertical="true"
@@ -320,6 +323,7 @@
                          android:layout_centerVertical="true"
                          android:layout_alignParentEnd="true"
                          android:layout_marginEnd="13dp"
+                         android:id="@+id/iv_down_price"
                          android:src="@mipmap/ic_switch_close"/>
         </RelativeLayout>
 
@@ -361,7 +365,7 @@
                     android:paddingRight="5dp"
                     android:inputType="numberDecimal"
                     android:textColorHint="@color/color_A1A1A1"
-                    android:textColor="@color/color_A1A1A1"
+                    android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_price_threshold"
                     android:layout_height="17dp"/>
               <TextView android:layout_width="wrap_content"
@@ -388,6 +392,7 @@
                       android:textColor="@color/color_FFFFFFFF"
                       android:textSize="12sp"
                       android:gravity="center"
+                      android:lines="1"
                       android:visibility="invisible"
                       android:id="@+id/tips_uprate_info"
                       android:layout_centerVertical="true"
@@ -399,6 +404,7 @@
                          android:layout_centerVertical="true"
                          android:layout_alignParentEnd="true"
                          android:layout_marginEnd="13dp"
+                         android:id="@+id/iv_up_rate"
                          android:src="@mipmap/ic_switch_close"/>
         </RelativeLayout>
 
@@ -439,7 +445,7 @@
                     android:paddingRight="5dp"
                     android:inputType="numberDecimal"
                     android:textColorHint="@color/color_A1A1A1"
-                    android:textColor="@color/color_A1A1A1"
+                    android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_down_range"
                     android:layout_height="17dp"/>
             <TextView android:layout_width="wrap_content"
@@ -467,6 +473,7 @@
                       android:textSize="12sp"
                       android:gravity="center"
                       android:visibility="invisible"
+                      android:lines="1"
                       android:id="@+id/tips_downrate_info"
                       android:layout_centerVertical="true"
                       android:layout_toEndOf="@+id/et_down_rate"
@@ -477,6 +484,7 @@
                          android:layout_centerVertical="true"
                          android:layout_alignParentEnd="true"
                          android:layout_marginEnd="13dp"
+                         android:id="@+id/iv_down_rate"
                          android:src="@mipmap/ic_switch_close"/>
         </RelativeLayout>
     </LinearLayout>
