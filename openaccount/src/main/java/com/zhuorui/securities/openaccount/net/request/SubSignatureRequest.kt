@@ -9,7 +9,8 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  *    desc   : 上传电子签名
  */
 class SubSignatureRequest(
-    val signaturePhoto: String, // 签名照片base64码
+    val fileType: String, // 文件类型 1-base64 2-url， 默认为1
+    val signaturePhotoUrl: String, // 图片url（大小不超过3M），文件类型为2时必填
     val id: String, // 开户id
     transaction: String
 ) : BaseRequest(transaction) {

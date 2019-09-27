@@ -201,6 +201,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onOrderListResponse(response: OrderListResponse) {
+        if (!transactions.isMyTransaction(response)) return
         count++
         orderDatas = response.data.list
         topicPrice()

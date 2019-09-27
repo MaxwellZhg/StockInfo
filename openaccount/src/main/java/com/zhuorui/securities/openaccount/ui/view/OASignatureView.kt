@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.view
 
+import android.content.Context
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 
 /**
@@ -15,4 +16,5 @@ interface OASignatureView : AbsView {
     fun jumpToNext()
 
     fun hideLoading()
+    fun getContext(): Context?
 }

@@ -48,9 +48,9 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-
-    api project(":base2app")
-    api project(':personal')
+    implementation project(":base2app")
+    implementation project(':personal')
+    implementation project(':alioss')
     implementation project(":commonwidget")
     // 支持使用butterknife注解
     kapt "com.jakewharton:butterknife-compiler:$butterknife_plugin_version"

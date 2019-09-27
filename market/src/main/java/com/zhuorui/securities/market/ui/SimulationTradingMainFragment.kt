@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
+import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -51,6 +52,7 @@ class SimulationTradingMainFragment :
     private var mIndex: Int = 0
     private var loading: ProgressDialog? = null
     private var fist: Boolean = true
+    private var confirmDialog: BaseDialog? = null
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
@@ -125,6 +127,12 @@ class SimulationTradingMainFragment :
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        confirmDialog?.hide()
+        hideLoading()
+    }
+
     /**
      * 去买卖
      */
@@ -157,7 +165,7 @@ class SimulationTradingMainFragment :
      * 撤单
      */
     override fun toCancelOrder(data: STOrderData) {
-        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
             .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(R.string.str_confirm_withdrawal)
             .setConfirmText(ResUtil.getString(R.string.str_confirm)!!)
@@ -179,7 +187,7 @@ class SimulationTradingMainFragment :
 
                 }
             })
-            .show()
+        confirmDialog?.show()
     }
 
     /**
@@ -232,7 +240,7 @@ class SimulationTradingMainFragment :
     }
 
     override fun onGetFundAccountError(code: String?, msg: String?) {
-        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
             .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(msg.toString())
             .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
@@ -246,11 +254,11 @@ class SimulationTradingMainFragment :
                     presenter?.getFundAccount()
                 }
             })
-            .show()
+        confirmDialog?.show()
     }
 
     override fun onCreateFundAccountError(code: String, message: String?) {
-        ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
             .setTitleText(ResUtil.getString(R.string.str_tips)!!)
             .setMsgText(message.toString())
             .setConfirmText(ResUtil.getString(R.string.str_retry)!!)
@@ -263,7 +271,7 @@ class SimulationTradingMainFragment :
                     presenter?.createFundAccount()
                 }
             })
-            .show()
+        confirmDialog?.show()
     }
 
     private fun onSelect(index: Int) {
@@ -321,11 +329,6 @@ class SimulationTradingMainFragment :
     override fun hideLoading() {
         if (loading != null && loading!!.isShowing)
             loading?.dismiss()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        hideLoading()
     }
 
     /**

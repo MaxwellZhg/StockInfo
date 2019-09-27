@@ -1,6 +1,9 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
+import android.text.TextUtils
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseRequest
+import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -8,6 +11,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.OpenInfoRequest
+import com.zhuorui.securities.openaccount.net.response.BucketResponse
 import com.zhuorui.securities.openaccount.net.response.OpenInfoResponse
 import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
@@ -26,6 +30,7 @@ class OpenAccountTabPresenter : AbsNetPresenter<OpenAccountTabView, OpenAccountT
         view?.init()
         if (getLoginStatus()) {
             requestOpenInfo()
+            requestOpenAccOssInfo()
         }
     }
 
@@ -52,4 +57,24 @@ class OpenAccountTabPresenter : AbsNetPresenter<OpenAccountTabView, OpenAccountT
     fun onJumpToOpenAccountStepsEvent(event: JumpToOpenAccountEvent) {
         view?.onJumpToOpenAccountPage()
     }
+
+    private fun requestOpenAccOssInfo() {
+        val request = BaseRequest(transactions.createTransaction())
+        request.generateSign()
+        Cache[IOpenAccountNet::class.java]?.bucketName(request)
+            ?.enqueue(Network.IHCallBack<BucketResponse>(request))
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    fun onBucketResponse(response: BucketResponse) {
+        // 记录开户信息
+        for (data in response.data) {
+            if (TextUtils.equals("1", data.type)) {
+                OpenInfoManager.getInstance()?.bucket = data
+                break
+            }
+        }
+    }
+
+
 }
