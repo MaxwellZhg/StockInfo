@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
-import com.zhuorui.securities.base2app.BaseApplication.Companion.context
 import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
-import com.zhuorui.securities.market.R2.id.magic_indicator
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
 import com.zhuorui.securities.market.model.STFundAccountData
@@ -168,7 +166,7 @@ class SimulationTradingMainFragment :
      * 撤单
      */
     override fun toCancelOrder(data: STOrderData) {
-        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, false, true)
+        confirmDialog = ConfirmToCancelDialog.createWidth265Dialog(context!!, true, false)
             .setTitleText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_tips)!!)
             .setMsgText(com.zhuorui.securities.market.R.string.str_confirm_withdrawal)
             .setConfirmText(ResUtil.getString(com.zhuorui.securities.market.R.string.str_confirm)!!)
@@ -231,8 +229,10 @@ class SimulationTradingMainFragment :
     ) {
         val postiosAdapter = getHoldpositionsAdapter()
         postiosAdapter.setData(positionDatas)
+        postiosAdapter.clearSelectd()
         val orderAdapter = getMockStockOrderAdapter()
         orderAdapter.clear()
+        orderAdapter.clearSelectd()
         orderAdapter.addDatas(orderDatas)
         if (mIndex == 0) {
             postiosAdapter.notifyDataSetChanged()

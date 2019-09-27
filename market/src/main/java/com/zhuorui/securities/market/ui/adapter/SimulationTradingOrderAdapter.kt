@@ -48,6 +48,10 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
         initItemViewType()
     }
 
+    fun clearSelectd(){
+        selected.clear()
+    }
+
     fun clear() {
         datas?.clear()
         initItemViewType()
@@ -135,24 +139,29 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                     }
                     itemViewHolder.business?.setOnClickListener {
                         val pos: Int = it.tag as Int
+                        hideMu(itemViewHolder,pos)
                         listener?.toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_UPDATE_ORDER, datas!![pos])
                     }
                     itemViewHolder.quotation?.setOnClickListener {
                         val pos: Int = it.tag as Int
                         val data = datas!![pos]
+                        hideMu(itemViewHolder,pos)
                         listener?.toQuotation(data.code.toString(), data.ts.toString())
                     }
                     itemViewHolder.orderQuotation?.setOnClickListener {
                         val pos: Int = it.tag as Int
                         val data = datas!![pos]
+                        hideMu(itemViewHolder,pos)
                         listener?.toQuotation(data.code.toString(), data.ts.toString())
                     }
                     itemViewHolder.change?.setOnClickListener {
                         val pos: Int = it.tag as Int
+                        hideMu(itemViewHolder,pos)
                         listener?.toChangeOrder(datas!![pos])
                     }
                     itemViewHolder.cancel?.setOnClickListener {
                         val pos: Int = it.tag as Int
+                        hideMu(itemViewHolder,pos)
                         listener?.toCancelOrder(datas!![pos])
                     }
                 }
@@ -160,6 +169,12 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                 itemViewHolder
             }
         }
+    }
+
+    private fun hideMu(itemViewHolder:ItemViewHolder, pos: Int) {
+        selected.remove(pos)
+        datas?.get(pos)?.selected = false
+        itemViewHolder.hideBtn()
     }
 
     private fun getEmptyView(parent: ViewGroup): View {
@@ -252,8 +267,6 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                 } else {
                     hideBtn()
                 }
-            } else {
-                hideBtn()
             }
         }
 
