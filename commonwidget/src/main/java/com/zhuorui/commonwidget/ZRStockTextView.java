@@ -2,7 +2,6 @@ package com.zhuorui.commonwidget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -21,9 +20,12 @@ import java.math.BigDecimal;
  * Desc:
  */
 public class ZRStockTextView extends AppCompatTextView {
-    boolean isInit;
+    private boolean isInit;
+    // 0无涨跌 1涨 2跌
+    private int diffState = 0;
+    // 是否在需要在数字之前添加“+”、“-”，如股价跌涨幅 +1.03，-1.66
     private boolean isUpDown;
-    private int state = 0;
+    // 是否支持百分号
     private boolean isSymbol;
 
     public ZRStockTextView(Context context) {
@@ -38,6 +40,7 @@ public class ZRStockTextView extends AppCompatTextView {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ZRStockTextView);
         isSymbol = a.getBoolean(R.styleable.ZRStockTextView_zr_showPrecentSymbol, false);
+        isUpDown = a.getBoolean(R.styleable.ZRStockTextView_zr_showPrecentUpDown, false);
         a.recycle();
         isInit = true;
         String tx = getText().toString();
@@ -47,64 +50,60 @@ public class ZRStockTextView extends AppCompatTextView {
 
     }
 
-    @Override
-    public void setText(CharSequence text, BufferType type) {
+    /**
+     * 设置显示内容
+     *
+     * @param text      内容
+     * @param diffState 根据类型显示不同的颜色 0无涨跌 1涨 2跌
+     * @param type      a {@link android.widget.TextView.BufferType} which defines whether the text is
+     *                  stored as a static text, styleable/spannable text, or editable text
+     */
+    public void setText(CharSequence text, int diffState, BufferType type) {
         if (!isInit) {
             super.setText(text, type);
             return;
         }
         try {
-            if (isSymbol && state == 0) {
+            String formatStr;
+            // 支持百分号，如跌涨幅 +1.009%
+            if (isSymbol) {
                 final BigDecimal amt = new BigDecimal(text.toString());
                 if (amt.compareTo(BigDecimal.ZERO) > 0) {
                     final String format = "+%s";
-                    final String tx = String.format(format, text.toString());
-                    super.setText(changTvColor(tx, state, isSymbol), type);
-                } else if (amt.compareTo(BigDecimal.ZERO) < 0) {
-                    super.setText(changTvColor(text.toString(), state, isSymbol), type);
+                    formatStr = String.format(format, text.toString());
                 } else {
-                    final String format = "+%s";
-                    final String tx = String.format(format, text.toString());
-                    super.setText(changTvColor(tx, state, isSymbol), type);
+                    formatStr = text.toString();
                 }
-            } else if (!isSymbol && state == 0) {
-                final BigDecimal amt = new BigDecimal(text.toString());
-                if (amt.compareTo(BigDecimal.ZERO) > 0) {
-                    final String format = "+%s";
-                    final String tx = String.format(format, text.toString());
-                    super.setText(changTvColor(tx, state, isSymbol), type);
-                } else if (amt.compareTo(BigDecimal.ZERO) < 0) {
-                    super.setText(changTvColor(text.toString(), state, isSymbol), type);
-                } else {
-                    final String format = "+%s";
-                    final String tx = String.format(format, text.toString());
-                    super.setText(changTvColor(tx, state, isSymbol), type);
-                }
-            } else if (!isSymbol && state == 1) {
-                super.setText(changTvColor(text.toString(), state, isSymbol), type);
-            } else if (!isSymbol && state == 2) {
-                super.setText(changTvColor(text.toString(), state, isSymbol), type);
             }
+            // 不支持百分号，如股价 1.33
+            else {
+                final BigDecimal amt = new BigDecimal(text.toString());
+                if (amt.compareTo(BigDecimal.ZERO) > 0 && isUpDown) {
+                    final String format = "+%s";
+                    formatStr = String.format(format, text.toString());
+                } else {
+                    formatStr = text.toString();
+                }
+            }
+            super.setText(changTvColor(formatStr, diffState, isSymbol), type);
         } catch (Exception e) {
             Log.e("tttttt", e.toString());
             super.setText(text, type);
         }
     }
 
-
-    public void setUpDownChange(boolean isUpDown) {
-        this.isUpDown = isUpDown;
-        if (isUpDown) {
-            this.state = 1;
-        } else {
-            this.state = 2;
-        }
-    }
-
-    public static SpannableString changTvColor(String value, int state, boolean isSymbol) {
+    /**
+     * 设置字体颜色
+     *
+     * @param value
+     * @param diffState 0无涨跌 1涨 2跌
+     * @param isSymbol
+     * @return
+     */
+    public static SpannableString changTvColor(String value, int diffState, boolean isSymbol) {
         String str = "";
         SpannableString spannableString;
-        if (isSymbol && state == 0) {
+        if (isSymbol && diffState == 0) {
             str = value + "%";
             spannableString = new SpannableString(str);
         } else {
@@ -112,19 +111,18 @@ public class ZRStockTextView extends AppCompatTextView {
         }
 
         int color;
-        if (state == 0) {
+        if (diffState == 0) {
             color = LocalSettingsConfig.Companion.read().getUpDownColor(new BigDecimal(value));
-        } else if (state == 1) {
+        } else if (diffState == 1) {
             color = LocalSettingsConfig.Companion.read().getUpColor();
         } else {
             color = LocalSettingsConfig.Companion.read().getDownColor();
         }
-        if (isSymbol && state == 0) {
+        if (isSymbol && diffState == 0) {
             spannableString.setSpan(new ForegroundColorSpan(color), 0, str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         } else {
             spannableString.setSpan(new ForegroundColorSpan(color), 0, value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannableString;
     }
-
 }

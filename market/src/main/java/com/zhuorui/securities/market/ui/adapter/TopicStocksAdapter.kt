@@ -114,12 +114,12 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             val diffPriceVal = if (item?.diffPrice == null) 0 else MathUtil.rounded(item?.diffPrice!!).toInt()
             if (diffPriceVal == 0 || diffPriceVal > 0) {
                 tv_price.setUpDownChange(true)
-                tv_price.text=item?.price.toString()
+                tv_price.text = item?.price.toString()
                 stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getUpBtnColor())
                 stock_up_down.text = "+" + (if (item?.diffRate == null) "0.00" else item.diffRate) + "%"
             } else {
                 tv_price.setUpDownChange(false)
-                tv_price.text=item?.price.toString()
+                tv_price.text = item?.price.toString()
                 stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getDownBtnColor())
                 stock_up_down.text = item?.diffRate.toString() + "%"
             }
