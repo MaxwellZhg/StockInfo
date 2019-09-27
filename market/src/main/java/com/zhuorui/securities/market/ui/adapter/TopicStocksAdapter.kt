@@ -108,18 +108,14 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 }
             }
 
-            tv_price.text = if (item?.price == null) "0.00" else item.price.toString()
-
             // 跌涨幅是否大于0或者等于0
             val diffPriceVal = if (item?.diffPrice == null) 0 else MathUtil.rounded(item?.diffPrice!!).toInt()
             if (diffPriceVal == 0 || diffPriceVal > 0) {
-                tv_price.setUpDownChange(true)
-                tv_price.text = item?.price.toString()
+                tv_price.setText(if (item?.price == null) "0.00" else item.price.toString(),diffPriceVal)
                 stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getUpBtnColor())
                 stock_up_down.text = "+" + (if (item?.diffRate == null) "0.00" else item.diffRate) + "%"
             } else {
-                tv_price.setUpDownChange(false)
-                tv_price.text = item?.price.toString()
+                tv_price.setText(item?.price.toString(),2)
                 stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getDownBtnColor())
                 stock_up_down.text = item?.diffRate.toString() + "%"
             }

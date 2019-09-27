@@ -154,6 +154,7 @@
                     android:textSize="14sp"
                     android:includeFontPadding="false"
                     android:layout_marginBottom="7dp"
+                    app:zr_showPrecentUpDown="true"
                     android:id="@+id/tv_diff_price_count"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:ignore="MissingConstraints"
@@ -257,7 +258,7 @@
                       android:textColor="@color/color_FFFFFFFF"
                       android:textSize="12sp"
                       android:gravity="center"
-                      android:id="@+id/tips_info"
+                      android:id="@+id/tips_up_info"
                       android:layout_centerVertical="true"
                       android:layout_toEndOf="@+id/et_up_price"
                       android:background="@mipmap/icon_tips_bg"/>
@@ -323,7 +324,7 @@
                       android:textColor="@color/color_FFFFFFFF"
                       android:textSize="12sp"
                       android:gravity="center"
-                      android:id="@+id/tips_info"
+                      android:id="@+id/tips_down_info"
                       android:layout_centerVertical="true"
                       android:layout_toEndOf="@+id/et_down_price"
                       android:background="@mipmap/icon_tips_bg"/>

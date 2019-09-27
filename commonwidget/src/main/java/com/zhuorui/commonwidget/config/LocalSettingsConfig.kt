@@ -67,7 +67,7 @@ class LocalSettingsConfig : AbsConfig() {
         return when (number.compareTo(BigDecimal(0))) {
             1 -> getUpColor()
             -1 -> getDownColor()
-            else -> getUpColor()
+            else -> defColor
         }
     }
 

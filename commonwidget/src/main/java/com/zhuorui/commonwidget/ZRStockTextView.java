@@ -55,12 +55,12 @@ public class ZRStockTextView extends AppCompatTextView {
      *
      * @param text      内容
      * @param diffState 根据类型显示不同的颜色 0无涨跌 1涨 2跌
-     * @param type      a {@link android.widget.TextView.BufferType} which defines whether the text is
+     * @param       a {@link android.widget.TextView.BufferType} which defines whether the text is
      *                  stored as a static text, styleable/spannable text, or editable text
      */
-    public void setText(CharSequence text, int diffState, BufferType type) {
+    public void setText(CharSequence text, int diffState) {
         if (!isInit) {
-            super.setText(text, type);
+            super.setText(text);
             return;
         }
         try {
@@ -85,10 +85,10 @@ public class ZRStockTextView extends AppCompatTextView {
                     formatStr = text.toString();
                 }
             }
-            super.setText(changTvColor(formatStr, diffState, isSymbol), type);
+            super.setText(changTvColor(formatStr, diffState, isSymbol));
         } catch (Exception e) {
             Log.e("tttttt", e.toString());
-            super.setText(text, type);
+            super.setText(text);
         }
     }
 
@@ -103,7 +103,7 @@ public class ZRStockTextView extends AppCompatTextView {
     public static SpannableString changTvColor(String value, int diffState, boolean isSymbol) {
         String str = "";
         SpannableString spannableString;
-        if (isSymbol && diffState == 0) {
+        if (isSymbol) {
             str = value + "%";
             spannableString = new SpannableString(str);
         } else {
@@ -118,7 +118,7 @@ public class ZRStockTextView extends AppCompatTextView {
         } else {
             color = LocalSettingsConfig.Companion.read().getDownColor();
         }
-        if (isSymbol && diffState == 0) {
+        if (isSymbol) {
             spannableString.setSpan(new ForegroundColorSpan(color), 0, str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         } else {
             spannableString.setSpan(new ForegroundColorSpan(color), 0, value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
