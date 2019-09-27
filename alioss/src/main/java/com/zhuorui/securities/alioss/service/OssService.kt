@@ -25,11 +25,12 @@ import java.util.HashSet as HashSet1
  * Created by mOss on 2015/12/7 0007.
  * 支持普通上传，普通下载
  */
-class OssService(applicationContext: Context, endpoint: String, bucketName: String) {
+class OssService(applicationContext: Context, type: String, endpoint: String, bucketName: String) {
 
     var mOss: OSS
     private var mBucket = if (TextUtils.isEmpty(endpoint)) "zhuorui-dev" else bucketName
     private var mEndpoint = if (TextUtils.isEmpty(endpoint)) "http://oss-cn-shenzhen.aliyuncs.com" else endpoint
+    private var mType = type
 
     private val credentialProvider = object : OSSFederationCredentialProvider() {
         @Throws(ClientException::class)
@@ -118,20 +119,18 @@ class OssService(applicationContext: Context, endpoint: String, bucketName: Stri
         return createName("video", suffix)
     }
 
-    fun createName(type: String, suffix: String): String {
+    fun createName(fileType: String, suffix: String): String {
         val timeMillis = TimeZoneUtil.currentTimeMillis()
         var strRand = ""
         for (i in 0..3) {
             strRand += (Math.random() * 10).toInt().toString()
         }
-        return String.format(
-            "%s/%s/%s%s%s",
-            type,
-            TimeZoneUtil.timeFormat(timeMillis, "yyyy/MM/dd"),
-            timeMillis,
-            strRand,
-            suffix
-        )
+        val date = TimeZoneUtil.timeFormat(timeMillis, "yyyy/MM/dd")
+        return "$mType/$fileType/$date/$timeMillis$strRand$suffix"
+    }
+
+    companion object {
+        const val TYPE_OPEN = "open"//开户类型
     }
 
 

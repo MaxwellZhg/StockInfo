@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.ui.view
 
+import android.content.Context
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 
 /**
@@ -17,4 +18,5 @@ interface OAVedioRecordView : AbsView {
     fun uploadComplete(isSuccessful: Boolean)
 
     fun setProgressText(msg: String?)
+    fun getContext(): Context?
 }

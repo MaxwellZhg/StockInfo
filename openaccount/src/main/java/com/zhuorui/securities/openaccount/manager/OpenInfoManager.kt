@@ -1,5 +1,6 @@
 package com.zhuorui.securities.openaccount.manager
 
+import android.content.Context
 import android.text.TextUtils
 import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.openaccount.constants.OpenAccountInfo
@@ -14,13 +15,14 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Desc:
  */
 open class OpenInfoManager {
+    var oss: OssService? = null
     var info: OpenAccountInfo? = null
     var bucket: BucketResponse.Data = BucketResponse.Data("", "", "")
 
     companion object {
         private var instance: OpenInfoManager? = null
 
-        fun getInstance(): OpenInfoManager? {//使用同步锁
+        fun getInstance(): OpenInfoManager {//使用同步锁
             if (instance == null) {
                 synchronized(OpenInfoManager::class.java) {
                     if (instance == null) {
@@ -28,7 +30,7 @@ open class OpenInfoManager {
                     }
                 }
             }
-            return instance
+            return instance!!
         }
 
     }
@@ -164,6 +166,15 @@ open class OpenInfoManager {
             }
         }
 
+    }
+
+    fun getOssService(context: Context): OssService {
+        if (oss == null) {
+            synchronized(OpenInfoManager::class.java) {
+                oss = OssService(context.applicationContext, OssService.TYPE_OPEN, bucket.endpoint, bucket.bucketName)
+            }
+        }
+        return oss!!
     }
 
     fun destroy() {

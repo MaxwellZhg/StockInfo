@@ -1,6 +1,7 @@
 package com.zhuorui.securities.openaccount.ui.presenter
 
 import android.graphics.Bitmap
+import com.zhuorui.securities.alioss.service.OssService
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -31,6 +32,10 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
 
     private val disposables = LinkedList<Disposable>()
 
+    override fun init() {
+        super.init()
+    }
+
     /**
      * 同意开户
      */
@@ -43,14 +48,17 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
      */
     fun uploadSignature(bitmap: Bitmap?) {
         view?.showLoading()
-
         // 转码后发起请求
-        val disposable = Observable.create(ObservableOnSubscribe<String> { emitter ->
-            emitter.onNext(FileToBase64Util.bitmapBase64String(Base64Enum.PNG, bitmap))
+        val disposable = Observable.create(ObservableOnSubscribe<ByteArray> { emitter ->
+            emitter.onNext(FileToBase64Util.getSmallBitmap(bitmap))
             emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
+        }).flatMap {
+            val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
+            oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+        }.subscribeOn(Schedulers.io())
             .subscribe {
                 val request = SubSignatureRequest(
+                    "2",
                     it,
                     OpenInfoManager.getInstance()?.info?.id.toString(),
                     transactions.createTransaction()

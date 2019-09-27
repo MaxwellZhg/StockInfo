@@ -6,18 +6,15 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.openaccount.R
 import com.zhuorui.securities.openaccount.manager.OpenInfoManager
 import com.zhuorui.securities.openaccount.net.IOpenAccountNet
 import com.zhuorui.securities.openaccount.net.request.LiveRecognRequest
 import com.zhuorui.securities.openaccount.net.response.LiveRecognResponse
 import com.zhuorui.securities.openaccount.ui.view.OAVedioRecordView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OAVedioRecordViewModel
-import com.zhuorui.securities.base2app.util.Base64Enum
-import com.zhuorui.securities.base2app.util.FileToBase64Util
-import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.openaccount.R
 import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -35,22 +32,24 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
     private val disposables = LinkedList<Disposable>()
     private var intervalTime: Disposable? = null
 
+    override fun init() {
+        super.init()
+    }
+
     fun setVerifyCode() {
         viewModel?.verifyCode?.value = OpenInfoManager.getInstance()?.info?.validateCode
     }
 
-    fun uploadVedio(vedioBytes: ByteArray?) {
+    fun uploadVedio(vedioBytes: ByteArray) {
         view?.showUploading()
         view?.setProgressText(ResUtil.getString(R.string.str_encrypting_video))
-        //  在子线程中计算视频流的Base64码，然后上传
-        val disposable = Observable.create(ObservableOnSubscribe<String> { emitter ->
-            emitter.onNext(FileToBase64Util.getBase64String(Base64Enum.MP4, vedioBytes))
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+        val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
+        val disposable = oss?.getPutObjectObservable(oss.createUpImageName(".mp4"), vedioBytes)
+            ?.subscribeOn(Schedulers.io())
+            ?.subscribe {
                 intervalTime()
                 val request = LiveRecognRequest(
+                    "2",
                     it,
                     viewModel?.verifyCode?.value,
                     OpenInfoManager.getInstance()?.info?.id,
@@ -59,7 +58,7 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
                 Cache[IOpenAccountNet::class.java]?.getLiveRecogn(request)
                     ?.enqueue(Network.IHCallBack<LiveRecognResponse>(request))
             }
-        disposables.add(disposable)
+        disposables.add(disposable!!)
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)

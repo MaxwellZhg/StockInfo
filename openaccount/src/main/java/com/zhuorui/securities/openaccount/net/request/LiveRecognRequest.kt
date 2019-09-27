@@ -8,7 +8,14 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/8/28
  * Desc: 上传活体检测
  */
-class LiveRecognRequest (val video:String,val validateCode:String?, val id:String?,  transaction: String) : BaseRequest(transaction) {
+class LiveRecognRequest(
+    val fileType: String,
+    val videoUrl: String,
+    val validateCode: String?,
+    val id: String?,
+    transaction: String
+) :
+    BaseRequest(transaction) {
     init {
         generateSign()
     }

@@ -23,6 +23,7 @@ import com.zhuorui.securities.personal.ui.OAHelpCenterFragment
 import com.zhuorui.securities.pickerview.option.OnOptionSelectedListener
 import kotlinx.android.synthetic.main.fragment_oa_data_supplementary_tips.*
 import kotlinx.android.synthetic.main.fragment_oa_select_region.*
+import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  *    author : liuwei
@@ -64,9 +65,11 @@ class OADataSupplementaryTispFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_next -> {
-                start(OpenInfoManager.getInstance()?.getNextFragment())
+                val f = OpenInfoManager.getInstance()?.getNextFragment()
+                if (f != null) {
+                    start(f)
+                }
             }
         }
     }
-
 }

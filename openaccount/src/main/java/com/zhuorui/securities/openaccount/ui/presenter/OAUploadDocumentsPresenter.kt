@@ -29,11 +29,9 @@ import io.reactivex.schedulers.Schedulers
  */
 class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUploadDocumentsViewModel>() {
 
-    var oss:OssService? = null
 
     override fun init() {
         super.init()
-        oss = view?.getContext()?.let { OssService(it,OpenInfoManager.getInstance()!!.bucket.endpoint,OpenInfoManager.getInstance()!!.bucket.bucketName) }
     }
 
     fun setDefData() {
@@ -60,6 +58,7 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
                     emitter.onNext(FileToBase64Util.getSmallBitmap(FileToBase64Util.getSmallBitmap(path)))
                     emitter.onComplete()
                 }).flatMap {
+                    val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
                     oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
                 }.flatMap { t ->
                     getIdCardOcrObservable(t)
@@ -72,6 +71,7 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
                     emitter.onNext(FileToBase64Util.getSmallBitmap(bitmap))
                     emitter.onComplete()
                 }).flatMap {
+                    val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
                     oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
                 }.flatMap { t ->
                     getIdCardOcrObservable(t)
