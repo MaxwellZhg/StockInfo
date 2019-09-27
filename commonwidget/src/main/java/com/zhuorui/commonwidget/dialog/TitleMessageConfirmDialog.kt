@@ -22,13 +22,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
  *    date   : 2019/8/29 10:27
  *    desc   : 含有 标题、消息、确定按钮 对话框
  */
-class TitleMessageConfirmDialog(
-    context: Context,
-    width: Int,
-    private val canceledOnTouchOutside: Boolean,
-    private val ignoreBack: Boolean
-) : BaseDialog(context, width, WindowManager.LayoutParams.WRAP_CONTENT),
+class TitleMessageConfirmDialog : BaseDialog,
     View.OnClickListener {
+
 
     @BindView(R2.id.tv_title)
     lateinit var tv_title: TextView
@@ -37,16 +33,24 @@ class TitleMessageConfirmDialog(
     @BindView(R2.id.tv_confirm)
     lateinit var tv_confirm: TextView
 
+    constructor(
+        context: Context,
+        width: Int,
+        canceledOnTouchOutside: Boolean,
+        ignoreBack: Boolean
+    ) : super(context, width, WindowManager.LayoutParams.WRAP_CONTENT) {
+        tv_confirm.setOnClickListener(this)
+        changeDialogOutside(canceledOnTouchOutside)
+        if (ignoreBack) {
+            ignoreBackPressed()
+        }
+    }
+
+    var listener: View.OnClickListener? = null
+
     override val layout: Int
         get() = R.layout.dialog_title_message_confirm
 
-    override fun init() {
-        tv_confirm.setOnClickListener(this)
-
-        changeDialogOutside(canceledOnTouchOutside)
-        if (ignoreBack)
-            ignoreBackPressed()
-    }
 
     fun setTitleText(str: String): TitleMessageConfirmDialog {
         tv_title.text = str
@@ -104,6 +108,7 @@ class TitleMessageConfirmDialog(
 
     override fun onClick(p0: View) {
         dialog?.dismiss()
+        listener?.onClick(p0)
     }
 
     // 默认提供的构造，有其他形态时，需要自行 new ConfirmDialog()

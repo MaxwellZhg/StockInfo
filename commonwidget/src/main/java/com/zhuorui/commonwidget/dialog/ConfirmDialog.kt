@@ -21,12 +21,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
  *    date   : 2019/8/29 10:27
  *    desc   : 确定对话框
  */
-class ConfirmDialog(
-    context: Context,
-    width: Int,
-    private val canceledOnTouchOutside: Boolean,
-    private val ignoreBack: Boolean
-) : BaseDialog(context, width, WindowManager.LayoutParams.WRAP_CONTENT),
+class ConfirmDialog : BaseDialog,
     View.OnClickListener {
 
     @BindView(R2.id.tv_msg)
@@ -37,9 +32,13 @@ class ConfirmDialog(
     override val layout: Int
         get() = R.layout.dialog_confirm
 
-    override fun init() {
+    constructor(
+        context: Context,
+        width: Int,
+        canceledOnTouchOutside: Boolean,
+        ignoreBack: Boolean
+    ) : super(context, width, WindowManager.LayoutParams.WRAP_CONTENT) {
         tv_confirm.setOnClickListener(this)
-
         changeDialogOutside(canceledOnTouchOutside)
         if (ignoreBack)
             ignoreBackPressed()

@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
@@ -196,6 +195,7 @@ class SimulationTradingMainFragment :
      * 去行情
      */
     override fun toQuotation(code: String, ts: String) {
+        createFundAccountSuccess()
     }
 
     /**
@@ -214,12 +214,12 @@ class SimulationTradingMainFragment :
     }
 
     override fun createFundAccountSuccess() {
-        fund_account?.createFundAccountSuccess()
-        TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
+        val dailog = TitleMessageConfirmDialog.createWidth225Dialog(context!!, false, true)
             .setTitleText("")
             .setMsgText(com.zhuorui.securities.market.R.string.create_fund_account_success)
             .setConfirmText(com.zhuorui.securities.market.R.string.str_understood)
-            .show()
+        dailog.listener = View.OnClickListener { fund_account?.createFundAccountSuccess() }
+        dailog.show()
     }
 
     override fun onUpData(
@@ -311,8 +311,8 @@ class SimulationTradingMainFragment :
         val hpNum = getHoldpositionsAdapter().datas?.size
         val toNum = getMockStockOrderAdapter().datas?.size
         return arrayOf(
-            ResUtil.getString(com.zhuorui.securities.market.R.string.str_hold_positions) + "($hpNum)",
-            ResUtil.getString(com.zhuorui.securities.market.R.string.str_today_orders) + "($toNum)"
+            ResUtil.getString(com.zhuorui.securities.market.R.string.str_hold_positions) + " ($hpNum)",
+            ResUtil.getString(com.zhuorui.securities.market.R.string.str_today_orders) + " ($toNum)"
         )
     }
 
