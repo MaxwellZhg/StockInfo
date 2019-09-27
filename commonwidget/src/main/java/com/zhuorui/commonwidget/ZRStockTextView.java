@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -64,6 +62,10 @@ public class ZRStockTextView extends AppCompatTextView {
                     super.setText(changTvColor(tx, state,isSymbol), type);
                 } else if (amt.compareTo(new BigDecimal(0)) == -1) {
                     super.setText(changTvColor(text.toString(), state,isSymbol), type);
+                }else{
+                    final String format = "+%s";
+                    final String tx = String.format(format,text.toString());
+                    super.setText(changTvColor(tx, state,isSymbol), type);
                 }
             }else if(!isSymbol && state == 0){
                 final BigDecimal amt = new BigDecimal(text.toString());
@@ -73,6 +75,10 @@ public class ZRStockTextView extends AppCompatTextView {
                     super.setText(changTvColor(tx, state,isSymbol), type);
                 } else if (amt.compareTo(new BigDecimal(0)) == -1) {
                     super.setText(changTvColor(text.toString(), state,isSymbol), type);
+                }else{
+                    final String format = "+%s";
+                    final String tx = String.format(format,text.toString());
+                    super.setText(changTvColor(tx, state,isSymbol), type);
                 }
             }else if(!isSymbol && state == 1){
                 super.setText(changTvColor(text.toString(), state,isSymbol), type);

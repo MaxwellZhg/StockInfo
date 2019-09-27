@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.commonwidget.StateButton
+import com.zhuorui.commonwidget.ZRStockTextView
+import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
@@ -16,6 +18,7 @@ import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.util.MathUtil
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 
 /**
  * Created by Maxwell.
@@ -81,9 +84,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         @BindView(R2.id.stock_up_down)
         lateinit var stock_up_down: StateButton
         @BindView(R2.id.tv_price)
-        lateinit var tv_price: TextView
-        @BindView(R2.id.tv_diff_pirce)
-        lateinit var tv_diff_pirce: TextView
+        lateinit var tv_price: ZRStockTextView
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockMarketInfo?, position: Int) {
@@ -112,20 +113,14 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             // 跌涨幅是否大于0或者等于0
             val diffPriceVal = if (item?.diffPrice == null) 0 else MathUtil.rounded(item?.diffPrice!!).toInt()
             if (diffPriceVal == 0 || diffPriceVal > 0) {
-                tv_price.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
-
-                tv_diff_pirce.setTextColor(ResUtil.getColor(R.color.up_price_color)!!)
-                tv_diff_pirce.text = "+" + (if (item?.diffPrice == null) "0.00" else item.diffPrice)
-
-                stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.up_stock_color)!!)
+                tv_price.setUpDownChange(true)
+                tv_price.text=item?.price.toString()
+                stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getUpBtnColor())
                 stock_up_down.text = "+" + (if (item?.diffRate == null) "0.00" else item.diffRate) + "%"
             } else {
-                tv_price.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
-
-                tv_diff_pirce.setTextColor(ResUtil.getColor(R.color.down_price_color)!!)
-                tv_diff_pirce.text = item?.diffPrice.toString()
-
-                stock_up_down.setUnableBackgroundColor(ResUtil.getColor(R.color.down_stock_color)!!)
+                tv_price.setUpDownChange(false)
+                tv_price.text=item?.price.toString()
+                stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getDownBtnColor())
                 stock_up_down.text = item?.diffRate.toString() + "%"
             }
         }

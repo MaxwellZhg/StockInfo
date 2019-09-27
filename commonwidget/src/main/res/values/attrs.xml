@@ -186,6 +186,6 @@
     </declare-styleable>
 
     <declare-styleable name="ZRStockTextView">
-     <attr name="zr_showPrecentSymbol" format="boolean"/>
+        <attr name="zr_showPrecentSymbol" format="boolean"/>
     </declare-styleable>
 </resources>

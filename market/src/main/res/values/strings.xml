@@ -26,8 +26,8 @@
     <string name="setting_remind" translatable="false">设置提醒</string>
     <string name="rise_threshold" translatable="false">价格涨到</string>
     <string name="down_threshold" translatable="false">价格跌到</string>
-    <string name="rise_range" translatable="false">&#160; 涨幅超</string>
-    <string name="down_range" translatable="false">&#160; 跌幅超</string>
+    <string name="rise_range" translatable="false">涨幅超</string>
+    <string name="down_range" translatable="false">跌幅超</string>
     <string name="str_no_position_present" translatable="false">暂无持仓</string>
     <string name="str_no_record_historical_transactions" translatable="false">暂无历史交易记录哦</string>
     <string name="str_hold_positions" translatable="false">持仓</string>

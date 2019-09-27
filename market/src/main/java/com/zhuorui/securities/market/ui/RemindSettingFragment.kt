@@ -63,11 +63,6 @@ class RemindSettingFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         stockInfo=arguments?.getSerializable("stockInfo") as StockMarketInfo?
-        LogInfra.Log.e("tttttt",stockInfo.toString())
-        adapter = presenter?.getAdapter()
-        rv_setting.adapter=adapter
-        presenter?.initData(stockInfo)
-        adapter?.notifyDataSetChanged()
         iv_back.setOnClickListener(this)
         textView.text=stockInfo?.name
         when (stockInfo?.ts) {
@@ -87,13 +82,13 @@ class RemindSettingFragment :
         if (diffPriceVal == 0 || diffPriceVal > 0) {
             tv_price.setUpDownChange(true)
             tv_price.text = if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString()
-            tv_diff_price_count.text = "+" + (if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice)
-            tv_diff_rate_count.text = "+" + (if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate) + "%"
+            tv_diff_price_count.text =  if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString()
+            tv_diff_rate_count.text = if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate .toString()
         } else {
             tv_price.setUpDownChange(false)
             tv_price.text = if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString()
             tv_diff_price_count.text = stockInfo?.diffPrice.toString()
-            tv_diff_rate_count.text = stockInfo?.diffRate.toString() + "%"
+            tv_diff_rate_count.text = stockInfo?.diffRate.toString()
         }
 
     }
