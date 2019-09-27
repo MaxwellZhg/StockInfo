@@ -56,37 +56,37 @@ public class ZRStockTextView extends AppCompatTextView {
         try {
             if (isSymbol && state == 0) {
                 final BigDecimal amt = new BigDecimal(text.toString());
-                if (amt.compareTo(new BigDecimal(0)) == 1) {
+                if (amt.compareTo(new BigDecimal(0)) > 0) {
                     final String format = "+%s";
-                    final String tx = String.format(format,text.toString());
-                    super.setText(changTvColor(tx, state,isSymbol), type);
-                } else if (amt.compareTo(new BigDecimal(0)) == -1) {
-                    super.setText(changTvColor(text.toString(), state,isSymbol), type);
-                }else{
+                    final String tx = String.format(format, text.toString());
+                    super.setText(changTvColor(tx, state, isSymbol), type);
+                } else if (amt.compareTo(new BigDecimal(0)) < 0) {
+                    super.setText(changTvColor(text.toString(), state, isSymbol), type);
+                } else {
                     final String format = "+%s";
-                    final String tx = String.format(format,text.toString());
-                    super.setText(changTvColor(tx, state,isSymbol), type);
+                    final String tx = String.format(format, text.toString());
+                    super.setText(changTvColor(tx, state, isSymbol), type);
                 }
-            }else if(!isSymbol && state == 0){
+            } else if (!isSymbol && state == 0) {
                 final BigDecimal amt = new BigDecimal(text.toString());
-                if (amt.compareTo(new BigDecimal(0)) == 1) {
+                if (amt.compareTo(new BigDecimal(0)) > 0) {
                     final String format = "+%s";
-                    final String tx = String.format(format,text.toString());
-                    super.setText(changTvColor(tx, state,isSymbol), type);
-                } else if (amt.compareTo(new BigDecimal(0)) == -1) {
-                    super.setText(changTvColor(text.toString(), state,isSymbol), type);
-                }else{
+                    final String tx = String.format(format, text.toString());
+                    super.setText(changTvColor(tx, state, isSymbol), type);
+                } else if (amt.compareTo(new BigDecimal(0)) < 0) {
+                    super.setText(changTvColor(text.toString(), state, isSymbol), type);
+                } else {
                     final String format = "+%s";
-                    final String tx = String.format(format,text.toString());
-                    super.setText(changTvColor(tx, state,isSymbol), type);
+                    final String tx = String.format(format, text.toString());
+                    super.setText(changTvColor(tx, state, isSymbol), type);
                 }
-            }else if(!isSymbol && state == 1){
-                super.setText(changTvColor(text.toString(), state,isSymbol), type);
-            }else if(!isSymbol && state == 2){
-                super.setText(changTvColor(text.toString(), state,isSymbol), type);
+            } else if (!isSymbol && state == 1) {
+                super.setText(changTvColor(text.toString(), state, isSymbol), type);
+            } else if (!isSymbol && state == 2) {
+                super.setText(changTvColor(text.toString(), state, isSymbol), type);
             }
         } catch (Exception e) {
-            Log.e("tttttt",e.toString());
+            Log.e("tttttt", e.toString());
             super.setText(text, type);
         }
     }
@@ -100,27 +100,28 @@ public class ZRStockTextView extends AppCompatTextView {
             this.state = 2;
         }
     }
-    public static SpannableString changTvColor(String value,int state,boolean isSymbol) {
-        String str ="";
+
+    public static SpannableString changTvColor(String value, int state, boolean isSymbol) {
+        String str = "";
         SpannableString spannableString;
         if (isSymbol && state == 0) {
-            str=value+"%";
-          spannableString = new SpannableString(str);
-        }else{
+            str = value + "%";
+            spannableString = new SpannableString(str);
+        } else {
             spannableString = new SpannableString(value);
         }
 
-        int  color ;
-        if(state==0) {
-           color= LocalSettingsConfig.Companion.read().getUpDownColor(new BigDecimal(value));
-        }else if(state==1){
-            color= LocalSettingsConfig.Companion.read().getUpColor();
-        }else{
-            color= LocalSettingsConfig.Companion.read().getDownColor();
+        int color;
+        if (state == 0) {
+            color = LocalSettingsConfig.Companion.read().getUpDownColor(new BigDecimal(value));
+        } else if (state == 1) {
+            color = LocalSettingsConfig.Companion.read().getUpColor();
+        } else {
+            color = LocalSettingsConfig.Companion.read().getDownColor();
         }
         if (isSymbol && state == 0) {
             spannableString.setSpan(new ForegroundColorSpan(color), 0, str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }else{
+        } else {
             spannableString.setSpan(new ForegroundColorSpan(color), 0, value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannableString;
