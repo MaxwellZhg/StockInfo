@@ -166,26 +166,30 @@
         <attr name="zr_set_title_bar_text" format="string|reference"/>
         <attr name="zr_set_title_bar_margin" format="dimension"/>
     </declare-styleable>
+
     <declare-styleable name="ZRSearchView">
         <attr name="zr_hint" format="string|reference"/>
         <attr name="zr_clear_icon" format="reference"/>
         <attr name="zr_left_icon" format="reference"/>
         <attr name="zr_background" format="reference"/>
     </declare-styleable>
+
     <declare-styleable name="ZRAmountTextView">
         <attr name="zr_showSymbol" format="boolean"/>
         <attr name="zr_decimalDigit" format="integer"/>
         <attr name="zr_relativeDecimal" format="boolean"/>
+        <attr name="zr_keepDecimalComplements" format="boolean"/>
     </declare-styleable>
+
     <declare-styleable name="ZREmptyView">
         <attr name="empty_img_width" format="dimension"/>
         <attr name="empty_img_height" format="dimension"/>
-        <attr name="empty_img_tips"  format="string|reference"/>
+        <attr name="empty_img_tips" format="string|reference"/>
         <attr name="empty_img_tips_margin" format="dimension"/>
         <attr name="empty_img_src" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="ZRStockTextView">
-     <attr name="zr_showPrecentSymbol" format="boolean"/>
+        <attr name="zr_showPrecentSymbol" format="boolean"/>
     </declare-styleable>
 </resources>

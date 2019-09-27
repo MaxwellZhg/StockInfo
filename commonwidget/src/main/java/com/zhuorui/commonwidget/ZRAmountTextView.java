@@ -19,9 +19,10 @@ import java.math.BigDecimal;
  */
 public class ZRAmountTextView extends AppCompatTextView {
 
-    private boolean showSymbol;
-    private boolean relativeDecimal = true;
-    private int decimalDigit = 2;
+    private boolean showSymbol;//是否显示正数符号
+    private boolean relativeDecimal = true;//是否缩小显示小数位
+    private boolean keepDecimalComplements = true;//是否保留小数补位
+    private int decimalDigit = 2;//小数保留位数，不足补0
     boolean isInit;
 
     public ZRAmountTextView(Context context) {
@@ -38,6 +39,7 @@ public class ZRAmountTextView extends AppCompatTextView {
         showSymbol = a.getBoolean(R.styleable.ZRAmountTextView_zr_showSymbol, showSymbol);
         relativeDecimal = a.getBoolean(R.styleable.ZRAmountTextView_zr_relativeDecimal, relativeDecimal);
         decimalDigit = a.getInt(R.styleable.ZRAmountTextView_zr_decimalDigit, decimalDigit);
+        keepDecimalComplements = a.getBoolean(R.styleable.ZRAmountTextView_zr_keepDecimalComplements, keepDecimalComplements);
         isInit = true;
         String tx = getText().toString();
         if (!TextUtils.isEmpty(tx)) {
@@ -55,7 +57,7 @@ public class ZRAmountTextView extends AppCompatTextView {
         try {
             final BigDecimal amt = new BigDecimal(text.toString());
             final String format = (showSymbol ? "%+" : "%") + ",." + decimalDigit + "f";
-            final String tx = String.format(format, amt);
+            final String tx = keepDecimalComplements ? String.format(format, amt) : subZeroAndDot(String.format(format, amt));
             super.setText(relativeDecimal ? changTVsize(tx) : tx, type);
         } catch (Exception e) {
             super.setText(text, type);
@@ -68,5 +70,19 @@ public class ZRAmountTextView extends AppCompatTextView {
             spannableString.setSpan(new RelativeSizeSpan(0.8f), value.indexOf("."), value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannableString;
+    }
+
+    /**
+     * 使用java正则表达式去掉多余的.与0
+     *
+     * @param s
+     * @return
+     */
+    public static String subZeroAndDot(String s) {
+        if (s.indexOf(".") > 0) {
+            s = s.replaceAll("0+?$", "");//去掉多余的0
+            s = s.replaceAll("[.]$", "");//如最后一位是.则去掉
+        }
+        return s;
     }
 }
