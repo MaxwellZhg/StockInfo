@@ -56,11 +56,11 @@ public class ZRStockTextView extends AppCompatTextView {
         try {
             if (isSymbol && state == 0) {
                 final BigDecimal amt = new BigDecimal(text.toString());
-                if (amt.compareTo(new BigDecimal(0)) > 0) {
+                if (amt.compareTo(BigDecimal.ZERO) > 0) {
                     final String format = "+%s";
                     final String tx = String.format(format, text.toString());
                     super.setText(changTvColor(tx, state, isSymbol), type);
-                } else if (amt.compareTo(new BigDecimal(0)) < 0) {
+                } else if (amt.compareTo(BigDecimal.ZERO) < 0) {
                     super.setText(changTvColor(text.toString(), state, isSymbol), type);
                 } else {
                     final String format = "+%s";
@@ -69,11 +69,11 @@ public class ZRStockTextView extends AppCompatTextView {
                 }
             } else if (!isSymbol && state == 0) {
                 final BigDecimal amt = new BigDecimal(text.toString());
-                if (amt.compareTo(new BigDecimal(0)) > 0) {
+                if (amt.compareTo(BigDecimal.ZERO) > 0) {
                     final String format = "+%s";
                     final String tx = String.format(format, text.toString());
                     super.setText(changTvColor(tx, state, isSymbol), type);
-                } else if (amt.compareTo(new BigDecimal(0)) < 0) {
+                } else if (amt.compareTo(BigDecimal.ZERO) < 0) {
                     super.setText(changTvColor(text.toString(), state, isSymbol), type);
                 } else {
                     final String format = "+%s";
