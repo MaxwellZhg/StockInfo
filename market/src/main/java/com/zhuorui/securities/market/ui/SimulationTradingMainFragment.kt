@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
+import com.zhuorui.securities.base2app.BaseApplication.Companion.context
 import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
+import com.zhuorui.securities.market.R2.id.magic_indicator
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
 import com.zhuorui.securities.market.model.STFundAccountData
@@ -284,11 +286,11 @@ class SimulationTradingMainFragment :
             when (mIndex) {
                 0 -> {
                     if (getHoldpositionsAdapter().itemCount - 1 == position)
-                        recycler_view.post { scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                        scroll_view.postDelayed({ scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 320)
                 }
                 1 -> {
                     if (getMockStockOrderAdapter().itemCount - 1 == position)
-                        recycler_view.post { scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                        scroll_view.postDelayed({ scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 320)
                 }
             }
         }
