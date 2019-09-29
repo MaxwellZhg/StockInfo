@@ -49,13 +49,27 @@ object MathUtil {
         return rounded3(number1.add(number2))
     }
 
+
+    /**
+     * 加法保留两位小数
+     */
+    fun add2(number1: BigDecimal, number2: BigDecimal): BigDecimal {
+        return rounded2(number1.add(number2))
+    }
+
+
     /**
      * 减法保留三位小数
      */
     fun subtract3(number1: BigDecimal, number2: BigDecimal): BigDecimal {
         return rounded3(number1.subtract(number2))
     }
-
+    /**
+     * 减法保留两位小数
+     */
+    fun subtract2(number1: BigDecimal, number2: BigDecimal): BigDecimal {
+        return rounded2(number1.subtract(number2))
+    }
     /**
      * 乘法保留两位小数
      */

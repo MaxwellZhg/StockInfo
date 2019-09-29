@@ -93,7 +93,7 @@ class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
 
         val sorckColorRed = Color.parseColor("#FFce0019")
         val sorckColorGreen = Color.parseColor("#FF23803A")
-        val sorckColor = Color.parseColor("#FFB3BCD0")
+        val sorckColor = Color.parseColor("#FFA4B2CB")
         val stockbtnRedColor = Color.parseColor("#FFAC3E19")
         val stockbtnGreenColor = Color.parseColor("#FF37672E")
 

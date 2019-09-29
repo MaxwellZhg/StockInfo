@@ -33,6 +33,7 @@
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="16sp"
+                      android:id="@+id/tv_save"
                       android:layout_alignParentRight="true"
                       android:textColor="@color/color_53A0FD"
                       android:layout_centerVertical="true"
@@ -213,7 +214,7 @@
                     android:textSize="17sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="60dp"
+                    android:layout_width="65dp"
                     android:background="@color/color_000000"
                     android:layout_marginStart="10dp"
                     android:includeFontPadding="false"
@@ -227,7 +228,7 @@
                     android:textColorHint="@color/color_A1A1A1"
                     android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_rise_threshold"
-                    android:layout_height="17dp"/>
+                    android:layout_height="23dp"/>
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="9sp"
@@ -283,7 +284,7 @@
                     android:textSize="17sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="60dp"
+                    android:layout_width="65dp"
                     android:background="@color/color_000000"
                     android:layout_marginStart="10dp"
                     android:includeFontPadding="false"
@@ -297,7 +298,7 @@
                     android:textColorHint="@color/color_A1A1A1"
                     android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_down_threshold"
-                    android:layout_height="17dp"/>
+                    android:layout_height="23dp"/>
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="9sp"
@@ -353,7 +354,7 @@
                     android:textSize="17sp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="60dp"
+                    android:layout_width="65dp"
                     android:background="@color/color_000000"
                     android:layout_marginStart="19dp"
                     android:includeFontPadding="false"
@@ -367,7 +368,7 @@
                     android:textColorHint="@color/color_A1A1A1"
                     android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_price_threshold"
-                    android:layout_height="17dp"/>
+                    android:layout_height="23dp"/>
               <TextView android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:textSize="17sp"
@@ -433,7 +434,7 @@
                     android:textColor="@color/color_FFFFFFFF"
                     android:textSize="17sp"/>
             <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="60dp"
+                    android:layout_width="65dp"
                     android:background="@color/color_000000"
                     android:layout_marginStart="19dp"
                     android:includeFontPadding="false"
@@ -447,7 +448,7 @@
                     android:textColorHint="@color/color_A1A1A1"
                     android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_down_range"
-                    android:layout_height="17dp"/>
+                    android:layout_height="23dp"/>
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="17sp"
