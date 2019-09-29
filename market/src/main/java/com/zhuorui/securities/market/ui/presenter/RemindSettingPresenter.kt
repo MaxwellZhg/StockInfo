@@ -25,7 +25,7 @@ import java.util.regex.Pattern
  */
 class RemindSettingPresenter(context: Context) : AbsEventPresenter<RemindSettingView, RemindSettingViewModel>(),
     DevComfirmDailog.CallBack {
-    val pattern = "^0 |0[.]?[0]*[1-9]"
+    val pattern = "^([1-9]\\d*(\\.\\d*[1-9])?)|(0\\.\\d*[1-9])\$"
     /* 加载对话框 */
     private lateinit var phoneDevDailog:DevComfirmDailog
 

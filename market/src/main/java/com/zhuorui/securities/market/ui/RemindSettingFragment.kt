@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
@@ -39,7 +40,7 @@ class RemindSettingFragment :
     private var downPrice:Boolean =false
     private var upRate:Boolean =false
     private var downRate:Boolean =false
-    val pattern = "^0 |0[.]?[0]*[1-9]"
+    val pattern = "^([1-9]\\d*(\\.\\d*[1-9])?)|(0\\.\\d*[1-9])\$"
     companion object {
         fun newInstance(stockInfo: StockMarketInfo?): RemindSettingFragment {
             val fragment = RemindSettingFragment()
@@ -181,16 +182,20 @@ class RemindSettingFragment :
     }
     override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
         // et.getCompoundDrawables()得到一个长度为4的数组，分别表示左右上下四张图片
-        return when {   et_up_price.isFocused -> {
-            detailEditDrawable(et_up_price,event)
+        return when(p0) {   et_up_price-> {
+                 et_up_price.isFocusableInTouchMode=true
+                 detailEditDrawable(et_up_price,event)
               }
-            et_down_price.isFocused -> {
+            et_down_price -> {
+                et_down_price.isFocusableInTouchMode=true
                 detailEditDrawable(et_down_price,event)
             }
-            et_up_rate.isFocused -> {
+            et_up_rate -> {
+                et_up_rate.isFocusableInTouchMode=true
                 detailEditDrawable(et_up_rate,event)
              }
             else -> {
+                et_down_rate.isFocusableInTouchMode=true
                 detailEditDrawable(et_down_rate,event)
             }
         }
@@ -397,16 +402,18 @@ class RemindSettingFragment :
     }
 
     fun detailFcousOn(et:EditText,bool: Boolean){
-        if(bool){
-            when(TextUtils.isEmpty(et.text.toString())){
-                true->{
-                    et.hint = ""
+        if(et.isFocused) {
+            if (bool) {
+                when (TextUtils.isEmpty(et.text.toString())) {
+                    true -> {
+                        et.hint = ""
+                    }
                 }
-            }
-        }else{
-            when(TextUtils.isEmpty(et.text.toString())){
-                true->{
-                    et.hint = "0.00"
+            } else {
+                when (TextUtils.isEmpty(et.text.toString())) {
+                    true -> {
+                        et.hint = "0.00"
+                    }
                 }
             }
         }

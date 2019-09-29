@@ -38,7 +38,7 @@ public class ZRStockStatusButton extends StateButton implements Observer {
         setUnableBackgroundColor();
     }
 
-    public void setUnableBackgroundColor() {
+    private void setUnableBackgroundColor() {
         switch (diffState) {
             case 0:
                 super.setUnableBackgroundColor(settingsConfig.getDefaultColor());
@@ -56,7 +56,7 @@ public class ZRStockStatusButton extends StateButton implements Observer {
     public void update(Subject subject) {
         settingsConfig = (LocalSettingsConfig) subject;
         // 更改字button 颜色
-        setUpDown(diffState);
+        setUnableBackgroundColor();
     }
 
 }
