@@ -14,7 +14,7 @@ import java.math.BigDecimal
 class LocalSettingsConfig : AbsConfig() {
     val sorckColorRed = Color.parseColor("#FFce0019")
     val sorckColorGreen = Color.parseColor("#FF23803A")
-    val sorckColor = Color.parseColor("#FFce0019")
+    val sorckColor = Color.parseColor("#FFA4B2CB")
     val stockbtnRedColor= Color.parseColor("#FFAC3E19")
     val stockbtnGreenColor = Color.parseColor("#FF37672E")
     // 默认为红涨绿跌

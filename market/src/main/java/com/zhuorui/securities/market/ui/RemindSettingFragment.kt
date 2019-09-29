@@ -23,6 +23,7 @@ import com.zhuorui.securities.market.ui.view.RemindSettingView
 import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
 import com.zhuorui.securities.market.util.MathUtil
 import kotlinx.android.synthetic.main.fragment_remind_setting.*
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -33,8 +34,6 @@ import kotlinx.android.synthetic.main.fragment_remind_setting.*
 class RemindSettingFragment :
     AbsSwipeBackEventFragment<FragmentRemindSettingBinding, RemindSettingViewModel, RemindSettingView, RemindSettingPresenter>(),
     RemindSettingView, View.OnClickListener,TextWatcher,View.OnTouchListener,View.OnFocusChangeListener{
-
-    private  var  adapter: SettingNoticeAdapter? = null
     private var stockInfo:StockMarketInfo?=null
     private var upPrice:Boolean =false
     private var downPrice:Boolean =false
@@ -114,6 +113,7 @@ class RemindSettingFragment :
         iv_down_price.setOnClickListener(this)
         iv_up_rate.setOnClickListener(this)
         iv_down_rate.setOnClickListener(this)
+        tv_save.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -133,8 +133,9 @@ class RemindSettingFragment :
             R.id.iv_down_rate->{
                 deatilSwithBtn(iv_down_rate,downRate)
             }
-            else -> {
-            }
+           R.id.tv_save->{
+               presenter?.deatilSave(et_up_price.text.toString(),et_down_price.text.toString(),et_up_rate.text.toString(),et_down_rate.text.toString(),stockInfo)
+           }
         }
     }
     override fun afterTextChanged(p0: Editable?) {
@@ -230,6 +231,11 @@ class RemindSettingFragment :
                     tips_down_info.visibility=View.INVISIBLE
                     tips_uprate_info.visibility=View.INVISIBLE
                     tips_downrate_info.visibility=View.INVISIBLE
+                    var count:BigDecimal?= stockInfo?.price?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
+                        MathUtil.multiply2(
+                            it,100.toBigDecimal())-100.toBigDecimal()
+                    }
+                    tips.text=ResUtil.getString(R.string.compare_price_up)+count.toString()+"%"
                     tips.visibility=View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_price.setTextColor(it) }
 
@@ -249,13 +255,23 @@ class RemindSettingFragment :
                     tips_up_info.visibility=View.INVISIBLE
                     tips_uprate_info.visibility=View.INVISIBLE
                     tips_downrate_info.visibility=View.INVISIBLE
+                    var count:BigDecimal?= stockInfo?.price?.let {
+                            stockInfo?.price?.let { MathUtil.subtract2(it,str.toBigDecimal()) }?.let { it1 ->
+                                MathUtil.divide2(
+                                    it1,
+                                    it
+                                )
+                            }
+                        }
+                    var downprecent:BigDecimal?= count?.let { MathUtil.multiply2(it,100.toBigDecimal()) }
+                    tips.text=ResUtil.getString(R.string.compare_price_down)+downprecent.toString()+"%"
                     tips.visibility=View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_price.setTextColor(it) }
                 }
             }
             et_up_rate->{
                 upRate=true
-                if(str.toBigDecimal()==0.toBigDecimal()){
+                if(str.toBigDecimal()==BigDecimal.ZERO){
                     tv.visibility=View.VISIBLE
                     tips_up_info.visibility=View.INVISIBLE
                     tips_down_info.visibility=View.INVISIBLE
@@ -267,13 +283,16 @@ class RemindSettingFragment :
                     tips_up_info.visibility=View.INVISIBLE
                     tips_down_info.visibility=View.INVISIBLE
                     tips_downrate_info.visibility=View.INVISIBLE
+                    var count :BigDecimal =MathUtil.add2(MathUtil.divide2(str.toBigDecimal(),100.toBigDecimal()),1.toBigDecimal())
+                    var upprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it,count) }
+                    tips.text=ResUtil.getString(R.string.compare_price_to)+upprice
                     tips.visibility=View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_rate.setTextColor(it) }
                 }
             }
             et_down_rate->{
                 downRate=false
-                if(str.toBigDecimal()==0.toBigDecimal()){
+                if(str.toBigDecimal()== BigDecimal.ZERO){
                     tv.visibility=View.VISIBLE
                     tips_up_info.visibility=View.INVISIBLE
                     tips_down_info.visibility=View.INVISIBLE
@@ -285,6 +304,9 @@ class RemindSettingFragment :
                     tips_up_info.visibility=View.INVISIBLE
                     tips_down_info.visibility=View.INVISIBLE
                     tips_uprate_info.visibility=View.INVISIBLE
+                    var count :BigDecimal =MathUtil.subtract2(1.toBigDecimal(),MathUtil.divide2(str.toBigDecimal(),100.toBigDecimal()))
+                    var downprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it,count) }
+                    tips.text=ResUtil.getString(R.string.compare_price_to)+downprice
                     tips.visibility=View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }

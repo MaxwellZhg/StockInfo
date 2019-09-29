@@ -19,23 +19,10 @@ import me.jessyan.autosize.utils.LogUtils
  *    desc   :
  */
 class RemindSettingPresenter : AbsEventPresenter<RemindSettingView, RemindSettingViewModel>() {
-    var listnotice:ArrayList<SettingNoticeData> = ArrayList<SettingNoticeData>()
-    fun initData(stockInfo: StockMarketInfo?){
-        listnotice.add(SettingNoticeData(R.mipmap.ic_rise_arrow,ResUtil.getString(R.string.rise_threshold),"",false,false,stockInfo))
-        listnotice.add(SettingNoticeData(R.mipmap.ic_down_arrow,ResUtil.getString(R.string.down_threshold),"",false,false,stockInfo))
-        listnotice.add(SettingNoticeData(R.mipmap.ic_rise_range,ResUtil.getString(R.string.rise_range),"",false,false,stockInfo))
-        listnotice.add(SettingNoticeData(R.mipmap.ic_down_range,ResUtil.getString(R.string.down_range),"",false,false,stockInfo))
-        viewModel?.adapter?.value?.clearItems()
-        if (viewModel?.adapter?.value?.items == null) {
-            viewModel?.adapter?.value?.items = ArrayList()
-        }
-        viewModel?.adapter?.value?.addItems(listnotice)
-        LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
+    override fun init() {
+        super.init()
     }
-    fun getAdapter(): SettingNoticeAdapter? {
-        if (viewModel?.adapter?.value == null) {
-            viewModel?.adapter?.value = SettingNoticeAdapter()
-        }
-        return viewModel?.adapter?.value
-    }
+  fun deatilSave(upprice:String,downprice:String,uprate:String,downrate:String,stockinfo:StockMarketInfo?){
+
+  }
 }
