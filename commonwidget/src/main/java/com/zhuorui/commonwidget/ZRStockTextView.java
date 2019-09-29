@@ -46,7 +46,7 @@ public class ZRStockTextView extends AppCompatTextView implements Observer {
         a.recycle();
 
         settingsConfig = LocalSettingsConfig.Companion.read();
-        // 监听
+        // 监听修改配置颜色
         settingsConfig.registerObserver(this);
     }
 
