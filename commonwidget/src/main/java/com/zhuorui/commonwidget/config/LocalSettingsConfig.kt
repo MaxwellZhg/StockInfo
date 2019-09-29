@@ -66,7 +66,6 @@ class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
 
     fun saveLanguage(enum: AppLanguage) {
         appLanguage = enum
-        notifyAllObservers()
         write()
     }
 
