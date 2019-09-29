@@ -44,7 +44,6 @@ public class ZRStockTextView extends AppCompatTextView implements Observer {
         isSymbol = a.getBoolean(R.styleable.ZRStockTextView_zr_showPrecentSymbol, false);
         isUpDown = a.getBoolean(R.styleable.ZRStockTextView_zr_showPrecentUpDown, false);
         a.recycle();
-
         settingsConfig = LocalSettingsConfig.Companion.read();
         // 监听修改配置颜色
         settingsConfig.registerObserver(this);

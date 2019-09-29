@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.commonwidget.StateButton
+import com.zhuorui.commonwidget.ZRStockStatusButton
 import com.zhuorui.commonwidget.ZRStockTextView
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
@@ -80,7 +81,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         @BindView(R2.id.stock_code)
         lateinit var stock_code: TextView
         @BindView(R2.id.stock_up_down)
-        lateinit var stock_up_down: StateButton
+        lateinit var stock_up_down:ZRStockStatusButton
         @BindView(R2.id.tv_price)
         lateinit var tv_price: ZRStockTextView
 
@@ -110,11 +111,11 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             val diffPriceVal = if (item?.diffPrice == null) 0 else MathUtil.rounded(item?.diffPrice!!).toInt()
             if (diffPriceVal == 0 || diffPriceVal > 0) {
                 tv_price.setText(if (item?.price == null) "0.00" else item.price.toString(), diffPriceVal)
-                stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getUpBtnColor())
+                stock_up_down.setUpDown(diffPriceVal)
                 stock_up_down.text = "+" + (if (item?.diffRate == null) "0.00" else item.diffRate) + "%"
             } else {
                 tv_price.setText(item?.price.toString(), 2)
-                stock_up_down.setUnableBackgroundColor(LocalSettingsConfig.read().getDownBtnColor())
+                stock_up_down.setUpDown(2)
                 stock_up_down.text = item?.diffRate.toString() + "%"
             }
         }

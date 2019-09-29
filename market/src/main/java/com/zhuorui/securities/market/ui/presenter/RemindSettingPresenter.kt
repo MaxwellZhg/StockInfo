@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.presenter
 
+import android.text.TextUtils
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
@@ -23,6 +24,10 @@ class RemindSettingPresenter : AbsEventPresenter<RemindSettingView, RemindSettin
         super.init()
     }
   fun deatilSave(upprice:String,downprice:String,uprate:String,downrate:String,stockinfo:StockMarketInfo?){
+            if(!TextUtils.isEmpty(upprice)&&upprice.toBigDecimal()<stockinfo?.price){
 
+            }else if(!TextUtils.isEmpty(downprice)&&upprice.toBigDecimal()<stockinfo?.price){
+
+            }
   }
 }
