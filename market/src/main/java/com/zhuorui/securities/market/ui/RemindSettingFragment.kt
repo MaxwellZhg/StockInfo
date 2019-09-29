@@ -17,13 +17,13 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentRemindSettingBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
-import com.zhuorui.securities.market.ui.adapter.SettingNoticeAdapter
 import com.zhuorui.securities.market.ui.presenter.RemindSettingPresenter
 import com.zhuorui.securities.market.ui.view.RemindSettingView
 import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
 import com.zhuorui.securities.market.util.MathUtil
 import kotlinx.android.synthetic.main.fragment_remind_setting.*
 import java.math.BigDecimal
+import java.util.regex.Pattern
 
 /**
  *    author : PengXianglin
@@ -39,6 +39,7 @@ class RemindSettingFragment :
     private var downPrice:Boolean =false
     private var upRate:Boolean =false
     private var downRate:Boolean =false
+    val pattern = "^0 |0[.]?[0]*[1-9]"
     companion object {
         fun newInstance(stockInfo: StockMarketInfo?): RemindSettingFragment {
             val fragment = RemindSettingFragment()
@@ -58,7 +59,7 @@ class RemindSettingFragment :
         get() = BR.viewModel
 
     override val createPresenter: RemindSettingPresenter
-        get() = RemindSettingPresenter()
+        get() = RemindSettingPresenter(requireContext())
 
     override val createViewModel: RemindSettingViewModel?
         get() = ViewModelProviders.of(this).get(RemindSettingViewModel::class.java)
@@ -271,7 +272,9 @@ class RemindSettingFragment :
             }
             et_up_rate->{
                 upRate=true
-                if(str.toBigDecimal()==BigDecimal.ZERO){
+                //用正则式匹配文本获取匹配器
+                val matcher = Pattern.compile(pattern).matcher(str)
+                if(!matcher.find()){
                     tv.visibility=View.VISIBLE
                     tips_up_info.visibility=View.INVISIBLE
                     tips_down_info.visibility=View.INVISIBLE
@@ -292,7 +295,9 @@ class RemindSettingFragment :
             }
             et_down_rate->{
                 downRate=false
-                if(str.toBigDecimal()== BigDecimal.ZERO){
+                //用正则式匹配文本获取匹配器
+                val matcher = Pattern.compile(pattern).matcher(str)
+                if(!matcher.find()){
                     tv.visibility=View.VISIBLE
                     tips_up_info.visibility=View.INVISIBLE
                     tips_down_info.visibility=View.INVISIBLE

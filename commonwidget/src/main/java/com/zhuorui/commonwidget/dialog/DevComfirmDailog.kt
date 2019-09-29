@@ -1,4 +1,4 @@
-package com.zhuorui.securities.personal.ui.dailog
+package com.zhuorui.commonwidget.dialog
 
 import android.content.Context
 import android.text.Spannable
@@ -8,10 +8,10 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.StringRes
 import butterknife.BindView
+import com.zhuorui.commonwidget.R
 import com.zhuorui.commonwidget.R2
 import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.personal.R
 
 /**
  * Created by Maxwell.
