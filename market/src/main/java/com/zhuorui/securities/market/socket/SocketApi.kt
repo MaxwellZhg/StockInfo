@@ -11,7 +11,7 @@ object SocketApi {
     /**
      * 定义socket中常量
      */
-    const val SOCKET_URL = "ws://192.168.1.213:1949" // 服务器地址
+    const val SOCKET_URL = "ws://120.24.98.127:1949" // 服务器地址
     const val SOCKET_AUTH_SIGNATURE = "069de7990c0c4b8d87f516b7478e9f4a" // 链接认证签名
 
     const val AUTH = "auth.auth" // 链接认证
