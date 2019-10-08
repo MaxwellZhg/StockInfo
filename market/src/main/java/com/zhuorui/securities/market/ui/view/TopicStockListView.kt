@@ -18,4 +18,6 @@ interface TopicStockListView : AbsView {
     fun notifyDataSetChanged(list: List<StockMarketInfo>?)
 
     fun notifyItemChanged(index: Int)
+
+    fun hideRegisterNow()
 }
