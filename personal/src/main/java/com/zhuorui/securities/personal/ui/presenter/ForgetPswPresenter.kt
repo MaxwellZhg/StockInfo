@@ -95,7 +95,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
-            if(response.msg=="当天短信验证码超过次"){
+            if(response.code == "030002"){
                 showErrorDailog()
             }
         }else if(response.request is VerifForgetCodeRequest){
@@ -105,7 +105,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
         dialogshow(1)
-        val request = VerifForgetCodeRequest(str, code,"0086",transactions.createTransaction())
+        val request = VerifForgetCodeRequest(str, code,"86",transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
