@@ -7,10 +7,11 @@
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlEnableLoadMore="true"
+            android:id="@+id/sm_refrsh"
+            app:srlEnableLoadMore="false"
             app:srlEnableOverScrollBounce="true"
             app:srlEnableOverScrollDrag="true"
-            app:srlEnableRefresh="true"
+            app:srlEnableRefresh="false"
             app:srlReboundDuration="1000">
         <com.scwang.smartrefresh.layout.header.ClassicsHeader
                 android:layout_width="match_parent"

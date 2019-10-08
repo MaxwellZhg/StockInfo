@@ -49,7 +49,6 @@ open class OpenAccountTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        onJumpToOpenAccountPage()
         tv_btn_open.setOnClickListener(this)
         val location = IntArray(2)
         top_bar?.getLocationOnScreen(location)
@@ -73,6 +72,11 @@ open class OpenAccountTabFragment :
         when (presenter?.getLoginStatus()) {
             false -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
+            }
+            true->{
+                val f = OpenInfoManager.getInstance()?.getStartFragment()
+                if (f != null)
+                    (parentFragment as AbsFragment<*, *, *, *>).start(f)
             }
         }
     }

@@ -90,9 +90,6 @@ class SearchInfoFragment :
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
-                    //  handler.removeCallbacks(getTopicStockDataRunnable)
-                    // getTopicStockDataRunnable = GetTopicStockDataRunnable(it)
-                    //  handler.postDelayed(getTopicStockDataRunnable, 500)
                     presenter?.initViewPager(it)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE

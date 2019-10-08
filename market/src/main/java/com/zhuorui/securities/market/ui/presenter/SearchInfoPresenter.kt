@@ -4,6 +4,7 @@ import android.content.Context
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.event.SearchAllEvent
+import com.zhuorui.securities.market.manager.InputObserverManager
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
@@ -20,6 +21,7 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
     var list =ArrayList<SearchDeafaultData>()
     var listhot =ArrayList<Int>()
     var history =ArrayList<Int>()
+    var manager : InputObserverManager=InputObserverManager()
     override fun init() {
         super.init()
     }

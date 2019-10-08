@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 
 /**
  * Created by Maxwell.
@@ -67,6 +70,11 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
                 adapter.items = ArrayList()
             }
             adapter.addItems(item?.hotlist)
+            adapter.setClickItemCallback{ i: Int, i1: Int, view: View ->
+                if(i1==null){
+                    RxBus.getDefault().post(ChageSearchTabEvent(SearchStokcInfoEnum.Stock))
+                }
+            }
         }
     }
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean):
@@ -81,6 +89,11 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
                 adapter.items = ArrayList()
             }
             adapter.addItems(item?.history)
+            adapter.setClickItemCallback{ i: Int, i1: Int, view: View ->
+                 if(i1==null){
+                     RxBus.getDefault().post(ChageSearchTabEvent(SearchStokcInfoEnum.Info))
+                 }
+            }
         }
 
     }
