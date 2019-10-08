@@ -2,7 +2,7 @@ package com.zhuorui.securities.market.socket;
 
 import android.annotation.SuppressLint;
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent;
-import com.zhuorui.securities.market.event.SocketDisconnectEvent;
+import com.zhuorui.securities.market.event.SocketConnectEvent;
 import com.zhuorui.securities.market.model.StockTopic;
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum;
 import com.zhuorui.securities.market.socket.push.StocksTopicMinuteKlineResponse;
@@ -81,6 +81,7 @@ public class SocketClient {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     LogInfra.Log.d(TAG, "握手成功");
+                    RxBus.getDefault().post(new SocketConnectEvent(true));
                     sendAuth();
                 }
 
@@ -177,7 +178,7 @@ public class SocketClient {
                 public void onClose(int i, String s, boolean b) {
                     LogInfra.Log.d(TAG, "链接已关闭");
                     // 通知上层连接断开
-                    RxBus.getDefault().post(new SocketDisconnectEvent());
+                    RxBus.getDefault().post(new SocketConnectEvent(false));
                 }
 
                 @Override

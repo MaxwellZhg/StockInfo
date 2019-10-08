@@ -23,4 +23,10 @@ interface StockTabView : AbsView {
      * 跳转到开户
      */
     fun onJumpToSimulationTradingStocksPage()
+
+    /**
+     * 更新网络连接状态提示
+     * @param isAvailable 网络是否可用
+     */
+    fun updateNetworkState(isAvailable: Boolean)
 }

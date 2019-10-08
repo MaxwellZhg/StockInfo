@@ -6,11 +6,10 @@
     <color name="color_1A6ED2" tools:ignore="MissingDefaultResource">#1A6ED2</color>
     <color name="color_CCCCCC" tools:ignore="MissingDefaultResource">#CCCCCC</color>
     <color name="color_FFA1A1A1" tools:ignore="MissingDefaultResource">#FFA1A1A1</color>
-    <color name="COLOR_FF343434" tools:ignore="MissingDefaultResource">#ff343434</color>
-    <color name="COLOR_FF1A6ED2" tools:ignore="MissingDefaultResource">#ff1a6ed2</color>
     <color name="color_616161" tools:ignore="MissingDefaultResource">#616161</color>
     <color name="color_232323"  tools:ignore="MissingDefaultResource">#232323</color>
     <color name="color_145bb3"  tools:ignore="MissingDefaultResource">#145bb3</color>
     <color name="color_F59A23"  tools:ignore="MissingDefaultResource">#FFF59A23</color>
     <color name="color_99F59A23"  tools:ignore="MissingDefaultResource">#99F59A23</color>
+    <color name="color_FFD7D7D7"  tools:ignore="MissingDefaultResource">#FFD7D7D7</color>
 </resources>

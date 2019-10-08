@@ -4,13 +4,15 @@ import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
+import com.zhuorui.securities.base2app.util.ThreadPoolUtil
 import com.zhuorui.securities.market.event.NotifyStockCountEvent
-import com.zhuorui.securities.market.event.SocketDisconnectEvent
+import com.zhuorui.securities.market.event.SocketConnectEvent
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
+import java.lang.Exception
 
 /**
  *    author : PengXianglin
@@ -28,11 +30,21 @@ class StockTabPresenter : AbsEventPresenter<StockTabView, StockTabViewModel>() {
         SocketClient.getInstance()?.connect()
     }
 
-    @RxSubscribe(observeOnThread = EventThread.SINGLE)
-    fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSocketDisconnectEvent(event: SocketConnectEvent) {
         LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
-        Thread.sleep(1000)
-        SocketClient.getInstance()?.connect()
+
+        view?.updateNetworkState(event.connected)
+        if (!event.connected) {
+            ThreadPoolUtil.getThreadPool().execute {
+                try {
+                    Thread.sleep(1000)
+                    SocketClient.getInstance()?.connect()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     fun toggleStockTab() {
