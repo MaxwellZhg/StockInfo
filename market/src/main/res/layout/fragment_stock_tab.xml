@@ -22,9 +22,10 @@
                 app:zr_backview_is_visibity="false"
                 app:zr_topbarTitle="@string/choose_stock"/>
 
-        <com.zhuorui.commonwidget.ZRNetworkUnavailableView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+        <include layout="@layout/layout_network_unavailable_tips"
+                 android:id="@+id/network_unavailable_tips"
+                 android:layout_width="match_parent"
+                 android:layout_height="30dp"/>
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -2,6 +2,8 @@ package com.zhuorui.securities.market.ui
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.Intent
+import android.provider.Settings.ACTION_WIRELESS_SETTINGS
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -18,6 +20,7 @@ import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
+import kotlinx.android.synthetic.main.layout_network_unavailable_tips.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -26,6 +29,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import java.util.*
+
 
 /**
  *    author : PengXianglin
@@ -62,6 +66,8 @@ class StockTabFragment :
         get() = this
 
     override fun init(fragments: ArrayList<StockTabViewModel.PageInfo>) {
+        btn_check_netwoke.setOnClickListener(this)
+
         mfragment = fragments
 
         top_bar.setRightClickListener {
@@ -149,21 +155,24 @@ class StockTabFragment :
     }
 
     override fun onClick(p0: View?) {
-        when (p0?.id) {
-            R.id.iv_list -> {
+        when (p0) {
+            iv_list -> {
                 presenter?.toggleStockTab()
             }
-            R.id.tv_select_all -> {
+            tv_select_all -> {
                 presenter?.toggleStockTab()
                 viewpager.currentItem = 0
             }
-            R.id.tv_select_hk -> {
+            tv_select_hk -> {
                 presenter?.toggleStockTab()
                 viewpager.currentItem = 1
             }
-            R.id.tv_select_hs -> {
+            tv_select_hs -> {
                 presenter?.toggleStockTab()
                 viewpager.currentItem = 2
+            }
+            btn_check_netwoke -> {
+                context!!.startActivity(Intent(ACTION_WIRELESS_SETTINGS))
             }
         }
     }
@@ -209,5 +218,13 @@ class StockTabFragment :
 
     override fun onJumpToSimulationTradingStocksPage() {
         (parentFragment as AbsFragment<*, *, *, *>).start(SimulationTradingMainFragment.newInstance())
+    }
+
+    override fun updateNetworkState(isAvailable: Boolean) {
+        if (isAvailable) {
+            network_unavailable_tips.visibility = View.GONE
+        } else {
+            network_unavailable_tips.visibility = View.VISIBLE
+        }
     }
 }

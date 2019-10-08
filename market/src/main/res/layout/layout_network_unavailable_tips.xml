@@ -6,7 +6,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:background="@color/color_FFD7D7D7"
-        android:layout_height="30dp">
+        android:layout_height="wrap_content">
 
     <ImageView
             android:id="@+id/iv_image"
@@ -21,7 +21,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="网络连接不可用，请检查网络设置"
+            android:text="@string/network_unavailable_tips"
             android:textColor="@color/color_282828"
             android:textSize="14sp"
             android:layout_marginStart="10dp"
@@ -30,8 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
     <com.zhuorui.commonwidget.StateButton
-            android:id="@+id/btn_check"
-            style="@style/btnStrokeStyle.Bule"
+            android:id="@+id/btn_check_netwoke"
             android:layout_width="55dp"
             android:layout_height="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +42,9 @@
             android:gravity="center"
             android:textSize="11sp"
             app:radius="9dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
             android:layout_marginEnd="13dp"
-            android:text="检查设置"
+            android:text="@string/check_network_setting"
             tools:ignore="SmallSp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
