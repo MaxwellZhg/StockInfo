@@ -33,7 +33,7 @@ import java.util.*
  * Date: 2019/8/20
  * Desc:
  */
-class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterView, LoginRegisterViewModel>(){
+class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterView, LoginRegisterViewModel>() {
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
@@ -42,8 +42,9 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
         ProgressDialog(context)
     }
     private val errorDialog by lazy {
-        ErrorTimesDialog(context,1,"")
+        ErrorTimesDialog(context, 1, "")
     }
+
     override fun init() {
         super.init()
         view?.init()
@@ -57,23 +58,25 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
 
-    fun requestUserLoginCode(str: kotlin.String,vfcode:kotlin.String) {
+    fun requestUserLoginCode(str: kotlin.String, vfcode: kotlin.String) {
         dialogshow(1)
-        val request = UserLoginCodeRequest(str, vfcode,"86", transactions.createTransaction())
+        val request = UserLoginCodeRequest(str, vfcode, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
-        if(response.request is SendLoginCodeRequest){
-               dialogshow(0)
-               startTimeCountDown()
+        if (response.request is SendLoginCodeRequest) {
+            dialogshow(0)
+            startTimeCountDown()
         }
     }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginCodeRequest) {
-               dialogshow(0)
+            dialogshow(0)
             if (LocalAccountConfig.read().saveLogin(
                     response.data.userId,
                     response.data.phone,
@@ -84,8 +87,9 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                 // 通知登录状态发生改变
                 RxBus.getDefault().post(LoginStateChangeEvent(true))
             }
-          }
         }
+    }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginOutResponse(response: SendLoginCodeResponse) {
         if (response.request is UserLoginOutRequest) {
@@ -100,12 +104,12 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
                 view?.gotopsw()
             } else if (response.code == "030002") {
                 showErrorDailog()
-            }
-        }else if(response.request is SendLoginCodeRequest){
-            dialogshow(0)
-            if(response.code!="000000") {
+            } else {
                 super.onErrorResponse(response)
             }
+        } else if (response.request is SendLoginCodeRequest) {
+            dialogshow(0)
+            super.onErrorResponse(response)
         }
     }
 
@@ -114,7 +118,8 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
         Cache[IPersonalNet::class.java]?.userLoginOut(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
-    fun setState(value:Int){
+
+    fun setState(value: Int) {
         viewModel!!.state.set(value)
     }
 
@@ -125,7 +130,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(recLen.toString()+"s")
+                    viewModel?.str?.set(recLen.toString() + "s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null
@@ -139,7 +144,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
         timer!!.schedule(task, 1000, 1000)
     }
 
-      fun startTimeCountDown() {
+    fun startTimeCountDown() {
         if (recLen == 60) {
             try {
                 startTask()
@@ -157,36 +162,36 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
         }
     }
 
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
+    fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
                 progressDialog.setCancelable(false)
                 progressDialog.show()
-              }
-            else->{
+            }
+            else -> {
                 progressDialog.setCancelable(true)
                 progressDialog.dismiss()
 
             }
-            }
         }
+    }
 
     fun showErrorDailog() {
         errorDialog.show()
-        errorDialog.setOnclickListener( View.OnClickListener {
-            when(it.id){
-                R.id.rl_complete_verify->{
+        errorDialog.setOnclickListener(View.OnClickListener {
+            when (it.id) {
+                R.id.rl_complete_verify -> {
                     errorDialog.dismiss()
                 }
             }
         })
     }
 
-    fun postChangeMytabInfo(){
+    fun postChangeMytabInfo() {
         RxBus.getDefault().post(MyTabInfoEvent())
     }
 
-    fun getGetCodeColor(state:Int){
+    fun getGetCodeColor(state: Int) {
         viewModel?.getcodeState?.set(state)
     }
 
