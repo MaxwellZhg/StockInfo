@@ -11,6 +11,7 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.view.StockTabView
 import com.zhuorui.securities.market.ui.viewmodel.StockTabViewModel
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
+import java.lang.Exception
 
 /**
  *    author : PengXianglin
@@ -31,8 +32,12 @@ class StockTabPresenter : AbsEventPresenter<StockTabView, StockTabViewModel>() {
     @RxSubscribe(observeOnThread = EventThread.SINGLE)
     fun onSocketDisconnectEvent(event: SocketDisconnectEvent) {
         LogInfra.Log.d(TAG, "onSocketDisconnectEvent()")
-        Thread.sleep(1000)
-        SocketClient.getInstance()?.connect()
+        try {
+            Thread.sleep(1000)
+            SocketClient.getInstance()?.connect()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun toggleStockTab() {
