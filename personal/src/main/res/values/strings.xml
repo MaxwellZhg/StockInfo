@@ -157,4 +157,5 @@
     <string name="notice" tools:ignore="MissingTranslation">通知</string>
     <string name="dev_login_problem_tips" tools:ignore="MissingTranslation">请拨打卓锐证券客服电话\n解决登录问题 </string>
     <string name="phone_call" tools:ignore="MissingTranslation">电话</string>
+    <string name="open_account_limit" tools:ignore="MissingTranslation">立即开户</string>
 </resources>

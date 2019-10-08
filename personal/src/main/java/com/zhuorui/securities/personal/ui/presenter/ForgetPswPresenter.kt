@@ -2,6 +2,7 @@ package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
 import android.view.View
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
@@ -48,12 +49,13 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(ResUtil.getStringFormat(R.string.credit_time, recLen))
+                    viewModel?.str?.set(recLen.toString()+"s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
+                        viewModel?.getcodeState?.set(0)
                     }
                 }
             }
@@ -81,7 +83,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     fun requestSendForgetCode(str: kotlin.String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendForgetPwdCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -97,15 +99,18 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
             dialogshow(0)
             if(response.code == "030002"){
                 showErrorDailog()
+                return
             }
+            super.onErrorResponse(response)
         }else if(response.request is VerifForgetCodeRequest){
             dialogshow(0)
+            super.onErrorResponse(response)
         }
     }
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
         dialogshow(1)
-        val request = VerifForgetCodeRequest(str, code,"86",transactions.createTransaction())
+        val request = VerifForgetCodeRequest(str, code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -142,4 +147,9 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
             }
         }
     }
+
+    fun getGetCodeColor(state: Int) {
+        viewModel?.getcodeState?.set(state)
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
@@ -46,7 +47,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
 
     fun requestUserLoginPwdCode(pwd: kotlin.String, code: kotlin.String, phone: kotlin.String) {
         dialogshow(1)
-        val request = UserLoginRegisterRequest(pwd, code, phone, "86", transactions.createTransaction())
+        val request = UserLoginRegisterRequest(pwd, code, phone, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userPwdCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
@@ -71,7 +72,9 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginRegisterRequest) {
             dialogshow(0)
+            return
         }
+        super.onErrorResponse(response)
     }
 
 

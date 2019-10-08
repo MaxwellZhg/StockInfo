@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.DevComfirmDailog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
@@ -54,7 +55,7 @@ class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyVi
     }
     fun requestSendLoginCode(str: kotlin.String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

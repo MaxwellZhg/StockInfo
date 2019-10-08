@@ -1,20 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
                 name="viewModel"
                 type="com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel"/>
     </data>
 
-    <RelativeLayout android:orientation="vertical"
-                    android:id="@+id/tv_test"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_centerInParent="true"
-                  android:textSize="16sp"
-                  android:text="@{viewModel.str}"/>
-    </RelativeLayout>
+  <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/color_f0f0f0">
+      <com.zhuorui.commonwidget.ZhuoRuiTopBar
+              app:layout_constraintTop_toTopOf="parent"
+              app:zr_right_icon="@mipmap/share_more"
+              app:zr_backview_is_visibity="false"
+              app:zr_right_icon_width="24dp"
+              app:zr_right_icon_hight="20dp"
+              app:zr_right_icon_margin="13dp"
+              android:id="@+id/top_bar"
+              app:zr_topbarTitle="@string/zhuorui_openaccount"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+      </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+      <ImageView
+                 android:id="@+id/iv_logo_open"
+                 app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:background="@mipmap/icon_open_logo"
+                 android:layout_marginTop="30dp"
+                 android:layout_width="150dp"
+                 android:layout_height="119dp"/>
+      <ImageView
+                android:id="@+id/iv_icon_tips"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toBottomOf="@+id/iv_logo_open"
+                 android:layout_marginTop="10dp"
+                 android:background="@mipmap/icon_open_tips_logo"
+                 android:layout_width="242dp"
+                 android:layout_height="35dp"/>
+      <com.zhuorui.commonwidget.StateButton
+              app:layout_constraintTop_toBottomOf="@+id/iv_icon_tips"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:layout_marginLeft="29dp"
+              android:layout_marginRight="29dp"
+              android:layout_marginTop="28dp"
+              android:id="@+id/tv_btn_open"
+              android:textSize="23sp"
+              android:padding="0dp"
+              android:minHeight="0dp"
+              android:gravity="center"
+              android:textStyle="bold"
+              android:text="@string/open_account_limit"
+              android:enabled="true"
+              app:radius="3dp"
+              android:textColor="@color/color_FFFFFFFF"
+              app:normalBackgroundColor="@color/color_1A6ED2"
+              app:unableBackgroundColor="@color/color_8DB9E4"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
