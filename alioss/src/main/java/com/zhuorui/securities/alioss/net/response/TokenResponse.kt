@@ -11,9 +11,9 @@ import com.zhuorui.securities.base2app.network.BaseResponse
 class TokenResponse(val data: Data) : BaseResponse() {
 
     data class Data(
-        val accessKeyId: String,
-        val securityToken: String,
-        val accessKeySecret: String,
-        val durationSeconds: Long
+        val accessKeyId: String,//凭证key
+        val securityToken: String,//token
+        val accessKeySecret: String,//凭证Secret
+        val expiration: Long//有效期（10位时间戳)
     )
 }

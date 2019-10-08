@@ -48,7 +48,7 @@ class OssService(applicationContext: Context, type: String, endpoint: String, bu
                         token.data.accessKeyId,
                         token.data.accessKeySecret,
                         token.data.securityToken,
-                        token.data.durationSeconds
+                        token.data.expiration
                     )
                 } else if (token != null) {
                     throw ClientException(token.msg)
