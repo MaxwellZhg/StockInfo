@@ -52,14 +52,14 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
 
     fun requestSendLoginCode(str: kotlin.String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
 
     fun requestUserLoginCode(str: kotlin.String,vfcode:kotlin.String) {
         dialogshow(1)
-        val request = UserLoginCodeRequest(str, vfcode,"0086", transactions.createTransaction())
+        val request = UserLoginCodeRequest(str, vfcode,"86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
@@ -96,14 +96,14 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginCodeRequest) {
             dialogshow(0)
-            if(response.code=="010003"){
+            if (response.code == "010003") {
                 view?.gotopsw()
-            }
-            if(response.msg=="当天短信验证码超过次"){
+            } else if (response.code == "030002") {
                 showErrorDailog()
             }
         }else if(response.request is SendLoginCodeRequest){
             dialogshow(0)
+            super.onErrorResponse(response)
         }
     }
 

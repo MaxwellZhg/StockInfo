@@ -43,7 +43,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
     }
     fun requestLoginPwd(phone: kotlin.String,password: kotlin.String,phoneArea:kotlin.String) {
         dialogshow(1)
-        val request = UserLoginPwdRequest(phone, password,"0086", transactions.createTransaction())
+        val request = UserLoginPwdRequest(phone, password,"86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginByPwd(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }

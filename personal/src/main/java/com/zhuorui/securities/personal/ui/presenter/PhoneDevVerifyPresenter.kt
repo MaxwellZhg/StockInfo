@@ -54,7 +54,7 @@ class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyVi
     }
     fun requestSendLoginCode(str: kotlin.String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

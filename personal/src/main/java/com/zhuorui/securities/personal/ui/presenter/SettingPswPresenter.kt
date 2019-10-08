@@ -46,7 +46,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
 
     fun requestUserLoginPwdCode(pwd: kotlin.String, code: kotlin.String, phone: kotlin.String) {
         dialogshow(1)
-        val request = UserLoginRegisterRequest(pwd, code, phone, "0086", transactions.createTransaction())
+        val request = UserLoginRegisterRequest(pwd, code, phone, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userPwdCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
