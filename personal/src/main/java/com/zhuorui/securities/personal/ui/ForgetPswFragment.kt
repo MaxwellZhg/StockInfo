@@ -50,11 +50,16 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
         return true
     }
     override fun init() {
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         iv_back.setOnClickListener(this)
         tv_send_code.setOnClickListener(this)
         rl_country_disct.setOnClickListener(this)
         tv_btn_commit.setOnClickListener(this)
         tv_phone_code_login.setOnClickListener(this)
+        et_phone.addTextChangedListener(PhoneEtChange())
         et_phone_code.addTextChangedListener(this)
     }
     override fun onClick(p0: View?) {
@@ -127,6 +132,25 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                 tv_areaphone_tips.text=code
             }
         }
+    }
+
+    inner class PhoneEtChange : TextWatcher{
+        override fun afterTextChanged(p0: Editable?) {
+            if(!TextUtils.isEmpty(p0.toString())){
+                presenter?.getGetCodeColor(1)
+            }else{
+                presenter?.getGetCodeColor(0)
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
     }
 
 }

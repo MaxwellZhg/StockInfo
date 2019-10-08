@@ -68,9 +68,12 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is ModifyOldPhoneRequest) {
             dialogshow(0)
+            return
         }else if(response.request is SendOldRepalceCodeRequest){
             dialogshow(0)
+            return
         }
+        super.onErrorResponse(response)
     }
 
     @Throws(InterruptedException::class)
@@ -80,7 +83,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(ResUtil.getStringFormat(R.string.credit_time, recLen))
+                    viewModel?.str?.set(recLen.toString()+"s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null

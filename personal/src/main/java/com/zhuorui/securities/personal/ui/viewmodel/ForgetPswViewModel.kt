@@ -13,7 +13,9 @@ import com.zhuorui.securities.personal.R
  */
 class ForgetPswViewModel :ViewModel(){
     var str= ObservableField<String>()
+    var getcodeState=ObservableField<Int>()
     init {
+        getcodeState.set(0)
         str.set(ResUtil.getString(R.string.send_verification_code))
     }
 }

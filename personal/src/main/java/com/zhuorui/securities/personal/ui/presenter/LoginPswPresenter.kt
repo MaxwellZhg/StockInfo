@@ -2,6 +2,7 @@ package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
 import android.view.View
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
@@ -43,7 +44,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
     }
     fun requestLoginPwd(phone: kotlin.String,password: kotlin.String,phoneArea:kotlin.String) {
         dialogshow(1)
-        val request = UserLoginPwdRequest(phone, password,"86", transactions.createTransaction())
+        val request = UserLoginPwdRequest(phone, password,CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginByPwd(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
@@ -71,10 +72,13 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
             dialogshow(0)
             if(response.code=="010005"){
                 showErrorDailog(response.msg)
+                return
             }
             if(response.code=="010007"){
                 view?.showVerify()
+                return
             }
+            super.onErrorResponse(response)
         }
     }
 
