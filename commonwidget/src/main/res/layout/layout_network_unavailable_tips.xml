@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@color/color_FFD7D7D7"
+        android:layout_height="30dp">
+
+    <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="13dp"
+            android:src="@mipmap/iv_network_unavailable"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网络连接不可用，请检查网络设置"
+            android:textColor="@color/color_282828"
+            android:textSize="14sp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@+id/iv_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.zhuorui.commonwidget.StateButton
+            android:id="@+id/btn_check"
+            style="@style/btnStrokeStyle.Bule"
+            android:layout_width="55dp"
+            android:layout_height="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/color_FFFFFFFF"
+            app:normalBackgroundColor="@color/color_1A6ED2"
+            app:pressedBackgroundColor="@color/color_145bb3"
+            android:gravity="center"
+            android:textSize="11sp"
+            app:radius="9dp"
+            android:layout_marginEnd="13dp"
+            android:text="检查设置"
+            tools:ignore="SmallSp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

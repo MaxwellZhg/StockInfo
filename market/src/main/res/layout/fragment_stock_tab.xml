@@ -22,6 +22,10 @@
                 app:zr_backview_is_visibity="false"
                 app:zr_topbarTitle="@string/choose_stock"/>
 
+        <com.zhuorui.commonwidget.ZRNetworkUnavailableView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/tablayout_bg">
