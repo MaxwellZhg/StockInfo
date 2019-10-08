@@ -174,4 +174,8 @@ class TopicStockListFragment :
             }
         }
     }
+
+    override fun hideRegisterNow() {
+        guide_open_accout?.visibility = View.GONE
+    }
 }
