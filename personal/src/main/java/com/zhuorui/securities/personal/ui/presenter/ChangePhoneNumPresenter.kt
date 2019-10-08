@@ -39,7 +39,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
     }
     fun requestSendOldRepaiedCode(str: kotlin.String?) {
         dialogshow(1)
-        val request = SendOldRepalceCodeRequest(str, "0086", transactions.createTransaction())
+        val request = SendOldRepalceCodeRequest(str, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendOldPhoneRepaireCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

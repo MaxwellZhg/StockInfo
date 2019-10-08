@@ -81,7 +81,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     fun requestSendForgetCode(str: kotlin.String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "0086", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendForgetPwdCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
