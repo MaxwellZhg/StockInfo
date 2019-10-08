@@ -62,7 +62,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(ResUtil.getStringFormat(R.string.credit_time, recLen))
+                    viewModel?.str?.set(recLen.toString()+"s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null

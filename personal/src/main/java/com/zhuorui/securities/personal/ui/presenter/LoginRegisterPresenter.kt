@@ -2,6 +2,7 @@ package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
 import android.view.View
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
@@ -53,14 +54,14 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
     fun requestSendLoginCode(str: kotlin.String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
 
     fun requestUserLoginCode(str: kotlin.String, vfcode: kotlin.String) {
         dialogshow(1)
-        val request = UserLoginCodeRequest(str, vfcode, "86", transactions.createTransaction())
+        val request = UserLoginCodeRequest(str, vfcode, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }

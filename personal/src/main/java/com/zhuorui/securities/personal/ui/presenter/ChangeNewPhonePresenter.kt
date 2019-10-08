@@ -1,6 +1,7 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
@@ -59,7 +60,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     }
     fun requestSendNewRepaiedCode(str:String?) {
         dialogshow(1)
-        val request = SendOldRepalceCodeRequest(str, "86", transactions.createTransaction())
+        val request = SendOldRepalceCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendNewRepairedCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -79,7 +80,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     fun onModifyNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
         if (response.request is ModifyNewPhoneCodeRequest) {
             dialogshow(0)
-            view?.gotomain()
+             view?.gotomain()
         }
     }
 
@@ -90,7 +91,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(ResUtil.getStringFormat(R.string.credit_time, recLen))
+                    viewModel?.str?.set(recLen.toString()+"s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null

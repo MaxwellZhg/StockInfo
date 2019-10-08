@@ -1,5 +1,6 @@
 package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
@@ -96,7 +97,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
     }
     fun requestRestLoginPsw(phone: String?,newpsw:String,code: String?) {
         dialogshow(1)
-        val request = RestLoginPswRequest(phone, newpsw,code,"86",transactions.createTransaction())
+        val request = RestLoginPswRequest(phone, newpsw,code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.restLoginPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -113,7 +114,9 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is RestLoginPswRequest) {
             dialogshow(0)
+            return
         }
+        super.onErrorResponse(response)
     }
 
     fun dialogshow(type:Int){
