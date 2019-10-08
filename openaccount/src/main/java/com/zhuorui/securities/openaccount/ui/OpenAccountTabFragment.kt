@@ -88,16 +88,7 @@ open class OpenAccountTabFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
                R.id.tv_btn_open->{
-                   when (presenter?.getLoginStatus()) {
-                       false -> {
-                           (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
-                       }
-                       true -> {
-                           val f = OpenInfoManager.getInstance()?.getStartFragment()
-                           if (f != null)
-                               (parentFragment as AbsFragment<*, *, *, *>).start(f)
-                       }
-                   }
+                   onJumpToOpenAccountPage()
                }
         }
     }
