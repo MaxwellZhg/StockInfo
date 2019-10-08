@@ -38,7 +38,7 @@
             android:textSize="14sp"/>
 
     <TextView
-            android:id="@+id/tv_opne_account"
+            android:id="@+id/tv_register_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/open_accout"
