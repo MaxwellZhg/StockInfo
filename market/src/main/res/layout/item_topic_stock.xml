@@ -43,7 +43,7 @@
                   android:text="800000"/>
     </RelativeLayout>
 
-    <com.zhuorui.commonwidget.StateButton
+    <com.zhuorui.commonwidget.ZRStockStatusButton
             android:layout_width="79dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
@@ -61,7 +61,7 @@
             android:autoSizeTextType="uniform"
             android:enabled="false"
             app:radius="2dp"
-            android:textColor="@color/un_tab_select"
+            android:textColor="@color/color_FFFFFFFF"
             app:unableBackgroundColor="@color/up_stock_color"/>
 
     <com.zhuorui.commonwidget.ZRStockTextView

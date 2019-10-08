@@ -1,9 +1,11 @@
 package com.zhuorui.commonwidget.config
 
 import android.graphics.Color
+import com.zhuorui.commonwidget.model.Observer
+import com.zhuorui.commonwidget.model.Subject
+import com.zhuorui.commonwidget.model.Subject.list
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
-import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -11,18 +13,10 @@ import java.math.BigDecimal
  *    date   : 2019/9/11 14:52
  *    desc   : 保存本地设置信息
  */
-class LocalSettingsConfig : AbsConfig() {
-    val sorckColorRed = Color.parseColor("#FFce0019")
-    val sorckColorGreen = Color.parseColor("#FF23803A")
-    val sorckColor = Color.parseColor("#FFce0019")
-    val stockbtnRedColor= Color.parseColor("#FFAC3E19")
-    val stockbtnGreenColor = Color.parseColor("#FF37672E")
+class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
+
     // 默认为红涨绿跌
     var stocksThemeColor: StocksThemeColor = StocksThemeColor.redUpGreenDown
-        set(value) {
-            field = value
-            write()
-        }
 
     fun getUpColor(): Int {
         return when (stocksThemeColor) {
@@ -51,33 +45,14 @@ class LocalSettingsConfig : AbsConfig() {
             else -> stockbtnRedColor
         }
     }
-    fun getUpDownColor(number: BigDecimal): Int {
-        return getUpDownColor(number, sorckColor)
-    }
 
-    fun getUpDownColor(number: Double): Int {
-        return getUpDownColor(number, sorckColor)
-    }
-
-    fun getUpDownColor(number: Double, defColor: Int): Int {
-        return getUpDownColor(BigDecimal(number), defColor)
-    }
-
-    fun getUpDownColor(number: BigDecimal, defColor: Int): Int {
-        return when (number.compareTo(BigDecimal(0))) {
-            1 -> getUpColor()
-            -1 -> getDownColor()
-            else -> defColor
-        }
+    fun getDefaultColor(): Int {
+        return sorckColor
     }
 
 
     // 默认为自动语言
     var appLanguage: AppLanguage = AppLanguage.auto
-        set(value) {
-            field = value
-            write()
-        }
 
     override fun write() {
         StorageInfra.put(LocalSettingsConfig::class.java.simpleName, this)
@@ -85,6 +60,7 @@ class LocalSettingsConfig : AbsConfig() {
 
     fun saveStockColor(enum: StocksThemeColor) {
         stocksThemeColor = enum
+        notifyAllObservers()
         write()
     }
 
@@ -93,12 +69,32 @@ class LocalSettingsConfig : AbsConfig() {
         write()
     }
 
+    override fun registerObserver(obs: Observer?) {
+        list.add(obs)
+    }
+
+    override fun removeObserver(obs: Observer?) {
+        list.remove(obs)
+    }
+
+    override fun notifyAllObservers() {
+        for (obs in list) {
+            // 更新每一个观察者中的信息
+            obs.update(this)
+        }
+    }
+
     override fun toString(): String {
         return "LocalSettingsConfig(stocksThemeColor=$stocksThemeColor, appLanguage=$appLanguage)"
     }
 
     companion object {
 
+        val sorckColorRed = Color.parseColor("#FFce0019")
+        val sorckColorGreen = Color.parseColor("#FF23803A")
+        val sorckColor = Color.parseColor("#FFA4B2CB")
+        val stockbtnRedColor = Color.parseColor("#FFAC3E19")
+        val stockbtnGreenColor = Color.parseColor("#FF37672E")
 
         fun read(): LocalSettingsConfig {
             var config: LocalSettingsConfig? =

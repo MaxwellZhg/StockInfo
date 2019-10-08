@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.zhuorui.commonwidget.dialog.DevComfirmDailog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
@@ -17,7 +18,6 @@ import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
-import com.zhuorui.securities.personal.ui.dailog.DevComfirmDailog
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyCodeView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyCodeViewModel
 import java.util.*
@@ -28,7 +28,8 @@ import java.util.*
  * Date: 2019/9/12
  * Desc:
  */
-class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVerifyCodeView,PhoneDevVerifyCodeViewModel>(),DevComfirmDailog.CallBack{
+class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVerifyCodeView,PhoneDevVerifyCodeViewModel>(),
+    DevComfirmDailog.CallBack{
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null

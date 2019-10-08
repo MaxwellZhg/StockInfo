@@ -1,25 +1,18 @@
 package com.zhuorui.securities.personal.ui
 
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.qw.soul.permission.PermissionTools
 import com.qw.soul.permission.SoulPermission
 import com.qw.soul.permission.bean.Permission
 import com.qw.soul.permission.bean.Permissions
-import com.qw.soul.permission.callbcak.CheckRequestPermissionListener
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.FragmentPhoneDevVerifyBinding
-import com.zhuorui.securities.personal.ui.dailog.DevComfirmDailog
 import com.zhuorui.securities.personal.ui.presenter.PhoneDevVerifyPresenter
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyViewModel

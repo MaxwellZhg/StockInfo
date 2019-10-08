@@ -5,4 +5,6 @@
     <string name="cancle" tools:ignore="MissingTranslation">取消</string>
     <string name="country_disct_tips" tools:ignore="MissingTranslation">请输入国家/国际地区名</string>
     <string name="ensure" tools:ignore="MissingTranslation">确定</string>
+    <string name="notice" tools:ignore="MissingTranslation">通知</string>
+    <string name="tips"  tools:ignore="MissingTranslation">提示</string>
 </resources>

@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.zhuorui.commonwidget.dialog.DevComfirmDailog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
@@ -12,10 +13,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
-import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
-import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
-import com.zhuorui.securities.personal.ui.dailog.DevComfirmDailog
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyViewModel
 
