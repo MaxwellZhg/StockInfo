@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.personal.config.LocalAccountConfig
@@ -71,7 +72,7 @@ class TopicStockListFragment :
         val type = arguments?.getSerializable("type") as StockTsEnum?
         if (type == null && !LocalAccountConfig.read().isLogin()) {
             guide_open_accout.inflate()
-            tv_opne_account.setOnClickListener(this)
+            tv_register_now.setOnClickListener(this)
         }
         if (type == StockTsEnum.HS) {
             root_view.addView(View.inflate(context, R.layout.layout_trans_index, null), 0)
@@ -105,7 +106,7 @@ class TopicStockListFragment :
         item?.longClick = true
         mAdapter?.notifyItemChanged(pos)
 
-        //获取需要在其上方显示的控件的位置信息
+        // 获取需要在其上方显示的控件的位置信息
         val location = IntArray(2)
         view?.getLocationOnScreen(location)
         // 显示更多操作
@@ -120,7 +121,23 @@ class TopicStockListFragment :
                 }
 
                 override fun onDelete() {
-                    presenter?.onDelete(item)
+                    context?.let { context ->
+                        // 显示确定删除对话框
+                        ConfirmToCancelDialog.createWidth250Dialog(context, false, true)
+                            .setMsgText(R.string.delete_topic_stock_tips)
+                            .setCancelText(R.string.cancle)
+                            .setConfirmText(R.string.ensure)
+                            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                                override fun onCancel() {
+
+                                }
+
+                                override fun onConfirm() {
+                                    presenter?.onDelete(item)
+                                }
+                            })
+                            .show()
+                    }
                 }
 
                 override fun onDismiss() {
@@ -152,8 +169,7 @@ class TopicStockListFragment :
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.tv_opne_account -> {
-                //TODO 开户
+            R.id.tv_register_now -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
             }
         }

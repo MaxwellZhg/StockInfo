@@ -144,4 +144,5 @@
     <string name="compare_price_down" tools:ignore="MissingTranslation">较当前价下跌</string>
     <string name="compare_price_to" tools:ignore="MissingTranslation">股价到</string>
     <string name="plaease_input_num" tools:ignore="MissingTranslation">请先输入数值</string>
+    <string name="delete_topic_stock_tips">确定删除该自选股票</string>
 </resources>
