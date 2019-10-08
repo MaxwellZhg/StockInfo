@@ -102,15 +102,15 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
             dialogshow(0)
             if (response.code == "010003") {
                 view?.gotopsw()
+                return
             } else if (response.code == "030002") {
                 showErrorDailog()
-            } else {
-                super.onErrorResponse(response)
+                return
             }
         } else if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
-            super.onErrorResponse(response)
         }
+        super.onErrorResponse(response)
     }
 
     fun requestUserLoginOut() {
