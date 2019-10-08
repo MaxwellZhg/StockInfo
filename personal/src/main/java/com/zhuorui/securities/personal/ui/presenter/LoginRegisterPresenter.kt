@@ -103,7 +103,9 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
             }
         }else if(response.request is SendLoginCodeRequest){
             dialogshow(0)
-            super.onErrorResponse(response)
+            if(response.code!="000000") {
+                super.onErrorResponse(response)
+            }
         }
     }
 
@@ -123,7 +125,7 @@ class LoginRegisterPresenter(context: Context): AbsNetPresenter<LoginRegisterVie
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(ResUtil.getStringFormat(R.string.credit_time, recLen))
+                    viewModel?.str?.set(recLen.toString()+"s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null

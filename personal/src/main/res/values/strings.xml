@@ -12,7 +12,7 @@
     <string name="phone_num_login" tools:ignore="MissingTranslation">手机号密码登录</string>
     <string name="phone_tips" tools:ignore="MissingTranslation">请输入手机号</string>
     <string name="phone_code_tips" tools:ignore="MissingTranslation">请输入验证码</string>
-    <string name="credit_time" tools:ignore="MissingTranslation">%d s</string>
+    <string name="credit_time" tools:ignore="MissingTranslation">%ds</string>
     <string name="minutiues" tools:ignore="MissingTranslation">60s</string>
     <string name="setting_psw" tools:ignore="MissingTranslation">设置登录密码</string>
     <string name="login_psw" tools:ignore="MissingTranslation">登录密码</string>
