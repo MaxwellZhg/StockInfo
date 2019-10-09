@@ -2,7 +2,6 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -22,7 +21,6 @@ import com.zhuorui.securities.market.ui.presenter.SearchInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
 import kotlinx.android.synthetic.main.fragment_search_info.*
-import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -30,31 +28,35 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
-import kotlin.collections.ArrayList
 
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/19
- * Desc:
+ * Desc: 搜索股票信息
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
     SearchInfoView, View.OnClickListener, TextWatcher {
-    var mfragment=ArrayList<StockPageInfo>()
+
+    private var mfragment = ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
+
     override val layout: Int
         get() = R.layout.fragment_search_info
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: SearchInfoPresenter
         get() = SearchInfoPresenter(requireContext())
+
     override val createViewModel: SearchInfoViewModel?
         get() = ViewModelProviders.of(this).get(SearchInfoViewModel::class.java)
+
     override val getView: SearchInfoView
         get() = this
-    private var handler = Handler()
-    private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
+
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
@@ -113,12 +115,6 @@ class SearchInfoFragment :
 
     }
 
-    private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
-        override fun run() {
-            presenter?.initViewPager(keyWord)
-        }
-    }
-
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): SearchResultInfoFragment {
             return SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
@@ -133,7 +129,7 @@ class SearchInfoFragment :
         }
     }
 
-   private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
+    private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
         if (viewpager.adapter == null) {
             mfragment = fragments
             // 设置viewpager指示器
@@ -189,6 +185,4 @@ class SearchInfoFragment :
             ViewPagerHelper.bind(magic_indicator, viewpager)
         }
     }
-
-
 }

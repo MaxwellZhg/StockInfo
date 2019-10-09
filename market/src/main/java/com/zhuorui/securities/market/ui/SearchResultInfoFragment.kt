@@ -2,7 +2,6 @@ package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -25,23 +24,29 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class SearchResultInfoFragment :
-    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView,OnNotifyObserver{
+    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),
+    SearchResultInfoView, OnNotifyObserver {
 
+    private var adapter: SeachAllofInfoAdapter? = null
+    private var stockadapter: StockAdapter? = null
+    private var infoadapter: StockInfoAdapter? = null
+    private var type: SearchStokcInfoEnum? = null
 
-    private  var adapter: SeachAllofInfoAdapter?=null
-    private  var stockadapter: StockAdapter?=null
-    private  var infoadapter: StockInfoAdapter?=null
-    private var type:SearchStokcInfoEnum?=null
     override val layout: Int
         get() = R.layout.fragment_search_result_info
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: SearchResultInfoPresenter
         get() = SearchResultInfoPresenter(type)
+
     override val createViewModel: SearchResultInfoViewModel?
         get() = ViewModelProviders.of(this).get(SearchResultInfoViewModel::class.java)
+
     override val getView: SearchResultInfoView
         get() = this
+
     companion object {
         fun newInstance(type: SearchStokcInfoEnum?): SearchResultInfoFragment {
             val fragment = SearchResultInfoFragment()
@@ -56,20 +61,20 @@ class SearchResultInfoFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-         type = arguments?.getSerializable("type") as SearchStokcInfoEnum?
+        type = arguments?.getSerializable("type") as SearchStokcInfoEnum?
         adapter = presenter?.getAdapter()
-        stockadapter=presenter?.getStockAdapter()
-        infoadapter=presenter?.getStockInfoAdapter()
-        when(type) {
-            SearchStokcInfoEnum.All->{
+        stockadapter = presenter?.getStockAdapter()
+        infoadapter = presenter?.getStockInfoAdapter()
+        when (type) {
+            SearchStokcInfoEnum.All -> {
                 rv_serach_all.adapter = adapter
             }
-            SearchStokcInfoEnum.Stock->{
+            SearchStokcInfoEnum.Stock -> {
                 sm_refrsh.setEnableRefresh(true)
                 sm_refrsh.setEnableLoadMore(true)
                 rv_serach_all.adapter = stockadapter
             }
-            SearchStokcInfoEnum.Info->{
+            SearchStokcInfoEnum.Info -> {
                 sm_refrsh.setEnableRefresh(true)
                 sm_refrsh.setEnableLoadMore(true)
                 rv_serach_all.adapter = infoadapter
@@ -82,20 +87,21 @@ class SearchResultInfoFragment :
         stockadapter?.notifyDataSetChanged()
         infoadapter?.notifyDataSetChanged()
     }
+
     override fun detailInfo(str: String) {
         LogUtils.e(str)
         adapter = presenter?.getAdapter()
-        stockadapter=presenter?.getStockAdapter()
-        infoadapter=presenter?.getStockInfoAdapter()
-        when(type) {
-            SearchStokcInfoEnum.All->{
+        stockadapter = presenter?.getStockAdapter()
+        infoadapter = presenter?.getStockInfoAdapter()
+        when (type) {
+            SearchStokcInfoEnum.All -> {
                 rv_serach_all.adapter = adapter
 
             }
-            SearchStokcInfoEnum.Stock->{
+            SearchStokcInfoEnum.Stock -> {
                 rv_serach_all.adapter = stockadapter
             }
-            SearchStokcInfoEnum.Info->{
+            SearchStokcInfoEnum.Info -> {
                 rv_serach_all.adapter = infoadapter
             }
         }
@@ -108,7 +114,7 @@ class SearchResultInfoFragment :
     }
 
     override fun updateInput(str: String?) {
-          LogUtils.e(str)
+        LogUtils.e(str)
     }
 
 }
