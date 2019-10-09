@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel"/>
     </data>
+
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/sm_refrsh"
-            app:srlEnableLoadMore="false"
             app:srlEnableOverScrollBounce="true"
             app:srlEnableOverScrollDrag="true"
-            app:srlEnableRefresh="false"
             app:srlReboundDuration="1000">
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_serach_all"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srlClassicsSpinnerStyle="Translate"/>
+                android:layout_height="match_parent"/>
+
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </layout>

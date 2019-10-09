@@ -70,7 +70,7 @@
                     android:textSize="15sp"
                     android:text="@{viewModel.stockInfo.name}"/>
 
-            <TextView
+            <com.zhuorui.commonwidget.ZRStockTextView
                     android:id="@+id/tv_stock_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -78,13 +78,13 @@
                     android:layout_marginStart="21dp"
                     app:layout_constraintStart_toEndOf="@id/tv_stock_name"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:drawableEnd="@mipmap/ic_stock_up_arrow"
+                    android:drawableEnd="@mipmap/ic_stock_up_arrow_red"
                     android:drawablePadding="6dp"
                     android:textColor="@color/color_ffce0019"
                     android:text="---"
                     android:textSize="15sp"/>
 
-            <TextView
+            <com.zhuorui.commonwidget.ZRStockTextView
                     android:id="@+id/tv_diff_pirce"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,10 +93,12 @@
                     app:layout_constraintStart_toEndOf="@id/tv_stock_price"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/color_ffce0019"
+                    app:zr_showPrecentSymbol="true"
+                    app:zr_showPrecentUpDown="true"
                     android:text="---"
                     android:textSize="15sp"/>
 
-            <TextView
+            <com.zhuorui.commonwidget.ZRStockTextView
                     android:id="@+id/tv_diff_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -105,6 +107,8 @@
                     app:layout_constraintStart_toEndOf="@id/tv_diff_pirce"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:textColor="@color/color_ffce0019"
+                    app:zr_showPrecentSymbol="true"
+                    app:zr_showPrecentUpDown="true"
                     android:text="---"
                     android:textSize="15sp"/>
 

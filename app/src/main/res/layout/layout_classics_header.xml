@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       tools:paddingTop="20dp"
+       tools:paddingBottom="20dp"
+       tools:background="#eee"
+       android:gravity="center">
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/srl_classics_arrow"
+                android:layout_width="18dp"
+                android:src="@mipmap/ic_srl_arrow"
+                android:layout_height="18dp"
+                android:layout_marginEnd="7.5dp"
+                tools:ignore="ContentDescription"/>
+
+        <ImageView
+                android:id="@+id/srl_classics_progress"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                tools:tint="@color/color_616161"
+                android:layout_marginEnd="13dp"
+                tools:src="@android:drawable/stat_notify_sync"
+                tools:ignore="ContentDescription"/>
+    </RelativeLayout>
+
+    <TextView
+            android:id="@+id/srl_classics_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="#666666"
+            android:textSize="15sp"
+            android:text="@string/srl_header_pulling"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

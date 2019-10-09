@@ -12,6 +12,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.SimpleTextWatcher
+import com.zhuorui.commonwidget.config.LocalSettingsConfig
+import com.zhuorui.commonwidget.config.StocksThemeColor
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
 import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -43,6 +45,8 @@ class SimulationTradingStocksFragment :
     SimulationTradingStocksView, View.OnClickListener {
 
     private val SEARCH_STOCK_CODE = 1000
+    private var upArrowResId = 0
+    private var downArrowResId = 0
 
     companion object {
         const val TRAD_TYPE_KEY = "trad_type"
@@ -170,29 +174,35 @@ class SimulationTradingStocksFragment :
 
     @SuppressLint("SetTextI18n")
     override fun updateStockPrice(price: BigDecimal, diffPrice: BigDecimal, diffRate: BigDecimal) {
-        tv_stock_price.text = price.toString()
-        val diffValue = MathUtil.rounded(diffPrice).toInt()
-        if (diffValue == 0 || diffValue > 0) {
-            ResUtil.getColor(R.color.color_ffce0019)?.let {
-                tv_stock_price.setTextColor(it)
-                tv_diff_pirce.setTextColor(it)
-                tv_diff_rate.setTextColor(it)
+        if (upArrowResId == 0 || downArrowResId == 0) {
+            val stocksThemeColor = LocalSettingsConfig.read().stocksThemeColor
+            if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
+                upArrowResId = R.mipmap.ic_stock_up_arrow_red
+                downArrowResId = R.mipmap.ic_stock_down_arrow_green
+            } else {
+                upArrowResId = R.mipmap.ic_stock_up_arrow_green
+                downArrowResId = R.mipmap.ic_stock_down_arrow_red
             }
-
-            tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_stock_up_arrow, 0)
-            tv_diff_pirce.text = "+$diffPrice"
-            tv_diff_rate.text = "+$diffRate%"
-        } else {
-            ResUtil.getColor(R.color.color_FF23803A)?.let {
-                tv_stock_price.setTextColor(it)
-                tv_diff_pirce.setTextColor(it)
-                tv_diff_rate.setTextColor(it)
-            }
-
-            tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_stock_down_arrow, 0)
-            tv_diff_pirce.text = diffPrice.toString()
-            tv_diff_rate.text = "$diffRate%"
         }
+        val diffValue = MathUtil.rounded(diffRate).toInt()
+        val diffState: Int
+        when {
+            diffValue == 0 -> {
+                diffState = 0
+                tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+            }
+            diffValue > 0 -> {
+                diffState = 1
+                tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, upArrowResId, 0)
+            }
+            else -> {
+                diffState = 2
+                tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, downArrowResId, 0)
+            }
+        }
+        tv_stock_price.setText(price.toString(), diffState)
+        tv_diff_pirce.setText(diffPrice.toString(), diffState)
+        tv_diff_rate.setText(diffRate.toString(), diffState)
     }
 
     override fun updateStockTrans(transData: PushStockTransData, buyRate: Double, sellRate: Double) {
