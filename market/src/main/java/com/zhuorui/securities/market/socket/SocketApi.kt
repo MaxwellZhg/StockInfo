@@ -15,7 +15,7 @@ object SocketApi {
     const val SOCKET_AUTH_SIGNATURE = "069de7990c0c4b8d87f516b7478e9f4a" // 链接认证签名
 
     const val AUTH = "auth.auth" // 链接认证
-    const val TOPIC_BIND = "topic.bind" // 订阅
+    const val TOPIC_BIND = "topic.reBind" // 订阅
     const val TOPIC_UNBIND = "topic.unBind" // 取消订阅
     const val TOPIC_UNBIND_ALL = "topic.unBindAll" // 取消所有订阅
     const val PUSH_STOCK_DATA = "push.stock.data" //  推送股票数据

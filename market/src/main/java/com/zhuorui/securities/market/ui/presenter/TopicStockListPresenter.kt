@@ -14,10 +14,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.event.AddTopicStockEvent
-import com.zhuorui.securities.market.event.DeleteTopicStockEvent
-import com.zhuorui.securities.market.event.NotifyStockCountEvent
-import com.zhuorui.securities.market.event.SynStockEvent
+import com.zhuorui.securities.market.event.*
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
@@ -301,7 +298,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                     }
                 }
             }
-            SocketClient.getInstance().bindTopic(stockTopic)
+            SocketClient.getInstance().unBindTopic(stockTopic)
             // 更新最新自选股数目
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas?.size!!))
         }
@@ -339,10 +336,21 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
     }
 
+    /**
+     * 同步自选股
+     */
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSynStockEvent(event: SynStockEvent) {
         // 同步完成，重新拉取自选股列表
         view?.requestStocks()
+    }
+
+    /**
+     * 长链接连接状态发生改变
+     */
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
+        viewModel?.datas?.value?.let { topicPrice(it) }
     }
 
     override fun destroy() {
