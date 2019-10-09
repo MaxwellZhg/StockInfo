@@ -108,22 +108,24 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             }
 
             // 跌涨幅是否大于0或者等于0
-            val diffPriceVal = MathUtil.rounded(item?.diffRate!!).toInt()
-            when {
-                diffPriceVal == 0 -> {
-                    tv_price.setText(item.price.toString(), 0)
-                    stock_up_down.setUpDown(0)
-                    stock_up_down.text = item.diffRate.toString() + "%"
-                }
-                diffPriceVal > 0 -> {
-                    tv_price.setText(item.price.toString(), 1)
-                    stock_up_down.setUpDown(1)
-                    stock_up_down.text = "+" + item.diffRate + "%"
-                }
-                else -> {
-                    tv_price.setText(item.price.toString(), 2)
-                    stock_up_down.setUpDown(2)
-                    stock_up_down.text = item.diffRate.toString() + "%"
+            item?.diffRate?.let {
+                val diffPriceVal = MathUtil.rounded(it).toInt()
+                when {
+                    diffPriceVal == 0 -> {
+                        tv_price.setText(item.price.toString(), 0)
+                        stock_up_down.setUpDown(0)
+                        stock_up_down.text = item.diffRate.toString() + "%"
+                    }
+                    diffPriceVal > 0 -> {
+                        tv_price.setText(item.price.toString(), 1)
+                        stock_up_down.setUpDown(1)
+                        stock_up_down.text = "+" + item.diffRate + "%"
+                    }
+                    else -> {
+                        tv_price.setText(item.price.toString(), 2)
+                        stock_up_down.setUpDown(2)
+                        stock_up_down.text = item.diffRate.toString() + "%"
+                    }
                 }
             }
         }
