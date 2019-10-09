@@ -1,3 +1,4 @@
+/*
 package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
@@ -19,12 +20,14 @@ import com.zhuorui.securities.market.ui.view.StockSearchView
 import com.zhuorui.securities.market.ui.viewmodel.StockSearchViewModel
 import kotlinx.android.synthetic.main.fragment_topic_stock_search.*
 
+*/
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/8
  * Desc:自选股搜索
- */
+ *//*
+
 class StockSearchFragment :
     AbsSwipeBackNetFragment<FragmentTopicStockSearchBinding, StockSearchViewModel, StockSearchView, StockSearchPresenter>(),
     StockSearchView, TextWatcher, SearchStocksAdapter.OnAddTopicClickItemCallback,
@@ -123,4 +126,4 @@ class StockSearchFragment :
         // 点击添加到自选列表
         presenter?.onAddTopicClickItem(item)
     }
-}
+}*/

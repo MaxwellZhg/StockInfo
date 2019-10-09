@@ -93,7 +93,7 @@ class SimulationTradingMainFragment :
         }
         top_bar.setRight2ClickListener {
             // 搜索自选股
-            start(StockSearchFragment.newInstance())
+            start(SearchInfoFragment.newInstance())
         }
         recycler_view.layoutManager = object : LinearLayoutManager(context) {
             override fun canScrollVertically(): Boolean {

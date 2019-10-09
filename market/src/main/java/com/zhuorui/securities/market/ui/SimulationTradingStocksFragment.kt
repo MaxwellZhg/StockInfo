@@ -98,7 +98,7 @@ class SimulationTradingStocksFragment :
         }
         top_bar.setRight2ClickListener {
             // 搜索自选股
-            start(StockSearchFragment.newInstance())
+            start(SearchInfoFragment.newInstance())
         }
         // 监听价格输入
         tv_buy_price.addTextChangedListener(object : SimpleTextWatcher() {
