@@ -43,6 +43,7 @@ public class SocketClient {
     private static SocketClient instance;
     private WebSocketClient client;
     private Map<String, SocketRequest> requestMap;
+    private boolean isConnected = false;
 
     private final boolean openGzip = true;
 
@@ -72,10 +73,9 @@ public class SocketClient {
     }
 
     public void connect() {
+        if (isConnected) return;
         try {
-            // 先断开上一次的连接
-            destroy();
-            // 重新创建连接
+            // 创建连接
             requestMap = new HashMap<>();
             client = new WebSocketClient(new URI(SocketApi.SOCKET_URL), new Draft_6455()) {
                 @Override
@@ -83,6 +83,7 @@ public class SocketClient {
                     LogInfra.Log.d(TAG, "握手成功");
                     RxBus.getDefault().post(new SocketConnectEvent(true));
                     sendAuth();
+                    isConnected = true;
                 }
 
                 @Override
@@ -179,12 +180,14 @@ public class SocketClient {
                     LogInfra.Log.d(TAG, "链接已关闭");
                     // 通知上层连接断开
                     RxBus.getDefault().post(new SocketConnectEvent(false));
+                    isConnected = false;
                 }
 
                 @Override
                 public void onError(Exception e) {
                     e.printStackTrace();
                     LogInfra.Log.d(TAG, "发生错误已关闭");
+                    isConnected = false;
                 }
             };
         } catch (URISyntaxException e) {
