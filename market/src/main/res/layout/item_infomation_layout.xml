@@ -23,10 +23,10 @@
           app:layout_constraintTop_toBottomOf="@+id/tv_stock_tips"
           android:background="@color/color_191821"
           android:layout_height="1dp"/>
-    <com.zhuorui.securities.market.customer.view.MyRecycleview
+    <androidx.recyclerview.widget.RecyclerView
             app:layout_constraintTop_toBottomOf="@+id/view_cent"
             android:id="@+id/rv_infomation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-    </com.zhuorui.securities.market.customer.view.MyRecycleview>
+    </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

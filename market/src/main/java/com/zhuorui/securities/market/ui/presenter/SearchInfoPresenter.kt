@@ -1,11 +1,15 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.content.Context
+import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SearchAllEvent
 import com.zhuorui.securities.market.manager.InputObserverManager
 import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.TestSeachDefaultData
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
@@ -18,7 +22,7 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,SearchInfoViewModel>(){
-    var list =ArrayList<SearchDeafaultData>()
+    var list =ArrayList<TestSeachDefaultData>()
     var listhot =ArrayList<Int>()
     var history =ArrayList<Int>()
     var manager : InputObserverManager=InputObserverManager()
@@ -32,7 +36,7 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
         for(i in 0..3){
             history.add(i)
         }
-        var data=SearchDeafaultData(listhot,history)
+        var data=TestSeachDefaultData(listhot,history)
         list.add(data)
         list.add(data)
        viewModel?.adapter?.value?.clearItems()
@@ -52,6 +56,12 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
     fun initViewPager(str:String){
         RxBus.getDefault().post(SearchAllEvent(str))
     }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchChangMoreEvent(event: ChageSearchTabEvent) {
+        view?.changeTab(event)
+    }
+
 
 
 }

@@ -15,6 +15,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
+import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
@@ -41,6 +42,7 @@ import kotlin.collections.ArrayList
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
     SearchInfoView, View.OnClickListener, TextWatcher {
+
     var mfragment=ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
     override val layout: Int
@@ -190,5 +192,16 @@ class SearchInfoFragment :
         }
     }
 
+
+    override fun changeTab(enum: ChageSearchTabEvent) {
+         when(enum.enum){
+             SearchStokcInfoEnum.Stock->{
+                 viewpager.currentItem = 1
+             }
+             SearchStokcInfoEnum.Info->{
+                 viewpager.currentItem = 2
+             }
+         }
+    }
 
 }

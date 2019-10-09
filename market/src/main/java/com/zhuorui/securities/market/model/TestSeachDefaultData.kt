@@ -3,9 +3,7 @@ package com.zhuorui.securities.market.model
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
- * Date: 2019/9/20
+ * Date: 2019/10/9
  * Desc:
  */
-class SearchDeafaultData(var hotlist:List<SearchStockInfo>,var history:ArrayList<Int>){
-
-}
+class TestSeachDefaultData (var hotlist:ArrayList<Int>,var history:ArrayList<Int>)

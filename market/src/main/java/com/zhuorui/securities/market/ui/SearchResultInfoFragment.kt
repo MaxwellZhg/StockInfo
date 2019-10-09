@@ -2,7 +2,6 @@ package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -63,20 +62,23 @@ class SearchResultInfoFragment :
         when(type) {
             SearchStokcInfoEnum.All->{
                 rv_serach_all.adapter = adapter
+                presenter?.setType(SearchStokcInfoEnum.All)
             }
             SearchStokcInfoEnum.Stock->{
+                presenter?.setType(SearchStokcInfoEnum.Stock)
                 sm_refrsh.setEnableRefresh(true)
                 sm_refrsh.setEnableLoadMore(true)
                 rv_serach_all.adapter = stockadapter
             }
             SearchStokcInfoEnum.Info->{
+                presenter?.setType(SearchStokcInfoEnum.Info)
                 sm_refrsh.setEnableRefresh(true)
                 sm_refrsh.setEnableLoadMore(true)
                 rv_serach_all.adapter = infoadapter
             }
         }
-        presenter?.getData(type)
-        presenter?.getStockData()
+        presenter?.getData(type,"0")
+        presenter?.getStockData("0")
         presenter?.getStockInfoData()
         adapter?.notifyDataSetChanged()
         stockadapter?.notifyDataSetChanged()
@@ -99,8 +101,8 @@ class SearchResultInfoFragment :
                 rv_serach_all.adapter = infoadapter
             }
         }
-        presenter?.getData(type)
-        presenter?.getStockData()
+        presenter?.getData(type,str)
+        presenter?.getStockData(str)
         presenter?.getStockInfoData()
         adapter?.notifyDataSetChanged()
         stockadapter?.notifyDataSetChanged()

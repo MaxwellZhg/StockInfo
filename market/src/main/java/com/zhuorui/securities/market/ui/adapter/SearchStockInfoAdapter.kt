@@ -1,10 +1,23 @@
 package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.event.ChageSearchTabEvent
+import com.zhuorui.securities.market.event.TopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
+import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -12,9 +25,10 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Date: 2019/9/23
  * Desc:
  */
-class SearchStockInfoAdapter : BaseListAdapter<Int>(){
+class SearchStockInfoAdapter : BaseListAdapter<SearchStockInfo>(){
     private val default = 0x00
     private val bottom = 0x01
+    private var onTopicStockInfoListener: OnTopicStockInfoListener? =null
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
             default -> R.layout.item_stock_search_layout
@@ -35,15 +49,62 @@ class SearchStockInfoAdapter : BaseListAdapter<Int>(){
 
 
    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
-    ListItemViewHolder<Int>(v, needClick, needLongClick) {
-       override fun bind(item: Int?, position: Int) {
+    ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
+       @BindView(R2.id.tv_stock_info_name)
+       lateinit var tv_stock_info_name: AppCompatTextView
+       @BindView(R2.id.iv_stock_logo)
+       lateinit var iv_stock_logo: AppCompatImageView
+       @BindView(R2.id.tv_stock_code)
+       lateinit var tv_stock_code: AppCompatTextView
+       @BindView(R2.id.iv_topic)
+       lateinit var iv_topic: AppCompatImageView
+       override fun bind(item: SearchStockInfo?, position: Int) {
+            tv_stock_info_name.text=item?.name
+            tv_stock_code.text=item?.code
+           when (item?.ts) {
+               "SH" -> {
+                   iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_sh)
+               }
+               "SZ" -> {
+                   iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_sz)
+               }
+               "HK" -> {
+                   iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_hk)
+               }
+           }
 
+       }
+       init {
+           iv_topic.setOnClickListener(this)
+       }
+
+       override fun onClick(v: View) {
+           if (v == iv_topic) {
+              RxBus.getDefault().post(TopicStockEvent( getItem(position),SearchStokcInfoEnum.All))
+           } else {
+               super.onClick(v)
+           }
        }
    }
 
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean):
-        ListItemViewHolder<Int>(v, needClick, needLongClick) {
-           override fun bind(item: Int?, position: Int) {
+        ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
+        @BindView(R2.id.rl_content)
+        lateinit var rl_content: ConstraintLayout
+
+        init {
+            rl_content.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            if (v == rl_content) {
+                LogUtils.e("ttttttt")
+                RxBus.getDefault().post(ChageSearchTabEvent(SearchStokcInfoEnum.Stock))
+            } else {
+                super.onClick(v)
+            }
+        }
+           override fun bind(item: SearchStockInfo?, position: Int) {
 
            }
 
@@ -75,9 +136,13 @@ class SearchStockInfoAdapter : BaseListAdapter<Int>(){
         }
     }
 
-    override fun getItem(position: Int): Int? {
+    override fun getItem(position: Int): SearchStockInfo? {
         if (position > items.size || position == items.size) return null
         return super.getItem(position)
+    }
+
+    interface OnTopicStockInfoListener{
+        fun topicStockInfo()
     }
 
 

@@ -12,6 +12,7 @@ import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
+import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -55,47 +56,48 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
     inner class ViewHolderHeader(v: View?, needClick: Boolean, needLongClick: Boolean):
         ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick){
+
         @BindView(R2.id.rv_stock_info)
         lateinit var rv_stock_info: RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
             var adapter= SearchStockInfoAdapter()
+            rv_stock_info.setHasFixedSize(true)
+            rv_stock_info.isNestedScrollingEnabled=false
             rv_stock_info.adapter=adapter
             rv_stock_info.layoutManager=LinearLayoutManager(context)
             if (adapter.items == null) {
                 adapter.items = ArrayList()
             }
             adapter.addItems(item?.hotlist)
-            adapter.setClickItemCallback{ i: Int, i1: Int, view: View ->
-                if(i1==null){
-                    RxBus.getDefault().post(ChageSearchTabEvent(SearchStokcInfoEnum.Stock))
-                }
-            }
+            adapter.notifyDataSetChanged()
         }
     }
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean):
-        ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick){
+        ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick),OnClickItemCallback<Int>{
+
         @BindView(R2.id.rv_infomation)
         lateinit var rv_infomation: RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
             var adapter= SearchInfomationAdapter(0)
+            rv_infomation.setHasFixedSize(true)
+            rv_infomation.isNestedScrollingEnabled=false
             rv_infomation.adapter=adapter
             rv_infomation.layoutManager=LinearLayoutManager(context)
             if (adapter.items == null) {
                 adapter.items = ArrayList()
             }
             adapter.addItems(item?.history)
-            adapter.setClickItemCallback{ i: Int, i1: Int, view: View ->
-                 if(i1==null){
-                     RxBus.getDefault().post(ChageSearchTabEvent(SearchStokcInfoEnum.Info))
-                 }
+            adapter.setClickItemCallback(ViewHolderBottom@this)
+        }
+        override fun onClickItem(pos: Int, item: Int?, v: View?) {
+            if(item==null){
+                RxBus.getDefault().post(ChageSearchTabEvent(SearchStokcInfoEnum.Info))
             }
         }
 
     }
+
 
 }

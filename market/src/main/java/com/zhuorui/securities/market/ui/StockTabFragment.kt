@@ -76,7 +76,7 @@ class StockTabFragment :
         }
         top_bar.setRight2ClickListener {
             // 搜索
-            (parentFragment as AbsFragment<*, *, *, *>).start(StockSearchFragment.newInstance())
+            (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
         }
         iv_list.setOnClickListener(this)
         tv_select_all.setOnClickListener(this)
