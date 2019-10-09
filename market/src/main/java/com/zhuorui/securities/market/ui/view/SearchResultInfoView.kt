@@ -10,4 +10,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface SearchResultInfoView :AbsView{
   fun detailInfo(str:String)
+  fun detailStock(str:String)
+  fun detailStockInfo(str:String)
 }

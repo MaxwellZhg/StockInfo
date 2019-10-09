@@ -9,10 +9,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.event.AddTopicStockEvent
-import com.zhuorui.securities.market.event.NotifyStockCountEvent
-import com.zhuorui.securities.market.event.SearchAllEvent
-import com.zhuorui.securities.market.event.TopicStockEvent
+import com.zhuorui.securities.market.event.*
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
@@ -45,10 +42,6 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
         super.init()
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onSearchALLEvent(event: SearchAllEvent) {
-            view?.detailInfo(event.str)
-    }
     fun setType(type: SearchStokcInfoEnum?) {
           this.type = type
     }
@@ -97,7 +90,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
             viewModel?.infoadapter?.value?.items = ArrayList()
         }
         viewModel?.infoadapter?.value?.addItems(history)
-        LogUtils.e("tttttt" + viewModel?.infoadapter?.value?.items?.size.toString())
+        LogUtils.e("tttttt---info----" + viewModel?.infoadapter?.value?.items?.size.toString())
     }
 
     fun getTopicStockData(keyWord: String, count: Int) {
@@ -125,7 +118,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
                     viewModel?.adapter?.value?.items = ArrayList()
                 }
                 viewModel?.adapter?.value?.addItems(list)
-                LogUtils.e("tttttt" + viewModel?.adapter?.value?.items?.size.toString())
+                LogUtils.e("tttttt-----all----" + viewModel?.adapter?.value?.items?.size.toString())
                 LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
             }
             20->{
@@ -135,7 +128,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
                 }
                 viewModel?.stockadapter?.value?.addItems(datas)
                 viewModel?.stockadapter?.value?.notifyDataSetChanged()
-                LogUtils.e("tttttt" + viewModel?.stockadapter?.value?.items?.size.toString())
+                LogUtils.e("tttttt-----stock----" + viewModel?.stockadapter?.value?.items?.size.toString())
             }
 
         }
@@ -167,6 +160,21 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
                 }
             }
         }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchTabChangeEvent(event: SelectsSearchTabEvent) {
+         when(event.enum){
+             SearchStokcInfoEnum.All->{
+                 view?.detailInfo(event.str)
+             }
+             SearchStokcInfoEnum.Stock->{
+                 view?.detailStock(event.str)
+             }
+             SearchStokcInfoEnum.Info->{
+                view?.detailStockInfo(event.str)
+             }
+         }
     }
 
 

@@ -418,5 +418,8 @@ class RemindSettingFragment :
             }
         }
     }
-
+    override fun onDetach() {
+        super.onDetach()
+        hideSoftInput()
+    }
 }
