@@ -3,9 +3,9 @@ package com.zhuorui.securities
 import android.content.Context
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.*
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.custom.view.ClassicsFooter
 import com.zhuorui.securities.custom.view.ClassicsHeader
 import com.zhuorui.securities.net.HeaderInterceptor
 import com.zhuorui.securities.net.TokenInterceptor
@@ -55,14 +55,13 @@ class Application : BaseApplication() {
         //设置全局的Footer构建器
         SmartRefreshLayout.setDefaultRefreshFooterCreator(object : DefaultRefreshFooterCreator {
             override fun createRefreshFooter(context: Context, layout: RefreshLayout): RefreshFooter {
-
                 ClassicsFooter.REFRESH_FOOTER_LOADING = "正在加载..."
                 ClassicsFooter.REFRESH_FOOTER_FINISH = "加载完成"
                 ClassicsFooter.REFRESH_FOOTER_FAILED = "加载失败"
                 ClassicsFooter.REFRESH_FOOTER_NOTHING = "-已全部加载完毕-"
 
                 //指定为经典Footer，默认是 BallPulseFooter
-                return ClassicsFooter(context).setDrawableSize(20f)
+                return ClassicsFooter(context)
             }
         })
     }
