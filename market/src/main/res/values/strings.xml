@@ -109,7 +109,7 @@
     <string name="search_tips" tools:ignore="MissingTranslation">请输入股票名称/代码/全拼</string>
     <string name="stock_search_all"  tools:ignore="MissingTranslation">综合</string>
     <string name="stock_search_topic"  tools:ignore="MissingTranslation">股票</string>
-    <string name="stock_search_info"  tools:ignore="MissingTranslation">咨讯</string>
+    <string name="stock_search_info"  tools:ignore="MissingTranslation">资讯</string>
     <string name="str_tips" translatable="false">提示</string>
     <string name="str_retry" translatable="false">重试</string>
     <string name="str_back" translatable="false">返回</string>

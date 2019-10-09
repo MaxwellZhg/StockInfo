@@ -24,8 +24,7 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class SearchResultInfoFragment :
-    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView,OnNotifyObserver{
-
+    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView{
 
     private  var adapter: SeachAllofInfoAdapter?=null
     private  var stockadapter: StockAdapter?=null
@@ -56,61 +55,46 @@ class SearchResultInfoFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
          type = arguments?.getSerializable("type") as SearchStokcInfoEnum?
-        adapter = presenter?.getAdapter()
-        stockadapter=presenter?.getStockAdapter()
-        infoadapter=presenter?.getStockInfoAdapter()
         when(type) {
             SearchStokcInfoEnum.All->{
-                rv_serach_all.adapter = adapter
                 presenter?.setType(SearchStokcInfoEnum.All)
+                rv_serach_all.adapter = adapter
             }
             SearchStokcInfoEnum.Stock->{
-                presenter?.setType(SearchStokcInfoEnum.Stock)
                 sm_refrsh.setEnableRefresh(true)
                 sm_refrsh.setEnableLoadMore(true)
-                rv_serach_all.adapter = stockadapter
             }
             SearchStokcInfoEnum.Info->{
-                presenter?.setType(SearchStokcInfoEnum.Info)
                 sm_refrsh.setEnableRefresh(true)
                 sm_refrsh.setEnableLoadMore(true)
-                rv_serach_all.adapter = infoadapter
             }
         }
-        presenter?.getData(type,"0")
-        presenter?.getStockData("0")
-        presenter?.getStockInfoData()
-        adapter?.notifyDataSetChanged()
-        stockadapter?.notifyDataSetChanged()
-        infoadapter?.notifyDataSetChanged()
     }
     override fun detailInfo(str: String) {
         LogUtils.e(str)
         adapter = presenter?.getAdapter()
-        stockadapter=presenter?.getStockAdapter()
-        infoadapter=presenter?.getStockInfoAdapter()
-        when(type) {
-            SearchStokcInfoEnum.All->{
-                rv_serach_all.adapter = adapter
-
-            }
-            SearchStokcInfoEnum.Stock->{
-                rv_serach_all.adapter = stockadapter
-            }
-            SearchStokcInfoEnum.Info->{
-                rv_serach_all.adapter = infoadapter
-            }
-        }
+        presenter?.setType(SearchStokcInfoEnum.All)
+        rv_serach_all.adapter = adapter
         presenter?.getData(type,str)
-        presenter?.getStockData(str)
-        presenter?.getStockInfoData()
         adapter?.notifyDataSetChanged()
+    }
+
+    override fun detailStock(str: String) {
+        stockadapter=presenter?.getStockAdapter()
+        presenter?.setType(SearchStokcInfoEnum.Stock)
+        presenter?.getStockData(str)
+        rv_serach_all.adapter = stockadapter
         stockadapter?.notifyDataSetChanged()
+    }
+
+    override fun detailStockInfo(str: String) {
+        LogUtils.e("tttttttttttttttt---------"+str)
+        infoadapter=presenter?.getStockInfoAdapter()
+        presenter?.setType(SearchStokcInfoEnum.Info)
+        presenter?.getStockInfoData()
+        rv_serach_all.adapter = infoadapter
         infoadapter?.notifyDataSetChanged()
     }
 
-    override fun updateInput(str: String?) {
-          LogUtils.e(str)
-    }
 
 }

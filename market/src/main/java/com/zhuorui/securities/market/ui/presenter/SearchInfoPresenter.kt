@@ -7,8 +7,10 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SearchAllEvent
+import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.manager.InputObserverManager
 import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.TestSeachDefaultData
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
@@ -25,7 +27,6 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
     var list =ArrayList<TestSeachDefaultData>()
     var listhot =ArrayList<Int>()
     var history =ArrayList<Int>()
-    var manager : InputObserverManager=InputObserverManager()
     override fun init() {
         super.init()
     }
@@ -53,8 +54,8 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
         return viewModel?.adapter?.value
     }
 
-    fun initViewPager(str:String){
-        RxBus.getDefault().post(SearchAllEvent(str))
+    fun initViewPager(str:String,enum:SearchStokcInfoEnum?){
+        RxBus.getDefault().post(SelectsSearchTabEvent(str,enum))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)

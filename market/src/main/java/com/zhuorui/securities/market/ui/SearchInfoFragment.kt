@@ -10,12 +10,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
+import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
@@ -41,7 +43,7 @@ import kotlin.collections.ArrayList
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
-    SearchInfoView, View.OnClickListener, TextWatcher {
+    SearchInfoView, View.OnClickListener, TextWatcher{
 
     var mfragment=ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
@@ -92,7 +94,7 @@ class SearchInfoFragment :
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
-                    presenter?.initViewPager(it)
+                    presenter?.initViewPager(it,mfragment[viewpager.currentItem].type)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
                 } else {
@@ -117,7 +119,6 @@ class SearchInfoFragment :
 
     private inner class GetTopicStockDataRunnable(val keyWord: String) : Runnable {
         override fun run() {
-            presenter?.initViewPager(keyWord)
         }
     }
 
@@ -175,6 +176,9 @@ class SearchInfoFragment :
             viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                     magic_indicator.onPageScrollStateChanged(state)
+                    if(state==0){
+                        RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[viewpager.currentItem].type))
+                    }
                 }
 
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -183,6 +187,7 @@ class SearchInfoFragment :
 
                 override fun onPageSelected(position: Int) {
                     magic_indicator.onPageSelected(position)
+                    RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[position].type))
                 }
             })
 
@@ -202,6 +207,11 @@ class SearchInfoFragment :
                  viewpager.currentItem = 2
              }
          }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        hideSoftInput()
     }
 
 }
