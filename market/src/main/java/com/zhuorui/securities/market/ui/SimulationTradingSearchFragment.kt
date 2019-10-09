@@ -47,7 +47,7 @@ class SimulationTradingSearchFragment :
 
     var tabTitle: Array<String>? = null
     var selectIndex = 0
-    var uiStatus = -1
+    var uiStatus = -1 // 0 自选股列表 1 搜索记录列表 2 搜索结果列表
     var searchAdapter: SimulationTradingSearchAdapter? = null
     var choiceAdapter: SimulationTradingSearchAdapter? = null
     var historyAdapter: SimulationTradingSearchAdapter? = null

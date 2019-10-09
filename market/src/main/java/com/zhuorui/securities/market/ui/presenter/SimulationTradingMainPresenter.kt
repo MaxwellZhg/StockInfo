@@ -318,28 +318,30 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
                 val stockInfo = stocksInfo?.get(data.getTsCode())
-                data.presentPrice = stockInfo?.price!!
+                val presentPrice = if (stockInfo?.price != null) stockInfo.price!! else BigDecimal(0)
+                val holdStockCount = if (data?.holdStockCount != null) data?.holdStockCount!! else BigDecimal(0)
+                val holeCost = if (data?.holeCost != null) data?.holeCost!! else BigDecimal(0)
+                val marketValue = if (data?.marketValue != null) data?.marketValue!! else BigDecimal(0)
+                data.presentPrice = presentPrice
                 //持仓市值=现价*持仓数
-                data.marketValue = MathUtil.multiply3(data.presentPrice!!, data?.holdStockCount!!)
+                data.marketValue = MathUtil.multiply3(presentPrice, holdStockCount)
                 //持仓盈亏金额=现价 * 持有数量 - 成本
-                data.profitAndLoss =
-                    MathUtil.subtract3(MathUtil.multiply3(data.presentPrice!!, data.holdStockCount!!), data.holeCost!!)
+                val profitAndLoss = MathUtil.subtract3(MathUtil.multiply3(presentPrice, holdStockCount), holeCost)
+                data.profitAndLoss = profitAndLoss
                 //持仓盈亏比例=盈亏金额/成本
-                data.profitAndLossPercentage = MathUtil.divide3(
-                    data.profitAndLoss!!,
-                    data.holeCost!!
-                )
-                totalMarketValue = MathUtil.add3(data.marketValue!!, totalMarketValue)
+                data.profitAndLossPercentage = MathUtil.divide3(profitAndLoss, holeCost)
+                totalMarketValue = MathUtil.add3(marketValue, totalMarketValue)
                 //总盈亏 -- 累计持仓盈亏金额
-                totalProfitAndLoss = MathUtil.add3(data.profitAndLoss!!, totalProfitAndLoss)
+                totalProfitAndLoss = MathUtil.add3(profitAndLoss, totalProfitAndLoss)
             }
         }
+        val todayProfitAndLossData = mTodayProfitAndLoss!!
         //账户总资产=持仓市值+可用资金
         val totalAssets: BigDecimal = MathUtil.add3(totalMarketValue, availableFunds)
         //今日盈亏 (今日市值 - 昨日收盘市值）+（今日卖出成交额 - 今日买入成交额）
-        var todayProfitAndLoss = MathUtil.subtract3(totalMarketValue, mTodayProfitAndLoss!!.yesterdayTotalAmount)
-        todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, mTodayProfitAndLoss!!.todaySellAmount)
-        todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, mTodayProfitAndLoss!!.todayBuyAmount)
+        var todayProfitAndLoss = MathUtil.subtract3(totalMarketValue, todayProfitAndLossData.yesterdayTotalAmount)
+        todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, todayProfitAndLossData.todaySellAmount)
+        todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, todayProfitAndLossData.todayBuyAmount)
         //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
         val todayProfitAndLossPercentage =
             MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
