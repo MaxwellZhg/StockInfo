@@ -81,7 +81,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         @BindView(R2.id.stock_code)
         lateinit var stock_code: TextView
         @BindView(R2.id.stock_up_down)
-        lateinit var stock_up_down:ZRStockStatusButton
+        lateinit var stock_up_down: ZRStockStatusButton
         @BindView(R2.id.tv_price)
         lateinit var tv_price: ZRStockTextView
 
@@ -108,15 +108,23 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             }
 
             // 跌涨幅是否大于0或者等于0
-            val diffPriceVal = if (item?.diffPrice == null) 0 else MathUtil.rounded(item?.diffPrice!!).toInt()
-            if (diffPriceVal == 0 || diffPriceVal > 0) {
-                tv_price.setText(if (item?.price == null) "0.00" else item.price.toString(), diffPriceVal)
-                stock_up_down.setUpDown(diffPriceVal)
-                stock_up_down.text = "+" + (if (item?.diffRate == null) "0.00" else item.diffRate) + "%"
-            } else {
-                tv_price.setText(item?.price.toString(), 2)
-                stock_up_down.setUpDown(2)
-                stock_up_down.text = item?.diffRate.toString() + "%"
+            val diffPriceVal = MathUtil.rounded(item?.diffRate!!).toInt()
+            when {
+                diffPriceVal == 0 -> {
+                    tv_price.setText(item.price.toString(), 0)
+                    stock_up_down.setUpDown(0)
+                    stock_up_down.text = item.diffRate.toString() + "%"
+                }
+                diffPriceVal > 0 -> {
+                    tv_price.setText(item.price.toString(), 1)
+                    stock_up_down.setUpDown(1)
+                    stock_up_down.text = "+" + item.diffRate + "%"
+                }
+                else -> {
+                    tv_price.setText(item.price.toString(), 2)
+                    stock_up_down.setUpDown(2)
+                    stock_up_down.text = item.diffRate.toString() + "%"
+                }
             }
         }
     }

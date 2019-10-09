@@ -122,4 +122,11 @@ public class ZRStockTextView extends AppCompatTextView implements Observer {
         // 更改字体颜色
         super.setText(changTvColor());
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        if (settingsConfig != null)
+            settingsConfig.removeObserver(this);
+        super.onDetachedFromWindow();
+    }
 }
