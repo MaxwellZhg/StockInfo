@@ -7,6 +7,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchResultInfoBinding
+import com.zhuorui.securities.market.model.OnNotifyObserver
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.ui.adapter.SeachAllofInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.StockAdapter
@@ -24,7 +25,9 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class SearchResultInfoFragment :
-    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView{
+    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView,OnNotifyObserver{
+
+
     private  var adapter: SeachAllofInfoAdapter?=null
     private  var stockadapter: StockAdapter?=null
     private  var infoadapter: StockInfoAdapter?=null
@@ -62,9 +65,13 @@ class SearchResultInfoFragment :
                 rv_serach_all.adapter = adapter
             }
             SearchStokcInfoEnum.Stock->{
+                sm_refrsh.setEnableRefresh(true)
+                sm_refrsh.setEnableLoadMore(true)
                 rv_serach_all.adapter = stockadapter
             }
             SearchStokcInfoEnum.Info->{
+                sm_refrsh.setEnableRefresh(true)
+                sm_refrsh.setEnableLoadMore(true)
                 rv_serach_all.adapter = infoadapter
             }
         }
@@ -83,6 +90,7 @@ class SearchResultInfoFragment :
         when(type) {
             SearchStokcInfoEnum.All->{
                 rv_serach_all.adapter = adapter
+
             }
             SearchStokcInfoEnum.Stock->{
                 rv_serach_all.adapter = stockadapter
@@ -97,6 +105,10 @@ class SearchResultInfoFragment :
         adapter?.notifyDataSetChanged()
         stockadapter?.notifyDataSetChanged()
         infoadapter?.notifyDataSetChanged()
+    }
+
+    override fun updateInput(str: String?) {
+          LogUtils.e(str)
     }
 
 }
