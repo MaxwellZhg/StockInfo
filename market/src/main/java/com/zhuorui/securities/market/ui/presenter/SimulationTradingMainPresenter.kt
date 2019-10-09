@@ -321,10 +321,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 val presentPrice = if (stockInfo?.price != null) stockInfo.price!! else BigDecimal(0)
                 val holdStockCount = if (data?.holdStockCount != null) data?.holdStockCount!! else BigDecimal(0)
                 val holeCost = if (data?.holeCost != null) data?.holeCost!! else BigDecimal(0)
-                val marketValue = if (data?.marketValue != null) data?.marketValue!! else BigDecimal(0)
                 data.presentPrice = presentPrice
                 //持仓市值=现价*持仓数
-                data.marketValue = MathUtil.multiply3(presentPrice, holdStockCount)
+                val marketValue =MathUtil.multiply3(presentPrice, holdStockCount)
+                data.marketValue = marketValue
                 //持仓盈亏金额=现价 * 持有数量 - 成本
                 val profitAndLoss = MathUtil.subtract3(MathUtil.multiply3(presentPrice, holdStockCount), holeCost)
                 data.profitAndLoss = profitAndLoss
