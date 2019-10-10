@@ -22,14 +22,13 @@
                   android:autoSizeMaxTextSize="17sp"
                   android:autoSizeMinTextSize="1sp"
                   android:autoSizeTextType="uniform"
-                  android:text="恒生指数"/>
+                  android:text="---"/>
 
         <ImageView android:layout_width="15dp"
                    android:layout_height="13dp"
                    android:layout_marginTop="2dp"
                    android:id="@+id/iv_stock_ts"
-                   android:layout_below="@+id/tv_stock_tile"
-                   android:background="@mipmap/ic_ts_hk"/>
+                   android:layout_below="@+id/tv_stock_tile"/>
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -40,7 +39,7 @@
                   android:layout_marginTop="2dp"
                   android:textColor="@color/tv_stock_code"
                   android:layout_toEndOf="@+id/iv_stock_ts"
-                  android:text="800000"/>
+                  android:text="---"/>
     </RelativeLayout>
 
     <com.zhuorui.commonwidget.ZRStockStatusButton
@@ -54,7 +53,7 @@
             android:padding="0dp"
             android:minHeight="0dp"
             android:gravity="center"
-            android:text="+3.41%"
+            android:text="---"
             android:lines="1"
             android:autoSizeMaxTextSize="18sp"
             android:autoSizeMinTextSize="1sp"
