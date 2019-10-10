@@ -57,6 +57,18 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     override fun init() {
         super.init()
         view?.init()
+        // 读取本地缓存的自选股
+        val disposable = Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
+            emitter.onNext(LocalStocksConfig.read().getStocks())
+            emitter.onComplete()
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                // 发起订阅
+                topicPrice(it)
+                // 更新界面数据
+                viewModel?.datas?.value = it }
+        disposables.add(disposable)
     }
 
     fun setType(type: StockTsEnum?) {
@@ -173,6 +185,13 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                 }
             }
         }
+        // 保存本地数据
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
+            emitter.onComplete()
+        }).subscribeOn(Schedulers.io())
+            .subscribe()
+        disposables.add(disposable)
     }
 
     /**
@@ -212,8 +231,8 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             stock.name = event.stock.name
             stock.type = event.stock.type
             stock.tsCode = event.stock.tsCode
-
-            datas.add(stock)
+            // TODO 添加到顶部
+            datas.add(0, stock)
 
             if (viewModel?.datas?.value.isNullOrEmpty()) {
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->

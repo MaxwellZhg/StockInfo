@@ -35,7 +35,7 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
-    var ts :SearchStokcInfoEnum?=null
+    var ts: SearchStokcInfoEnum? = null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
@@ -44,12 +44,11 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     }
 
     fun setType(type: SearchStokcInfoEnum?) {
-           ts = type
+        ts = type
     }
 
 
-
-    fun getData(type: SearchStokcInfoEnum?,str:String) {
+    fun getData(type: SearchStokcInfoEnum?, str: String) {
         listhot.clear()
         history.clear()
         list.clear()
@@ -78,11 +77,12 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         return viewModel?.infoadapter?.value
     }
 
-    fun getStockData(str:String){
+    fun getStockData(str: String) {
         listhot.clear()
-        getTopicStockData(str,20)
+        getTopicStockData(str, 20)
     }
-    fun getStockInfoData(){
+
+    fun getStockInfoData() {
         history.clear()
         for (i in 0..4) {
             history.add(i)
@@ -105,8 +105,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     fun onStockSearchResponse(response: StockSearchResponse) {
         val datas = response.data?.datas
         if (datas.isNullOrEmpty()) return
-        when((response.request as StockSearchRequest).pageSize){
-              5->{
+        when ((response.request as StockSearchRequest).pageSize) {
+            5 -> {
                 history.clear()
                 list.clear()
                 for (i in 0..4) {
@@ -123,7 +123,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 LogUtils.e("tttttt-----all----" + viewModel?.adapter?.value?.items?.size.toString())
                 LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
             }
-            20->{
+            20 -> {
                 viewModel?.stockadapter?.value?.clearItems()
                 if (viewModel?.stockadapter?.value?.items == null) {
                     viewModel?.stockadapter?.value?.items = ArrayList()
@@ -139,7 +139,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSearchTypeEvent(event: TopicStockEvent) {
-        if(ts==event.enum) {
+        if (ts == event.enum) {
             // 点击添加到自选列表
             if (LocalAccountConfig.read().isLogin()) {
                 // 已登录
@@ -166,7 +166,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSearchTabChangeEvent(event: SelectsSearchTabEvent) {
-        if(ts==event.enum) {
+        if (ts == event.enum) {
             when (event.enum) {
                 SearchStokcInfoEnum.All -> {
                     view?.detailInfo(event.str)
@@ -184,27 +184,32 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSearchTabPositionEvent(event: TabPositionEvent) {
         when (event.pos) {
-                0 -> {
-                    setType(SearchStokcInfoEnum.All)
-                    view?.initonlazy()
-                }
-                1 -> {
-                    setType(SearchStokcInfoEnum.Stock)
-                    view?.initonlazy()
-                }
-               2 -> {
-                   setType(SearchStokcInfoEnum.Info)
-                   view?.initonlazy()
-
-                }
+            0 -> {
+                setType(SearchStokcInfoEnum.All)
+                view?.initonlazy()
             }
+            1 -> {
+                setType(SearchStokcInfoEnum.Stock)
+                view?.initonlazy()
+            }
+            2 -> {
+                setType(SearchStokcInfoEnum.Info)
+                view?.initonlazy()
 
+            }
+        }
+
+    }
+
+    override fun onBaseResponse(response: BaseResponse) {
+        if (response.request is CollectionStockRequest) {
+            // 传递添加自选股
+            RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
+            toast(R.string.add_topic_successful)
+        }
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
     }
-
-
-
 }
