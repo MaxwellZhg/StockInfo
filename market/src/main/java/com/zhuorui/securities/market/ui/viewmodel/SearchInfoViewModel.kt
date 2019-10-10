@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockPageInfo
+import com.zhuorui.securities.market.model.TestSeachDefaultData
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 
 /**
@@ -15,7 +17,7 @@ import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
  * Desc:
  */
 class SearchInfoViewModel :ViewModel(){
-    var adapter: MutableLiveData<SearchInfoAdapter> = MutableLiveData()
+    var searchInfoDatas: MutableLiveData<MutableList<TestSeachDefaultData>> = MutableLiveData()
     var fragments=ArrayList<StockPageInfo>()
     init {
         fragments.add(StockPageInfo(ResUtil.getString(R.string.stock_search_all),SearchStokcInfoEnum.All))

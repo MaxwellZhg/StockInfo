@@ -2,6 +2,9 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.TestSeachDefaultData
 import com.zhuorui.securities.market.ui.adapter.SeachAllofInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.StockAdapter
 import com.zhuorui.securities.market.ui.adapter.StockInfoAdapter
@@ -13,7 +16,8 @@ import com.zhuorui.securities.market.ui.adapter.StockInfoAdapter
  * Desc:
  */
 class SearchResultInfoViewModel :ViewModel(){
-    var adapter: MutableLiveData<SeachAllofInfoAdapter> = MutableLiveData()
-    var stockadapter: MutableLiveData<StockAdapter> = MutableLiveData()
-    var infoadapter: MutableLiveData<StockInfoAdapter> = MutableLiveData()
+    var searchInfoDatas: MutableLiveData<MutableList<SearchDeafaultData>> = MutableLiveData()
+    var stockdatas: MutableLiveData<MutableList<SearchStockInfo>> = MutableLiveData()
+    var infoadatas: MutableLiveData<MutableList<TestSeachDefaultData>> = MutableLiveData()
+    var infos: MutableLiveData<MutableList<Int>> = MutableLiveData()
 }

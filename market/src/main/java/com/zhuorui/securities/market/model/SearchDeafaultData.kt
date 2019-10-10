@@ -6,6 +6,6 @@ package com.zhuorui.securities.market.model
  * Date: 2019/9/20
  * Desc:
  */
-class SearchDeafaultData(var hotlist:List<SearchStockInfo>,var history:ArrayList<Int>){
+class SearchDeafaultData(var hotlist:List<SearchStockInfo?>,var history:ArrayList<Int>){
 
 }

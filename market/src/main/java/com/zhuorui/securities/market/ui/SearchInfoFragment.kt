@@ -19,9 +19,9 @@ import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.event.TabPositionEvent
-import com.zhuorui.securities.market.manager.InputObserverManager
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
+import com.zhuorui.securities.market.model.TestSeachDefaultData
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.SearchInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
@@ -46,6 +46,7 @@ import kotlin.collections.ArrayList
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
     SearchInfoView, View.OnClickListener, TextWatcher{
+
     var mfragment=ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
     override val layout: Int
@@ -72,6 +73,7 @@ class SearchInfoFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        presenter?.setLifecycleOwner(this)
         adapter = presenter?.getAdapter()
         search_info.adapter = adapter
         presenter?.getData()
@@ -212,6 +214,13 @@ class SearchInfoFragment :
     override fun onDetach() {
         super.onDetach()
         hideSoftInput()
+    }
+    override fun notifyDataSetChanged(list: List<TestSeachDefaultData>?) {
+        if (adapter?.items == null) {
+            adapter?.items = list
+        } else {
+            adapter?.notifyDataSetChanged()
+        }
     }
 
 }

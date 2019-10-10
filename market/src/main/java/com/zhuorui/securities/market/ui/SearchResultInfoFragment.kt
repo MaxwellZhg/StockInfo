@@ -7,6 +7,8 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchResultInfoBinding
 import com.zhuorui.securities.market.model.OnNotifyObserver
+import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.ui.adapter.SeachAllofInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.StockAdapter
@@ -25,7 +27,6 @@ import me.jessyan.autosize.utils.LogUtils
  */
 class SearchResultInfoFragment :
     AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView {
-
     private var adapter: SeachAllofInfoAdapter? = null
     private var stockadapter: StockAdapter? = null
     private var infoadapter: StockInfoAdapter? = null
@@ -59,6 +60,7 @@ class SearchResultInfoFragment :
         stockadapter = presenter?.getStockAdapter()
         infoadapter = presenter?.getStockInfoAdapter()
         presenter?.setType(type)
+        presenter?.setLifecycleOwner(this)
          if (presenter?.ts!=null) {
              initRv(presenter?.ts)
           }else{
@@ -68,18 +70,21 @@ class SearchResultInfoFragment :
 
     override fun detailInfo(str: String) {
         rv_serach_all.adapter = adapter
+        adapter?.setkeywords(str)
         presenter?.getData(type, str)
         adapter?.notifyDataSetChanged()
     }
 
     override fun detailStock(str: String) {
         presenter?.getStockData(str)
+        stockadapter?.setkeywords(str)
         rv_serach_all.adapter = stockadapter
         stockadapter?.notifyDataSetChanged()
     }
 
     override fun detailStockInfo(str: String) {
         presenter?.getStockInfoData()
+        infoadapter?.setkeywords(str)
         rv_serach_all.adapter = infoadapter
         infoadapter?.notifyDataSetChanged()
     }
@@ -104,5 +109,36 @@ class SearchResultInfoFragment :
     override fun initonlazy() {
          init()
     }
+    override fun addInfoToAdapter(list: List<Int>?) {
+        if(presenter?.ts==SearchStokcInfoEnum.Info) {
+            infoadapter?.clearItems()
+            if (infoadapter?.items == null) {
+                infoadapter?.items = ArrayList()
+            }
+            infoadapter?.addItems(list)
+        }
+    }
+
+    override fun addStockToAdapter(list: List<SearchStockInfo>?) {
+        if(presenter?.ts==SearchStokcInfoEnum.Stock) {
+            stockadapter?.clearItems()
+            if (stockadapter?.items == null) {
+                stockadapter?.items = ArrayList()
+            }
+            stockadapter?.addItems(list)
+        }
+
+    }
+
+    override fun addAllToAdapter(list: List<SearchDeafaultData>?) {
+        if(presenter?.ts==SearchStokcInfoEnum.All) {
+            adapter?.clearItems()
+            if (adapter?.items == null) {
+                adapter?.items = ArrayList()
+            }
+            adapter?.addItems(list)
+        }
+    }
+
 }
 
