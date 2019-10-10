@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.manager
 import com.zhuorui.securities.market.model.OnNotifyObserver
 import com.zhuorui.securities.market.model.OnSubject
 import com.zhuorui.securities.market.model.OnSubject.list
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 
 /**
  * Created by Maxwell.
@@ -11,18 +12,19 @@ import com.zhuorui.securities.market.model.OnSubject.list
  * Desc:
  */
 open class InputObserverManager : OnSubject<OnNotifyObserver>{
+    override fun notifyAllObservers(str: String, infoEnum: SearchStokcInfoEnum?) {
+        for(obs in list){
+            obs.updateInput(str,infoEnum)
+        }
+    }
+
     override fun registerObserver(obs: OnNotifyObserver?) {
         list.add(obs)
     }
 
     override fun removeObserver(obs: OnNotifyObserver?) {
-       list.remove(obs)
+         list.remove(obs)
     }
 
-    override fun notifyAllObservers(str :String) {
-        for(obs in list){
-            obs.updateInput(str)
-        }
     }
 
-}

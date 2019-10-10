@@ -21,5 +21,5 @@ public interface OnSubject<T> {
     void removeObserver(T obs);
 
     //通知所有的观察者更新状态
-    void notifyAllObservers(String str);
+    void notifyAllObservers(String str,SearchStokcInfoEnum infoEnum);
 }

@@ -9,6 +9,8 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface SearchResultInfoView :AbsView{
+  fun init()
+  fun initonlazy()
   fun detailInfo(str:String)
   fun detailStock(str:String)
   fun detailStockInfo(str:String)

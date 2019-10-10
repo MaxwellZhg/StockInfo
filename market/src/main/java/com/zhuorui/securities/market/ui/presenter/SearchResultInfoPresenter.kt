@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.presenter
 
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -33,8 +34,8 @@ import me.jessyan.autosize.utils.LogUtils
  * Date: 2019/9/20
  * Desc:
  */
-class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
-   private var type :SearchStokcInfoEnum?=null
+class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
+    var ts :SearchStokcInfoEnum?=null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
@@ -43,8 +44,9 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
     }
 
     fun setType(type: SearchStokcInfoEnum?) {
-          this.type = type
+           ts = type
     }
+
 
 
     fun getData(type: SearchStokcInfoEnum?,str:String) {
@@ -137,7 +139,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSearchTypeEvent(event: TopicStockEvent) {
-        if(type==event.enum) {
+        if(ts==event.enum) {
             // 点击添加到自选列表
             if (LocalAccountConfig.read().isLogin()) {
                 // 已登录
@@ -164,17 +166,43 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSearchTabChangeEvent(event: SelectsSearchTabEvent) {
-         when(event.enum){
-             SearchStokcInfoEnum.All->{
-                 view?.detailInfo(event.str)
-             }
-             SearchStokcInfoEnum.Stock->{
-                 view?.detailStock(event.str)
-             }
-             SearchStokcInfoEnum.Info->{
-                view?.detailStockInfo(event.str)
-             }
-         }
+        if(ts==event.enum) {
+            when (event.enum) {
+                SearchStokcInfoEnum.All -> {
+                    view?.detailInfo(event.str)
+                }
+                SearchStokcInfoEnum.Stock -> {
+                    view?.detailStock(event.str)
+                }
+                SearchStokcInfoEnum.Info -> {
+                    view?.detailStockInfo(event.str)
+                }
+            }
+        }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchTabPositionEvent(event: TabPositionEvent) {
+        when (event.pos) {
+                0 -> {
+                    setType(SearchStokcInfoEnum.All)
+                    view?.initonlazy()
+                }
+                1 -> {
+                    setType(SearchStokcInfoEnum.Stock)
+                    view?.initonlazy()
+                }
+               2 -> {
+                   setType(SearchStokcInfoEnum.Info)
+                   view?.initonlazy()
+
+                }
+            }
+
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
     }
 
 

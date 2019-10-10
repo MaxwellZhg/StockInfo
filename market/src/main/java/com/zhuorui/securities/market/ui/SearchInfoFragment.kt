@@ -18,6 +18,8 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
+import com.zhuorui.securities.market.event.TabPositionEvent
+import com.zhuorui.securities.market.manager.InputObserverManager
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
@@ -44,7 +46,6 @@ import kotlin.collections.ArrayList
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
     SearchInfoView, View.OnClickListener, TextWatcher{
-
     var mfragment=ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
     override val layout: Int
@@ -94,6 +95,7 @@ class SearchInfoFragment :
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
+                    RxBus.getDefault().post(TabPositionEvent(viewpager.currentItem))
                     presenter?.initViewPager(it,mfragment[viewpager.currentItem].type)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
@@ -124,7 +126,7 @@ class SearchInfoFragment :
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): SearchResultInfoFragment {
-            return SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
+            return  SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
         }
 
         override fun getCount(): Int {
@@ -176,9 +178,6 @@ class SearchInfoFragment :
             viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                     magic_indicator.onPageScrollStateChanged(state)
-                    if(state==0){
-                        RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[viewpager.currentItem].type))
-                    }
                 }
 
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -187,7 +186,8 @@ class SearchInfoFragment :
 
                 override fun onPageSelected(position: Int) {
                     magic_indicator.onPageSelected(position)
-                    RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[position].type))
+                    RxBus.getDefault().post(TabPositionEvent(position))
+                    RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[viewpager.currentItem].type))
                 }
             })
 
