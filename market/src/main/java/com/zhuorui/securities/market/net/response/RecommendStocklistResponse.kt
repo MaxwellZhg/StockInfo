@@ -14,7 +14,7 @@ class RecommendStocklistResponse : BaseResponse() {
 
     data class Data(
         val currentPage: Int,
-        val datas: MutableList<StockMarketInfo>,
+        val datas: ArrayList<StockMarketInfo>,
         val pageSize: Int,
         val totalPage: Int,
         val totalRecord: Int

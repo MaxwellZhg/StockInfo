@@ -184,7 +184,7 @@ class SimulationTradingSearchFragment :
                     onClickStock(data)
                 }
             }
-            val list: MutableList<StockMarketInfo> = LocalStocksConfig.read().getStocks()
+            val list: MutableList<StockMarketInfo> = LocalStocksConfig.getInstance().getStocks()
             choiceAdapter?.setData(list.toMutableList())
         }
         return choiceAdapter

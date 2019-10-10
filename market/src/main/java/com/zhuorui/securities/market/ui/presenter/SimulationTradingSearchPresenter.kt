@@ -6,16 +6,11 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
-import com.zhuorui.securities.market.ui.view.SimulationTradingRuleView
 import com.zhuorui.securities.market.ui.view.SimulationTradingSearchView
-import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingRuleViewModel
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingSearchViewModel
-import me.jessyan.autosize.utils.LogUtils
 
 /**
  *    author : liuwei
@@ -42,14 +37,5 @@ class SimulationTradingSearchPresenter :
         val datas = response.data?.datas
         if (datas.isNullOrEmpty()) return
         view?.setSearchData(datas)
-
     }
-
-    /**
-     * 获取自选股
-     */
-    fun getStocks(): MutableList<StockMarketInfo> {
-        return LocalStocksConfig.read().getStocks()
-    }
-
 }
