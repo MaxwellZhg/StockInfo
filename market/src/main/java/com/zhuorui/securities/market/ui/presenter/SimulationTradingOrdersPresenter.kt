@@ -16,6 +16,9 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.view.SimulationTradingOrdersView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingOrdersViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  *    author : liuwei
@@ -25,41 +28,61 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
  */
 class SimulationTradingOrdersPresenter :
     AbsNetPresenter<SimulationTradingOrdersView, SimulationTradingOrdersViewModel>() {
-    private var page: Int = 0
+    private var mPage: Int = 1
     private var sDate: String = ""
     private var eDate: String = ""
+    private var disposable: Disposable? = null
 
     fun getOrders(sDate: String, eDate: String) {
         this.sDate = sDate
         this.eDate = eDate
-        page = 0
         view?.onRefreshData()
-        getOrders(sDate, eDate, 1)
+        getOrders(sDate, eDate, 1, false)
+    }
+
+    fun refresh() {
+        getOrders(sDate, eDate, 1, true)
     }
 
     fun getOrdersMore() {
-        getOrders(sDate, eDate, page + 1)
+        getOrders(sDate, eDate, mPage, false)
     }
 
-    private fun getOrders(sDate: String, eDate: String, page: Int) {
+    private fun getOrders(sDate: String, eDate: String, page: Int, refresh: Boolean) {
         val accountInfo = LocalAccountConfig.read().getAccountInfo()
-        val request = OrderListRequest(STInfoManager.getInstance().getSTFundAccountData().accountId, sDate, eDate, accountInfo.token!!, page, 20, transactions.createTransaction())
-        Cache[ISimulationTradeNet::class.java]?.orderList(request)
-            ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
-    }
-
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onOrderListResponse(response: OrderListResponse) {
-        page++
-        view?.addData(response.data.total!!,response.data.list)
-    }
-
-
-    override fun onErrorResponse(response: ErrorResponse) {
-        super.onErrorResponse(response)
-        if (response.request is OrderListRequest) {
-            view?.getDataError(response.msg!!)
-        }
+        val request = OrderListRequest(
+            STInfoManager.getInstance().getSTFundAccountData().accountId,
+            sDate,
+            eDate,
+            accountInfo.token!!,
+            page,
+            20,
+            transactions.createTransaction()
+        )
+        if (disposable != null && !disposable!!.isDisposed) disposable!!.dispose()
+        disposable = Cache[ISimulationTradeNet::class.java]?.orderList(request)
+            ?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(io.reactivex.functions.Consumer {
+                if (page > 1) {
+                    view?.onFinishLoadMore()
+                } else {
+                    view?.onFinishRefresh()
+                }
+                if (it.isSuccess()) {
+                    mPage += page
+                    if (refresh) view?.onRefreshData()
+                    view?.addData(it.data.total!!, it.data.list)
+                } else {
+                    view?.getDataError(it.msg!!)
+                }
+            }, io.reactivex.functions.Consumer {
+                view?.getDataError(it.message!!)
+                if (page > 1) {
+                    view?.onFinishLoadMore()
+                } else {
+                    view?.onFinishRefresh()
+                }
+            })
     }
 
 }

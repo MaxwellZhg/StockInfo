@@ -6,6 +6,9 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.zhuorui.commonwidget.dialog.DatePickerDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -37,13 +40,12 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class SimulationTradingOrdersFragment :
     AbsSwipeBackNetFragment<FragmentSimulationTradingOrdersBinding, SimulationTradingOrdersViewModel, SimulationTradingOrdersView, SimulationTradingOrdersPresenter>(),
-    SimulationTradingOrdersView, View.OnClickListener {
+    SimulationTradingOrdersView, View.OnClickListener, OnRefreshListener, OnLoadMoreListener {
 
-    val timeFormat = "yyyy-MM-dd"
+    private val timeFormat = "yyyy-MM-dd"
     var orderAdapter: SimulationTradingOrderAdapter? = null
     var tabTitle: Array<String>? = null
     var datePicker: DatePickerDialog? = null
-    var canLoadMore = false
 
     companion object {
         fun newInstance(): SimulationTradingOrdersFragment {
@@ -66,48 +68,41 @@ class SimulationTradingOrdersFragment :
     override val getView: SimulationTradingOrdersView
         get() = this
 
-
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         datePicker = context?.let { DatePickerDialog(it) }
         start_date.setOnClickListener(this)
         end_date.setOnClickListener(this)
+        smart_refresh.setOnRefreshListener(this)
+        smart_refresh.setOnLoadMoreListener(this)
         tabTitle = ResUtil.getStringArray(com.zhuorui.securities.market.R.array.order_screen_time)
         magic_indicator.navigator = getNavigator()
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.adapter = getMockStockOrderAdapter()
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            //用来标记是否正在向最后一个滑动
-            var isSlidingToLast = false
+    }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val manager = recyclerView.layoutManager as LinearLayoutManager
-                // 当不滚动时
-                if (newState === RecyclerView.SCROLL_STATE_IDLE) {
-                    //获取最后一个完全显示的ItemPosition
-                    val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
-                    val totalItemCount = manager.itemCount
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        presenter?.getOrdersMore()
+    }
 
-                    // 判断是否滚动到底部
-                    if (canLoadMore && lastVisibleItem == totalItemCount - 1 && isSlidingToLast) {
-                        onLoadMore()
-                    }
-                }
-            }
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        smart_refresh.setEnableLoadMore(false)
+        presenter?.refresh()
+    }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                isSlidingToLast = dy > 0
-            }
-        })
+    override fun onFinishRefresh() {
+        smart_refresh.finishRefresh()
+    }
+
+    override fun onFinishLoadMore() {
+        smart_refresh.finishLoadMore()
     }
 
     override fun addData(total: Int, list: List<STOrderData>?) {
         orderAdapter?.addDatas(list)
         orderAdapter?.notifyDataSetChanged()
         val dataSize = orderAdapter!!.datas!!.size
-        canLoadMore =  dataSize < total
+        smart_refresh.setEnableLoadMore(dataSize < total)
         orderAdapter?.setEmptyMassge(ResUtil.getString(R.string.str_no_record_historical_transactions)!!)
     }
 
@@ -115,15 +110,12 @@ class SimulationTradingOrdersFragment :
         orderAdapter?.clear()
         orderAdapter?.setEmptyMassge(ResUtil.getString(R.string.loading_data)!!)
         orderAdapter?.notifyDataSetChanged()
-        canLoadMore = false
+        smart_refresh.setEnableLoadMore(false)
     }
 
     override fun getDataError(msg: String) {
         orderAdapter?.setEmptyMassge(msg)
-    }
-
-    private fun onLoadMore() {
-        presenter?.getOrdersMore()
+        smart_refresh
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
@@ -159,7 +151,7 @@ class SimulationTradingOrdersFragment :
                         presenter?.getOrders(date, end_date?.text.toString())
                     }
                 })
-                datePicker?.setCurrentData(start_date.text.toString(), "yyyy-MM-dd")
+                datePicker?.setCurrentData(start_date.text.toString(), timeFormat)
                 datePicker?.show()
             }
             end_date -> {
@@ -169,7 +161,7 @@ class SimulationTradingOrdersFragment :
                         presenter?.getOrders(start_date?.text.toString(), date)
                     }
                 })
-                datePicker?.setCurrentData(end_date.text.toString(), "yyyy-MM-dd")
+                datePicker?.setCurrentData(end_date.text.toString(), timeFormat)
                 datePicker?.show()
 
             }
@@ -202,9 +194,9 @@ class SimulationTradingOrdersFragment :
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
                 colorTransitionPagerTitleView.normalColor =
-                    ResUtil.getColor(com.zhuorui.securities.market.R.color.color_232323)!!
+                    ResUtil.getColor(R.color.color_232323)!!
                 colorTransitionPagerTitleView.selectedColor =
-                    ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select)!!
+                    ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 14f
                 colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
@@ -218,7 +210,7 @@ class SimulationTradingOrdersFragment :
             override fun getIndicator(context: Context): IPagerIndicator {
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select))
+                indicator.setColors(ResUtil.getColor(R.color.tab_select))
                 indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
                 indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator
