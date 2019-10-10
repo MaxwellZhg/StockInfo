@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.net.request
 
 import com.zhuorui.securities.base2app.network.BaseRequest
+import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
  *    author : PengXianglin
@@ -9,7 +10,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  *    desc   : 添加自选股
  */
 class CollectionStockRequest(
-    val custom: Any,
+    val stockInfo: SearchStockInfo,
     val type: Int,
     val ts: String,
     val code: String,

@@ -9,8 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.model.IStocks
-import com.zhuorui.securities.market.model.StockMarketInfo
+import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
  *    author : liuwei
@@ -29,7 +28,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
     var mEmptyMsg: String? = null
     var types: Array<Int?> = arrayOfNulls(2)
     var listener: OnSimulationTradingSearchListener? = null
-    var datas: MutableList<IStocks>? = null
+    var datas: MutableList<SearchStockInfo>? = null
     var posOff = 0
 
 
@@ -52,7 +51,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
         initItemViewType()
     }
 
-    fun setData(list: MutableList<IStocks>?) {
+    fun setData(list: MutableList<SearchStockInfo>?) {
         datas?.clear()
         list?.let { datas?.addAll(it) }
         initItemViewType()
@@ -150,9 +149,9 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
             code = itemView.findViewById(R.id.tv_code)
         }
 
-        fun bindData(data: IStocks) {
-            name?.text = data.getIName()
-            code?.text = data.getITsCode()
+        fun bindData(data: SearchStockInfo) {
+            name?.text = data.name
+            code?.text = data.tsCode
         }
 
     }
@@ -160,7 +159,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     interface OnSimulationTradingSearchListener {
-        fun onItemClick(stocks: IStocks)
+        fun onItemClick(stocks: SearchStockInfo)
     }
 
 

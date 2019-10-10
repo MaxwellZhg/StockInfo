@@ -35,19 +35,20 @@ import java.util.regex.Pattern
  */
 class RemindSettingFragment :
     AbsSwipeBackEventFragment<FragmentRemindSettingBinding, RemindSettingViewModel, RemindSettingView, RemindSettingPresenter>(),
-    RemindSettingView, View.OnClickListener,TextWatcher,View.OnTouchListener,View.OnFocusChangeListener{
-    private var stockInfo:StockMarketInfo?=null
-    private var upPrice:Boolean =false
-    private var downPrice:Boolean =false
-    private var upRate:Boolean =false
-    private var downRate:Boolean =false
+    RemindSettingView, View.OnClickListener, TextWatcher, View.OnTouchListener, View.OnFocusChangeListener {
+    private var stockInfo: StockMarketInfo? = null
+    private var upPrice: Boolean = false
+    private var downPrice: Boolean = false
+    private var upRate: Boolean = false
+    private var downRate: Boolean = false
     val pattern = "^([1-9]\\d*(\\.\\d*[1-9])?)|(0\\.\\d*[1-9])\$"
+
     companion object {
         fun newInstance(stockInfo: StockMarketInfo?): RemindSettingFragment {
             val fragment = RemindSettingFragment()
             if (stockInfo != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("stockInfo", stockInfo)
+                bundle.putParcelable(StockMarketInfo::class.java.simpleName, stockInfo)
                 fragment.arguments = bundle
             }
             return fragment
@@ -72,11 +73,12 @@ class RemindSettingFragment :
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
+
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        stockInfo=arguments?.getSerializable("stockInfo") as StockMarketInfo?
+        stockInfo = arguments?.getParcelable(StockMarketInfo::class.java.simpleName)
         iv_back.setOnClickListener(this)
-        textView.text=stockInfo?.name
+        textView.text = stockInfo?.name
         when (stockInfo?.ts) {
             StockTsEnum.HK.name -> {
                 imageView.setImageResource(R.mipmap.ic_ts_hk)
@@ -88,17 +90,26 @@ class RemindSettingFragment :
                 imageView.setImageResource(R.mipmap.ic_ts_sz)
             }
         }
-        textView2.text=stockInfo?.code
+        textView2.text = stockInfo?.code
         // 跌涨幅是否大于0或者等于0
         val diffPriceVal = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()
         if (diffPriceVal == 0 || diffPriceVal > 0) {
-            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(),diffPriceVal)
-            tv_diff_price_count.setText(if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),diffPriceVal)
-            tv_diff_rate_count.setText (if(stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate .toString(),diffPriceVal)
+            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(), diffPriceVal)
+            tv_diff_price_count.setText(
+                if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),
+                diffPriceVal
+            )
+            tv_diff_rate_count.setText(
+                if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate.toString(),
+                diffPriceVal
+            )
         } else {
-            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(),2)
-            tv_diff_price_count.setText(if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),2)
-            tv_diff_rate_count.setText (if(stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate .toString(),2)
+            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(), 2)
+            tv_diff_price_count.setText(
+                if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),
+                2
+            )
+            tv_diff_rate_count.setText(if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate.toString(), 2)
         }
         et_up_price.addTextChangedListener(this)
         et_down_price.addTextChangedListener(this)
@@ -122,57 +133,77 @@ class RemindSettingFragment :
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.iv_back-> {
-              pop()
+            R.id.iv_back -> {
+                pop()
             }
-            R.id.iv_up_price->{
-               deatilSwithBtn(iv_up_price,upPrice)
+            R.id.iv_up_price -> {
+                deatilSwithBtn(iv_up_price, upPrice)
             }
-            R.id.iv_down_price->{
-                deatilSwithBtn(iv_down_price,downPrice)
+            R.id.iv_down_price -> {
+                deatilSwithBtn(iv_down_price, downPrice)
             }
-            R.id.iv_up_rate->{
-                deatilSwithBtn(iv_up_rate,upRate)
+            R.id.iv_up_rate -> {
+                deatilSwithBtn(iv_up_rate, upRate)
             }
-            R.id.iv_down_rate->{
-                deatilSwithBtn(iv_down_rate,downRate)
+            R.id.iv_down_rate -> {
+                deatilSwithBtn(iv_down_rate, downRate)
             }
-           R.id.tv_save->{
-               presenter?.deatilSave(et_up_price.text.toString(),et_down_price.text.toString(),et_up_rate.text.toString(),et_down_rate.text.toString(),stockInfo)
-           }
-            R.id.tv_open_setting->{
-               GotoSettingUtil.gotoSetting(requireContext())
+            R.id.tv_save -> {
+                presenter?.deatilSave(
+                    et_up_price.text.toString(),
+                    et_down_price.text.toString(),
+                    et_up_rate.text.toString(),
+                    et_down_rate.text.toString(),
+                    stockInfo
+                )
+            }
+            R.id.tv_open_setting -> {
+                GotoSettingUtil.gotoSetting(requireContext())
             }
         }
     }
+
     override fun afterTextChanged(p0: Editable?) {
-        if(!TextUtils.isEmpty(p0.toString())) {
+        if (!TextUtils.isEmpty(p0.toString())) {
             when {
                 et_up_price.isFocused -> {
-                    showCancleDrawable(et_up_price,iv_up_price,p0.toString(),tv_up_nomatch_tips,tips_up_info)
+                    showCancleDrawable(et_up_price, iv_up_price, p0.toString(), tv_up_nomatch_tips, tips_up_info)
                 }
                 et_down_price.isFocused -> {
-                    showCancleDrawable(et_down_price,iv_down_price,p0.toString(),tv_down_nomatch_tips,tips_down_info)
+                    showCancleDrawable(
+                        et_down_price,
+                        iv_down_price,
+                        p0.toString(),
+                        tv_down_nomatch_tips,
+                        tips_down_info
+                    )
                 }
                 et_up_rate.isFocused -> {
-                    showCancleDrawable(et_up_rate,iv_up_rate,p0.toString(),tv_uprate_nomatch_tips,tips_uprate_info)
+                    showCancleDrawable(et_up_rate, iv_up_rate, p0.toString(), tv_uprate_nomatch_tips, tips_uprate_info)
                 }
                 else -> {
-                    showCancleDrawable(et_down_rate,iv_down_rate,p0.toString(),tv_downrate_nomatch_tips,tips_downrate_info)
+                    showCancleDrawable(
+                        et_down_rate,
+                        iv_down_rate,
+                        p0.toString(),
+                        tv_downrate_nomatch_tips,
+                        tips_downrate_info
+                    )
                 }
             }
-        }else{
-            when {  et_up_price.isFocused -> {
-                   detailCancle(et_up_price,iv_up_price,tv_up_nomatch_tips,tips_up_info)
-                 }
+        } else {
+            when {
+                et_up_price.isFocused -> {
+                    detailCancle(et_up_price, iv_up_price, tv_up_nomatch_tips, tips_up_info)
+                }
                 et_down_price.isFocused -> {
-                    detailCancle(et_down_price,iv_down_price,tv_down_nomatch_tips,tips_down_info)
+                    detailCancle(et_down_price, iv_down_price, tv_down_nomatch_tips, tips_down_info)
                 }
                 et_up_rate.isFocused -> {
-                    detailCancle(et_up_rate,iv_up_rate,tv_uprate_nomatch_tips,tips_uprate_info)
+                    detailCancle(et_up_rate, iv_up_rate, tv_uprate_nomatch_tips, tips_uprate_info)
                 }
                 else -> {
-                    detailCancle(et_down_rate,iv_down_rate,tv_downrate_nomatch_tips,tips_downrate_info)
+                    detailCancle(et_down_rate, iv_down_rate, tv_downrate_nomatch_tips, tips_downrate_info)
                 }
             }
         }
@@ -185,28 +216,30 @@ class RemindSettingFragment :
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
     }
+
     override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
         // et.getCompoundDrawables()得到一个长度为4的数组，分别表示左右上下四张图片
-        return when(p0) {   et_up_price-> {
-                 et_up_price.isFocusableInTouchMode=true
-                 detailEditDrawable(et_up_price,event)
-              }
+        return when (p0) {
+            et_up_price -> {
+                et_up_price.isFocusableInTouchMode = true
+                detailEditDrawable(et_up_price, event)
+            }
             et_down_price -> {
-                et_down_price.isFocusableInTouchMode=true
-                detailEditDrawable(et_down_price,event)
+                et_down_price.isFocusableInTouchMode = true
+                detailEditDrawable(et_down_price, event)
             }
             et_up_rate -> {
-                et_up_rate.isFocusableInTouchMode=true
-                detailEditDrawable(et_up_rate,event)
-             }
+                et_up_rate.isFocusableInTouchMode = true
+                detailEditDrawable(et_up_rate, event)
+            }
             else -> {
-                et_down_rate.isFocusableInTouchMode=true
-                detailEditDrawable(et_down_rate,event)
+                et_down_rate.isFocusableInTouchMode = true
+                detailEditDrawable(et_down_rate, event)
             }
         }
     }
 
-    private fun detailEditDrawable(edittext: EditText, event: MotionEvent?):Boolean{
+    private fun detailEditDrawable(edittext: EditText, event: MotionEvent?): Boolean {
         val drawable = edittext.compoundDrawables[2] ?: return false
         //如果右边没有图片，不再处理
         //如果不是按下事件，不再处理
@@ -219,7 +252,7 @@ class RemindSettingFragment :
         return false
     }
 
-    private fun showCancleDrawable(edittext: EditText,iv :ImageButton,str:String,tv:TextView,tips:TextView){
+    private fun showCancleDrawable(edittext: EditText, iv: ImageButton, str: String, tv: TextView, tips: TextView) {
         iv.setImageResource(R.mipmap.ic_switch_open)
         edittext.setCompoundDrawablesWithIntrinsicBounds(
             null,
@@ -227,187 +260,192 @@ class RemindSettingFragment :
             ResUtil.getDrawable(R.mipmap.icon_et_set_cancle),
             null
         )
-        when(edittext){
-            et_up_price->{
-                upPrice=true
-                if(str.toBigDecimal()<stockInfo?.price){
-                    tv.visibility=View.VISIBLE
-                    tips_down_info.visibility=View.INVISIBLE
-                    tips_uprate_info.visibility=View.INVISIBLE
-                    tips_downrate_info.visibility=View.INVISIBLE
-                    tips.visibility=View.INVISIBLE
+        when (edittext) {
+            et_up_price -> {
+                upPrice = true
+                if (str.toBigDecimal() < stockInfo?.price) {
+                    tv.visibility = View.VISIBLE
+                    tips_down_info.visibility = View.INVISIBLE
+                    tips_uprate_info.visibility = View.INVISIBLE
+                    tips_downrate_info.visibility = View.INVISIBLE
+                    tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_price.setTextColor(it) }
-                }else{
-                    tv.visibility=View.INVISIBLE
-                    tips_down_info.visibility=View.INVISIBLE
-                    tips_uprate_info.visibility=View.INVISIBLE
-                    tips_downrate_info.visibility=View.INVISIBLE
-                    var count:BigDecimal?= stockInfo?.price?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
+                } else {
+                    tv.visibility = View.INVISIBLE
+                    tips_down_info.visibility = View.INVISIBLE
+                    tips_uprate_info.visibility = View.INVISIBLE
+                    tips_downrate_info.visibility = View.INVISIBLE
+                    var count: BigDecimal? = stockInfo?.price?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
                         MathUtil.multiply2(
-                            it,100.toBigDecimal())-100.toBigDecimal()
+                            it, 100.toBigDecimal()
+                        ) - 100.toBigDecimal()
                     }
-                    tips.text=ResUtil.getString(R.string.compare_price_up)+count.toString()+"%"
-                    tips.visibility=View.VISIBLE
+                    tips.text = ResUtil.getString(R.string.compare_price_up) + count.toString() + "%"
+                    tips.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_price.setTextColor(it) }
 
                 }
             }
-            et_down_price->{
-                downPrice=true
-                if(str.toBigDecimal()>stockInfo?.price){
-                    tv.visibility=View.VISIBLE
-                    tips_up_info.visibility=View.INVISIBLE
-                    tips_uprate_info.visibility=View.INVISIBLE
-                    tips_downrate_info.visibility=View.INVISIBLE
-                    tips.visibility=View.INVISIBLE
+            et_down_price -> {
+                downPrice = true
+                if (str.toBigDecimal() > stockInfo?.price) {
+                    tv.visibility = View.VISIBLE
+                    tips_up_info.visibility = View.INVISIBLE
+                    tips_uprate_info.visibility = View.INVISIBLE
+                    tips_downrate_info.visibility = View.INVISIBLE
+                    tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_price.setTextColor(it) }
-                }else{
-                    tv.visibility=View.INVISIBLE
-                    tips_up_info.visibility=View.INVISIBLE
-                    tips_uprate_info.visibility=View.INVISIBLE
-                    tips_downrate_info.visibility=View.INVISIBLE
-                    var count:BigDecimal?= stockInfo?.price?.let {
-                            stockInfo?.price?.let { MathUtil.subtract2(it,str.toBigDecimal()) }?.let { it1 ->
-                                MathUtil.divide2(
-                                    it1,
-                                    it
-                                )
-                            }
+                } else {
+                    tv.visibility = View.INVISIBLE
+                    tips_up_info.visibility = View.INVISIBLE
+                    tips_uprate_info.visibility = View.INVISIBLE
+                    tips_downrate_info.visibility = View.INVISIBLE
+                    var count: BigDecimal? = stockInfo?.price?.let {
+                        stockInfo?.price?.let { MathUtil.subtract2(it, str.toBigDecimal()) }?.let { it1 ->
+                            MathUtil.divide2(
+                                it1,
+                                it
+                            )
                         }
-                    var downprecent:BigDecimal?= count?.let { MathUtil.multiply2(it,100.toBigDecimal()) }
-                    tips.text=ResUtil.getString(R.string.compare_price_down)+downprecent.toString()+"%"
-                    tips.visibility=View.VISIBLE
+                    }
+                    var downprecent: BigDecimal? = count?.let { MathUtil.multiply2(it, 100.toBigDecimal()) }
+                    tips.text = ResUtil.getString(R.string.compare_price_down) + downprecent.toString() + "%"
+                    tips.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_price.setTextColor(it) }
                 }
             }
-            et_up_rate->{
-                upRate=true
+            et_up_rate -> {
+                upRate = true
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(str)
-                if(!matcher.find()){
-                    tv.visibility=View.VISIBLE
-                    tips_up_info.visibility=View.INVISIBLE
-                    tips_down_info.visibility=View.INVISIBLE
-                    tips_downrate_info.visibility=View.INVISIBLE
-                    tips.visibility=View.INVISIBLE
+                if (!matcher.find()) {
+                    tv.visibility = View.VISIBLE
+                    tips_up_info.visibility = View.INVISIBLE
+                    tips_down_info.visibility = View.INVISIBLE
+                    tips_downrate_info.visibility = View.INVISIBLE
+                    tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_rate.setTextColor(it) }
-                }else{
-                    tv.visibility=View.INVISIBLE
-                    tips_up_info.visibility=View.INVISIBLE
-                    tips_down_info.visibility=View.INVISIBLE
-                    tips_downrate_info.visibility=View.INVISIBLE
-                    var count :BigDecimal =MathUtil.add2(MathUtil.divide2(str.toBigDecimal(),100.toBigDecimal()),1.toBigDecimal())
-                    var upprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it,count) }
-                    tips.text=ResUtil.getString(R.string.compare_price_to)+upprice
-                    tips.visibility=View.VISIBLE
+                } else {
+                    tv.visibility = View.INVISIBLE
+                    tips_up_info.visibility = View.INVISIBLE
+                    tips_down_info.visibility = View.INVISIBLE
+                    tips_downrate_info.visibility = View.INVISIBLE
+                    var count: BigDecimal =
+                        MathUtil.add2(MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()), 1.toBigDecimal())
+                    var upprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
+                    tips.text = ResUtil.getString(R.string.compare_price_to) + upprice
+                    tips.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_rate.setTextColor(it) }
                 }
             }
-            et_down_rate->{
-                downRate=false
+            et_down_rate -> {
+                downRate = false
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(str)
-                if(!matcher.find()){
-                    tv.visibility=View.VISIBLE
-                    tips_up_info.visibility=View.INVISIBLE
-                    tips_down_info.visibility=View.INVISIBLE
-                    tips_uprate_info.visibility=View.INVISIBLE
-                    tips.visibility=View.INVISIBLE
+                if (!matcher.find()) {
+                    tv.visibility = View.VISIBLE
+                    tips_up_info.visibility = View.INVISIBLE
+                    tips_down_info.visibility = View.INVISIBLE
+                    tips_uprate_info.visibility = View.INVISIBLE
+                    tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_rate.setTextColor(it) }
-                }else{
-                    tv.visibility=View.INVISIBLE
-                    tips_up_info.visibility=View.INVISIBLE
-                    tips_down_info.visibility=View.INVISIBLE
-                    tips_uprate_info.visibility=View.INVISIBLE
-                    var count :BigDecimal =MathUtil.subtract2(1.toBigDecimal(),MathUtil.divide2(str.toBigDecimal(),100.toBigDecimal()))
-                    var downprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it,count) }
-                    tips.text=ResUtil.getString(R.string.compare_price_to)+downprice
-                    tips.visibility=View.VISIBLE
+                } else {
+                    tv.visibility = View.INVISIBLE
+                    tips_up_info.visibility = View.INVISIBLE
+                    tips_down_info.visibility = View.INVISIBLE
+                    tips_uprate_info.visibility = View.INVISIBLE
+                    var count: BigDecimal =
+                        MathUtil.subtract2(1.toBigDecimal(), MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()))
+                    var downprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
+                    tips.text = ResUtil.getString(R.string.compare_price_to) + downprice
+                    tips.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
             }
         }
     }
-    private fun detailCancle(edittext: EditText,iv :ImageButton,tv: TextView,tips:TextView){
+
+    private fun detailCancle(edittext: EditText, iv: ImageButton, tv: TextView, tips: TextView) {
         iv.setImageResource(R.mipmap.ic_switch_close)
         edittext.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-        tv.visibility=View.INVISIBLE
-        tips.visibility=View.INVISIBLE
-        when(edittext){
-            et_up_price->{
-                upPrice=false
+        tv.visibility = View.INVISIBLE
+        tips.visibility = View.INVISIBLE
+        when (edittext) {
+            et_up_price -> {
+                upPrice = false
             }
-            et_down_price-> {
+            et_down_price -> {
                 downPrice = false
             }
-            et_up_rate->{
-                upRate=false
+            et_up_rate -> {
+                upRate = false
             }
-            et_down_rate->{
-                downRate=false
+            et_down_rate -> {
+                downRate = false
             }
         }
     }
 
-    private fun deatilSwithBtn(iv:ImageButton,bool:Boolean){
-      when(iv){
-          iv_up_price->{
-              upPrice = if(upPrice){
-                  iv_up_price.setImageResource(R.mipmap.ic_switch_close)
-                  false
-              }else{
-                  iv_up_price.setImageResource(R.mipmap.ic_switch_open)
-                  true
-              }
-          }
-          iv_down_price->{
-              downPrice = if(downPrice){
-                  iv_down_price.setImageResource(R.mipmap.ic_switch_close)
-                  false
-              }else{
-                  iv_down_price.setImageResource(R.mipmap.ic_switch_open)
-                  true
-              }
-          }
-          iv_up_rate->{
-              upRate = if(upRate){
-                  iv_up_rate.setImageResource(R.mipmap.ic_switch_close)
-                  false
-              }else{
-                  iv_up_rate.setImageResource(R.mipmap.ic_switch_open)
-                  true
-              }
-          }
-          iv_down_rate->{
-              downRate = if(downRate){
-                  iv_down_rate.setImageResource(R.mipmap.ic_switch_close)
-                  false
-              }else{
-                  iv_down_rate.setImageResource(R.mipmap.ic_switch_open)
-                  true
-              }
-          }
-      }
-    }
-    override fun onFocusChange(p0: View?, hasFocus: Boolean) {
-       when(p0){
-           et_up_price->{
-               detailFcousOn(et_up_price,hasFocus)
-           }
-           et_down_price->{
-               detailFcousOn(et_down_price,hasFocus)
-           }
-           et_up_rate->{
-               detailFcousOn(et_up_rate,hasFocus)
-           }
-           et_down_rate->{
-               detailFcousOn(et_down_rate,hasFocus)
-           }
-       }
+    private fun deatilSwithBtn(iv: ImageButton, bool: Boolean) {
+        when (iv) {
+            iv_up_price -> {
+                upPrice = if (upPrice) {
+                    iv_up_price.setImageResource(R.mipmap.ic_switch_close)
+                    false
+                } else {
+                    iv_up_price.setImageResource(R.mipmap.ic_switch_open)
+                    true
+                }
+            }
+            iv_down_price -> {
+                downPrice = if (downPrice) {
+                    iv_down_price.setImageResource(R.mipmap.ic_switch_close)
+                    false
+                } else {
+                    iv_down_price.setImageResource(R.mipmap.ic_switch_open)
+                    true
+                }
+            }
+            iv_up_rate -> {
+                upRate = if (upRate) {
+                    iv_up_rate.setImageResource(R.mipmap.ic_switch_close)
+                    false
+                } else {
+                    iv_up_rate.setImageResource(R.mipmap.ic_switch_open)
+                    true
+                }
+            }
+            iv_down_rate -> {
+                downRate = if (downRate) {
+                    iv_down_rate.setImageResource(R.mipmap.ic_switch_close)
+                    false
+                } else {
+                    iv_down_rate.setImageResource(R.mipmap.ic_switch_open)
+                    true
+                }
+            }
+        }
     }
 
-    fun detailFcousOn(et:EditText,bool: Boolean){
-        if(et.isFocused) {
+    override fun onFocusChange(p0: View?, hasFocus: Boolean) {
+        when (p0) {
+            et_up_price -> {
+                detailFcousOn(et_up_price, hasFocus)
+            }
+            et_down_price -> {
+                detailFcousOn(et_down_price, hasFocus)
+            }
+            et_up_rate -> {
+                detailFcousOn(et_up_rate, hasFocus)
+            }
+            et_down_rate -> {
+                detailFcousOn(et_down_rate, hasFocus)
+            }
+        }
+    }
+
+    fun detailFcousOn(et: EditText, bool: Boolean) {
+        if (et.isFocused) {
             if (bool) {
                 when (TextUtils.isEmpty(et.text.toString())) {
                     true -> {
@@ -423,6 +461,7 @@ class RemindSettingFragment :
             }
         }
     }
+
     override fun onDetach() {
         super.onDetach()
         hideSoftInput()

@@ -212,8 +212,8 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             stock.name = event.stock.name
             stock.type = event.stock.type
             stock.tsCode = event.stock.tsCode
-
-            datas.add(stock)
+            // TODO 添加到顶部
+            datas.add(0, stock)
 
             if (viewModel?.datas?.value.isNullOrEmpty()) {
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
