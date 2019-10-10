@@ -24,6 +24,7 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
     private val context=context
     private val itemHeader=0x01
     private val itemBottom=0x02
+    private lateinit var keywords:String
     override fun getLayout(viewType: Int): Int {
         return when(viewType){
             itemHeader->{
@@ -62,7 +63,7 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
         @BindView(R2.id.rv_stock_info)
         lateinit var rv_stock_info: RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
-            var adapter= SearchStockInfoAdapter()
+            var adapter= SearchStockInfoAdapter(keywords)
             rv_stock_info.setHasFixedSize(true)
             rv_stock_info.isNestedScrollingEnabled=false
             rv_stock_info.adapter=adapter
@@ -80,7 +81,7 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
         @BindView(R2.id.rv_infomation)
         lateinit var rv_infomation: RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
-            var adapter= SearchInfomationAdapter(0)
+            var adapter= SearchInfomationAdapter(0,keywords)
             rv_infomation.setHasFixedSize(true)
             rv_infomation.isNestedScrollingEnabled=false
             rv_infomation.adapter=adapter
@@ -97,6 +98,10 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
             }
         }
 
+    }
+
+    fun setkeywords(str:String){
+         keywords=str
     }
 
 

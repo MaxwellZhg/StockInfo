@@ -13,4 +13,6 @@ interface SimulationTradingOrdersView : AbsView {
     fun addData(total: Int, list: List<STOrderData>?)
     fun getDataError(msg: String)
     fun onRefreshData()
+    fun onFinishRefresh()
+    fun onFinishLoadMore()
 }

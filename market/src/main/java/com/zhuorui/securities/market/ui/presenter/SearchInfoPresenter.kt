@@ -1,16 +1,16 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.content.Context
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
-import com.zhuorui.securities.market.event.SearchAllEvent
+import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
-import com.zhuorui.securities.market.manager.InputObserverManager
-import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.TestSeachDefaultData
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
@@ -40,18 +40,19 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
         var data=TestSeachDefaultData(listhot,history)
         list.add(data)
         list.add(data)
-       viewModel?.adapter?.value?.clearItems()
-      if (viewModel?.adapter?.value?.items == null) {
-            viewModel?.adapter?.value?.items = ArrayList()
+        viewModel?.searchInfoDatas?.value=list
+    }
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.searchInfoDatas?.observe(it,
+                androidx.lifecycle.Observer<List<TestSeachDefaultData>> { t ->
+                    view?.notifyDataSetChanged(t)
+                })
         }
-        viewModel?.adapter?.value?.addItems(list)
-        LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
     }
     fun getAdapter(): SearchInfoAdapter? {
-        if (viewModel?.adapter?.value == null) {
-            viewModel?.adapter?.value = SearchInfoAdapter(context)
-        }
-        return viewModel?.adapter?.value
+        return SearchInfoAdapter(context)
     }
 
     fun initViewPager(str:String,enum:SearchStokcInfoEnum?){

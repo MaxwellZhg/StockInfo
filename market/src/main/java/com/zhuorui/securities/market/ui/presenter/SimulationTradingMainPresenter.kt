@@ -173,7 +173,17 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 transactions.createTransaction()
             )
         Cache[ISimulationTradeNet::class.java]?.orderList(request)
-            ?.enqueue(Network.IHCallBack<OrderListResponse>(request))
+            ?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(io.reactivex.functions.Consumer {
+                count++
+                if (it.isSuccess()) {
+                    orderDatas = it.data.list
+                }
+                topicPrice()
+            }, io.reactivex.functions.Consumer {
+                count++
+                topicPrice()
+            })
     }
 
     /**
@@ -213,15 +223,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         topicPrice()
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onOrderListResponse(response: OrderListResponse) {
-        if (!transactions.isMyTransaction(response)) return
-        count++
-        orderDatas = response.data.list
-        topicPrice()
-    }
-
-
     override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
         when (response.request) {
@@ -235,10 +236,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     override fun onErrorResponse(response: ErrorResponse) {
         when (response.request) {
             is GetPositionRequest -> {
-                count++
-                topicPrice()
-            }
-            is OrderListRequest -> {
                 count++
                 topicPrice()
             }
@@ -322,7 +319,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 val holeCost = if (data?.holeCost != null) data?.holeCost!! else BigDecimal(0)
                 data.presentPrice = presentPrice
                 //持仓市值=现价*持仓数
-                val marketValue =MathUtil.multiply3(presentPrice, holdStockCount)
+                val marketValue = MathUtil.multiply3(presentPrice, holdStockCount)
                 data.marketValue = marketValue
                 //持仓盈亏金额=现价 * 持有数量 - 成本
                 val profitAndLoss = MathUtil.subtract3(MathUtil.multiply3(presentPrice, holdStockCount), holeCost)

@@ -11,7 +11,8 @@ import com.zhuorui.securities.market.R
  * Date: 2019/9/23
  * Desc:
  */
-class StockInfoAdapter :BaseListAdapter<Int>(){
+class StockInfoAdapter() :BaseListAdapter<Int>(){
+    private lateinit var keywords:String
     override fun getLayout(viewType: Int): Int {
        return R.layout.item_seach_stock_infomation_layout
     }
@@ -26,4 +27,8 @@ class StockInfoAdapter :BaseListAdapter<Int>(){
 
         }
     }
+    fun setkeywords(str:String){
+        keywords=str
+    }
+
 }

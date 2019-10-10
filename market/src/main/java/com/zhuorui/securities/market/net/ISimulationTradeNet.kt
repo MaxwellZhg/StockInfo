@@ -40,7 +40,7 @@ interface ISimulationTradeNet {
     fun getPosition(@Body request: GetPositionRequest): Call<GetPositionResponse>
 
     @POST(SimulationTradeApi.ORDER_LIST)
-    fun orderList(@Body request: OrderListRequest): Call<OrderListResponse>
+    fun orderList(@Body request: OrderListRequest): Observable<OrderListResponse>
 
     @POST(SimulationTradeApi.STOCKS_INFO)
     fun getStocksInfo(@Body request: BaseRequest): Call<GetStocksInfoResponse>

@@ -1,6 +1,9 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.TestSeachDefaultData
 
 /**
  * Created by Maxwell.
@@ -14,4 +17,12 @@ interface SearchResultInfoView :AbsView{
   fun detailInfo(str:String)
   fun detailStock(str:String)
   fun detailStockInfo(str:String)
+
+  fun addInfoToAdapter(list: List<Int>?)
+
+  fun addStockToAdapter(list: List<SearchStockInfo>?)
+
+  fun addAllToAdapter(list: List<SearchDeafaultData>?)
+
+
 }
