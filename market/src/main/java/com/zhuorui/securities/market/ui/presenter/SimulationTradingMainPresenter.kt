@@ -82,7 +82,6 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         view?.showLoading()
         val request = FundAccountRequest(1, transactions.createTransaction())
         disposable = Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
-            ?.flatMap { Cache[ISimulationTradeNet::class.java]?.getFundAccount(request) }
             ?.subscribeOn(Schedulers.io())?.observeOn(
                 AndroidSchedulers.mainThread()
             )

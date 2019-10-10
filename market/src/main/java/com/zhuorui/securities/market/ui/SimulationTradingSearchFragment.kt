@@ -18,7 +18,6 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.config.SimulationTradingSearchConfig
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingSearchBinding
-import com.zhuorui.securities.market.model.IStocks
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.adapter.SimulationTradingSearchAdapter
@@ -168,8 +167,8 @@ class SimulationTradingSearchFragment :
         if (searchAdapter == null) {
             searchAdapter = SimulationTradingSearchAdapter(context!!)
             searchAdapter?.listener = object : SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
-                override fun onItemClick(data: IStocks) {
-                    SimulationTradingSearchConfig.read().add(data as SearchStockInfo)
+                override fun onItemClick(data: SearchStockInfo) {
+                    SimulationTradingSearchConfig.read().add(data)
                     onClickStock(data)
                 }
             }
@@ -181,7 +180,7 @@ class SimulationTradingSearchFragment :
         if (choiceAdapter == null) {
             choiceAdapter = SimulationTradingSearchAdapter(context!!)
             choiceAdapter?.listener = object : SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
-                override fun onItemClick(data: IStocks) {
+                override fun onItemClick(data: SearchStockInfo) {
                     onClickStock(data)
                 }
             }
@@ -196,7 +195,7 @@ class SimulationTradingSearchFragment :
             historyAdapter = SimulationTradingSearchAdapter(context!!)
             historyAdapter?.setFooterView(getHistoryFooterView())
             historyAdapter?.listener = object : SimulationTradingSearchAdapter.OnSimulationTradingSearchListener {
-                override fun onItemClick(data: IStocks) {
+                override fun onItemClick(data: SearchStockInfo) {
                     onClickStock(data)
                 }
             }
@@ -223,16 +222,9 @@ class SimulationTradingSearchFragment :
         return clear
     }
 
-    fun onClickStock(data: IStocks) {
+    fun onClickStock(data: SearchStockInfo) {
         var b = Bundle()
-        val stockInfo = SearchStockInfo()
-        stockInfo.id = data.getIID()
-        stockInfo.name = data.getIName()
-        stockInfo.ts = data.getITs()
-        stockInfo.code = data.getICode()
-        stockInfo.tsCode = data.getITsCode()
-        stockInfo.type = data.getIType()
-        b.putParcelable(SearchStockInfo::class.java.simpleName, stockInfo)
+        b.putParcelable(SearchStockInfo::class.java.simpleName, data)
         setFragmentResult(ISupportFragment.RESULT_OK, b)
         pop()
     }
