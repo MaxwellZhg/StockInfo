@@ -14,8 +14,19 @@ class LocalStocksConfig : AbsConfig() {
 
     private var stocks: MutableList<StockMarketInfo> = ArrayList()
 
-    fun getStocks(): MutableList<StockMarketInfo> {
-        return ArrayList(stocks)
+    fun getStocks(vararg ts: String): MutableList<StockMarketInfo> {
+        return when {
+            ts.isNullOrEmpty() -> ArrayList(stocks)
+            else -> {
+                val tempList = ArrayList<StockMarketInfo>()
+                for (stock in stocks) {
+                    if (ts.contains(stock.ts)) {
+                        tempList.add(stock)
+                    }
+                }
+                tempList
+            }
+        }
     }
 
     /**
@@ -65,7 +76,7 @@ class LocalStocksConfig : AbsConfig() {
     /**
      * 删除自选股
      */
-    fun remove(code: String, ts: String): Boolean {
+    fun remove(ts: String, code: String): Boolean {
         val stock = getStock(ts, code)
         if (stock != null) {
             stocks.remove(stock)
@@ -88,6 +99,10 @@ class LocalStocksConfig : AbsConfig() {
                 config.write()
             }
             return config
+        }
+
+        fun clear() {
+            StorageInfra.remove(LocalStocksConfig::class.java)
         }
     }
 }

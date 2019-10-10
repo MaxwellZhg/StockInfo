@@ -150,10 +150,12 @@ class TopicStockListFragment :
     }
 
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
-        if (mAdapter?.items == null) {
-            mAdapter?.items = list
-        } else {
-            mAdapter?.notifyDataSetChanged()
+        _mActivity?.runOnUiThread {
+            if (mAdapter?.items == null) {
+                mAdapter?.items = list
+            } else {
+                mAdapter?.notifyDataSetChanged()
+            }
         }
     }
 
