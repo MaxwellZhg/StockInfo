@@ -16,11 +16,11 @@ import java.security.spec.PKCS8EncodedKeySpec
  */
 object SignUtil {
 
-    fun encryptBASE64(keyBytes: ByteArray): String {
-        return BASE64Encoder().encode(keyBytes).replace("\n","")
+    private fun encryptBASE64(keyBytes: ByteArray): String {
+        return BASE64Encoder().encode(keyBytes).replace("\n", "")
     }
 
-    fun decryptBASE64(privateKey: String): ByteArray? {
+    private fun decryptBASE64(privateKey: String): ByteArray? {
         var output: ByteArray? = null
         try {
             output = BASE64Decoder().decodeBuffer(privateKey)
@@ -43,7 +43,7 @@ object SignUtil {
     }
 
     @Throws(Exception::class)
-    fun getPrivateKeyByStr(privateKey: String): PrivateKey {
+    private fun getPrivateKeyByStr(privateKey: String): PrivateKey {
         val keyBytes = decryptBASE64(privateKey)
         val keySpec = PKCS8EncodedKeySpec(keyBytes)
         val keyFactory = KeyFactory.getInstance("RSA")

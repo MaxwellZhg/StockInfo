@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  *    date   : 2019/8/23 14:19
  *    desc   : 删除自选股
  */
-class DeleteStockRequest(val custom: Any, val ids: Array<String?>, transaction: String) : BaseRequest(transaction) {
+class DeleteStockRequest(val ids: Array<String?>, transaction: String) : BaseRequest(transaction) {
 
     init {
         generateSign()

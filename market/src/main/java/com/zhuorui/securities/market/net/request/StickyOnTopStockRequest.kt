@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  *    date   : 2019/8/23 14:19
  *    desc   : 置顶自选股
  */
-class StickyOnTopStockRequest(val custom: Any, val id: String, transaction: String) : BaseRequest(transaction) {
+class StickyOnTopStockRequest(val id: String, transaction: String) : BaseRequest(transaction) {
 
     init {
         generateSign()
