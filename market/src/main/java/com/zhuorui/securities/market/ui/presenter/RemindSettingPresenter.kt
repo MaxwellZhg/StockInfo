@@ -2,19 +2,15 @@ package com.zhuorui.securities.market.ui.presenter
 
 import android.content.Context
 import android.text.TextUtils
+import androidx.core.app.NotificationManagerCompat
 import com.zhuorui.commonwidget.dialog.DevComfirmDailog
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.model.SearchDeafaultData
-import com.zhuorui.securities.market.model.SettingNoticeData
 import com.zhuorui.securities.market.model.StockMarketInfo
-import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
-import com.zhuorui.securities.market.ui.adapter.SettingNoticeAdapter
 import com.zhuorui.securities.market.ui.view.RemindSettingView
 import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
-import me.jessyan.autosize.utils.LogUtils
 import java.util.regex.Pattern
 
 /**
@@ -65,5 +61,10 @@ class RemindSettingPresenter(context: Context) : AbsEventPresenter<RemindSetting
             .setCancelText(R.string.cancle)
             .setConfirmText(R.string.ensure)
             .setCallBack(this)
+    }
+
+    fun checkSetting():Boolean?{
+        val notificationManager: NotificationManagerCompat? = context?.let { NotificationManagerCompat.from(it) }
+        return notificationManager?.areNotificationsEnabled()
     }
 }

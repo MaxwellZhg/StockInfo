@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.commonwidget.ZrCompareTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.event.TopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 
 /**
  * Created by Maxwell.
@@ -59,7 +62,12 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         }
 
         override fun onClick(v: View) {
-            super.onClick(v)
+                if (v == iv_topic) {
+                    iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
+                    RxBus.getDefault().post(TopicStockEvent( getItem(position), SearchStokcInfoEnum.Stock))
+                } else {
+                    super.onClick(v)
+                }
         }
     }
 

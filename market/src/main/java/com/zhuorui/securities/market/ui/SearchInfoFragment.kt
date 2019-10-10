@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
@@ -26,6 +28,7 @@ import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.SearchInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
+import kotlinx.android.synthetic.main.fragment_remind_setting.*
 import kotlinx.android.synthetic.main.fragment_search_info.*
 import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -45,8 +48,7 @@ import kotlin.collections.ArrayList
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
-    SearchInfoView, View.OnClickListener, TextWatcher{
-
+    SearchInfoView, View.OnClickListener, TextWatcher,View.OnTouchListener{
     var mfragment=ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
     override val layout: Int
@@ -83,6 +85,8 @@ class SearchInfoFragment :
         mfragment?.let { initViewPager(it) }
         tv_cancle.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
+        et_search_info.setOnTouchListener(this)
+
     }
 
     override fun onClick(p0: View?) {
@@ -101,13 +105,21 @@ class SearchInfoFragment :
                     presenter?.initViewPager(it,mfragment[viewpager.currentItem].type)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
+                    et_search_info.setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        null,
+                        ResUtil.getDrawable(R.mipmap.detele_search_tips),
+                        null
+                    )
                 } else {
+                    et_search_info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
                     search_info.visibility = View.VISIBLE
                     ll_search_info.visibility = View.GONE
                 }
             }
 
         } else {
+            et_search_info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             search_info.visibility = View.VISIBLE
             ll_search_info.visibility = View.GONE
         }
@@ -222,5 +234,22 @@ class SearchInfoFragment :
             adapter?.notifyDataSetChanged()
         }
     }
+    override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
+        return detailEditDrawable(et_search_info, event)
+    }
+
+    fun detailEditDrawable(edittext: EditText, event: MotionEvent?): Boolean {
+        val drawable = edittext.compoundDrawables[2] ?: return false
+        //如果右边没有图片，不再处理
+        //如果不是按下事件，不再处理
+        if (event?.action !== MotionEvent.ACTION_UP)
+            return false
+        if (event.x > (edittext.width - edittext.paddingRight - drawable.intrinsicWidth)) {
+            edittext.setText("")
+            edittext.hint = ResUtil.getString(R.string.search_tips)
+        }
+        return false
+    }
+
 
 }

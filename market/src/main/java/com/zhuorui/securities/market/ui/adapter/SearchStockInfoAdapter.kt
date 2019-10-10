@@ -82,7 +82,8 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
 
        override fun onClick(v: View) {
            if (v == iv_topic) {
-              RxBus.getDefault().post(TopicStockEvent( getItem(position),SearchStokcInfoEnum.All))
+               iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
+               RxBus.getDefault().post(TopicStockEvent( getItem(position),SearchStokcInfoEnum.All))
            } else {
                super.onClick(v)
            }
