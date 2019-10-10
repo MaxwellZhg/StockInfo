@@ -7,5 +7,5 @@ package com.zhuorui.securities.market.model;
  * Desc:
  */
 public interface OnNotifyObserver {
-    public void updateInput(String str);
+    public void updateInput(String str,SearchStokcInfoEnum infoEnum);
 }

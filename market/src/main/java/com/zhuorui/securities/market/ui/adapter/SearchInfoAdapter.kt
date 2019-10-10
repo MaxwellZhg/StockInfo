@@ -67,7 +67,9 @@ class SearchInfoAdapter(context:Context?) :BaseListAdapter<TestSeachDefaultData>
             rl_hot.addItemDecoration(
                 SpaceItemDecoration(
                     ResUtil.getDimensionDp2Px(
-                        25f
+                        12.5f
+                    ),    ResUtil.getDimensionDp2Px(
+                        12.5f
                     )
                 )
             )

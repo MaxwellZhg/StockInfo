@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.presenter
 
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -9,10 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.event.AddTopicStockEvent
-import com.zhuorui.securities.market.event.NotifyStockCountEvent
-import com.zhuorui.securities.market.event.SearchAllEvent
-import com.zhuorui.securities.market.event.TopicStockEvent
+import com.zhuorui.securities.market.event.*
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
@@ -36,8 +34,8 @@ import me.jessyan.autosize.utils.LogUtils
  * Date: 2019/9/20
  * Desc:
  */
-class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
-   private var type :SearchStokcInfoEnum?=null
+class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
+    var ts :SearchStokcInfoEnum?=null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
@@ -45,13 +43,10 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
         super.init()
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onSearchALLEvent(event: SearchAllEvent) {
-            view?.detailInfo(event.str)
-    }
     fun setType(type: SearchStokcInfoEnum?) {
-          this.type = type
+           ts = type
     }
+
 
 
     fun getData(type: SearchStokcInfoEnum?,str:String) {
@@ -97,7 +92,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
             viewModel?.infoadapter?.value?.items = ArrayList()
         }
         viewModel?.infoadapter?.value?.addItems(history)
-        LogUtils.e("tttttt" + viewModel?.infoadapter?.value?.items?.size.toString())
+        LogUtils.e("tttttt---info----" + viewModel?.infoadapter?.value?.items?.size.toString())
     }
 
     fun getTopicStockData(keyWord: String, count: Int) {
@@ -125,7 +120,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
                     viewModel?.adapter?.value?.items = ArrayList()
                 }
                 viewModel?.adapter?.value?.addItems(list)
-                LogUtils.e("tttttt" + viewModel?.adapter?.value?.items?.size.toString())
+                LogUtils.e("tttttt-----all----" + viewModel?.adapter?.value?.items?.size.toString())
                 LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
             }
             20->{
@@ -135,7 +130,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
                 }
                 viewModel?.stockadapter?.value?.addItems(datas)
                 viewModel?.stockadapter?.value?.notifyDataSetChanged()
-                LogUtils.e("tttttt" + viewModel?.stockadapter?.value?.items?.size.toString())
+                LogUtils.e("tttttt-----stock----" + viewModel?.stockadapter?.value?.items?.size.toString())
             }
 
         }
@@ -144,7 +139,7 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSearchTypeEvent(event: TopicStockEvent) {
-        if(type==event.enum) {
+        if(ts==event.enum) {
             // 点击添加到自选列表
             if (LocalAccountConfig.read().isLogin()) {
                 // 已登录
@@ -167,6 +162,47 @@ class SearchResultInfoPresenter(type: SearchStokcInfoEnum?) : AbsNetPresenter<Se
                 }
             }
         }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchTabChangeEvent(event: SelectsSearchTabEvent) {
+        if(ts==event.enum) {
+            when (event.enum) {
+                SearchStokcInfoEnum.All -> {
+                    view?.detailInfo(event.str)
+                }
+                SearchStokcInfoEnum.Stock -> {
+                    view?.detailStock(event.str)
+                }
+                SearchStokcInfoEnum.Info -> {
+                    view?.detailStockInfo(event.str)
+                }
+            }
+        }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchTabPositionEvent(event: TabPositionEvent) {
+        when (event.pos) {
+                0 -> {
+                    setType(SearchStokcInfoEnum.All)
+                    view?.initonlazy()
+                }
+                1 -> {
+                    setType(SearchStokcInfoEnum.Stock)
+                    view?.initonlazy()
+                }
+               2 -> {
+                   setType(SearchStokcInfoEnum.Info)
+                   view?.initonlazy()
+
+                }
+            }
+
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
     }
 
 

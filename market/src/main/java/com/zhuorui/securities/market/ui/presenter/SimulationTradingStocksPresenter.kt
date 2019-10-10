@@ -9,6 +9,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.manager.STInfoManager
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
@@ -538,6 +539,17 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         if (response.request is StockTradRequest) {
             // 买入/卖出/修改买入/修改卖出股票成功
             view?.tradStocksSuccessful()
+        }
+    }
+
+    /**
+     * 长链接连接状态发生改变
+     */
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
+        // 恢复订阅
+        if (stockTopicPrice != null && stockTopicTrans != null) {
+            SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
         }
     }
 

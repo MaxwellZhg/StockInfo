@@ -21,6 +21,7 @@ import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.ui.presenter.RemindSettingPresenter
 import com.zhuorui.securities.market.ui.view.RemindSettingView
 import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
+import com.zhuorui.securities.market.util.GotoSettingUtil
 import com.zhuorui.securities.market.util.MathUtil
 import kotlinx.android.synthetic.main.fragment_remind_setting.*
 import java.math.BigDecimal
@@ -89,7 +90,7 @@ class RemindSettingFragment :
         }
         textView2.text=stockInfo?.code
         // 跌涨幅是否大于0或者等于0
-        val diffPriceVal = if (stockInfo?.diffPrice == null) 0 else MathUtil.rounded(stockInfo?.diffPrice!!).toInt()
+        val diffPriceVal = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()
         if (diffPriceVal == 0 || diffPriceVal > 0) {
             tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(),diffPriceVal)
             tv_diff_price_count.setText(if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),diffPriceVal)
@@ -116,6 +117,7 @@ class RemindSettingFragment :
         iv_up_rate.setOnClickListener(this)
         iv_down_rate.setOnClickListener(this)
         tv_save.setOnClickListener(this)
+        tv_open_setting.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -138,6 +140,9 @@ class RemindSettingFragment :
            R.id.tv_save->{
                presenter?.deatilSave(et_up_price.text.toString(),et_down_price.text.toString(),et_up_rate.text.toString(),et_down_rate.text.toString(),stockInfo)
            }
+            R.id.tv_open_setting->{
+               GotoSettingUtil.gotoSetting(requireContext())
+            }
         }
     }
     override fun afterTextChanged(p0: Editable?) {
@@ -418,5 +423,8 @@ class RemindSettingFragment :
             }
         }
     }
-
+    override fun onDetach() {
+        super.onDetach()
+        hideSoftInput()
+    }
 }

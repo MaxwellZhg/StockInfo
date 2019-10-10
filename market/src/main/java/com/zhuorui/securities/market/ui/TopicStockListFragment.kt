@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import com.zhuorui.securities.market.BR
@@ -133,7 +134,7 @@ class TopicStockListFragment :
                                 }
 
                                 override fun onConfirm() {
-                                    presenter?.onDelete(item)
+                                    presenter?.onDeleteStock(item)
                                 }
                             })
                             .show()
@@ -144,7 +145,7 @@ class TopicStockListFragment :
                     item?.longClick = false
                     mAdapter?.notifyItemChanged(pos)
                 }
-            }).showAtLocation(view, Gravity.TOP, location[0], location[1])
+            }).showAtLocation(view, Gravity.TOP, location[0], location[1] + ResUtil.getDimensionDp2Px(12f))
         }
     }
 
