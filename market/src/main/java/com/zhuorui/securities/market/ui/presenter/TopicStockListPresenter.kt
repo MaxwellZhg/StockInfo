@@ -21,10 +21,7 @@ import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.net.IStockNet
-import com.zhuorui.securities.market.net.request.DeleteStockRequest
-import com.zhuorui.securities.market.net.request.RecommendStocklistRequest
-import com.zhuorui.securities.market.net.request.StickyOnTopStockRequest
-import com.zhuorui.securities.market.net.request.SynStockRequest
+import com.zhuorui.securities.market.net.request.*
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
@@ -329,6 +326,9 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         } else if (response.request is SynStockRequest) {
             // 通知同步完成
             RxBus.getDefault().post(SynStockEvent())
+        } else if (response.request is CollectionStockRequest) {
+            // 添加自选股
+            response.request as CollectionStockRequest
         }
     }
 
