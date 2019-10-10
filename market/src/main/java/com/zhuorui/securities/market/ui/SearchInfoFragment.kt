@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -19,7 +21,6 @@ import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.event.TabPositionEvent
-import com.zhuorui.securities.market.manager.InputObserverManager
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
@@ -27,7 +28,6 @@ import com.zhuorui.securities.market.ui.presenter.SearchInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchInfoViewModel
 import kotlinx.android.synthetic.main.fragment_search_info.*
-import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -35,7 +35,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
-import kotlin.collections.ArrayList
 
 /**
  * Created by Maxwell.
@@ -45,8 +44,10 @@ import kotlin.collections.ArrayList
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
-    SearchInfoView, View.OnClickListener, TextWatcher{
-    var mfragment=ArrayList<StockPageInfo>()
+    SearchInfoView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener {
+
+
+    var mfragment = ArrayList<StockPageInfo>()
     private var adapter: SearchInfoAdapter? = null
     override val layout: Int
         get() = R.layout.fragment_search_info
@@ -81,6 +82,7 @@ class SearchInfoFragment :
         mfragment?.let { initViewPager(it) }
         tv_cancle.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
+        (activity as AbsActivity).setDispatchTouchEventListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -96,7 +98,7 @@ class SearchInfoFragment :
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
                     RxBus.getDefault().post(TabPositionEvent(viewpager.currentItem))
-                    presenter?.initViewPager(it,mfragment[viewpager.currentItem].type)
+                    presenter?.initViewPager(it, mfragment[viewpager.currentItem].type)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
                 } else {
@@ -126,7 +128,7 @@ class SearchInfoFragment :
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): SearchResultInfoFragment {
-            return  SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
+            return SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
         }
 
         override fun getCount(): Int {
@@ -138,7 +140,7 @@ class SearchInfoFragment :
         }
     }
 
-   private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
+    private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
         if (viewpager.adapter == null) {
             mfragment = fragments
             // 设置viewpager指示器
@@ -187,7 +189,12 @@ class SearchInfoFragment :
                 override fun onPageSelected(position: Int) {
                     magic_indicator.onPageSelected(position)
                     RxBus.getDefault().post(TabPositionEvent(position))
-                    RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[viewpager.currentItem].type))
+                    RxBus.getDefault().post(
+                        SelectsSearchTabEvent(
+                            et_search_info.text.toString(),
+                            mfragment[viewpager.currentItem].type
+                        )
+                    )
                 }
             })
 
@@ -199,19 +206,19 @@ class SearchInfoFragment :
 
 
     override fun changeTab(enum: ChageSearchTabEvent) {
-         when(enum.enum){
-             SearchStokcInfoEnum.Stock->{
-                 viewpager.currentItem = 1
-             }
-             SearchStokcInfoEnum.Info->{
-                 viewpager.currentItem = 2
-             }
-         }
+        when (enum.enum) {
+            SearchStokcInfoEnum.Stock -> {
+                viewpager.currentItem = 1
+            }
+            SearchStokcInfoEnum.Info -> {
+                viewpager.currentItem = 2
+            }
+        }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        hideSoftInput()
+    override fun onTouch(event: MotionEvent?) {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            hideSoftInput()
+        }
     }
-
 }

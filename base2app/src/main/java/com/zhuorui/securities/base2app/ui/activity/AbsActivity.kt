@@ -13,6 +13,9 @@ import com.zhuorui.securities.base2app.util.QuickClickUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import me.yokeyword.fragmentation.SupportActivity
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.core.content.ContextCompat.getSystemService
+
 
 /**
  * Create by xieyingwu on 2018/4/3.
@@ -46,6 +49,8 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
 
     protected val isDestroy: Boolean
         get() = isFinishing || isDestroyed
+
+    private var dispatchTouchEventListener: OnDispatchTouchEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -184,4 +189,16 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
 
     }
 
+    interface OnDispatchTouchEventListener {
+        fun onTouch(ev: MotionEvent?)
+    }
+
+    public fun setDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener) {
+        this.dispatchTouchEventListener = dispatchTouchEventListener
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        dispatchTouchEventListener?.onTouch(ev)
+        return super.dispatchTouchEvent(ev)
+    }
 }
