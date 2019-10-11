@@ -37,6 +37,7 @@ import me.jessyan.autosize.utils.LogUtils
  */
 class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
     var ts :SearchStokcInfoEnum?=null
+    var str: String?=null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
@@ -47,6 +48,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     fun setType(type: SearchStokcInfoEnum?) {
            ts = type
     }
+
+
 
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
         // 监听datas的变化
@@ -166,12 +169,15 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             when (event.enum) {
                 SearchStokcInfoEnum.All -> {
                     view?.detailInfo(event.str)
+                    str=event.str
                 }
                 SearchStokcInfoEnum.Stock -> {
                     view?.detailStock(event.str)
+                    str=event.str
                 }
                 SearchStokcInfoEnum.Info -> {
                     view?.detailStockInfo(event.str)
+                    str=event.str
                 }
             }
         }
@@ -202,11 +208,23 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         if(response.request is CollectionStockRequest){
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             toast(R.string.add_topic_successful)
+            updateCurrentFragmentData(str)
         }
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
+    }
+
+    fun updateCurrentFragmentData(str :String?){
+        when(ts){
+            SearchStokcInfoEnum.All -> {
+                str?.let { view?.detailInfo(it) }
+            }
+            SearchStokcInfoEnum.Stock -> {
+                str?.let { view?.detailStock(it) }
+            }
+        }
     }
 
 
