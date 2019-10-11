@@ -91,46 +91,52 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe { isLogin ->
-                if (isLogin) {
-                    // 已登录
-                    Cache[IStockNet::class.java]?.myList(request)
-                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
-                } else {
-                    // 未登录
-                    // 先查看是否有缓存
-                    if (!LocalStocksConfig.hasCache()) {
-                        // 本地无缓存，拉取网络数据
-                        Cache[IStockNet::class.java]?.list(request)
+                // 先查看是否有缓存
+                if (!LocalStocksConfig.hasCache()) {
+                    // 无缓存
+                    if (isLogin) {
+                        // 已登录
+                        Cache[IStockNet::class.java]?.myList(request)
                             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
                     } else {
-                        // 本地有缓存，读取本地缓存的自选股
-                        val disposable =
-                            Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
-                                when (ts) {
-                                    null -> emitter.onNext(LocalStocksConfig.getInstance().getStocks())
-                                    StockTsEnum.HK -> emitter.onNext(
-                                        LocalStocksConfig.getInstance().getStocks(
-                                            StockTsEnum.HK.name
-                                        )
-                                    )
-                                    else -> emitter.onNext(
-                                        LocalStocksConfig.getInstance().getStocks(
-                                            StockTsEnum.SH.name,
-                                            StockTsEnum.SZ.name
-                                        )
-                                    )
-                                }
-                                emitter.onComplete()
-                            }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe {
-                                    // 发起订阅
-                                    topicPrice(it)
-                                    // 更新界面数据
-                                    viewModel?.datas?.value = it
-                                }
-                        disposables.add(disposable)
+                        // 未登录
+                        Cache[IStockNet::class.java]?.list(request)
+                            ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
                     }
+                } else {
+                    // 本地有缓存，读取本地缓存的自选股
+                    val disposable =
+                        Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
+                            when (ts) {
+                                null -> emitter.onNext(LocalStocksConfig.getInstance().getStocks())
+                                StockTsEnum.HK -> emitter.onNext(
+                                    LocalStocksConfig.getInstance().getStocks(
+                                        StockTsEnum.HK.name
+                                    )
+                                )
+                                else -> emitter.onNext(
+                                    LocalStocksConfig.getInstance().getStocks(
+                                        StockTsEnum.SH.name,
+                                        StockTsEnum.SZ.name
+                                    )
+                                )
+                            }
+                            emitter.onComplete()
+                        }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                // 发起订阅
+                                topicPrice(it)
+                                // 更新界面数据
+                                viewModel?.datas?.value = it
+                                // 加载网络数据
+                                if (isLogin) {
+                                    // 已登录
+                                    Cache[IStockNet::class.java]?.myList(request)
+                                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+                                }
+                            }
+                    disposables.add(disposable)
                 }
             }
         disposables.add(disposable)
