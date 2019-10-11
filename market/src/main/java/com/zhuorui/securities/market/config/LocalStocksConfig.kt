@@ -12,10 +12,22 @@ import com.zhuorui.securities.market.model.StockMarketInfo
  */
 class LocalStocksConfig : AbsConfig() {
 
-    private var stocks: MutableList<StockMarketInfo> = ArrayList()
+    private var stocks: ArrayList<StockMarketInfo> = ArrayList()
 
-    fun getStocks(): MutableList<StockMarketInfo> {
-        return ArrayList(stocks)
+    @Synchronized
+    fun getStocks(vararg ts: String): ArrayList<StockMarketInfo> {
+        return when {
+            ts.isNullOrEmpty() -> ArrayList(stocks)
+            else -> {
+                val tempList = ArrayList<StockMarketInfo>()
+                for (stock in stocks) {
+                    if (ts.contains(stock.ts)) {
+                        tempList.add(stock)
+                    }
+                }
+                tempList
+            }
+        }
     }
 
     /**
@@ -40,6 +52,7 @@ class LocalStocksConfig : AbsConfig() {
     /**
      * 添加自选股
      */
+    @Synchronized
     fun replaceAll(list: MutableList<StockMarketInfo>): Boolean {
         if (list.isNullOrEmpty()) {
             return false
@@ -53,8 +66,9 @@ class LocalStocksConfig : AbsConfig() {
     /**
      * 添加自选股
      */
+    @Synchronized
     fun add(stockInfo: StockMarketInfo): Boolean {
-        if (isExist(stockInfo.ts!!, stockInfo.tsCode!!)) {
+        if (isExist(stockInfo.ts!!, stockInfo.code!!)) {
             return false
         }
         stocks.add(stockInfo)
@@ -65,7 +79,8 @@ class LocalStocksConfig : AbsConfig() {
     /**
      * 删除自选股
      */
-    fun remove(code: String, ts: String): Boolean {
+    @Synchronized
+    fun remove(ts: String, code: String): Boolean {
         val stock = getStock(ts, code)
         if (stock != null) {
             stocks.remove(stock)
@@ -80,7 +95,21 @@ class LocalStocksConfig : AbsConfig() {
     }
 
     companion object {
-        fun read(): LocalStocksConfig {
+        private var instance: LocalStocksConfig? = null
+
+        fun getInstance(): LocalStocksConfig {
+            if (instance == null) {
+                // 使用同步锁
+                synchronized(LocalStocksConfig::class.java) {
+                    if (instance == null) {
+                        instance = read()
+                    }
+                }
+            }
+            return instance!!
+        }
+
+        private fun read(): LocalStocksConfig {
             var config: LocalStocksConfig? =
                 StorageInfra.get(LocalStocksConfig::class.java.simpleName, LocalStocksConfig::class.java)
             if (config == null) {
@@ -88,6 +117,14 @@ class LocalStocksConfig : AbsConfig() {
                 config.write()
             }
             return config
+        }
+
+        fun clear() {
+            StorageInfra.remove(LocalStocksConfig::class.java)
+        }
+
+        fun hasCache(): Boolean {
+            return StorageInfra.get(LocalStocksConfig::class.java.simpleName, LocalStocksConfig::class.java) != null
         }
     }
 }
