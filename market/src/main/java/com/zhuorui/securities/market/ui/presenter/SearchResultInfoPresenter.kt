@@ -197,6 +197,14 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     }
 
+    override fun onBaseResponse(response: BaseResponse) {
+        super.onBaseResponse(response)
+        if(response.request is CollectionStockRequest){
+            RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
+            toast(R.string.add_topic_successful)
+        }
+    }
+
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
     }
