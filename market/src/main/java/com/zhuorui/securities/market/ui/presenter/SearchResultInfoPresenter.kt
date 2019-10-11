@@ -1,32 +1,31 @@
 package com.zhuorui.securities.market.ui.presenter
 
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
-import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.event.*
-import com.zhuorui.securities.market.model.*
+import com.zhuorui.securities.market.event.AddTopicStockEvent
+import com.zhuorui.securities.market.event.SelectsSearchTabEvent
+import com.zhuorui.securities.market.event.TabPositionEvent
+import com.zhuorui.securities.market.event.TopicStockEvent
+import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
-import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.ui.adapter.SeachAllofInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.StockAdapter
 import com.zhuorui.securities.market.ui.adapter.StockInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchResultInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -36,6 +35,7 @@ import me.jessyan.autosize.utils.LogUtils
  */
 class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
     var ts: SearchStokcInfoEnum? = null
+    var str: String? = null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
@@ -48,6 +48,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     }
 
 
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.searchInfoDatas?.observe(it,
+                androidx.lifecycle.Observer<List<SearchDeafaultData>> { t ->
+                    view?.addAllToAdapter(t)
+                })
+            viewModel?.stockdatas?.observe(it,
+                androidx.lifecycle.Observer<List<SearchStockInfo>> { t ->
+                    view?.addStockToAdapter(t)
+                })
+            viewModel?.infos?.observe(it,
+                androidx.lifecycle.Observer<List<Int>> { t ->
+                    view?.addInfoToAdapter(t)
+                })
+        }
+    }
+
     fun getData(type: SearchStokcInfoEnum?, str: String) {
         listhot.clear()
         history.clear()
@@ -57,24 +75,15 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
 
     fun getAdapter(): SeachAllofInfoAdapter? {
-        if (viewModel?.adapter?.value == null) {
-            viewModel?.adapter?.value = SeachAllofInfoAdapter(context)
-        }
-        return viewModel?.adapter?.value
+        return SeachAllofInfoAdapter(context)
     }
 
     fun getStockAdapter(): StockAdapter? {
-        if (viewModel?.stockadapter?.value == null) {
-            viewModel?.stockadapter?.value = StockAdapter()
-        }
-        return viewModel?.stockadapter?.value
+        return StockAdapter()
     }
 
     fun getStockInfoAdapter(): StockInfoAdapter? {
-        if (viewModel?.infoadapter?.value == null) {
-            viewModel?.infoadapter?.value = StockInfoAdapter()
-        }
-        return viewModel?.infoadapter?.value
+        return StockInfoAdapter()
     }
 
     fun getStockData(str: String) {
@@ -87,12 +96,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         for (i in 0..4) {
             history.add(i)
         }
-        viewModel?.infoadapter?.value?.clearItems()
-        if (viewModel?.infoadapter?.value?.items == null) {
-            viewModel?.infoadapter?.value?.items = ArrayList()
-        }
-        viewModel?.infoadapter?.value?.addItems(history)
-        LogUtils.e("tttttt---info----" + viewModel?.infoadapter?.value?.items?.size.toString())
+        viewModel?.infos?.value = history
+
     }
 
     fun getTopicStockData(keyWord: String, count: Int) {
@@ -103,7 +108,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-        val datas = response.data?.datas
+        if (!transactions.isMyTransaction(response)) return
+        val datas = response.data.datas
         if (datas.isNullOrEmpty()) return
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
@@ -115,22 +121,12 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 var data = SearchDeafaultData(datas, history)
                 list.add(data)
                 list.add(data)
-                viewModel?.adapter?.value?.clearItems()
-                if (viewModel?.adapter?.value?.items == null) {
-                    viewModel?.adapter?.value?.items = ArrayList()
-                }
-                viewModel?.adapter?.value?.addItems(list)
-                LogUtils.e("tttttt-----all----" + viewModel?.adapter?.value?.items?.size.toString())
-                LogUtils.e(viewModel?.adapter?.value?.items?.size.toString())
+                viewModel?.searchInfoDatas?.value = list
             }
             20 -> {
-                viewModel?.stockadapter?.value?.clearItems()
-                if (viewModel?.stockadapter?.value?.items == null) {
-                    viewModel?.stockadapter?.value?.items = ArrayList()
+                datas.let {
+                    viewModel?.stockdatas?.value = it as MutableList<SearchStockInfo>
                 }
-                viewModel?.stockadapter?.value?.addItems(datas)
-                viewModel?.stockadapter?.value?.notifyDataSetChanged()
-                LogUtils.e("tttttt-----stock----" + viewModel?.stockadapter?.value?.items?.size.toString())
             }
 
         }
@@ -156,10 +152,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                     ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
             } else {
                 // 未登录
-                event.info?.let { AddTopicStockEvent(it) }?.let {
-                    RxBus.getDefault().post(it)
-                    toast(R.string.add_topic_successful)
-                }
+                RxBus.getDefault().post(AddTopicStockEvent(event.info!!))
+                toast(R.string.add_topic_successful)
             }
         }
     }
@@ -170,12 +164,15 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             when (event.enum) {
                 SearchStokcInfoEnum.All -> {
                     view?.detailInfo(event.str)
+                    str = event.str
                 }
                 SearchStokcInfoEnum.Stock -> {
                     view?.detailStock(event.str)
+                    str = event.str
                 }
                 SearchStokcInfoEnum.Info -> {
                     view?.detailStockInfo(event.str)
+                    str = event.str
                 }
             }
         }
@@ -195,21 +192,29 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             2 -> {
                 setType(SearchStokcInfoEnum.Info)
                 view?.initonlazy()
-
             }
         }
-
     }
 
     override fun onBaseResponse(response: BaseResponse) {
+        super.onBaseResponse(response)
         if (response.request is CollectionStockRequest) {
-            // 传递添加自选股
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             toast(R.string.add_topic_successful)
+            updateCurrentFragmentData(str)
         }
     }
 
-    override fun onErrorResponse(response: ErrorResponse) {
-        super.onErrorResponse(response)
+    private fun updateCurrentFragmentData(str: String?) {
+        when (ts) {
+            SearchStokcInfoEnum.All -> {
+                str?.let { view?.detailInfo(it) }
+            }
+            SearchStokcInfoEnum.Stock -> {
+                str?.let { view?.detailStock(it) }
+            }
+            else -> {
+            }
+        }
     }
 }

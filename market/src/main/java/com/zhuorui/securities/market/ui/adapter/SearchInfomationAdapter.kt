@@ -16,7 +16,7 @@ import com.zhuorui.securities.market.R2
  * Date: 2019/9/23
  * Desc:
  */
-class SearchInfomationAdapter(type:Int) :BaseListAdapter<Int>(){
+class SearchInfomationAdapter(type:Int,keywords:String) :BaseListAdapter<Int>(){
     private var type=type
     private val default = 0x00
     private val bottom = 0x01

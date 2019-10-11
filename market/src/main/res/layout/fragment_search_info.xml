@@ -41,21 +41,12 @@
                         android:textCursorDrawable="@drawable/my_cursor"
                         android:textSize="15sp"
                         android:layout_marginLeft="10dp"
+                        android:paddingRight="10dp"
                         android:textColorHint="@color/color_FFFFFFFF"
                         android:textColor="@color/color_FFFFFFFF"
                         android:hint="@string/search_tips"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
-                <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:id="@+id/iv_cancle"
-                        android:visibility="invisible"
-                        android:layout_marginRight="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="10dp"
-                        android:background="@mipmap/detele_search_tips"/>
             </RelativeLayout>
             <androidx.appcompat.widget.AppCompatTextView
                     android:layout_alignParentRight="true"

@@ -193,4 +193,7 @@
         <attr name="zr_showPrecentSymbol" format="boolean"/>
         <attr name="zr_showPrecentUpDown" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="ZrCompareTextView">
+        <attr name="zr_spancolor" format="color"/>
+    </declare-styleable>
 </resources>

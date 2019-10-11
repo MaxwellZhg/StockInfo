@@ -45,6 +45,7 @@
                 android:background="@color/color_D7D7D7"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
+                android:id="@+id/rl_notice"
                 android:gravity="center_vertical"
                 android:layout_height="30dp">
 

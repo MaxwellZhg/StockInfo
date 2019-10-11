@@ -77,6 +77,15 @@ class RemindSettingFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         stockInfo = arguments?.getParcelable(StockMarketInfo::class.java.simpleName)
+        presenter?.checkSetting().let {
+            if(it!!){
+                rl_notice.visibility=View.GONE
+            }else{
+                rl_notice.visibility=View.VISIBLE
+            }
+        }
+
+
         iv_back.setOnClickListener(this)
         textView.text = stockInfo?.name
         when (stockInfo?.ts) {
@@ -90,6 +99,7 @@ class RemindSettingFragment :
                 imageView.setImageResource(R.mipmap.ic_ts_sz)
             }
         }
+
         textView2.text = stockInfo?.code
         // 跌涨幅是否大于0或者等于0
         val diffPriceVal = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()

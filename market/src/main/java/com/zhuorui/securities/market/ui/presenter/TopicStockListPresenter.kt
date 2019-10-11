@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.presenter
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -13,9 +14,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.AddTopicStockEvent
+import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
-import com.zhuorui.securities.market.event.SynStockEvent
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
@@ -57,18 +58,6 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     override fun init() {
         super.init()
         view?.init()
-        // 读取本地缓存的自选股
-        val disposable = Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
-            emitter.onNext(LocalStocksConfig.read().getStocks())
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                // 发起订阅
-                topicPrice(it)
-                // 更新界面数据
-                viewModel?.datas?.value = it }
-        disposables.add(disposable)
     }
 
     fun setType(type: StockTsEnum?) {
@@ -101,15 +90,47 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             emitter.onNext(LocalAccountConfig.read().isLogin())
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
-            .subscribe {
-                if (it) {
+            .subscribe { isLogin ->
+                if (isLogin) {
                     // 已登录
                     Cache[IStockNet::class.java]?.myList(request)
                         ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
                 } else {
                     // 未登录
-                    Cache[IStockNet::class.java]?.list(request)
-                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+                    // 先查看是否有缓存
+                    if (!LocalStocksConfig.hasCache()) {
+                        // 本地无缓存，拉取网络数据
+                        Cache[IStockNet::class.java]?.list(request)
+                            ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+                    } else {
+                        // 本地有缓存，读取本地缓存的自选股
+                        val disposable =
+                            Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
+                                when (ts) {
+                                    null -> emitter.onNext(LocalStocksConfig.getInstance().getStocks())
+                                    StockTsEnum.HK -> emitter.onNext(
+                                        LocalStocksConfig.getInstance().getStocks(
+                                            StockTsEnum.HK.name
+                                        )
+                                    )
+                                    else -> emitter.onNext(
+                                        LocalStocksConfig.getInstance().getStocks(
+                                            StockTsEnum.SH.name,
+                                            StockTsEnum.SZ.name
+                                        )
+                                    )
+                                }
+                                emitter.onComplete()
+                            }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe {
+                                    // 发起订阅
+                                    topicPrice(it)
+                                    // 更新界面数据
+                                    viewModel?.datas?.value = it
+                                }
+                        disposables.add(disposable)
+                    }
                 }
             }
         disposables.add(disposable)
@@ -133,7 +154,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (ts == null) {
             // 保存本地数据
             disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
+                emitter.onNext(LocalStocksConfig.getInstance().replaceAll(datas))
                 emitter.onComplete()
             }).subscribeOn(Schedulers.io())
                 .subscribe()
@@ -146,25 +167,17 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     private fun topicPrice(datas: MutableList<StockMarketInfo>): Boolean {
         for (item in datas) {
-            val stockTopic = item.ts?.let {
-                item.code?.let { it1 ->
-                    item.type?.let { it2 ->
-                        StockTopic(
-                            StockTopicDataTypeEnum.price, it,
-                            it1, it2
-                        )
-                    }
-                }
-            }
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.price, item.ts!!, item.code!!, item.type!!)
             SocketClient.getInstance().bindTopic(stockTopic)
         }
         return true
     }
 
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    @RxSubscribe(observeOnThread = EventThread.IO)
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
 
-        val datas = viewModel?.datas?.value ?: return
+        val datas = viewModel?.datas?.value
+        if (datas.isNullOrEmpty()) return
 
         val stockPriceDatas = response.body
 
@@ -186,42 +199,29 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             }
         }
         // 保存本地数据
-        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalStocksConfig.read().replaceAll(datas))
-            emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
-            .subscribe()
-        disposables.add(disposable)
+        LocalStocksConfig.getInstance().replaceAll(datas)
     }
 
     /**
      * 添加自选股
      */
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    @RxSubscribe(observeOnThread = EventThread.IO)
     fun onAddTopicStockEvent(event: AddTopicStockEvent) {
+        LogInfra.Log.d(TAG, "onAddTopicStockEvent ...")
         val stockTs = event.stock.ts
-        if (ts == null || stockTs.equals(ts?.name) || (ts == StockTsEnum.HS && (stockTs == StockTsEnum.SH.name || stockTs == StockTsEnum.SZ.name))) {
+        val stockCode = event.stock.code
+        if (ts == null || stockTs.equals(ts?.name) || (ts == StockTsEnum.HS && (stockTs.equals(StockTsEnum.SH.name) || stockTs.equals(
+                StockTsEnum.SZ.name
+            )))
+        ) {
             var datas = viewModel?.datas?.value
-            if (datas.isNullOrEmpty()) {
+            if (datas == null) {
                 datas = ArrayList()
             }
 
             for (item in datas) {
-                if (item.ts.equals(stockTs) && item.code.equals(stockTs)) return
+                if (item.ts.equals(stockTs) && item.code.equals(stockCode)) return
             }
-
-            // 发起订阅价格
-            val stockTopic = stockTs?.let {
-                event.stock.code?.let { it1 ->
-                    event.stock.type?.let { it2 ->
-                        StockTopic(
-                            StockTopicDataTypeEnum.price,
-                            it, it1, it2
-                        )
-                    }
-                }
-            }
-            SocketClient.getInstance().bindTopic(stockTopic)
 
             // 显示新添加的自选股
             val stock = StockMarketInfo()
@@ -233,7 +233,6 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             stock.tsCode = event.stock.tsCode
             // TODO 添加到顶部
             datas.add(0, stock)
-
             if (viewModel?.datas?.value.isNullOrEmpty()) {
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                     viewModel?.datas?.value = datas
@@ -245,15 +244,13 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             } else {
                 view?.notifyDataSetChanged(datas)
             }
+            // 发起订阅价格
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockTs!!, stock.code!!, stock.type!!)
+            SocketClient.getInstance().bindTopic(stockTopic)
+            // 刷新股票个数
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
-
-            // TODO 保存本地数据
-            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                emitter.onNext(LocalStocksConfig.read().add(stock))
-                emitter.onComplete()
-            }).subscribeOn(Schedulers.io())
-                .subscribe()
-            disposables.add(disposable)
+            // 保存本地数据
+            LocalStocksConfig.getInstance().add(stock)
         }
     }
 
@@ -276,6 +273,12 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         val datas = viewModel?.datas?.value ?: return
         datas.remove(item)
         item?.let { datas.add(0, it) }
+        // 修改本地缓存
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            emitter.onNext(LocalStocksConfig.getInstance().replaceAll(datas))
+            emitter.onComplete()
+        }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+        disposables.add(disposable)
         // 刷新界面
         view?.notifyDataSetChanged(datas)
         // 提示置顶成功
@@ -286,57 +289,54 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         // 判断是否登录
         if (LocalAccountConfig.read().isLogin()) {
             val ids = arrayOf(item?.id)
-            val request = DeleteStockRequest(ids, transactions.createTransaction())
+            val request = DeleteStockRequest(ids, item?.ts!!, item.code!!, transactions.createTransaction())
             Cache[IStockNet::class.java]?.delelte(request)
                 ?.enqueue(Network.IHCallBack<BaseResponse>(request))
         } else {
-            item?.let { deleteStock(it) }
-            // 提示删除成功
-            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+            // 传递删除自选股事件
+            RxBus.getDefault().post(DeleteTopicStockEvent(item?.ts!!, item.code!!))
         }
     }
 
-    private fun deleteStock(item: StockMarketInfo) {
+    @RxSubscribe(observeOnThread = EventThread.IO)
+    fun onDeleteTopicStockEvent(event: DeleteTopicStockEvent) {
         val datas = viewModel?.datas?.value ?: return
-        val stockTs = item.ts
-        if (ts == null || stockTs.equals(ts?.name) || (ts == StockTsEnum.HS && (stockTs == StockTsEnum.SH.name || stockTs == StockTsEnum.SZ.name))) {
+        val stockTs = event.ts
+        if (ts == null || stockTs == ts?.name || (ts == StockTsEnum.HS && (stockTs == StockTsEnum.SH.name || stockTs == StockTsEnum.SZ.name))) {
             for (element in datas) {
-                if (element.tsCode.equals(item.tsCode)) {
-                    datas?.remove(element)
+                if (element.ts.equals(event.ts) && element.code.equals(event.code)) {
+                    datas.remove(element)
+                    // 取消订阅
+                    val stockTopic = StockTopic(
+                        StockTopicDataTypeEnum.price, element.ts!!, element.code!!,
+                        element.type!!
+                    )
+                    SocketClient.getInstance().unBindTopic(stockTopic)
                     break
                 }
             }
             // 刷新界面
             view?.notifyDataSetChanged(datas)
-            // 取消订阅
-            val stockTopic = item.ts?.let {
-                item.code?.let { it1 ->
-                    item.type?.let { it2 ->
-                        StockTopic(
-                            StockTopicDataTypeEnum.price, it,
-                            it1, it2
-                        )
-                    }
-                }
-            }
-            SocketClient.getInstance().unBindTopic(stockTopic)
+            // 删除本地缓存
+            LocalStocksConfig.getInstance().remove(event.ts, event.code)
             // 更新最新自选股数目
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
+            // 提示删除成功
+            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+                emitter.onNext(true)
+                emitter.onComplete()
+            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+            disposables.add(disposable)
         }
     }
 
     override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
         if (response.request is DeleteStockRequest) {
-            val ids = (response.request as DeleteStockRequest).ids
-            for (it in viewModel?.datas?.value!!) {
-                if (ids.contains(it.id)) {
-                    deleteStock(it)
-                    break
-                }
-            }
-            // 提示删除成功
-            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+            val request = response.request as DeleteStockRequest
+            // 传递删除自选股事件
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts, request.code))
         } else if (response.request is StickyOnTopStockRequest) {
             val id = (response.request as StickyOnTopStockRequest).id
             for (it in viewModel?.datas?.value!!) {
@@ -346,34 +346,35 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                 }
             }
         } else if (response.request is SynStockRequest) {
-            // 通知同步完成
-            RxBus.getDefault().post(SynStockEvent())
+            // 同步完成，重新拉取自选股列表
+            view?.requestStocks()
         }
     }
 
     /**
      * 登录状态发生改变
      */
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    @RxSubscribe(observeOnThread = EventThread.IO)
     fun onLoginStateChangeEvent(event: LoginStateChangeEvent) {
-        // 只同步全部列表中的自选股
-        if (ts == null && event.isLogin) {
-            view?.hideRegisterNow()
-
-            val datas = viewModel?.datas?.value ?: return
-            val request = SynStockRequest(datas, transactions.createTransaction())
-            Cache[IStockNet::class.java]?.synStock(request)
-                ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+        // 已登录
+        if (event.isLogin) {
+            if (ts == null) {
+                view?.hideRegisterNow()
+                // 同步缓存中的自选股
+                val datas = LocalStocksConfig.getInstance().getStocks()
+                if (datas.isNullOrEmpty()) return
+                val request = SynStockRequest(datas, transactions.createTransaction())
+                Cache[IStockNet::class.java]?.synStock(request)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            }
         }
-    }
-
-    /**
-     * 同步自选股
-     */
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
-    fun onSynStockEvent(event: SynStockEvent) {
-        // 同步完成，重新拉取自选股列表
-        view?.requestStocks()
+        // 未登录
+        else {
+            // 清空所有的缓存
+            LocalStocksConfig.clear()
+            // 重新拉取未登录状态的自选股列表
+            view?.requestStocks()
+        }
     }
 
     /**

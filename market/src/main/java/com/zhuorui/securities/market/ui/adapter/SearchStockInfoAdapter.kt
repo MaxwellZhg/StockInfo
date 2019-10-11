@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
+import com.zhuorui.commonwidget.ZrCompareTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -25,9 +26,10 @@ import me.jessyan.autosize.utils.LogUtils
  * Date: 2019/9/23
  * Desc:
  */
-class SearchStockInfoAdapter : BaseListAdapter<SearchStockInfo>(){
+class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
     private val default = 0x00
     private val bottom = 0x01
+    private var str:String = str
     private var onTopicStockInfoListener: OnTopicStockInfoListener? =null
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
@@ -51,16 +53,16 @@ class SearchStockInfoAdapter : BaseListAdapter<SearchStockInfo>(){
    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
     ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
        @BindView(R2.id.tv_stock_info_name)
-       lateinit var tv_stock_info_name: AppCompatTextView
+       lateinit var tv_stock_info_name: ZrCompareTextView
        @BindView(R2.id.iv_stock_logo)
        lateinit var iv_stock_logo: AppCompatImageView
        @BindView(R2.id.tv_stock_code)
-       lateinit var tv_stock_code: AppCompatTextView
+       lateinit var tv_stock_code: ZrCompareTextView
        @BindView(R2.id.iv_topic)
        lateinit var iv_topic: AppCompatImageView
        override fun bind(item: SearchStockInfo?, position: Int) {
-            tv_stock_info_name.text=item?.name
-            tv_stock_code.text=item?.code
+            tv_stock_info_name.setText(item?.name,str)
+            tv_stock_code.setText(item?.code,str)
            when (item?.ts) {
                "SH" -> {
                    iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_sh)
@@ -80,7 +82,8 @@ class SearchStockInfoAdapter : BaseListAdapter<SearchStockInfo>(){
 
        override fun onClick(v: View) {
            if (v == iv_topic) {
-              RxBus.getDefault().post(TopicStockEvent( getItem(position),SearchStokcInfoEnum.All))
+               iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
+               RxBus.getDefault().post(TopicStockEvent( getItem(position),SearchStokcInfoEnum.All))
            } else {
                super.onClick(v)
            }

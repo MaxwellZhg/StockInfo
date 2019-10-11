@@ -12,10 +12,9 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import com.zhuorui.securities.personal.event.DisctCodeSelectEvent
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.event.MyTabInfoEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
@@ -61,7 +60,8 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
     fun requestUserLoginCode(str: kotlin.String, vfcode: kotlin.String) {
         dialogshow(1)
-        val request = UserLoginCodeRequest(str, vfcode, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
+        val request =
+            UserLoginCodeRequest(str, vfcode, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
     }
@@ -112,16 +112,6 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
             dialogshow(0)
         }
         super.onErrorResponse(response)
-    }
-
-    fun requestUserLoginOut() {
-        val request = UserLoginOutRequest(transactions.createTransaction())
-        Cache[IPersonalNet::class.java]?.userLoginOut(request)
-            ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
-    }
-
-    fun setState(value: Int) {
-        viewModel!!.state.set(value)
     }
 
     @Throws(InterruptedException::class)
