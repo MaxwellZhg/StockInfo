@@ -205,13 +205,15 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         }
     }
 
-    fun updateCurrentFragmentData(str: String?) {
+    private fun updateCurrentFragmentData(str: String?) {
         when (ts) {
             SearchStokcInfoEnum.All -> {
                 str?.let { view?.detailInfo(it) }
             }
             SearchStokcInfoEnum.Stock -> {
                 str?.let { view?.detailStock(it) }
+            }
+            else -> {
             }
         }
     }
