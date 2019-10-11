@@ -3,7 +3,6 @@ package com.zhuorui.securities.market.ui.presenter
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
-import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -36,6 +35,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
  */
 class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
     var ts: SearchStokcInfoEnum? = null
+    var str: String? = null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
@@ -46,6 +46,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     fun setType(type: SearchStokcInfoEnum?) {
         ts = type
     }
+
 
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
         // 监听datas的变化
@@ -108,9 +109,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
-        if (response.data == null) return
         val datas = response.data.datas
-        if (datas == null || datas.isNullOrEmpty()) return
+        if (datas.isNullOrEmpty()) return
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
                 history.clear()
@@ -164,12 +164,15 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             when (event.enum) {
                 SearchStokcInfoEnum.All -> {
                     view?.detailInfo(event.str)
+                    str = event.str
                 }
                 SearchStokcInfoEnum.Stock -> {
                     view?.detailStock(event.str)
+                    str = event.str
                 }
                 SearchStokcInfoEnum.Info -> {
                     view?.detailStockInfo(event.str)
+                    str = event.str
                 }
             }
         }
@@ -194,10 +197,22 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     }
 
     override fun onBaseResponse(response: BaseResponse) {
+        super.onBaseResponse(response)
         if (response.request is CollectionStockRequest) {
-            // 传递添加自选股
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             toast(R.string.add_topic_successful)
+            updateCurrentFragmentData(str)
+        }
+    }
+
+    fun updateCurrentFragmentData(str: String?) {
+        when (ts) {
+            SearchStokcInfoEnum.All -> {
+                str?.let { view?.detailInfo(it) }
+            }
+            SearchStokcInfoEnum.Stock -> {
+                str?.let { view?.detailStock(it) }
+            }
         }
     }
 }
