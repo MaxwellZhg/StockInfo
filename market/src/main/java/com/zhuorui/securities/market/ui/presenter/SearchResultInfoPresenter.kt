@@ -10,6 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.*
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStockInfo
@@ -111,11 +112,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
+        if (response.data == null) return
         val datas = response.data.datas
         if (datas.isNullOrEmpty()) return
+        val localStocks = LocalStocksConfig.getInstance().getStocks()
+        if (localStocks.isNotEmpty()) {
+            for (item in datas) {
+                for (stock in localStocks) {
+                    if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
+                        item.collect = true
+                        localStocks.remove(stock)
+                        break
+                    }
+                }
+            }
+        }
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
                 history.clear()
@@ -126,7 +140,6 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 var data = SearchDeafaultData(datas, history)
                 list.add(data)
                 list.add(data)
-                viewModel?.searchInfoDatas?.value = list
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                     viewModel?.searchInfoDatas?.value = list
                     emitter.onNext(true)
@@ -150,24 +163,11 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     }
 
-    fun collectionStock(stockInfo: SearchStockInfo, collect: Boolean) {
+    fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
         // 点击添加到自选列表
         if (LocalAccountConfig.read().isLogin()) {
             // 已登录
-            if (collect) {
-                //添加收藏
-                val requset =
-                    CollectionStockRequest(
-                        stockInfo,
-                        stockInfo.type!!,
-                        stockInfo.ts!!,
-                        stockInfo.code!!,
-                        0,
-                        transactions.createTransaction()
-                    )
-                Cache[IStockNet::class.java]?.collection(requset)
-                    ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
-            } else {
+            if (isCollected) {
                 //取消收藏
                 val ids = arrayOf(stockInfo.id)
                 val request =
@@ -180,12 +180,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                     )
                 Cache[IStockNet::class.java]?.delelte(request)
                     ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            } else {
+                //添加收藏
+                val requset =
+                    CollectionStockRequest(
+                        stockInfo,
+                        stockInfo.type!!,
+                        stockInfo.ts!!,
+                        stockInfo.code!!,
+                        0,
+                        transactions.createTransaction()
+                    )
+                Cache[IStockNet::class.java]?.collection(requset)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
             }
 
         } else {
-            if (collect) {
                 // 未登录
-                if (collect) {
+                if (isCollected) {
                     // 传递删除自选股事件
                     RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
                     toast(R.string.delete_successful)
@@ -195,7 +207,6 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                     toast(R.string.add_topic_successful)
                 }
             }
-        }
     }
 
             @RxSubscribe(observeOnThread = EventThread.MAIN)
