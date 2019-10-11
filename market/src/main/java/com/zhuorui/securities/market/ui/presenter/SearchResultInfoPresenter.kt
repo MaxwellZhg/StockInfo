@@ -163,24 +163,11 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     }
 
-    fun collectionStock(stockInfo: SearchStockInfo, collect: Boolean) {
+    fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
         // 点击添加到自选列表
         if (LocalAccountConfig.read().isLogin()) {
             // 已登录
-            if (collect) {
-                //添加收藏
-                val requset =
-                    CollectionStockRequest(
-                        stockInfo,
-                        stockInfo.type!!,
-                        stockInfo.ts!!,
-                        stockInfo.code!!,
-                        0,
-                        transactions.createTransaction()
-                    )
-                Cache[IStockNet::class.java]?.collection(requset)
-                    ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
-            } else {
+            if (isCollected) {
                 //取消收藏
                 val ids = arrayOf(stockInfo.id)
                 val request =
@@ -193,11 +180,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                     )
                 Cache[IStockNet::class.java]?.delelte(request)
                     ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            } else {
+                //添加收藏
+                val requset =
+                    CollectionStockRequest(
+                        stockInfo,
+                        stockInfo.type!!,
+                        stockInfo.ts!!,
+                        stockInfo.code!!,
+                        0,
+                        transactions.createTransaction()
+                    )
+                Cache[IStockNet::class.java]?.collection(requset)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
             }
 
         } else {
                 // 未登录
-                if (collect) {
+                if (isCollected) {
                     // 传递删除自选股事件
                     RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
                     toast(R.string.delete_successful)
