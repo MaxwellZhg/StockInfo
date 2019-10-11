@@ -10,6 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.*
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStockInfo
@@ -111,11 +112,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
+        if (response.data == null) return
         val datas = response.data.datas
         if (datas.isNullOrEmpty()) return
+        val localStocks = LocalStocksConfig.getInstance().getStocks()
+        if (localStocks.isNotEmpty()) {
+            for (item in datas) {
+                for (stock in localStocks) {
+                    if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
+                        item.collect = true
+                        localStocks.remove(stock)
+                        break
+                    }
+                }
+            }
+        }
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
                 history.clear()
@@ -126,7 +140,6 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 var data = SearchDeafaultData(datas, history)
                 list.add(data)
                 list.add(data)
-                viewModel?.searchInfoDatas?.value = list
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                     viewModel?.searchInfoDatas?.value = list
                     emitter.onNext(true)
