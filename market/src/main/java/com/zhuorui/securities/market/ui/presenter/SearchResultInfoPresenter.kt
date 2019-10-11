@@ -196,7 +196,6 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             }
 
         } else {
-            if (collect) {
                 // 未登录
                 if (collect) {
                     // 传递删除自选股事件
@@ -208,7 +207,6 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                     toast(R.string.add_topic_successful)
                 }
             }
-        }
     }
 
             @RxSubscribe(observeOnThread = EventThread.MAIN)
