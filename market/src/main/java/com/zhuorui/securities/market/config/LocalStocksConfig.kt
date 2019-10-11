@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.config
 
 import com.zhuorui.securities.base2app.infra.AbsConfig
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.infra.StorageInfra
 import com.zhuorui.securities.market.model.StockMarketInfo
 
@@ -69,10 +70,12 @@ class LocalStocksConfig : AbsConfig() {
     @Synchronized
     fun add(stockInfo: StockMarketInfo): Boolean {
         if (isExist(stockInfo.ts!!, stockInfo.code!!)) {
+            LogInfra.Log.d(TAG, "add failed.")
             return false
         }
         stocks.add(stockInfo)
         write()
+        LogInfra.Log.d(TAG, "add  succeeded.")
         return true
     }
 
@@ -95,6 +98,9 @@ class LocalStocksConfig : AbsConfig() {
     }
 
     companion object {
+
+        private val TAG = "LocalStocksConfig"
+
         private var instance: LocalStocksConfig? = null
 
         fun getInstance(): LocalStocksConfig {
