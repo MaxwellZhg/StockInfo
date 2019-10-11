@@ -40,6 +40,8 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginOutResponse(response: SendLoginCodeResponse) {
         if (response.request is UserLoginOutRequest) {
+            // 通知登录状态发生改变
+            RxBus.getDefault().post(LoginStateChangeEvent(false))
             if (LocalAccountConfig.read().saveLogin(
                     "",
                     "",
@@ -99,12 +101,5 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSettingChangeEvent(event: SettingChooseEvent) {
         view?.changeSetChooseSet(event.type, event.str)
-    }
-
-    override fun onBaseResponse(response: BaseResponse) {
-        if (response.request is UserLoginOutRequest) {
-            // 通知登录状态发生改变
-            RxBus.getDefault().post(LoginStateChangeEvent(false))
-        }
     }
 }

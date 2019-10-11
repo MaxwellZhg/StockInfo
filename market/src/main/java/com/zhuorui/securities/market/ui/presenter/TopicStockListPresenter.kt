@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.presenter
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -166,16 +167,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     private fun topicPrice(datas: MutableList<StockMarketInfo>): Boolean {
         for (item in datas) {
-            val stockTopic = item.ts?.let {
-                item.code?.let { it1 ->
-                    item.type?.let { it2 ->
-                        StockTopic(
-                            StockTopicDataTypeEnum.price, it,
-                            it1, it2
-                        )
-                    }
-                }
-            }
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.price, item.ts!!, item.code!!, item.type!!)
             SocketClient.getInstance().bindTopic(stockTopic)
         }
         return true
@@ -215,7 +207,9 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     @RxSubscribe(observeOnThread = EventThread.IO)
     fun onAddTopicStockEvent(event: AddTopicStockEvent) {
+        LogInfra.Log.d(TAG, "onAddTopicStockEvent ...")
         val stockTs = event.stock.ts
+        val stockCode = event.stock.code
         if (ts == null || stockTs.equals(ts?.name) || (ts == StockTsEnum.HS && (stockTs.equals(StockTsEnum.SH.name) || stockTs.equals(
                 StockTsEnum.SZ.name
             )))
@@ -226,21 +220,8 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             }
 
             for (item in datas) {
-                if (item.ts.equals(stockTs) && item.code.equals(stockTs)) return
+                if (item.ts.equals(stockTs) && item.code.equals(stockCode)) return
             }
-
-            // 发起订阅价格
-            val stockTopic = stockTs?.let {
-                event.stock.code?.let { it1 ->
-                    event.stock.type?.let { it2 ->
-                        StockTopic(
-                            StockTopicDataTypeEnum.price,
-                            it, it1, it2
-                        )
-                    }
-                }
-            }
-            SocketClient.getInstance().bindTopic(stockTopic)
 
             // 显示新添加的自选股
             val stock = StockMarketInfo()
@@ -252,7 +233,6 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             stock.tsCode = event.stock.tsCode
             // TODO 添加到顶部
             datas.add(0, stock)
-
             if (viewModel?.datas?.value.isNullOrEmpty()) {
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                     viewModel?.datas?.value = datas
@@ -264,9 +244,12 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             } else {
                 view?.notifyDataSetChanged(datas)
             }
+            // 发起订阅价格
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockTs!!, stock.code!!, stock.type!!)
+            SocketClient.getInstance().bindTopic(stockTopic)
+            // 刷新股票个数
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
-
-            // TODO 保存本地数据
+            // 保存本地数据
             LocalStocksConfig.getInstance().add(stock)
         }
     }
