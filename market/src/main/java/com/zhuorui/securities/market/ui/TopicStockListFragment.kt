@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -20,7 +19,6 @@ import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.ui.adapter.TopicStocksAdapter
-import com.zhuorui.securities.market.ui.detail.StockDetailLandActivity
 import com.zhuorui.securities.market.ui.presenter.TopicStockListPresenter
 import com.zhuorui.securities.market.ui.view.TopicStockListView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
@@ -96,7 +94,8 @@ class TopicStockListFragment :
     override fun onClickItem(pos: Int, item: StockMarketInfo?, v: View?) {
         if (item != null) {
             // 跳转到详情页
-            startActivity(Intent(context, StockDetailLandActivity::class.java))
+//          startActivity(Intent(context, StockDetailLandActivity::class.java))
+            start(MarketDetailFragment())
         } else {
             // 跳转到搜索
             (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
