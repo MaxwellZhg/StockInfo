@@ -2,18 +2,14 @@ package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.commonwidget.ZrCompareTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
-import com.zhuorui.securities.market.event.TopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
-import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 
 /**
  * Created by Maxwell.
@@ -26,10 +22,11 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
     override fun getLayout(viewType: Int): Int {
        return R.layout.item_stock_search_layout
     }
-
+    var onStockColollectListenner:OnStockColollectListenner?=null
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(v,true,false)
     }
+
 
     inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
         ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
@@ -59,12 +56,19 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
                     iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_hk)
                 }
             }
+            when(item?.collect){
+                true->{
+                    iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
+                }
+                false->{
+                    iv_topic.background=ResUtil.getDrawable(R.mipmap.ic_topic_history_d)
+                }
+            }
         }
 
         override fun onClick(v: View) {
                 if (v == iv_topic) {
-                    iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
-                    RxBus.getDefault().post(TopicStockEvent( getItem(position), SearchStokcInfoEnum.Stock))
+                    getItem(position)?.let { onStockColollectListenner?.onStockCollectionStock(it) }
                 } else {
                     super.onClick(v)
                 }
@@ -74,6 +78,8 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
     fun setkeywords(str:String){
         keywords=str
     }
-
+   interface OnStockColollectListenner{
+       fun onStockCollectionStock(stockInfo:SearchStockInfo)
+     }
 
 }

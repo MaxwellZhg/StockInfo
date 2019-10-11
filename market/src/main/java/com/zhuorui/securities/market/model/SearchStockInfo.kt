@@ -20,4 +20,6 @@ open class SearchStockInfo : BaseStockMarket(), Parcelable {
     var tsCode: String? = null//股票代码 600004.SH
     @IgnoredOnParcel
     var name: String? = null//名称
+    @IgnoredOnParcel
+    var collect:Boolean =false//是否收藏
 }
