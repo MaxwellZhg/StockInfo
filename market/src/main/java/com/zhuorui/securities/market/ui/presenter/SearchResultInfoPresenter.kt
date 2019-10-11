@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
@@ -9,6 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.*
@@ -196,98 +198,100 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             }
 
         } else {
-                // 未登录
-                if (isCollected) {
-                    // 传递删除自选股事件
-                    RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
-                    toast(R.string.delete_successful)
-                } else {
-                    // 传递添加自选股事件
-                    RxBus.getDefault().post(AddTopicStockEvent(stockInfo))
-                    toast(R.string.add_topic_successful)
-                }
+            stockInfo.collect = !isCollected
+            // 未登录
+            if (isCollected) {
+                // 传递删除自选股事件
+                RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
+                updateCurrentFragmentData(str)
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+            } else {
+                // 传递添加自选股事件
+                RxBus.getDefault().post(AddTopicStockEvent(stockInfo))
+                updateCurrentFragmentData(str)
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
             }
+        }
     }
 
-            @RxSubscribe(observeOnThread = EventThread.MAIN)
-            fun onSearchTabChangeEvent(event: SelectsSearchTabEvent) {
-                if (ts == event.enum) {
-                    when (event.enum) {
-                        SearchStokcInfoEnum.All -> {
-                            view?.detailInfo(event.str)
-                            str = event.str
-                        }
-                        SearchStokcInfoEnum.Stock -> {
-                            view?.detailStock(event.str)
-                            str = event.str
-                        }
-                        SearchStokcInfoEnum.Info -> {
-                            view?.detailStockInfo(event.str)
-                            str = event.str
-                        }
-                    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchTabChangeEvent(event: SelectsSearchTabEvent) {
+        if (ts == event.enum) {
+            when (event.enum) {
+                SearchStokcInfoEnum.All -> {
+                    view?.detailInfo(event.str)
+                    str = event.str
+                }
+                SearchStokcInfoEnum.Stock -> {
+                    view?.detailStock(event.str)
+                    str = event.str
+                }
+                SearchStokcInfoEnum.Info -> {
+                    view?.detailStockInfo(event.str)
+                    str = event.str
                 }
             }
+        }
+    }
 
-            @RxSubscribe(observeOnThread = EventThread.MAIN)
-            fun onSearchTabPositionEvent(event: TabPositionEvent) {
-                when (event.pos) {
-                    0 -> {
-                        setType(SearchStokcInfoEnum.All)
-                        view?.initonlazy()
-                    }
-                    1 -> {
-                        setType(SearchStokcInfoEnum.Stock)
-                        view?.initonlazy()
-                    }
-                    2 -> {
-                        setType(SearchStokcInfoEnum.Info)
-                        view?.initonlazy()
-
-                    }
-                }
-
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSearchTabPositionEvent(event: TabPositionEvent) {
+        when (event.pos) {
+            0 -> {
+                setType(SearchStokcInfoEnum.All)
+                view?.initonlazy()
             }
+            1 -> {
+                setType(SearchStokcInfoEnum.Stock)
+                view?.initonlazy()
+            }
+            2 -> {
+                setType(SearchStokcInfoEnum.Info)
+                view?.initonlazy()
+            }
+        }
+    }
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
-       }
+    }
 
-
-        override fun onBaseResponse(response: BaseResponse) {
-                super.onBaseResponse(response)
-                if (response.request is CollectionStockRequest) {
-                    RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
-                    toast(R.string.add_topic_successful)
-                    (response.request as CollectionStockRequest).stockInfo.collect = true
-                    updateCurrentFragmentData(str)
-                } else if (response.request is DeleteStockRequest) {
-                    val request = response.request as DeleteStockRequest
-                    request.stockInfo?.collect = false
-                    updateCurrentFragmentData(str)
-                    // 传递删除自选股事件
-                    RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
-                }
-            }
-
-            fun updateCurrentFragmentData(str: String?) {
-                when (ts) {
-                    SearchStokcInfoEnum.All -> {
-                        str?.let { view?.detailInfo(it) }
-                    }
-                    SearchStokcInfoEnum.Stock -> {
-                        str?.let { view?.detailStock(it) }
-                    }
-                }
-            }
-
-            override fun destroy() {
-                super.destroy()
-                if (disposables.isNullOrEmpty()) return
-                for (disposable in disposables) {
-                    disposable.dispose()
-                }
-                disposables.clear()
-            }
-
+    override fun onBaseResponse(response: BaseResponse) {
+        super.onBaseResponse(response)
+        if (response.request is CollectionStockRequest) {
+            RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
+            toast(R.string.add_topic_successful)
+            (response.request as CollectionStockRequest).stockInfo.collect = true
+            updateCurrentFragmentData(str)
+            ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
+        } else if (response.request is DeleteStockRequest) {
+            val request = response.request as DeleteStockRequest
+            request.stockInfo?.collect = false
+            updateCurrentFragmentData(str)
+            // 传递删除自选股事件
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         }
+    }
+
+    fun updateCurrentFragmentData(str: String?) {
+        when (ts) {
+            SearchStokcInfoEnum.All -> {
+                str?.let { view?.detailInfo(it) }
+            }
+            SearchStokcInfoEnum.Stock -> {
+                str?.let { view?.detailStock(it) }
+            }
+        }
+    }
+
+    override fun destroy() {
+        super.destroy()
+        if (disposables.isNullOrEmpty()) return
+        for (disposable in disposables) {
+            disposable.dispose()
+        }
+        disposables.clear()
+    }
+
+}
