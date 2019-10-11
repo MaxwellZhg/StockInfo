@@ -24,5 +24,7 @@ interface SearchResultInfoView :AbsView{
 
   fun addAllToAdapter(list: List<SearchDeafaultData>?)
 
+  //fun notifyAdapter()
+
 
 }

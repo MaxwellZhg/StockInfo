@@ -353,7 +353,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts, request.code))
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
         } else if (response.request is StickyOnTopStockRequest) {
             val id = (response.request as StickyOnTopStockRequest).id
             for (it in viewModel?.datas?.value!!) {

@@ -1,10 +1,7 @@
 package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -15,7 +12,6 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
-import com.zhuorui.securities.market.event.TopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import me.jessyan.autosize.utils.LogUtils
@@ -30,7 +26,7 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
     private val default = 0x00
     private val bottom = 0x01
     private var str:String = str
-    private var onTopicStockInfoListener: OnTopicStockInfoListener? =null
+    var onTopicStockInfoListener: OnTopicStockInfoListener? =null
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
             default -> R.layout.item_stock_search_layout
@@ -74,6 +70,14 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
                    iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_hk)
                }
            }
+           when(item?.collect){
+               true->{
+                   iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
+               }
+               false->{
+                   iv_topic.background=ResUtil.getDrawable(R.mipmap.ic_topic_history_d)
+               }
+           }
 
        }
        init {
@@ -82,8 +86,7 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
 
        override fun onClick(v: View) {
            if (v == iv_topic) {
-               iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
-               RxBus.getDefault().post(TopicStockEvent( getItem(position),SearchStokcInfoEnum.All))
+               getItem(position)?.let { onTopicStockInfoListener?.topicStockInfo(it) }
            } else {
                super.onClick(v)
            }
@@ -145,7 +148,7 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
     }
 
     interface OnTopicStockInfoListener{
-        fun topicStockInfo()
+        fun topicStockInfo(stockInfo:SearchStockInfo)
     }
 
 
