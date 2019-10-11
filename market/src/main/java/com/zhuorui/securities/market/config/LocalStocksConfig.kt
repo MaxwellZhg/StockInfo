@@ -93,12 +93,12 @@ class LocalStocksConfig : AbsConfig() {
     @Synchronized
     fun add(stockInfo: StockMarketInfo): Boolean {
         if (isExist(stockInfo.ts!!, stockInfo.code!!)) {
-            LogInfra.Log.d(TAG, "add failed.")
+            LogInfra.Log.d(TAG, "add " + stockInfo.name + " failed.")
             return false
         }
         stocks.add(stockInfo)
         write()
-        LogInfra.Log.d(TAG, "add  succeeded.")
+        LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded.")
         return true
     }
 
@@ -109,6 +109,7 @@ class LocalStocksConfig : AbsConfig() {
     fun remove(ts: String, code: String): Boolean {
         val stock = getStock(ts, code)
         if (stock != null) {
+            LogInfra.Log.d(TAG, "remove " + stock.name + " succeeded.")
             stocks.remove(stock)
             write()
             return true
