@@ -51,15 +51,38 @@ class LocalStocksConfig : AbsConfig() {
     }
 
     /**
-     * 添加自选股
+     * 更新自选股，当不存在时会新增
      */
     @Synchronized
-    fun replaceAll(list: MutableList<StockMarketInfo>): Boolean {
+    fun update(list: MutableList<StockMarketInfo>): Boolean {
         if (list.isNullOrEmpty()) {
             return false
         }
-        stocks.clear()
-        stocks.addAll(list)
+
+        if (stocks.isEmpty()) {
+            stocks.addAll(list)
+        } else {
+            // 拷贝数据
+            val tempList = ArrayList<StockMarketInfo>(stocks)
+//            Collections.copy(tempList, stocks)
+            for (item in list) {
+                var isExist = false
+                for (stock in tempList) {
+                    if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
+                        // 更新数据
+                        StockMarketInfo.copyProperties(item, stock)
+                        tempList.remove(stock)
+                        isExist = true
+                        break
+                    }
+                }
+                if (!isExist) {
+                    // 插入数据
+                    stocks.add(item)
+                }
+            }
+        }
+
         write()
         return true
     }
