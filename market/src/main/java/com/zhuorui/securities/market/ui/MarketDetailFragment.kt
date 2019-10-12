@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
@@ -14,6 +15,7 @@ import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
+import com.zhuorui.securities.personal.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.fragment_market_detail.magic_indicator
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
@@ -38,6 +40,8 @@ class MarketDetailFragment :
     MarketDetailView, View.OnClickListener {
 
     private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", "F10")
+    private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(4)
+    private var mIndex = 0
 
     override val layout: Int
         get() = R.layout.fragment_market_detail
@@ -80,6 +84,36 @@ class MarketDetailFragment :
         magic_indicator.navigator = getNavigator()
     }
 
+    private fun onSelect(index: Int) {
+        showHideFragment(mFragments[index], mFragments[mIndex])
+        mIndex = index
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val firstFragment = findChildFragment(MarketDetailCapitalFragment::class.java)
+        if (firstFragment == null) {
+            mFragments[0] = MarketDetailCapitalFragment.newInstance()
+            mFragments[1] = MarketDetailInformationFragment.newInstance()
+            mFragments[2] = MarketDetailNoticeFragment.newInstance()
+            mFragments[3] = MarketDetailF10Fragment.newInstance()
+            loadMultipleRootFragment(
+                R.id.fl_tab_container, mIndex,
+                mFragments[0],
+                mFragments[1],
+                mFragments[2],
+                mFragments[3]
+            )
+        } else {
+            // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
+            // 这里我们需要拿到mFragments的引用
+            mFragments[0] = firstFragment
+            mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
+            mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
+            mFragments[3] = findChildFragment(MarketDetailF10Fragment::class.java)
+        }
+    }
+
     /**
      * 获取指示器适配器
      */
@@ -102,7 +136,7 @@ class MarketDetailFragment :
                 colorTransitionPagerTitleView.setOnClickListener {
                     magic_indicator.onPageSelected(index)
                     magic_indicator.onPageScrolled(index, 0.0F, 0)
-//                    onSelect(index)
+                    onSelect(index)
                 }
                 return colorTransitionPagerTitleView
             }
@@ -118,4 +152,5 @@ class MarketDetailFragment :
         }
         return commonNavigator
     }
+
 }

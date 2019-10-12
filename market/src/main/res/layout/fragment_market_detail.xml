@@ -29,6 +29,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                <!--股票信息-->
                 <com.zhuorui.securities.market.customer.view.MarketDetailView
                         android:background="#2D2C35"
                         android:layout_width="match_parent"
@@ -43,20 +44,24 @@
                         android:background="#C0CCE0"
                 />
 
+                <!--A股-->
+
                 <include
                         layout="@layout/layout_market_detail_a_shares"/>
+
+                <!--除权信息-->
                 <include
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         layout="@layout/layout_market_detail_ex_rights"/>
 
+                <!--K线-->
                 <TextView
                         android:text="K线"
                         android:gravity="center"
                         android:textColor="#C0CCE0"
                         android:textSize="20sp"
-                        android:background="#2D2C35"
                         android:layout_width="match_parent"
                         android:layout_height="337dp"
                         android:layout_marginTop="2dp"
@@ -70,33 +75,10 @@
                         android:background="#2D2C35"
                 />
 
-
-                <TextView
-                        android:text="今日资金成交分布"
-                        android:textColor="#C0CCE0"
-                        android:padding="10dp"
+                <FrameLayout
+                        android:id="@+id/fl_tab_container"
                         android:layout_width="match_parent"
-                        android:layout_height="440dp"
-                        android:layout_marginTop="2dp"
-                />
-
-                <TextView
-                        android:text="今日资金流向趋势"
-                        android:textColor="#C0CCE0"
-                        android:padding="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="226dp"
-                        android:layout_marginTop="2dp"
-                />
-
-                <TextView
-                        android:text="历史资金流向"
-                        android:textColor="#C0CCE0"
-                        android:padding="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="255dp"
-                        android:layout_marginTop="2dp"
-                />
+                        android:layout_height="wrap_content"/>
 
             </LinearLayout>
 
