@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.market.model.StockMarketInfo
 
@@ -10,5 +11,9 @@ import com.zhuorui.securities.market.model.StockMarketInfo
  * Desc:
  */
 class TopicStockListViewModel : ViewModel() {
-    var datas: MutableList<StockMarketInfo>? = null
+    val datas: MutableLiveData<ArrayList<StockMarketInfo>> = MutableLiveData()
+
+    init {
+        datas.value = ArrayList()
+    }
 }

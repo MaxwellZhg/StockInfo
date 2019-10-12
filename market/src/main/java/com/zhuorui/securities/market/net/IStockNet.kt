@@ -5,6 +5,7 @@ import com.zhuorui.securities.market.net.api.StockApi
 import com.zhuorui.securities.market.net.request.*
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.net.response.StockSearchResponse
+import com.zhuorui.securities.market.net.response.SynStockResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -30,5 +31,5 @@ interface IStockNet {
     fun stickyOnTop(@Body request: StickyOnTopStockRequest): Call<BaseResponse>
 
     @POST(StockApi.SYN)
-    fun synStock(@Body request: SynStockRequest): Call<BaseResponse>
+    fun synStock(@Body request: SynStockRequest): Call<SynStockResponse>
 }

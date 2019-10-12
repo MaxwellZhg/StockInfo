@@ -5,6 +5,7 @@ import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.infra.StorageInfra
 import com.zhuorui.securities.market.model.StockMarketInfo
 
+
 /**
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
@@ -63,8 +64,8 @@ class LocalStocksConfig : AbsConfig() {
             stocks.addAll(list)
         } else {
             // 拷贝数据
-            val tempList = ArrayList<StockMarketInfo>(stocks)
-//            Collections.copy(tempList, stocks)
+            val tempList = ArrayList<StockMarketInfo>()
+            tempList.addAll(stocks)
             for (item in list) {
                 var isExist = false
                 for (stock in tempList) {
@@ -123,6 +124,13 @@ class LocalStocksConfig : AbsConfig() {
         StorageInfra.put(LocalStocksConfig::class.java.simpleName, this)
     }
 
+
+    @Synchronized
+    fun clear() {
+        stocks.clear()
+        StorageInfra.remove(LocalStocksConfig::class.java.simpleName, LocalStocksConfig::class.java.name)
+    }
+
     companion object {
 
         private val TAG = "LocalStocksConfig"
@@ -149,10 +157,6 @@ class LocalStocksConfig : AbsConfig() {
                 config.write()
             }
             return config
-        }
-
-        fun clear() {
-            StorageInfra.remove(LocalStocksConfig::class.java)
         }
 
         fun hasCache(): Boolean {
