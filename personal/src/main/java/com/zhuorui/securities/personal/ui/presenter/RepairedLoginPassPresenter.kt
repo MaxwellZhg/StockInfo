@@ -132,6 +132,7 @@ class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLogi
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onmodifyNewLoginPsw(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
             //dialogshow(0)
             view?.gotomain()
 

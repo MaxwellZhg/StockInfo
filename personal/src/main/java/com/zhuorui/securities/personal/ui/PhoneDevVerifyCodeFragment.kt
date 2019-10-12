@@ -34,6 +34,7 @@ class PhoneDevVerifyCodeFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerify
     CheckRequestPermissionsListener {
     private var phone: String? = null
     private var phoneArea: String? = null
+    private var code: String? = null
     override val layout: Int
         get() = R.layout.fragment_phone_dev_verify_code
     override val viewModelId: Int
@@ -45,12 +46,13 @@ class PhoneDevVerifyCodeFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerify
     override val getView: PhoneDevVerifyCodeView
         get() = this
     companion object {
-        fun newInstance(phone:String?,phoneArea:String): PhoneDevVerifyCodeFragment {
+        fun newInstance(phone:String?,phoneArea:String,code:String): PhoneDevVerifyCodeFragment {
             val fragment = PhoneDevVerifyCodeFragment()
             if (phone!= null&&phoneArea!=null) {
                 val bundle = Bundle()
                 bundle.putSerializable("phone", phone)
                 bundle.putSerializable("phoneArea", phoneArea)
+                bundle.putSerializable("code", code)
                 fragment.arguments = bundle
             }
             return fragment
@@ -61,9 +63,11 @@ class PhoneDevVerifyCodeFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerify
         super.onLazyInitView(savedInstanceState)
         phone = arguments?.getSerializable("phone") as String?
         phoneArea = arguments?.getSerializable("phoneArea") as String?
+        code = arguments?.getSerializable("code") as String?
         et_phone_code.setPasswordListener(this)
         tv_no_reciver_code.setOnClickListener(this)
-        tv_phone_timer_tips.text=ResUtil.getStringFormat(R.string.phone_dev_timer_phonenum_tips,PhoneHideUtils.hidePhoneNum(phone))
+        tv_phone_timer_tips.text=ResUtil.getString(R.string.phone_dev_timer_phonenum_tips)+PhoneHideUtils.hidePhoneNum(phone)
+
         presenter?.startTimeCountDown()
     }
     override fun passwordChange(changeText: String?) {

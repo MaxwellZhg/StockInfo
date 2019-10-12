@@ -42,6 +42,7 @@ class ChangeTradePassPresenter(context: Context) :AbsNetPresenter<ChangeTradePas
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onmodifyCapitalPsw(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
         dialogshow(0)
         view?.gotomain()
 

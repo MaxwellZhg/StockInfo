@@ -62,9 +62,10 @@ class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyVi
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
         if(response.request is SendLoginCodeRequest){
             dialogshow(0)
-            view?.gotoVerifyCode()
+            view?.gotoVerifyCode(response.data)
         }
     }
     fun dialogshow(type:Int){

@@ -10,4 +10,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface ChangePhoneNumView :AbsView{
   fun gotonext()
+  fun showGetCode(str:String)
 }

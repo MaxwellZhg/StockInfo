@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.forget_psw_fragment.*
  * Desc:
  */
 class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding,ChangePhoneNumViewModel,ChangePhoneNumView,ChangePhoneNumPresenter>(),ChangePhoneNumView,View.OnClickListener,TextWatcher {
+
     override val layout: Int
         get() = R.layout.fragment_change_phone_num
     override val viewModelId: Int
@@ -41,10 +42,8 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         if(LocalAccountConfig.read().getAccountInfo().phone!=null) {
-            tv_hide_phone.text = ResUtil.getStringFormat(
-                R.string.phone_tips_hide,
-                PhoneHideUtils.hidePhoneNum(LocalAccountConfig.read().getAccountInfo().phone)
-            )
+            tv_hide_phone.text = ResUtil.getString(R.string.phone_tips_hide)+PhoneHideUtils.hidePhoneNum(LocalAccountConfig.read().getAccountInfo().phone)
+
         }
         tv_get_code.setOnClickListener(this)
         et_verify_code.addTextChangedListener(this)
@@ -97,5 +96,8 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
 
     override fun gotonext() {
      start(ChangeNewPhoneFragment.newInstance(LocalAccountConfig.read().getAccountInfo().phone,et_verify_code.text.toString()))
+    }
+    override fun showGetCode(str: String) {
+        et_verify_code.setText(str)
     }
 }

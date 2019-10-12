@@ -68,6 +68,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
             startTimeCountDown()
@@ -92,12 +93,6 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onUserLoginOutResponse(response: SendLoginCodeResponse) {
-        if (response.request is UserLoginOutRequest) {
-            view?.gotomain()
-        }
-    }
 
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginCodeRequest) {

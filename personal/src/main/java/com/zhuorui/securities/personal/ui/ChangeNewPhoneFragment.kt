@@ -127,5 +127,8 @@ class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumB
             }
         }
     }
+    override fun showgetCode(str: String) {
+        et_verify_code.setText(str)
+    }
 
 }

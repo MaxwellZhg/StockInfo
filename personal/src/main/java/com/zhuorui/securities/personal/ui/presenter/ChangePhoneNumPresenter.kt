@@ -44,9 +44,13 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendOldRepaiedCodeResponse(response: SendLoginCodeResponse) {
-        if(response.request is SendOldRepalceCodeRequest){
-            dialogshow(0)
+        if (!transactions.isMyTransaction(response)) return
+        dialogshow(0)
+        if(response.request is SendLoginCodeRequest){
             startTimeCountDown()
+            view?.showGetCode(response.data)
+        }else if(response.request is ModifyOldPhoneRequest){
+            view?.gotonext()
         }
     }
 
@@ -56,20 +60,12 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
         Cache[IPersonalNet::class.java]?.sendModifyOldPhone(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onModifyOldPhoneCode(response: SendLoginCodeResponse) {
-        if(response.request is ModifyOldPhoneRequest){
-            dialogshow(0)
-            view?.gotonext()
-        }
-    }
 
     override fun onErrorResponse(response: ErrorResponse) {
+        dialogshow(0)
         if (response.request is ModifyOldPhoneRequest) {
-            dialogshow(0)
             return
-        }else if(response.request is SendOldRepalceCodeRequest){
-            dialogshow(0)
+        }else if(response.request is SendLoginCodeRequest){
             return
         }
         super.onErrorResponse(response)
