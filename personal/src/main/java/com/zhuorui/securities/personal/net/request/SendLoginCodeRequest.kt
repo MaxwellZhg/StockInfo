@@ -9,7 +9,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/8/15
  * Desc:
  */
-class SendLoginCodeRequest(val phone: String?, val countryCode: String, transaction: String) : BaseRequest(transaction) {
+class SendLoginCodeRequest(val phone: String, val countryCode: String, transaction: String) : BaseRequest(transaction) {
 
 
     @JSONField(name = "isSend")

@@ -36,7 +36,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
     override fun init() {
         super.init()
     }
-    fun requestSendOldRepaiedCode(str: kotlin.String?) {
+    fun requestSendOldRepaiedCode(str: String) {
         dialogshow(1)
         val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendOldPhoneRepaireCode(request)

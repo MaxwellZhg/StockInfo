@@ -58,7 +58,7 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
     override fun onClick(p0: View?) {
        when(p0?.id){
            R.id.tv_get_code->{
-            presenter?.requestSendOldRepaiedCode(LocalAccountConfig.read().getAccountInfo().phone)
+               LocalAccountConfig.read().getAccountInfo().phone?.let { presenter?.requestSendOldRepaiedCode(it) }
            }
            R.id.tv_btn_next->{
                if(LocalAccountConfig.read().getAccountInfo().phone!="") {

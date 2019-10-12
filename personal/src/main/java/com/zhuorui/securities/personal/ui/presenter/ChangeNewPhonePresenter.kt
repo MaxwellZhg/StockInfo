@@ -56,7 +56,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
         }
         return true
     }
-    fun requestSendNewRepaiedCode(str:String?) {
+    fun requestSendNewRepaiedCode(str:String) {
         dialogshow(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendNewRepairedCode(request)
@@ -64,9 +64,13 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
-          if(response.request is SendLoginCodeRequest)
-            dialogshow(0)
-            startTimeCountDown()
+          if(response.request is SendLoginCodeRequest) {
+              dialogshow(0)
+              startTimeCountDown()
+          } else if(response.request is ModifyNewPhoneCodeRequest){
+              dialogshow(0)
+              view?.gotomain()
+          }
 
     }
 
