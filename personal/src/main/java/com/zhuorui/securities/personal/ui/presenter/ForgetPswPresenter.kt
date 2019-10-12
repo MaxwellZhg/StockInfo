@@ -91,6 +91,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
         if(response.request is SendLoginCodeRequest){
             dialogshow(0)
             startTimeCountDown()

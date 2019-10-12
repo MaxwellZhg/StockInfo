@@ -104,6 +104,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onRestLoginPswResponse(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
         if (response.request is RestLoginPswRequest) {
              dialogshow(0)
               view?.gotopswlogin()

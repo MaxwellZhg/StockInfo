@@ -107,7 +107,7 @@
     <string name="fix_login_pass" tools:ignore="MissingTranslation">修改登录密码</string>
     <string name="fix_pay_pass" tools:ignore="MissingTranslation">修改交易密码</string>
     <string name="phone_num_verify" tools:ignore="MissingTranslation">手机号验证</string>
-    <string name="phone_tips_hide" tools:ignore="MissingTranslation">您当前的手机号为\n%1$s</string>
+    <string name="phone_tips_hide" tools:ignore="MissingTranslation">您当前的手机号为</string>
     <string name="hide_phone_tips" tools:ignore="MissingTranslation">请输入您收到的验证码</string>
     <string name="get_verify_code" tools:ignore="MissingTranslation">获取验证码</string>
     <string name="next" tools:ignore="MissingTranslation">下一步</string>
@@ -151,7 +151,7 @@
     <string name="unable_verify_phone_tips" tools:ignore="MissingTranslation">无法验证此手机号</string>
     <string name="input_dev_phone_code" tools:ignore="MissingTranslation">输入验证码</string>
     <string name="unable_get_phone_code" tools:ignore="MissingTranslation">收不到验证码</string>
-    <string name="phone_dev_timer_phonenum_tips" tools:ignore="MissingTranslation">验证码已发送至：%1$s</string>
+    <string name="phone_dev_timer_phonenum_tips" tools:ignore="MissingTranslation">验证码已发送至</string>
     <string name="input_verify_code" tools:ignore="MissingTranslation">输入验证码</string>
     <string name="other_dev_login_tips" tools:ignore="MissingTranslation">您的账号已在其他设备登录,\n从本设备下线。如果不是您本\n人操作，请及时联系卓锐客服\n400-788-190。</string>
     <string name="notice" tools:ignore="MissingTranslation">通知</string>

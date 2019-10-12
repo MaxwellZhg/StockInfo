@@ -203,13 +203,13 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             if (isCollected) {
                 // 传递删除自选股事件
                 RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
-                updateCurrentFragmentData(str)
                 ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+                setAdapterDataNotify(stockInfo,stockInfo.collect)
             } else {
                 // 传递添加自选股事件
                 RxBus.getDefault().post(AddTopicStockEvent(stockInfo))
-                updateCurrentFragmentData(str)
                 ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
+                setAdapterDataNotify(stockInfo,stockInfo.collect)
             }
         }
     }
@@ -262,12 +262,14 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             toast(R.string.add_topic_successful)
             (response.request as CollectionStockRequest).stockInfo.collect = true
-            updateCurrentFragmentData(str)
+            //updateCurrentFragmentData(str)
+            setAdapterDataNotify(  (response.request as CollectionStockRequest).stockInfo, (response.request as CollectionStockRequest).stockInfo.collect)
             ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
         } else if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             request.stockInfo?.collect = false
-            updateCurrentFragmentData(str)
+            //updateCurrentFragmentData(str)
+            request.stockInfo?.let { request.stockInfo?.collect?.let { it1 -> setAdapterDataNotify(it, it1) } }
             // 传递删除自选股事件
             RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
@@ -292,6 +294,35 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             disposable.dispose()
         }
         disposables.clear()
+    }
+
+    fun setAdapterDataNotify(stockInfo: SearchStockInfo,collect:Boolean){
+        when(ts){
+            SearchStokcInfoEnum.All -> {
+              viewModel?.searchInfoDatas?.value.let {
+                  if(it!=null){
+                      for(data in it[0].hotlist){
+                          if(stockInfo.id==data?.id){
+                              data?.collect=collect
+                          }
+                      }
+                  }
+              }
+                view?.notifyAdapter()
+            }
+            SearchStokcInfoEnum.Stock -> {
+               viewModel?.stockdatas?.value.let {
+                   if (it != null) {
+                       for(data in it){
+                           if(stockInfo.id==data?.id){
+                               data?.collect=collect
+                           }
+                       }
+                   }
+               }
+                view?.notifyAdapter()
+            }
+        }
     }
 
 }

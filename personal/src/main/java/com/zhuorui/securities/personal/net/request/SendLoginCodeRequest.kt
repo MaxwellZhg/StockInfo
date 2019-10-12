@@ -11,7 +11,6 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  */
 class SendLoginCodeRequest(val phone: String, val countryCode: String, transaction: String) : BaseRequest(transaction) {
 
-
     @JSONField(name = "isSend")
     var isSend = false
 

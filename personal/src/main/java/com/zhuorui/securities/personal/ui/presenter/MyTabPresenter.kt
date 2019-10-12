@@ -34,11 +34,12 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
     fun requestUserLoginOut() {
         val request = UserLoginOutRequest(transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginOut(request)
-            ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
+            ?.enqueue(Network.IHCallBack<BaseResponse>(request))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onUserLoginOutResponse(response: SendLoginCodeResponse) {
+
+    override fun onBaseResponse(response: BaseResponse) {
+        super.onBaseResponse(response)
         if (response.request is UserLoginOutRequest) {
             // 通知登录状态发生改变
             RxBus.getDefault().post(LoginStateChangeEvent(false))

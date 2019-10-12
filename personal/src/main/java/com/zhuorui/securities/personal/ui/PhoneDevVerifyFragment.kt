@@ -75,8 +75,8 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
            }
        }
     }
-    override fun gotoVerifyCode() {
-        start(PhoneDevVerifyCodeFragment.newInstance(phone, CountryCodeConfig.read().defaultCode))
+    override fun gotoVerifyCode(str:String) {
+        start(PhoneDevVerifyCodeFragment.newInstance(phone, CountryCodeConfig.read().defaultCode,str))
     }
 
     override fun gotoPhone() {

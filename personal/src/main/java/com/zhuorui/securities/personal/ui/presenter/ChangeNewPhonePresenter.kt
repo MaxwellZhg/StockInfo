@@ -4,6 +4,7 @@ import android.content.Context
 import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -25,7 +26,7 @@ import java.util.*
  * Date: 2019/9/10
  * Desc:
  */
-class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneView,ChangeNewPhoneViewModel>(){
+class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhoneView, ChangeNewPhoneViewModel>() {
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
@@ -33,59 +34,68 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
+
     override fun init() {
         super.init()
     }
 
-    fun detailPhoneTips(phone:String,code:String,oldphone:String?):Boolean{
-        if(phone==""){
+    fun detailPhoneTips(phone: String, code: String, oldphone: String?): Boolean {
+        if (phone == "") {
             ResUtil.getString(R.string.phone_tips)?.let { ToastUtil.instance.toast(it) }
             return false
         }
-        if(phone == oldphone){
+        if (phone == oldphone) {
             ResUtil.getString(R.string.same_phone_num)?.let { ToastUtil.instance.toastCenter(it) }
             return false
         }
-        if(code==null){
+        if (code == null) {
             ResUtil.getString(R.string.phone_code_tips)?.let { ToastUtil.instance.toast(it) }
             return false
         }
-        if(code.length<6){
+        if (code.length < 6) {
             ResUtil.getString(R.string.verify_code_length)?.let { ToastUtil.instance.toast(it) }
             return false
         }
         return true
     }
-    fun requestSendNewRepaiedCode(str:String) {
+
+    fun requestSendNewRepaiedCode(str: String) {
         dialogshow(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendNewRepairedCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
-          if(response.request is SendLoginCodeRequest) {
-              dialogshow(0)
-              startTimeCountDown()
-          } else if(response.request is ModifyNewPhoneCodeRequest){
-              dialogshow(0)
-              view?.gotomain()
-          }
-
+        if (!transactions.isMyTransaction(response)) return
+        dialogshow(0)
+        if (response.request is SendLoginCodeRequest) {
+            startTimeCountDown()
+            view?.showgetCode(response.data)
+        } else if (response.request is ModifyNewPhoneCodeRequest) {
+            view?.gotomain()
+        }
     }
 
-    fun requestModifyNewRepaiedCode(str: String?,verificationCode:String?,newPhone:String,newVerificationCode:String) {
+    fun requestModifyNewRepaiedCode(
+        str: String?,
+        verificationCode: String?,
+        newPhone: String,
+        newVerificationCode: String
+    ) {
         dialogshow(1)
-        val request = ModifyNewPhoneCodeRequest(str, verificationCode,newPhone,newVerificationCode,"86","86", transactions.createTransaction())
+        val request = ModifyNewPhoneCodeRequest(
+            str,
+            verificationCode,
+            newPhone,
+            newVerificationCode,
+            "86",
+            "86",
+            transactions.createTransaction()
+        )
         Cache[IPersonalNet::class.java]?.sendModifyNewPhone(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
-    }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onModifyNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
-        if (response.request is ModifyNewPhoneCodeRequest) {
-            dialogshow(0)
-             view?.gotomain()
-        }
     }
 
     @Throws(InterruptedException::class)
@@ -95,7 +105,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(recLen.toString()+"s")
+                    viewModel?.str?.set(recLen.toString() + "s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null
@@ -106,6 +116,11 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
             }
         }
         timer!!.schedule(task, 1000, 1000)
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+        dialogshow(0)
     }
 
     private fun startTimeCountDown() {
@@ -126,13 +141,13 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
         }
     }
 
-    private fun dialogshow(type:Int){
-        when(type){
-            1->{
+    private fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
                 progressDialog.setCancelable(false)
                 progressDialog.show()
             }
-            else->{
+            else -> {
                 progressDialog.setCancelable(true)
                 progressDialog.dismiss()
 
