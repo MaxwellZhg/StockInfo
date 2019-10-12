@@ -71,7 +71,7 @@ class LocalStocksConfig : AbsConfig() {
                     if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
                         // 更新数据
                         StockMarketInfo.copyProperties(item, stock)
-                        LogInfra.Log.d(TAG, "update " + item.name + " succeeded.")
+                        LogInfra.Log.d(TAG, "update " + item.name + " succeeded. Current cache zise " + stocks.size)
                         tempList.remove(stock)
                         isExist = true
                         break
@@ -79,8 +79,8 @@ class LocalStocksConfig : AbsConfig() {
                 }
                 if (!isExist) {
                     // 插入数据
-                    LogInfra.Log.d(TAG, "add " + item.name + " succeeded.")
                     stocks.add(item)
+                    LogInfra.Log.d(TAG, "update to add " + item.name + " succeeded. Current cache zise " + stocks.size)
                 }
             }
         }
@@ -95,12 +95,12 @@ class LocalStocksConfig : AbsConfig() {
     @Synchronized
     fun add(stockInfo: StockMarketInfo): Boolean {
         if (isExist(stockInfo.ts!!, stockInfo.code!!)) {
-            LogInfra.Log.d(TAG, "add " + stockInfo.name + " failed.")
+            LogInfra.Log.d(TAG, "add " + stockInfo.name + " failed. Current cache zise " + stocks.size)
             return false
         }
         stocks.add(stockInfo)
+        LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded. Current cache zise " + stocks.size)
         write()
-        LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded.")
         return true
     }
 
@@ -111,8 +111,8 @@ class LocalStocksConfig : AbsConfig() {
     fun remove(ts: String, code: String): Boolean {
         val stock = getStock(ts, code)
         if (stock != null) {
-            LogInfra.Log.d(TAG, "remove " + stock.name + " succeeded.")
             stocks.remove(stock)
+            LogInfra.Log.d(TAG, "remove " + stock.name + " succeeded. Current cache zise " + stocks.size)
             write()
             return true
         }

@@ -77,7 +77,6 @@ class TopicStockListFragment :
             root_view.addView(View.inflate(context, R.layout.layout_trans_index, null), 0)
         }
         presenter?.setType(type)
-        presenter?.setLifecycleOwner(this)
 
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false

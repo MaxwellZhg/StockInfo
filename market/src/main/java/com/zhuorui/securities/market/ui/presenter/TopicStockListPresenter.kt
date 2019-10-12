@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.infra.LogInfra
@@ -64,28 +63,10 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         ts = type
     }
 
-    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
-        // 监听datas的变化
-        lifecycleOwner.let {
-            viewModel?.datas?.observe(it,
-                androidx.lifecycle.Observer<List<StockMarketInfo>> { t ->
-                    RxBus.getDefault().post(NotifyStockCountEvent(ts, if (t.isNullOrEmpty()) 0 else t.size))
-                    view?.notifyDataSetChanged(t)
-                })
-        }
-    }
-
     /**
      * 加载推荐自选股列表
      */
     fun requestStocks(currentPage: Int, pageSize: Int) {
-        val request = RecommendStocklistRequest(
-            if (ts == StockTsEnum.HS) StockTsEnum.SH.name + "," + StockTsEnum.SZ.name else ts?.name,
-            currentPage,
-            pageSize,
-            transactions.createTransaction()
-        )
-
         val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             emitter.onNext(LocalAccountConfig.read().isLogin())
             emitter.onComplete()
@@ -93,6 +74,12 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             .subscribe { isLogin ->
                 // 先查看是否有缓存
                 if (!LocalStocksConfig.hasCache()) {
+                    val request = RecommendStocklistRequest(
+                        if (ts == StockTsEnum.HS) StockTsEnum.SH.name + "," + StockTsEnum.SZ.name else ts?.name,
+                        currentPage,
+                        pageSize,
+                        transactions.createTransaction()
+                    )
                     // 无缓存
                     if (isLogin) {
                         // 已登录
@@ -128,10 +115,19 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                                 // 发起订阅
                                 topicPrice(it)
                                 // 更新界面数据
-                                viewModel?.datas?.value = it
+                                viewModel?.datas = it
+                                RxBus.getDefault()
+                                    .post(NotifyStockCountEvent(ts, if (it.isNullOrEmpty()) 0 else it.size))
+                                view?.notifyDataSetChanged(it)
                                 // 加载网络数据
                                 if (isLogin) {
                                     // 已登录
+                                    val request = RecommendStocklistRequest(
+                                        if (ts == StockTsEnum.HS) StockTsEnum.SH.name + "," + StockTsEnum.SZ.name else ts?.name,
+                                        currentPage,
+                                        pageSize,
+                                        transactions.createTransaction()
+                                    )
                                     Cache[IStockNet::class.java]?.myList(request)
                                         ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
                                 }
@@ -147,11 +143,18 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data?.datas
         if (datas.isNullOrEmpty()) return
-        if ((response.request as RecommendStocklistRequest).currentPage == 0 && viewModel?.datas?.value != null) {
-            // 刷新数据
-            viewModel?.datas?.value = null
+        if (viewModel?.datas == null) {
+            // 设置新数据
+            viewModel?.datas = datas
+        } else {
+            if ((response.request as RecommendStocklistRequest).currentPage == 0) {
+                // 刷新数据时要清掉老数据
+                viewModel?.datas?.clear()
+            }
+            viewModel?.datas?.addAll(datas)
         }
-        viewModel?.datas?.value = datas
+        RxBus.getDefault().post(NotifyStockCountEvent(ts, if (datas.isNullOrEmpty()) 0 else datas.size))
+        view?.notifyDataSetChanged(datas)
 
         // 订阅价格
         var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
@@ -186,7 +189,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     @RxSubscribe(observeOnThread = EventThread.IO)
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
 
-        val datas = viewModel?.datas?.value
+        val datas = viewModel?.datas
         if (datas.isNullOrEmpty()) return
 
         val stockPriceDatas = response.body
@@ -224,7 +227,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                 StockTsEnum.SZ.name
             )))
         ) {
-            var datas = viewModel?.datas?.value
+            var datas = viewModel?.datas
             if (datas == null) {
                 datas = ArrayList()
             }
@@ -243,17 +246,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             stock.tsCode = event.stock.tsCode
             // TODO 添加到顶部
             datas.add(0, stock)
-            if (viewModel?.datas?.value.isNullOrEmpty()) {
-                val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                    viewModel?.datas?.value = datas
-                    emitter.onNext(true)
-                    emitter.onComplete()
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-                disposables.add(disposable)
-            } else {
-                view?.notifyDataSetChanged(datas)
-            }
+            view?.notifyDataSetChanged(datas)
             // 发起订阅价格
             val stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockTs!!, stock.code!!, stock.type!!)
             SocketClient.getInstance().bindTopic(stockTopic)
@@ -280,7 +273,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
 
     private fun stickyOnTop(item: StockMarketInfo?) {
         // 更换自选股位置
-        val datas = viewModel?.datas?.value ?: return
+        val datas = viewModel?.datas ?: return
         datas.remove(item)
         item?.let { datas.add(0, it) }
         // 修改本地缓存
@@ -311,7 +304,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
 
     @RxSubscribe(observeOnThread = EventThread.IO)
     fun onDeleteTopicStockEvent(event: DeleteTopicStockEvent) {
-        val datas = viewModel?.datas?.value ?: return
+        val datas = viewModel?.datas ?: return
         val stockTs = event.ts
         if (ts == null || stockTs == ts?.name || (ts == StockTsEnum.HS && (stockTs == StockTsEnum.SH.name || stockTs == StockTsEnum.SZ.name))) {
             for (element in datas) {
@@ -344,7 +337,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         } else if (response.request is StickyOnTopStockRequest) {
             val id = (response.request as StickyOnTopStockRequest).id
-            for (it in viewModel?.datas?.value!!) {
+            for (it in viewModel?.datas!!) {
                 if (it.id.equals(id)) {
                     stickyOnTop(it)
                     break
@@ -387,7 +380,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
-        viewModel?.datas?.value?.let { topicPrice(it) }
+        viewModel?.datas?.let { topicPrice(it) }
     }
 
     override fun destroy() {
