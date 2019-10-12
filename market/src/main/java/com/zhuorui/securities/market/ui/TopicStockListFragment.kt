@@ -10,8 +10,6 @@ import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.personal.config.LocalAccountConfig
-import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.custom.StockPopupWindow
@@ -22,6 +20,8 @@ import com.zhuorui.securities.market.ui.adapter.TopicStocksAdapter
 import com.zhuorui.securities.market.ui.presenter.TopicStockListPresenter
 import com.zhuorui.securities.market.ui.view.TopicStockListView
 import com.zhuorui.securities.market.ui.viewmodel.TopicStockListViewModel
+import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.layout_guide_open_accout.*
 
@@ -77,7 +77,6 @@ class TopicStockListFragment :
             root_view.addView(View.inflate(context, R.layout.layout_trans_index, null), 0)
         }
         presenter?.setType(type)
-        presenter?.setLifecycleOwner(this)
 
         // 设置列表数据适配器
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -178,6 +177,6 @@ class TopicStockListFragment :
     }
 
     override fun hideRegisterNow() {
-        guide_open_accout?.visibility = View.GONE
+        _mActivity?.runOnUiThread { viewInfalatedRootId?.visibility = View.GONE }
     }
 }

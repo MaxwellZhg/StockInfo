@@ -11,5 +11,9 @@ import com.zhuorui.securities.market.model.StockMarketInfo
  * Desc:
  */
 class TopicStockListViewModel : ViewModel() {
-    var datas: MutableLiveData<MutableList<StockMarketInfo>> = MutableLiveData()
+    val datas: MutableLiveData<ArrayList<StockMarketInfo>> = MutableLiveData()
+
+    init {
+        datas.value = ArrayList()
+    }
 }
