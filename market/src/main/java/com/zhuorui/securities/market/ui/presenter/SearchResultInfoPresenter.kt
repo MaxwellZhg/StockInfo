@@ -1,23 +1,25 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.event.AddTopicStockEvent
-import com.zhuorui.securities.market.event.SelectsSearchTabEvent
-import com.zhuorui.securities.market.event.TabPositionEvent
-import com.zhuorui.securities.market.event.TopicStockEvent
+import com.zhuorui.securities.market.config.LocalStocksConfig
+import com.zhuorui.securities.market.event.*
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
+import com.zhuorui.securities.market.net.request.DeleteStockRequest
 import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.StockSearchResponse
 import com.zhuorui.securities.market.ui.adapter.SeachAllofInfoAdapter
@@ -26,6 +28,11 @@ import com.zhuorui.securities.market.ui.adapter.StockInfoAdapter
 import com.zhuorui.securities.market.ui.view.SearchResultInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import kotlin.collections.ArrayList
 
 /**
  * Created by Maxwell.
@@ -34,6 +41,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
  * Desc:
  */
 class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
+    private val disposables = ArrayList<Disposable>()
     var ts: SearchStokcInfoEnum? = null
     var str: String? = null
     var list = ArrayList<SearchDeafaultData>()
@@ -106,11 +114,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
+        if (response.data == null) return
         val datas = response.data.datas
         if (datas.isNullOrEmpty()) return
+        val localStocks = LocalStocksConfig.getInstance().getStocks()
+        if (localStocks.isNotEmpty()) {
+            for (item in datas) {
+                for (stock in localStocks) {
+                    if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
+                        item.collect = true
+                        localStocks.remove(stock)
+                        break
+                    }
+                }
+            }
+        }
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
                 history.clear()
@@ -121,11 +142,22 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 var data = SearchDeafaultData(datas, history)
                 list.add(data)
                 list.add(data)
-                viewModel?.searchInfoDatas?.value = list
+                val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                    viewModel?.searchInfoDatas?.value = list
+                    emitter.onNext(true)
+                    emitter.onComplete()
+                }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                disposables.add(disposable)
             }
+
             20 -> {
                 datas.let {
-                    viewModel?.stockdatas?.value = it as MutableList<SearchStockInfo>
+                    val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                        viewModel?.stockdatas?.value = it as MutableList<SearchStockInfo>
+                        emitter.onNext(true)
+                        emitter.onComplete()
+                    }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                    disposables.add(disposable)
                 }
             }
 
@@ -133,27 +165,51 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onSearchTypeEvent(event: TopicStockEvent) {
-        if (ts == event.enum) {
-            // 点击添加到自选列表
-            if (LocalAccountConfig.read().isLogin()) {
-                // 已登录
+    fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
+        // 点击添加到自选列表
+        if (LocalAccountConfig.read().isLogin()) {
+            // 已登录
+            if (isCollected) {
+                //取消收藏
+                val ids = arrayOf(stockInfo.id)
+                val request =
+                    DeleteStockRequest(
+                        stockInfo,
+                        ids,
+                        stockInfo.ts!!,
+                        stockInfo.code!!,
+                        transactions.createTransaction()
+                    )
+                Cache[IStockNet::class.java]?.delelte(request)
+                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+            } else {
+                //添加收藏
                 val requset =
                     CollectionStockRequest(
-                        event.info!!,
-                        event.info.type!!,
-                        event.info.ts!!,
-                        event.info.code!!,
+                        stockInfo,
+                        stockInfo.type!!,
+                        stockInfo.ts!!,
+                        stockInfo.code!!,
                         0,
                         transactions.createTransaction()
                     )
                 Cache[IStockNet::class.java]?.collection(requset)
                     ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
+            }
+
+        } else {
+            stockInfo.collect = !isCollected
+            // 未登录
+            if (isCollected) {
+                // 传递删除自选股事件
+                RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
+                updateCurrentFragmentData(str)
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
             } else {
-                // 未登录
-                RxBus.getDefault().post(AddTopicStockEvent(event.info!!))
-                toast(R.string.add_topic_successful)
+                // 传递添加自选股事件
+                RxBus.getDefault().post(AddTopicStockEvent(stockInfo))
+                updateCurrentFragmentData(str)
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
             }
         }
     }
@@ -196,16 +252,29 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         }
     }
 
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+    }
+
     override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
         if (response.request is CollectionStockRequest) {
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             toast(R.string.add_topic_successful)
+            (response.request as CollectionStockRequest).stockInfo.collect = true
             updateCurrentFragmentData(str)
+            ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
+        } else if (response.request is DeleteStockRequest) {
+            val request = response.request as DeleteStockRequest
+            request.stockInfo?.collect = false
+            updateCurrentFragmentData(str)
+            // 传递删除自选股事件
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         }
     }
 
-    private fun updateCurrentFragmentData(str: String?) {
+    fun updateCurrentFragmentData(str: String?) {
         when (ts) {
             SearchStokcInfoEnum.All -> {
                 str?.let { view?.detailInfo(it) }
@@ -213,8 +282,16 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             SearchStokcInfoEnum.Stock -> {
                 str?.let { view?.detailStock(it) }
             }
-            else -> {
-            }
         }
     }
+
+    override fun destroy() {
+        super.destroy()
+        if (disposables.isNullOrEmpty()) return
+        for (disposable in disposables) {
+            disposable.dispose()
+        }
+        disposables.clear()
+    }
+
 }

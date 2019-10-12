@@ -33,4 +33,23 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
     @IgnoredOnParcel
     var longClick: Boolean = false
 
+    companion object {
+        /**
+         * 将源对象中的属性赋值给目标对象
+         */
+        fun copyProperties(origin: StockMarketInfo, target: StockMarketInfo) {
+            target.id = origin.id
+            target.ts = origin.ts
+            target.code = origin.code
+            target.tsCode = origin.tsCode
+            target.name = origin.name
+            target.type = origin.type
+            target.sort = origin.sort
+            target.price = origin.price
+            target.diffPrice = origin.diffPrice
+            target.diffRate = origin.diffRate
+            target.createTime = origin.createTime
+            target.longClick = origin.longClick
+        }
+    }
 }

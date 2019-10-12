@@ -11,6 +11,7 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.model.SearchDeafaultData
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import me.jessyan.autosize.utils.LogUtils
 
@@ -25,6 +26,7 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
     private val itemHeader=0x01
     private val itemBottom=0x02
     private lateinit var keywords:String
+    var onTopicStockInfoListenner:OnTopicStockInfoListenner? = null
     override fun getLayout(viewType: Int): Int {
         return when(viewType){
             itemHeader->{
@@ -58,12 +60,13 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
     }
 
     inner class ViewHolderHeader(v: View?, needClick: Boolean, needLongClick: Boolean):
-        ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick){
+        ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick),SearchStockInfoAdapter.OnTopicStockInfoListener{
 
         @BindView(R2.id.rv_stock_info)
         lateinit var rv_stock_info: RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
             var adapter= SearchStockInfoAdapter(keywords)
+            adapter.onTopicStockInfoListener=this
             rv_stock_info.setHasFixedSize(true)
             rv_stock_info.isNestedScrollingEnabled=false
             rv_stock_info.adapter=adapter
@@ -73,6 +76,9 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
             }
             adapter.addItems(item?.hotlist)
             adapter.notifyDataSetChanged()
+        }
+        override fun topicStockInfo(stockInfo: SearchStockInfo) {
+           onTopicStockInfoListenner?.onClickCollectionStock(stockInfo)
         }
     }
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean):
@@ -103,6 +109,8 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
     fun setkeywords(str:String){
          keywords=str
     }
-
+   interface OnTopicStockInfoListenner{
+       fun onClickCollectionStock(stock:SearchStockInfo)
+   }
 
 }

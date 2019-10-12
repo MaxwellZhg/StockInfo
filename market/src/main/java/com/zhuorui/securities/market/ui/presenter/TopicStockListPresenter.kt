@@ -69,7 +69,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         lifecycleOwner.let {
             viewModel?.datas?.observe(it,
                 androidx.lifecycle.Observer<List<StockMarketInfo>> { t ->
-                    RxBus.getDefault().post(NotifyStockCountEvent(ts, t.size))
+                    RxBus.getDefault().post(NotifyStockCountEvent(ts, if (t.isNullOrEmpty()) 0 else t.size))
                     view?.notifyDataSetChanged(t)
                 })
         }
@@ -91,46 +91,52 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe { isLogin ->
-                if (isLogin) {
-                    // 已登录
-                    Cache[IStockNet::class.java]?.myList(request)
-                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
-                } else {
-                    // 未登录
-                    // 先查看是否有缓存
-                    if (!LocalStocksConfig.hasCache()) {
-                        // 本地无缓存，拉取网络数据
-                        Cache[IStockNet::class.java]?.list(request)
+                // 先查看是否有缓存
+                if (!LocalStocksConfig.hasCache()) {
+                    // 无缓存
+                    if (isLogin) {
+                        // 已登录
+                        Cache[IStockNet::class.java]?.myList(request)
                             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
                     } else {
-                        // 本地有缓存，读取本地缓存的自选股
-                        val disposable =
-                            Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
-                                when (ts) {
-                                    null -> emitter.onNext(LocalStocksConfig.getInstance().getStocks())
-                                    StockTsEnum.HK -> emitter.onNext(
-                                        LocalStocksConfig.getInstance().getStocks(
-                                            StockTsEnum.HK.name
-                                        )
-                                    )
-                                    else -> emitter.onNext(
-                                        LocalStocksConfig.getInstance().getStocks(
-                                            StockTsEnum.SH.name,
-                                            StockTsEnum.SZ.name
-                                        )
-                                    )
-                                }
-                                emitter.onComplete()
-                            }).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe {
-                                    // 发起订阅
-                                    topicPrice(it)
-                                    // 更新界面数据
-                                    viewModel?.datas?.value = it
-                                }
-                        disposables.add(disposable)
+                        // 未登录
+                        Cache[IStockNet::class.java]?.list(request)
+                            ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
                     }
+                } else {
+                    // 本地有缓存，读取本地缓存的自选股
+                    val disposable =
+                        Observable.create(ObservableOnSubscribe<MutableList<StockMarketInfo>> { emitter ->
+                            when (ts) {
+                                null -> emitter.onNext(LocalStocksConfig.getInstance().getStocks())
+                                StockTsEnum.HK -> emitter.onNext(
+                                    LocalStocksConfig.getInstance().getStocks(
+                                        StockTsEnum.HK.name
+                                    )
+                                )
+                                else -> emitter.onNext(
+                                    LocalStocksConfig.getInstance().getStocks(
+                                        StockTsEnum.SH.name,
+                                        StockTsEnum.SZ.name
+                                    )
+                                )
+                            }
+                            emitter.onComplete()
+                        }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                // 发起订阅
+                                topicPrice(it)
+                                // 更新界面数据
+                                viewModel?.datas?.value = it
+                                // 加载网络数据
+                                if (isLogin) {
+                                    // 已登录
+                                    Cache[IStockNet::class.java]?.myList(request)
+                                        ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
+                                }
+                            }
+                    disposables.add(disposable)
                 }
             }
         disposables.add(disposable)
@@ -141,6 +147,10 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data?.datas
         if (datas.isNullOrEmpty()) return
+        if ((response.request as RecommendStocklistRequest).currentPage == 0 && viewModel?.datas?.value != null) {
+            // 刷新数据
+            viewModel?.datas?.value = null
+        }
         viewModel?.datas?.value = datas
 
         // 订阅价格
@@ -154,7 +164,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (ts == null) {
             // 保存本地数据
             disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                emitter.onNext(LocalStocksConfig.getInstance().replaceAll(datas))
+                emitter.onNext(LocalStocksConfig.getInstance().update(datas))
                 emitter.onComplete()
             }).subscribeOn(Schedulers.io())
                 .subscribe()
@@ -199,7 +209,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             }
         }
         // 保存本地数据
-        LocalStocksConfig.getInstance().replaceAll(datas)
+        LocalStocksConfig.getInstance().update(datas)
     }
 
     /**
@@ -275,7 +285,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         item?.let { datas.add(0, it) }
         // 修改本地缓存
         val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalStocksConfig.getInstance().replaceAll(datas))
+            emitter.onNext(LocalStocksConfig.getInstance().update(datas))
             emitter.onComplete()
         }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
         disposables.add(disposable)
@@ -295,6 +305,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         } else {
             // 传递删除自选股事件
             RxBus.getDefault().post(DeleteTopicStockEvent(item?.ts!!, item.code!!))
+            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         }
     }
 
@@ -321,13 +332,6 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             LocalStocksConfig.getInstance().remove(event.ts, event.code)
             // 更新最新自选股数目
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
-            // 提示删除成功
-            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
-                emitter.onNext(true)
-                emitter.onComplete()
-            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
-            disposables.add(disposable)
         }
     }
 
@@ -336,7 +340,8 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts, request.code))
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         } else if (response.request is StickyOnTopStockRequest) {
             val id = (response.request as StickyOnTopStockRequest).id
             for (it in viewModel?.datas?.value!!) {

@@ -6,7 +6,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentSearchResultInfoBinding
-import com.zhuorui.securities.market.model.OnNotifyObserver
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
@@ -17,7 +16,6 @@ import com.zhuorui.securities.market.ui.presenter.SearchResultInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchResultInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel
 import kotlinx.android.synthetic.main.fragment_search_result_info.*
-import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -26,7 +24,9 @@ import me.jessyan.autosize.utils.LogUtils
  * Desc:
  */
 class SearchResultInfoFragment :
-    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),SearchResultInfoView {
+    AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),
+    SearchResultInfoView, SeachAllofInfoAdapter.OnTopicStockInfoListenner,StockAdapter.OnStockColollectListenner {
+
     private var adapter: SeachAllofInfoAdapter? = null
     private var stockadapter: StockAdapter? = null
     private var infoadapter: StockInfoAdapter? = null
@@ -57,14 +57,16 @@ class SearchResultInfoFragment :
     override fun init() {
         type = arguments?.getSerializable("type") as SearchStokcInfoEnum?
         adapter = presenter?.getAdapter()
+        adapter?.onTopicStockInfoListenner = this
         stockadapter = presenter?.getStockAdapter()
         infoadapter = presenter?.getStockInfoAdapter()
+        stockadapter?.onStockColollectListenner=this
         presenter?.setType(type)
         presenter?.setLifecycleOwner(this)
-         if (presenter?.ts!=null) {
-             initRv(presenter?.ts)
-          }else{
-             initRv(SearchStokcInfoEnum.All)
+        if (presenter?.ts != null) {
+            initRv(presenter?.ts)
+        } else {
+            initRv(SearchStokcInfoEnum.All)
         }
     }
 
@@ -106,11 +108,13 @@ class SearchResultInfoFragment :
         }
 
     }
+
     override fun initonlazy() {
-         init()
+        init()
     }
+
     override fun addInfoToAdapter(list: List<Int>?) {
-        if(presenter?.ts==SearchStokcInfoEnum.Info) {
+        if (presenter?.ts == SearchStokcInfoEnum.Info) {
             infoadapter?.clearItems()
             if (infoadapter?.items == null) {
                 infoadapter?.items = ArrayList()
@@ -120,7 +124,7 @@ class SearchResultInfoFragment :
     }
 
     override fun addStockToAdapter(list: List<SearchStockInfo>?) {
-        if(presenter?.ts==SearchStokcInfoEnum.Stock) {
+        if (presenter?.ts == SearchStokcInfoEnum.Stock) {
             stockadapter?.clearItems()
             if (stockadapter?.items == null) {
                 stockadapter?.items = ArrayList()
@@ -131,13 +135,20 @@ class SearchResultInfoFragment :
     }
 
     override fun addAllToAdapter(list: List<SearchDeafaultData>?) {
-        if(presenter?.ts==SearchStokcInfoEnum.All) {
+        if (presenter?.ts == SearchStokcInfoEnum.All) {
             adapter?.clearItems()
             if (adapter?.items == null) {
                 adapter?.items = ArrayList()
             }
             adapter?.addItems(list)
         }
+    }
+
+    override fun onClickCollectionStock(stockInfo: SearchStockInfo) {
+        presenter?.collectionStock(stockInfo, stockInfo.collect)
+    }
+    override fun onStockCollectionStock(stockInfo: SearchStockInfo) {
+        presenter?.collectionStock(stockInfo, stockInfo.collect)
     }
 
 }
