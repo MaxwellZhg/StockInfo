@@ -141,11 +141,13 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         super.onFragmentResult(requestCode, resultCode, data)
         when(requestCode){
             ISupportFragment.RESULT_OK->{
-                var str=data?.get("str") as String
-                var code=data?.get("code") as String
-                  LogUtils.e(str)
-                 tv_login_contry.text=str
-                 tv_areaphone_tips.text=code
+                if(data?.get("str")!=null&&data?.get("code")!=null) {
+                    var str = data?.get("str") as String
+                    var code = data?.get("code") as String
+                    LogUtils.e(str)
+                    tv_login_contry.text = str
+                    tv_areaphone_tips.text = code
+                }
             }
         }
     }
