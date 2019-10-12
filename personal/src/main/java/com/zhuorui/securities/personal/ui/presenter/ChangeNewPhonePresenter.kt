@@ -13,12 +13,9 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyNewPhoneCodeRequest
-import com.zhuorui.securities.personal.net.request.ModifyOldPhoneRequest
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
-import com.zhuorui.securities.personal.net.request.SendOldRepalceCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangeNewPhoneView
-import com.zhuorui.securities.personal.ui.view.ChangePhoneNumView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangeNewPhoneViewModel
 import java.util.*
 
@@ -67,6 +64,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
+          if(response.request is SendLoginCodeRequest)
             dialogshow(0)
             startTimeCountDown()
 
