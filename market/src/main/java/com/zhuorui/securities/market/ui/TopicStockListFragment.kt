@@ -95,7 +95,7 @@ class TopicStockListFragment :
         if (item != null) {
             // 跳转到详情页
 //          startActivity(Intent(context, StockDetailLandActivity::class.java))
-            start(MarketDetailFragment())
+            (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance())
         } else {
             // 跳转到搜索
             (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
