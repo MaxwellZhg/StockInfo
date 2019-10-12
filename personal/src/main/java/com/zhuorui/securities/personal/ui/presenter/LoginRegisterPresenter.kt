@@ -71,6 +71,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
             startTimeCountDown()
+            view?.showSendCode(response.data)
         }
     }
 

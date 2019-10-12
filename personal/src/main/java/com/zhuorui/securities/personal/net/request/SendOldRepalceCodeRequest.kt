@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Date: 2019/9/10
  * Desc:
  */
-class SendOldRepalceCodeRequest(val phone: String?,val countryCode:String , transaction: String) :BaseRequest(transaction){
+class SendOldRepalceCodeRequest(val phone: String?,val countryCode:String ,val isSend:Boolean, transaction: String) :BaseRequest(transaction){
    init {
       generateSign()
     }

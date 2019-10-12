@@ -71,6 +71,7 @@ class LocalStocksConfig : AbsConfig() {
                     if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
                         // 更新数据
                         StockMarketInfo.copyProperties(item, stock)
+                        LogInfra.Log.d(TAG, "update " + item.name + " succeeded.")
                         tempList.remove(stock)
                         isExist = true
                         break
@@ -78,6 +79,7 @@ class LocalStocksConfig : AbsConfig() {
                 }
                 if (!isExist) {
                     // 插入数据
+                    LogInfra.Log.d(TAG, "add " + item.name + " succeeded.")
                     stocks.add(item)
                 }
             }

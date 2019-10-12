@@ -5,6 +5,7 @@ import android.view.View
 import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -90,8 +91,14 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
-          dialogshow(0)
-          startTimeCountDown()
+        if(response.request is SendLoginCodeRequest){
+            dialogshow(0)
+            startTimeCountDown()
+            view?.showForgetCode(response.data)
+        }else if(response.request is VerifForgetCodeRequest){
+            dialogshow(0)
+            view?.restpsw()
+        }
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
@@ -114,13 +121,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onVerifyForgetCodeResponse(response: SendLoginCodeResponse) {
-        if(response.request is VerifForgetCodeRequest) {
-            dialogshow(0)
-            view?.restpsw()
-        }
-    }
+
 
     fun showErrorDailog() {
         errorDialog.show()

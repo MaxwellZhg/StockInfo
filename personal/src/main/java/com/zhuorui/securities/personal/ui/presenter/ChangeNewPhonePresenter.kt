@@ -14,6 +14,7 @@ import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyNewPhoneCodeRequest
 import com.zhuorui.securities.personal.net.request.ModifyOldPhoneRequest
+import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.SendOldRepalceCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangeNewPhoneView
@@ -60,7 +61,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     }
     fun requestSendNewRepaiedCode(str:String?) {
         dialogshow(1)
-        val request = SendOldRepalceCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendNewRepairedCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -68,6 +69,7 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
     fun onSendNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
             dialogshow(0)
             startTimeCountDown()
+
     }
 
     fun requestModifyNewRepaiedCode(str: String?,verificationCode:String?,newPhone:String,newVerificationCode:String) {
