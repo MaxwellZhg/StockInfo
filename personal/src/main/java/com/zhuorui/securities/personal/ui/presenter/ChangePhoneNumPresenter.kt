@@ -14,7 +14,6 @@ import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyOldPhoneRequest
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.SendOldRepalceCodeRequest
-import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangePhoneNumView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangePhoneNumViewModel
@@ -37,9 +36,9 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
     override fun init() {
         super.init()
     }
-    fun requestSendOldRepaiedCode(str: kotlin.String?) {
+    fun requestSendOldRepaiedCode(str: String) {
         dialogshow(1)
-        val request = SendOldRepalceCodeRequest(str, "86", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendOldPhoneRepaireCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

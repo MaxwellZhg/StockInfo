@@ -34,6 +34,7 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Desc:
  */
 class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,ForgetPswViewModel, ForgetPswView, ForgetPswPresenter>(),ForgetPswView,View.OnClickListener,TextWatcher{
+
     private lateinit var strphone: String
     private lateinit var phonecode: String
     override val layout: Int
@@ -151,6 +152,9 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
 
         }
 
+    }
+    override fun showForgetCode(str: String) {
+       et_phone_code.setText(str)
     }
 
 }

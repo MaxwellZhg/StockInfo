@@ -45,14 +45,14 @@ interface IPersonalNet {
     fun getUserInfo(@Body request: UserInfoRequest): Call<UserInfoResponse>
 
     @POST(PersonalApi.SEND_OLD_REPLACE_CODE)
-    fun sendOldPhoneRepaireCode(@Body request: SendOldRepalceCodeRequest): Call<SendLoginCodeResponse>
+    fun sendOldPhoneRepaireCode(@Body request: SendLoginCodeRequest): Call<SendLoginCodeResponse>
 
 
     @POST(PersonalApi.MODIFY_PHONE_OLD)
     fun sendModifyOldPhone(@Body request: ModifyOldPhoneRequest): Call<SendLoginCodeResponse>
 
     @POST(PersonalApi.SEND_NEW_REPLACE_CODE)
-    fun sendNewRepairedCode(@Body request: SendOldRepalceCodeRequest): Call<SendLoginCodeResponse>
+    fun sendNewRepairedCode(@Body request: SendLoginCodeRequest): Call<SendLoginCodeResponse>
 
     @POST(PersonalApi.MODIFY_PHONE_NEW)
     fun sendModifyNewPhone(@Body request: ModifyNewPhoneCodeRequest): Call<SendLoginCodeResponse>

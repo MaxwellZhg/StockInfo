@@ -8,6 +8,6 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  * Date: 2019/8/15
  * Desc:
  */
-class SendLoginCodeResponse :BaseResponse(){
+class SendLoginCodeResponse(val data :String) :BaseResponse(){
 
 }

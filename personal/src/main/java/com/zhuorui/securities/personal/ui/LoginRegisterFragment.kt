@@ -31,6 +31,7 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Desc:手机号登录与注册
  */
 class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(), View.OnClickListener, TextWatcher,LoginRegisterView {
+
     private lateinit var strphone: String
     private lateinit var phonecode: String
     private var type:Int = 0
@@ -174,6 +175,9 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
         }
 
+    }
+    override fun showSendCode(str:String) {
+        et_phone_code.setText(str)
     }
 }
 

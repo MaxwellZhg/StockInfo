@@ -13,11 +13,9 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyNewPhoneCodeRequest
-import com.zhuorui.securities.personal.net.request.ModifyOldPhoneRequest
-import com.zhuorui.securities.personal.net.request.SendOldRepalceCodeRequest
+import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangeNewPhoneView
-import com.zhuorui.securities.personal.ui.view.ChangePhoneNumView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangeNewPhoneViewModel
 import java.util.*
 
@@ -58,16 +56,22 @@ class ChangeNewPhonePresenter(context: Context) :AbsNetPresenter<ChangeNewPhoneV
         }
         return true
     }
-    fun requestSendNewRepaiedCode(str:String?) {
+    fun requestSendNewRepaiedCode(str:String) {
         dialogshow(1)
-        val request = SendOldRepalceCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendNewRepairedCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
-            dialogshow(0)
-            startTimeCountDown()
+          if(response.request is SendLoginCodeRequest) {
+              dialogshow(0)
+              startTimeCountDown()
+          } else if(response.request is ModifyNewPhoneCodeRequest){
+              dialogshow(0)
+              view?.gotomain()
+          }
+
     }
 
     fun requestModifyNewRepaiedCode(str: String?,verificationCode:String?,newPhone:String,newVerificationCode:String) {
