@@ -20,100 +20,93 @@
 
         <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_view"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="2dp"
                 android:fadingEdge="none"
                 android:overScrollMode="never">
+
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                <TextView
-                        android:text="股票信息"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
+                <!--股票信息-->
+                <com.zhuorui.securities.market.customer.view.MarketDetailView
                         android:background="#2D2C35"
                         android:layout_width="match_parent"
-                        android:layout_height="135dp"/>
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="13dp"
+                        android:paddingRight="13dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
                 <View
                         android:layout_width="match_parent"
                         android:layout_height="0.6dp"
                         android:background="#C0CCE0"
                 />
 
-                <TextView
-                        android:text="A股信息"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
-                        android:background="#2D2C35"
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"/>
-                <TextView
-                        android:text="除权日"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
-                        android:background="#2D2C35"
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        android:layout_marginTop="2dp"
-                />
+                <!--A股-->
 
+                <include
+                        layout="@layout/layout_market_detail_a_shares"/>
+
+                <!--除权信息-->
+                <include
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        layout="@layout/layout_market_detail_ex_rights"/>
+
+                <!--K线-->
                 <TextView
                         android:text="K线"
                         android:gravity="center"
                         android:textColor="#C0CCE0"
                         android:textSize="20sp"
-                        android:background="#2D2C35"
                         android:layout_width="match_parent"
                         android:layout_height="337dp"
                         android:layout_marginTop="2dp"
                 />
 
+                <!--买卖盘经纪-->
                 <TextView
-                        android:text="Tab"
+                        android:text="买卖盘经纪"
                         android:gravity="center"
                         android:textColor="#C0CCE0"
                         android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="157dp"
+                        android:layout_marginTop="2dp"
                         android:background="#2D2C35"
+                />
+
+                <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/magic_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="2dp"
+                        android:background="#2D2C35"
                 />
 
-                <TextView
-                        android:text="今日资金成交分布"
-                        android:textColor="#C0CCE0"
-                        android:padding="10dp"
+                <FrameLayout
+                        android:id="@+id/fl_tab_container"
                         android:layout_width="match_parent"
-                        android:layout_height="440dp"
-                        android:layout_marginTop="2dp"
-                />
-
-                <TextView
-                        android:text="今日资金流向趋势"
-                        android:textColor="#C0CCE0"
-                        android:padding="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="226dp"
-                        android:layout_marginTop="2dp"
-                />
-
-                <TextView
-                        android:text="历史资金流向"
-                        android:textColor="#C0CCE0"
-                        android:padding="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="255dp"
-                        android:layout_marginTop="2dp"
-                />
+                        android:layout_height="wrap_content"/>
 
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+        />
+
+        <include
+                layout="@layout/layout_market_detail_bottom"/>
 
 
     </LinearLayout>

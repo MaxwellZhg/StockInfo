@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:gravity="center_vertical"
+              android:padding="13dp"
+              android:background="#2D2C35"
+              android:minHeight="38dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A股"
+            android:textColor="#C0CCE0"
+            android:textSize="14sp"
+            android:textStyle="bold"
+    />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="88.34"
+            android:textColor="#D9001B"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+    />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1.02"
+            android:textColor="#D9001B"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+    />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1.02"
+            android:textColor="#D9001B"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="溢价（H/A)  -6.46%"
+            android:textColor="#C0CCE0"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:gravity="right"
+    />
+
+
+</LinearLayout>

@@ -195,7 +195,7 @@ class SimulationTradingMainFragment :
      * 去行情
      */
     override fun toQuotation(code: String, ts: String) {
-        ToastUtil.instance.toast("行情功能待开发")
+        start(MarketDetailFragment.newInstance())
     }
 
     /**

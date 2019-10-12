@@ -1,5 +1,6 @@
 package com.zhuorui.securities.personal.net
 
+import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.personal.net.api.PersonalApi
 import com.zhuorui.securities.personal.net.request.*
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
@@ -27,7 +28,7 @@ interface IPersonalNet {
     fun userPwdCode(@Body request: UserLoginRegisterRequest): Call<UserLoginCodeResponse>
 
     @POST(PersonalApi.USER_LOGIN_OUT)
-    fun userLoginOut(@Body request: UserLoginOutRequest): Call<SendLoginCodeResponse>
+    fun userLoginOut(@Body request: UserLoginOutRequest): Call<BaseResponse>
 
     @POST(PersonalApi.USER_PWD_CODE)
     fun userLoginByPwd(@Body request: UserLoginPwdRequest): Call<UserLoginCodeResponse>

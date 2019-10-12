@@ -150,6 +150,16 @@ class SearchResultInfoFragment :
     override fun onStockCollectionStock(stockInfo: SearchStockInfo) {
         presenter?.collectionStock(stockInfo, stockInfo.collect)
     }
+    override fun notifyAdapter() {
+        when(presenter?.ts){
+            SearchStokcInfoEnum.All -> {
+               adapter?.notifyDataSetChanged()
+            }
+            SearchStokcInfoEnum.Stock -> {
+                stockadapter?.notifyDataSetChanged()
+            }
+        }
+    }
 
 }
 
