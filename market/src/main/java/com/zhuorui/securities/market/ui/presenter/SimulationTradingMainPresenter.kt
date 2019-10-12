@@ -117,8 +117,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         disposable = Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
             ?.flatMap { t ->
                 if (t.isSuccess()) {
-                    val request = FundAccountRequest(1, transactions.createTransaction())
-                    Cache[ISimulationTradeNet::class.java]?.getFundAccount(request)
+                    Cache[ISimulationTradeNet::class.java]?.getFundAccount(FundAccountRequest(1, transactions.createTransaction()))
                 } else {
                     Observable.create(ObservableOnSubscribe<FundAccountResponse> { emitter ->
                         emitter.onError(RuntimeException(t.msg))
@@ -313,10 +312,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         var totalProfitAndLoss = BigDecimal(0)//总盈亏 ∑个股持仓盈亏金额+卖出股票的持仓盈亏金额
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
-                val stockInfo = stocksInfo?.get(data.getTsCode())
+                val stockInfo = stocksInfo[data.getTsCode()]
                 val presentPrice = if (stockInfo?.price != null) stockInfo.price!! else BigDecimal(0)
-                val holdStockCount = if (data?.holdStockCount != null) data?.holdStockCount!! else BigDecimal(0)
-                val holeCost = if (data?.holeCost != null) data?.holeCost!! else BigDecimal(0)
+                val holdStockCount = if (data.holdStockCount != null) data.holdStockCount!! else BigDecimal(0)
+                val holeCost = if (data.holdCost != null) data.holdCost!! else BigDecimal(0)
                 data.presentPrice = presentPrice
                 //持仓市值=现价*持仓数
                 val marketValue = MathUtil.multiply3(presentPrice, holdStockCount)

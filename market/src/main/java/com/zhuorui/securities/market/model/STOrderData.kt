@@ -28,7 +28,7 @@ open class STOrderData : Parcelable {
     @IgnoredOnParcel
     var saleStockCount: BigDecimal? = null //可卖股票数量
     @IgnoredOnParcel
-    var holeCost: BigDecimal? = null //股票价格/成本/订单价
+    var holdCost: BigDecimal? = null //股票价格/成本/订单价
     @IgnoredOnParcel
     var createTime: Long? = null //下单日期
     @IgnoredOnParcel

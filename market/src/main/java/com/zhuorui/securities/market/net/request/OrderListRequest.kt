@@ -14,7 +14,7 @@ class OrderListRequest : BaseRequest {
     var startDate: String? = null
     var endDate: String? = null
     var token: String? = null
-    var pageNum = 1
+    var currentPage = 1
     var pageSize = 50
 
     constructor(
@@ -46,7 +46,7 @@ class OrderListRequest : BaseRequest {
         this.accountId = accountId
         this.token = token
         this.transaction = transaction
-        this.pageNum = pageNum
+        this.currentPage = pageNum
         this.pageSize = pageSize
         generateSign()
     }
