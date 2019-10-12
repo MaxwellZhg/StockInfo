@@ -159,7 +159,7 @@ class SimulationTradingSearchAdapter(context: Context) : RecyclerView.Adapter<Re
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     interface OnSimulationTradingSearchListener {
-        fun onItemClick(stocks: SearchStockInfo)
+        fun onItemClick(data: SearchStockInfo)
     }
 
 

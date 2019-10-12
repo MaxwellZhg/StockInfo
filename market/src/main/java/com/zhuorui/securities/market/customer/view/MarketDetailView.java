@@ -22,6 +22,6 @@ public class MarketDetailView extends FrameLayout {
 
     public MarketDetailView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-//        inflate(context, R.layout.layout_)
+        inflate(context, R.layout.view_market_detail,this);
     }
 }
