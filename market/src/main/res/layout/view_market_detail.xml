@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:background="#2D2C35"
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -210,6 +211,191 @@
     />
 
     <TextView
+            android:id="@+id/tv_4_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="振幅"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_3_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_3_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_3_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_4_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="今开"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_4_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_3_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_3_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_4_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="总股本"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_4_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_3_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_3_3"
+    />
+
+    <TextView
+            android:id="@+id/tv_5_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="52周最高"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_4_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_4_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_4_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_5_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="股息"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_5_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_4_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_4_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_5_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="股息"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_5_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_4_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_4_3"
+    />
+
+    <TextView
+            android:id="@+id/tv_6_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="52周最低"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_5_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_5_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_5_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_6_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="委比"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_6_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_5_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_5_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_6_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="流通率"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_6_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_5_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_5_3"
+    />
+
+    <TextView
+            android:id="@+id/tv_7_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="每手"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_6_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_6_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_6_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_7_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="量比"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_7_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_6_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_6_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_7_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="股息率"
+            android:textColor="#A4B2CB"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_7_1"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_6_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_6_3"
+    />
+
+    <TextView
+            android:id="@+id/more_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看更多"
+            android:textColor="#53A0FD"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_7_1"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+    />
+
+    <androidx.constraintlayout.widget.Group
+            android:id="@+id/more_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tv_4_1,tv_4_2,tv_4_3,tv_5_1,tv_5_2,tv_5_3,tv_6_1,tv_6_2,tv_6_3,tv_7_1,tv_7_2,tv_7_3,tv_41,tv_42,tv_43,tv_51,tv_52,tv_53,tv_61,tv_62,tv_63,tv_71,tv_72,tv_73"
+    />
+
+    <!--数据展示-->
+
+    <TextView
+            android:id="@+id/tv_11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="90.950"
@@ -222,6 +408,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="90.100"
@@ -234,6 +421,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="329.27万股"
@@ -246,6 +434,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="89.600"
@@ -258,6 +447,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="90.100"
@@ -270,6 +460,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.18亿"
@@ -282,6 +473,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0.05%"
@@ -294,6 +486,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="13.56"
@@ -306,6 +499,7 @@
     />
 
     <TextView
+            android:id="@+id/tv_33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1.66万亿"
@@ -318,16 +512,157 @@
     />
 
     <TextView
+            android:id="@+id/tv_41"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="查看更多"
-            android:textColor="#53A0FD"
+            android:text="1.50%"
+            android:textColor="@android:color/white"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_3_1"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_4_1"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_4_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_4_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_42"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.62"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_4_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_4_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_4_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_43"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="182.80亿"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_4_3"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_4_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_4_3"
+    />
+
+    <TextView
+            android:id="@+id/tv_51"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="98.000"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_5_1"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_5_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_5_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_52"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.12"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_5_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_5_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_5_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_53"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6766.12亿"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_5_3"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_5_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_5_3"
+    />
+    <TextView
+            android:id="@+id/tv_61"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="64.666"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_6_1"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_6_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_6_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_62"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-7.61%"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_6_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_6_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_6_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_63"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="74.48亿"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_6_3"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_6_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_6_3"
+    />
+    <TextView
+            android:id="@+id/tv_71"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_7_1"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_7_1"
+            app:layout_constraintRight_toRightOf="@+id/tv_7_1"
+    />
+
+    <TextView
+            android:id="@+id/tv_72"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.87"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_7_2"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_7_2"
+            app:layout_constraintRight_toRightOf="@+id/tv_7_2"
+    />
+
+    <TextView
+            android:id="@+id/tv_73"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.34%"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/tv_7_3"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_7_3"
+            app:layout_constraintRight_toRightOf="@+id/tv_7_3"
     />
 
 

@@ -20,13 +20,16 @@
 
         <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_view"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="2dp"
                 android:fadingEdge="none"
                 android:overScrollMode="never">
+
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                 <!--股票信息-->
@@ -67,6 +70,18 @@
                         android:layout_marginTop="2dp"
                 />
 
+                <!--买卖盘经纪-->
+                <TextView
+                        android:text="买卖盘经纪"
+                        android:gravity="center"
+                        android:textColor="#C0CCE0"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="157dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#2D2C35"
+                />
+
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator"
                         android:layout_width="match_parent"
@@ -83,6 +98,15 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+        />
+
+        <include
+                layout="@layout/layout_market_detail_bottom"/>
 
 
     </LinearLayout>
