@@ -121,7 +121,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                         viewModel?.updateOrderId?.value = orderData.id
                         viewModel?.updateType?.value = 1
                         // 显示订单委托价格、委托股数
-                        viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
+                        viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holdCost!!)
                         viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
                         // 显示买入改单状态
                         view?.changeTrustType(1)
@@ -148,7 +148,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                         viewModel?.updateOrderId?.value = orderData.id
                         viewModel?.updateType?.value = 2
                         // 显示订单委托价格、委托股数
-                        viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holeCost!!)
+                        viewModel?.buyPrice?.value = MathUtil.rounded3(orderData.holdCost!!)
                         viewModel?.buyCount?.value = orderData.holdStockCount?.toInt()
                         updateMaxBuySell(orderData.saleStockCount!!.toLong())
                         // 显示卖出改单状态

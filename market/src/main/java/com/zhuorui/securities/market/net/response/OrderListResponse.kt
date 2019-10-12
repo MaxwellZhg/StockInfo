@@ -14,9 +14,7 @@ class OrderListResponse(val data: Data) : BaseResponse(){
     data class Data(
         val list: List<STOrderData>?,
         val total: Int?,//总数
-        val size: Int?,//返回的数据大小
-        val current: Int?,//起始页数
-        val pages: Int?,//一页查询多少条
-        val searchCount: Boolean?
+        val currentPage: Int?,//起始页数
+        val pageSize: Int?//一页查询多少条
     )
 }

@@ -190,7 +190,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             val itemHolder = (holder as ItemViewHolder)
             val dataPos = getDataPosition(position)
             val data = datas?.get(dataPos)!!
-            if (data?.selected == null) data?.selected = selected.contains(dataPos)
+            if (data.selected == null) data.selected = selected.contains(dataPos)
             itemHolder.bindData(dataPos, data)
 
         }
@@ -240,7 +240,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             stockName?.text = data.stockName
             stockTsCode?.text = data.code + "." + data.ts
             number?.text = data.holdStockCount.toString()
-            presentPrice?.text = data.holeCost.toString()
+            presentPrice?.text = data.holdCost.toString()
             orderDate?.text = TimeZoneUtil.timeFormat(data.createTime!!, "MM-dd")
             orderTime?.text = TimeZoneUtil.timeFormat(data.createTime!!, "HH:mm:ss")
             item?.tag = position
@@ -249,12 +249,12 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
             orderQuotation?.tag = position
             change?.tag = position
             cancel?.tag = position
-            orderType?.text = data?.trustName
-            orderType?.setTextColor(data?.trustColor!!)
-            orderStatus?.text = data?.statusName
-            orderStatus?.setCompoundDrawablesWithIntrinsicBounds(data?.statusLogo!!, 0, 0, 0)
+            orderType?.text = data.trustName
+            orderType?.setTextColor(data.trustColor!!)
+            orderStatus?.text = data.statusName
+            orderStatus?.setCompoundDrawablesWithIntrinsicBounds(data.statusLogo!!, 0, 0, 0)
             if (canClick) {
-                val status = data?.majorStatus
+                val status = data.majorStatus
                 menuType = if (status == 1 || status == 3) {
                     1
                 } else if (status == 4 || status == 5) {
@@ -262,7 +262,7 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                 } else {
                     0
                 }
-                if (data?.selected!!) {
+                if (data.selected!!) {
                     showBtn()
                 } else {
                     hideBtn()

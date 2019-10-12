@@ -165,8 +165,8 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             val itemHolder = (holder as ItemViewHolder)
             val dataPos = getDataPosition(position)
             val data = datas?.get(dataPos)!!
-            if (data?.selected == null)
-                data?.selected = selected.contains(dataPos)
+            if (data.selected == null)
+                data.selected = selected.contains(dataPos)
             itemHolder.bindData(dataPos, data)
         }
     }
@@ -210,23 +210,23 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             item?.tag = position
             business?.tag = position
             quotation?.tag = position
-            stockName?.text = data?.stockName
-            stockTsCode?.text = data?.code + "." + data?.ts
-            marketValue?.text = data?.marketValue.toString()
-            presentPrice?.text = data?.presentPrice.toString()
-            number?.text = data?.holdStockCount.toString()
-            cost?.text = data?.holeCost.toString()
-            profitAndLoss?.text = data?.profitAndLoss.toString()
-            btnGroup?.visibility = if (data?.selected!!) View.VISIBLE else View.GONE
+            stockName?.text = data.stockName
+            stockTsCode?.text = data.code + "." + data.ts
+            marketValue?.text = data.marketValue.toString()
+            presentPrice?.text = data.presentPrice.toString()
+            number?.text = data.holdStockCount.toString()
+            cost?.text = data.holdCost.toString()
+            profitAndLoss?.text = data.profitAndLoss.toString()
+            btnGroup?.visibility = if (data.selected!!) View.VISIBLE else View.GONE
             when {
-                data?.profitAndLoss!!.toFloat() > 0 -> {
+                data.profitAndLoss != null && data.profitAndLoss!!.toFloat() > 0 -> {
                     profitAndLoss?.setTextColor(upColor)
-                    profitAndLossPercentage?.text = "+" + DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
+                    profitAndLossPercentage?.text = "+" + DecimalFormat("0.00%").format(data.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(upColor)
                 }
-                data?.profitAndLoss!!.toFloat() < 0 -> {
+                data.profitAndLoss != null && data.profitAndLoss!!.toFloat() < 0 -> {
                     profitAndLoss?.setTextColor(downColor)
-                    profitAndLossPercentage?.text = DecimalFormat("0.00%").format(data?.profitAndLossPercentage)
+                    profitAndLossPercentage?.text = DecimalFormat("0.00%").format(data.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(downColor)
                 }
                 else -> {
