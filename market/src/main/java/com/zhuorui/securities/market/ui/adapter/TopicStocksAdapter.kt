@@ -94,6 +94,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             }
 
             tv_stock_tile.text = item?.name
+            tv_stock_tile.invalidate()
             stock_code.text = item?.code
             when (item?.ts) {
                 StockTsEnum.HK.name -> {
