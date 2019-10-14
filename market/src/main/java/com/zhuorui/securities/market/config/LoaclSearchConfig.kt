@@ -9,9 +9,9 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/14
- * Desc:
+ * Desc: 本地搜索股票信息记录缓存
  */
-class LoaclSearchConfig :AbsConfig(){
+class LoaclSearchConfig : AbsConfig() {
 
     private var serachStocks: ArrayList<SearchStockInfo> = ArrayList()
 
@@ -37,6 +37,7 @@ class LoaclSearchConfig :AbsConfig(){
     fun isExist(ts: String, code: String): Boolean {
         return getStock(ts, code) != null
     }
+
     /**
      * 检查搜索股列表中是对比
      */
@@ -96,10 +97,6 @@ class LoaclSearchConfig :AbsConfig(){
                 config.write()
             }
             return config
-        }
-
-        fun hasCache(): Boolean {
-            return StorageInfra.get(LoaclSearchConfig::class.java.simpleName, LoaclSearchConfig::class.java) != null
         }
     }
 }
