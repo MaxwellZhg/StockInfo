@@ -113,15 +113,8 @@ public abstract class Utils {
                             "take place.");
             return dp;
         }
-        int designWidthInDp = AutoSizeConfig.getInstance().getDesignWidthInDp();
-        int designHeightInDp = AutoSizeConfig.getInstance().getDesignHeightInDp();
 
-        int screenHeight = mMetrics.heightPixels;
-        int screenWidth = mMetrics.widthPixels;
-        float scaleH = screenHeight / designWidthInDp;
-        float scaleW = screenWidth / designHeightInDp;
-        float scale = scaleH < scaleW ? scaleW : scaleH;
-        return dp * mMetrics.density / scale * 1.5f;
+        return dp * mMetrics.density;
     }
 
     /**
