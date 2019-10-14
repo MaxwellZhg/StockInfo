@@ -4,6 +4,7 @@ import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -139,14 +140,21 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data?.datas
         if (datas.isNullOrEmpty()) return
+        var isRefresh = false
         if ((response.request as RecommendStocklistRequest).currentPage == 0) {
             // 刷新数据时要清掉老数据
             viewModel?.datas?.value?.clear()
+            isRefresh = true
         }
         viewModel?.datas?.value?.addAll(datas)
         RxBus.getDefault().post(NotifyStockCountEvent(ts, if (datas.isNullOrEmpty()) 0 else datas.size))
         view?.notifyDataSetChanged(viewModel?.datas?.value)
-
+        val noMoreData = datas.size < (response.request as RecommendStocklistRequest).pageSize
+        if (isRefresh) {
+            view?.finishRefresh(true, noMoreData)
+        } else {
+            view?.finishLoadMore(true, noMoreData)
+        }
         // 订阅价格
         var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             emitter.onNext(topicPrice(datas))
@@ -331,13 +339,24 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
     }
 
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+        if (response.request is RecommendStocklistRequest) {
+            if ((response.request as RecommendStocklistRequest).currentPage == 0) {
+                view?.finishRefresh(false, null)
+            } else {
+                view?.finishLoadMore(false, null)
+            }
+        }
+    }
+
     /**
      * 同步自选股完成
      */
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSynStockResponse(response: SynStockResponse) {
         // 同步完成，重新拉取自选股列表
-        view?.requestStocks()
+        view?.refreshStocks()
     }
 
     /**
@@ -362,7 +381,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             // 清空所有的缓存
             LocalStocksConfig.getInstance().clear()
             // 重新拉取未登录状态的自选股列表
-            view?.requestStocks()
+            view?.refreshStocks()
         }
     }
 

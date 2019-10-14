@@ -6,6 +6,8 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
@@ -34,11 +36,11 @@ import kotlinx.android.synthetic.main.layout_guide_open_accout.*
 class TopicStockListFragment :
     AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListView, TopicStockListPresenter>(),
     BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
-    TopicStockListView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
+    TopicStockListView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo>, OnRefreshLoadMoreListener {
 
     private var mAdapter: TopicStocksAdapter? = null
     private var currentPage = 0
-    private var pageSize = 20
+    private val pageSize = 20
 
     companion object {
         fun newInstance(type: StockTsEnum?): TopicStockListFragment {
@@ -87,7 +89,19 @@ class TopicStockListFragment :
         mAdapter?.setLongClickItemCallback(this)
         rv_stock.adapter = mAdapter
 
-        requestStocks()
+        refrsh_layout.setOnRefreshLoadMoreListener(this)
+
+        refreshStocks()
+    }
+
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        refreshStocks()
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        currentPage++
+        presenter?.requestStocks(currentPage, pageSize)
     }
 
     override fun onClickItem(pos: Int, item: StockMarketInfo?, v: View?) {
@@ -147,6 +161,20 @@ class TopicStockListFragment :
         }
     }
 
+    override fun finishRefresh(success: Boolean, noMoreData: Boolean?) {
+        refrsh_layout.finishRefresh(success)
+        if (noMoreData != null) {
+            refrsh_layout.setNoMoreData(noMoreData)
+        }
+    }
+
+    override fun finishLoadMore(success: Boolean, noMoreData: Boolean?) {
+        refrsh_layout.finishLoadMore(success)
+        if (noMoreData != null) {
+            refrsh_layout.setNoMoreData(noMoreData)
+        }
+    }
+
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
         _mActivity?.runOnUiThread {
             if (mAdapter?.items == null) {
@@ -162,9 +190,10 @@ class TopicStockListFragment :
     }
 
     /**
-     * 加载推荐自选股列表
+     * 刷新自选股列表
      */
-    override fun requestStocks() {
+    override fun refreshStocks() {
+        currentPage = 0
         presenter?.requestStocks(currentPage, pageSize)
     }
 

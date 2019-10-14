@@ -13,7 +13,11 @@ interface TopicStockListView : AbsView {
 
     fun init()
 
-    fun requestStocks()
+    fun refreshStocks()
+
+    fun finishRefresh(success: Boolean, noMoreData: Boolean?)
+
+    fun finishLoadMore(success: Boolean, noMoreData: Boolean?)
 
     fun notifyDataSetChanged(list: List<StockMarketInfo>?)
 

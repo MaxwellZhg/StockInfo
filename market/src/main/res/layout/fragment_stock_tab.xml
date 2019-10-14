@@ -51,20 +51,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srlEnableLoadMore="false"
-                    app:srlEnableOverScrollBounce="true"
-                    app:srlEnableOverScrollDrag="true"
-                    app:srlEnableRefresh="false"
-                    app:srlReboundDuration="1000">
-
-                <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/viewpager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                    android:layout_height="match_parent"/>
 
             <RelativeLayout
                     android:id="@+id/rl_filter"
