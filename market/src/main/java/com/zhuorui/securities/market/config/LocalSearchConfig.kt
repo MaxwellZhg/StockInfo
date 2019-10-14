@@ -11,10 +11,15 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Date: 2019/10/14
  * Desc:
  */
-class LoaclSearchConfig :AbsConfig(){
+class LocalSearchConfig :AbsConfig(){
 
     private var serachStocks: ArrayList<SearchStockInfo> = ArrayList()
 
+
+    @Synchronized
+    fun getStocks(): ArrayList<SearchStockInfo> {
+        return serachStocks
+    }
     /**
      * 添加搜索记录
      */
@@ -24,7 +29,11 @@ class LoaclSearchConfig :AbsConfig(){
             LogInfra.Log.d(TAG, "add " + stockInfo.name + " failed. Current cache zise " + serachStocks.size)
             return false
         }
-        serachStocks.add(stockInfo)
+        if(serachStocks.size<10) {
+            serachStocks.add(stockInfo)
+        }else{
+
+        }
         LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded. Current cache zise " + serachStocks.size)
         write()
         return true
@@ -50,9 +59,9 @@ class LoaclSearchConfig :AbsConfig(){
     }
 
 
-    /**
+/*    *//**
      * 删除自选股
-     */
+     *//*
     @Synchronized
     fun remove(ts: String, code: String): Boolean {
         val stock = getStock(ts, code)
@@ -63,23 +72,30 @@ class LoaclSearchConfig :AbsConfig(){
             return true
         }
         return false
-    }
+    }*/
 
     override fun write() {
-        StorageInfra.put(LoaclSearchConfig::class.java.simpleName, this)
+        StorageInfra.put(LocalSearchConfig::class.java.simpleName, this)
     }
+
+    @Synchronized
+    fun clear() {
+        serachStocks.clear()
+        StorageInfra.remove(LocalSearchConfig::class.java.simpleName, LocalSearchConfig::class.java.name)
+    }
+
 
 
     companion object {
 
         private val TAG = "LoacLSearchConfig"
 
-        private var instance: LoaclSearchConfig? = null
+        private var instance: LocalSearchConfig? = null
 
-        fun getInstance(): LoaclSearchConfig {
+        fun getInstance(): LocalSearchConfig {
             if (instance == null) {
                 // 使用同步锁
-                synchronized(LoaclSearchConfig::class.java) {
+                synchronized(LocalSearchConfig::class.java) {
                     if (instance == null) {
                         instance = read()
                     }
@@ -88,18 +104,18 @@ class LoaclSearchConfig :AbsConfig(){
             return instance!!
         }
 
-        private fun read(): LoaclSearchConfig {
-            var config: LoaclSearchConfig? =
-                StorageInfra.get(LoaclSearchConfig::class.java.simpleName, LoaclSearchConfig::class.java)
+        private fun read(): LocalSearchConfig {
+            var config: LocalSearchConfig? =
+                StorageInfra.get(LocalSearchConfig::class.java.simpleName, LocalSearchConfig::class.java)
             if (config == null) {
-                config = LoaclSearchConfig()
+                config = LocalSearchConfig()
                 config.write()
             }
             return config
         }
 
         fun hasCache(): Boolean {
-            return StorageInfra.get(LoaclSearchConfig::class.java.simpleName, LoaclSearchConfig::class.java) != null
+            return StorageInfra.get(LocalSearchConfig::class.java.simpleName, LocalSearchConfig::class.java) != null
         }
     }
 }

@@ -29,4 +29,6 @@ interface SearchResultInfoView :AbsView{
   fun showEmpty()
   fun hideEmpty()
 
+  fun showloadMoreFail()
+
 }

@@ -27,6 +27,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:background="@mipmap/ic_detele"
                 android:layout_marginEnd="13dp"
+                android:id="@+id/iv_detele_all"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="16dp"
                 android:layout_height="15dp"/>

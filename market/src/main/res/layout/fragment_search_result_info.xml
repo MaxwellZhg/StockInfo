@@ -11,7 +11,7 @@
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/sm_refrsh"
             app:srlEnableOverScrollBounce="true"
             app:srlEnableOverScrollDrag="true"
@@ -28,7 +28,7 @@
                android:id="@+id/empty_view"
                android:layout_width="match_parent"
                android:layout_height="match_parent"
-               android:background="@color/color_282828"
+               android:background="@color/color_211F2A"
                app:empty_img_width="64dp"
                app:empty_img_height="64dp"
                app:empty_img_tips_margin="45dp"

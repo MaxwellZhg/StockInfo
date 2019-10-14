@@ -24,8 +24,10 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         // 由于每行都只有3个，所以第一个都是3的倍数，把左边距设为0
         if (parent.getChildLayoutPosition(view) %2==0) {
             outRect.left = 0;
+            outRect.right = 0;
             outRect.right = right;
         }else{
+            outRect.left = 0;
             outRect.left = left;
             outRect.right = 0;
         }

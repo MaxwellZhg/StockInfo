@@ -21,6 +21,7 @@ import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.event.TabPositionEvent
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.model.TestSeachDefaultData
@@ -45,7 +46,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
-    SearchInfoView, View.OnClickListener, TextWatcher, View.OnTouchListener, AbsActivity.OnDispatchTouchEventListener {
+    SearchInfoView, View.OnClickListener, TextWatcher, View.OnTouchListener, AbsActivity.OnDispatchTouchEventListener,
+    SearchInfoAdapter.OnDeteleHistoryClickListener, SearchInfoAdapter.OnTopicStockInfoListenner {
 
     var mfragment = ArrayList<StockPageInfo>()
 
@@ -80,6 +82,8 @@ class SearchInfoFragment :
         super.onLazyInitView(savedInstanceState)
         presenter?.setLifecycleOwner(this)
         adapter = presenter?.getAdapter()
+        adapter?.onDeteleHistoryClickListener=this
+        adapter?.onTopicStockInfoListenner=this
         search_info.adapter = adapter
         presenter?.getData()
         mfragment.add(StockPageInfo(ResUtil.getString(R.string.stock_search_all), SearchStokcInfoEnum.All))
@@ -115,6 +119,8 @@ class SearchInfoFragment :
                     )
                 } else {
                     et_search_info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+                    adapter?.clearItems()
+                    presenter?.getData()
                     search_info.visibility = View.VISIBLE
                     ll_search_info.visibility = View.GONE
                 }
@@ -122,6 +128,8 @@ class SearchInfoFragment :
 
         } else {
             et_search_info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            adapter?.clearItems()
+            presenter?.getData()
             search_info.visibility = View.VISIBLE
             ll_search_info.visibility = View.GONE
         }
@@ -230,12 +238,18 @@ class SearchInfoFragment :
         }
     }
 
-    override fun notifyDataSetChanged(list: List<TestSeachDefaultData>?) {
-        if (adapter?.items == null) {
+    override fun notifyDataSetChanged(list: TestSeachDefaultData) {
+ /*       if (adapter?.items == null) {
             adapter?.items = list
         } else {
             adapter?.notifyDataSetChanged()
+        }*/
+
+        adapter?.clearItems()
+        if (adapter?.items == null) {
+            adapter?.items = ArrayList()
         }
+        adapter?.addItem(list)
     }
 
     override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
@@ -259,5 +273,17 @@ class SearchInfoFragment :
         if (event?.action == MotionEvent.ACTION_DOWN) {
             hideSoftInput()
         }
+    }
+    override fun onClickDeteleHistory() {
+        adapter?.clearItems()
+        presenter?.getData()
+    }
+
+    override fun onClickCollectionStock(stock: SearchStockInfo) {
+      presenter?.collectionStock(stock,stock.collect)
+    }
+
+    override fun notifyAdapter() {
+        adapter?.notifyDataSetChanged()
     }
 }

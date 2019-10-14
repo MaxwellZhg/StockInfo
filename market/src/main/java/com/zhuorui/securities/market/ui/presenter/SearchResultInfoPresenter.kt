@@ -131,7 +131,15 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         }
         val datas = response.data.datas
         totalPage=response.data.totalPage
-        if (datas.isNullOrEmpty()) return
+        if (datas.isNullOrEmpty()){
+            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                view?.showloadMoreFail()
+                emitter.onNext(true)
+                emitter.onComplete()
+            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+            disposables.add(disposable)
+            return
+        }
         val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             view?.hideEmpty()
             emitter.onNext(true)

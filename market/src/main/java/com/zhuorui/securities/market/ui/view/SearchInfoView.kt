@@ -17,5 +17,6 @@ import java.util.ArrayList
  */
 interface SearchInfoView :AbsView{
     fun changeTab(enum: ChageSearchTabEvent)
-    fun notifyDataSetChanged(list: List<TestSeachDefaultData>?)
+    fun notifyDataSetChanged(list: TestSeachDefaultData)
+    fun notifyAdapter()
 }

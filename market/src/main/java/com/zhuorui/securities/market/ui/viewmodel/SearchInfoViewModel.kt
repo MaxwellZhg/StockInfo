@@ -17,7 +17,7 @@ import com.zhuorui.securities.market.ui.adapter.SearchInfoAdapter
  * Desc:
  */
 class SearchInfoViewModel :ViewModel(){
-    var searchInfoDatas: MutableLiveData<MutableList<TestSeachDefaultData>> = MutableLiveData()
+    var searchInfoDatas: MutableLiveData<TestSeachDefaultData> = MutableLiveData()
     var fragments=ArrayList<StockPageInfo>()
     init {
         fragments.add(StockPageInfo(ResUtil.getString(R.string.stock_search_all),SearchStokcInfoEnum.All))

@@ -8,6 +8,7 @@
 <androidx.appcompat.widget.AppCompatTextView
         android:text="奋达科技(002681.SZ)"
         android:layout_marginStart="13dp"
+        android:id="@+id/tv_stock_name"
         android:layout_centerVertical="true"
         android:textSize="16sp"
         android:textColor="@color/color_CCCCCC"
@@ -18,6 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:id="@+id/iv_stock_state"
             android:layout_marginEnd="13dp"
             android:layout_width="15dp"
             android:layout_height="15dp"/>

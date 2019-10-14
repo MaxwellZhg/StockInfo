@@ -2,13 +2,16 @@ package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.commonwidget.ZrCompareTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.config.LocalSearchConfig
 import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
@@ -38,8 +41,11 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         lateinit var tv_stock_code: ZrCompareTextView
         @BindView(R2.id.iv_topic)
         lateinit var iv_topic: AppCompatImageView
+        @BindView(R2.id.rl_stock)
+        lateinit var rl_stock: ConstraintLayout
         init {
             iv_topic.setOnClickListener(this)
+            rl_stock.setOnClickListener(this)
         }
 
         override fun bind(item: SearchStockInfo?, position: Int) {
@@ -69,6 +75,9 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         override fun onClick(v: View) {
                 if (v == iv_topic) {
                     getItem(position)?.let { onStockColollectListenner?.onStockCollectionStock(it) }
+                }else if(v == rl_stock){
+                    getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
+                    ToastUtil.instance.toastCenter("加入历史记录")
                 } else {
                     super.onClick(v)
                 }

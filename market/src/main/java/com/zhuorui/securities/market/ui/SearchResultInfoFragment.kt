@@ -159,6 +159,7 @@ class SearchResultInfoFragment :
                 stockadapter?.items = ArrayList()
             }
             if(!list?.let { stockadapter?.items?.containsAll(it) }!!) {
+                sm_refrsh.finishLoadMore(true)
                 stockadapter?.addItems(list)
             }
         }
@@ -194,13 +195,12 @@ class SearchResultInfoFragment :
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         when(presenter?.ts){
             SearchStokcInfoEnum.Stock->{
-                sm_refrsh.finishLoadMore(true)
                 currentPage++
                 strInfo?.let { presenter?.getStockData(it,currentPage) }
-                if(currentPage==totalPage){
-                    //refreshLayout.finishLoadMore(false)//结束加载（加载失败）
-                    refreshLayout.setNoMoreData(true)
-                }
+           /*     if(currentPage==totalPage){
+                    sm_refrsh.finishLoadMore(false)//结束加载（加载失败）
+                    sm_refrsh.setNoMoreData(true)
+                }*/
             }
         }
 
@@ -216,6 +216,9 @@ class SearchResultInfoFragment :
     override fun hideEmpty() {
         empty_view.visibility=View.INVISIBLE
     }
-
+    override fun showloadMoreFail() {
+        sm_refrsh.finishLoadMore(false)//结束加载（加载失败）
+        sm_refrsh.setNoMoreData(true)
+    }
 }
 

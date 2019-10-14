@@ -9,9 +9,10 @@ import com.zhuorui.commonwidget.ZrCompareTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
-import com.zhuorui.securities.market.config.LoaclSearchConfig
+import com.zhuorui.securities.market.config.LocalSearchConfig
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
@@ -91,8 +92,9 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
        override fun onClick(v: View) {
            if (v == iv_topic) {
                getItem(position)?.let { onTopicStockInfoListener?.topicStockInfo(it) }
-           }else if(v ==rl_stock){
-               getItem(position)?.let { LoaclSearchConfig.getInstance().add(it) }
+           }else if(v == rl_stock){
+               getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
+               ToastUtil.instance.toastCenter("加入历史记录")
            } else{
                super.onClick(v)
            }
