@@ -64,8 +64,7 @@ class LocalStocksConfig : AbsConfig() {
             stocks.addAll(list)
         } else {
             // 拷贝数据
-            val tempList = ArrayList<StockMarketInfo>()
-            tempList.addAll(stocks)
+            val tempList = ArrayList<StockMarketInfo>(stocks)
             for (item in list) {
                 var isExist = false
                 for (stock in tempList) {

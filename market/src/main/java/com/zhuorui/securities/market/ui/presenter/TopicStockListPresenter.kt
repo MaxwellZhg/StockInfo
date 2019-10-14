@@ -42,6 +42,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  *    author : PengXianglin
@@ -213,7 +214,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             }
         }
         // 保存本地数据
-        LocalStocksConfig.getInstance().update(datas)
+        LocalStocksConfig.getInstance().update(ArrayList(datas))
     }
 
     /**
