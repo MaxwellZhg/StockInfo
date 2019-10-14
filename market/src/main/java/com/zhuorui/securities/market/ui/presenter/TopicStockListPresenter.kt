@@ -139,27 +139,31 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     fun onRecommendStocklistResponse(response: RecommendStocklistResponse) {
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data?.datas
-        if (datas.isNullOrEmpty()) return
+
         var isRefresh = false
         if ((response.request as RecommendStocklistRequest).currentPage == 0) {
             // 刷新数据时要清掉老数据
             viewModel?.datas?.value?.clear()
             isRefresh = true
         }
-        viewModel?.datas?.value?.addAll(datas)
-        RxBus.getDefault().post(NotifyStockCountEvent(ts, if (datas.isNullOrEmpty()) 0 else datas.size))
-        view?.notifyDataSetChanged(viewModel?.datas?.value)
-        val noMoreData = datas.size < (response.request as RecommendStocklistRequest).pageSize
+        val noMoreData = (datas?.size ?: 0) < (response.request as RecommendStocklistRequest).pageSize
         if (isRefresh) {
             view?.finishRefresh(true, noMoreData)
         } else {
             view?.finishLoadMore(true, noMoreData)
         }
+
+        if (datas.isNullOrEmpty()) return
+
+        viewModel?.datas?.value?.addAll(datas)
+        RxBus.getDefault().post(NotifyStockCountEvent(ts, if (datas.isNullOrEmpty()) 0 else datas.size))
+
+        view?.notifyDataSetChanged(viewModel?.datas?.value)
         // 订阅价格
         var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             emitter.onNext(topicPrice(datas))
             emitter.onComplete()
-        }).subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.computation())
             .subscribe()
         disposables.add(disposable)
 

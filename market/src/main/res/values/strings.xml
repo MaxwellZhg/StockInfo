@@ -147,4 +147,6 @@
     <string name="delete_topic_stock_tips" translatable="false">确定删除该自选股票</string>
     <string name="network_unavailable_tips" translatable="false">网络连接不可用，请检查网络设置</string>
     <string name="check_network_setting" translatable="false">检查设置</string>
+    <string name="no_stock_str">暂无股票</string>
+    <string name="add_stocks_str">添加自选股</string>
 </resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:gravity="center_horizontal"
+              android:layout_height="match_parent">
+
+    <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="92dp"
+            android:src="@mipmap/ic_empty_list"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_stock_str"
+            android:layout_marginTop="11dp"
+            android:textColor="@color/color_CCCCCC"
+            android:textSize="14sp"/>
+
+    <com.zhuorui.commonwidget.StateButton
+            android:id="@+id/btn_add_stotcks"
+            android:layout_width="125dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            app:radius="5dp"
+            android:text="@string/add_stocks_str"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:padding="0dp"
+            android:minHeight="0dp"
+            android:theme="@style/btnStyle"/>
+</LinearLayout>

@@ -120,11 +120,21 @@
                   android:layout_height="1dp"
                   android:background="@color/cent_color"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_stock"
-                    android:layout_weight="20"
+            <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_weight="20">
+
+                <com.zhuorui.commonwidget.SupportEmptyViewRecyclerView
+                        android:id="@+id/rv_stock"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                <include
+                        android:id="@+id/list_empty_view"
+                        layout="@layout/layout_topic_stock_list_empty"
+                        android:visibility="gone"/>
+            </FrameLayout>
 
             <ViewStub
                     android:id="@+id/guide_open_accout"

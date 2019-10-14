@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="13dp"
-            android:src="@mipmap/iv_network_unavailable"/>
+            android:src="@mipmap/ic_network_unavailable"/>
 
     <TextView
             android:layout_width="wrap_content"

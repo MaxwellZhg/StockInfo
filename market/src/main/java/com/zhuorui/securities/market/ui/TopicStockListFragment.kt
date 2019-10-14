@@ -26,6 +26,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.layout_guide_open_accout.*
+import kotlinx.android.synthetic.main.layout_topic_stock_list_empty.*
 
 /**
  * Created by Maxwell.
@@ -84,11 +85,13 @@ class TopicStockListFragment :
         (rv_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_stock.layoutManager = LinearLayoutManager(context)
         mAdapter = TopicStocksAdapter()
-
         mAdapter?.setClickItemCallback(this)
         mAdapter?.setLongClickItemCallback(this)
         rv_stock.adapter = mAdapter
+        btn_add_stotcks.setOnClickListener(this)
+        rv_stock.setEmptyView(list_empty_view)
 
+        // 设置下拉刷新、加载更多监听
         refrsh_layout.setOnRefreshLoadMoreListener(this)
 
         refreshStocks()
@@ -201,6 +204,10 @@ class TopicStockListFragment :
         when (p0?.id) {
             R.id.tv_register_now -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
+            }
+            R.id.btn_add_stotcks -> {
+                // 跳转到搜索
+                (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
             }
         }
     }
