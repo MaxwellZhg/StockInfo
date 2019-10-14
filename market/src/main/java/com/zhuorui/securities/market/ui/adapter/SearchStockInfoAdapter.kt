@@ -11,6 +11,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.config.LoaclSearchConfig
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
@@ -56,6 +57,8 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
        lateinit var tv_stock_code: ZrCompareTextView
        @BindView(R2.id.iv_topic)
        lateinit var iv_topic: AppCompatImageView
+       @BindView(R2.id.rl_stock)
+       lateinit var rl_stock: ConstraintLayout
        override fun bind(item: SearchStockInfo?, position: Int) {
             tv_stock_info_name.setText(item?.name,str)
             tv_stock_code.setText(item?.code,str)
@@ -82,12 +85,15 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
        }
        init {
            iv_topic.setOnClickListener(this)
+           rl_stock.setOnClickListener(this)
        }
 
        override fun onClick(v: View) {
            if (v == iv_topic) {
                getItem(position)?.let { onTopicStockInfoListener?.topicStockInfo(it) }
-           } else {
+           }else if(v ==rl_stock){
+               getItem(position)?.let { LoaclSearchConfig.getInstance().add(it) }
+           } else{
                super.onClick(v)
            }
        }

@@ -250,7 +250,7 @@ class SearchInfoFragment :
         val drawable = edittext.compoundDrawables[2] ?: return false
         //如果右边没有图片，不再处理
         //如果不是按下事件，不再处理
-        if (event?.action !== MotionEvent.ACTION_UP)
+        if (event?.action != MotionEvent.ACTION_UP)
             return false
         if (event.x > (edittext.width - edittext.paddingRight - drawable.intrinsicWidth)) {
             edittext.setText("")

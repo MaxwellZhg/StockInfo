@@ -5,6 +5,9 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel"/>
     </data>
+   <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
@@ -21,4 +24,17 @@
                 android:layout_height="match_parent"/>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+       <com.zhuorui.commonwidget.ZREmptyView
+               android:id="@+id/empty_view"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:background="@color/color_282828"
+               app:empty_img_width="64dp"
+               app:empty_img_height="64dp"
+               app:empty_img_tips_margin="45dp"
+               android:visibility="invisible"
+               app:empty_img_src="@mipmap/empty_content"
+               app:empty_img_tips="@string/no_data"
+       />
+   </FrameLayout>
 </layout>

@@ -47,6 +47,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
+    var totalPage: Int =0
     override fun init() {
         super.init()
     }
@@ -65,11 +66,13 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 })
             viewModel?.stockdatas?.observe(it,
                 androidx.lifecycle.Observer<List<SearchStockInfo>> { t ->
-                    view?.addStockToAdapter(t)
+                    if(ts==SearchStokcInfoEnum.Stock) {
+                        view?.addStockToAdapter(t, totalPage)
+                    }
                 })
             viewModel?.infos?.observe(it,
                 androidx.lifecycle.Observer<List<Int>> { t ->
-                    view?.addInfoToAdapter(t)
+                    view?.addInfoToAdapter(t,totalPage)
                 })
         }
     }
@@ -78,7 +81,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         listhot.clear()
         history.clear()
         list.clear()
-        getTopicStockData(str, 5)
+        getTopicStockData(str, 0,5)
     }
 
 
@@ -94,9 +97,9 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         return StockInfoAdapter()
     }
 
-    fun getStockData(str: String) {
+    fun getStockData(str: String,currentPage:Int) {
         listhot.clear()
-        getTopicStockData(str, 20)
+        getTopicStockData(str, currentPage,20)
     }
 
     fun getStockInfoData() {
@@ -108,8 +111,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     }
 
-    fun getTopicStockData(keyWord: String, count: Int) {
-        val requset = StockSearchRequest(keyWord, 0, count, transactions.createTransaction())
+    fun getTopicStockData(keyWord: String,currentPage:Int, count: Int) {
+        val requset = StockSearchRequest(keyWord, currentPage, count, transactions.createTransaction())
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
@@ -117,9 +120,24 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
-        if (response.data == null) return
+        if (response.data == null){
+            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                view?.showEmpty()
+                emitter.onNext(true)
+                emitter.onComplete()
+            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+            disposables.add(disposable)
+            return
+        }
         val datas = response.data.datas
+        totalPage=response.data.totalPage
         if (datas.isNullOrEmpty()) return
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            view?.hideEmpty()
+            emitter.onNext(true)
+            emitter.onComplete()
+        }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+        disposables.add(disposable)
         val localStocks = LocalStocksConfig.getInstance().getStocks()
         if (localStocks.isNotEmpty()) {
             for (item in datas) {
@@ -254,6 +272,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
+        view?.showEmpty()
     }
 
     override fun onBaseResponse(response: BaseResponse) {

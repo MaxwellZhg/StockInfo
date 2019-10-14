@@ -18,13 +18,15 @@ interface SearchResultInfoView :AbsView{
   fun detailStock(str:String)
   fun detailStockInfo(str:String)
 
-  fun addInfoToAdapter(list: List<Int>?)
+  fun addInfoToAdapter(list: List<Int>?,totalPage: Int)
 
-  fun addStockToAdapter(list: List<SearchStockInfo>?)
+  fun addStockToAdapter(list: List<SearchStockInfo>?,totalPage:Int)
 
   fun addAllToAdapter(list: List<SearchDeafaultData>?)
 
   fun notifyAdapter()
 
+  fun showEmpty()
+  fun hideEmpty()
 
 }

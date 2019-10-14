@@ -1,7 +1,12 @@
 package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -16,6 +21,7 @@ import com.zhuorui.securities.market.ui.presenter.SearchResultInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchResultInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel
 import kotlinx.android.synthetic.main.fragment_search_result_info.*
+import kotlinx.android.synthetic.main.fragment_simulation_trading_orders.*
 
 /**
  * Created by Maxwell.
@@ -25,8 +31,13 @@ import kotlinx.android.synthetic.main.fragment_search_result_info.*
  */
 class SearchResultInfoFragment :
     AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),
-    SearchResultInfoView, SeachAllofInfoAdapter.OnTopicStockInfoListenner,StockAdapter.OnStockColollectListenner {
+    SearchResultInfoView, SeachAllofInfoAdapter.OnTopicStockInfoListenner,StockAdapter.OnStockColollectListenner,
+    OnRefreshLoadMoreListener {
 
+    var currentPage :Int = 0
+    var totalPage:Int =0
+    var countNum:Int =0
+    private var strInfo:String?=null
     private var adapter: SeachAllofInfoAdapter? = null
     private var stockadapter: StockAdapter? = null
     private var infoadapter: StockInfoAdapter? = null
@@ -41,7 +52,6 @@ class SearchResultInfoFragment :
         get() = ViewModelProviders.of(this).get(SearchResultInfoViewModel::class.java)
     override val getView: SearchResultInfoView
         get() = this
-
     companion object {
         fun newInstance(type: SearchStokcInfoEnum?): SearchResultInfoFragment {
             val fragment = SearchResultInfoFragment()
@@ -56,11 +66,6 @@ class SearchResultInfoFragment :
 
     override fun init() {
         type = arguments?.getSerializable("type") as SearchStokcInfoEnum?
-        adapter = presenter?.getAdapter()
-        adapter?.onTopicStockInfoListenner = this
-        stockadapter = presenter?.getStockAdapter()
-        infoadapter = presenter?.getStockInfoAdapter()
-        stockadapter?.onStockColollectListenner=this
         presenter?.setType(type)
         presenter?.setLifecycleOwner(this)
         if (presenter?.ts != null) {
@@ -71,6 +76,10 @@ class SearchResultInfoFragment :
     }
 
     override fun detailInfo(str: String) {
+        strInfo=str
+        currentPage=0
+        totalPage=0
+        countNum=0
         rv_serach_all.adapter = adapter
         adapter?.setkeywords(str)
         presenter?.getData(type, str)
@@ -78,13 +87,23 @@ class SearchResultInfoFragment :
     }
 
     override fun detailStock(str: String) {
-        presenter?.getStockData(str)
+        strInfo=str
+        currentPage=0
+        //totalPage=0
+        countNum=0
+        sm_refrsh.setNoMoreData(false)
+        presenter?.getStockData(str,currentPage)
         stockadapter?.setkeywords(str)
         rv_serach_all.adapter = stockadapter
         stockadapter?.notifyDataSetChanged()
     }
 
     override fun detailStockInfo(str: String) {
+        strInfo=str
+        currentPage=0
+        countNum=0
+       // totalPage=0
+        sm_refrsh.setNoMoreData(false)
         presenter?.getStockInfoData()
         infoadapter?.setkeywords(str)
         rv_serach_all.adapter = infoadapter
@@ -94,16 +113,23 @@ class SearchResultInfoFragment :
     fun initRv(enum: SearchStokcInfoEnum?) {
         when (enum) {
             SearchStokcInfoEnum.All -> {
+                adapter = presenter?.getAdapter()
+                adapter?.onTopicStockInfoListenner = this
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(false)
             }
             SearchStokcInfoEnum.Stock -> {
+                stockadapter = presenter?.getStockAdapter()
+                stockadapter?.onStockColollectListenner=this
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(true)
+                sm_refrsh.setOnRefreshLoadMoreListener(this)
             }
             SearchStokcInfoEnum.Info -> {
+                infoadapter = presenter?.getStockInfoAdapter()
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(true)
+                sm_refrsh.setOnRefreshLoadMoreListener(this)
             }
         }
 
@@ -113,7 +139,7 @@ class SearchResultInfoFragment :
         init()
     }
 
-    override fun addInfoToAdapter(list: List<Int>?) {
+    override fun addInfoToAdapter(list: List<Int>?,totalPage: Int) {
         if (presenter?.ts == SearchStokcInfoEnum.Info) {
             infoadapter?.clearItems()
             if (infoadapter?.items == null) {
@@ -123,13 +149,18 @@ class SearchResultInfoFragment :
         }
     }
 
-    override fun addStockToAdapter(list: List<SearchStockInfo>?) {
+    override fun addStockToAdapter(list: List<SearchStockInfo>?,totalPage: Int) {
         if (presenter?.ts == SearchStokcInfoEnum.Stock) {
-            stockadapter?.clearItems()
-            if (stockadapter?.items == null) {
+            this.totalPage=totalPage
+            if(currentPage==0) {
+                 stockadapter?.clearItems()
+            }
+           if (stockadapter?.items == null) {
                 stockadapter?.items = ArrayList()
             }
-            stockadapter?.addItems(list)
+            if(!list?.let { stockadapter?.items?.containsAll(it) }!!) {
+                stockadapter?.addItems(list)
+            }
         }
 
     }
@@ -159,6 +190,31 @@ class SearchResultInfoFragment :
                 stockadapter?.notifyDataSetChanged()
             }
         }
+    }
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        when(presenter?.ts){
+            SearchStokcInfoEnum.Stock->{
+                sm_refrsh.finishLoadMore(true)
+                currentPage++
+                strInfo?.let { presenter?.getStockData(it,currentPage) }
+                if(currentPage==totalPage){
+                    //refreshLayout.finishLoadMore(false)//结束加载（加载失败）
+                    refreshLayout.setNoMoreData(true)
+                }
+            }
+        }
+
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+
+    }
+
+    override fun showEmpty() {
+        empty_view.visibility=View.VISIBLE
+    }
+    override fun hideEmpty() {
+        empty_view.visibility=View.INVISIBLE
     }
 
 }
