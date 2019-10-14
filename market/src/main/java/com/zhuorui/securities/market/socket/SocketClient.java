@@ -24,6 +24,7 @@ import com.zhuorui.securities.base2app.util.Md5Util;
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -203,13 +204,17 @@ public class SocketClient {
         if (request == null || client == null || client.getReadyState() != WebSocket.READYSTATE.OPEN) {
             return;
         }
-        String json = JsonUtil.toJson(request);
-        LogInfra.Log.d(TAG, "--> sendRequest " + json);
-        if (openGzip) {
-            byte[] zipBytes = GZipUtil.compress(json);
-            client.send(ByteBuffer.wrap(zipBytes));
-        } else {
-            client.send(ByteBufferUtil.string2ByteBuffer(json));
+        try {
+            String json = JsonUtil.toJson(request);
+            if (openGzip) {
+                byte[] zipBytes = GZipUtil.compress(json);
+                client.send(ByteBuffer.wrap(zipBytes));
+            } else {
+                client.send(ByteBufferUtil.string2ByteBuffer(json));
+            }
+            LogInfra.Log.d(TAG, "--> sendRequest " + json);
+        } catch (WebsocketNotConnectedException e) {
+            e.printStackTrace();
         }
     }
 
