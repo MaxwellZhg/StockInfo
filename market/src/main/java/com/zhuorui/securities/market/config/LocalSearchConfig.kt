@@ -11,7 +11,7 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Date: 2019/10/14
  * Desc: 本地搜索股票信息记录缓存
  */
-class LoaclSearchConfig : AbsConfig() {
+class LocalSearchConfig : AbsConfig() {
 
     private var serachStocks: ArrayList<SearchStockInfo> = ArrayList()
 
@@ -89,7 +89,7 @@ class LoaclSearchConfig : AbsConfig() {
 
     companion object {
 
-        private val TAG = "LoacLSearchConfig"
+        private val TAG = "LocaLSearchConfig"
 
         private var instance: LocalSearchConfig? = null
 
