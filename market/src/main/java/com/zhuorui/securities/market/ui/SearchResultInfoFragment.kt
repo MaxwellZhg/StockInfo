@@ -197,10 +197,6 @@ class SearchResultInfoFragment :
             SearchStokcInfoEnum.Stock->{
                 currentPage++
                 strInfo?.let { presenter?.getStockData(it,currentPage) }
-           /*     if(currentPage==totalPage){
-                    sm_refrsh.finishLoadMore(false)//结束加载（加载失败）
-                    sm_refrsh.setNoMoreData(true)
-                }*/
             }
         }
 
@@ -211,13 +207,15 @@ class SearchResultInfoFragment :
     }
 
     override fun showEmpty() {
-        empty_view.visibility=View.VISIBLE
+        sm_refrsh.finishLoadMore(false)
+        //empty_view.visibility=View.VISIBLE
     }
     override fun hideEmpty() {
         empty_view.visibility=View.INVISIBLE
     }
     override fun showloadMoreFail() {
-        sm_refrsh.finishLoadMore(false)//结束加载（加载失败）
+        sm_refrsh.finishLoadMore(true)//结束加载（加载失败）
+       sm_refrsh.finishLoadMoreWithNoMoreData()
         sm_refrsh.setNoMoreData(true)
     }
 }
