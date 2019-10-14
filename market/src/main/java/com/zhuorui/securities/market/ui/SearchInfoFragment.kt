@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -44,25 +45,31 @@ import kotlin.collections.ArrayList
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/19
- * Desc:
+ * Desc: 搜索股票、资讯
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
-    SearchInfoView, View.OnClickListener, TextWatcher,View.OnTouchListener{
-    var mfragment=ArrayList<StockPageInfo>()
+    SearchInfoView, View.OnClickListener, TextWatcher, View.OnTouchListener, AbsActivity.OnDispatchTouchEventListener {
+
+    var mfragment = ArrayList<StockPageInfo>()
+
     private var adapter: SearchInfoAdapter? = null
+
     override val layout: Int
         get() = R.layout.fragment_search_info
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: SearchInfoPresenter
         get() = SearchInfoPresenter(requireContext())
+
     override val createViewModel: SearchInfoViewModel?
         get() = ViewModelProviders.of(this).get(SearchInfoViewModel::class.java)
+
     override val getView: SearchInfoView
         get() = this
-    private var handler = Handler()
-    private var getTopicStockDataRunnable: GetTopicStockDataRunnable? = null
+
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
@@ -85,8 +92,7 @@ class SearchInfoFragment :
         mfragment?.let { initViewPager(it) }
         tv_cancle.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
-        et_search_info.setOnTouchListener(this)
-
+        (activity as AbsActivity).setDispatchTouchEventListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -102,7 +108,7 @@ class SearchInfoFragment :
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
                     RxBus.getDefault().post(TabPositionEvent(viewpager.currentItem))
-                    presenter?.initViewPager(it,mfragment[viewpager.currentItem].type)
+                    presenter?.initViewPager(it, mfragment[viewpager.currentItem].type)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
                     et_search_info.setCompoundDrawablesWithIntrinsicBounds(
@@ -140,7 +146,7 @@ class SearchInfoFragment :
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): SearchResultInfoFragment {
-            return  SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
+            return SearchResultInfoFragment.newInstance(mfragment?.get(position)?.type)
         }
 
         override fun getCount(): Int {
@@ -152,7 +158,7 @@ class SearchInfoFragment :
         }
     }
 
-   private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
+    private fun initViewPager(fragments: ArrayList<StockPageInfo>) {
         if (viewpager.adapter == null) {
             mfragment = fragments
             // 设置viewpager指示器
@@ -201,7 +207,12 @@ class SearchInfoFragment :
                 override fun onPageSelected(position: Int) {
                     magic_indicator.onPageSelected(position)
                     RxBus.getDefault().post(TabPositionEvent(position))
-                    RxBus.getDefault().post(SelectsSearchTabEvent(et_search_info.text.toString(),mfragment[viewpager.currentItem].type))
+                    RxBus.getDefault().post(
+                        SelectsSearchTabEvent(
+                            et_search_info.text.toString(),
+                            mfragment[viewpager.currentItem].type
+                        )
+                    )
                 }
             })
 
@@ -213,20 +224,16 @@ class SearchInfoFragment :
 
 
     override fun changeTab(enum: ChageSearchTabEvent) {
-         when(enum.enum){
-             SearchStokcInfoEnum.Stock->{
-                 viewpager.currentItem = 1
-             }
-             SearchStokcInfoEnum.Info->{
-                 viewpager.currentItem = 2
-             }
-         }
+        when (enum.enum) {
+            SearchStokcInfoEnum.Stock -> {
+                viewpager.currentItem = 1
+            }
+            SearchStokcInfoEnum.Info -> {
+                viewpager.currentItem = 2
+            }
+        }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        hideSoftInput()
-    }
     override fun notifyDataSetChanged(list: List<TestSeachDefaultData>?) {
         if (adapter?.items == null) {
             adapter?.items = list
@@ -234,6 +241,7 @@ class SearchInfoFragment :
             adapter?.notifyDataSetChanged()
         }
     }
+
     override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
         return detailEditDrawable(et_search_info, event)
     }
@@ -251,5 +259,9 @@ class SearchInfoFragment :
         return false
     }
 
-
+    override fun onTouch(event: MotionEvent?) {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            hideSoftInput()
+        }
+    }
 }
