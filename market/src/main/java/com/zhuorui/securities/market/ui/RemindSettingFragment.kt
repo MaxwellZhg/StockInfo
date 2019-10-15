@@ -177,43 +177,40 @@ class RemindSettingFragment :
         if (!TextUtils.isEmpty(p0.toString())) {
             when {
                 et_up_price.isFocused -> {
-                    showCancleDrawable(et_up_price, iv_up_price, p0.toString(), tv_up_nomatch_tips, tips_up_info)
+                    showCancleDrawable(et_up_price, iv_up_price, p0.toString(), tv_up_nomatch_tips)
                 }
                 et_down_price.isFocused -> {
                     showCancleDrawable(
                         et_down_price,
                         iv_down_price,
                         p0.toString(),
-                        tv_down_nomatch_tips,
-                        tips_down_info
-                    )
+                        tv_down_nomatch_tips)
                 }
                 et_up_rate.isFocused -> {
-                    showCancleDrawable(et_up_rate, iv_up_rate, p0.toString(), tv_uprate_nomatch_tips, tips_uprate_info)
+                    showCancleDrawable(et_up_rate, iv_up_rate, p0.toString(), tv_uprate_nomatch_tips)
                 }
                 else -> {
                     showCancleDrawable(
                         et_down_rate,
                         iv_down_rate,
                         p0.toString(),
-                        tv_downrate_nomatch_tips,
-                        tips_downrate_info
+                        tv_downrate_nomatch_tips
                     )
                 }
             }
         } else {
             when {
                 et_up_price.isFocused -> {
-                    detailCancle(et_up_price, iv_up_price, tv_up_nomatch_tips, tips_up_info)
+                    detailCancle(et_up_price, iv_up_price, tv_up_nomatch_tips)
                 }
                 et_down_price.isFocused -> {
-                    detailCancle(et_down_price, iv_down_price, tv_down_nomatch_tips, tips_down_info)
+                    detailCancle(et_down_price, iv_down_price, tv_down_nomatch_tips)
                 }
                 et_up_rate.isFocused -> {
-                    detailCancle(et_up_rate, iv_up_rate, tv_uprate_nomatch_tips, tips_uprate_info)
+                    detailCancle(et_up_rate, iv_up_rate, tv_uprate_nomatch_tips)
                 }
                 else -> {
-                    detailCancle(et_down_rate, iv_down_rate, tv_downrate_nomatch_tips, tips_downrate_info)
+                    detailCancle(et_down_rate, iv_down_rate, tv_downrate_nomatch_tips)
                 }
             }
         }
@@ -257,12 +254,12 @@ class RemindSettingFragment :
             return false
         if (event.x > (edittext.width - edittext.paddingRight - drawable.intrinsicWidth)) {
             edittext.setText("")
-            edittext.hint = "0.00"
+            edittext.hint = ResUtil.getString(R.string.setting_no_info)
         }
         return false
     }
 
-    private fun showCancleDrawable(edittext: EditText, iv: ImageButton, str: String, tv: TextView, tips: TextView) {
+    private fun showCancleDrawable(edittext: EditText, iv: ImageButton, str: String, tv: TextView) {
         iv.setImageResource(R.mipmap.ic_switch_open)
         edittext.setCompoundDrawablesWithIntrinsicBounds(
             null,
@@ -275,23 +272,23 @@ class RemindSettingFragment :
                 upPrice = true
                 if (str.toBigDecimal() < stockInfo?.price) {
                     tv.visibility = View.VISIBLE
-                    tips_down_info.visibility = View.INVISIBLE
-                    tips_uprate_info.visibility = View.INVISIBLE
-                    tips_downrate_info.visibility = View.INVISIBLE
-                    tips.visibility = View.INVISIBLE
+                    tv_down_nomatch_tips.visibility = View.INVISIBLE
+                    tv_uprate_nomatch_tips.visibility = View.INVISIBLE
+                    tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_price.setTextColor(it) }
+                    tv.text=ResUtil.getString(R.string.up_setting_tips)
                 } else {
                     tv.visibility = View.INVISIBLE
-                    tips_down_info.visibility = View.INVISIBLE
-                    tips_uprate_info.visibility = View.INVISIBLE
-                    tips_downrate_info.visibility = View.INVISIBLE
+                    tv_down_nomatch_tips.visibility = View.INVISIBLE
+                    tv_uprate_nomatch_tips.visibility = View.INVISIBLE
+                    tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     var count: BigDecimal? = stockInfo?.price?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
                         MathUtil.multiply2(
                             it, 100.toBigDecimal()
                         ) - 100.toBigDecimal()
                     }
-                    tips.text = ResUtil.getString(R.string.compare_price_up) + count.toString() + "%"
-                    tips.visibility = View.VISIBLE
+                    tv.text = ResUtil.getString(R.string.compare_price_up) + count.toString() + "%"
+                    tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_price.setTextColor(it) }
 
                 }
@@ -300,16 +297,16 @@ class RemindSettingFragment :
                 downPrice = true
                 if (str.toBigDecimal() > stockInfo?.price) {
                     tv.visibility = View.VISIBLE
-                    tips_up_info.visibility = View.INVISIBLE
-                    tips_uprate_info.visibility = View.INVISIBLE
-                    tips_downrate_info.visibility = View.INVISIBLE
-                    tips.visibility = View.INVISIBLE
+                    tv_up_nomatch_tips.visibility = View.INVISIBLE
+                    tv_uprate_nomatch_tips.visibility = View.INVISIBLE
+                    tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_price.setTextColor(it) }
+                    tv.text=ResUtil.getString(R.string.down_setting_tips)
                 } else {
-                    tv.visibility = View.INVISIBLE
-                    tips_up_info.visibility = View.INVISIBLE
-                    tips_uprate_info.visibility = View.INVISIBLE
-                    tips_downrate_info.visibility = View.INVISIBLE
+                    tv.visibility = View.VISIBLE
+                    tv_up_nomatch_tips.visibility = View.INVISIBLE
+                    tv_uprate_nomatch_tips.visibility = View.INVISIBLE
+                    tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     var count: BigDecimal? = stockInfo?.price?.let {
                         stockInfo?.price?.let { MathUtil.subtract2(it, str.toBigDecimal()) }?.let { it1 ->
                             MathUtil.divide2(
@@ -319,8 +316,8 @@ class RemindSettingFragment :
                         }
                     }
                     var downprecent: BigDecimal? = count?.let { MathUtil.multiply2(it, 100.toBigDecimal()) }
-                    tips.text = ResUtil.getString(R.string.compare_price_down) + downprecent.toString() + "%"
-                    tips.visibility = View.VISIBLE
+                    tv.text = ResUtil.getString(R.string.compare_price_down) + downprecent.toString() + "%"
+                    tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_price.setTextColor(it) }
                 }
             }
@@ -330,21 +327,21 @@ class RemindSettingFragment :
                 val matcher = Pattern.compile(pattern).matcher(str)
                 if (!matcher.find()) {
                     tv.visibility = View.VISIBLE
-                    tips_up_info.visibility = View.INVISIBLE
-                    tips_down_info.visibility = View.INVISIBLE
-                    tips_downrate_info.visibility = View.INVISIBLE
-                    tips.visibility = View.INVISIBLE
+                    tv_up_nomatch_tips.visibility = View.INVISIBLE
+                    tv_down_nomatch_tips.visibility = View.INVISIBLE
+                    tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_rate.setTextColor(it) }
+                    tv.text=ResUtil.getString(R.string.up_rate_tips)
                 } else {
-                    tv.visibility = View.INVISIBLE
-                    tips_up_info.visibility = View.INVISIBLE
-                    tips_down_info.visibility = View.INVISIBLE
-                    tips_downrate_info.visibility = View.INVISIBLE
+                    tv.visibility = View.VISIBLE
+                    tv_up_nomatch_tips.visibility = View.INVISIBLE
+                    tv_down_nomatch_tips.visibility = View.INVISIBLE
+                    tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     var count: BigDecimal =
                         MathUtil.add2(MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()), 1.toBigDecimal())
                     var upprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
-                    tips.text = ResUtil.getString(R.string.compare_price_to) + upprice
-                    tips.visibility = View.VISIBLE
+                    tv.text = ResUtil.getString(R.string.compare_price_to) + upprice
+                    tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_rate.setTextColor(it) }
                 }
             }
@@ -354,32 +351,32 @@ class RemindSettingFragment :
                 val matcher = Pattern.compile(pattern).matcher(str)
                 if (!matcher.find()) {
                     tv.visibility = View.VISIBLE
-                    tips_up_info.visibility = View.INVISIBLE
-                    tips_down_info.visibility = View.INVISIBLE
-                    tips_uprate_info.visibility = View.INVISIBLE
-                    tips.visibility = View.INVISIBLE
+                    tv_up_nomatch_tips.visibility = View.INVISIBLE
+                    tv_down_nomatch_tips.visibility = View.INVISIBLE
+                    tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_rate.setTextColor(it) }
+                    tv.text=ResUtil.getString(R.string.down_rate_tips)
                 } else {
-                    tv.visibility = View.INVISIBLE
-                    tips_up_info.visibility = View.INVISIBLE
-                    tips_down_info.visibility = View.INVISIBLE
-                    tips_uprate_info.visibility = View.INVISIBLE
+                    tv.visibility = View.VISIBLE
+                    tv_up_nomatch_tips.visibility = View.INVISIBLE
+                    tv_down_nomatch_tips.visibility = View.INVISIBLE
+                    tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     var count: BigDecimal =
                         MathUtil.subtract2(1.toBigDecimal(), MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()))
                     var downprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
-                    tips.text = ResUtil.getString(R.string.compare_price_to) + downprice
-                    tips.visibility = View.VISIBLE
+                    tv.text = ResUtil.getString(R.string.compare_price_to) + downprice
+                    tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
             }
         }
     }
 
-    private fun detailCancle(edittext: EditText, iv: ImageButton, tv: TextView, tips: TextView) {
+    private fun detailCancle(edittext: EditText, iv: ImageButton, tv: TextView) {
         iv.setImageResource(R.mipmap.ic_switch_close)
         edittext.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         tv.visibility = View.INVISIBLE
-        tips.visibility = View.INVISIBLE
+       // tips.visibility = View.INVISIBLE
         when (edittext) {
             et_up_price -> {
                 upPrice = false
@@ -459,13 +456,13 @@ class RemindSettingFragment :
             if (bool) {
                 when (TextUtils.isEmpty(et.text.toString())) {
                     true -> {
-                        et.hint = ""
+                        et.hint = ResUtil.getString(R.string.setting_no_info)
                     }
                 }
             } else {
                 when (TextUtils.isEmpty(et.text.toString())) {
                     true -> {
-                        et.hint = "0.00"
+                        et.hint = ResUtil.getString(R.string.setting_no_info)
                     }
                 }
             }

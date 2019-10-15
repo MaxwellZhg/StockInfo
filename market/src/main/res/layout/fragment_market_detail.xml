@@ -23,7 +23,7 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="0.6dp"
                 android:fadingEdge="none"
                 android:overScrollMode="never">
 
@@ -47,7 +47,6 @@
                         android:background="#C0CCE0"/>
 
                 <!--A股-->
-
                 <include
                         layout="@layout/layout_market_detail_a_shares"/>
 
@@ -92,10 +91,11 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <!--指数-->
         <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"/>
+                android:layout_marginBottom="0.6dp"/>
 
         <include
                 layout="@layout/layout_market_detail_bottom"/>
