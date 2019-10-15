@@ -29,6 +29,7 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
     private val bottom = 0x01
     private var str:String = str
     var onTopicStockInfoListener: OnTopicStockInfoListener? =null
+    var onClickStockIntoStockDetailListener:OnClickStockIntoStockDetailListener?=null
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
             default -> R.layout.item_stock_search_layout
@@ -92,9 +93,11 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
        override fun onClick(v: View) {
            if (v == iv_topic) {
                getItem(position)?.let { onTopicStockInfoListener?.topicStockInfo(it) }
+               getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
            }else if(v == rl_stock){
                getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
-               ToastUtil.instance.toastCenter("加入历史记录")
+               onClickStockIntoStockDetailListener?.onClickStockIntoDetail()
+
            } else{
                super.onClick(v)
            }
@@ -157,6 +160,10 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
 
     interface OnTopicStockInfoListener{
         fun topicStockInfo(stockInfo:SearchStockInfo)
+    }
+
+    interface OnClickStockIntoStockDetailListener{
+        fun onClickStockIntoDetail()
     }
 
 

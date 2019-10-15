@@ -25,6 +25,7 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
     override fun getLayout(viewType: Int): Int {
        return R.layout.item_stock_search_layout
     }
+    var onClickStockIntoStockDetailListener:OnClickStockIntoStockDetailListener?=null
     var onStockColollectListenner:OnStockColollectListenner?=null
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(v,true,false)
@@ -75,9 +76,10 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         override fun onClick(v: View) {
                 if (v == iv_topic) {
                     getItem(position)?.let { onStockColollectListenner?.onStockCollectionStock(it) }
+                    getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
                 }else if(v == rl_stock){
                     getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
-                    ToastUtil.instance.toastCenter("加入历史记录")
+                    onClickStockIntoStockDetailListener?.onClickStockIntoDetail()
                 } else {
                     super.onClick(v)
                 }
@@ -90,5 +92,8 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
    interface OnStockColollectListenner{
        fun onStockCollectionStock(stockInfo:SearchStockInfo)
      }
+    interface OnClickStockIntoStockDetailListener{
+        fun onClickStockIntoDetail()
+    }
 
 }

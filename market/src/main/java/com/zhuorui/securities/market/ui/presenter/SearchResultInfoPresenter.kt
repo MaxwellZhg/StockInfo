@@ -120,7 +120,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
-        if (response.data == null){
+        if (response.data == null&&response.code=="000000"){
             val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.showEmpty()
                 emitter.onNext(true)
@@ -280,7 +280,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
-        view?.showEmpty()
+        view?.showError()
     }
 
     override fun onBaseResponse(response: BaseResponse) {
