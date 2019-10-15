@@ -10,4 +10,5 @@ class AccountInfo {
     var userId: String? = null
     var token: String? = null
     var phone: String? = null
+    var zrNo:Int?=null
 }

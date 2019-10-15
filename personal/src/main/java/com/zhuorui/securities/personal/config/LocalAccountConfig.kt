@@ -43,6 +43,11 @@ class LocalAccountConfig : AbsConfig() {
         write()
     }
 
+    fun setZrNo(zrNo:Int){
+        accountInfo.zrNo=zrNo
+        write()
+    }
+
     override fun write() {
         StorageInfra.put(LocalAccountConfig::class.java.simpleName, this)
     }
@@ -63,4 +68,5 @@ class LocalAccountConfig : AbsConfig() {
         }
 
     }
+
 }

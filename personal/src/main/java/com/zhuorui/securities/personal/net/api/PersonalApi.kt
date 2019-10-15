@@ -81,5 +81,11 @@ interface PersonalApi {
          */
         const val MODIFY_CAPITAL_PASSWORD = "/as_user/api/user_account/v1/modify_capital_password"
 
+        /**
+         *获取用户信息
+         *
+         */
+        const val USER_INFO = "/as_user/api/user_account/v1/user_info"
+
     }
 }

@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -17,6 +18,7 @@ import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.event.MyTabInfoEvent
+import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
@@ -75,7 +77,7 @@ class MyTabFragment :
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().zrNo.toString()
         }
     }
     override fun onClick(p0: View?) {
@@ -132,7 +134,7 @@ class MyTabFragment :
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().zrNo.toString()
         }
     }
     override fun changeMyTabInfoView() {
@@ -141,7 +143,7 @@ class MyTabFragment :
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().phone
+            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().zrNo.toString()
         }
     }
     override fun changeSetChooseSet(type: Int, str: String?) {
@@ -154,5 +156,7 @@ class MyTabFragment :
            }
        }
     }
+
+
 
 }
