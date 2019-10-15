@@ -1,3 +1,4 @@
+/*
 package com.zhuorui.securities.personal.widget;
 
 import android.content.Context;
@@ -22,10 +23,12 @@ import com.zhuorui.securities.personal.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+*/
 /**
  * Created by Arron on 2016/11/21 0021.
  * 密码输入框
- */
+ *//*
+
 
 public class PasswordView extends View {
 
@@ -67,14 +70,18 @@ public class PasswordView extends View {
     }
 
     public enum Mode {
-        /**
+        */
+/**
          * 下划线样式
-         */
+         *//*
+
         UNDERLINE(0),
 
-        /**
+        */
+/**
          * 边框样式
-         */
+         *//*
+
         RECT(1);
         private int mode;
 
@@ -96,12 +103,14 @@ public class PasswordView extends View {
         }
     }
 
-    /**
+    */
+/**
      * 当前只支持从xml中构建该控件
      *
      * @param context
      * @param attrs
-     */
+     *//*
+
     public PasswordView(Context context, AttributeSet attrs) {
         super(context, attrs);
         readAttribute(attrs);
@@ -138,14 +147,16 @@ public class PasswordView extends View {
         inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         paint = new Paint();
         paint.setAntiAlias(true);
-      /* timerTask = new TimerTask() {
+      */
+/* timerTask = new TimerTask() {
             @Override
             public void run() {
                 isCursorShowing = !isCursorShowing;
                 postInvalidate();
             }
         };
-        timer = new Timer();*/
+        timer = new Timer();*//*
+
     }
 
     @Override
@@ -203,9 +214,11 @@ public class PasswordView extends View {
             int action = event.getAction();
             if (action == KeyEvent.ACTION_DOWN) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
-                    /**
+                    */
+/**
                      * 删除操作
-                     */
+                     *//*
+
                     if (TextUtils.isEmpty(password[0])) {
                         return true;
                     }
@@ -217,9 +230,11 @@ public class PasswordView extends View {
                     return true;
                 }
                 if (keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
-                    /**
+                    */
+/**
                      * 只支持数字
-                     */
+                     *//*
+
                     if (isInputComplete) {
                         return true;
                     }
@@ -231,9 +246,11 @@ public class PasswordView extends View {
                     return true;
                 }
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    /**
+                    */
+/**
                      * 确认键
-                     */
+                     *//*
+
                     if (passwordListener != null) {
                         passwordListener.keyEnterPress(getPassword(), isInputComplete);
                     }
@@ -244,9 +261,11 @@ public class PasswordView extends View {
         }
     }
 
-    /**
+    */
+/**
      * 删除
-     */
+     *//*
+
     private String delete() {
         String deleteText = null;
         if (cursorPosition > 0) {
@@ -261,9 +280,11 @@ public class PasswordView extends View {
         return deleteText;
     }
 
-    /**
+    */
+/**
      * 增加
-     */
+     *//*
+
     private String add(String c) {
         String addText = null;
         if (cursorPosition < passwordLength) {
@@ -280,9 +301,11 @@ public class PasswordView extends View {
         return addText;
     }
 
-    /**
+    */
+/**
      * 获取密码
-     */
+     *//*
+
     private String getPassword() {
         StringBuffer stringBuffer = new StringBuffer();
         for (String c : password) {
@@ -294,12 +317,14 @@ public class PasswordView extends View {
         return stringBuffer.toString();
     }
 
-    /**
+    */
+/**
      * 绘制密码替代符号
      *
      * @param canvas
      * @param paint
-     */
+     *//*
+
     private void drawCipherText(Canvas canvas, Paint paint) {
         //画笔初始化
         paint.setColor(textColor);
@@ -333,12 +358,14 @@ public class PasswordView extends View {
         }
     }
 
-    /**
+    */
+/**
      * 绘制光标
      *
      * @param canvas
      * @param paint
-     */
+     *//*
+
     private void drawCursor(Canvas canvas, Paint paint) {
         //画笔初始化
         paint.setColor(cursorColor);
@@ -358,12 +385,14 @@ public class PasswordView extends View {
         }
     }
 
-    /**
+    */
+/**
      * 绘制密码框下划线
      *
      * @param canvas
      * @param paint
-     */
+     *//*
+
     private void drawUnderLine(Canvas canvas, Paint paint) {
         //画笔初始化
         paint.setColor(borderColor);
@@ -397,9 +426,11 @@ public class PasswordView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            /**
+            */
+/**
              * 弹出软键盘
-             */
+             *//*
+
             requestFocus();
             inputManager.showSoftInput(this, InputMethodManager.SHOW_FORCED);
             return true;
@@ -419,17 +450,21 @@ public class PasswordView extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         //cursorFlashTime为光标闪动的间隔时间
-  /*      if(timer!=null&&timerTask!=null) {
+  */
+/*      if(timer!=null&&timerTask!=null) {
             timer.scheduleAtFixedRate(timerTask, 0, cursorFlashTime);
-        }*/
+        }*//*
+
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-     /*   timer.cancel();
+     */
+/*   timer.cancel();
         timer=null;
-        timerTask=null;*/
+        timerTask=null;*//*
+
     }
 
     private int dp2px(float dp) {
@@ -477,28 +512,36 @@ public class PasswordView extends View {
         postInvalidate();
     }
 
-    /**
+    */
+/**
      * 密码监听者
-     */
+     *//*
+
     public interface PasswordListener {
-        /**
+        */
+/**
          * 输入/删除监听
          *
          * @param changeText  输入/删除的字符
-         */
+         *//*
+
         void passwordChange(String changeText);
 
-        /**
+        */
+/**
          * 输入完成
-         */
+         *//*
+
         void passwordComplete();
 
-        /**
+        */
+/**
          * 确认键后的回调
          *
          * @param password   密码
          * @param isComplete 是否达到要求位数
-         */
+         *//*
+
         void keyEnterPress(String password, boolean isComplete);
 
     }
@@ -523,3 +566,4 @@ public class PasswordView extends View {
         super.onRestoreInstanceState(state);
     }
 }
+*/

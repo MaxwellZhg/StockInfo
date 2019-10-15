@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <com.zhuorui.securities.personal.widget.PasswordView
+   <!--     <com.zhuorui.securities.personal.widget.PasswordView
                 android:id="@+id/et_phone_code"
                 app:layout_constraintTop_toBottomOf="@+id/ll_timer_tips"
                 android:layout_marginStart="29dp"
@@ -55,7 +55,23 @@
                 app:textColor="@color/color_282828"
                 app:cipherEnable="false"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"/>-->
+        <com.zhuorui.securities.personal.widget.SeparatedEditText
+                app:layout_constraintTop_toBottomOf="@+id/ll_timer_tips"
+                android:id="@+id/et_phone_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:inputType="number"
+                app:blockSpacing="21dp"
+                app:cursorColor="@color/color_1A6ED2"
+                android:paddingBottom="5dp"
+                android:layout_marginLeft="29dp"
+                android:layout_marginRight="29dp"
+                app:borderColor="@color/color_282828"
+                app:separateType="@integer/type_underline"
+                app:textColor="@color/color_282828"/>
+
         <androidx.appcompat.widget.AppCompatTextView
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_phone_code"
