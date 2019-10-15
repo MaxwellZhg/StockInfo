@@ -109,8 +109,11 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                                     .post(NotifyStockCountEvent(ts, if (it.isNullOrEmpty()) 0 else it.size))
                                 view?.notifyDataSetChanged(viewModel?.datas?.value)
                                 // 加载网络数据
-                                if (isLogin)
+                                if (isLogin) {
                                     loadRecommendStocklist(currentPage, pageSize, true)
+                                } else {
+                                    view?.finishRefresh(true, true)
+                                }
                             }
                     disposables.add(disposable)
                 }
