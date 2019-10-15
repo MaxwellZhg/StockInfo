@@ -2,11 +2,11 @@ package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentKlineBinding
-import com.zhuorui.securities.market.stockChart.data.KLineDataManage
 import com.zhuorui.securities.market.ui.kline.presenter.ChartKLinePresenter
 import com.zhuorui.securities.market.ui.kline.view.KlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.KlineViewModel

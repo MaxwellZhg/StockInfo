@@ -1,7 +1,7 @@
 package com.zhuorui.securities.market.ui.kline.view
 
+import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
-import com.zhuorui.securities.market.stockChart.data.KLineDataManage
 
 /**
  *    author : PengXianglin

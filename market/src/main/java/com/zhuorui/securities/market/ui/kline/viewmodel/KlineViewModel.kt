@@ -1,8 +1,8 @@
 package com.zhuorui.securities.market.ui.kline.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.market.model.StockTopic
-import com.zhuorui.securities.market.stockChart.data.KLineDataManage
 
 /**
  *    author : PengXianglin

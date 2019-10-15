@@ -12,7 +12,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3
-        versionName '3.0.2'
+        versionName '3.1.0'
     }
     buildTypes {
         release {
@@ -39,7 +39,6 @@ dependencies {
     //compile 'com.android.support:support-v4:19.+'
     //provided 'io.realm:realm-android:0.87.5' // "optional" dependency to realm-database API
     api "androidx.appcompat:appcompat:$appcompat_version"
-    api 'org.greenrobot:eventbus:3.1.1'
     api project(":base2app")
 }
 

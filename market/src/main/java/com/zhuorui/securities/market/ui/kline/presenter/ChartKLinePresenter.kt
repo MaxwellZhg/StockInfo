@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.kline.presenter
 
+import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -10,7 +11,6 @@ import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.request.StockKlineGetDaily
 import com.zhuorui.securities.market.socket.response.StocksDayKlineResponse
-import com.zhuorui.securities.market.stockChart.data.KLineDataManage
 import com.zhuorui.securities.market.ui.kline.view.KlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.KlineViewModel
 import io.reactivex.Observable
