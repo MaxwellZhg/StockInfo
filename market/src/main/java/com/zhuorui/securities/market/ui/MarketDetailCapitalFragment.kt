@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
@@ -8,6 +9,7 @@ import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
+import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
 
 /**
  *    author : liuwei
@@ -34,5 +36,18 @@ class MarketDetailCapitalFragment :
         fun newInstance(): MarketDetailCapitalFragment {
             return MarketDetailCapitalFragment()
         }
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        val outData = mutableListOf<Float>()
+        outData.add(4685.19f)
+        outData.add(7999.99f)
+        outData.add(10307.56f)
+        val inData = mutableListOf<Float>()
+        inData.add(3400.60f)
+        inData.add(9999.99f)
+        inData.add(7028.76f)
+        todayFundTransaction.setData(outData,inData)
     }
 }
