@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui.detail.presenter
+package com.zhuorui.securities.market.ui.kline.presenter
 
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -11,8 +11,8 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.request.StockKlineGetDaily
 import com.zhuorui.securities.market.socket.response.StocksDayKlineResponse
 import com.zhuorui.securities.market.stockChart.data.KLineDataManage
-import com.zhuorui.securities.market.ui.detail.view.KlineView
-import com.zhuorui.securities.market.ui.detail.viewmodel.KlineViewModel
+import com.zhuorui.securities.market.ui.kline.view.KlineView
+import com.zhuorui.securities.market.ui.kline.viewmodel.KlineViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -110,7 +110,7 @@ class TopicStockListFragment :
     override fun onClickItem(pos: Int, item: StockMarketInfo?, v: View?) {
         if (item != null) {
             // 跳转到详情页
-//          startActivity(Intent(context, StockDetailLandActivity::class.java))
+//          startActivity(Intent(context, KlineLandActivity::class.java))
             (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance())
         } else {
             // 跳转到搜索

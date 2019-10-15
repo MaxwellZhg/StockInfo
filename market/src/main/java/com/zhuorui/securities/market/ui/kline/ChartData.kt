@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui.detail
+package com.zhuorui.securities.market.ui.kline
 
 object ChartData {
     //分时数据

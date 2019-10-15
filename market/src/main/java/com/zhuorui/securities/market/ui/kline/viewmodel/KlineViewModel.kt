@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui.detail.viewmodel
+package com.zhuorui.securities.market.ui.kline.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.market.model.StockTopic

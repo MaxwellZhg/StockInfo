@@ -12,14 +12,13 @@ import com.zhuorui.securities.base2app.util.StatusBarUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
-import com.zhuorui.securities.personal.ui.MyTabFragment
 import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.fragment_market_detail.magic_indicator
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
-import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -45,12 +44,16 @@ class MarketDetailFragment :
 
     override val layout: Int
         get() = R.layout.fragment_market_detail
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: MarketDetailPresenter
         get() = MarketDetailPresenter()
+
     override val createViewModel: MarketDetailViewModel?
         get() = ViewModelProviders.of(this).get(MarketDetailViewModel::class.java)
+
     override val getView: MarketDetailView
         get() = this
 
@@ -82,6 +85,8 @@ class MarketDetailFragment :
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
         magic_indicator.navigator = getNavigator()
+
+        loadRootFragment(R.id.kline_view, KlineFragment())
     }
 
     private fun onSelect(index: Int) {

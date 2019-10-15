@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui.detail.presenter
+package com.zhuorui.securities.market.ui.kline.presenter
 
 import android.annotation.SuppressLint
 import com.zhuorui.securities.base2app.infra.LogInfra
@@ -15,8 +15,8 @@ import com.zhuorui.securities.market.socket.request.StockMinuteKline
 import com.zhuorui.securities.market.socket.response.GetStocksMinuteKlineResponse
 import com.zhuorui.securities.market.socket.vo.kline.StockMinuteVo
 import com.zhuorui.securities.market.stockChart.data.TimeDataManage
-import com.zhuorui.securities.market.ui.detail.view.OneDayKlineView
-import com.zhuorui.securities.market.ui.detail.viewmodel.OneDayKlineViewModel
+import com.zhuorui.securities.market.ui.kline.view.OneDayKlineView
+import com.zhuorui.securities.market.ui.kline.viewmodel.OneDayKlineViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers

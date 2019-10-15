@@ -2,7 +2,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.zhuorui.securities.market.ui.detail.viewmodel.OneDayKlineViewModel"/>
+                type="com.zhuorui.securities.market.ui.kline.viewmodel.OneDayKlineViewModel"/>
     </data>
 
     <RelativeLayout android:layout_width="match_parent"

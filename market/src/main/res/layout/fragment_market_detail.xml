@@ -44,8 +44,7 @@
                 <View
                         android:layout_width="match_parent"
                         android:layout_height="0.6dp"
-                        android:background="#C0CCE0"
-                />
+                        android:background="#C0CCE0"/>
 
                 <!--A股-->
 
@@ -60,15 +59,11 @@
                         layout="@layout/layout_market_detail_ex_rights"/>
 
                 <!--K线-->
-                <TextView
-                        android:text="K线"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
+                <FrameLayout
+                        android:id="@+id/kline_view"
                         android:layout_width="match_parent"
                         android:layout_height="337dp"
-                        android:layout_marginTop="2dp"
-                />
+                        android:layout_marginTop="2dp"/>
 
                 <!--买卖盘经纪-->
                 <TextView
@@ -79,16 +74,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="157dp"
                         android:layout_marginTop="2dp"
-                        android:background="#2D2C35"
-                />
+                        android:background="#2D2C35"/>
 
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="2dp"
-                        android:background="#2D2C35"
-                />
+                        android:background="#2D2C35"/>
 
                 <FrameLayout
                         android:id="@+id/fl_tab_container"
@@ -102,8 +95,7 @@
         <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
-        />
+                android:layout_marginBottom="1dp"/>
 
         <include
                 layout="@layout/layout_market_detail_bottom"/>

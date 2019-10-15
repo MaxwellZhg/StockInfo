@@ -2,7 +2,7 @@
           package="com.zhuorui.securities.market">
 
     <application>
-        <activity android:name="com.zhuorui.securities.market.ui.detail.StockDetailLandActivity"
+        <activity android:name="com.zhuorui.securities.market.ui.kline.KlineLandActivity"
                   android:screenOrientation="landscape"/>
     </application>
 </manifest>

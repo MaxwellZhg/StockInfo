@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui.detail
+package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
@@ -7,9 +7,9 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentFiveDayBinding
 import com.zhuorui.securities.market.stockChart.data.TimeDataManage
-import com.zhuorui.securities.market.ui.detail.presenter.ChartFiveDayPresenter
-import com.zhuorui.securities.market.ui.detail.view.FiveDayKlineView
-import com.zhuorui.securities.market.ui.detail.viewmodel.FiveDayKlineViewModel
+import com.zhuorui.securities.market.ui.kline.presenter.ChartFiveDayPresenter
+import com.zhuorui.securities.market.ui.kline.view.FiveDayKlineView
+import com.zhuorui.securities.market.ui.kline.viewmodel.FiveDayKlineViewModel
 import kotlinx.android.synthetic.main.fragment_five_day.*
 
 /**

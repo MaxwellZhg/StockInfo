@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.ui.detail
+package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
@@ -7,9 +7,9 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentKlineBinding
 import com.zhuorui.securities.market.stockChart.data.KLineDataManage
-import com.zhuorui.securities.market.ui.detail.presenter.ChartKLinePresenter
-import com.zhuorui.securities.market.ui.detail.view.KlineView
-import com.zhuorui.securities.market.ui.detail.viewmodel.KlineViewModel
+import com.zhuorui.securities.market.ui.kline.presenter.ChartKLinePresenter
+import com.zhuorui.securities.market.ui.kline.view.KlineView
+import com.zhuorui.securities.market.ui.kline.viewmodel.KlineViewModel
 import kotlinx.android.synthetic.main.fragment_kline.*
 
 /**
