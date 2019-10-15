@@ -17,7 +17,9 @@ import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.DisctCodeSelectEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
+import com.zhuorui.securities.personal.net.request.GetUserInfoDataRequest
 import com.zhuorui.securities.personal.net.request.UserLoginPwdRequest
+import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.view.LoginPswView
@@ -59,9 +61,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
                     response.data.token
                 )
             ) {
-                view?.gotomain()
-                // 通知登录状态发生改变
-                RxBus.getDefault().post(LoginStateChangeEvent(true))
+              getUserInfoData()
             }
         }
     }
@@ -132,6 +132,20 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
 
         return true
 
+    }
+
+    fun getUserInfoData(){
+        val request = GetUserInfoDataRequest(transactions.createTransaction())
+        Cache[IPersonalNet::class.java]?.getUserInfoData(request)
+            ?.enqueue(Network.IHCallBack<GetUserInfoResponse>(request))
+    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onGetUserInfoDataResponse(response: GetUserInfoResponse) {
+        if (!transactions.isMyTransaction(response)) return
+        LocalAccountConfig.read().setZrNo(response.data.zrNo)
+        view?.gotomain()
+        // 通知登录状态发生改变
+        RxBus.getDefault().post(LoginStateChangeEvent(true))
     }
 
 

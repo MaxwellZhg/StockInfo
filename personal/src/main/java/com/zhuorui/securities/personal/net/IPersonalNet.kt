@@ -1,8 +1,10 @@
 package com.zhuorui.securities.personal.net
 
+import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.personal.net.api.PersonalApi
 import com.zhuorui.securities.personal.net.request.*
+import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.net.response.UserInfoResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
@@ -63,4 +65,7 @@ interface IPersonalNet {
 
     @POST(PersonalApi.MODIFY_CAPITAL_PASSWORD)
     fun sendModifyCapitalPsw(@Body request: ModifyCapitalPswRequest): Call<SendLoginCodeResponse>
+
+    @POST(PersonalApi.USER_INFO)
+    fun getUserInfoData(@Body request: BaseRequest): Call<GetUserInfoResponse>
 }
