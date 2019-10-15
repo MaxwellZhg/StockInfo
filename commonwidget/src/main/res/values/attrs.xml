@@ -196,4 +196,9 @@
     <declare-styleable name="ZrCompareTextView">
         <attr name="zr_spancolor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="FloatEditTextView">
+        <attr name="integer_part" format="integer"></attr>
+        <attr name="decimal_part" format="integer"></attr>
+    </declare-styleable>
 </resources>

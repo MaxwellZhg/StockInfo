@@ -177,23 +177,23 @@ class RemindSettingFragment :
         if (!TextUtils.isEmpty(p0.toString())) {
             when {
                 et_up_price.isFocused -> {
-                    showCancleDrawable(et_up_price, iv_up_price, p0.toString(), tv_up_nomatch_tips)
+                    showCancleDrawable(et_up_price, iv_up_price, et_up_price.text.toString(), tv_up_nomatch_tips)
                 }
                 et_down_price.isFocused -> {
                     showCancleDrawable(
                         et_down_price,
                         iv_down_price,
-                        p0.toString(),
+                        et_down_price.text.toString(),
                         tv_down_nomatch_tips)
                 }
                 et_up_rate.isFocused -> {
-                    showCancleDrawable(et_up_rate, iv_up_rate, p0.toString(), tv_uprate_nomatch_tips)
+                    showCancleDrawable(et_up_rate, iv_up_rate,  et_up_rate.text.toString(), tv_uprate_nomatch_tips)
                 }
                 else -> {
                     showCancleDrawable(
                         et_down_rate,
                         iv_down_rate,
-                        p0.toString(),
+                        et_down_rate.text.toString(),
                         tv_downrate_nomatch_tips
                     )
                 }
@@ -326,14 +326,14 @@ class RemindSettingFragment :
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(str)
                 if (!matcher.find()) {
-                    tv.visibility = View.VISIBLE
+                   tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_rate.setTextColor(it) }
                     tv.text=ResUtil.getString(R.string.up_rate_tips)
                 } else {
-                    tv.visibility = View.VISIBLE
+                   tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
@@ -341,8 +341,7 @@ class RemindSettingFragment :
                         MathUtil.add2(MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()), 1.toBigDecimal())
                     var upprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
                     tv.text = ResUtil.getString(R.string.compare_price_to) + upprice
-                    tv.visibility = View.VISIBLE
-                    ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_rate.setTextColor(it) }
+                    ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
             }
             et_down_rate -> {
@@ -356,6 +355,7 @@ class RemindSettingFragment :
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_rate.setTextColor(it) }
                     tv.text=ResUtil.getString(R.string.down_rate_tips)
+
                 } else {
                     tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
@@ -365,7 +365,6 @@ class RemindSettingFragment :
                         MathUtil.subtract2(1.toBigDecimal(), MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()))
                     var downprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
                     tv.text = ResUtil.getString(R.string.compare_price_to) + downprice
-                    tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
             }
