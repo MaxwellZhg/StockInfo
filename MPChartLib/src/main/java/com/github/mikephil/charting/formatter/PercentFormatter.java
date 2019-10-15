@@ -21,6 +21,10 @@ public class PercentFormatter implements IValueFormatter, IAxisValueFormatter {
         mFormat = new DecimalFormat("###,###,##0.0");
     }
 
+    public PercentFormatter(String format) {
+        mFormat = new DecimalFormat(format);
+    }
+
     /**
      * Allow a custom decimalformat
      *
