@@ -165,16 +165,20 @@ class TopicStockListFragment :
     }
 
     override fun finishRefresh(success: Boolean, noMoreData: Boolean?) {
-        refrsh_layout.finishRefresh(success)
-        if (noMoreData != null) {
-            refrsh_layout.setNoMoreData(noMoreData)
+        _mActivity?.runOnUiThread {
+            refrsh_layout.finishRefresh(success)
+            if (noMoreData != null) {
+                refrsh_layout.setNoMoreData(noMoreData)
+            }
         }
     }
 
     override fun finishLoadMore(success: Boolean, noMoreData: Boolean?) {
-        refrsh_layout.finishLoadMore(success)
-        if (noMoreData != null) {
-            refrsh_layout.setNoMoreData(noMoreData)
+        _mActivity?.runOnUiThread {
+            refrsh_layout.finishLoadMore(success)
+            if (noMoreData != null) {
+                refrsh_layout.setNoMoreData(noMoreData)
+            }
         }
     }
 
