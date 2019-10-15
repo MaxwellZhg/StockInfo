@@ -5,6 +5,7 @@ import android.view.View
 import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -17,9 +18,11 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.event.MyTabInfoEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
+import com.zhuorui.securities.personal.net.request.GetUserInfoDataRequest
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.UserLoginOutRequest
+import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
@@ -86,9 +89,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                     response.data.token
                 )
             ) {
-                view?.gotomain()
-                // 通知登录状态发生改变
-                RxBus.getDefault().post(LoginStateChangeEvent(true))
+                getUserInfoData()
             }
         }
     }
@@ -180,6 +181,19 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
     fun getGetCodeColor(state: Int) {
         viewModel?.getcodeState?.set(state)
+    }
+    fun getUserInfoData(){
+        val request = GetUserInfoDataRequest(transactions.createTransaction())
+        Cache[IPersonalNet::class.java]?.getUserInfoData(request)
+            ?.enqueue(Network.IHCallBack<GetUserInfoResponse>(request))
+    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onGetUserInfoDataResponse(response: GetUserInfoResponse) {
+        if (!transactions.isMyTransaction(response)) return
+          LocalAccountConfig.read().setZrNo(response.data.zrNo)
+           view?.gotomain()
+          // 通知登录状态发生改变
+          RxBus.getDefault().post(LoginStateChangeEvent(true))
     }
 
 }
