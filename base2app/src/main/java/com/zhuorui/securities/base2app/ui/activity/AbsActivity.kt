@@ -193,7 +193,7 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
         fun onTouch(ev: MotionEvent?)
     }
 
-    public fun setDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener) {
+    fun setDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener?) {
         this.dispatchTouchEventListener = dispatchTouchEventListener
     }
 
