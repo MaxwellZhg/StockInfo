@@ -27,6 +27,7 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
     private val itemBottom=0x02
     private lateinit var keywords:String
     var onTopicStockInfoListenner:OnTopicStockInfoListenner? = null
+    var onClickStockAllIntoStockDetailListener: OnClickStockAllIntoStockDetailListener?=null
     override fun getLayout(viewType: Int): Int {
         return when(viewType){
             itemHeader->{
@@ -60,13 +61,14 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
     }
 
     inner class ViewHolderHeader(v: View?, needClick: Boolean, needLongClick: Boolean):
-        ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick),SearchStockInfoAdapter.OnTopicStockInfoListener{
-
+        ListItemViewHolder<SearchDeafaultData>(v, needClick, needLongClick),SearchStockInfoAdapter.OnTopicStockInfoListener,
+        SearchStockInfoAdapter.OnClickStockIntoStockDetailListener {
         @BindView(R2.id.rv_stock_info)
         lateinit var rv_stock_info: RecyclerView
         override fun bind(item: SearchDeafaultData?, position: Int) {
             var adapter= SearchStockInfoAdapter(keywords)
             adapter.onTopicStockInfoListener=this
+            adapter.onClickStockIntoStockDetailListener=this
             rv_stock_info.setHasFixedSize(true)
             rv_stock_info.isNestedScrollingEnabled=false
             rv_stock_info.adapter=adapter
@@ -79,6 +81,9 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
         }
         override fun topicStockInfo(stockInfo: SearchStockInfo) {
            onTopicStockInfoListenner?.onClickCollectionStock(stockInfo)
+        }
+        override fun onClickStockIntoDetail() {
+            onClickStockAllIntoStockDetailListener?.onClickStockAllIntoDeatil()
         }
     }
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean):
@@ -112,5 +117,9 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
    interface OnTopicStockInfoListenner{
        fun onClickCollectionStock(stock:SearchStockInfo)
    }
+
+  interface OnClickStockAllIntoStockDetailListener{
+      fun onClickStockAllIntoDeatil()
+  }
 
 }

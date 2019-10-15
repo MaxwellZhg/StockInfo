@@ -32,7 +32,8 @@ class LocalSearchConfig : AbsConfig() {
         if(serachStocks.size<10) {
             serachStocks.add(stockInfo)
         }else{
-
+            serachStocks.add(0,stockInfo)
+            serachStocks.removeAt(10)
         }
         LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded. Current cache zise " + serachStocks.size)
         write()

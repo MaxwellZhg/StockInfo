@@ -32,8 +32,8 @@ import kotlinx.android.synthetic.main.fragment_simulation_trading_orders.*
 class SearchResultInfoFragment :
     AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),
     SearchResultInfoView, SeachAllofInfoAdapter.OnTopicStockInfoListenner,StockAdapter.OnStockColollectListenner,
-    OnRefreshLoadMoreListener {
-
+    OnRefreshLoadMoreListener, StockAdapter.OnClickStockIntoStockDetailListener,
+    SeachAllofInfoAdapter.OnClickStockAllIntoStockDetailListener {
     var currentPage :Int = 0
     var totalPage:Int =0
     var countNum:Int =0
@@ -115,12 +115,14 @@ class SearchResultInfoFragment :
             SearchStokcInfoEnum.All -> {
                 adapter = presenter?.getAdapter()
                 adapter?.onTopicStockInfoListenner = this
+                adapter?.onClickStockAllIntoStockDetailListener=this
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(false)
             }
             SearchStokcInfoEnum.Stock -> {
                 stockadapter = presenter?.getStockAdapter()
                 stockadapter?.onStockColollectListenner=this
+                stockadapter?.onClickStockIntoStockDetailListener=this
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(true)
                 sm_refrsh.setOnRefreshLoadMoreListener(this)
@@ -207,16 +209,28 @@ class SearchResultInfoFragment :
     }
 
     override fun showEmpty() {
-        sm_refrsh.finishLoadMore(false)
-        //empty_view.visibility=View.VISIBLE
+        empty_view.visibility=View.VISIBLE
     }
     override fun hideEmpty() {
         empty_view.visibility=View.INVISIBLE
     }
     override fun showloadMoreFail() {
         sm_refrsh.finishLoadMore(true)//结束加载（加载失败）
-       sm_refrsh.finishLoadMoreWithNoMoreData()
+        sm_refrsh.finishLoadMoreWithNoMoreData()
         sm_refrsh.setNoMoreData(true)
     }
+    override fun showError() {
+         sm_refrsh.finishLoadMore(false)
+    }
+    override fun onClickStockIntoDetail() {
+       gotoDetail()
+    }
+    override fun onClickStockAllIntoDeatil() {
+        gotoDetail()
+    }
+    fun gotoDetail(){
+        (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance())
+    }
+
 }
 
