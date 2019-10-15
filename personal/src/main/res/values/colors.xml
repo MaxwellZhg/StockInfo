@@ -13,4 +13,6 @@
     <color name="color_FF0000" tools:ignore="MissingDefaultResource">#FF0000</color>
     <color name="color_211F2A" tools:ignore="MissingDefaultResource">#FF211F2A</color>
     <color name="color_ca0000" tools:ignore="MissingDefaultResource">#ca0000</color>
+    <color name="lightGrey">#d3d3d3</color>
+    <color name="colorPrimary">#3F51B5</color>
 </resources>

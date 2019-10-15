@@ -112,6 +112,8 @@ class MyTabFragment :
             }
             R.id.ll_about_us->{
                 (parentFragment as AbsFragment<*, *, *, *>).start(IntroProFragment.newInstance())
+
+
             }
         }
     }
@@ -156,6 +158,7 @@ class MyTabFragment :
            }
        }
     }
+
 
 
 
