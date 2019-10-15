@@ -1,6 +1,5 @@
 package com.zhuorui.securities.base2app.ui.activity
 
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Build
@@ -13,8 +12,6 @@ import com.zhuorui.securities.base2app.util.QuickClickUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import me.yokeyword.fragmentation.SupportActivity
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import androidx.core.content.ContextCompat.getSystemService
 
 
 /**
@@ -193,7 +190,7 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
         fun onTouch(ev: MotionEvent?)
     }
 
-    fun setDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener?) {
+    public fun setDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener?) {
         this.dispatchTouchEventListener = dispatchTouchEventListener
     }
 

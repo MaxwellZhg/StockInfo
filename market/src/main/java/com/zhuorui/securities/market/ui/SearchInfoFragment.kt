@@ -46,7 +46,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
-    SearchInfoView, View.OnClickListener, TextWatcher, View.OnTouchListener, AbsActivity.OnDispatchTouchEventListener,
+    SearchInfoView, View.OnClickListener, TextWatcher,  AbsActivity.OnDispatchTouchEventListener,
     SearchInfoAdapter.OnDeteleHistoryClickListener, SearchInfoAdapter.OnTopicStockInfoListenner {
 
     var mfragment = ArrayList<StockPageInfo>()
@@ -91,6 +91,7 @@ class SearchInfoFragment :
         mfragment.add(StockPageInfo(ResUtil.getString(R.string.stock_search_info), SearchStokcInfoEnum.Info))
         mfragment?.let { initViewPager(it) }
         tv_cancle.setOnClickListener(this)
+        iv_detele.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
         (activity as AbsActivity).setDispatchTouchEventListener(this)
     }
@@ -100,6 +101,11 @@ class SearchInfoFragment :
             R.id.tv_cancle -> {
                 pop()
             }
+            R.id.iv_detele->{
+                et_search_info.setText("")
+                et_search_info.hint = ResUtil.getString(R.string.search_tips)
+                iv_detele.visibility=View.INVISIBLE
+            }
         }
     }
 
@@ -107,18 +113,15 @@ class SearchInfoFragment :
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
+                    iv_search.visibility=View.GONE
+                    iv_detele.visibility=View.VISIBLE
                     RxBus.getDefault().post(TabPositionEvent(viewpager.currentItem))
                     presenter?.initViewPager(it, mfragment[viewpager.currentItem].type)
                     search_info.visibility = View.GONE
                     ll_search_info.visibility = View.VISIBLE
-                    et_search_info.setCompoundDrawablesWithIntrinsicBounds(
-                        null,
-                        null,
-                        ResUtil.getDrawable(R.mipmap.detele_search_tips),
-                        null
-                    )
                 } else {
-                    et_search_info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+                    iv_search.visibility=View.VISIBLE
+                    iv_detele.visibility=View.INVISIBLE
                     adapter?.clearItems()
                     presenter?.getData()
                     search_info.visibility = View.VISIBLE
@@ -127,7 +130,8 @@ class SearchInfoFragment :
             }
 
         } else {
-            et_search_info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            iv_search.visibility=View.VISIBLE
+            iv_detele.visibility=View.INVISIBLE
             adapter?.clearItems()
             presenter?.getData()
             search_info.visibility = View.VISIBLE
@@ -252,22 +256,8 @@ class SearchInfoFragment :
         adapter?.addItem(list)
     }
 
-    override fun onTouch(p0: View?, event: MotionEvent?): Boolean {
-        return detailEditDrawable(et_search_info, event)
-    }
 
-    fun detailEditDrawable(edittext: EditText, event: MotionEvent?): Boolean {
-        val drawable = edittext.compoundDrawables[2] ?: return false
-        //如果右边没有图片，不再处理
-        //如果不是按下事件，不再处理
-        if (event?.action != MotionEvent.ACTION_UP)
-            return false
-        if (event.x > (edittext.width - edittext.paddingRight - drawable.intrinsicWidth)) {
-            edittext.setText("")
-            edittext.hint = ResUtil.getString(R.string.search_tips)
-        }
-        return false
-    }
+
 
     override fun onTouch(event: MotionEvent?) {
         if (event?.action == MotionEvent.ACTION_DOWN) {
@@ -285,5 +275,9 @@ class SearchInfoFragment :
 
     override fun notifyAdapter() {
         adapter?.notifyDataSetChanged()
+    }
+    override fun onDetach() {
+        super.onDetach()
+        (activity as AbsActivity).setDispatchTouchEventListener(null)
     }
 }
