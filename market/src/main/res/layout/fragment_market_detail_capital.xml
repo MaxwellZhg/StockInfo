@@ -23,13 +23,13 @@
                 android:paddingBottom="12dp"
         />
 
-        <TextView
-                android:text="今日资金流向趋势"
-                android:textColor="#C0CCE0"
-                android:padding="10dp"
+        <com.zhuorui.securities.market.customer.view.TodayCapitalFlowTrendView
                 android:layout_width="match_parent"
-                android:layout_height="226dp"
-                android:layout_marginTop="2dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
         />
 
         <TextView

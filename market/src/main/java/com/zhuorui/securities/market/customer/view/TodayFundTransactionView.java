@@ -121,6 +121,7 @@ public class TodayFundTransactionView extends FrameLayout {
         pieDataSet.setValueTextSize(14f);
         pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        pieDataSet.setUsingSliceColorAsValueLineColor(true);
 //        pieDataSet.setValueLinePart1Length(0.3f);
 //        pieDataSet.setValueLinePart2Length(0.4f);
         //最终数据 PieData
