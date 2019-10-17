@@ -32,14 +32,17 @@
                 android:paddingBottom="12dp"
         />
 
-        <TextView
+ <!--       <TextView
                 android:text="历史资金流向"
                 android:textColor="#C0CCE0"
                 android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="255dp"
                 android:layout_marginTop="2dp"
-        />
+        />-->
+        <com.zhuorui.securities.market.customer.view.HistoryFundTransactionView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
