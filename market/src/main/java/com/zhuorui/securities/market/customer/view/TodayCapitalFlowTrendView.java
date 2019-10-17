@@ -111,8 +111,6 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         YAxis leftAxis = vChart.getAxisLeft();
         leftAxis.setDrawAxisLine(false);
         leftAxis.setDrawGridLines(true);
-//        leftAxis.setDrawZeroLine(true);
-//        leftAxis.setZeroLineColor(mGridColor);
         leftAxis.setTextColor(mTextColor);
         leftAxis.setGridColor(mGridColor);
         leftAxis.setGridLineWidth(1f);
@@ -137,10 +135,11 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
 
 
     private void setData() {
+        int[] d = {-1,1};
         List<Entry> entrys = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 149; i += 4) {
-            Entry entry = new Entry(i, random.nextFloat());
+            Entry entry = new Entry(i, (random.nextInt(60) * d[random.nextInt(d.length)]));
             entrys.add(entry);
         }
         Entry entry = new Entry(149, 0);
