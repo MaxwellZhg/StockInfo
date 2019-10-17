@@ -97,6 +97,7 @@ public class ComparisonMapView extends LinearLayout {
         vTitle1.setText(mTitle1);
         vTitle2.setText(mTitle2);
         vTitle3.setText(mTitle3);
+        vTitleRoot.setVisibility(getChildCount() > 1 ? VISIBLE : GONE);
     }
 
     public void setValueTextColor(int color1, int color2) {
@@ -120,6 +121,7 @@ public class ComparisonMapView extends LinearLayout {
             holder.setValueTextColor(mValue1TextColor, mValue2TextColor);
             holder.setData(datas.get(i));
         }
+        vTitleRoot.setVisibility(getChildCount() > 1 ? VISIBLE : GONE);
     }
 
     public interface IItemHolder {
