@@ -14,6 +14,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
+import com.github.mikephil.charting.renderer.YAxisRenderer;
+import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.ViewPortHandler;
@@ -27,17 +29,12 @@ import java.util.Random;
  * author : liuwei
  * e-mail : vsanliu@foxmail.com
  * date   : 2019-10-16 09:53
- * desc   :
+ * desc   : 今日资金流向趋势
  */
 public class TodayCapitalFlowTrendView extends FrameLayout {
 
-    private final int mGridColor = Color.parseColor("#191821");
+    private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
-    private int maxX;//最大数据点1分钟占一点
-    private int breakIndex;//休盘点坐标
-    private String openingHours;//开市时间
-    private String breakTime;//休盘时间
-    private String closingHours;//收市时间
 
     private LineChart vChart;
 
@@ -60,7 +57,6 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
     private void initLineChart() {
         vChart = findViewById(R.id.line_cahart);
         vChart.setNoDataText("暂无数据");
-
         //是否有触摸事件
         vChart.setTouchEnabled(false);
         //是否展示网格线
@@ -75,34 +71,22 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         vChart.getLegend().setEnabled(false);
         vChart.getDescription().setEnabled(false);
         vChart.setMinOffset(0f);
-        vChart.setExtraTopOffset(1f);
-        vChart.setExtraBottomOffset(18f);
-        vChart.setExtraLeftOffset(1f);
-        vChart.setExtraRightOffset(1f);
-
+        vChart.setExtraTopOffset(0.5f);
+        vChart.setExtraLeftOffset(0.5f);
+        vChart.setExtraRightOffset(0.5f);
+        vChart.setExtraBottomOffset(2f);
         // x坐标轴
         XAxis xl = vChart.getXAxis();
         xl.setDrawAxisLine(false);
         xl.setDrawGridLines(true);
         xl.setTextColor(mTextColor);
         xl.setGridColor(mGridColor);
-        xl.setGridLineWidth(1f);
+        xl.setTextSize(12f);
+        xl.setGridLineWidth(0.5f);
         xl.setLabelCount(2, true);
         // 将X坐标轴放置在底部，默认是在顶部。
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
         xl.setAvoidFirstLastClipping(true);
-        xl.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                if (value == 0) {
-                    return openingHours;
-                }
-                if (value == maxX) {
-                    return closingHours;
-                }
-                return super.getFormattedValue(value);
-            }
-        });
         vChart.getAxisRight().setEnabled(false);
         MyXAxisRenderer xAxisRenderer = new MyXAxisRenderer(vChart.getViewPortHandler(), vChart.getXAxis(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
         vChart.setXAxisRenderer(xAxisRenderer);
@@ -113,13 +97,22 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(mTextColor);
         leftAxis.setGridColor(mGridColor);
-        leftAxis.setGridLineWidth(1f);
-        leftAxis.setXOffset(0f);
+        leftAxis.setTextSize(12f);
+        leftAxis.setGridLineWidth(0.5f);
+        leftAxis.setXOffset(2f);
         leftAxis.setSpaceBottom(0f);
         leftAxis.setSpaceTop(0f);
-        leftAxis.setLabelCount(3, true);
+        leftAxis.setLabelCount(2, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return value == 0 ? "0" : String.format("%.2f", value);
+            }
+        });
+        MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(vChart.getViewPortHandler(), vChart.getAxisLeft(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
+        vChart.setRendererLeftYAxis(yAxisRenderer);
     }
 
     private LineData getLineData(List<Entry> entrys) {
@@ -135,53 +128,114 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
 
 
     private void setData() {
-        int[] d = {-1,1};
+        int[] d = {1,1, -1};
         List<Entry> entrys = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 149; i += 4) {
             Entry entry = new Entry(i, (random.nextInt(60) * d[random.nextInt(d.length)]));
             entrys.add(entry);
         }
-        Entry entry = new Entry(149, 0);
-        entrys.add(entry);
         vChart.setData(getLineData(entrys));
     }
 
     public void setStockTs(String ts) {
-        switch (ts) {
-            case "HK":
-                maxX = 330;//最大数据点1分钟占一点
-                breakIndex = 149;//休盘点坐标
-                openingHours = "09:30";//开市时间
-                breakTime = "12:00/13:00";//休盘时间
-                closingHours = "16:00";//收市时间
-                break;
-            case "US":
-                maxX = 390;//最大数据点1分钟占一点
-                breakIndex = 194;//中间线坐标
-                openingHours = "09:30";//开市时间
-                breakTime = "12:45";//中间线
-                closingHours = "16:00";//收市时间
-                break;
-            case "SZ":
-            case "SH":
-                maxX = 240;//最大数据点1分钟占一点
-                breakIndex = 119;//休盘点坐标
-                openingHours = "09:30";//开市时间
-                breakTime = "1:30/13:00";//休盘时间
-                closingHours = "15:00";//收市时间
-                break;
+        ((MyXAxisRenderer) vChart.getRendererXAxis()).setStockTs(ts);
+        vChart.invalidate();
+    }
+
+    class MyYAxisRenderer extends YAxisRenderer {
+
+        private float dividerY;
+        private float dividerValue;
+
+        public MyYAxisRenderer(ViewPortHandler viewPortHandler, YAxis yAxis, Transformer trans) {
+            super(viewPortHandler, yAxis, trans);
         }
-        vChart.getXAxis().setAxisMaximum(maxX);
+
+        @Override
+        public void computeAxis(float min, float max, boolean inverted) {
+            super.computeAxis(min, max, inverted);
+            if (max > 0 && min < 0) {
+                dividerValue = 0;
+            } else {
+                double range = Math.abs(max - min);
+                dividerValue = (float) (max - (range / 2));
+            }
+            MPPointD pos = mTrans.getPixelForValues(0f, dividerValue);
+            dividerY = (float) pos.y;
+        }
+
+        @Override
+        protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
+            super.drawYLabels(c, fixedPosition, positions, offset);
+            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + offset, mAxisLabelPaint);
+        }
+
+        @Override
+        public void renderGridLines(Canvas c) {
+            super.renderGridLines(c);
+            int clipRestoreCount = c.save();
+            c.clipRect(getGridClippingRect());
+            Path gridLinePath = mRenderGridLinesPath;
+            gridLinePath.reset();
+            gridLinePath.moveTo(mViewPortHandler.offsetLeft(), dividerY);
+            gridLinePath.lineTo(mViewPortHandler.contentRight(), dividerY);
+            c.drawPath(gridLinePath, mGridPaint);
+            gridLinePath.reset();
+            c.restoreToCount(clipRestoreCount);
+        }
     }
 
     class MyXAxisRenderer extends XAxisRenderer {
 
+        private int maxX;//最大数据点1分钟占一点
+        private int breakIndex;//休盘点坐标
+        private String openingHours;//开市时间
+        private String breakTime;//休盘时间
+        private String closingHours;//收市时间
 
         public MyXAxisRenderer(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
             super(viewPortHandler, xAxis, trans);
+            xAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    if (value == 0) {
+                        return openingHours;
+                    } else if (value == maxX) {
+                        return closingHours;
+                    }
+                    return super.getFormattedValue(value);
+                }
+            });
         }
 
+        public void setStockTs(String ts) {
+            switch (ts) {
+                case "HK":
+                    maxX = 330;//最大数据点1分钟占一点
+                    breakIndex = 149;//休盘点坐标
+                    openingHours = "09:30";//开市时间
+                    breakTime = "12:00/13:00";//休盘时间
+                    closingHours = "16:00";//收市时间
+                    break;
+                case "US":
+                    maxX = 390;//最大数据点1分钟占一点
+                    breakIndex = 194;//中间线坐标
+                    openingHours = "09:30";//开市时间
+                    breakTime = "12:45";//中间线
+                    closingHours = "16:00";//收市时间
+                    break;
+                case "SZ":
+                case "SH":
+                    maxX = 240;//最大数据点1分钟占一点
+                    breakIndex = 119;//休盘点坐标
+                    openingHours = "09:30";//开市时间
+                    breakTime = "1:30/13:00";//休盘时间
+                    closingHours = "15:00";//收市时间
+                    break;
+            }
+            mXAxis.setAxisMaximum(maxX);
+        }
 
         @Override
         protected void drawLabels(Canvas c, float pos, MPPointF anchor) {
@@ -196,7 +250,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         }
 
         /**
-         * 绘制休市分割线
+         * 绘制休盘分割线
          *
          * @param c
          */
@@ -214,7 +268,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         }
 
         /**
-         * 绘制休市分割Label
+         * 绘制休盘分割Label
          *
          * @param c
          * @param pos
