@@ -18,12 +18,10 @@ import java.util.List;
  * author : liuwei
  * e-mail : vsanliu@foxmail.com
  * date   : 2019-10-14 13:45
- * desc   : 今日成交分布
+ * desc   : 今日资金成交分布
  */
 public class TodayFundTransactionView extends FrameLayout {
 
-    private final float selectionShift = 10f;
-    private final float tblr = 10f;
     private PieChart vPieChart;
     private ComparisonMapView vComparisonMap;
     private int mOut1Color;
@@ -69,17 +67,17 @@ public class TodayFundTransactionView extends FrameLayout {
 
     private void initPieChart() {
         vPieChart = findViewById(R.id.pie_cahart);
+        vPieChart.setNoDataText("暂无数据");
+        vPieChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         vPieChart.setUsePercentValues(true);//使用百分比显示
         vPieChart.getDescription().setEnabled(false);//是否启用描述
         vPieChart.getLegend().setEnabled(false);//是否启用图列
         vPieChart.setRotationAngle(270);//设置pieChart图表起始角度
-        vPieChart.setExtraOffsets(tblr, tblr, tblr, tblr);//设置pieChart图表上下左右的偏移，类似于外边距
+        vPieChart.setMinOffset(0f);
         vPieChart.setRotationEnabled(false);              //设置pieChart图表是否可以手动旋转
         vPieChart.setHighlightPerTapEnabled(false);       //设置piecahrt图表点击Item高亮是否可用
         // 设置 pieChart 图表Item文本属性
         vPieChart.setDrawEntryLabels(false);              //设置pieChart是否显示文字（true：下面属性才有效果）
-//        vPieChart.setEntryLabelColor(Color.WHITE);       //设置pieChart图表文本字体颜色
-//        vPieChart.setEntryLabelTextSize(30f);            //设置pieChart图表文本字体大小
         //设置 pieChart 内部圆环属性
         vPieChart.setDrawHoleEnabled(true);              //是否显示PieChart内部圆环(true:下面属性才有意义)
         vPieChart.setHoleRadius(60);
@@ -89,9 +87,6 @@ public class TodayFundTransactionView extends FrameLayout {
         vPieChart.setCenterTextSize(18f);                //设置PieChart内部圆文字的大小
         vPieChart.setCenterTextColor(Color.WHITE);         //设置PieChart内部圆文字的颜色
         vPieChart.setTransparentCircleRadius(0f);       //设置PieChart内部透明圆的半径(这里设置31.0f)
-//        vPieChart.setTransparentCircleColor(Color.BLACK);//设置PieChart内部透明圆与内部圆间距(31f-28f)填充颜色
-//        vPieChart.setTransparentCircleAlpha(50);         //设置PieChart内部透明圆与内部圆间距(31f-28f)透明度[0~255]数值越小越透明
-
     }
 
     private void initComparisonMap() {
@@ -114,8 +109,6 @@ public class TodayFundTransactionView extends FrameLayout {
     private PieData getPieData(ArrayList<PieEntry> data) {
         //饼状图数据集 PieDataSet
         PieDataSet pieDataSet = new PieDataSet(data, "今日资金成交分布");
-//        pieDataSet.setSliceSpace(3f);           //设置饼状Item之间的间隙
-//        pieDataSet.setSelectionShift(selectionShift);      //设置饼状Item被选中时变化的距离
         pieDataSet.setColors(colors);           //为DataSet中的数据匹配上颜色集(饼图Item颜色)
         pieDataSet.setValueTextColor(Color.WHITE);
         pieDataSet.setValueTextSize(14f);
