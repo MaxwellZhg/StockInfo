@@ -74,6 +74,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
+            setGetCodeClickState(1)
             startTimeCountDown()
             view?.showSendCode(response.data)
         }
@@ -125,11 +126,13 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
                         viewModel?.getcodeState?.set(0)
+                        viewModel?.getCodeClickState?.set(0)
                     }
                 }
             }
+            timer?.schedule(task, 1000, 1000)
         }
-        timer!!.schedule(task, 1000, 1000)
+
     }
 
     fun startTimeCountDown() {
@@ -194,6 +197,10 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
            view?.gotomain()
           // 通知登录状态发生改变
           RxBus.getDefault().post(LoginStateChangeEvent(true))
+    }
+
+    fun setGetCodeClickState(state:Int){
+        viewModel?.getCodeClickState?.set(state)
     }
 
 }

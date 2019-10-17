@@ -134,6 +134,7 @@
                           android:layout_alignParentRight="true"
                           android:layout_centerVertical="true"
                           android:textStyle="bold"
+                          android:clickable="@{viewmodel.getCodeClickState==0?true:false}"
                           android:text="@{viewmodel.str}"
                           android:textColor="@{viewmodel.getcodeState==0?@color/color_8DB9E4:@color/color_1A6ED2}"/>
             </RelativeLayout>

@@ -40,4 +40,5 @@ class MarketTabFragment :
     override val getView: MarketTabVierw
         get() = this
 
+
 }

@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
                 name="viewModel"
                 type="com.zhuorui.securities.market.ui.viewmodel.MarketTabVierwModel"/>
     </data>
+    <LinearLayout android:orientation="vertical"
+                  android:background="@color/tab_bar_bg"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <com.zhuorui.securities.market.custom.MoreIconTitleBar
+            android:id="@+id/top_bar"
+            style="@style/SimulationTradingTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            app:zr_backview_is_visibity="false"
+            app:zr_topbarTitle="@string/market_info"/>
+        <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/magic_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
 
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+    </LinearLayout>
 </layout>

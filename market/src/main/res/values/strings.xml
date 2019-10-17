@@ -151,4 +151,5 @@
     <string name="no_stock_str">暂无股票</string>
     <string name="add_stocks_str">添加自选股</string>
     <string name="setting_no_info" tools:ignore="MissingTranslation">请输入目标价</string>
+    <string name="market_info" tools:ignore="MissingTranslation">行情</string>
 </resources>
