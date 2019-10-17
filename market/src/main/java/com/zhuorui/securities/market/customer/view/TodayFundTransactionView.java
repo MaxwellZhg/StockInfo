@@ -67,6 +67,8 @@ public class TodayFundTransactionView extends FrameLayout {
 
     private void initPieChart() {
         vPieChart = findViewById(R.id.pie_cahart);
+        vPieChart.setNoDataText("暂无数据");
+        vPieChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         vPieChart.setUsePercentValues(true);//使用百分比显示
         vPieChart.getDescription().setEnabled(false);//是否启用描述
         vPieChart.getLegend().setEnabled(false);//是否启用图列

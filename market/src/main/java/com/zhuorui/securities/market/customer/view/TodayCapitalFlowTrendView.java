@@ -57,6 +57,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
     private void initLineChart() {
         vChart = findViewById(R.id.line_cahart);
         vChart.setNoDataText("暂无数据");
+        vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         //是否有触摸事件
         vChart.setTouchEnabled(false);
         //是否展示网格线

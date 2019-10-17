@@ -53,7 +53,8 @@ public class HistoricalCapitalFlowView extends FrameLayout {
 
     private void initBarChart() {
         vChart = findViewById(R.id.bar_cahart);
-
+        vChart.setNoDataText("暂无数据");
+        vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         //是否有触摸事件
         vChart.setTouchEnabled(false);
         //是否展示网格线
@@ -121,7 +122,7 @@ public class HistoricalCapitalFlowView extends FrameLayout {
         barDataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                if (value == 0){
+                if (value == 0) {
                     return "0.0";
                 }
                 return String.format("%+.1f", value);
