@@ -386,6 +386,10 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
         // 未登录
         else {
+            // 取消所有订阅
+            if (ts == null) {
+                SocketClient.getInstance().unBindAllTopic()
+            }
             // 清空所有的缓存
             LocalStocksConfig.getInstance().clear()
             // 重新拉取未登录状态的自选股列表
