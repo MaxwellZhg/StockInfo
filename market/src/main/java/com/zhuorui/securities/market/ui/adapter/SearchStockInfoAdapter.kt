@@ -93,9 +93,7 @@ class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
        override fun onClick(v: View) {
            if (v == iv_topic) {
                getItem(position)?.let { onTopicStockInfoListener?.topicStockInfo(it) }
-               getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
            }else if(v == rl_stock){
-               getItem(position)?.let { LocalSearchConfig.getInstance().add(it) }
                onClickStockIntoStockDetailListener?.onClickStockIntoDetail()
 
            } else{

@@ -6,4 +6,4 @@ package com.zhuorui.securities.market.model
  * Date: 2019/10/9
  * Desc:
  */
-class TestSeachDefaultData (var hotlist:ArrayList<Int>,var history:ArrayList<SearchStockInfo>)
+class TestSeachDefaultData (var hotlist:ArrayList<Int>,var history:ArrayList<String>)

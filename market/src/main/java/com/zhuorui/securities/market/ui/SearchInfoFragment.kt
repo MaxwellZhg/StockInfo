@@ -4,9 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
@@ -17,6 +20,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.config.LocalSearchConfig
 import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
@@ -47,7 +51,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class SearchInfoFragment :
     AbsSwipeBackNetFragment<FragmentSearchInfoBinding, SearchInfoViewModel, SearchInfoView, SearchInfoPresenter>(),
     SearchInfoView, View.OnClickListener, TextWatcher,  AbsActivity.OnDispatchTouchEventListener,
-    SearchInfoAdapter.OnDeteleHistoryClickListener, SearchInfoAdapter.OnTopicStockInfoListenner {
+    SearchInfoAdapter.OnDeteleHistoryClickListener, SearchInfoAdapter.OnTopicStockInfoListenner,TextView.OnEditorActionListener {
 
     var mfragment = ArrayList<StockPageInfo>()
 
@@ -93,6 +97,7 @@ class SearchInfoFragment :
         tv_cancle.setOnClickListener(this)
         iv_detele.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
+        et_search_info.setOnEditorActionListener(this)
         (activity as AbsActivity).setDispatchTouchEventListener(this)
     }
 
@@ -110,8 +115,8 @@ class SearchInfoFragment :
     }
 
     override fun afterTextChanged(p0: Editable?) {
-        if (p0.toString().isNotEmpty()) {
-            p0?.toString()?.trim()?.let {
+       if (p0.toString().isNotEmpty()) {
+           p0?.toString()?.trim()?.let {
                 if (et_search_info.text.toString().isNotEmpty()) {
                     iv_search.visibility=View.GONE
                     iv_detele.visibility=View.VISIBLE
@@ -269,8 +274,8 @@ class SearchInfoFragment :
         presenter?.getData()
     }
 
-    override fun onClickCollectionStock(stock: SearchStockInfo) {
-      presenter?.collectionStock(stock,stock.collect)
+    override fun onClickCollectionStock(stock: String) {
+      presenter?.detailStrInfo(stock)
     }
 
     override fun notifyAdapter() {
@@ -280,4 +285,34 @@ class SearchInfoFragment :
         super.onDetach()
         (activity as AbsActivity).setDispatchTouchEventListener(null)
     }
+    override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+        detailAction(actionId)
+        return true
+    }
+
+    private fun detailAction(actionId: Int) {
+      when(actionId){
+          EditorInfo.IME_ACTION_SEARCH->{
+              hideSoftInput()
+              if (et_search_info.text.toString().isNotEmpty()) {
+                  LocalSearchConfig.getInstance().add(et_search_info.text.toString())
+                  iv_search.visibility=View.GONE
+                  iv_detele.visibility=View.VISIBLE
+                  RxBus.getDefault().post(TabPositionEvent(viewpager.currentItem))
+                  presenter?.initViewPager(et_search_info.text.toString(), mfragment[viewpager.currentItem].type)
+                  search_info.visibility = View.GONE
+                  ll_search_info.visibility = View.VISIBLE
+              } else {
+                  iv_search.visibility=View.VISIBLE
+                  iv_detele.visibility=View.INVISIBLE
+                  adapter?.clearItems()
+                  presenter?.getData()
+                  search_info.visibility = View.VISIBLE
+                  ll_search_info.visibility = View.GONE
+              }
+
+          }
+      }
+    }
+
 }

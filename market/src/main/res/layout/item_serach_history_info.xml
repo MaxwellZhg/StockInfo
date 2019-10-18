@@ -15,14 +15,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <ImageView
-            android:background="@mipmap/ic_topic_history_d"
+            android:background="@mipmap/icon_close_detail"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:id="@+id/iv_stock_state"
             android:layout_marginEnd="13dp"
-            android:layout_width="15dp"
-            android:layout_height="15dp"/>
+            android:layout_width="14dp"
+            android:layout_height="14dp"/>
     <View android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
