@@ -50,7 +50,7 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
             history.add(i)
         }*/
         var datas=LocalSearchConfig.getInstance().getStocks()
-        val localStocks = LocalStocksConfig.getInstance().getStocks()
+  /*      val localStocks = LocalStocksConfig.getInstance().getStocks()
         if (localStocks.isNotEmpty()) {
             for (item in datas) {
                 for (stock in localStocks) {
@@ -61,7 +61,7 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
                     }
                 }
             }
-        }
+        }*/
         var data=TestSeachDefaultData(listhot,datas)
         viewModel?.searchInfoDatas?.value=data
     }
@@ -87,9 +87,9 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
         view?.changeTab(event)
     }
 
-    fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
+/*    fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
         // 点击添加到自选列表
-        if (LocalAccountConfig.read().isLogin()) {
+  *//*      if (LocalAccountConfig.read().isLogin()) {
             // 已登录
             if (isCollected) {
                 //取消收藏
@@ -133,12 +133,12 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
                 ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
                 setAdapterDataNotify(stockInfo,stockInfo.collect)
             }
-        }
-    }
+        }*//*
+    }*/
 
-    override fun onBaseResponse(response: BaseResponse) {
+/*    override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
-        if (response.request is CollectionStockRequest) {
+       if (response.request is CollectionStockRequest) {
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             toast(R.string.add_topic_successful)
             (response.request as CollectionStockRequest).stockInfo.collect = true
@@ -154,17 +154,26 @@ class SearchInfoPresenter(context: Context) : AbsNetPresenter<SearchInfoView,Sea
             RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         }
-    }
-    fun setAdapterDataNotify(stockInfo: SearchStockInfo,collect:Boolean){
+    }*/
+/*    fun setAdapterDataNotify(stockInfo: SearchStockInfo,collect:Boolean){
         viewModel?.searchInfoDatas?.value.let {
-            if(it!=null){
+      *//*      if(it!=null){
                 for(data in it.history){
                     if(stockInfo.id==data?.id){
                         data?.collect=collect
                     }
                 }
-            }
+            }*//*
         }
+        view?.notifyAdapter()
+    }*/
+
+
+    fun detailStrInfo(str:String){
+        LocalSearchConfig.getInstance().remove(str)
+        setAdapterDataInfoNotify(str)
+    }
+    fun setAdapterDataInfoNotify(str:String){
         view?.notifyAdapter()
     }
 

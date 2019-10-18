@@ -13,29 +13,29 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  */
 class LocalSearchConfig : AbsConfig() {
 
-    private var serachStocks: ArrayList<SearchStockInfo> = ArrayList()
+    private var serachStocks: ArrayList<String> = ArrayList()
 
 
     @Synchronized
-    fun getStocks(): ArrayList<SearchStockInfo> {
+    fun getStocks(): ArrayList<String> {
         return serachStocks
     }
     /**
      * 添加搜索记录
      */
     @Synchronized
-    fun add(stockInfo: SearchStockInfo): Boolean {
-        if (isExist(stockInfo.ts!!, stockInfo.code!!)) {
-            LogInfra.Log.d(TAG, "add " + stockInfo.name + " failed. Current cache zise " + serachStocks.size)
+    fun add(str: String): Boolean {
+        if (isExist(str)) {
+            LogInfra.Log.d(TAG, "add " + str + " failed. Current cache zise " + serachStocks.size)
             return false
         }
         if(serachStocks.size<10) {
-            serachStocks.add(stockInfo)
+            serachStocks.add(str)
         }else{
-            serachStocks.add(0,stockInfo)
+            serachStocks.add(0,str)
             serachStocks.removeAt(10)
         }
-        LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded. Current cache zise " + serachStocks.size)
+        LogInfra.Log.d(TAG, "add " + str + " succeeded. Current cache zise " + serachStocks.size)
         write()
         return true
     }
@@ -44,16 +44,16 @@ class LocalSearchConfig : AbsConfig() {
     /**
      * 检查自选股列表中是否存在
      */
-    fun isExist(ts: String, code: String): Boolean {
-        return getStock(ts, code) != null
+    fun isExist(ts: String): Boolean {
+        return getStock(ts) != null
     }
 
     /**
      * 检查搜索股列表中是对比
      */
-    private fun getStock(ts: String, code: String): SearchStockInfo? {
+    private fun getStock(ts: String): String? {
         for (stock in serachStocks) {
-            if (stock.code.equals(code) && stock.ts.equals(ts)) {
+            if (stock == ts) {
                 return stock
             }
         }
@@ -61,20 +61,20 @@ class LocalSearchConfig : AbsConfig() {
     }
 
 
-/*    *//**
+    /**
      * 删除自选股
-     *//*
+     */
     @Synchronized
-    fun remove(ts: String, code: String): Boolean {
-        val stock = getStock(ts, code)
+    fun remove(ts: String): Boolean {
+        val stock = getStock(ts)
         if (stock != null) {
             serachStocks.remove(stock)
-            LogInfra.Log.d(TAG, "remove " + stock.name + " succeeded. Current cache zise " + serachStocks.size)
+            LogInfra.Log.d(TAG, "remove " + stock + " succeeded. Current cache zise " + serachStocks.size)
             write()
             return true
         }
         return false
-    }*/
+    }
 
     override fun write() {
         StorageInfra.put(LocalSearchConfig::class.java.simpleName, this)

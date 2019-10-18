@@ -57,6 +57,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
                         viewModel?.getcodeState?.set(0)
+                        viewModel?.getCodeClickState?.set(0)
                     }
                 }
             }
@@ -94,6 +95,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
         if (!transactions.isMyTransaction(response)) return
         if(response.request is SendLoginCodeRequest){
             dialogshow(0)
+            setGetCodeClickState(1)
             startTimeCountDown()
             view?.showForgetCode(response.data)
         }else if(response.request is VerifForgetCodeRequest){
@@ -152,6 +154,9 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     fun getGetCodeColor(state: Int) {
         viewModel?.getcodeState?.set(state)
+    }
+    fun setGetCodeClickState(state:Int){
+        viewModel?.getCodeClickState?.set(state)
     }
 
 }

@@ -66,6 +66,7 @@
                             android:id="@+id/tv_get_code"
                             android:layout_marginEnd="14dp"
                             android:layout_alignParentEnd="true"
+                            android:clickable="@{viewModel.getCodeClickState==0?true:false}"
                             android:textColor="@color/color_8DB9E4"
                             android:text="@{viewModel.str}"/>
               </RelativeLayout>

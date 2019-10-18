@@ -47,6 +47,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
         if (!transactions.isMyTransaction(response)) return
         dialogshow(0)
         if(response.request is SendLoginCodeRequest){
+            setGetCodeClickState(1)
             startTimeCountDown()
             view?.showGetCode(response.data)
         }else if(response.request is ModifyOldPhoneRequest){
@@ -84,6 +85,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
                         task = null
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.get_verify_code))
+                        viewModel?.getCodeClickState?.set(0)
                     }
                 }
             }
@@ -121,5 +123,9 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
 
             }
         }
+    }
+
+    fun setGetCodeClickState(state:Int){
+        viewModel?.getCodeClickState?.set(state)
     }
 }
