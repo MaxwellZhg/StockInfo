@@ -152,4 +152,7 @@
     <string name="add_stocks_str">添加自选股</string>
     <string name="setting_no_info" tools:ignore="MissingTranslation">请输入目标价</string>
     <string name="market_info" tools:ignore="MissingTranslation">行情</string>
+    <string name="sh_sz_stock"  tools:ignore="MissingTranslation">沪深</string>
+    <string name="all_hk_stock" tools:ignore="MissingTranslation">港股通</string>
+    <string name="gloab_stock" tools:ignore="MissingTranslation">全球</string>
 </resources>

@@ -12,4 +12,7 @@
     <color name="color_F59A23"  tools:ignore="MissingDefaultResource">#FFF59A23</color>
     <color name="color_99F59A23"  tools:ignore="MissingDefaultResource">#99F59A23</color>
     <color name="color_FFD7D7D7"  tools:ignore="MissingDefaultResource">#FFD7D7D7</color>
+    <color name="color_D9001B" tools:ignore="MissingDefaultResource">#D9001B</color>
+    <color name="color_00CC00" tools:ignore="MissingDefaultResource">#00CC00</color>
+    <color name="color_C0CCE0" tools:ignore="MissingDefaultResource">#C0CCE0</color>
 </resources>
