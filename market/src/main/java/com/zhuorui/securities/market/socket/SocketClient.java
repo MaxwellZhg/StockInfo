@@ -241,11 +241,11 @@ public class SocketClient {
 
         SocketRequest request = new SocketRequest();
         SocketHeader socketHeader = getRequestHeader(SocketApi.AUTH);
-        socketHeader.setDevId(devId);
+        socketHeader.setDeviceId(devId);
         request.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("devId", devId);
+        body.put("deviceId", devId);
         long timestamp = System.currentTimeMillis();
         body.put("timestamp", System.currentTimeMillis());
         String str = devId + timestamp + SocketApi.SOCKET_AUTH_SIGNATURE;
