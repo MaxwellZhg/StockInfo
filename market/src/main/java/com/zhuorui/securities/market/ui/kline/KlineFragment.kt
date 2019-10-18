@@ -91,25 +91,25 @@ class KlineFragment : SupportFragment() {
     private fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
         when (index) {
             0 -> {
-                return ChartOneDayFragment.newInstance(false)
+                return ChartOneDayFragment.newInstance(true)
             }
             1 -> {
-                return ChartFiveDayFragment.newInstance(false)
+                return ChartFiveDayFragment.newInstance(true)
             }
             2 -> {
-                return ChartKLineFragment.newInstance(1, false)
+                return ChartKLineFragment.newInstance(1, true)
             }
             3 -> {
-                return ChartKLineFragment.newInstance(7, false)
+                return ChartKLineFragment.newInstance(7, true)
             }
             4 -> {
-                return ChartKLineFragment.newInstance(30, false)
+                return ChartKLineFragment.newInstance(30, true)
             }
             5 -> {
-                return ChartKLineFragment.newInstance(90, false)
+                return ChartKLineFragment.newInstance(90, true)
             }
             6 -> {
-                return ChartKLineFragment.newInstance(365, false)
+                return ChartKLineFragment.newInstance(365, true)
             }
         }
         return null

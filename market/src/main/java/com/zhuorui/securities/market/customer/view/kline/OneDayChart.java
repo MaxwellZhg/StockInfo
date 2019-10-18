@@ -1,56 +1,45 @@
 package com.zhuorui.securities.market.customer.view.kline;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import com.zhuorui.securities.base2app.rxbus.RxBus;
-import com.zhuorui.securities.base2app.util.ResUtil;
-import com.zhuorui.securities.market.R;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.components.*;
+import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.VolFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.zhuorui.securities.market.customer.view.kline.markerView.BarBottomMarkerView;
-import com.zhuorui.securities.market.customer.view.kline.renderer.ColorContentYAxisRenderer;
-import com.zhuorui.securities.market.customer.view.kline.charts.CoupleChartGestureListener;
-import com.zhuorui.securities.market.customer.view.kline.markerView.LeftMarkerView;
-import com.zhuorui.securities.market.customer.view.kline.charts.TimeBarChart;
-import com.zhuorui.securities.market.customer.view.kline.charts.TimeLineChart;
-import com.zhuorui.securities.market.customer.view.kline.markerView.TimeRightMarkerView;
-import com.zhuorui.securities.market.customer.view.kline.charts.TimeXAxis;
-import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage;
-import com.zhuorui.securities.market.customer.view.kline.enums.ChartType;
-import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
-import com.zhuorui.securities.market.customer.view.kline.model.CirclePositionTime;
-import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel;
 import com.github.mikephil.charting.utils.CommonUtil;
 import com.github.mikephil.charting.utils.NumberUtils;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
+import com.zhuorui.securities.base2app.rxbus.RxBus;
+import com.zhuorui.securities.base2app.util.ResUtil;
+import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.view.kline.charts.CoupleChartGestureListener;
+import com.zhuorui.securities.market.customer.view.kline.charts.TimeBarChart;
+import com.zhuorui.securities.market.customer.view.kline.charts.TimeLineChart;
+import com.zhuorui.securities.market.customer.view.kline.charts.TimeXAxis;
+import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage;
+import com.zhuorui.securities.market.customer.view.kline.enums.ChartType;
+import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
+import com.zhuorui.securities.market.customer.view.kline.markerView.BarBottomMarkerView;
+import com.zhuorui.securities.market.customer.view.kline.markerView.LeftMarkerView;
+import com.zhuorui.securities.market.customer.view.kline.markerView.TimeRightMarkerView;
+import com.zhuorui.securities.market.customer.view.kline.model.CirclePositionTime;
+import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel;
+import com.zhuorui.securities.market.customer.view.kline.renderer.ColorContentYAxisRenderer;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -110,7 +99,7 @@ public class OneDayChart extends BaseChart {
         lineChart.setScaleEnabled(false);
         lineChart.setDrawBorders(true);
         lineChart.setBorderColor(ContextCompat.getColor(mContext, R.color.border_color));
-        lineChart.setBorderWidth(0.5f);
+        lineChart.setBorderWidth(0.35f);
         lineChart.setNoDataText(getResources().getString(R.string.loading));
         Legend lineChartLegend = lineChart.getLegend();
         lineChartLegend.setEnabled(false);
@@ -120,27 +109,34 @@ public class OneDayChart extends BaseChart {
         barChart.setScaleEnabled(false);
         barChart.setDrawBorders(true);
         barChart.setBorderColor(ContextCompat.getColor(mContext, R.color.border_color));
-        barChart.setBorderWidth(0.5f);
+        barChart.setBorderWidth(0.35f);
         barChart.setNoDataText(getResources().getString(R.string.loading));
         Legend barChartLegend = barChart.getLegend();
         barChartLegend.setEnabled(false);
-        barChart.setDescription(null);
+        Description description = barChart.getDescription();
+        description.setText(getResources().getString(R.string.vol_name));
+        description.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
+        description.setTextSize(12f);
+        description.setXOffset(5f);
+        description.setYOffset(7f);
+        barChart.setDescription(description);
 
         //主图X轴
         xAxisLine = (TimeXAxis) lineChart.getXAxis();
         xAxisLine.setDrawAxisLine(false);
         xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
         xAxisLine.setTextSize(12f);
+        xAxisLine.setXOffset(5f);
         xAxisLine.setYOffset(8f);
         xAxisLine.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisLine.setAvoidFirstLastClipping(true);
         xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
-        xAxisLine.setGridLineWidth(0.5f);
+        xAxisLine.setGridLineWidth(0.35f);
 
         //主图左Y轴
         axisLeftLine = lineChart.getAxisLeft();
         axisLeftLine.setLabelCount(5, true);
-        axisLeftLine.setXOffset(6f);
+        axisLeftLine.setXOffset(5f);
         axisLeftLine.setYOffset(5f);
         axisLeftLine.setTextSize(12f);
         axisLeftLine.setDrawGridLines(false);
@@ -159,12 +155,12 @@ public class OneDayChart extends BaseChart {
         //主图右Y轴
         axisRightLine = lineChart.getAxisRight();
         axisRightLine.setLabelCount(5, true);
-        axisRightLine.setXOffset(6f);
+        axisRightLine.setXOffset(5f);
         axisRightLine.setYOffset(5f);
         axisRightLine.setTextSize(12f);
         axisRightLine.setDrawTopBottomGridLine(false);
         axisRightLine.setDrawGridLines(true);
-        axisRightLine.setGridLineWidth(0.5f);
+        axisRightLine.setGridLineWidth(0.3f);
 //      画虚线  axisRightLine.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
         axisRightLine.setDrawAxisLine(false);
         axisRightLine.setValueLineInside(true);
@@ -187,13 +183,16 @@ public class OneDayChart extends BaseChart {
         xAxisBar.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisBar.setAvoidFirstLastClipping(true);
         xAxisBar.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
-        xAxisBar.setGridLineWidth(0.5f);
+        xAxisBar.setGridLineWidth(0.35f);
 
         //副图左Y轴
         axisLeftBar = barChart.getAxisLeft();
         axisLeftBar.setDrawGridLines(false);
         axisLeftBar.setDrawAxisLine(false);
-        axisLeftBar.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
+        axisLeftBar.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
+        axisLeftBar.setTextSize(12f);
+        axisLeftBar.setXOffset(5f);
+        axisLeftBar.setYOffset(3f);
         axisLeftBar.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftBar.setDrawLabels(true);
         axisLeftBar.setLabelCount(2, true);
@@ -204,12 +203,12 @@ public class OneDayChart extends BaseChart {
         //副图右Y轴
         axisRightBar = barChart.getAxisRight();
         axisRightBar.setDrawLabels(false);
-        axisRightBar.setDrawGridLines(true);
+        axisRightBar.setDrawGridLines(false);
         axisRightBar.setDrawAxisLine(false);
         axisRightBar.setLabelCount(3, true);
         axisRightBar.setDrawTopBottomGridLine(false);
         axisRightBar.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
-        axisRightBar.setGridLineWidth(0.5f);
+        axisRightBar.setGridLineWidth(0.3f);
 //        axisRightBar.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
 
         //手势联动监听
@@ -415,8 +414,8 @@ public class OneDayChart extends BaseChart {
 //                lineChart.setViewPortOffsets(left, CommonUtil.dip2px(mContext, 5), right, CommonUtil.dip2px(mContext, 15));
 //                barChart.setViewPortOffsets(left, 0, right, CommonUtil.dip2px(mContext, 15));
 //            } else {
-                lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
-                barChart.setViewPortOffsets(CommonUtil.dip2px(mContext, 5), 0, CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5));
+            lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
+            barChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 19), 0, 0);
 //            }
 
             axisLeftLine.setAxisMinimum(mData.getMin());
