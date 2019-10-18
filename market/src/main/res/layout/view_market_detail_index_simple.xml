@@ -3,7 +3,7 @@
               android:orientation="horizontal"
               android:gravity="center_vertical"
               android:background="#2D2C35"
-              android:minHeight="37dp"
+              android:minHeight="38dp"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
@@ -50,11 +50,12 @@
 
     <ImageView
             android:id="@+id/open_btn"
-            android:background="#498"
-            android:layout_width="37dp"
-            android:layout_height="37dp"
+            android:layout_width="38dp"
+            android:layout_height="34dp"
+            android:padding="13dp"
+            android:src="@mipmap/ic_arrow_up_c3cde3"
+            android:layout_marginLeft="5dp"
             android:gravity="right"
-            android:layout_marginLeft="18dp"
     />
 
 

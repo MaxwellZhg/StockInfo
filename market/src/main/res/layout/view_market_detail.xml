@@ -3,7 +3,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:background="#2D2C35"
-        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,7 +15,6 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="bottom"
-
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
     />
@@ -379,6 +377,8 @@
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@mipmap/ic_arrow_down_53a0fd"
             app:layout_constraintTop_toBottomOf="@+id/tv_7_1"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
