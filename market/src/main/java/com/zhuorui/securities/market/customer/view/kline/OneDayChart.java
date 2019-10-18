@@ -23,7 +23,6 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.CommonUtil;
 import com.github.mikephil.charting.utils.NumberUtils;
 import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
@@ -195,6 +194,7 @@ public class OneDayChart extends BaseChart {
         axisLeftBar.setYOffset(3f);
         axisLeftBar.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftBar.setDrawLabels(true);
+        axisLeftBar.setDrawFirstLable(false);
         axisLeftBar.setLabelCount(2, true);
         axisLeftBar.setAxisMinimum(0);
         axisLeftBar.setSpaceTop(5);
@@ -375,7 +375,7 @@ public class OneDayChart extends BaseChart {
             d1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
             d2.setColor(ContextCompat.getColor(mContext, R.color.minute_yellow));
             d1.setDrawFilled(true);
-            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_11FF8DB9E4));
+            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_33FF8DB9E4));
             d1.setFillDrawable(drawable);
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
             d1.setHighlightEnabled(landscape);
