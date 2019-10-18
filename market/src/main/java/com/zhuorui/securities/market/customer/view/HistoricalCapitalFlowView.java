@@ -134,7 +134,7 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         });
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth(0.5f);
-        //极端数据上下留空间出显示Values
+        //数据上下留空间出显示Values
         float max = barDataSet.getYMax();
         float min = barDataSet.getYMin();
         double maxMinAbs = Math.abs(max - min);
