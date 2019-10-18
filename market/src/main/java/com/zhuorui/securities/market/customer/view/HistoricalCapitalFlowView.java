@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,6 +24,7 @@ import com.zhuorui.securities.market.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * author : liuwei
@@ -29,12 +32,13 @@ import java.util.List;
  * date   : 2019-10-17 11:43
  * desc   : 历史资金流向
  */
-public class HistoricalCapitalFlowView extends FrameLayout {
+public class HistoricalCapitalFlowView extends FrameLayout implements View.OnClickListener {
 
     private final int upColor = Color.parseColor("#D9001B");
     private final int downColor = Color.parseColor("#00AB3B");
-    private final float testSizePx = Utils.convertDpToPixel(10f);
+    private int mDateNum = 5;
     private BarChart vChart;
+    private TextView vNum;
 
     public HistoricalCapitalFlowView(Context context) {
         this(context, null);
@@ -47,6 +51,8 @@ public class HistoricalCapitalFlowView extends FrameLayout {
     public HistoricalCapitalFlowView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_historical_capital_flow, this);
+        vNum = findViewById(R.id.tv_date_num);
+        vNum.setOnClickListener(this);
         initBarChart();
         getTestData();
     }
@@ -86,8 +92,6 @@ public class HistoricalCapitalFlowView extends FrameLayout {
         axisLeft.setDrawZeroLine(true);
         axisLeft.setZeroLineColor(Color.parseColor("#333741"));
         axisLeft.setZeroLineWidth(1f);
-        axisLeft.setSpaceTop(0f);
-        axisLeft.setSpaceBottom(0f);
         axisLeft.setValueLineInside(true);
         axisLeft.setLabelCount(2, true);
         axisLeft.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
@@ -103,14 +107,14 @@ public class HistoricalCapitalFlowView extends FrameLayout {
     private void getTestData() {
         List<Integer> color = new ArrayList<>();
         List<BarEntry> entryList = new ArrayList<>();
-        for (int i = 3; i >= 0; i--) {
-            BarEntry barEntry = new BarEntry(i, i * 1000);
+        int[] d = {-1, 1};
+        Random random = new Random();
+        for (int i = 0; i < mDateNum; i++) {
+            int v = (i + 1) * random.nextInt(1000) * d[random.nextInt(d.length)];
+            BarEntry barEntry = new BarEntry(i, v);
             entryList.add(barEntry);
-            color.add(upColor);
+            color.add(v < 0 ? downColor : upColor);
         }
-        BarEntry barEntry = new BarEntry(4, -2900);
-        entryList.add(barEntry);
-        color.add(downColor);
         setData(entryList, color);
     }
 
@@ -130,9 +134,50 @@ public class HistoricalCapitalFlowView extends FrameLayout {
         });
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth(0.5f);
+        //极端数据上下留空间出显示Values
+        float max = barDataSet.getYMax();
+        float min = barDataSet.getYMin();
+        double maxMinAbs = Math.abs(max - min);
+        float maxMinAbs15 = (float) (maxMinAbs * 0.15);
+        float maxMinAbs05 = (float) (maxMinAbs * 0.05);
+        if (max < maxMinAbs15) {
+            vChart.getAxisLeft().setAxisMaximum(maxMinAbs15);
+            vChart.getAxisLeft().setAxisMinimum(min - maxMinAbs05);
+        } else if (min > -maxMinAbs15) {
+            vChart.getAxisLeft().setAxisMaximum(max + maxMinAbs05);
+            vChart.getAxisLeft().setAxisMinimum(-maxMinAbs15);
+        } else {
+            vChart.getAxisLeft().setAxisMaximum(max + maxMinAbs05);
+            vChart.getAxisLeft().setAxisMinimum(min - maxMinAbs05);
+        }
         vChart.getXAxis().setLabelCount(entryList.size());
         vChart.setData(barData);
+        vChart.invalidate();
     }
+
+    private void changeDateNum() {
+        if (mDateNum == 5) {
+            mDateNum = 10;
+            vChart.setDragEnabled(true);
+        } else {
+            mDateNum = 5;
+            vChart.setDragEnabled(false);
+        }
+        upDateNumText();
+        getTestData();
+    }
+
+    private void upDateNumText() {
+        vNum.setText(mDateNum + "天");
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == vNum) {
+            changeDateNum();
+        }
+    }
+
 
     class HCFVRenderer extends BarChartRenderer {
 
@@ -140,6 +185,7 @@ public class HistoricalCapitalFlowView extends FrameLayout {
         private float space = 0;
         private float zeroLineWidth = 0;
         private float textSpace = 0;
+        private final float testSizePx = Utils.convertDpToPixel(10f);
 
         public HCFVRenderer(BarDataProvider chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
             super(chart, animator, viewPortHandler);

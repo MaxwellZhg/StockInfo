@@ -30,6 +30,25 @@
             app:layout_constraintLeft_toRightOf="@+id/tv_title"
     />
 
+    <TextView
+            android:id="@+id/tv_date_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="5天"
+            android:padding="5dp"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:minWidth="30dp"
+            android:minHeight="18dp"
+            android:gravity="center"
+            android:background="@mipmap/bg_date"
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title"
+            app:layout_constraintRight_toRightOf="parent"
+    />
+
+
     <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bar_cahart"
             android:layout_width="0dp"
