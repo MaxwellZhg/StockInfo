@@ -74,6 +74,11 @@ public class YAxis extends AxisBase {
     private YAxisLabelPosition mPosition = YAxisLabelPosition.OUTSIDE_CHART;
 
     /**
+     * 边缘文字Y轴的偏移量
+     */
+    private float edgeYOffset;
+
+    /**
      * enum for the position of the y-labels relative to the chart
      */
     public enum YAxisLabelPosition {
@@ -461,5 +466,13 @@ public class YAxis extends AxisBase {
         this.mAxisMaximum = mCustomAxisMax ? this.mAxisMaximum : max + (range / 100f) * getSpaceTop();
 
         this.mAxisRange = Math.abs(this.mAxisMinimum - this.mAxisMaximum);
+    }
+
+    public void setEdgeYOffset(float edgeYOffset) {
+        this.edgeYOffset = Utils.convertDpToPixel(edgeYOffset);
+    }
+
+    public float getEdgeYOffset() {
+        return edgeYOffset;
     }
 }
