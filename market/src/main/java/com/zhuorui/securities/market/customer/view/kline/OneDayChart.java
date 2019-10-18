@@ -131,7 +131,7 @@ public class OneDayChart extends BaseChart {
         xAxisLine.setDrawAxisLine(false);
         xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
         xAxisLine.setTextSize(12f);
-        xAxisLine.setYOffset(9f);
+        xAxisLine.setYOffset(8f);
         xAxisLine.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisLine.setAvoidFirstLastClipping(true);
         xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
@@ -147,7 +147,7 @@ public class OneDayChart extends BaseChart {
         axisLeftLine.setValueLineInside(true);
         axisLeftLine.setDrawTopBottomGridLine(false);
         axisLeftLine.setDrawAxisLine(false);
-        axisLeftLine.setPosition(landscape ? YAxis.YAxisLabelPosition.OUTSIDE_CHART : YAxis.YAxisLabelPosition.INSIDE_CHART);
+        axisLeftLine.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftLine.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
         axisLeftLine.setValueFormatter(new ValueFormatter() {
             @Override
@@ -168,7 +168,7 @@ public class OneDayChart extends BaseChart {
 //      画虚线  axisRightLine.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
         axisRightLine.setDrawAxisLine(false);
         axisRightLine.setValueLineInside(true);
-        axisRightLine.setPosition(landscape ? YAxis.YAxisLabelPosition.OUTSIDE_CHART : YAxis.YAxisLabelPosition.INSIDE_CHART);
+        axisRightLine.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisRightLine.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
         axisRightLine.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
         axisRightLine.setValueFormatter(new ValueFormatter() {
@@ -194,7 +194,7 @@ public class OneDayChart extends BaseChart {
         axisLeftBar.setDrawGridLines(false);
         axisLeftBar.setDrawAxisLine(false);
         axisLeftBar.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
-        axisLeftBar.setPosition(landscape ? YAxis.YAxisLabelPosition.OUTSIDE_CHART : YAxis.YAxisLabelPosition.INSIDE_CHART);
+        axisLeftBar.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftBar.setDrawLabels(true);
         axisLeftBar.setLabelCount(2, true);
         axisLeftBar.setAxisMinimum(0);
@@ -343,14 +343,14 @@ public class OneDayChart extends BaseChart {
             ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(lineChart.getViewPortHandler(), axisLeftLine, leftYTransformer);
             leftColorContentYAxisRenderer.setLabelColor(colorArray);
             leftColorContentYAxisRenderer.setClosePrice(mData.getPreClose());
-            leftColorContentYAxisRenderer.setLandscape(landscape);
+//            leftColorContentYAxisRenderer.setLandscape(landscape);
             lineChart.setRendererLeftYAxis(leftColorContentYAxisRenderer);
             //右Y轴label渲染颜色
             Transformer rightYTransformer = lineChart.getRendererRightYAxis().getTransformer();
             ColorContentYAxisRenderer rightColorContentYAxisRenderer = new ColorContentYAxisRenderer(lineChart.getViewPortHandler(), axisRightLine, rightYTransformer);
             rightColorContentYAxisRenderer.setLabelColor(colorArray);
             rightColorContentYAxisRenderer.setClosePrice(mData.getPreClose());
-            rightColorContentYAxisRenderer.setLandscape(landscape);
+//            rightColorContentYAxisRenderer.setLandscape(landscape);
             lineChart.setRendererRightYAxis(rightColorContentYAxisRenderer);
 
             if (Float.isNaN(mData.getPercentMax()) || Float.isNaN(mData.getPercentMin()) || Float.isNaN(mData.getVolMaxTime())) {
@@ -407,17 +407,17 @@ public class OneDayChart extends BaseChart {
 
             //请注意，修改视口的所有方法需要在为Chart设置数据之后调用。
             //设置当前视图四周的偏移量。 设置这个，将阻止图表自动计算它的偏移量。使用 resetViewPortOffsets()撤消此设置。
-            if (landscape) {
-                float volwidth = Utils.calcTextWidthForVol(mPaint, mData.getVolMaxTime());
-                float pricewidth = Utils.calcTextWidth(mPaint, NumberUtils.keepPrecision(Float.isNaN(mData.getMax()) ? "0" : mData.getMax() + "", precision) + "#");
-                float left = CommonUtil.dip2px(mContext, pricewidth > volwidth ? pricewidth : volwidth);
-                float right = CommonUtil.dip2px(mContext, Utils.calcTextWidth(mPaint, "-10.00%"));
-                lineChart.setViewPortOffsets(left, CommonUtil.dip2px(mContext, 5), right, CommonUtil.dip2px(mContext, 15));
-                barChart.setViewPortOffsets(left, 0, right, CommonUtil.dip2px(mContext, 15));
-            } else {
-                lineChart.setViewPortOffsets(CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 15));
+//            if (landscape) {
+//                float volwidth = Utils.calcTextWidthForVol(mPaint, mData.getVolMaxTime());
+//                float pricewidth = Utils.calcTextWidth(mPaint, NumberUtils.keepPrecision(Float.isNaN(mData.getMax()) ? "0" : mData.getMax() + "", precision) + "#");
+//                float left = CommonUtil.dip2px(mContext, pricewidth > volwidth ? pricewidth : volwidth);
+//                float right = CommonUtil.dip2px(mContext, Utils.calcTextWidth(mPaint, "-10.00%"));
+//                lineChart.setViewPortOffsets(left, CommonUtil.dip2px(mContext, 5), right, CommonUtil.dip2px(mContext, 15));
+//                barChart.setViewPortOffsets(left, 0, right, CommonUtil.dip2px(mContext, 15));
+//            } else {
+                lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
                 barChart.setViewPortOffsets(CommonUtil.dip2px(mContext, 5), 0, CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5));
-            }
+//            }
 
             axisLeftLine.setAxisMinimum(mData.getMin());
             axisLeftLine.setAxisMaximum(mData.getMax());
@@ -551,6 +551,8 @@ public class OneDayChart extends BaseChart {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        RxBus.getDefault().unregister(this);
+        if (RxBus.getDefault().isRegistered(this)) {
+            RxBus.getDefault().unregister(this);
+        }
     }
 }
