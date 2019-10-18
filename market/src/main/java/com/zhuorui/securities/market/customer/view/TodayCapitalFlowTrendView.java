@@ -15,10 +15,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
-import com.github.mikephil.charting.utils.MPPointD;
-import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.github.mikephil.charting.utils.*;
 import com.zhuorui.securities.market.R;
 
 import java.util.ArrayList;
@@ -105,7 +102,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setEdgeYOffset(5f);
         leftAxis.setSpaceBottom(0f);
         leftAxis.setSpaceTop(0f);
-        leftAxis.setLabelCount(4, true);
+        leftAxis.setLabelCount(2, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setValueFormatter(new ValueFormatter() {
@@ -131,7 +128,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
 
 
     private void setData() {
-        int[] d = {1,1, -1};
+        int[] d = {1, 1, -1};
         List<Entry> entrys = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 149; i += 4) {
@@ -171,7 +168,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         @Override
         protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
             super.drawYLabels(c, fixedPosition, positions, offset);
-            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + offset, mAxisLabelPaint);
+            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + +Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
         }
 
         @Override
