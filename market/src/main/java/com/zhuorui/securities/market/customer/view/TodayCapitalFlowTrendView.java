@@ -168,7 +168,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         @Override
         protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
             super.drawYLabels(c, fixedPosition, positions, offset);
-            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + +Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
+            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
         }
 
         @Override
@@ -230,7 +230,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
                     maxX = 240;//最大数据点1分钟占一点
                     breakIndex = 119;//休盘点坐标
                     openingHours = "09:30";//开市时间
-                    breakTime = "1:30/13:00";//休盘时间
+                    breakTime = "11:30/13:00";//休盘时间
                     closingHours = "15:00";//收市时间
                     break;
             }
