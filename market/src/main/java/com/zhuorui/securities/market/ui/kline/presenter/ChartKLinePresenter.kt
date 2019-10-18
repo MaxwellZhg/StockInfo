@@ -92,7 +92,7 @@ class ChartKLinePresenter : AbsEventPresenter<KlineView, KlineViewModel>() {
             if (kDataManager == null) {
                 kDataManager = KLineDataManage(context)
             }
-            kDataManager.parseKlineData(kTimeData, "000001.IDX.SZ", land)
+            kDataManager.parseKlineData(kTimeData, "000001.SZ", land)
             var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.setDataToChart(kDataManager)
                 emitter.onNext(true)

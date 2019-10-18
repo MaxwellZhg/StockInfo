@@ -445,7 +445,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
                         xpos = xpos + Utils.calcTextWidth(mDescPaint, mDescriptionLabels[i]) + 20;
                         mDescPaint.setColor(mDescriptionColors[i]);
                         c.drawText(mDescriptionLabels[i], xpos,
-                                mViewPortHandler.contentTop() + 5 - Utils.calcTextHeight(mDescPaint, mDescription.toString()) / 2, mDescPaint);
+                                mViewPortHandler.contentTop() + 5 - Utils.calcTextHeight(mDescPaint, mDescription.toString()) / 2f, mDescPaint);
                     }
 
                 } else {
@@ -458,8 +458,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             } else if (!"".equals(mDescription.getText())) {
 
                 if (position == null) {
-                    c.drawText(mDescription.getText(), mViewPortHandler.contentLeft() + Utils.calcTextWidth(mDescPaint, mDescription.getText()) + 10,
-                            mViewPortHandler.contentTop() + 5 - Utils.calcTextHeight(mDescPaint, mDescription.getText()) / 2, mDescPaint);
+                    c.drawText(mDescription.getText(), mViewPortHandler.contentLeft() + Utils.calcTextWidth(mDescPaint, mDescription.getText()) + mDescription.getXOffset(),
+                            mViewPortHandler.contentTop() - mDescription.getYOffset(), mDescPaint);
                 } else {
                     c.drawText(mDescription.getText(), position.x, position.y, mDescPaint);
                 }
@@ -591,7 +591,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     * @param x The x-value to highlight
+     *
+     * @param x            The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, int dataSetIndex) {
@@ -602,8 +603,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights the value at the given x-value and y-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     * @param x The x-value to highlight
-     * @param y The y-value to highlight. Supply `NaN` for "any"
+     *
+     * @param x            The x-value to highlight
+     * @param y            The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, float y, int dataSetIndex) {
@@ -613,7 +615,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     * @param x The x-value to highlight
+     *
+     * @param x            The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -624,8 +627,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     * @param x The x-value to highlight
-     * @param y The y-value to highlight. Supply `NaN` for "any"
+     *
+     * @param x            The x-value to highlight
+     * @param y            The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -892,7 +896,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      *
      * @param durationMillisX
      * @param durationMillisY
-     * @param easing         a custom easing function to be used on the animation phase
+     * @param easing          a custom easing function to be used on the animation phase
      */
     @RequiresApi(11)
     public void animateXY(int durationMillisX, int durationMillisY, EasingFunction easing) {

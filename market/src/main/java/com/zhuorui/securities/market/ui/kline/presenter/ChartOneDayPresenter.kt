@@ -46,7 +46,7 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
                     var kDataManager = viewModel?.kDataManager
                     if (kDataManager == null) {
                         kDataManager = TimeDataManage()
-                        kDataManager.parseTimeData(it, "000001.IDX.SZ", 0.0, true)
+                        kDataManager.parseTimeData(it, "000001.SZ", 0.0, true)
                         viewModel?.kDataManager = kDataManager
                     }
                     emitter.onNext(kDataManager)
@@ -91,7 +91,7 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
             if (kDataManager == null) {
                 kDataManager = TimeDataManage()
             }
-            kDataManager.parseTimeData(klineData, "000001.IDX.SZ", 0.0, true)
+            kDataManager.parseTimeData(klineData, "000001.SZ", 0.0, true)
             var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.setDataToChart(kDataManager)
                 emitter.onNext(true)
@@ -128,7 +128,7 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
 
         // 在子线程中整合新数据再更新到界面
         val kDataManager = viewModel?.kDataManager
-        kDataManager?.parseTimeData(klineData, "000001.IDX.SZ", 0.0, false)
+        kDataManager?.parseTimeData(klineData, "000001.SZ", 0.0, false)
         var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             view?.setDataToChart(kDataManager)
             emitter.onNext(true)

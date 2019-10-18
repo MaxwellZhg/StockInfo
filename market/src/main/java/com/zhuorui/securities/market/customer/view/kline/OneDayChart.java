@@ -2,52 +2,43 @@ package com.zhuorui.securities.market.customer.view.kline;
 
 import android.content.Context;
 import android.graphics.Paint;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import com.zhuorui.securities.base2app.rxbus.RxBus;
-import com.zhuorui.securities.market.R;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.components.*;
+import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.VolFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.zhuorui.securities.market.customer.view.kline.markerView.BarBottomMarkerView;
-import com.zhuorui.securities.market.customer.view.kline.renderer.ColorContentYAxisRenderer;
+import com.github.mikephil.charting.utils.CommonUtil;
+import com.github.mikephil.charting.utils.NumberUtils;
+import com.github.mikephil.charting.utils.Transformer;
+import com.zhuorui.securities.base2app.rxbus.RxBus;
+import com.zhuorui.securities.base2app.util.ResUtil;
+import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.customer.view.kline.charts.CoupleChartGestureListener;
-import com.zhuorui.securities.market.customer.view.kline.markerView.LeftMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.charts.TimeBarChart;
 import com.zhuorui.securities.market.customer.view.kline.charts.TimeLineChart;
-import com.zhuorui.securities.market.customer.view.kline.markerView.TimeRightMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.charts.TimeXAxis;
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage;
 import com.zhuorui.securities.market.customer.view.kline.enums.ChartType;
 import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
+import com.zhuorui.securities.market.customer.view.kline.markerView.BarBottomMarkerView;
+import com.zhuorui.securities.market.customer.view.kline.markerView.LeftMarkerView;
+import com.zhuorui.securities.market.customer.view.kline.markerView.TimeRightMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.model.CirclePositionTime;
 import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel;
-import com.github.mikephil.charting.utils.CommonUtil;
-import com.github.mikephil.charting.utils.NumberUtils;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
+import com.zhuorui.securities.market.customer.view.kline.renderer.ColorContentYAxisRenderer;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -86,13 +77,13 @@ public class OneDayChart extends BaseChart {
         super(context, attrs);
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.layout_kline_time, this);
-        lineChart = (TimeLineChart) findViewById(R.id.line_chart);
-        barChart = (TimeBarChart) findViewById(R.id.bar_chart);
-        cirCleView = (FrameLayout) findViewById(R.id.circle_frame_time);
+        lineChart = findViewById(R.id.line_chart);
+        barChart = findViewById(R.id.bar_chart);
+        cirCleView = findViewById(R.id.circle_frame_time);
 
         RxBus.getDefault().register(this);
 
-        colorArray = new int[]{ ContextCompat.getColor(mContext, R.color.up_color), ContextCompat.getColor(mContext, R.color.equal_color),ContextCompat.getColor(mContext, R.color.down_color)};
+        colorArray = new int[]{ContextCompat.getColor(mContext, R.color.up_color), ContextCompat.getColor(mContext, R.color.equal_color), ContextCompat.getColor(mContext, R.color.down_color)};
 
         playHeartbeatAnimation(cirCleView.findViewById(R.id.anim_view));
 
@@ -107,38 +98,51 @@ public class OneDayChart extends BaseChart {
         lineChart.setScaleEnabled(false);
         lineChart.setDrawBorders(true);
         lineChart.setBorderColor(ContextCompat.getColor(mContext, R.color.border_color));
-        lineChart.setBorderWidth(0.7f);
+        lineChart.setBorderWidth(0.35f);
         lineChart.setNoDataText(getResources().getString(R.string.loading));
         Legend lineChartLegend = lineChart.getLegend();
         lineChartLegend.setEnabled(false);
         lineChart.setDescription(null);
+
         //副图
         barChart.setScaleEnabled(false);
         barChart.setDrawBorders(true);
         barChart.setBorderColor(ContextCompat.getColor(mContext, R.color.border_color));
-        barChart.setBorderWidth(0.7f);
+        barChart.setBorderWidth(0.35f);
         barChart.setNoDataText(getResources().getString(R.string.loading));
         Legend barChartLegend = barChart.getLegend();
         barChartLegend.setEnabled(false);
-        barChart.setDescription(null);
+        Description description = barChart.getDescription();
+        description.setText(getResources().getString(R.string.vol_name));
+        description.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
+        description.setTextSize(12f);
+        description.setXOffset(5f);
+        description.setYOffset(7f);
+        barChart.setDescription(description);
 
         //主图X轴
         xAxisLine = (TimeXAxis) lineChart.getXAxis();
         xAxisLine.setDrawAxisLine(false);
         xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
+        xAxisLine.setTextSize(12f);
+        xAxisLine.setXOffset(5f);
+        xAxisLine.setYOffset(8f);
         xAxisLine.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisLine.setAvoidFirstLastClipping(true);
         xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
-        xAxisLine.setGridLineWidth(0.7f);
+        xAxisLine.setGridLineWidth(0.35f);
 
         //主图左Y轴
         axisLeftLine = lineChart.getAxisLeft();
         axisLeftLine.setLabelCount(5, true);
+        axisLeftLine.setXOffset(5f);
+        axisLeftLine.setEdgeYOffset(5f);
+        axisLeftLine.setTextSize(12f);
         axisLeftLine.setDrawGridLines(false);
         axisLeftLine.setValueLineInside(true);
         axisLeftLine.setDrawTopBottomGridLine(false);
         axisLeftLine.setDrawAxisLine(false);
-        axisLeftLine.setPosition(landscape ? YAxis.YAxisLabelPosition.OUTSIDE_CHART : YAxis.YAxisLabelPosition.INSIDE_CHART);
+        axisLeftLine.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftLine.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
         axisLeftLine.setValueFormatter(new ValueFormatter() {
             @Override
@@ -150,13 +154,16 @@ public class OneDayChart extends BaseChart {
         //主图右Y轴
         axisRightLine = lineChart.getAxisRight();
         axisRightLine.setLabelCount(5, true);
+        axisRightLine.setXOffset(5f);
+        axisRightLine.setEdgeYOffset(5f);
+        axisRightLine.setTextSize(12f);
         axisRightLine.setDrawTopBottomGridLine(false);
         axisRightLine.setDrawGridLines(true);
-        axisRightLine.setGridLineWidth(0.7f);
-        axisRightLine.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
+        axisRightLine.setGridLineWidth(0.3f);
+//      画虚线  axisRightLine.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
         axisRightLine.setDrawAxisLine(false);
         axisRightLine.setValueLineInside(true);
-        axisRightLine.setPosition(landscape ? YAxis.YAxisLabelPosition.OUTSIDE_CHART : YAxis.YAxisLabelPosition.INSIDE_CHART);
+        axisRightLine.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisRightLine.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
         axisRightLine.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
         axisRightLine.setValueFormatter(new ValueFormatter() {
@@ -175,15 +182,19 @@ public class OneDayChart extends BaseChart {
         xAxisBar.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisBar.setAvoidFirstLastClipping(true);
         xAxisBar.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
-        xAxisBar.setGridLineWidth(0.7f);
+        xAxisBar.setGridLineWidth(0.35f);
 
         //副图左Y轴
         axisLeftBar = barChart.getAxisLeft();
         axisLeftBar.setDrawGridLines(false);
         axisLeftBar.setDrawAxisLine(false);
-        axisLeftBar.setTextColor(ContextCompat.getColor(mContext, R.color.axis_text));
-        axisLeftBar.setPosition(landscape ? YAxis.YAxisLabelPosition.OUTSIDE_CHART : YAxis.YAxisLabelPosition.INSIDE_CHART);
+        axisLeftBar.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
+        axisLeftBar.setTextSize(12f);
+        axisLeftBar.setXOffset(5f);
+        axisLeftBar.setEdgeYOffset(3f);
+        axisLeftBar.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftBar.setDrawLabels(true);
+        axisLeftBar.setDrawFirstLable(false);
         axisLeftBar.setLabelCount(2, true);
         axisLeftBar.setAxisMinimum(0);
         axisLeftBar.setSpaceTop(5);
@@ -192,13 +203,13 @@ public class OneDayChart extends BaseChart {
         //副图右Y轴
         axisRightBar = barChart.getAxisRight();
         axisRightBar.setDrawLabels(false);
-        axisRightBar.setDrawGridLines(true);
+        axisRightBar.setDrawGridLines(false);
         axisRightBar.setDrawAxisLine(false);
         axisRightBar.setLabelCount(3, true);
         axisRightBar.setDrawTopBottomGridLine(false);
         axisRightBar.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
-        axisRightBar.setGridLineWidth(0.7f);
-        axisRightBar.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
+        axisRightBar.setGridLineWidth(0.3f);
+//        axisRightBar.enableGridDashedLine(CommonUtil.dip2px(mContext, 4), CommonUtil.dip2px(mContext, 3), 0);
 
         //手势联动监听
         gestureListenerLine = new CoupleChartGestureListener(lineChart, new Chart[]{barChart});
@@ -280,18 +291,18 @@ public class OneDayChart extends BaseChart {
         for (int i = 0, j = 0; i < mData.getDatas().size(); i++, j++) {
             TimeDataModel t = mData.getDatas().get(j);
             if (t == null) {
-                lineCJEntries.add(new Entry( i, Float.NaN));
-                lineJJEntries.add(new Entry( i, Float.NaN));
-                barEntries.add(new BarEntry( i, Float.NaN));
+                lineCJEntries.add(new Entry(i, Float.NaN));
+                lineJJEntries.add(new Entry(i, Float.NaN));
+                barEntries.add(new BarEntry(i, Float.NaN));
                 continue;
             }
-            lineCJEntries.add(new Entry( i, (float) mData.getDatas().get(i).getNowPrice()));
-            lineJJEntries.add(new Entry( i, (float) mData.getDatas().get(i).getAveragePrice()));
-            barEntries.add(new BarEntry( i, mData.getDatas().get(i).getVolume()));
+            lineCJEntries.add(new Entry(i, (float) mData.getDatas().get(i).getNowPrice()));
+            lineJJEntries.add(new Entry(i, (float) mData.getDatas().get(i).getAveragePrice()));
+            barEntries.add(new BarEntry(i, mData.getDatas().get(i).getVolume()));
         }
 
-        if(lineChart.getData() != null &&lineChart.getData().getDataSetCount() > 0
-                &&barChart.getData() != null &&barChart.getData().getDataSetCount() > 0){
+        if (lineChart.getData() != null && lineChart.getData().getDataSetCount() > 0
+                && barChart.getData() != null && barChart.getData().getDataSetCount() > 0) {
             d1 = (LineDataSet) lineChart.getData().getDataSetByIndex(0);
             d1.setValues(lineCJEntries);
             d1.notifyDataSetChanged();
@@ -306,7 +317,7 @@ public class OneDayChart extends BaseChart {
             barDataSet.notifyDataSetChanged();
             barChart.getData().notifyDataChanged();
             barChart.notifyDataSetChanged();
-        }else {
+        } else {
             if (mData.getAssetId().endsWith(".HK")) {
                 setPrecision(mData.getAssetId().contains("IDX") ? 2 : 3);
                 setMaxCount(ChartType.HK_ONE_DAY.getPointNum());
@@ -331,14 +342,14 @@ public class OneDayChart extends BaseChart {
             ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(lineChart.getViewPortHandler(), axisLeftLine, leftYTransformer);
             leftColorContentYAxisRenderer.setLabelColor(colorArray);
             leftColorContentYAxisRenderer.setClosePrice(mData.getPreClose());
-            leftColorContentYAxisRenderer.setLandscape(landscape);
+//            leftColorContentYAxisRenderer.setLandscape(landscape);
             lineChart.setRendererLeftYAxis(leftColorContentYAxisRenderer);
             //右Y轴label渲染颜色
             Transformer rightYTransformer = lineChart.getRendererRightYAxis().getTransformer();
             ColorContentYAxisRenderer rightColorContentYAxisRenderer = new ColorContentYAxisRenderer(lineChart.getViewPortHandler(), axisRightLine, rightYTransformer);
             rightColorContentYAxisRenderer.setLabelColor(colorArray);
             rightColorContentYAxisRenderer.setClosePrice(mData.getPreClose());
-            rightColorContentYAxisRenderer.setLandscape(landscape);
+//            rightColorContentYAxisRenderer.setLandscape(landscape);
             lineChart.setRendererRightYAxis(rightColorContentYAxisRenderer);
 
             if (Float.isNaN(mData.getPercentMax()) || Float.isNaN(mData.getPercentMin()) || Float.isNaN(mData.getVolMaxTime())) {
@@ -359,12 +370,12 @@ public class OneDayChart extends BaseChart {
             d2.setDrawCircleDashMarker(false);
             d1.setDrawValues(false);
             d2.setDrawValues(false);
-            d1.setLineWidth(0.7f);
-            d2.setLineWidth(0.7f);
+            d1.setLineWidth(1f);
+            d2.setLineWidth(1f);
             d1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
             d2.setColor(ContextCompat.getColor(mContext, R.color.minute_yellow));
             d1.setDrawFilled(true);
-            Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.fade_fill_color);
+            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_33FF8DB9E4));
             d1.setFillDrawable(drawable);
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
             d1.setHighlightEnabled(landscape);
@@ -395,17 +406,17 @@ public class OneDayChart extends BaseChart {
 
             //请注意，修改视口的所有方法需要在为Chart设置数据之后调用。
             //设置当前视图四周的偏移量。 设置这个，将阻止图表自动计算它的偏移量。使用 resetViewPortOffsets()撤消此设置。
-            if (landscape) {
-                float volwidth = Utils.calcTextWidthForVol(mPaint, mData.getVolMaxTime());
-                float pricewidth = Utils.calcTextWidth(mPaint, NumberUtils.keepPrecision(Float.isNaN(mData.getMax()) ? "0" : mData.getMax() + "", precision) + "#");
-                float left = CommonUtil.dip2px(mContext, pricewidth > volwidth ? pricewidth : volwidth);
-                float right = CommonUtil.dip2px(mContext, Utils.calcTextWidth(mPaint, "-10.00%"));
-                lineChart.setViewPortOffsets(left, CommonUtil.dip2px(mContext, 5), right, CommonUtil.dip2px(mContext, 15));
-                barChart.setViewPortOffsets(left, 0, right, CommonUtil.dip2px(mContext, 15));
-            } else {
-                lineChart.setViewPortOffsets(CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 15));
-                barChart.setViewPortOffsets(CommonUtil.dip2px(mContext, 5), 0, CommonUtil.dip2px(mContext, 5), CommonUtil.dip2px(mContext, 5));
-            }
+//            if (landscape) {
+//                float volwidth = Utils.calcTextWidthForVol(mPaint, mData.getVolMaxTime());
+//                float pricewidth = Utils.calcTextWidth(mPaint, NumberUtils.keepPrecision(Float.isNaN(mData.getMax()) ? "0" : mData.getMax() + "", precision) + "#");
+//                float left = CommonUtil.dip2px(mContext, pricewidth > volwidth ? pricewidth : volwidth);
+//                float right = CommonUtil.dip2px(mContext, Utils.calcTextWidth(mPaint, "-10.00%"));
+//                lineChart.setViewPortOffsets(left, CommonUtil.dip2px(mContext, 5), right, CommonUtil.dip2px(mContext, 15));
+//                barChart.setViewPortOffsets(left, 0, right, CommonUtil.dip2px(mContext, 15));
+//            } else {
+            lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
+            barChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 19), 0, 0);
+//            }
 
             axisLeftLine.setAxisMinimum(mData.getMin());
             axisLeftLine.setAxisMaximum(mData.getMax());
@@ -424,6 +435,7 @@ public class OneDayChart extends BaseChart {
 
     /**
      * 动态增加一个点数据
+     *
      * @param timeDatamodel
      * @param length
      */
@@ -451,6 +463,7 @@ public class OneDayChart extends BaseChart {
 
     /**
      * 动态更新最后一点数据
+     *
      * @param timeDatamodel
      * @param length
      */
@@ -503,13 +516,12 @@ public class OneDayChart extends BaseChart {
         barChart.setMarker(bottomMarkerView, kDatas);
     }
 
-
     @Override
     public void onEventMainThread(BaseEvent event) {
         if (event.method == 1) {
             CirclePositionTime position = (CirclePositionTime) event.obj;
-            cirCleView.setX(position.cx - cirCleView.getWidth() / 2);
-            cirCleView.setY(position.cy - cirCleView.getHeight() / 2);
+            cirCleView.setX(position.cx - cirCleView.getWidth() / 2f);
+            cirCleView.setY(position.cy - cirCleView.getHeight() / 2f);
         }
     }
 
@@ -538,6 +550,8 @@ public class OneDayChart extends BaseChart {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        RxBus.getDefault().unregister(this);
+        if (RxBus.getDefault().isRegistered(this)) {
+            RxBus.getDefault().unregister(this);
+        }
     }
 }

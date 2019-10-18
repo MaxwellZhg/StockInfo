@@ -67,11 +67,11 @@ public class ColorContentYAxisRenderer extends YAxisRenderer {
                     mAxisLabelPaint.setColor(originalColor);
                 }
                 if (i == 0) {
-                    c.drawText(text, fixedPosition, mViewPortHandler.contentBottom() - Utils.convertDpToPixel(1), mAxisLabelPaint);
+                    c.drawText(text, fixedPosition, mViewPortHandler.contentBottom() - mYAxis.getEdgeYOffset(), mAxisLabelPaint);
                 } else if (i == to - 1) {
-                    c.drawText(text, fixedPosition, mViewPortHandler.contentTop() + Utils.convertDpToPixel(8), mAxisLabelPaint);
+                    c.drawText(text, fixedPosition, mViewPortHandler.contentTop() + Utils.convertDpToPixel(8) + mYAxis.getEdgeYOffset(), mAxisLabelPaint);
                 } else {
-                    c.drawText(text, fixedPosition, positions[i * 2 + 1] + offset, mAxisLabelPaint);
+                    c.drawText(text, fixedPosition, positions[i * 2 + 1] + Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
                 }
             }
         } else {

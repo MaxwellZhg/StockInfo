@@ -119,14 +119,14 @@ public class TimeLineChart extends LineChart {
             myMarkerViewRight.layout(0, 0, myMarkerViewRight.getMeasuredWidth(), myMarkerViewRight.getMeasuredHeight());
 
             if (getAxisLeft().getLabelPosition() == YAxis.YAxisLabelPosition.OUTSIDE_CHART) {
-                myMarkerViewLeft.draw(canvas, mViewPortHandler.contentLeft() - myMarkerViewLeft.getWidth() / 2, pos[1] + myMarkerViewLeft.getHeight() / 2);
+                myMarkerViewLeft.draw(canvas, mViewPortHandler.contentLeft() - myMarkerViewLeft.getWidth() / 2f, pos[1] + myMarkerViewLeft.getHeight() / 2f);
             } else {
-                myMarkerViewLeft.draw(canvas, mViewPortHandler.contentLeft() + myMarkerViewLeft.getWidth() / 2, pos[1] + myMarkerViewLeft.getHeight() / 2);
+                myMarkerViewLeft.draw(canvas, mViewPortHandler.contentLeft() + myMarkerViewLeft.getWidth() / 2f, pos[1] + myMarkerViewLeft.getHeight() / 2f);
             }
             if (getAxisRight().getLabelPosition() == YAxis.YAxisLabelPosition.OUTSIDE_CHART) {
-                myMarkerViewRight.draw(canvas, mViewPortHandler.contentRight() + myMarkerViewRight.getWidth() / 2, pos[1] + myMarkerViewRight.getHeight() / 2);//- myMarkerViewRight.getWidth()
+                myMarkerViewRight.draw(canvas, mViewPortHandler.contentRight() + myMarkerViewRight.getWidth() / 2f, pos[1] + myMarkerViewRight.getHeight() / 2f);//- myMarkerViewRight.getWidth()
             } else {
-                myMarkerViewRight.draw(canvas, mViewPortHandler.contentRight() - myMarkerViewRight.getWidth() / 2, pos[1] + myMarkerViewRight.getHeight() / 2);//- myMarkerViewRight.getWidth()
+                myMarkerViewRight.draw(canvas, mViewPortHandler.contentRight() - myMarkerViewRight.getWidth() / 2f, pos[1] + myMarkerViewRight.getHeight() / 2f);//- myMarkerViewRight.getWidth()
             }
             // callbacks to update the content
 //            mMarker.refreshContent(e, highlight);

@@ -43,7 +43,7 @@ public class SocketClient {
 
     private static SocketClient instance;
     private WebSocketClient client;
-    private Map<String, SocketRequest> requestMap;
+//    private Map<String, SocketRequest> requestMap;
     private boolean isConnected = false;
 
     private final boolean openGzip = true;
@@ -67,17 +67,17 @@ public class SocketClient {
             client.close();
             client = null;
         }
-        if (requestMap != null) {
-            requestMap.clear();
-            requestMap = null;
-        }
+//        if (requestMap != null) {
+//            requestMap.clear();
+//            requestMap = null;
+//        }
     }
 
     public void connect() {
         if (isConnected) return;
         try {
             // 创建连接
-            requestMap = new HashMap<>();
+//            requestMap = new HashMap<>();
             client = new WebSocketClient(new URI(SocketApi.SOCKET_URL), new Draft_6455()) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
@@ -144,21 +144,21 @@ public class SocketClient {
                                         break;
                                     case SocketApi.TOPIC_UNBIND:
                                         // 传递上层，解绑订阅成功
-                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getRespId())));
+//                                        RxBus.getDefault().post(new StockUnBindTopicResponse(requestMap.remove(response.getRespId())));
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_MINUTE:
                                         // 获取分时
-                                        requestMap.remove(response.getRespId());
+//                                        requestMap.remove(response.getRespId());
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetStocksMinuteKlineResponse.class));
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_DAILY:
                                         // 获取日K
-                                        requestMap.remove(response.getRespId());
+//                                        requestMap.remove(response.getRespId());
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksDayKlineResponse.class));
                                         break;
                                     case SocketApi.PUSH_STOCK_KLINE_GET_FIVE_DAY:
                                         // 获取五日
-                                        requestMap.remove(response.getRespId());
+//                                        requestMap.remove(response.getRespId());
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksFiveDayKlineResponse.class));
                                         break;
                                 }
@@ -228,7 +228,7 @@ public class SocketClient {
     public void unBindTopic(StockTopic... topics) {
         SocketRequest request = createTopicMessage(SocketApi.TOPIC_UNBIND, topics);
         sendRequest(request);
-        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+//        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
     }
 
     private void unBindAllTopic() {
@@ -241,11 +241,11 @@ public class SocketClient {
 
         SocketRequest request = new SocketRequest();
         SocketHeader socketHeader = getRequestHeader(SocketApi.AUTH);
-        socketHeader.setDevId(devId);
+        socketHeader.setDeviceId(devId);
         request.setHeader(socketHeader);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("devId", devId);
+        body.put("deviceId", devId);
         long timestamp = System.currentTimeMillis();
         body.put("timestamp", System.currentTimeMillis());
         String str = devId + timestamp + SocketApi.SOCKET_AUTH_SIGNATURE;
@@ -279,7 +279,7 @@ public class SocketClient {
         request.setBody(stockKlineGetDaily);
 
         sendRequest(request);
-        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+//        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
         return socketHeader.getReqId();
     }
 
@@ -291,7 +291,7 @@ public class SocketClient {
         request.setBody(stockKlineGetDaily);
 
         sendRequest(request);
-        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+//        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
         return socketHeader.getReqId();
     }
 
@@ -303,7 +303,7 @@ public class SocketClient {
         request.setBody(stockMinuteKline);
 
         sendRequest(request);
-        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+//        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
         return socketHeader.getReqId();
     }
 

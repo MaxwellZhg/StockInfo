@@ -44,9 +44,11 @@ public class MarketDetailView extends FrameLayout {
         if (vMoreGroup.getVisibility() == VISIBLE) {
             vMoreBtn.setText("查看更多");
             vMoreGroup.setVisibility(GONE);
+            vMoreBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_arrow_down_53a0fd,0,0,0);
         } else {
             vMoreBtn.setText("收起");
             vMoreGroup.setVisibility(VISIBLE);
+            vMoreBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_arrow_up_53a0fd,0,0,0);
         }
     }
 }

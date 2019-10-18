@@ -10,7 +10,6 @@
 
     <LinearLayout
             android:orientation="vertical"
-            android:background="@color/color_211F2A"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -23,7 +22,6 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="0.6dp"
                 android:fadingEdge="none"
                 android:overScrollMode="never">
 
@@ -41,6 +39,7 @@
                         android:paddingRight="13dp"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"/>
+
                 <View
                         android:layout_width="match_parent"
                         android:layout_height="0.6dp"
@@ -50,37 +49,47 @@
                 <include
                         layout="@layout/layout_market_detail_a_shares"/>
 
+                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
                 <!--除权信息-->
                 <include
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
                         layout="@layout/layout_market_detail_ex_rights"/>
+
+                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
 
                 <!--K线-->
                 <FrameLayout
                         android:id="@+id/kline_view"
+                        android:background="#2D2C35"
                         android:layout_width="match_parent"
-                        android:layout_height="337dp"
-                        android:layout_marginTop="2dp"/>
+                        android:layout_height="337dp"/>
+
+                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
+                <!--买卖盘十档-->
+                <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
 
                 <!--买卖盘经纪-->
-                <TextView
-                        android:text="买卖盘经纪"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
+
+                <com.zhuorui.securities.market.customer.view.OrderBrokerView
                         android:layout_width="match_parent"
-                        android:layout_height="157dp"
-                        android:layout_marginTop="2dp"
-                        android:background="#2D2C35"/>
+                        android:layout_height="wrap_content"/>
+
+                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
 
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_marginTop="2dp"
                         android:background="#2D2C35"/>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#191821"/>
 
                 <FrameLayout
                         android:id="@+id/fl_tab_container"
@@ -91,11 +100,14 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#191821"/>
+
         <!--指数-->
         <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="0.6dp"/>
+                android:layout_height="wrap_content"/>
+
+        <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#191821"/>
 
         <include
                 layout="@layout/layout_market_detail_bottom"/>

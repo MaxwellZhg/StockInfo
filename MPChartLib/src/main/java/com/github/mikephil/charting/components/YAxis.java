@@ -74,6 +74,11 @@ public class YAxis extends AxisBase {
     private YAxisLabelPosition mPosition = YAxisLabelPosition.OUTSIDE_CHART;
 
     /**
+     * 边缘文字Y轴的偏移量
+     */
+    private float edgeYOffset;
+
+    /**
      * enum for the position of the y-labels relative to the chart
      */
     public enum YAxisLabelPosition {
@@ -114,6 +119,11 @@ public class YAxis extends AxisBase {
      * set is draw the top and bottom grid line
      */
     protected boolean isDrawTopBottomGridLine = true;
+
+    /**
+     * 是否需要绘制第一个文本
+     */
+    protected boolean mDrawFirstLable = true;
 
     public boolean isDrawTopBottomGridLine() {
         return isDrawTopBottomGridLine;
@@ -398,7 +408,7 @@ public class YAxis extends AxisBase {
      * Returns true if autoscale restriction for axis min value is enabled
      */
     @Deprecated
-    public boolean isUseAutoScaleMinRestriction( ) {
+    public boolean isUseAutoScaleMinRestriction() {
         return mUseAutoScaleRestrictionMin;
     }
 
@@ -406,7 +416,7 @@ public class YAxis extends AxisBase {
      * Sets autoscale restriction for axis min value as enabled/disabled
      */
     @Deprecated
-    public void setUseAutoScaleMinRestriction( boolean isEnabled ) {
+    public void setUseAutoScaleMinRestriction(boolean isEnabled) {
         mUseAutoScaleRestrictionMin = isEnabled;
     }
 
@@ -422,10 +432,17 @@ public class YAxis extends AxisBase {
      * Sets autoscale restriction for axis max value as enabled/disabled
      */
     @Deprecated
-    public void setUseAutoScaleMaxRestriction( boolean isEnabled ) {
+    public void setUseAutoScaleMaxRestriction(boolean isEnabled) {
         mUseAutoScaleRestrictionMax = isEnabled;
     }
 
+    public void setDrawFirstLable(boolean drawFirstLable) {
+        this.mDrawFirstLable = drawFirstLable;
+    }
+
+    public boolean getDrawFirstLable() {
+        return mDrawFirstLable;
+    }
 
     @Override
     public void calculate(float dataMin, float dataMax) {
@@ -449,5 +466,13 @@ public class YAxis extends AxisBase {
         this.mAxisMaximum = mCustomAxisMax ? this.mAxisMaximum : max + (range / 100f) * getSpaceTop();
 
         this.mAxisRange = Math.abs(this.mAxisMinimum - this.mAxisMaximum);
+    }
+
+    public void setEdgeYOffset(float edgeYOffset) {
+        this.edgeYOffset = Utils.convertDpToPixel(edgeYOffset);
+    }
+
+    public float getEdgeYOffset() {
+        return edgeYOffset;
     }
 }

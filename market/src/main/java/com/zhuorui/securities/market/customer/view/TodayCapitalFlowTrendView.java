@@ -15,10 +15,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
-import com.github.mikephil.charting.utils.MPPointD;
-import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.github.mikephil.charting.utils.*;
 import com.zhuorui.securities.market.R;
 
 import java.util.ArrayList;
@@ -100,7 +97,9 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setGridColor(mGridColor);
         leftAxis.setTextSize(12f);
         leftAxis.setGridLineWidth(0.5f);
-        leftAxis.setXOffset(2f);
+        // 设置文字偏移量
+        leftAxis.setXOffset(5f);
+        leftAxis.setEdgeYOffset(5f);
         leftAxis.setSpaceBottom(0f);
         leftAxis.setSpaceTop(0f);
         leftAxis.setLabelCount(2, true);
@@ -129,7 +128,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
 
 
     private void setData() {
-        int[] d = {1,1, -1};
+        int[] d = {1, 1, -1};
         List<Entry> entrys = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 149; i += 4) {
@@ -169,7 +168,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         @Override
         protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
             super.drawYLabels(c, fixedPosition, positions, offset);
-            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + offset, mAxisLabelPaint);
+            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
         }
 
         @Override
@@ -231,7 +230,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
                     maxX = 240;//最大数据点1分钟占一点
                     breakIndex = 119;//休盘点坐标
                     openingHours = "09:30";//开市时间
-                    breakTime = "1:30/13:00";//休盘时间
+                    breakTime = "11:30/13:00";//休盘时间
                     closingHours = "15:00";//收市时间
                     break;
             }
