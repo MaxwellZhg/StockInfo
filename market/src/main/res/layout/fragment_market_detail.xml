@@ -68,27 +68,18 @@
 
                 <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
 
-                <!--买卖盘经纪-->
-                <TextView
-                        android:text="买卖盘十档"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
+                <!--买卖盘十档-->
+                <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
                         android:layout_width="match_parent"
-                        android:layout_height="157dp"
-                        android:background="#2D2C35"/>
+                        android:layout_height="wrap_content"/>
 
                 <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
 
                 <!--买卖盘经纪-->
-                <TextView
-                        android:text="买卖盘经纪"
-                        android:gravity="center"
-                        android:textColor="#C0CCE0"
-                        android:textSize="20sp"
+
+                <com.zhuorui.securities.market.customer.view.OrderBrokerView
                         android:layout_width="match_parent"
-                        android:layout_height="157dp"
-                        android:background="#2D2C35"/>
+                        android:layout_height="wrap_content"/>
 
                 <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
 
@@ -108,13 +99,15 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-        
+
+        <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#191821"/>
+
         <!--指数-->
         <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#191821"/>
+        <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#191821"/>
 
         <include
                 layout="@layout/layout_market_detail_bottom"/>
