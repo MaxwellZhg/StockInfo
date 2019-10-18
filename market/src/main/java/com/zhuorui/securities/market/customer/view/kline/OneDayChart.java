@@ -23,7 +23,9 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.CommonUtil;
 import com.github.mikephil.charting.utils.NumberUtils;
 import com.github.mikephil.charting.utils.Transformer;
+import com.zhuorui.securities.base2app.rxbus.EventThread;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.customer.view.kline.charts.CoupleChartGestureListener;
@@ -516,7 +518,7 @@ public class OneDayChart extends BaseChart {
         barChart.setMarker(bottomMarkerView, kDatas);
     }
 
-    @Override
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
     public void onEventMainThread(BaseEvent event) {
         if (event.method == 1) {
             CirclePositionTime position = (CirclePositionTime) event.obj;
