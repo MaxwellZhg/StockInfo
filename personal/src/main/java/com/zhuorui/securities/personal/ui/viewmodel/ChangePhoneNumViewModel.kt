@@ -11,9 +11,12 @@ import com.zhuorui.securities.personal.R
  * Date: 2019/9/10
  * Desc:
  */
-class ChangePhoneNumViewModel :ViewModel(){
- var str=ObservableField<String>()
- init {
-     str.set(ResUtil.getString(R.string.get_verify_code))
- }
+class ChangePhoneNumViewModel : ViewModel() {
+    var str = ObservableField<String>()
+    var getCodeClickState = ObservableField<Int>()
+
+    init {
+        getCodeClickState.set(0)
+        str.set(ResUtil.getString(R.string.get_verify_code))
+    }
 }
