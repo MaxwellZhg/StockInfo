@@ -8,6 +8,7 @@
     <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/kline_indicator"
             android:layout_width="match_parent"
+            android:background="@color/color_2D2C35"
             android:layout_height="38dp"/>
 
     <FrameLayout

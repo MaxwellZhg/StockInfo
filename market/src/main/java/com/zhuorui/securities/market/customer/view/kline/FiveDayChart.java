@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.customer.view.kline;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -30,6 +31,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.customer.view.kline.markerView.BarBottomMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.renderer.ColorContentYAxisRenderer;
@@ -360,7 +362,7 @@ public class FiveDayChart extends BaseChart {
             d1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
             d2.setColor(ContextCompat.getColor(mContext, R.color.minute_yellow));
             d1.setDrawFilled(true);
-            Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.fade_fill_color);
+            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_33FF8DB9E4));
             d1.setFillDrawable(drawable);
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
             d1.setHighlightEnabled(landscape);

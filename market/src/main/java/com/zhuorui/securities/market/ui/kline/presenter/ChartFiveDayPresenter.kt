@@ -51,7 +51,7 @@ class ChartFiveDayPresenter : AbsEventPresenter<FiveDayKlineView, FiveDayKlineVi
             if (kDataManager == null) {
                 kDataManager = TimeDataManage()
             }
-            kDataManager.parseKlineData(kLineData, "000001.IDX.SZ", 0.0, true)
+            kDataManager.parseKlineData(kLineData, "000001.SZ", 0.0, true)
             var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.setDataToChart(kDataManager)
                 emitter.onNext(true)

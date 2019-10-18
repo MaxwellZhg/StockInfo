@@ -122,7 +122,7 @@ class SearchInfoAdapter(context:Context?) :BaseListAdapter<TestSeachDefaultData>
                 super.onClick(v)
             }
         }
-        override fun topicStockInfo(stockInfo: SearchStockInfo) {
+        override fun topicStockInfo(stockInfo: String) {
             onTopicStockInfoListenner?.onClickCollectionStock(stockInfo)
         }
     }
@@ -136,7 +136,7 @@ class SearchInfoAdapter(context:Context?) :BaseListAdapter<TestSeachDefaultData>
         fun onClickDeteleHistory()
     }
     interface OnTopicStockInfoListenner{
-        fun onClickCollectionStock(stock:SearchStockInfo)
+        fun onClickCollectionStock(stock:String)
     }
 
 }

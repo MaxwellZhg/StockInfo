@@ -11,6 +11,7 @@ import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.config.LocalSearchConfig
 import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
@@ -19,7 +20,7 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Date: 2019/9/20
  * Desc:
  */
-class SearchHistoryAdapter :BaseListAdapter<SearchStockInfo>(){
+class SearchHistoryAdapter :BaseListAdapter<String>(){
     var onClickCollectStockHistoryListener:OnClickCollectStockHistoryListener?=null
     override fun getLayout(viewType: Int): Int {
         return R.layout.item_serach_history_info
@@ -29,21 +30,13 @@ class SearchHistoryAdapter :BaseListAdapter<SearchStockInfo>(){
         return ViewHolder(v, needClick = true, needLongClick = false)
     }
 
-    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) : ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
+    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) : ListItemViewHolder<String>(v, needClick, needLongClick) {
         @BindView(R2.id.tv_stock_name)
         lateinit var tv_stock_name: AppCompatTextView
         @BindView(R2.id.iv_stock_state)
         lateinit var iv_stock_state: ImageView
-        override fun bind(item: SearchStockInfo?, position: Int) {
-           tv_stock_name.text=item?.name+"("+item?.tsCode+")"
-            when(item?.collect){
-                true->{
-                    iv_stock_state.background= ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
-                }
-                false->{
-                    iv_stock_state.background= ResUtil.getDrawable(R.mipmap.ic_topic_history_d)
-                }
-            }
+        override fun bind(item: String?, position: Int) {
+           tv_stock_name.text=item
         }
         init {
             iv_stock_state.setOnClickListener(this)
@@ -51,7 +44,7 @@ class SearchHistoryAdapter :BaseListAdapter<SearchStockInfo>(){
 
         override fun onClick(v: View) {
             if(v==iv_stock_state){
-                getItem(position)?.let { onClickCollectStockHistoryListener?.topicStockInfo(it) }
+                onClickCollectStockHistoryListener?.topicStockInfo(getItem(position))
             }else{
                 super.onClick(v)
             }
@@ -59,6 +52,6 @@ class SearchHistoryAdapter :BaseListAdapter<SearchStockInfo>(){
 
     }
     interface OnClickCollectStockHistoryListener{
-        fun topicStockInfo(stockInfo:SearchStockInfo)
+        fun topicStockInfo(stockInfo:String)
     }
 }
