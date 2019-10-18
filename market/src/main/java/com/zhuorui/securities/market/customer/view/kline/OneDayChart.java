@@ -136,7 +136,7 @@ public class OneDayChart extends BaseChart {
         axisLeftLine = lineChart.getAxisLeft();
         axisLeftLine.setLabelCount(5, true);
         axisLeftLine.setXOffset(5f);
-        axisLeftLine.setYOffset(5f);
+        axisLeftLine.setEdgeYOffset(5f);
         axisLeftLine.setTextSize(12f);
         axisLeftLine.setDrawGridLines(false);
         axisLeftLine.setValueLineInside(true);
@@ -155,7 +155,7 @@ public class OneDayChart extends BaseChart {
         axisRightLine = lineChart.getAxisRight();
         axisRightLine.setLabelCount(5, true);
         axisRightLine.setXOffset(5f);
-        axisRightLine.setYOffset(5f);
+        axisRightLine.setEdgeYOffset(5f);
         axisRightLine.setTextSize(12f);
         axisRightLine.setDrawTopBottomGridLine(false);
         axisRightLine.setDrawGridLines(true);
@@ -191,7 +191,7 @@ public class OneDayChart extends BaseChart {
         axisLeftBar.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
         axisLeftBar.setTextSize(12f);
         axisLeftBar.setXOffset(5f);
-        axisLeftBar.setYOffset(3f);
+        axisLeftBar.setEdgeYOffset(3f);
         axisLeftBar.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         axisLeftBar.setDrawLabels(true);
         axisLeftBar.setDrawFirstLable(false);

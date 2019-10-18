@@ -100,10 +100,12 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setGridColor(mGridColor);
         leftAxis.setTextSize(12f);
         leftAxis.setGridLineWidth(0.5f);
-        leftAxis.setXOffset(2f);
+        // 设置文字偏移量
+        leftAxis.setXOffset(5f);
+        leftAxis.setEdgeYOffset(5f);
         leftAxis.setSpaceBottom(0f);
         leftAxis.setSpaceTop(0f);
-        leftAxis.setLabelCount(2, true);
+        leftAxis.setLabelCount(4, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setValueFormatter(new ValueFormatter() {
