@@ -1,31 +1,26 @@
 package com.zhuorui.securities.market.customer.view.kline.renderer;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PathEffect;
-
+import android.graphics.*;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.zhuorui.securities.base2app.rxbus.RxBus;
-import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
-import com.zhuorui.securities.market.customer.view.kline.model.CirclePositionTime;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
-import com.github.mikephil.charting.utils.NumberUtils;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.zhuorui.securities.base2app.rxbus.RxBus;
+import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
+import com.zhuorui.securities.market.customer.view.kline.model.CirclePositionTime;
 
 /**
+ * 当前价格虚线
  * Created by ly on 2017/7/3.
  */
 
 public class TimeLineChartRenderer extends LineChartRenderer {
 
+    private double preClose;//昨收价
 
     public TimeLineChartRenderer(LineDataProvider chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(chart, animator, viewPortHandler);
@@ -51,7 +46,7 @@ public class TimeLineChartRenderer extends LineChartRenderer {
 
         mRenderPaint.setStyle(Paint.Style.STROKE);
 
-        Canvas canvas = null;
+        Canvas canvas;
 
         // if the data-set is dashed, draw on bitmap-canvas
         if (dataSet.isDashedLineEnabled()) {
@@ -61,6 +56,12 @@ public class TimeLineChartRenderer extends LineChartRenderer {
         }
 
         mXBounds.set(mChart, dataSet);
+
+        // 是否需要画价位虚线
+        if (dataSet.isDrawCircleDashMarkerEnabled()) {
+            drawDashMarker(canvas, dataSet, phaseY);
+            mRenderPaint.setStrokeWidth(dataSet.getLineWidth());
+        }
 
         // if drawing filled is enabled
         if (dataSet.isDrawFilledEnabled() && entryCount > 0) {
@@ -184,73 +185,112 @@ public class TimeLineChartRenderer extends LineChartRenderer {
             }
         }
 
-        if (dataSet.isDrawCircleDashMarkerEnabled()) {//这个地方做了限制，一般是不会绘制的
-            drawCircleDashMarker(canvas, dataSet, entryCount);//画虚线圆点和MarkerView
+        // 是否需要画价位虚线和圆点
+        if (dataSet.isDrawCircleDashMarkerEnabled()) {
+            drawCircleDashMarker(canvas, dataSet);
         }
-
-        mRenderPaint.setPathEffect(null);
     }
 
-    public void drawCircleDashMarker(Canvas canvas, ILineDataSet dataSet, int count) {
+    private void drawDashMarker(Canvas canvas, ILineDataSet dataSet, float phaseY) {
+        // TODO 灰色当前价格画虚线参数设置
+//        Path path = new Path();
+//        float y = (float) (preClose * phaseY);
+//        // 不在当前价格范围内不会绘制虚线
+//        if (y <= mChart.getYChartMin() || y <= mChart.getYChartMax()) return;
+//        path.moveTo(mLineBuffer[0], y);
+//        path.lineTo(mViewPortHandler.contentRight(), y);
+//        // 设置虚线的间隔长度如“ 一 一 一 ”
+//        mRenderPaint.setPathEffect(new DashPathEffect(new float[]{25, 10, 25, 10}, 1));
+//        mRenderPaint.setColor(Color.parseColor("#FFC0CCE0"));
+//        mRenderPaint.setStrokeWidth(dataSet.getLineWidth() / 2f);
+//        canvas.drawPath(path, mRenderPaint);
+//        mRenderPaint.setPathEffect(null);
+    }
 
-        //画虚线圆点和MarkerView
-        PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
-        Path path = new Path();
-        // 应为这里会复用之前的mLineBuffer，在总长度不变的情况下，取一般就是之前的位置，mXBounds.range + mXBounds.min 是最新的K线的变动范围
+    private void drawCircleDashMarker(Canvas canvas, ILineDataSet dataSet) {
+        // 画虚线圆点和MarkerView
         int pointOffset = (mXBounds.range + mXBounds.min + 1) * 4;
+        float y = mLineBuffer[pointOffset - 1];
         if (dataSet.getEntryCount() != 0) {
-            //画虚线参数设置
-            path.moveTo(mLineBuffer[pointOffset - 2], mLineBuffer[pointOffset - 1]);
-            path.lineTo(mViewPortHandler.contentRight(), mLineBuffer[pointOffset - 1]);
-            mRenderPaint.setPathEffect(effects);
-
-            Entry e = dataSet.getEntryForIndex(count - 1);//Utils.convertDpToPixel(35)
-            mRenderPaint.setTextSize(Utils.convertDpToPixel(10));
-            String text = NumberUtils.keepPrecisionR(e.getY(), dataSet.getPrecision());
-            int width = Utils.calcTextWidth(mRenderPaint, text);
-            int height = Utils.calcTextHeight(mRenderPaint, text);
-            float rectLeft = mViewPortHandler.contentRight() - width - Utils.convertDpToPixel(4);
-            float circleX = mLineBuffer[pointOffset - 2];
-
-            if (circleX >= rectLeft) {
-                mRenderPaint.setColor(Color.parseColor("#A65198FA"));
-                mRenderPaint.setStyle(Paint.Style.FILL);
-                float x = mLineBuffer[pointOffset - 2];
-                float y = mLineBuffer[pointOffset - 1];
-                if (y > mViewPortHandler.contentTop() + mViewPortHandler.getChartHeight() / 2) {
-                    canvas.drawRect(rectLeft, y - Utils.convertDpToPixel(22), mViewPortHandler.contentRight(), y - Utils.convertDpToPixel(6), mRenderPaint);
-                    Path pathS = new Path();
-                    pathS.moveTo(x, y - Utils.convertDpToPixel(3));// 此点为多边形的起点
-                    pathS.lineTo(x - Utils.convertDpToPixel(3), y - Utils.convertDpToPixel(6));
-                    pathS.lineTo(x + Utils.convertDpToPixel(3), y - Utils.convertDpToPixel(6));
-                    pathS.close(); // 使这些点构成封闭的多边形
-                    canvas.drawPath(pathS, mRenderPaint);
-                    mRenderPaint.setColor(Color.parseColor("#66FFFFFF"));
-                    canvas.drawText(text, rectLeft + Utils.convertDpToPixel(2), y - Utils.convertDpToPixel(10), mRenderPaint);
-                } else {
-                    canvas.drawRect(rectLeft, y + Utils.convertDpToPixel(6), mViewPortHandler.contentRight(), y + Utils.convertDpToPixel(22), mRenderPaint);
-                    Path pathS = new Path();
-                    pathS.moveTo(x, y + Utils.convertDpToPixel(1));// 此点为多边形的起点
-                    pathS.lineTo(x - Utils.convertDpToPixel(3), y + Utils.convertDpToPixel(6));
-                    pathS.lineTo(x + Utils.convertDpToPixel(3), y + Utils.convertDpToPixel(6));
-                    pathS.close(); // 使这些点构成封闭的多边形
-                    canvas.drawPath(pathS, mRenderPaint);
-                    mRenderPaint.setColor(Color.parseColor("#66FFFFFF"));
-                    canvas.drawText(text, rectLeft + Utils.convertDpToPixel(2), y + Utils.convertDpToPixel(10) + height, mRenderPaint);
-                }
-            } else {
-                canvas.drawPath(path, mRenderPaint);
-                mRenderPaint.setStyle(Paint.Style.FILL);
-                canvas.drawRect(rectLeft, mLineBuffer[pointOffset - 1] - Utils.convertDpToPixel(8), mViewPortHandler.contentRight(), mLineBuffer[pointOffset - 1] + Utils.convertDpToPixel(8), mRenderPaint);
-                mRenderPaint.setColor(Color.parseColor("#FFFFFF"));
-                canvas.drawText(text, rectLeft + Utils.convertDpToPixel(2), mLineBuffer[pointOffset - 1] + Utils.convertDpToPixel(3), mRenderPaint);
-            }
+            // 黄色当前价格画虚线参数设置
+            Path path = new Path();
+            path.moveTo(mLineBuffer[0], y);
+            path.lineTo(mViewPortHandler.contentRight(), y);
+            // 设置虚线的间隔长度如“ - - - ”
+            mRenderPaint.setPathEffect(new DashPathEffect(new float[]{10, 10, 10, 10}, 1));
+            mRenderPaint.setColor(Color.parseColor("#FFFFB027"));
+            mRenderPaint.setStrokeWidth(dataSet.getLineWidth() / 2f);
+            canvas.drawPath(path, mRenderPaint);
+            mRenderPaint.setPathEffect(null);
         }
-        mRenderPaint.setColor(Color.RED);
-        postPosition(dataSet, mLineBuffer[pointOffset - 2], mLineBuffer[pointOffset - 1]);
+        postPosition(dataSet, mLineBuffer[pointOffset - 2], y);
     }
 
-    public void postPosition(ILineDataSet dataSet, float x, float y) {
+//    public void drawCircleDashMarker(Canvas canvas, ILineDataSet dataSet, int count) {
+//
+//        //画虚线圆点和MarkerView
+//        PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
+//        Path path = new Path();
+//        // 应为这里会复用之前的mLineBuffer，在总长度不变的情况下，取一般就是之前的位置，mXBounds.range + mXBounds.min 是最新的K线的变动范围
+//        int pointOffset = (mXBounds.range + mXBounds.min + 1) * 4;
+//        if (dataSet.getEntryCount() != 0) {
+//            //画虚线参数设置
+//            path.moveTo(mLineBuffer[pointOffset - 2], mLineBuffer[pointOffset - 1]);
+//            path.lineTo(mViewPortHandler.contentRight(), mLineBuffer[pointOffset - 1]);
+//            mRenderPaint.setPathEffect(effects);
+//
+//            Entry e = dataSet.getEntryForIndex(count - 1);//Utils.convertDpToPixel(35)
+//            mRenderPaint.setTextSize(Utils.convertDpToPixel(10));
+//            String text = NumberUtils.keepPrecisionR(e.getY(), dataSet.getPrecision());
+//            int width = Utils.calcTextWidth(mRenderPaint, text);
+//            int height = Utils.calcTextHeight(mRenderPaint, text);
+//            float rectLeft = mViewPortHandler.contentRight() - width - Utils.convertDpToPixel(4);
+//            float circleX = mLineBuffer[pointOffset - 2];
+//
+//            if (circleX >= rectLeft) {
+//                mRenderPaint.setColor(Color.parseColor("#A65198FA"));
+//                mRenderPaint.setStyle(Paint.Style.FILL);
+//                float x = mLineBuffer[pointOffset - 2];
+//                float y = mLineBuffer[pointOffset - 1];
+//                if (y > mViewPortHandler.contentTop() + mViewPortHandler.getChartHeight() / 2) {
+//                    canvas.drawRect(rectLeft, y - Utils.convertDpToPixel(22), mViewPortHandler.contentRight(), y - Utils.convertDpToPixel(6), mRenderPaint);
+//                    Path pathS = new Path();
+//                    pathS.moveTo(x, y - Utils.convertDpToPixel(3));// 此点为多边形的起点
+//                    pathS.lineTo(x - Utils.convertDpToPixel(3), y - Utils.convertDpToPixel(6));
+//                    pathS.lineTo(x + Utils.convertDpToPixel(3), y - Utils.convertDpToPixel(6));
+//                    pathS.close(); // 使这些点构成封闭的多边形
+//                    canvas.drawPath(pathS, mRenderPaint);
+//                    mRenderPaint.setColor(Color.parseColor("#66FFFFFF"));
+//                    canvas.drawText(text, rectLeft + Utils.convertDpToPixel(2), y - Utils.convertDpToPixel(10), mRenderPaint);
+//                } else {
+//                    canvas.drawRect(rectLeft, y + Utils.convertDpToPixel(6), mViewPortHandler.contentRight(), y + Utils.convertDpToPixel(22), mRenderPaint);
+//                    Path pathS = new Path();
+//                    pathS.moveTo(x, y + Utils.convertDpToPixel(1));// 此点为多边形的起点
+//                    pathS.lineTo(x - Utils.convertDpToPixel(3), y + Utils.convertDpToPixel(6));
+//                    pathS.lineTo(x + Utils.convertDpToPixel(3), y + Utils.convertDpToPixel(6));
+//                    pathS.close(); // 使这些点构成封闭的多边形
+//                    canvas.drawPath(pathS, mRenderPaint);
+//                    mRenderPaint.setColor(Color.parseColor("#66FFFFFF"));
+//                    canvas.drawText(text, rectLeft + Utils.convertDpToPixel(2), y + Utils.convertDpToPixel(10) + height, mRenderPaint);
+//                }
+//            } else {
+//                canvas.drawPath(path, mRenderPaint);
+//                mRenderPaint.setStyle(Paint.Style.FILL);
+//                canvas.drawRect(rectLeft, mLineBuffer[pointOffset - 1] - Utils.convertDpToPixel(8), mViewPortHandler.contentRight(), mLineBuffer[pointOffset - 1] + Utils.convertDpToPixel(8), mRenderPaint);
+//                mRenderPaint.setColor(Color.parseColor("#FFFFFF"));
+//                canvas.drawText(text, rectLeft + Utils.convertDpToPixel(2), mLineBuffer[pointOffset - 1] + Utils.convertDpToPixel(3), mRenderPaint);
+//            }
+//        }
+//        mRenderPaint.setColor(Color.RED);
+//        postPosition(dataSet, mLineBuffer[pointOffset - 2], mLineBuffer[pointOffset - 1]);
+//    }
+
+
+    public void setPreClose(double preClose) {
+        this.preClose = preClose;
+    }
+
+    private void postPosition(ILineDataSet dataSet, float x, float y) {
         CirclePositionTime position = new CirclePositionTime();
         position.cx = x;
         position.cy = y;

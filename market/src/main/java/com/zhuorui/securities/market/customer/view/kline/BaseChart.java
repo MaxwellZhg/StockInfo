@@ -2,22 +2,14 @@ package com.zhuorui.securities.market.customer.view.kline;
 
 import android.content.Context;
 import android.graphics.Paint;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
+import android.view.animation.*;
 import android.widget.LinearLayout;
-
-import com.zhuorui.securities.base2app.rxbus.EventThread;
-import com.zhuorui.securities.base2app.rxbus.RxSubscribe;
+import androidx.annotation.Nullable;
 import com.zhuorui.securities.market.customer.view.kline.charts.CoupleChartGestureListener;
 import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage;
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage;
-import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
 
 public class BaseChart extends LinearLayout {
 
@@ -110,10 +102,4 @@ public class BaseChart extends LinearLayout {
             }
         });
     }
-
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    public void onEventMainThread(BaseEvent event) {
-
-    }
-
 }
