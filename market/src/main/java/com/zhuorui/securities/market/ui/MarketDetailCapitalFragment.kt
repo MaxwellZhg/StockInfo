@@ -41,7 +41,7 @@ class MarketDetailCapitalFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         val outData = mutableListOf<Float>()
-        outData.add(4685.19f)
+        outData.add(4322.9f)
         outData.add(7999.99f)
         outData.add(10307.56f)
         val inData = mutableListOf<Float>()

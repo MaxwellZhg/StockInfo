@@ -38,4 +38,6 @@
     <color name="color_33FF8DB9E4" tools:ignore="MissingDefaultResource">#338DB9E4</color>
     <color name="color_D9001B" tools:ignore="MissingDefaultResource">#D9001B</color>
     <color name="color_00cc00" tools:ignore="MissingDefaultResource">#00cc00</color>
+    <color name="color_B3BCD0" tools:ignore="MissingDefaultResource">#B3BCD0</color>
+    <color name="color_FDFDFD" tools:ignore="MissingDefaultResource">#FDFDFD</color>
 </resources>

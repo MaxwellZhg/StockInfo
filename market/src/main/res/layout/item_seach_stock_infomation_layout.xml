@@ -4,7 +4,7 @@
                                                    android:orientation="vertical"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="wrap_content"
-                                                   android:background="@color/color_211F2A">
+                                                   android:background="@color/color_2D2C35">
      <androidx.appcompat.widget.AppCompatTextView
              app:layout_constraintStart_toStartOf="parent"
              app:layout_constraintTop_toTopOf="parent"

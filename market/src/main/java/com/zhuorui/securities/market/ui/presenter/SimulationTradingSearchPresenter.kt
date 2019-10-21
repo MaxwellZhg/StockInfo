@@ -27,14 +27,14 @@ class SimulationTradingSearchPresenter :
 
     fun search(key: String) {
         if (TextUtils.isEmpty(key))return
-        val requset = StockSearchRequest(key, 0, 10, transactions.createTransaction())
+        val requset = StockSearchRequest(key,  10, transactions.createTransaction())
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockSearchResponse(response: StockSearchResponse) {
-        val datas = response.data?.datas
+        val datas = response.data
         if (datas.isNullOrEmpty()) return
         view?.setSearchData(datas)
     }

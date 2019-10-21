@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@color/color_2D2C35"
+                android:layout_width="match_parent"
+                android:paddingBottom="12dp"
+                android:layout_height="wrap_content">
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+
+        <ImageView android:layout_width="24dp"
+                   android:layout_height="24dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginStart="33dp"
+                   android:background="@mipmap/icon_date"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:textColor="@color/color_B3BCD0"
+                  android:layout_marginStart="13dp"
+                  android:layout_marginTop="12dp"
+                  android:text="新股日历"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_toLeftOf="@+id/ll_content"
+                  android:layout_marginRight="30dp"
+                  android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/color_B3BCD0"
+                  android:textSize="16sp"
+                  android:layout_marginTop="12dp"
+                  android:text="已递表  0"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/color_B3BCD0"
+                  android:textSize="16sp"
+                  android:layout_marginTop="21dp"
+                  android:text="待上市  0"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentEnd="true"
+                  android:id="@+id/ll_content"
+                  android:layout_marginRight="13dp"
+                  android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/color_B3BCD0"
+                  android:textSize="16sp"
+                  android:layout_marginTop="12dp"
+                  android:text="可认购  0"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/color_B3BCD0"
+                  android:layout_marginTop="21dp"
+                  android:textSize="16sp"
+                  android:text="已上市  0"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -3,111 +3,85 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:layout_height="wrap_content">
 
     <TextView
             android:id="@+id/btn"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="#FF8E1B"
             android:textColor="@android:color/white"
             android:textSize="19sp"
             android:gravity="center"
             android:text="开户"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/ll_1"
+            app:layout_constraintRight_toLeftOf="@+id/tv_remind"
     />
 
-    <LinearLayout
-            android:id="@+id/ll_1"
+
+    <TextView
+            android:id="@+id/tv_remind"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:drawablePadding="5dp"
+            android:padding="7dp"
+            android:drawableTop="@mipmap/ic_small_bell_line_c3cde3"
+            android:textColor="#C3CDE3"
+            android:text="提醒"
             android:gravity="center"
             android:background="#2D2C35"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/btn"
             app:layout_constraintBottom_toBottomOf="@id/btn"
             app:layout_constraintLeft_toRightOf="@+id/btn"
-            app:layout_constraintRight_toLeftOf="@+id/ll_2"
-    >
+            app:layout_constraintRight_toLeftOf="@+id/tv_follow"
+    />
 
-        <ImageView
-                android:background="#FF8E1B"
-                android:layout_width="24dp"
-                android:layout_height="24dp"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:layout_marginTop="5dp"
-                android:textColor="#C3CDE3"
-                android:text="提醒"
-        />
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/ll_2"
+    <TextView
+            android:id="@+id/tv_follow"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textColor="#C3CDE3"
+            android:padding="7dp"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/ic_heart_c3cde3"
+            android:text="设自选"
             android:gravity="center"
             android:background="#2D2C35"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/btn"
             app:layout_constraintBottom_toBottomOf="@id/btn"
-            app:layout_constraintLeft_toRightOf="@+id/ll_1"
-            app:layout_constraintRight_toLeftOf="@+id/ll_3"
-    >
+            app:layout_constraintLeft_toRightOf="@+id/tv_remind"
+            app:layout_constraintRight_toLeftOf="@+id/tv_simulation_trading"
+    />
 
-        <ImageView
-                android:background="#FF8E1B"
-                android:layout_width="24dp"
-                android:layout_height="24dp"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textColor="#C3CDE3"
-                android:layout_marginTop="5dp"
-                android:text="设自选"
-        />
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/ll_3"
+    <TextView
+            android:id="@+id/tv_simulation_trading"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textColor="#C3CDE3"
+            android:padding="7dp"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/ic_chart_c3cde3"
+            android:text="模拟炒股"
             android:gravity="center"
             android:background="#2D2C35"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/btn"
             app:layout_constraintBottom_toBottomOf="@id/btn"
-            app:layout_constraintLeft_toRightOf="@+id/ll_2"
+            app:layout_constraintLeft_toRightOf="@+id/tv_follow"
             app:layout_constraintRight_toRightOf="parent"
-    >
-
-        <ImageView
-                android:background="#FF8E1B"
-                android:layout_width="24dp"
-                android:layout_height="24dp"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textColor="#C3CDE3"
-                android:layout_marginTop="5dp"
-                android:text="模拟炒股"
-        />
-
-    </LinearLayout>
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

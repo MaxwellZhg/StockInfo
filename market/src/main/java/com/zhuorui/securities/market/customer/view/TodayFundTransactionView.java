@@ -97,12 +97,12 @@ public class TodayFundTransactionView extends FrameLayout {
     private ArrayList<PieEntry> getPieEntrys(List<Float> out, List<Float> in) {
         ArrayList<PieEntry> pieEntryList = new ArrayList<PieEntry>();
         //饼图实体 PieEntry
-        pieEntryList.add(new PieEntry(out.get(0), "大单流出"));
-        pieEntryList.add(new PieEntry(out.get(1), "中单流出"));
-        pieEntryList.add(new PieEntry(out.get(2), "小单流出"));
-        pieEntryList.add(new PieEntry(in.get(2), "小单流入"));
-        pieEntryList.add(new PieEntry(in.get(1), "中单流入"));
-        pieEntryList.add(new PieEntry(in.get(0), "大单流入"));
+        if (out.get(0) > 0)pieEntryList.add(new PieEntry(out.get(0), "大单流出"));
+        if (out.get(1) > 0)pieEntryList.add(new PieEntry(out.get(1), "中单流出"));
+        if (out.get(2) > 0)pieEntryList.add(new PieEntry(out.get(2), "小单流出"));
+        if (in.get(2) > 0)pieEntryList.add(new PieEntry(in.get(2), "小单流入"));
+        if (in.get(1) > 0)pieEntryList.add(new PieEntry(in.get(1), "中单流入"));
+        if (in.get(0) > 0)pieEntryList.add(new PieEntry(in.get(0), "大单流入"));
         return pieEntryList;
     }
 
