@@ -21,14 +21,28 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Desc:
  */
 class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
+    private val default = 0x00
+    private val bottom = 0x01
     private lateinit var keywords:String
     override fun getLayout(viewType: Int): Int {
-       return R.layout.item_stock_search_layout
+        return when (viewType) {
+            default -> R.layout.item_stock_search_layout
+            else -> {
+                R.layout.item_layout_fifth_data_info
+            }
+        }
     }
+
+
     var onClickStockIntoStockDetailListener:OnClickStockIntoStockDetailListener?=null
     var onStockColollectListenner:OnStockColollectListenner?=null
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(v,true,false)
+        return when (viewType) {
+            default -> ViewHolder(v, false, false)
+            else -> {
+                ViewBottomHolder(v, true, false)
+            }
+        }
     }
 
 
@@ -84,6 +98,13 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         }
     }
 
+    inner class ViewBottomHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
+        ListItemViewHolder<SearchStockInfo>(v, needClick, needLongClick) {
+        override fun bind(item: SearchStockInfo?, position: Int) {
+
+        }
+    }
+
     fun setkeywords(str:String){
         keywords=str
     }
@@ -93,5 +114,36 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
     interface OnClickStockIntoStockDetailListener{
         fun onClickStockIntoDetail()
     }
+    override fun getItemCount(): Int {
+        return when {
+            items == null -> return 0
+            items.size > 50 -> items.size
+            items.size == 50 -> items.size + 1
+            else -> items.size
+        }
+    }
+    override fun getItemViewType(position: Int): Int {
+        return if (items.size > 50) {
+            default
+        } else if (items.size == 50) {
+            when (position) {
+                itemCount - 1 -> {
+                    bottom
+                }
+                else -> {
+                    default
+                }
+            }
+        } else {
+            default
+        }
+    }
+
+
+    override fun getItem(position: Int): SearchStockInfo? {
+        if (position > items.size || position == items.size) return null
+        return super.getItem(position)
+    }
+
 
 }

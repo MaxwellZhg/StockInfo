@@ -18,6 +18,7 @@
                          android:layout_height="match_parent">
                  <include layout="@layout/item_stock_detail_header"/>
                  <include layout="@layout/layout_new_stock_date"/>
+
            </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

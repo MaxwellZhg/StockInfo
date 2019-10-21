@@ -38,9 +38,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class MarketTabFragment :
     AbsBackFinishFragment<FragmentMarketTabBinding, MarketTabVierwModel, MarketTabVierw, MarketTabPresenter>(),
     MarketTabVierw {
-    private var tabTitle: Array<String> = arrayOf("港股", "沪深", "港股通", "全球")
     private var mfragment:ArrayList<String?> = ArrayList()
-    private val mFragments:ArrayList<AbsFragment<*,*,*,*>> = ArrayList()
+    private val mFragments:ArrayList<HkStockDetailFragment> = ArrayList()
     private var mIndex = 0
     companion object {
         fun newInstance(): MarketTabFragment {
@@ -134,7 +133,7 @@ class MarketTabFragment :
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): AbsFragment<*,*,*,*> {
+        override fun getItem(position: Int): HkStockDetailFragment {
             return mFragments[position]
         }
 

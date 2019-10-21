@@ -46,6 +46,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     var str: String? = null
     var list = ArrayList<SearchDeafaultData>()
     var listhot = ArrayList<SearchStockInfo>()
+    var preListStock = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
     var totalPage: Int =0
     override fun init() {
@@ -112,7 +113,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     }
 
     fun getTopicStockData(keyWord: String,currentPage:Int, count: Int) {
-        val requset = StockSearchRequest(keyWord, currentPage, count, transactions.createTransaction())
+        val requset = StockSearchRequest(keyWord, count, transactions.createTransaction())
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
     }
@@ -120,7 +121,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
-        if (response.data == null&&response.code=="000000"){
+  /*      if (response.data == null&&response.code=="000000"){
             val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.showEmpty()
                 emitter.onNext(true)
@@ -128,12 +129,12 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
             disposables.add(disposable)
             return
-        }
-        val datas = response.data.datas
-        totalPage=response.data.totalPage
+        }*/
+        val datas = response.data
+       // totalPage=response.data.totalPage
         if (datas.isNullOrEmpty()){
             val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                view?.showloadMoreFail()
+                view?.showEmpty()
                 emitter.onNext(true)
                 emitter.onComplete()
             }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
@@ -160,12 +161,21 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         }
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
+                var data:SearchDeafaultData
                 history.clear()
                 list.clear()
                 for (i in 0..4) {
                     history.add(i)
                 }
-                var data = SearchDeafaultData(datas, history)
+                if(datas.size>5){
+                    preListStock.clear()
+                    for (index in 0 until 5){
+                       preListStock.add(datas[index])
+                    }
+                     data = SearchDeafaultData(preListStock, history)
+                }else{
+                     data = SearchDeafaultData(datas, history)
+                }
                 list.add(data)
                 list.add(data)
                 val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->

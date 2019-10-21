@@ -124,8 +124,7 @@ class SearchResultInfoFragment :
                 stockadapter?.onStockColollectListenner=this
                 stockadapter?.onClickStockIntoStockDetailListener=this
                 sm_refrsh.setEnableRefresh(false)
-                sm_refrsh.setEnableLoadMore(true)
-                sm_refrsh.setOnRefreshLoadMoreListener(this)
+                sm_refrsh.setEnableLoadMore(false)
             }
             SearchStokcInfoEnum.Info -> {
                 infoadapter = presenter?.getStockInfoAdapter()

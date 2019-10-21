@@ -155,4 +155,5 @@
     <string name="sh_sz_stock"  tools:ignore="MissingTranslation">沪深</string>
     <string name="all_hk_stock" tools:ignore="MissingTranslation">港股通</string>
     <string name="gloab_stock" tools:ignore="MissingTranslation">全球</string>
+    <string name="fifth_data_info" tools:ignore="MissingTranslation">仅展示50条搜索结果</string>
 </resources>
