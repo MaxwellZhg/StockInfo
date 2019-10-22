@@ -1,4 +1,4 @@
-package com.zhuorui.commonwidget;
+package com.zhuorui.securities.market.customer.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,7 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.ResUtil;
+import com.zhuorui.securities.market.R;
 
 /**
  * Created by Maxwell.
@@ -68,30 +70,36 @@ public class ZRThreePartLineLayout extends LinearLayout {
 
     private View getUpCentView(int up) {
         ImageView iv = new ImageView(getContext());
-        iv.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.icon_up_precent));
+        iv.setBackgroundColor(LocalSettingsConfig.Companion.read().getUpColor());
         int wh = mWidth * up / allCount;
         int height = ResUtil.INSTANCE.getDimensionDp2Px(3f);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, 20);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, height);
         iv.setLayoutParams(lp);
         return iv;
     }
 
     private View getZeroCentView(int zero) {
         ImageView iv = new ImageView(getContext());
-        iv.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.icon_zore_precent));
+        iv.setBackgroundColor(LocalSettingsConfig.Companion.read().getDefaultColor());
         int wh = mWidth * zero / allCount;
         int height = ResUtil.INSTANCE.getDimensionDp2Px(3f);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, height);
+        if(zero>0){
+            lp.leftMargin=ResUtil.INSTANCE.getDimensionDp2Px(1f);
+        }
         iv.setLayoutParams(lp);
         return iv;
     }
 
     private View getDownCentView(int down) {
         ImageView iv = new ImageView(getContext());
-        iv.setBackground(ResUtil.INSTANCE.getDrawable(R.mipmap.icon_down_precent));
+        iv.setBackgroundColor(LocalSettingsConfig.Companion.read().getDownColor());
         int wh = mWidth * down / allCount;
         int height = ResUtil.INSTANCE.getDimensionDp2Px(3f);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, height);
+        if(down>0){
+            lp.leftMargin=ResUtil.INSTANCE.getDimensionDp2Px(1f);
+        }
         iv.setLayoutParams(lp);
         return iv;
     }

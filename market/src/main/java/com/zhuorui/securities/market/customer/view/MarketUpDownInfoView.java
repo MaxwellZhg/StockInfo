@@ -18,7 +18,6 @@ import com.github.mikephil.charting.renderer.BarChartRenderer;
 import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.zhuorui.commonwidget.ZRThreePartLineLayout;
 import com.zhuorui.securities.market.R;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class MarketUpDownInfoView extends FrameLayout {
 
     public MarketUpDownInfoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-         inflate(context, R.layout.layout_market_up_down_info,this   );
+         inflate(context, R.layout.layout_market_up_down_info,this);
          initBarChart();
          getTestData();
     }

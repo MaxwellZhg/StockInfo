@@ -20,8 +20,14 @@ import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.ui.presenter.MarketTabPresenter
 import com.zhuorui.securities.market.ui.view.MarketTabVierw
 import com.zhuorui.securities.market.ui.viewmodel.MarketTabVierwModel
+import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_search_info.*
+import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
+import kotlinx.android.synthetic.main.fragment_search_info.viewpager
+import kotlinx.android.synthetic.main.fragment_stock_tab.*
+import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
+import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
@@ -64,6 +70,14 @@ class MarketTabFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        top_bar.setRightClickListener {
+            // 消息
+            (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())
+        }
+        top_bar.setRight2ClickListener {
+            // 搜索
+            (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
+        }
         mfragment.add(ResUtil.getString(R.string.hk_stock))
         mfragment.add(ResUtil.getString(R.string.sh_sz_stock))
         mfragment.add(ResUtil.getString(R.string.all_hk_stock))
@@ -145,5 +159,6 @@ class MarketTabFragment :
             return mfragment[position]
         }
     }
+
 
 }
