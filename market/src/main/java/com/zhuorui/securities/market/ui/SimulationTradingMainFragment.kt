@@ -14,6 +14,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
+import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
 import com.zhuorui.securities.market.model.STFundAccountData
@@ -24,6 +25,7 @@ import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingMainView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingMainViewModel
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
 import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
@@ -110,6 +112,9 @@ class SimulationTradingMainFragment :
         fund_account.setOnMockStockFundAccountListener(this)
         magic_indicator.navigator = getNavigator()
         presenter?.setLifecycleOwner(this)
+        val zrNo = LocalAccountConfig.read().getAccountInfo().zrNo.toString()
+        user_name.text = ResUtil.getString(R.string.str_zr_user) + zrNo
+        zr_no.text = ResUtil.getString(R.string.str_zr_no) + ":" + zrNo
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {

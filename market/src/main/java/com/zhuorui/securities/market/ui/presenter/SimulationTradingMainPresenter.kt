@@ -328,6 +328,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 totalMarketValue = MathUtil.add3(marketValue, totalMarketValue)
                 //总盈亏 -- 累计持仓盈亏金额
                 totalProfitAndLoss = MathUtil.add3(profitAndLoss, totalProfitAndLoss)
+                data.unitCost = MathUtil.divide3(holeCost,holdStockCount);
             }
         }
         val todayProfitAndLossData = mTodayProfitAndLoss!!

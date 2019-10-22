@@ -24,7 +24,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/atv2"
-            android:layout_width="90dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/str_name_code"
             android:gravity="center"
@@ -40,7 +40,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/atv3"
-            android:layout_width="0dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/str_quantity_and_order_price"
             android:gravity="center"
@@ -55,7 +55,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/atv4"
-            android:layout_width="90dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/str_order_time"
             android:gravity="center"

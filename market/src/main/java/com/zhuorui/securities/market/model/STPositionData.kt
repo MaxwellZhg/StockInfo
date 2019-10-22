@@ -9,8 +9,9 @@ import java.math.BigDecimal
  *    desc   : 模拟炒股持仓数据
  */
 class STPositionData : STOrderData() {
-    var marketValue: BigDecimal? = null
-    var presentPrice: BigDecimal? = null
-    var profitAndLoss: BigDecimal? = null
-    var profitAndLossPercentage: BigDecimal? = null
+    var marketValue: BigDecimal? = null//市值
+    var presentPrice: BigDecimal? = null//现价
+    var profitAndLoss: BigDecimal? = null//盈亏
+    var profitAndLossPercentage: BigDecimal? = null//盈亏比
+    var unitCost: BigDecimal? = null//成本单价
 }
