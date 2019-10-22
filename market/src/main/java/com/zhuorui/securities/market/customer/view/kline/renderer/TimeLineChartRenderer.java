@@ -7,7 +7,6 @@ import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
 import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
 import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
@@ -59,8 +58,7 @@ public class TimeLineChartRenderer extends LineChartRenderer {
 
         // 是否需要画价位虚线
         if (dataSet.isDrawCircleDashMarkerEnabled()) {
-            drawDashMarker(canvas, dataSet, phaseY);
-            mRenderPaint.setStrokeWidth(dataSet.getLineWidth());
+            drawDashMarker(canvas, dataSet, trans, phaseY);
         }
 
         // if drawing filled is enabled
@@ -127,6 +125,7 @@ public class TimeLineChartRenderer extends LineChartRenderer {
                 // get the color that is set for this line-segment
                 mRenderPaint.setColor(dataSet.getColor(j));
 
+                // 绘制K线
                 canvas.drawLines(mLineBuffer, 0, pointsPerEntryPair * 2, mRenderPaint);
             }
 
@@ -172,14 +171,13 @@ public class TimeLineChartRenderer extends LineChartRenderer {
                 }
 
                 if (j > 0) {
-                    trans.pointValuesToPixel(mLineBuffer);
 
-                    final int size = Math.max((mXBounds.range + 1) * pointsPerEntryPair, pointsPerEntryPair) * 2;
+                    trans.pointValuesToPixel(mLineBuffer);
 
                     mRenderPaint.setColor(dataSet.getColor());
 
-                    int max = mXBounds.range + mXBounds.min;
-//                    Log.e("内容",j+" "+mLineBuffer.length+" "+max);
+                    final int size = Math.max((mXBounds.range + 1) * pointsPerEntryPair, pointsPerEntryPair) * 2;
+                    // 绘制K线
                     canvas.drawLines(mLineBuffer, 0, size, mRenderPaint);
                 }
             }
@@ -191,20 +189,23 @@ public class TimeLineChartRenderer extends LineChartRenderer {
         }
     }
 
-    private void drawDashMarker(Canvas canvas, ILineDataSet dataSet, float phaseY) {
-        // TODO 灰色当前价格画虚线参数设置
-//        Path path = new Path();
-//        float y = (float) (preClose * phaseY);
-//        // 不在当前价格范围内不会绘制虚线
-//        if (y <= mChart.getYChartMin() || y <= mChart.getYChartMax()) return;
-//        path.moveTo(mLineBuffer[0], y);
-//        path.lineTo(mViewPortHandler.contentRight(), y);
-//        // 设置虚线的间隔长度如“ 一 一 一 ”
-//        mRenderPaint.setPathEffect(new DashPathEffect(new float[]{25, 10, 25, 10}, 1));
-//        mRenderPaint.setColor(Color.parseColor("#FFC0CCE0"));
-//        mRenderPaint.setStrokeWidth(dataSet.getLineWidth() / 2f);
-//        canvas.drawPath(path, mRenderPaint);
-//        mRenderPaint.setPathEffect(null);
+    private void drawDashMarker(Canvas canvas, ILineDataSet dataSet, Transformer trans, float phaseY) {
+        // 不在当前价格范围内不会绘制虚线
+        if (preClose <= dataSet.getYMin() || preClose >= dataSet.getYMax()) return;
+        // 灰色当前价格画虚线参数设置
+        Path path = new Path();
+        float[] line = new float[]{0.0f, (float) (preClose * phaseY)};
+        trans.pointValuesToPixel(line);
+        float y = line[1];
+        path.moveTo(mChart.getXChartMin(), y);
+        path.lineTo(mViewPortHandler.contentRight(), y);
+        // 设置虚线的间隔长度如“ 一 一 一 ”
+        mRenderPaint.setPathEffect(new DashPathEffect(new float[]{25, 10, 25, 10}, 1));
+        mRenderPaint.setColor(Color.parseColor("#FFC0CCE0"));
+        mRenderPaint.setStrokeWidth(dataSet.getLineWidth() / 2f);
+        canvas.drawPath(path, mRenderPaint);
+        mRenderPaint.setPathEffect(null);
+        mRenderPaint.setStrokeWidth(dataSet.getLineWidth());
     }
 
     private void drawCircleDashMarker(Canvas canvas, ILineDataSet dataSet) {
@@ -285,7 +286,6 @@ public class TimeLineChartRenderer extends LineChartRenderer {
 //        postPosition(dataSet, mLineBuffer[pointOffset - 2], mLineBuffer[pointOffset - 1]);
 //    }
 
-
     public void setPreClose(double preClose) {
         this.preClose = preClose;
     }
@@ -298,5 +298,4 @@ public class TimeLineChartRenderer extends LineChartRenderer {
         event.obj = position;
         RxBus.getDefault().post(event);
     }
-
 }
