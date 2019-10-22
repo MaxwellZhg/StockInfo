@@ -75,8 +75,8 @@ public class TimeDataManage {
                 if (i == 0 && refresh) {
                     preClose = timeDatamodel.getPreClose();
                     mAllVolume = timeDatamodel.getVolume();
-                    max = timeDatamodel.getNowPrice();
-                    min = timeDatamodel.getNowPrice();
+                    max = Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice());
+                    min = Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice());
                     volMaxTimeLine = 0;
                     if (baseValue == 0) {
                         baseValue = timeDatamodel.getPreClose();
@@ -96,8 +96,8 @@ public class TimeDataManage {
                 timeDatamodel.setCha(timeDatamodel.getNowPrice() - preClose);
                 timeDatamodel.setPer(timeDatamodel.getCha() / preClose);
 
-                max = Math.max(timeDatamodel.getNowPrice(), max);
-                min = Math.min(timeDatamodel.getNowPrice(), min);
+                max = Math.max(Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice()), max);
+                min = Math.min(Math.min(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice()), min);
 
                 perVolMaxTimeLine = volMaxTimeLine;
                 volMaxTimeLine = Math.max(timeDatamodel.getVolume(), volMaxTimeLine);
@@ -134,7 +134,7 @@ public class TimeDataManage {
 //            JSONArray data = object.optJSONArray("data");
             int size = klineData.size();
             for (int i = 0; i < size; i++) {
-                FiveDayKlineData fiveDayKlineData =  klineData.get(i);
+                FiveDayKlineData fiveDayKlineData = klineData.get(i);
 
                 TimeDataModel timeDatamodel = new TimeDataModel();
                 timeDatamodel.setTimeMills(fiveDayKlineData.getDateTime());
@@ -266,14 +266,14 @@ public class TimeDataManage {
 
     //分时图右Y轴最大涨跌值
     public float getPercentMax() {
-        //0.1表示Y轴最大涨跌值再增加10%，使图线不至于顶到最顶部
-        return (float) ((max - baseValue) / baseValue + Math.abs(max - baseValue > min - baseValue ? max - baseValue : min - baseValue) / baseValue * 0.1);
+        //0.5表示Y轴最大涨跌值再增加50%，使图线不至于顶到最顶部
+        return (float) ((max - baseValue) / baseValue + Math.abs(max - baseValue > min - baseValue ? max - baseValue : min - baseValue) / baseValue * 0.5);
     }
 
     //分时图右Y轴最小涨跌值
     public float getPercentMin() {
-        //0.1表示Y轴最小涨跌值再减小10%，使图线不至于顶到最底部
-        return (float) ((min - baseValue) / baseValue - Math.abs(max - baseValue > min - baseValue ? max - baseValue : min - baseValue) / baseValue * 0.1);
+        //0.5表示Y轴最小涨跌值再减小50%，使图线不至于顶到最底部
+        return (float) ((min - baseValue) / baseValue - Math.abs(max - baseValue > min - baseValue ? max - baseValue : min - baseValue) / baseValue * 0.5);
     }
 
     //分时图最大成交量
