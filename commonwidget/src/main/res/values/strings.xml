@@ -7,4 +7,6 @@
     <string name="ensure" tools:ignore="MissingTranslation">确定</string>
     <string name="notice" tools:ignore="MissingTranslation">通知</string>
     <string name="tips"  tools:ignore="MissingTranslation">提示</string>
+    <string name="go_to_setting">去设置</string>
+    <string name="str_write_external_storage">获取存储空间权限失败，将导致无法正常获取图片，请打开设置页面手动授权</string>
 </resources>

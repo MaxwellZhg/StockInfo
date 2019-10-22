@@ -23,10 +23,10 @@ import java.text.DecimalFormat
  */
 class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val TYPE_HEADER = 0
-    val TYPE_TITLE = 1
-    val TYPE_EMPTY = 2
-    val TYPE_ITEM = 3
+    private val TYPE_HEADER = 0
+    private val TYPE_TITLE = 1
+    private val TYPE_EMPTY = 2
+    private val TYPE_ITEM = 3
     val context = context
     var vEmpty: TextView? = null
     var listener: HoldPositionsListListener? = null
@@ -215,18 +215,18 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             marketValue?.text = data.marketValue.toString()
             presentPrice?.text = data.presentPrice.toString()
             number?.text = data.holdStockCount.toString()
-            cost?.text = data.holdCost.toString()
+            cost?.text = data.unitCost.toString()
             profitAndLoss?.text = data.profitAndLoss.toString()
             btnGroup?.visibility = if (data.selected!!) View.VISIBLE else View.GONE
             when {
                 data.profitAndLoss != null && data.profitAndLoss!!.toFloat() > 0 -> {
                     profitAndLoss?.setTextColor(upColor)
-                    profitAndLossPercentage?.text = "+" + DecimalFormat("0.00%").format(data.profitAndLossPercentage)
+                    profitAndLossPercentage?.text = "+" + DecimalFormat("0.00###%").format(data.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(upColor)
                 }
                 data.profitAndLoss != null && data.profitAndLoss!!.toFloat() < 0 -> {
                     profitAndLoss?.setTextColor(downColor)
-                    profitAndLossPercentage?.text = DecimalFormat("0.00%").format(data.profitAndLossPercentage)
+                    profitAndLossPercentage?.text = DecimalFormat("0.00###%").format(data.profitAndLossPercentage)
                     profitAndLossPercentage?.setTextColor(downColor)
                 }
                 else -> {

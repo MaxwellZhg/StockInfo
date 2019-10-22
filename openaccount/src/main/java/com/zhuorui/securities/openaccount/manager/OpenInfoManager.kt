@@ -77,7 +77,7 @@ open class OpenInfoManager {
             }
             //开户完成
             31 -> {
-                //目前不确实要做什么操作
+                //目前不确定要做什么操作
                 null
             }
             else -> {
