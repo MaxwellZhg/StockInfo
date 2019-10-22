@@ -1,5 +1,6 @@
 package com.zhuorui.commonwidget;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -15,12 +17,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.qw.soul.permission.SoulPermission;
+import com.qw.soul.permission.bean.Permission;
+import com.qw.soul.permission.bean.Permissions;
+import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener;
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog;
 import com.zhuorui.commonwidget.dialog.GetPicturesModeDialog;
 import com.zhuorui.commonwidget.impl.IImageUploader;
 import com.zhuorui.commonwidget.impl.OnImageUploaderListener;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.security.AccessController;
 
 
 /**
@@ -252,7 +261,7 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
 
     @Override
     public void goAlbum(@Nullable Integer toAlbumRequestCode) {
-        if (mListener != null) mListener.goAlbum(toAlbumRequestCode);
+        checkPermission(toAlbumRequestCode);
     }
 
     public void setOnUploadImageListener(OnUploadImageListener l) {
@@ -290,6 +299,40 @@ public class ZRUploadImageView extends FrameLayout implements View.OnClickListen
     @NotNull
     public String getPath() {
         return mStatus == 2 ? mPath : "";
+    }
+
+    private void checkPermission(final int toAlbumRequestCode){
+        // 请求权限
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        SoulPermission.getInstance().checkAndRequestPermissions(Permissions.build(permissions), new CheckRequestPermissionsListener() {
+            @Override
+            public void onAllPermissionOk(Permission[] allPermissions) {
+                if (mListener != null) mListener.goAlbum(toAlbumRequestCode);
+            }
+
+            @Override
+            public void onPermissionDenied(Permission[] refusedPermissions) {
+                ConfirmToCancelDialog.Companion.createWidth265Dialog(getContext(), false, true)
+                        .setMsgText(R.string.str_write_external_storage)
+                        .setConfirmText(getContext().getString(R.string.go_to_setting))
+                        .setCancelText(getContext().getString(R.string.cancle))
+                        .setCallBack(new ConfirmToCancelDialog.CallBack() {
+                            @Override
+                            public void onCancel() {
+
+                            }
+
+                            @Override
+                            public void onConfirm() {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                intent.setData(uri);
+                                getContext().startActivity(intent);
+                            }
+                        }).show();
+            }
+        });
+
     }
 
 

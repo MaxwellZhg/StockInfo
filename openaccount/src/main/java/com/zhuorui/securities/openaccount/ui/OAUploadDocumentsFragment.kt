@@ -1,17 +1,25 @@
 package com.zhuorui.securities.openaccount.ui
 
-import android.content.Context
+import android.Manifest
 import android.content.Intent
+import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.qw.soul.permission.SoulPermission
+import com.qw.soul.permission.bean.Permission
+import com.qw.soul.permission.bean.Permissions
+import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener
 import com.zhuorui.commonwidget.ZRUploadImageView
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.GetPhotoFromAlbumUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.camera.CameraHelper
 import com.zhuorui.securities.openaccount.custom.UploadDocumentsTipsDialog
 import com.zhuorui.securities.openaccount.databinding.FragmentOaUploadDocumentsBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OAUploadDocumentsPresenter
@@ -39,7 +47,7 @@ class OAUploadDocumentsFragment :
     }
 
     override val layout: Int
-        get() = com.zhuorui.securities.openaccount.R.layout.fragment_oa_upload_documents
+        get() = R.layout.fragment_oa_upload_documents
 
     override val viewModelId: Int
         get() = BR.viewModel
@@ -79,7 +87,6 @@ class OAUploadDocumentsFragment :
             showTipsDialog(getString(R.string.str_upload_err))
         }
     }
-
 
     private fun checkUpload() {
         var idPath1: String? = idcard_portrait.path
@@ -133,5 +140,4 @@ class OAUploadDocumentsFragment :
         idcard_portrait.onFragmentResult(requestCode, resultCode, data)
         idcard_national_emblem.onFragmentResult(requestCode, resultCode, data)
     }
-
 }
