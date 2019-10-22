@@ -9,6 +9,7 @@
     <LinearLayout android:layout_width="0dp"
                   android:layout_weight="1"
                   android:paddingBottom="10dp"
+                  android:id="@+id/ll_hs_point"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
                   android:gravity="center_horizontal"

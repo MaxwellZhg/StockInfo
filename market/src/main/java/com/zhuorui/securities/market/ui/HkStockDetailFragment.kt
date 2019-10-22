@@ -2,7 +2,9 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -31,8 +33,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Desc:
  */
 class HkStockDetailFragment :
-    AbsSwipeBackNetFragment<com.zhuorui.securities.market.databinding.FragmentHkStockDetailBinding, HkStockDetailViewModel, HkStockDetailView, HkStockDetailPresenter>(),
-    HkStockDetailView {
+    AbsFragment<com.zhuorui.securities.market.databinding.FragmentHkStockDetailBinding, HkStockDetailViewModel, HkStockDetailView, HkStockDetailPresenter>(),
+    HkStockDetailView,View.OnClickListener {
     private var infoadapter: MarketPartInfoAdapter? = null
     private var tabTitle:ArrayList<String> = ArrayList()
     override val layout: Int
@@ -51,6 +53,8 @@ class HkStockDetailFragment :
             return HkStockDetailFragment()
         }
     }
+
+
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
@@ -90,6 +94,7 @@ class HkStockDetailFragment :
         rv_hk_stock1.adapter=infoadapter
         rv_hk_stock2.adapter=infoadapter
         rv_hk_stock3.adapter=infoadapter
+        ll_hs_point.setOnClickListener(this)
     }
 
     /**
@@ -158,6 +163,16 @@ class HkStockDetailFragment :
             infoadapter?.items = ArrayList()
         }
         infoadapter?.addItems(list)
+    }
+
+    override fun onClick(p0: View?) {
+        var pre  = parentFragment as AbsFragment<*,*,*,*>
+        var parent  = pre.getParentFragment() as AbsFragment<*,*,*,*>
+       when(p0?.id){
+           R.id.ll_hs_point->{
+               parent.start(MarketPointFragment.newInstance())
+           }
+       }
     }
 
 
