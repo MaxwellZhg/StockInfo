@@ -80,8 +80,11 @@ public interface ILineDataSet extends ILineRadarDataSet<Entry> {
      */
     boolean isDrawCircleHoleEnabled();
 
-    //是否画最后一点的值和边框
+    /**
+     * 是否画最后一点的值和边框
+     */
     boolean isDrawCircleDashMarkerEnabled();
+
     /**
      * Returns the DashPathEffect that is used for drawing the lines.
      *
@@ -103,6 +106,7 @@ public interface ILineDataSet extends ILineRadarDataSet<Entry> {
      * @return
      */
     IFillFormatter getFillFormatter();
+
     //获取
     SparseArray<String> getXLabels();
 }

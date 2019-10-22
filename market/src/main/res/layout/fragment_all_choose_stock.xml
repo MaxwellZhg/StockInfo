@@ -10,12 +10,10 @@
             android:id="@+id/refrsh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlEnableAutoLoadMore="true"
             app:srlEnableOverScrollBounce="true"
             app:srlEnableOverScrollDrag="true"
-            app:srlEnableFooterFollowWhenLoadFinished="true"
-            app:srlEnableRefresh="true"
-            app:srlEnableLoadMore="true"
+            app:srlEnableRefresh="false"
+            app:srlEnableLoadMore="false"
             app:srlReboundDuration="1000">
 
         <LinearLayout android:orientation="vertical"

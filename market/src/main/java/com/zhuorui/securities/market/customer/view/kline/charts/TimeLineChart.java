@@ -64,6 +64,7 @@ public class TimeLineChart extends LineChart {
         this.myMarkerViewLeft = markerLeft;
         this.myMarkerViewRight = markerRight;
         this.kTimeData = kTimeData;
+        ((TimeLineChartRenderer) mRenderer).setPreClose(kTimeData.getPreClose());
     }
 
     @Override

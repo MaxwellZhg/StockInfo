@@ -29,13 +29,15 @@
 
         <ImageView
                 android:id="@+id/anim_view"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@mipmap/ring" />
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:padding="4.5dp"
+                android:src="@drawable/kline_dot" />
 
-        <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@mipmap/dot" />
+        <!--<ImageView-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="15dp"-->
+                <!--android:padding="4.5dp"-->
+                <!--android:src="@drawable/kline_dot" />-->
     </FrameLayout>
 </FrameLayout>

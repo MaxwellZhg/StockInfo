@@ -12,9 +12,6 @@ import retrofit2.http.POST
 
 interface IStockNet {
 
-    @POST(StockApi.LIST)
-    fun list(@Body request: RecommendStocklistRequest): Call<RecommendStocklistResponse>
-
     @POST(StockApi.MY_LIST)
     fun myList(@Body request: RecommendStocklistRequest): Call<RecommendStocklistResponse>
 

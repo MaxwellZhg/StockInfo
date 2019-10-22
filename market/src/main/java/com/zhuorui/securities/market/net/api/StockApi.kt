@@ -6,10 +6,6 @@ package com.zhuorui.securities.market.net.api
 interface StockApi {
     companion object {
         /**
-         * 自选股股票列表,游客身份
-         */
-        const val LIST = "as_market/api/stock/selected/v1/view/list"
-        /**
          * 自选股股票列表,已登陆身份
          */
         const val MY_LIST = "as_market/api/stock/selected/v1/view/mylist"

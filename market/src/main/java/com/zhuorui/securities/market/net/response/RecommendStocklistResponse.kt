@@ -1,7 +1,7 @@
 package com.zhuorui.securities.market.net.response
 
-import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.market.model.StockMarketInfo
 
 /**
  *    author : PengXianglin
@@ -9,14 +9,4 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  *    date   : 2019/8/8 13:55
  *    desc   : 获取自选股列表推荐数据
  */
-class RecommendStocklistResponse : BaseResponse() {
-    var data: ArrayList<StockMarketInfo>? = null
-
-//    data class Data(
-//        val currentPage: Int,
-//        val datas: ArrayList<StockMarketInfo>,
-//        val pageSize: Int,
-//        val totalPage: Int,
-//        val totalRecord: Int
-//    )
-}
+class RecommendStocklistResponse(val data: ArrayList<StockMarketInfo>) : BaseResponse()

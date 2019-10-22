@@ -37,11 +37,9 @@ import kotlinx.android.synthetic.main.layout_topic_stock_list_empty.*
 class TopicStockListFragment :
     AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListView, TopicStockListPresenter>(),
     BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
-    TopicStockListView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo>, OnRefreshLoadMoreListener {
+    TopicStockListView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
 
     private var mAdapter: TopicStocksAdapter? = null
-    private var currentPage = 0
-    private val pageSize = 20
 
     companion object {
         fun newInstance(type: StockTsEnum?): TopicStockListFragment {
@@ -90,21 +88,6 @@ class TopicStockListFragment :
         rv_stock.adapter = mAdapter
         btn_add_stotcks.setOnClickListener(this)
         rv_stock.setEmptyView(list_empty_view)
-
-        // 设置下拉刷新、加载更多监听
-        refrsh_layout.setOnRefreshLoadMoreListener(this)
-
-        refreshStocks()
-    }
-
-
-    override fun onRefresh(refreshLayout: RefreshLayout) {
-        refreshStocks()
-    }
-
-    override fun onLoadMore(refreshLayout: RefreshLayout) {
-        currentPage++
-        presenter?.requestStocks(currentPage, pageSize)
     }
 
     override fun onClickItem(pos: Int, item: StockMarketInfo?, v: View?) {
@@ -164,24 +147,6 @@ class TopicStockListFragment :
         }
     }
 
-    override fun finishRefresh(success: Boolean, noMoreData: Boolean?) {
-        _mActivity?.runOnUiThread {
-            refrsh_layout.finishRefresh(success)
-            if (noMoreData != null) {
-                refrsh_layout.setNoMoreData(noMoreData)
-            }
-        }
-    }
-
-    override fun finishLoadMore(success: Boolean, noMoreData: Boolean?) {
-        _mActivity?.runOnUiThread {
-            refrsh_layout.finishLoadMore(success)
-            if (noMoreData != null) {
-                refrsh_layout.setNoMoreData(noMoreData)
-            }
-        }
-    }
-
     override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
         _mActivity?.runOnUiThread {
             if (mAdapter?.items == null) {
@@ -194,14 +159,6 @@ class TopicStockListFragment :
 
     override fun notifyItemChanged(index: Int) {
         _mActivity?.runOnUiThread { mAdapter?.notifyItemChanged(index) }
-    }
-
-    /**
-     * 刷新自选股列表
-     */
-    override fun refreshStocks() {
-        currentPage = 0
-        presenter?.requestStocks(currentPage, pageSize)
     }
 
     override fun onClick(p0: View?) {

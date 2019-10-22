@@ -231,7 +231,7 @@ public class SocketClient {
 //        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
     }
 
-    private void unBindAllTopic() {
+    public void unBindAllTopic() {
         SocketRequest request = createTopicMessage(SocketApi.TOPIC_UNBIND_ALL);
         sendRequest(request);
     }
