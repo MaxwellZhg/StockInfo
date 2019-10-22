@@ -10,13 +10,13 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  *    desc   : 获取自选股列表推荐数据
  */
 class RecommendStocklistResponse : BaseResponse() {
-    var data: Data? = null
+    var data: ArrayList<StockMarketInfo>? = null
 
-    data class Data(
-        val currentPage: Int,
-        val datas: ArrayList<StockMarketInfo>,
-        val pageSize: Int,
-        val totalPage: Int,
-        val totalRecord: Int
-    )
+//    data class Data(
+//        val currentPage: Int,
+//        val datas: ArrayList<StockMarketInfo>,
+//        val pageSize: Int,
+//        val totalPage: Int,
+//        val totalRecord: Int
+//    )
 }

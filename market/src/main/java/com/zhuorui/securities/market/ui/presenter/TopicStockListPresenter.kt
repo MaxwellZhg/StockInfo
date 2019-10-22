@@ -142,7 +142,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onRecommendStocklistResponse(response: RecommendStocklistResponse) {
         if (!transactions.isMyTransaction(response)) return
-        val datas = response.data?.datas
+        val datas = response.data
 
         var isRefresh = false
         if ((response.request as RecommendStocklistRequest).currentPage == 0) {
