@@ -70,6 +70,7 @@
 
                 <!--买卖盘十档-->
                 <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
+                        android:id="@+id/buyingSellingFiles"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

@@ -26,6 +26,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 /**
@@ -66,6 +67,19 @@ class MarketDetailFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         initView()
+    }
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
+        setTestData()
+    }
+
+    private fun setTestData(){
+        val datas = mutableListOf<Int>()
+        for (i: Int in 1..10){
+            datas.add(i)
+        }
+        buyingSellingFiles.setData(7458f,2442f,datas,datas)
     }
 
     override fun onClick(v: View?) {

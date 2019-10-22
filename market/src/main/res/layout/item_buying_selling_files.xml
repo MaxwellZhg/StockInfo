@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:background="#1A6ED2"
+              android:gravity="center_vertical"
+              android:paddingLeft="13dp"
+              android:paddingRight="13dp"
+              android:layout_height="23.5dp">
+
+    <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:text="买一"
+    />
+
+    <com.zhuorui.commonwidget.ZRStockTextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#C0CCE0"
+            android:text="90.001"
+            android:layout_marginLeft="20dp"
+    />
+
+    <TextView
+            android:id="@+id/tv_num"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:text="30.5K(12)"
+            android:maxLines="1"
+            app:autoSizeMaxTextSize="12sp"
+            app:autoSizeMinTextSize="9sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform"
+    />
+
+</LinearLayout>
