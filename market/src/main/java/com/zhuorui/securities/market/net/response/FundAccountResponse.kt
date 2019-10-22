@@ -23,8 +23,8 @@ class FundAccountResponse(val data: Data) : BaseResponse() {
         val availableAmount: BigDecimal?,//可用资金
         val freezeAmount: BigDecimal?,//冻结资金
         val version: Int?,//版本号
-        val cypherFlagTime: Date?,//资金计算日期(标记定时总资产等是否计算)
-        val createTime: Date?,//创建时间
-        val updateTime: Date//最后更新时间
+        val cypherFlagTime: Long?,//资金计算日期(标记定时总资产等是否计算)
+        val createTime: Long?,//创建时间
+        val updateTime: Long//最后更新时间
     )
 }

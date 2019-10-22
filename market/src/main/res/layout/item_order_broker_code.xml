@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/tv_code"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:background="#1A6ED2"
+          android:gravity="center"
+          android:paddingLeft="13dp"
+          android:paddingRight="13dp"
+          android:layout_height="23.5dp"
+          android:textStyle="bold"
+          android:text="80905"
+          android:maxLines="1"
+          android:textColor="@android:color/white"
+          android:autoSizeStepGranularity="1sp"
+          android:autoSizeMaxTextSize="12sp"
+          android:autoSizeMinTextSize="7sp"
+          android:autoSizeTextType="uniform"
+/>
+
