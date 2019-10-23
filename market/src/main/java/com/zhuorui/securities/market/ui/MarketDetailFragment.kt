@@ -80,6 +80,13 @@ class MarketDetailFragment :
             datas.add(i)
         }
         buyingSellingFiles.setData(7458f,2442f,datas,datas)
+
+        val datas2 = mutableListOf<String>()
+        for (i: Int in 1..30){
+            datas2.add("item$i")
+        }
+        orderBroker.setData(datas2,datas2)
+
     }
 
     override fun onClick(v: View?) {
