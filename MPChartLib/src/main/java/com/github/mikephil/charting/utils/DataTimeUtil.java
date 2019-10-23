@@ -113,6 +113,13 @@ public class DataTimeUtil {
     }
 
     // a integer to xxxxxx
+    public static String secToDateTime(long time) {
+        String timeStr = null;
+        timeStr = new SimpleDateFormat("MM-dd HH:mm").format(new Date(time));
+        return timeStr;
+    }
+
+    // a integer to xxxxxx
     public static String secToDateForFiveDay(long time) {
         String timeStr = null;
         timeStr = new SimpleDateFormat("MM-dd").format(new Date(time));

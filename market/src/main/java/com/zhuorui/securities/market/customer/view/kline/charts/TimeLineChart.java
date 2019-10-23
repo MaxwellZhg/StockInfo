@@ -4,21 +4,28 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import android.view.MotionEvent;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.mikephil.charting.utils.DataTimeUtil;
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage;
+import com.zhuorui.securities.market.customer.view.kline.markerView.BarBottomMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.markerView.LeftMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.markerView.TimeRightMarkerView;
 import com.zhuorui.securities.market.customer.view.kline.renderer.TimeLineChartRenderer;
 import com.zhuorui.securities.market.customer.view.kline.renderer.TimeXAxisRenderer;
 
 
+/***
+ * 绘制分时K线
+ */
 public class TimeLineChart extends LineChart {
     private LeftMarkerView myMarkerViewLeft;
     private TimeRightMarkerView myMarkerViewRight;
+    private BarBottomMarkerView myMarkerBottom;
     private TimeDataManage kTimeData;
     private VolSelected volSelected;
 
@@ -60,9 +67,10 @@ public class TimeLineChart extends LineChart {
     }
 
     /*返回转型后的左右轴*/
-    public void setMarker(LeftMarkerView markerLeft, TimeRightMarkerView markerRight, TimeDataManage kTimeData) {
+    public void setMarker(LeftMarkerView markerLeft, TimeRightMarkerView markerRight,  BarBottomMarkerView markerBottom, TimeDataManage kTimeData) {
         this.myMarkerViewLeft = markerLeft;
         this.myMarkerViewRight = markerRight;
+        this.myMarkerBottom = markerBottom;
         this.kTimeData = kTimeData;
         ((TimeLineChartRenderer) mRenderer).setPreClose(kTimeData.getPreClose());
     }
@@ -108,9 +116,11 @@ public class TimeLineChart extends LineChart {
 
             myMarkerViewLeft.setData(yValForXIndex1);
             myMarkerViewRight.setData(yValForXIndex2);
+            myMarkerBottom.setData(DataTimeUtil.secToDateTime(kTimeData.getDatas().get((int) e.getX()).getTimeMills()));
 
             myMarkerViewLeft.refreshContent(e, mIndicesToHighlight[i]);
             myMarkerViewRight.refreshContent(e, mIndicesToHighlight[i]);
+            myMarkerBottom.refreshContent(e, highlight);
             /*修复bug*/
             // invalidate();
             /*重新计算大小*/
@@ -118,6 +128,8 @@ public class TimeLineChart extends LineChart {
             myMarkerViewLeft.layout(0, 0, myMarkerViewLeft.getMeasuredWidth(), myMarkerViewLeft.getMeasuredHeight());
             myMarkerViewRight.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
             myMarkerViewRight.layout(0, 0, myMarkerViewRight.getMeasuredWidth(), myMarkerViewRight.getMeasuredHeight());
+            myMarkerBottom.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            myMarkerBottom.layout(0, 0, myMarkerBottom.getMeasuredWidth(), myMarkerBottom.getMeasuredHeight());
 
             if (getAxisLeft().getLabelPosition() == YAxis.YAxisLabelPosition.OUTSIDE_CHART) {
                 myMarkerViewLeft.draw(canvas, mViewPortHandler.contentLeft() - myMarkerViewLeft.getWidth() / 2f, pos[1] + myMarkerViewLeft.getHeight() / 2f);
@@ -128,6 +140,14 @@ public class TimeLineChart extends LineChart {
                 myMarkerViewRight.draw(canvas, mViewPortHandler.contentRight() + myMarkerViewRight.getWidth() / 2f, pos[1] + myMarkerViewRight.getHeight() / 2f);//- myMarkerViewRight.getWidth()
             } else {
                 myMarkerViewRight.draw(canvas, mViewPortHandler.contentRight() - myMarkerViewRight.getWidth() / 2f, pos[1] + myMarkerViewRight.getHeight() / 2f);//- myMarkerViewRight.getWidth()
+            }
+            int width = myMarkerBottom.getWidth() / 2;
+            if (mViewPortHandler.contentRight() - pos[0] <= width) {
+                myMarkerBottom.draw(canvas, mViewPortHandler.contentRight() - myMarkerBottom.getWidth() / 2f, mViewPortHandler.contentBottom() + myMarkerBottom.getHeight());//-markerBottom.getHeight()   CommonUtil.dip2px(getContext(),65.8f)
+            } else if (pos[0] - mViewPortHandler.contentLeft() <= width) {
+                myMarkerBottom.draw(canvas, mViewPortHandler.contentLeft() + myMarkerBottom.getWidth() / 2f, mViewPortHandler.contentBottom() + myMarkerBottom.getHeight());
+            } else {
+                myMarkerBottom.draw(canvas, pos[0], mViewPortHandler.contentBottom() + myMarkerBottom.getHeight());
             }
             // callbacks to update the content
 //            mMarker.refreshContent(e, highlight);
@@ -228,5 +248,12 @@ public class TimeLineChart extends LineChart {
 //        drawDescription(canvas);
 //    }
 
-
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        // 当触摸K线显示指标线时，请求父控件不拦截上下滑动
+        if (valuesToHighlight()) {
+            disableScroll();
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }
