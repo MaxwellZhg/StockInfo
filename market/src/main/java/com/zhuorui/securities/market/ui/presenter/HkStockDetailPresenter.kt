@@ -39,6 +39,6 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
     }
 
     fun getMarketInfoAdapter(): MarketPartInfoAdapter {
-          return MarketPartInfoAdapter()
+          return MarketPartInfoAdapter(1)
     }
 }

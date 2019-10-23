@@ -11,9 +11,17 @@ import com.zhuorui.securities.market.R
  * Date: 2019/10/22
  * Desc:
  */
-class MarketPartInfoAdapter :BaseListAdapter<Int>(){
+class MarketPartInfoAdapter(type:Int) :BaseListAdapter<Int>(){
+    var type =type
     override fun getLayout(viewType: Int): Int {
-       return  R.layout.item_market_part_stock_info
+       return when(type){
+           1->{
+               R.layout.item_market_part_stock_info
+           }
+           else->{
+               R.layout.item_market_point_view
+           }
+       }
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
