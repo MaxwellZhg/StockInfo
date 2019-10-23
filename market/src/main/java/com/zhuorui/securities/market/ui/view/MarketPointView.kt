@@ -10,4 +10,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface MarketPointView :AbsView{
     fun addInfoToAdapter(list: List<Int>)
+    fun addPointInfoAdapter(list: List<Int>)
 }

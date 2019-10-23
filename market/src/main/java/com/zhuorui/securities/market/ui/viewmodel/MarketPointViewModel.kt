@@ -11,4 +11,5 @@ import androidx.lifecycle.ViewModel
  */
 class MarketPointViewModel :ViewModel(){
     var infos: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var pointInfos: MutableLiveData<MutableList<Int>> = MutableLiveData()
 }
