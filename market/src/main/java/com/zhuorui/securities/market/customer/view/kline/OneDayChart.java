@@ -337,7 +337,7 @@ public class OneDayChart extends BaseChart {
             setXLabels(mData.getOneDayXLabels(landscape));
             setShowLabels(true);
             setMarkerView(mData);
-            setBottomMarkerView(mData);
+//            setBottomMarkerView(mData);
 
             //左Y轴label渲染颜色
             Transformer leftYTransformer = lineChart.getRendererLeftYAxis().getTransformer();
@@ -379,7 +379,11 @@ public class OneDayChart extends BaseChart {
             d1.setDrawFilled(true);
             Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_33FF8DB9E4));
             d1.setFillDrawable(drawable);
+            // 设置触摸K线显示的指标线颜色
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
+            // 设置触摸K线显示的指标线宽度
+            d1.setHighlightLineWidth(1f);
+            // 设置触摸K线是否绘制指标线
             d1.setHighlightEnabled(landscape);
             d2.setHighlightEnabled(false);
             d1.setDrawCircles(false);
@@ -395,7 +399,11 @@ public class OneDayChart extends BaseChart {
             lineChart.setData(cd);
 
             barDataSet = new BarDataSet(barEntries, "成交量");
+            // 设置触摸成交量显示的指标线颜色
             barDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
+            // 设置触摸成交量显示的指标线宽度
+            barDataSet.setHighlightLineWidth(1f);
+            // 设置触摸成交量是否绘制指标线
             barDataSet.setHighlightEnabled(landscape);
             barDataSet.setDrawValues(false);
             barDataSet.setNeutralColor(ContextCompat.getColor(mContext, R.color.equal_color));
@@ -507,10 +515,16 @@ public class OneDayChart extends BaseChart {
         }
     }
 
+    /**
+     * 设置K线触摸时左、右、下侧指标显示价格、时间、涨幅
+     *
+     * @param mData
+     */
     private void setMarkerView(TimeDataManage mData) {
         LeftMarkerView leftMarkerView = new LeftMarkerView(mContext, R.layout.layout_kline_markerview, precision);
         TimeRightMarkerView rightMarkerView = new TimeRightMarkerView(mContext, R.layout.layout_kline_markerview);
-        lineChart.setMarker(leftMarkerView, rightMarkerView, mData);
+        BarBottomMarkerView bottomMarkerView = new BarBottomMarkerView(mContext, R.layout.layout_kline_markerview);
+        lineChart.setMarker(leftMarkerView, rightMarkerView, bottomMarkerView, mData);
     }
 
     private void setBottomMarkerView(TimeDataManage kDatas) {

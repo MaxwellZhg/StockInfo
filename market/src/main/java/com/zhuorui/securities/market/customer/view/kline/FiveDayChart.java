@@ -498,7 +498,8 @@ public class FiveDayChart extends BaseChart {
     private void setMarkerView(TimeDataManage mData) {
         LeftMarkerView leftMarkerView = new LeftMarkerView(mContext, R.layout.layout_kline_markerview, precision);
         TimeRightMarkerView rightMarkerView = new TimeRightMarkerView(mContext, R.layout.layout_kline_markerview);
-        lineChart.setMarker(leftMarkerView, rightMarkerView, mData);
+        BarBottomMarkerView bottomMarkerView = new BarBottomMarkerView(mContext, R.layout.layout_kline_markerview);
+        lineChart.setMarker(leftMarkerView, rightMarkerView, bottomMarkerView, mData);
     }
 
     private void setBottomMarkerView(TimeDataManage kDatas) {
