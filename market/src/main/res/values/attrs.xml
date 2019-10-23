@@ -21,4 +21,10 @@
         <attr name="title_background" format="color"/>
         <attr name="price_text_color" format="color"/>
     </declare-styleable>
+    <declare-styleable name="ZRThreePartLineLayout">
+        <attr name="zr_line_width" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="MarketPartInfoView">
+        <attr name="market_info_type" format="integer"/>
+    </declare-styleable>
 </resources>

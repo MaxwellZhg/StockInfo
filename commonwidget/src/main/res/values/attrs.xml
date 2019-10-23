@@ -201,7 +201,4 @@
         <attr name="integer_part" format="integer"></attr>
         <attr name="decimal_part" format="integer"></attr>
     </declare-styleable>
-    <declare-styleable name="ZRThreePartLineLayout">
-        <attr name="zr_line_width" format="dimension"/>
-    </declare-styleable>
 </resources>

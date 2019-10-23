@@ -9,6 +9,7 @@
     <LinearLayout android:layout_width="0dp"
                   android:layout_weight="1"
                   android:paddingBottom="10dp"
+                  android:id="@+id/ll_hs_point"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
                   android:gravity="center_horizontal"
@@ -35,7 +36,7 @@
                 android:textColor="@color/color_D9001B"
                 android:layout_marginBottom="4.5dp"
                 android:textSize="12sp"/>
-        <com.zhuorui.commonwidget.ZRThreePartLineLayout
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
                 android:id="@+id/zr_line"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -43,7 +44,7 @@
                 app:zr_line_width="101dp"
                 android:layout_height="3dp"/>
 
-        <com.zhuorui.commonwidget.ZRThreePartLineLayout
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
                 android:id="@+id/zr_line_text"
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"
@@ -82,14 +83,14 @@
                 android:textColor="@color/color_D9001B"
                 android:layout_marginBottom="4.5dp"
                 android:textSize="12sp"/>
-        <com.zhuorui.commonwidget.ZRThreePartLineLayout
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
                 android:id="@+id/zr_line1"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="13dp"
                 app:zr_line_width="101dp"
                 android:layout_height="3dp"/>
-        <com.zhuorui.commonwidget.ZRThreePartLineLayout
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
                 android:id="@+id/zr_line_text1"
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"
@@ -128,14 +129,14 @@
                 android:textColor="@color/color_00cc00"
                 android:layout_marginBottom="4.5dp"
                 android:textSize="12sp"/>
-        <com.zhuorui.commonwidget.ZRThreePartLineLayout
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
                 android:id="@+id/zr_line2"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="13dp"
                 app:zr_line_width="101dp"
                 android:layout_height="3dp"/>
-        <com.zhuorui.commonwidget.ZRThreePartLineLayout
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
                 android:id="@+id/zr_line_text2"
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"

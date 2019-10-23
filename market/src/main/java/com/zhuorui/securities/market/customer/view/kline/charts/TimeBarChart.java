@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import android.view.MotionEvent;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -58,7 +59,7 @@ public class TimeBarChart extends BarChart {
     @Override
     protected void drawMarkers(Canvas canvas) {
         // if there is no marker view or drawing marker is disabled
-        if (!isDrawMarkersEnabled() || !valuesToHighlight()) {
+        if (markerBottom == null || !isDrawMarkersEnabled() || !valuesToHighlight()) {
             return;
         }
 
@@ -175,4 +176,13 @@ public class TimeBarChart extends BarChart {
 ////            mMarker.draw(canvas, pos[0], pos[1]);
 //        }
 //    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        // 当触摸K线显示指标线时，请求父控件不拦截上下滑动
+        if (valuesToHighlight()) {
+            disableScroll();
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }
