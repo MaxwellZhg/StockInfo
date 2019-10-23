@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_hk_stock_detail.*
 import kotlinx.android.synthetic.main.fragment_search_info.*
 import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
 import kotlinx.android.synthetic.main.item_stock_detail_header.*
+import kotlinx.android.synthetic.main.layout_new_stock_date.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -95,6 +96,7 @@ class HkStockDetailFragment :
         rv_hk_stock2.adapter=infoadapter
         rv_hk_stock3.adapter=infoadapter
         ll_hs_point.setOnClickListener(this)
+        rl_new_stock_date.setOnClickListener(this)
     }
 
     /**
@@ -171,6 +173,9 @@ class HkStockDetailFragment :
        when(p0?.id){
            R.id.ll_hs_point->{
                parent.start(MarketPointFragment.newInstance())
+           }
+           R.id.rl_new_stock_date->{
+               parent.start(NewStockDateFragment.newInstance())
            }
        }
     }
