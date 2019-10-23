@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel"/>
@@ -11,5 +11,39 @@
         <include
                 android:id="@+id/top_bar"
                 layout="@layout/layout_market_point_topbar"/>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="vertical">
+                <com.zhuorui.securities.market.customer.view.MarketPointDetailView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <View android:layout_width="match_parent"
+                      android:background="@color/color_C0CCE0"
+                      android:layout_height="0.5dp"/>
+                <!--K线-->
+                <FrameLayout
+                        android:id="@+id/kline_view"
+                        android:background="#2D2C35"
+                        android:layout_width="match_parent"
+                        android:layout_height="337dp"/>
+                <net.lucode.hackware.magicindicator.MagicIndicator
+                        android:id="@+id/magic_indicator"
+                        android:layout_width="match_parent"
+                        android:background="@color/color_2D2C35"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="2dp"
+                />
+                <include layout="@layout/layout_market_point_view_tips"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_point_stock"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </layout>
