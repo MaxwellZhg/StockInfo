@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -21,10 +22,12 @@ import com.zhuorui.securities.market.ui.presenter.MarketTabPresenter
 import com.zhuorui.securities.market.ui.view.MarketTabVierw
 import com.zhuorui.securities.market.ui.viewmodel.MarketTabVierwModel
 import com.zhuorui.securities.personal.ui.MessageFragment
+import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.fragment_search_info.*
 import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
 import kotlinx.android.synthetic.main.fragment_search_info.viewpager
 import kotlinx.android.synthetic.main.fragment_stock_tab.*
+import kotlinx.android.synthetic.main.fragment_stock_tab.top_bar
 import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
@@ -45,7 +48,7 @@ class MarketTabFragment :
     AbsBackFinishFragment<FragmentMarketTabBinding, MarketTabVierwModel, MarketTabVierw, MarketTabPresenter>(),
     MarketTabVierw {
     private var mfragment:ArrayList<String?> = ArrayList()
-    private val mFragments:ArrayList<HkStockDetailFragment> = ArrayList()
+    private val mFragments: Array<HkStockDetailFragment?> = arrayOfNulls<HkStockDetailFragment>(4)
     private var mIndex = 0
     companion object {
         fun newInstance(): MarketTabFragment {
@@ -82,82 +85,76 @@ class MarketTabFragment :
         mfragment.add(ResUtil.getString(R.string.sh_sz_stock))
         mfragment.add(ResUtil.getString(R.string.all_hk_stock))
         mfragment.add(ResUtil.getString(R.string.gloab_stock))
-        mFragments.add(HkStockDetailFragment.newInstance())
-        mFragments.add(HkStockDetailFragment.newInstance())
-        mFragments.add(HkStockDetailFragment.newInstance())
-        mFragments.add(HkStockDetailFragment.newInstance())
-        initViewPager()
+        magic_indicator.navigator = getNavigator()
     }
 
-    private fun initViewPager() {
-        if (viewpager.adapter == null) {
-            // 设置viewpager指示器
-            val commonNavigator = CommonNavigator(requireContext())
-            commonNavigator.isAdjustMode = true
-            commonNavigator.adapter = object : CommonNavigatorAdapter() {
+    private fun onSelect(index: Int) {
+        showHideFragment(mFragments[index], mFragments[mIndex])
+        mIndex = index
+    }
 
-                override fun getCount(): Int {
-                    return mfragment!!.size
-                }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val firstFragment = findChildFragment(HkStockDetailFragment::class.java)
+        if (firstFragment == null) {
+            mFragments[0] = HkStockDetailFragment.newInstance()
+            mFragments[1] = HkStockDetailFragment.newInstance()
+            mFragments[2] = HkStockDetailFragment.newInstance()
+            mFragments[3] = HkStockDetailFragment.newInstance()
+            loadMultipleRootFragment(
+                R.id.fl_tab_container, mIndex,
+                mFragments[0],
+                mFragments[1],
+                mFragments[2],
+                mFragments[3]
+            )
+        } else {
+            // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
+            // 这里我们需要拿到mFragments的引用
+            mFragments[0] = firstFragment
+            mFragments[1] = findChildFragment(HkStockDetailFragment::class.java)
+            mFragments[2] = findChildFragment(HkStockDetailFragment::class.java)
+            mFragments[3] = findChildFragment(HkStockDetailFragment::class.java)
+        }
+    }
 
-                override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                    val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
-                    colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.un_tab_select)!!
-                    colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
-                    colorTransitionPagerTitleView.text = mfragment!![index]
-                    colorTransitionPagerTitleView.textSize = 18f
-                    colorTransitionPagerTitleView.setOnClickListener {
-                        viewpager.currentItem = index
-                    }
-                    return colorTransitionPagerTitleView
-                }
+    /**
+     * 获取指示器适配器
+     */
+    private fun getNavigator(): IPagerNavigator? {
+        // 设置viewpager指示器
+        val commonNavigator = CommonNavigator(requireContext())
+        commonNavigator.isAdjustMode = true
+        commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
-                override fun getIndicator(context: Context): IPagerIndicator {
-                    val indicator = LinePagerIndicator(context)
-                    indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                    indicator.setColors(ResUtil.getColor(R.color.tab_select))
-                    indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
-                    indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
-                    return indicator
-                }
+            override fun getCount(): Int {
+                return mfragment?.size!!
             }
 
-            // 设置viewpager页面缓存数量
-            viewpager.offscreenPageLimit =mFragments.size
-            // 设置viewpager适配器
-            viewpager.adapter = childFragmentManager?.let { ViewPagerAdapter(it) }
-            viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) {
-                    magic_indicator.onPageScrollStateChanged(state)
+            override fun getTitleView(context: Context, index: Int): IPagerTitleView {
+                val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
+                colorTransitionPagerTitleView.normalColor = Color.parseColor("#C0CCE0")
+                colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
+                colorTransitionPagerTitleView.textSize = 18f
+                colorTransitionPagerTitleView.text = mfragment!![index]
+                colorTransitionPagerTitleView.setOnClickListener {
+                    magic_indicator.onPageSelected(index)
+                    magic_indicator.onPageScrolled(index, 0.0F, 0)
+                    onSelect(index)
                 }
+                return colorTransitionPagerTitleView
+            }
 
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                    magic_indicator.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                }
-
-                override fun onPageSelected(position: Int) {
-                    magic_indicator.onPageSelected(position)
-                }
-            })
-
-            // 指示器绑定viewpager
-            magic_indicator.navigator = commonNavigator
-            ViewPagerHelper.bind(magic_indicator, viewpager)
+            override fun getIndicator(context: Context): IPagerIndicator {
+                val indicator = LinePagerIndicator(context)
+                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
+                indicator.setColors(ResUtil.getColor(R.color.tab_select))
+                indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
+                indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
+                return indicator
+            }
         }
-    }
-
-    inner class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): HkStockDetailFragment {
-            return mFragments[position]
-        }
-
-        override fun getCount(): Int {
-            return mfragment?.size!!
-        }
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return mfragment[position]
-        }
+        return commonNavigator
     }
 
 
