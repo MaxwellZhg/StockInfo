@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:background="#1A6ED2"
-              android:gravity="center_vertical"
               android:paddingLeft="13dp"
               android:paddingRight="13dp"
               android:layout_height="23.5dp">
@@ -16,6 +15,8 @@
             android:textStyle="bold"
             android:text="80905"
             android:maxLines="1"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
     />
 
@@ -26,8 +27,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="12sp"
-            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="50dp"
             android:text="中银国际"
     />
 
-</LinearLayout>
+</FrameLayout>
