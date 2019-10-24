@@ -299,9 +299,4 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_3_3"
             app:layout_constraintRight_toRightOf="@+id/tv_3_3"
     />
-  <View android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_3_1"
-        android:background="@color/color_C0CCE0"
-        android:layout_marginTop="10dp"
-        android:layout_height="0.5dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

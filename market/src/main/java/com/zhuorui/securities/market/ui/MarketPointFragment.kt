@@ -14,10 +14,12 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
 import com.zhuorui.securities.market.generated.callback.OnClickListener
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
+import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.kline.KlineFragment
 import kotlinx.android.synthetic.main.fragment_hk_stock_detail.*
 import kotlinx.android.synthetic.main.fragment_market_point.*
 import kotlinx.android.synthetic.main.layout_market_point_topbar.*
+import kotlinx.android.synthetic.main.layout_market_point_view_tips.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -34,6 +36,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,MarketPointViewModel,MarketPointView,MarketPointPresenter>(),MarketPointView,View.OnClickListener{
     private var infoadapter: MarketPartInfoAdapter? = null
+    private var pointInfoAdapter:MarketPointInfoAdapter?=null
     private var tabTitle:ArrayList<String> = ArrayList()
     override val layout: Int
         get() = R.layout.fragment_market_point
@@ -65,6 +68,7 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         magic_indicator.navigator=getNavigator()
         presenter?.setLifecycleOwner(this)
         infoadapter = presenter?.getMarketInfoAdapter()
+        pointInfoAdapter=presenter?.getMarketPointInfoAdapter()
         //解决数据加载不完的问题
         rv_point_stock.isNestedScrollingEnabled = false
         rv_point_stock.setHasFixedSize(true)
@@ -72,6 +76,7 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         presenter?.getData()
         infoadapter?.notifyDataSetChanged()
         rv_point_stock.adapter=infoadapter
+        refrsh_layout.setEnableLoadMore(true)
     }
     override fun onClick(v: View?) {
         when(v){
@@ -127,7 +132,20 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
     }
 
     private fun onSelect(index: Int) {
-
+      when(index){
+          0->{
+              presenter?.getData()
+              infoadapter?.notifyDataSetChanged()
+              rv_point_stock.adapter=infoadapter
+              point_tips.visibility=View.VISIBLE
+          }
+          1->{
+              presenter?.getInfoData()
+              pointInfoAdapter?.notifyDataSetChanged()
+              rv_point_stock.adapter=pointInfoAdapter
+              point_tips.visibility=View.GONE
+          }
+      }
     }
 
     override fun addInfoToAdapter(list: List<Int>) {
@@ -136,6 +154,14 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
             infoadapter?.items = ArrayList()
         }
         infoadapter?.addItems(list)
+    }
+
+    override fun addPointInfoAdapter(list: List<Int>) {
+        pointInfoAdapter?.clearItems()
+        if (pointInfoAdapter?.items == null) {
+            pointInfoAdapter?.items = ArrayList()
+        }
+        pointInfoAdapter?.addItems(list)
     }
 
 
