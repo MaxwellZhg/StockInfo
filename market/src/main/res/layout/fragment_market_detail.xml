@@ -8,110 +8,143 @@
                 type="com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel"/>
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <include
                 android:id="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
                 layout="@layout/layout_market_detail_topbar"/>
 
-        <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll_view"
-                android:layout_weight="1"
+        <include
+                android:id="@+id/bottpm_bar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fadingEdge="none"
-                android:overScrollMode="never">
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                <!--股票信息-->
-                <com.zhuorui.securities.market.customer.view.MarketDetailView
-                        android:background="#2D2C35"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="13dp"
-                        android:paddingRight="13dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"/>
-
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.6dp"
-                        android:background="#C0CCE0"/>
-
-                <!--A股-->
-                <include
-                        layout="@layout/layout_market_detail_a_shares"/>
-
-                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
-
-                <!--除权信息-->
-                <include
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        layout="@layout/layout_market_detail_ex_rights"/>
-
-                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
-
-                <!--K线-->
-                <FrameLayout
-                        android:id="@+id/kline_view"
-                        android:background="#2D2C35"
-                        android:layout_width="match_parent"
-                        android:layout_height="337dp"/>
-
-                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
-
-                <!--买卖盘十档-->
-                <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
-                        android:id="@+id/buyingSellingFiles"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                />
-
-                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
-
-                <!--买卖盘经纪-->
-
-                <com.zhuorui.securities.market.customer.view.OrderBrokerView
-                        android:id="@+id/orderBroker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
-
-                <net.lucode.hackware.magicindicator.MagicIndicator
-                        android:id="@+id/magic_indicator"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:background="#2D2C35"/>
-
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#191821"/>
-
-                <FrameLayout
-                        android:id="@+id/fl_tab_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                layout="@layout/layout_market_detail_bottom"/>
 
         <!--指数-->
         <com.zhuorui.securities.market.customer.view.MarketDetailIndexView
+                android:id="@+id/index"
+                app:layout_constraintBottom_toTopOf="@id/bottpm_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-        <include
-                layout="@layout/layout_market_detail_bottom"/>
-        
-    </LinearLayout>
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:srlEnableOverScrollBounce="false"
+                app:srlEnableOverScrollDrag="false"
+                app:srlEnableRefresh="false"
+                app:srlEnableLoadMore="false"
+                app:srlReboundDuration="1000"
+                app:layout_constraintTop_toBottomOf="@id/top_bar"
+                app:layout_constraintBottom_toTopOf="@id/index"
+        >
+
+            <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fadingEdge="none"
+                    android:overScrollMode="never">
+
+                <LinearLayout
+                        android:id="@+id/ll_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    <!--股票信息-->
+                    <com.zhuorui.securities.market.customer.view.MarketDetailView
+                            android:background="#2D2C35"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="13dp"
+                            android:paddingRight="13dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"/>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.6dp"
+                            android:background="#C0CCE0"/>
+
+                    <!--A股-->
+                    <include
+                            layout="@layout/layout_market_detail_a_shares"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
+                    <!--除权信息-->
+                    <include
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            layout="@layout/layout_market_detail_ex_rights"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
+                    <!--K线-->
+                    <FrameLayout
+                            android:id="@+id/kline_view"
+                            android:background="#2D2C35"
+                            android:layout_width="match_parent"
+                            android:layout_height="337dp"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
+                    <!--买卖盘十档-->
+                    <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
+                            android:id="@+id/buyingSellingFiles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                    />
+
+                    <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
+                    <!--买卖盘经纪-->
+
+                    <com.zhuorui.securities.market.customer.view.OrderBrokerView
+                            android:id="@+id/orderBroker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="2dp" android:background="#191821"/>
+
+                    <net.lucode.hackware.magicindicator.MagicIndicator
+                            android:id="@+id/magic_indicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:background="#2D2C35"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#191821"/>
+
+                    <FrameLayout
+                            android:id="@+id/fl_tab_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <!--顶部悬浮tab-->
+        <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/top_magic_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/top_bar"
+                android:background="#2D2C35"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

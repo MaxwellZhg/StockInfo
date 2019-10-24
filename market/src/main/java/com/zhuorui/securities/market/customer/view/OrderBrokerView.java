@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.securities.market.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * author : liuwei
@@ -184,7 +186,6 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
                     }
                 }
             }
-
         }
 
     }
@@ -200,7 +201,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         }
 
         public void bindData(int position, Object object) {
-            vCode.setText(String.valueOf(80900 + position));
+            vCode.setText(String.valueOf(new Random().nextInt(1000) + position));
             if (vName != null)vName.setText(object.toString());
             itemView.setBackgroundColor(colors[position % colors.length]);
         }
