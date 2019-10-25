@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -11,6 +12,8 @@ import com.zhuorui.securities.market.ui.presenter.AllHkStockPresenter
 import com.zhuorui.securities.market.ui.view.AllHkStockView
 import com.zhuorui.securities.market.ui.viewmodel.AllHkStockViewModel
 import kotlinx.android.synthetic.main.fragment_all_hk_stock.*
+import kotlinx.android.synthetic.main.fragment_all_hk_stock.top_bar
+import kotlinx.android.synthetic.main.fragment_stock_tab.*
 
 /**
  * Created by Maxwell.
@@ -43,6 +46,10 @@ class AllHkStockFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        top_bar.setRight2ClickListener {
+            // 搜索
+           start(SearchInfoFragment.newInstance())
+        }
         requireActivity().layoutInflater.inflate(R.layout.table_right_title, right_title_container)
         presenter?.setLifecycleOwner(this)
         nameAdapter = presenter?.getAllHkStockNameAdapter()

@@ -92,6 +92,7 @@
             android:autoSizeMaxTextSize="14sp"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeTextType="uniform"
+            android:textColor="@color/color_B3BCD0"
             android:text="20.61%"/>
 
     <androidx.appcompat.widget.AppCompatTextView

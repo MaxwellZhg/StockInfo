@@ -5,125 +5,130 @@
                   type="com.zhuorui.securities.market.ui.viewmodel.AllHkStockViewModel"/>
     </data>
     <LinearLayout
-                  android:orientation="vertical"
-                  android:background="@color/color_211F2A"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
-         <com.zhuorui.commonwidget.ZhuoRuiTopBar
-                 android:id="@+id/top_bar"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:zr_topbarTitle="全部港股"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content">
-
-         </com.zhuorui.commonwidget.ZhuoRuiTopBar>
-        <TextView
-                  app:layout_constraintTop_toBottomOf="@+id/top_bar"
-                  android:layout_width="match_parent"
-                  android:id="@+id/tv_filters"
-                  android:drawableLeft="@mipmap/icon_filters"
-                  android:textColor="@color/color_53A0FD"
-                  android:gravity="center_vertical"
-                  android:drawablePadding="10.5dp"
-                  android:paddingStart="13dp"
-                  android:text="筛选"
-                  android:background="@color/color_2D2C35"
-                  android:layout_height="35dp"/>
-        <!-- 此部分是标题部分 -->
-        <LinearLayout
-                android:id="@+id/ll_top_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_filters"
+            android:orientation="vertical"
+            android:background="@color/color_211F2A"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.zhuorui.securities.market.custom.MoreIconTitleBar
+                android:id="@+id/top_bar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:zr_topbarTitle="全部港股"
+                app:zr_backview_is_visibity="true"
+                style="@style/AllHkStockMoreIconBar"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:background="@color/color_2D2C35"
-                android:orientation="horizontal">
-
-            <!-- 左侧标题的父容器 -->
-
+                android:layout_height="wrap_content">
+        </com.zhuorui.securities.market.custom.MoreIconTitleBar>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
             <TextView
-                    android:id="@+id/tv_table_title_left"
-                    android:textColor="@color/color_B3BCD0"
-                    android:textSize="12sp"
-                    android:layout_width="0dp"
-                    android:layout_height="35dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="13dp"
-                    android:maxLines="1"
-                    android:text="名称代码"/>
-
-            <!-- 右侧标题的父容器可实现水平滚动 -->
-            <com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView
-                    android:id="@+id/title_horsv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:fillViewport="true"
-                    android:scrollbars="none">
-
-                <LinearLayout
-                        android:id="@+id/right_title_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-                    <!--<include layout="@layout/table_sales_right_tab"/>-->
-                </LinearLayout>
-            </com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView>
-        </LinearLayout>
-
-        <!-- 此部分是内容部分 用ScrollView实现上下滚动效果 -->
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                android:id="@+id/refrsh_layout"
-                app:layout_constraintTop_toBottomOf="@+id/tv_filters"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srlEnableOverScrollBounce="true"
-                app:srlEnableOverScrollDrag="true"
-                app:srlEnableRefresh="false"
-                app:srlEnableLoadMore="false"
-                app:srlReboundDuration="1000">
-
-            <androidx.core.widget.NestedScrollView
-                    android:id="@+id/pull_refresh_scroll"
+                    app:layout_constraintTop_toBottomOf="@+id/top_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:id="@+id/tv_filters"
+                    android:drawableLeft="@mipmap/icon_filters"
+                    android:textColor="@color/color_53A0FD"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="10.5dp"
+                    android:paddingStart="13dp"
+                    android:text="筛选"
+                    android:background="@color/color_2D2C35"
+                    android:layout_height="35dp"/>
+            <!-- 此部分是标题部分 -->
+            <LinearLayout
+                    android:id="@+id/ll_top_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/color_2D2C35"
+                    android:orientation="horizontal">
 
-                <LinearLayout
-                        android:layout_width="match_parent"
+                <!-- 左侧标题的父容器 -->
+
+                <TextView
+                        android:id="@+id/tv_table_title_left"
+                        android:textColor="@color/color_B3BCD0"
+                        android:textSize="12sp"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="13dp"
+                        android:maxLines="1"
+                        android:text="名称代码"/>
+
+                <!-- 右侧标题的父容器可实现水平滚动 -->
+                <com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView
+                        android:id="@+id/title_horsv"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_weight="2"
+                        android:fillViewport="true"
+                        android:scrollbars="none">
 
-                    <!-- 左侧内容的父容器 -->
-                    <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/left_container_rv"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            android:layout_weight="1"
-                            android:scrollbars="none">
-                    </androidx.recyclerview.widget.RecyclerView>
+                    <LinearLayout
+                            android:id="@+id/right_title_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+                        <!--<include layout="@layout/table_sales_right_tab"/>-->
+                    </LinearLayout>
+                </com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView>
+            </LinearLayout>
 
-                    <!-- 右侧内容的父容器 实现水平滚动 -->
-                    <com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView
-                            android:id="@+id/content_horsv"
-                            android:layout_width="0dp"
+            <!-- 此部分是内容部分 用ScrollView实现上下滚动效果 -->
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                    android:id="@+id/refrsh_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srlEnableOverScrollBounce="true"
+                    app:srlEnableOverScrollDrag="true"
+                    app:srlEnableRefresh="false"
+                    app:srlEnableLoadMore="false"
+                    app:srlReboundDuration="1000">
+
+                <androidx.core.widget.NestedScrollView
+                        android:id="@+id/pull_refresh_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:fillViewport="true"
-                            android:scrollbars="none">
+                            android:orientation="horizontal">
+
+                        <!-- 左侧内容的父容器 -->
                         <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/right_container_rv"
-                                android:layout_width="match_parent"
+                                android:id="@+id/left_container_rv"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:background="#ffffff"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                android:layout_weight="1"
                                 android:scrollbars="none">
                         </androidx.recyclerview.widget.RecyclerView>
-                    </com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView>
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+                        <!-- 右侧内容的父容器 实现水平滚动 -->
+                        <com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView
+                                android:id="@+id/content_horsv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:fillViewport="true"
+                                android:scrollbars="none">
+                            <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/right_container_rv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="#ffffff"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                    android:scrollbars="none">
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        </FrameLayout>
     </LinearLayout>
 </layout>
