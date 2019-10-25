@@ -23,6 +23,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.CommonUtil;
 import com.github.mikephil.charting.utils.NumberUtils;
 import com.github.mikephil.charting.utils.Transformer;
+import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.rxbus.EventThread;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe;
@@ -50,20 +51,30 @@ import java.util.ArrayList;
  */
 public class OneDayChart extends BaseChart {
 
+    private final String TAG = this.getClass().getSimpleName();
+
     private Context mContext;
+    // K线走势图
     TimeLineChart lineChart;
+    // 成交量柱图
     TimeBarChart barChart;
     FrameLayout cirCleView;
 
     private LineDataSet d1, d2;
     private BarDataSet barDataSet;
 
+    // K线底部时间刻度线
     TimeXAxis xAxisLine;
-    YAxis axisRightLine;
+    // K线左侧价格刻度线
     YAxis axisLeftLine;
+    // K线右侧涨幅刻度线
+    YAxis axisRightLine;
 
+    // 成交量底部刻度线
     TimeXAxis xAxisBar;
+    // 成交量左侧刻度线
     YAxis axisLeftBar;
+    // 成交量右侧刻度线
     YAxis axisRightBar;
 
     private int maxCount = ChartType.HK_ONE_DAY.getPointNum();//最大可见数量，即分时一天最大数据点数
@@ -222,37 +233,38 @@ public class OneDayChart extends BaseChart {
         lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                lineChart.highlightValue(h);
+                // 当触摸K线时，配置参数显示成交量对应的指标线
                 barChart.highlightValue(new Highlight(h.getX(), h.getDataSetIndex(), -1));
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, (int) e.getX(), true);
-                }
             }
 
             @Override
             public void onNothingSelected() {
-                barChart.highlightValues(null);
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, 0, false);
-                }
+                barChart.highlightValue(null);
             }
         });
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                barChart.highlightValue(h);
-                lineChart.highlightValue(new Highlight(h.getX(), h.getDataSetIndex(), -1));
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, (int) e.getX(), true);
+                LogInfra.Log.d(TAG, "barChart OnChartValueSelectedListener onValueSelected = " + h);
+                // 当触摸范围移动到K线范围内时，配置参数显示K线对应的指标线
+                Highlight highlight = new Highlight(h.getX(), h.getDataSetIndex(), -1);
+                // y为负数代表已经移动到成交量的外部
+                if (h.getTouchY() < 0) {
+                    float touchY = h.getTouchY() + lineChart.getHeight();
+                    Highlight h1 = lineChart.getHighlightByTouchPoint(h.getX(), touchY);
+                    if (h1 == null) {
+                        highlight.setTouchY(0f);
+                    } else {
+                        highlight.setTouchY(touchY);
+                        highlight.setTouchYValue(h1.getTouchYValue());
+                    }
                 }
+                lineChart.highlightValue(highlight);
             }
 
             @Override
             public void onNothingSelected() {
-                lineChart.highlightValues(null);
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, 0, false);
-                }
+                lineChart.highlightValue(null);
             }
         });
 

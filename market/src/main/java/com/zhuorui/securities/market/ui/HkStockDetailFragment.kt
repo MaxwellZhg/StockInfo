@@ -97,6 +97,8 @@ class HkStockDetailFragment :
         rv_hk_stock3.adapter=infoadapter
         ll_hs_point.setOnClickListener(this)
         rl_new_stock_date.setOnClickListener(this)
+        ll_part_one.setOnClickListener(this)
+        ll_part_two.setOnClickListener(this)
     }
 
     /**
@@ -176,6 +178,12 @@ class HkStockDetailFragment :
            }
            R.id.rl_new_stock_date->{
                parent.start(NewStockDateFragment.newInstance())
+           }
+           R.id.ll_part_one->{
+               parent.start(MarketPartInfoFragment.newInstance(1))
+           }
+           R.id.ll_part_two->{
+               parent.start(MarketPartInfoFragment.newInstance(2))
            }
        }
     }
