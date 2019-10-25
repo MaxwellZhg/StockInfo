@@ -59,6 +59,14 @@ public class Highlight {
      * the y-position (pixels) on which this highlight object was last drawn
      */
     private float mDrawY;
+    /**
+     * 手指点击的区域
+     */
+    private float mTouchX, mTouchY;
+    /**
+     * 手指点击的区域的值
+     */
+    private float[] mTouchYValue;
 
     //用这个会造成同一条
     public Highlight(float x, float y, int dataSetIndex) {
@@ -71,6 +79,13 @@ public class Highlight {
     public Highlight(float x, int dataSetIndex, int stackIndex) {
         this(x, Float.NaN, dataSetIndex);
         this.mStackIndex = stackIndex;
+    }
+
+    public Highlight(float x, float y, int dataIndex, int dataSetIndex) {
+        this.mX = x;
+        this.mY = y;
+        this.mDataIndex = dataIndex;
+        this.mDataSetIndex = dataSetIndex;
     }
 
     /**
@@ -110,6 +125,10 @@ public class Highlight {
      */
     public float getX() {
         return mX;
+    }
+
+    public void setY(float y) {
+        this.mY = y;
     }
 
     /**
@@ -209,6 +228,30 @@ public class Highlight {
         return mDrawY;
     }
 
+    public void setTouchX(float touchX) {
+        this.mTouchX = touchX;
+    }
+
+    public float getTouchX() {
+        return mTouchX;
+    }
+
+    public void setTouchY(float touchY) {
+        this.mTouchY = touchY;
+    }
+
+    public float getTouchY() {
+        return mTouchY;
+    }
+
+    public void setTouchYValue(float[] touchYValue) {
+        this.mTouchYValue = touchYValue;
+    }
+
+    public float[] getTouchYValue() {
+        return mTouchYValue;
+    }
+
     /**
      * Returns true if this highlight object is equal to the other (compares
      * xIndex and dataSetIndex)
@@ -228,7 +271,7 @@ public class Highlight {
 
     @Override
     public String toString() {
-        return "Highlight, x: " + mX + ", y: " + mY + ", dataSetIndex: " + mDataSetIndex
+        return "Highlight, x: " + mX + ", y: " + mY + ", touchX:" + mTouchX + ", touchY:" + mTouchY + ", dataSetIndex: " + mDataSetIndex
                 + ", stackIndex (only stacked barentry): " + mStackIndex;
     }
 }

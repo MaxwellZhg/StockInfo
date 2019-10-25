@@ -88,6 +88,31 @@ class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
         return "LocalSettingsConfig(stocksThemeColor=$stocksThemeColor, appLanguage=$appLanguage)"
     }
 
+    /**
+     * 根据价格获取涨跌颜色
+     * @param price 当前价格
+     * @param oldPrice 开盘价，或用作对比价格
+     */
+    fun getUpDownColor(price: Float, oldPrice: Float): Int {
+        return getUpDownColor(price, oldPrice, getDefaultColor())
+    }
+
+    /**
+     * 根据价格获取涨跌颜色
+     * @param price 当前价格
+     * @param oldPrice 开盘价，或用作对比价格
+     * @param defColor 平价颜色
+     */
+    fun getUpDownColor(price: Float, oldPrice: Float, defColor: Int): Int {
+        return if (price > oldPrice) {
+            getUpColor()
+        } else if (price < oldPrice) {
+            getDownColor()
+        } else {
+            defColor
+        }
+    }
+
     companion object {
 
         val sorckColorRed = Color.parseColor("#FFFF0000")

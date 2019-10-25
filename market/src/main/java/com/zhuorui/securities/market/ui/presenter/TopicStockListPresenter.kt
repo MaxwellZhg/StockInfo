@@ -375,7 +375,9 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
-        viewModel?.datas?.value?.let { topicPrice(it) }
+        viewModel?.datas?.value?.let {
+            //使用克隆数据，防止在迭代时，数据发生改变而奔溃
+            topicPrice(it.clone() as ArrayList<StockMarketInfo>) }
     }
 
     override fun destroy() {

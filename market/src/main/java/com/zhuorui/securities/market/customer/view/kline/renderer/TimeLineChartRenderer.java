@@ -3,21 +3,28 @@ package com.zhuorui.securities.market.customer.view.kline.renderer;
 import android.graphics.*;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
+import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
 import com.zhuorui.securities.market.customer.view.kline.event.BaseEvent;
 import com.zhuorui.securities.market.customer.view.kline.model.CirclePositionTime;
 
 /**
- * 当前价格虚线
+ * 绘制K线渲染器
  * Created by ly on 2017/7/3.
  */
 
 public class TimeLineChartRenderer extends LineChartRenderer {
+
+    private final String TAG = this.getClass().getSimpleName();
 
     private double preClose;//昨收价
 
@@ -285,6 +292,48 @@ public class TimeLineChartRenderer extends LineChartRenderer {
 //        mRenderPaint.setColor(Color.RED);
 //        postPosition(dataSet, mLineBuffer[pointOffset - 2], mLineBuffer[pointOffset - 1]);
 //    }
+
+    @Override
+    public void drawHighlighted(Canvas c, Highlight[] indices) {
+
+        LineData lineData = mChart.getLineData();
+
+        for (Highlight high : indices) {
+
+            ILineDataSet set = lineData.getDataSetByIndex(high.getDataSetIndex());
+
+            if (set == null || !set.isHighlightEnabled()) {
+                continue;
+            }
+
+            Entry e = set.getEntryForXValue(high.getX(), high.getY());
+
+            if (!isInBoundsX(e, set))
+                continue;
+
+            MPPointD pix;
+            float[] touchYValue = high.getTouchYValue();
+            if (touchYValue == null) {
+                if (set instanceof LineDataSet) {
+                    ((LineDataSet) set).setDrawHorizontalHighlightIndicator(false);
+                }
+                pix = mChart.getTransformer(set.getAxisDependency()).getPixelForValues(e.getX(), e.getY() * mAnimator
+                        .getPhaseY());
+            } else {
+                if (set instanceof LineDataSet) {
+                    ((LineDataSet) set).setDrawHorizontalHighlightIndicator(true);
+                }
+                pix = mChart.getTransformer(set.getAxisDependency()).getPixelForValues(e.getX(), touchYValue[0]);
+            }
+
+            high.setDraw((float) pix.x, (float) pix.y);
+
+            // draw the lines
+            drawHighlightLines(c, (float) pix.x, (float) pix.y, set);
+
+            LogInfra.Log.d(TAG, "drawHighlighted x = " + pix.x + ", y = " + pix.y);
+        }
+    }
 
     public void setPreClose(double preClose) {
         this.preClose = preClose;

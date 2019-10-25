@@ -36,10 +36,29 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
         MPPointD pos = getValsForTouch(x, y);
         float xVal = (float) pos.x;
         MPPointD.recycleInstance(pos);
-
         Highlight high = getHighlightForX(xVal, x, y);
+        high.setTouchX(x);
+        high.setTouchY(y);
+        high.setTouchYValue(getYValue(y));
         return high;
     }
+
+    /**
+     * 获取Y坐标对应的值
+     *
+     * @param y 坐标值
+     * @return 刻度值
+     */
+    private float[] getYValue(float y) {
+        float[] pts1 = new float[2];
+        pts1[1] = y;
+        mChart.getTransformer(YAxis.AxisDependency.LEFT).pixelsToValue(pts1);
+        float[] pts2 = new float[2];
+        pts2[1] = y;
+        mChart.getTransformer(YAxis.AxisDependency.RIGHT).pixelsToValue(pts2);
+        return new float[]{pts1[1], pts2[1]};
+    }
+
 
     /**
      * Returns a recyclable MPPointD instance.
