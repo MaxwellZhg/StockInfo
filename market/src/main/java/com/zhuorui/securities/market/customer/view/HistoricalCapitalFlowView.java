@@ -67,7 +67,7 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     }
 
     private void initAnimator() {
-        ((ViewGroup)findViewById(R.id.root_view)).setLayoutTransition(new LayoutTransition());
+        ((ViewGroup) findViewById(R.id.root_view)).setLayoutTransition(new LayoutTransition());
     }
 
     private void initBarChart() {
@@ -93,7 +93,7 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         xAxis.setTextSize(12f);
         xAxis.setTextColor(Color.parseColor("#7B889E"));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        //X轴设置
+        //Y轴设置
         YAxis axisLeft = vChart.getAxisLeft();
         axisLeft.setDrawGridLines(false);
         axisLeft.setDrawAxisLine(false);
@@ -142,12 +142,37 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     }
 
     private void setBarData(List<BarEntry> entryList, List<Integer> color) {
+        BarDataSet barDataSet = new BarDataSet(entryList, "");
         vTotal.setVisibility(GONE);
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) vChart.getLayoutParams();
         lp.leftMargin = (int) (getResources().getDisplayMetrics().density * 15);
         lp.rightMargin = lp.leftMargin;
         vChart.setLayoutParams(lp);
-        BarDataSet barDataSet = new BarDataSet(entryList, "");
+        vChart.setDrawBorders(false);
+        XAxis xAxis = vChart.getXAxis();
+        xAxis.setLabelCount(entryList.size());
+        xAxis.setAvoidFirstLastClipping(false);
+        //解决柱状图左右两边只显示了一半的问题
+        xAxis.setAxisMinimum(-0.5f);
+        xAxis.setAxisMaximum((float) (entryList.size() - 0.5));
+        YAxis leftAxis = vChart.getAxisLeft();
+        leftAxis.setDrawZeroLine(true);
+        //数据上下留空间出显示Values
+        float max = barDataSet.getYMax();
+        float min = barDataSet.getYMin();
+        double maxMinAbs = Math.abs(max - min);
+        float maxMinAbs15 = (float) (maxMinAbs * 0.15);
+        float maxMinAbs05 = (float) (maxMinAbs * 0.05);
+        if (max < maxMinAbs15) {
+            leftAxis.setAxisMaximum(maxMinAbs15);
+            leftAxis.setAxisMinimum(min - maxMinAbs05);
+        } else if (min > -maxMinAbs15) {
+            leftAxis.setAxisMaximum(max + maxMinAbs05);
+            leftAxis.setAxisMinimum(-maxMinAbs15);
+        } else {
+            leftAxis.setAxisMaximum(max + maxMinAbs05);
+            leftAxis.setAxisMinimum(min - maxMinAbs05);
+        }
         barDataSet.setValueTextSize(10f);
         barDataSet.setColors(color);
         barDataSet.setValueTextColors(color);
@@ -162,35 +187,13 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         });
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth(0.5f);
-        vChart.setDrawBorders(false);
-        vChart.getXAxis().setAvoidFirstLastClipping(false);
-        //数据上下留空间出显示Values
-        vChart.getAxisLeft().setDrawZeroLine(true);
-        float max = barDataSet.getYMax();
-        float min = barDataSet.getYMin();
-        double maxMinAbs = Math.abs(max - min);
-        float maxMinAbs15 = (float) (maxMinAbs * 0.15);
-        float maxMinAbs05 = (float) (maxMinAbs * 0.05);
-        if (max < maxMinAbs15) {
-            vChart.getAxisLeft().setAxisMaximum(maxMinAbs15);
-            vChart.getAxisLeft().setAxisMinimum(min - maxMinAbs05);
-        } else if (min > -maxMinAbs15) {
-            vChart.getAxisLeft().setAxisMaximum(max + maxMinAbs05);
-            vChart.getAxisLeft().setAxisMinimum(-maxMinAbs15);
-        } else {
-            vChart.getAxisLeft().setAxisMaximum(max + maxMinAbs05);
-            vChart.getAxisLeft().setAxisMinimum(min - maxMinAbs05);
-        }
-        vChart.getXAxis().setLabelCount(entryList.size());
         CombinedData combinedData = new CombinedData();
         combinedData.setData(barData);
         vChart.setData(combinedData);
-        //以下是为了解决 柱状图 左右两边只显示了一半的问题 根据实际情况 而定
-        vChart.getXAxis().setAxisMinimum(-0.5f);
-        vChart.getXAxis().setAxisMaximum((float) (entryList.size() - 0.5));
-        List<DataRenderer> renderers = new ArrayList<>();
-        renderers.add(new HCFVRenderer(vChart, vChart.getAnimator(), vChart.getViewPortHandler()));
-        ((CombinedChartRenderer) vChart.getRenderer()).setSubRenderers(renderers);
+        //柱形图使用自定义BarChartRenderer ，必须在setData 后设置
+        List<DataRenderer> renders = new ArrayList<>();
+        renders.add(new HCFVRenderer(vChart, vChart.getAnimator(), vChart.getViewPortHandler()));
+        ((CombinedChartRenderer) vChart.getRenderer()).setSubRenderers(renders);
         vChart.getRenderer().initBuffers();
         vChart.invalidate();
     }

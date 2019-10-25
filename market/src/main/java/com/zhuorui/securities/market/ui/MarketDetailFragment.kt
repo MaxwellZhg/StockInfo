@@ -1,13 +1,11 @@
 package com.zhuorui.securities.market.ui
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -29,7 +27,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 /**
@@ -41,6 +38,12 @@ import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
     MarketDetailView, View.OnClickListener {
+
+    companion object {
+        fun newInstance(): MarketDetailFragment {
+            return MarketDetailFragment()
+        }
+    }
 
     private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", "F10")
     private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(4)
@@ -61,11 +64,6 @@ class MarketDetailFragment :
     override val getView: MarketDetailView
         get() = this
 
-    companion object {
-        fun newInstance(): MarketDetailFragment {
-            return MarketDetailFragment()
-        }
-    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
@@ -90,7 +88,11 @@ class MarketDetailFragment :
             datas2.add("item$i")
         }
         orderBroker.setData(datas2, datas2)
+    }
 
+    override fun upTopBarInfo(info: String, color: Int) {
+        tv_status.text = info
+        tv_status.setTextColor(color)
     }
 
     override fun onClick(v: View?) {
@@ -109,13 +111,17 @@ class MarketDetailFragment :
         top_bar.setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0)
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
-        magic_indicator.navigator =  getNavigator()
-        top_magic_indicator.navigator =  getNavigator()
+        magic_indicator.navigator = getNavigator()
+        top_magic_indicator.navigator = getNavigator()
         loadRootFragment(R.id.kline_view, KlineFragment())
         scroll_view.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
-            if (magic_indicator != null && top_magic_indicator!= null){
-                val visibility = if (magic_indicator.top < scrollY) View.VISIBLE else View.GONE
-                if (visibility != top_magic_indicator.visibility)top_magic_indicator.visibility = visibility
+            if (magic_indicator != null) {
+                top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+            }
+            if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
+                presenter?.getTopBarPriceInfo()
+            } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
+                presenter?.getTopBarStockStatusInfo()
             }
         }
     }
@@ -156,6 +162,7 @@ class MarketDetailFragment :
             mFragments[3] = findChildFragment(MarketDetailF10Fragment::class.java)
         }
     }
+
 
     /**
      * 获取指示器适配器

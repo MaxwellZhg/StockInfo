@@ -9,4 +9,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface MarketDetailView : AbsView{
+    fun upTopBarInfo(info: String, color: Int)
 }
