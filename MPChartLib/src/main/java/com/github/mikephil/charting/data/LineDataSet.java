@@ -67,6 +67,11 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
 
     private boolean mDrawCircleDashMarker = true;
 
+    /**
+     * 在长按触摸图表时，是否需要绘制当前位置的圆点
+     */
+    private boolean mDrawHighlightCircle = false;
+
     private SparseArray<String> xLabels;
 
     public LineDataSet(List<Entry> yVals, String label) {
@@ -409,6 +414,15 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
     @Override
     public boolean isDrawCircleDashMarkerEnabled() {
         return mDrawCircleDashMarker;
+    }
+
+    public void setDrawHighlightCircle(boolean drawHighlightCircle) {
+        this.mDrawHighlightCircle = drawHighlightCircle;
+    }
+
+    @Override
+    public boolean isDrawHighlightCircle() {
+        return mDrawHighlightCircle;
     }
 
     /**

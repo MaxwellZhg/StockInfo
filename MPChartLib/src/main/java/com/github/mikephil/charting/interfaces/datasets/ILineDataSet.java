@@ -109,4 +109,10 @@ public interface ILineDataSet extends ILineRadarDataSet<Entry> {
 
     //获取
     SparseArray<String> getXLabels();
+
+    /**
+     * 在长按触摸图表时，是否需要绘制当前位置的圆点
+     * @return
+     */
+    boolean isDrawHighlightCircle();
 }
