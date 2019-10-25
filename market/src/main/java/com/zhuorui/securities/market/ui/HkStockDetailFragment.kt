@@ -99,6 +99,7 @@ class HkStockDetailFragment :
         rl_new_stock_date.setOnClickListener(this)
         ll_part_one.setOnClickListener(this)
         ll_part_two.setOnClickListener(this)
+        tv_all_hk_stock.setOnClickListener(this)
     }
 
     /**
@@ -184,6 +185,9 @@ class HkStockDetailFragment :
            }
            R.id.ll_part_two->{
                parent.start(MarketPartInfoFragment.newInstance(2))
+           }
+           R.id.tv_all_hk_stock->{
+               parent.start(AllHkStockFragment.newInstance())
            }
        }
     }

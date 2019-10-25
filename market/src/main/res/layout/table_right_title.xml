@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge android:id="@+id/merge_sales"
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+    <LinearLayout android:id="@+id/ll_right_content_0"
+              style="@style/Linelayout_Tab_Right_Content">
+        <TextView android:id="@+id/tv_table_title_0"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="最新价"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_1"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_1"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_price"
+              android:text="涨跌幅"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_2"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_2"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="涨跌价"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_3"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_3"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="成交量"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_4"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_4"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="成交额"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_5"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_5"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="市盈率"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_6"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_6"
+              style="@style/TextView_Table_Right"
+              android:text="换手率"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_7"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_7"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="振幅"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_8"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_8"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="市值"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_9"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_9"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="量比"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/ll_right_content_10"
+                  style="@style/Linelayout_Tab_Right_Content">
+    <TextView android:id="@+id/tv_table_title_10"
+              style="@style/TextView_Table_Right"
+              android:drawableEnd="@mipmap/icon_up_rate"
+              android:text="委比"/>
+    </LinearLayout>
+</merge>
