@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle

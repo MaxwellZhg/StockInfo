@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.adapter
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -192,6 +193,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
 
 
         init {
+            (v.findViewById(R.id.root_view)as ViewGroup).setLayoutTransition(LayoutTransition())
             item = v.findViewById(R.id.item_bg)
             btnGroup = v.findViewById(R.id.btn_group)
             business = v.findViewById(R.id.tv_business)

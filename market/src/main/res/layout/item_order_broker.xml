@@ -5,7 +5,7 @@
               android:background="#1A6ED2"
               android:paddingLeft="13dp"
               android:paddingRight="13dp"
-              android:layout_height="23.5dp">
+              android:layout_height="24dp">
 
     <TextView
             android:id="@+id/tv_code"

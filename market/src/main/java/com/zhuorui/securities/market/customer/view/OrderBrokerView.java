@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.customer.view;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.securities.market.R;
@@ -108,6 +108,8 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         private Context context;
         private int mNum = 0;
         private int itemCount = 0;
+        private int lineSize = 0;
+        private int mItemHeight = 0;
         private List<Object> mBuyingDatas;
         private List<Object> mSellingDatas;
         private List<Object> mDatas;
@@ -117,6 +119,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             mBuyingDatas = new ArrayList<>();
             mSellingDatas = new ArrayList<>();
             mDatas = new ArrayList<>();
+            mItemHeight = (int) (context.getResources().getDisplayMetrics().density * 24);
         }
 
         @NonNull
@@ -158,7 +161,6 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         private void initData() {
             mDatas.clear();
             int relSize = Math.max(mBuyingDatas.size(), mSellingDatas.size());
-            int lineSize;
             int spanCount;//一行单边数据条数
             if (mNum == -1) {
                 spanCount = 4;
@@ -188,6 +190,9 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             }
         }
 
+        public int getHeight() {
+            return lineSize * mItemHeight;
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
