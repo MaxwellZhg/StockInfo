@@ -10,6 +10,8 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.R2.id.buyingSellingFiles
+import com.zhuorui.securities.market.R2.id.orderBroker
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
@@ -19,6 +21,7 @@ import com.zhuorui.securities.market.net.request.DeleteStockRequest
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import kotlinx.android.synthetic.main.fragment_market_detail.*
 
 /**
  *    author : liuwei
@@ -115,6 +118,19 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         }
+    }
+
+    fun getData() {
+        val datas = mutableListOf<Int>()
+        for (i: Int in 1..10) {
+            datas.add(i)
+        }
+        view?.upBuyingSellingFilesData(7458f, 2442f, datas, datas)
+        val datas2 = mutableListOf<String>()
+        for (i: Int in 1..30) {
+            datas2.add("item$i")
+        }
+        view?.upOrderBrokerData(datas2, datas2)
     }
 
 

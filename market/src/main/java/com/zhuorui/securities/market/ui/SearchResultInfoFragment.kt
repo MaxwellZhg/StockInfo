@@ -221,14 +221,14 @@ class SearchResultInfoFragment :
     override fun showError() {
          sm_refrsh.finishLoadMore(false)
     }
-    override fun onClickStockIntoDetail() {
-       gotoDetail()
+    override fun onClickStockIntoDetail(stock:SearchStockInfo) {
+       gotoDetail(stock)
     }
-    override fun onClickStockAllIntoDeatil() {
-        gotoDetail()
+    override fun onClickStockAllIntoDeatil(stock:SearchStockInfo) {
+        gotoDetail(stock)
     }
-    fun gotoDetail(){
-        (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance())
+    fun gotoDetail(stock:SearchStockInfo){
+        (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance(stock))
     }
 
 }

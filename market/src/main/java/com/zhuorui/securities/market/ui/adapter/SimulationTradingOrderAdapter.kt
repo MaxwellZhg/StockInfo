@@ -146,13 +146,13 @@ class SimulationTradingOrderAdapter(context: Context) : RecyclerView.Adapter<Rec
                         val pos: Int = it.tag as Int
                         val data = datas!![pos]
                         hideMu(itemViewHolder,pos)
-                        listener?.toQuotation(data.code.toString(), data.ts.toString())
+                        listener?.toQuotation(data.code.toString(), data.ts.toString(),data.getTsCode(),data.stockName.toString())
                     }
                     itemViewHolder.orderQuotation?.setOnClickListener {
                         val pos: Int = it.tag as Int
                         val data = datas!![pos]
                         hideMu(itemViewHolder,pos)
-                        listener?.toQuotation(data.code.toString(), data.ts.toString())
+                        listener?.toQuotation(data.code.toString(), data.ts.toString(),data.getTsCode(),data.stockName.toString())
                     }
                     itemViewHolder.change?.setOnClickListener {
                         val pos: Int = it.tag as Int

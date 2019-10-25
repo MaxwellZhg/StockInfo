@@ -88,13 +88,11 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         }
 
         override fun onClick(v: View) {
-                if (v == iv_topic) {
-                    getItem(position)?.let { onStockColollectListenner?.onStockCollectionStock(it) }
-                }else if(v == rl_stock){
-                    onClickStockIntoStockDetailListener?.onClickStockIntoDetail()
-                } else {
-                    super.onClick(v)
-                }
+            when (v) {
+                iv_topic -> getItem(position)?.let { onStockColollectListenner?.onStockCollectionStock(it) }
+                rl_stock -> getItem(position)?.let { onClickStockIntoStockDetailListener?.onClickStockIntoDetail(it) }
+                else -> super.onClick(v)
+            }
         }
     }
 
@@ -112,7 +110,7 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
        fun onStockCollectionStock(stockInfo:SearchStockInfo)
      }
     interface OnClickStockIntoStockDetailListener{
-        fun onClickStockIntoDetail()
+        fun onClickStockIntoDetail(stockInfo:SearchStockInfo)
     }
     override fun getItemCount(): Int {
         return when {

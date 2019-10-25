@@ -33,6 +33,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
 import java.util.*
+import kotlin.math.sinh
 
 /**
  *    author : PengXianglin
@@ -87,17 +88,18 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             calculateBuyMoney()
         })
 
-        setTradType()
+//        setTradType()
     }
 
     /**
      * 根据交易类型设置界面
      */
-    private fun setTradType() {
+    fun setTradType() {
         // 获取传递订单参数
         val arguments = fragment.arguments
         val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
         val tradType = arguments?.getInt(SimulationTradingStocksFragment.TRAD_TYPE_KEY)
+        val stockInfo = if(orderData == null)arguments?.getParcelable<SearchStockInfo>(SearchStockInfo::class.java.simpleName) else null
         if (orderData != null) {
             // 设置股票信息
             val stockInfo = SearchStockInfo()
@@ -170,6 +172,10 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     }
                 }
             }
+        }else if (stockInfo != null){
+            // 显示默认购买状态
+            view?.changeTrustType(0)
+            setStock(stockInfo)
         } else {
             // 显示默认购买状态
             view?.changeTrustType(0)

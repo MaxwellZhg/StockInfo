@@ -140,7 +140,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                     val pos: Int = it.tag as Int
                     val data = datas!![pos]
                     hideMu(itemViewHolder,pos)
-                    listener?.toQuotation(data.code.toString(), data.ts.toString())
+                    listener?.toQuotation(data.code.toString(), data.ts.toString(),data.getTsCode(),data.stockName.toString())
                 }
                 itemViewHolder
             }
@@ -254,7 +254,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         /**
          * 去行情
          */
-        fun toQuotation(code: String, ts: String)
+        fun toQuotation(code: String, ts: String,tsCode:String,name:String)
 
         /**
          * 选择监听

@@ -20,6 +20,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.R2.id.order
 import com.zhuorui.securities.market.custom.TradingStocksOrderDialog
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
 import com.zhuorui.securities.market.model.PushStockTransData
@@ -62,6 +63,14 @@ class SimulationTradingStocksFragment :
             val arguments = Bundle()
             arguments.putInt(TRAD_TYPE_KEY, tradType)
             arguments.putParcelable(STOrderData::class.java.simpleName, order)
+            fragment.arguments = arguments
+            return fragment
+        }
+
+        fun newInstance(stock: SearchStockInfo): SimulationTradingStocksFragment {
+            val fragment = SimulationTradingStocksFragment()
+            val arguments = Bundle()
+            arguments.putParcelable(SearchStockInfo::class.java.simpleName, stock)
             fragment.arguments = arguments
             return fragment
         }
@@ -112,6 +121,11 @@ class SimulationTradingStocksFragment :
                 presenter?.onEditBuyCount(s?.toString())
             }
         })
+    }
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
+        presenter?.setTradType()
     }
 
     override fun onClick(p0: View?) {

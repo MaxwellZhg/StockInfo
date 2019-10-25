@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.ScrollView
 import androidx.lifecycle.ViewModelProviders
@@ -9,17 +10,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.commonwidget.dialog.TitleMessageConfirmDialog
+import com.zhuorui.securities.base2app.BaseApplication.Companion.context
 import com.zhuorui.securities.base2app.dialog.BaseDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.R2.id.*
 import com.zhuorui.securities.market.customer.view.SimulationTradingFundAccountView
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingMainBinding
 import com.zhuorui.securities.market.model.STFundAccountData
 import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.STPositionData
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.adapter.HoldPositionsListAdapter
 import com.zhuorui.securities.market.ui.adapter.SimulationTradingOrderAdapter
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingMainPresenter
@@ -56,15 +60,24 @@ class SimulationTradingMainFragment :
     private var loading: ProgressDialog? = null
     private var fist: Boolean = true
     private var confirmDialog: BaseDialog? = null
+    private var toStockData: SearchStockInfo? = null
 
     companion object {
         fun newInstance(): SimulationTradingMainFragment {
             return SimulationTradingMainFragment()
         }
+
+        fun newInstance(stock: SearchStockInfo): SimulationTradingMainFragment {
+            val fragment = SimulationTradingMainFragment()
+            val arguments = Bundle()
+            arguments.putParcelable(SearchStockInfo::class.java.simpleName, stock)
+            fragment.arguments = arguments
+            return fragment
+        }
     }
 
     override val layout: Int
-        get() = com.zhuorui.securities.market.R.layout.fragment_simulation_trading_main
+        get() = R.layout.fragment_simulation_trading_main
 
     override val viewModelId: Int
         get() = BR.viewModel
@@ -77,6 +90,11 @@ class SimulationTradingMainFragment :
 
     override val getView: SimulationTradingMainView
         get() = this
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        toStockData = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)
+    }
 
     override fun onClick(p0: View?) {
         when (p0) {
@@ -199,8 +217,13 @@ class SimulationTradingMainFragment :
     /**
      * 去行情
      */
-    override fun toQuotation(code: String, ts: String) {
-        start(MarketDetailFragment.newInstance())
+    override fun toQuotation(code: String, ts: String, tsCode: String, name: String) {
+        val stock = SearchStockInfo()
+        stock.code = code
+        stock.ts = ts
+        stock.tsCode = tsCode
+        stock.name = name
+        start(MarketDetailFragment.newInstance(stock))
     }
 
     /**
@@ -246,6 +269,26 @@ class SimulationTradingMainFragment :
         }
         notifyTitleTab()
         fund_account?.setData(fundAccount)
+
+        //去买卖
+        if (toStockData != null) {
+            var orderData: STOrderData? = null
+            if (positionDatas != null) {
+                for (data in positionDatas) {
+                    if (TextUtils.equals(data.getTsCode(), toStockData!!.tsCode)) {
+                        orderData = data
+                        break
+                    }
+                }
+            }
+            if (orderData != null) {
+                toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT, orderData)
+            } else {
+                val stock = toStockData!!
+                start(SimulationTradingStocksFragment.newInstance(stock))
+            }
+            toStockData = null
+        }
     }
 
     override fun onGetFundAccountError(code: String?, msg: String?) {

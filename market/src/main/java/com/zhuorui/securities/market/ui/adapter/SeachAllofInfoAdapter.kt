@@ -82,8 +82,8 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
         override fun topicStockInfo(stockInfo: SearchStockInfo) {
            onTopicStockInfoListenner?.onClickCollectionStock(stockInfo)
         }
-        override fun onClickStockIntoDetail() {
-            onClickStockAllIntoStockDetailListener?.onClickStockAllIntoDeatil()
+        override fun onClickStockIntoDetail(stock:SearchStockInfo) {
+            onClickStockAllIntoStockDetailListener?.onClickStockAllIntoDeatil(stock)
         }
     }
     inner class ViewHolderBottom(v: View?, needClick: Boolean, needLongClick: Boolean):
@@ -119,7 +119,7 @@ class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultD
    }
 
   interface OnClickStockAllIntoStockDetailListener{
-      fun onClickStockAllIntoDeatil()
+      fun onClickStockAllIntoDeatil(stock:SearchStockInfo)
   }
 
 }

@@ -13,12 +13,15 @@ import com.zhuorui.securities.base2app.util.StatusBarUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
+import com.zhuorui.securities.market.util.MarketUtil
 import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.fragment_market_detail.magic_indicator
+import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -39,9 +42,15 @@ class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
     MarketDetailView, View.OnClickListener {
 
+    private var mStock: SearchStockInfo? = null
+
     companion object {
-        fun newInstance(): MarketDetailFragment {
-            return MarketDetailFragment()
+        fun newInstance(stock: SearchStockInfo): MarketDetailFragment {
+            val b = Bundle()
+            b.putParcelable(SearchStockInfo::class.java.simpleName, stock)
+            val fragment = MarketDetailFragment()
+            fragment.arguments = b
+            return fragment
         }
     }
 
@@ -65,34 +74,53 @@ class MarketDetailFragment :
         get() = this
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mStock = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)!!
+    }
+
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-//        initView()
+        initView()
+        setTopbarData()
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
-        initView()
-        setTestData()
+        presenter?.getData()
     }
 
-    private fun setTestData() {
-        val datas = mutableListOf<Int>()
-        for (i: Int in 1..10) {
-            datas.add(i)
-        }
-        buyingSellingFiles.setData(7458f, 2442f, datas, datas)
-
-        val datas2 = mutableListOf<String>()
-        for (i: Int in 1..30) {
-            datas2.add("item$i")
-        }
-        orderBroker.setData(datas2, datas2)
+    private fun setTopbarData() {
+        tv_title.text = String.format("%s(%s)", mStock?.name, mStock?.code)
+        var left = MarketUtil.getStockTSIcon(mStock?.ts)
+        tv_title.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0)
     }
 
+    /**
+     * 更新TopBar数据
+     */
     override fun upTopBarInfo(info: String, color: Int) {
         tv_status.text = info
         tv_status.setTextColor(color)
+    }
+
+    /**
+     * 更新买卖盘档数据
+     */
+    override fun upBuyingSellingFilesData(
+        buy: Float,
+        sell: Float,
+        buyData: MutableList<Int>,
+        sellData: MutableList<Int>
+    ) {
+        buyingSellingFiles.setData(buy, sell, buyData, sellData)
+    }
+
+    /**
+     * 更新买卖经纪数据
+     */
+    override fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>) {
+        orderBroker.setData(buyData, sellData)
     }
 
     override fun onClick(v: View?) {
@@ -103,6 +131,9 @@ class MarketDetailFragment :
             iv_search -> {
                 start(SearchInfoFragment.newInstance())
             }
+            tv_simulation_trading -> {
+                start(SimulationTradingMainFragment.newInstance(mStock!!))
+            }
         }
 
     }
@@ -111,10 +142,11 @@ class MarketDetailFragment :
         top_bar.setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0)
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
+        tv_simulation_trading.setOnClickListener(this)
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         loadRootFragment(R.id.kline_view, KlineFragment())
-        scroll_view.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+        scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
                 top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             }
@@ -174,7 +206,7 @@ class MarketDetailFragment :
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
             override fun getCount(): Int {
-                return tabTitle?.size!!
+                return tabTitle.size
             }
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
@@ -182,7 +214,7 @@ class MarketDetailFragment :
                 colorTransitionPagerTitleView.normalColor = Color.parseColor("#C0CCE0")
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 18f
-                colorTransitionPagerTitleView.text = tabTitle!![index]
+                colorTransitionPagerTitleView.text = tabTitle[index]
                 colorTransitionPagerTitleView.setOnClickListener {
                     onSelect(index)
                 }
