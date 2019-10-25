@@ -10,8 +10,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.R2.id.buyingSellingFiles
-import com.zhuorui.securities.market.R2.id.orderBroker
+import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
@@ -21,7 +20,6 @@ import com.zhuorui.securities.market.net.request.DeleteStockRequest
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import kotlinx.android.synthetic.main.fragment_market_detail.*
 
 /**
  *    author : liuwei
@@ -32,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail.*
 class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailViewModel>() {
 
     private var topBarInfoTp = 0 // 0 状态，1 价格
+    private var isCollected:Boolean = false
 
     /**
      * 获取topbar 显示股票价格信息
@@ -59,7 +58,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     /**
      * 添加删除自选到自选
      */
-    fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
+    fun collectionStock(stockInfo: SearchStockInfo) {
         if (LocalAccountConfig.read().isLogin()) {
             // 已登录
             if (isCollected) {
@@ -90,7 +89,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                     ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
             }
         } else {
-            stockInfo.collect = !isCollected
+            isCollected = !isCollected
             // 未登录
             if (isCollected) {
                 // 传递删除自选股事件
@@ -101,6 +100,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 RxBus.getDefault().post(AddTopicStockEvent(stockInfo))
                 ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
             }
+            view?.upFollow(isCollected)
         }
     }
 
@@ -112,15 +112,30 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
             //updateCurrentFragmentData(str)
             ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
+            isCollected = true
+            view?.upFollow(true)
         } else if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             // 传递删除自选股事件
             RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+            isCollected = false
+            view?.upFollow(false)
         }
     }
 
-    fun getData() {
+    fun getData(stockInfo: SearchStockInfo) {
+        isCollected = false
+        val localStocks = LocalStocksConfig.getInstance().getStocks()
+        if (localStocks.isNotEmpty()) {
+            for (stock in localStocks) {
+                if (stock.ts.equals(stockInfo.ts) && stock.code.equals(stockInfo.code)) {
+                    isCollected = true
+                    break
+                }
+            }
+        }
+        view?.upFollow(isCollected)
         val datas = mutableListOf<Int>()
         for (i: Int in 1..10) {
             datas.add(i)

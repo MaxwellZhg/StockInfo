@@ -12,4 +12,5 @@ interface MarketDetailView : AbsView {
     fun upTopBarInfo(info: String, color: Int)
     fun upBuyingSellingFilesData(buy: Float, sell: Float, buyData: MutableList<Int>, sellData: MutableList<Int>)
     fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>)
+    fun upFollow(collected: Boolean)
 }

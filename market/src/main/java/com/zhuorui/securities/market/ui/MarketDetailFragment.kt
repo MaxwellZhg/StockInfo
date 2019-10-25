@@ -14,6 +14,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailView
@@ -87,13 +88,18 @@ class MarketDetailFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
-        presenter?.getData()
+        presenter?.getData(mStock!!)
     }
 
     private fun setTopbarData() {
         tv_title.text = String.format("%s(%s)", mStock?.name, mStock?.code)
         var left = MarketUtil.getStockTSIcon(mStock?.ts)
         tv_title.setCompoundDrawablesWithIntrinsicBounds(left, 0, 0, 0)
+    }
+
+    override fun upFollow(collected: Boolean) {
+        val top = if (collected) R.mipmap.ic_heart_ff8e1b else R.mipmap.ic_heart_c3cde3
+        tv_follow.setCompoundDrawablesWithIntrinsicBounds(0,top,0,0)
     }
 
     /**
@@ -134,6 +140,18 @@ class MarketDetailFragment :
             tv_simulation_trading -> {
                 start(SimulationTradingMainFragment.newInstance(mStock!!))
             }
+            tv_remind->{
+                val sm = StockMarketInfo()
+                sm.name = mStock?.name
+                sm.code = mStock?.code
+                sm.id = mStock?.id
+                sm.ts = mStock?.ts
+                sm.tsCode = mStock?.tsCode
+                (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance(sm))
+            }
+            tv_follow->{
+                presenter?.collectionStock(mStock!!)
+            }
         }
 
     }
@@ -143,6 +161,8 @@ class MarketDetailFragment :
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
         tv_simulation_trading.setOnClickListener(this)
+        tv_remind.setOnClickListener(this)
+        tv_follow.setOnClickListener(this)
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         loadRootFragment(R.id.kline_view, KlineFragment())
