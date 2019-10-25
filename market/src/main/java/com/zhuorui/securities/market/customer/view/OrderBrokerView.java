@@ -9,9 +9,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.securities.market.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * author : liuwei
@@ -93,14 +98,25 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         mAdapter.notifyDataSetChanged();
     }
 
+    public void setData(List<? extends Object> buyings, List<? extends Object> sellings) {
+        mAdapter.setData(buyings, sellings);
+        mAdapter.notifyDataSetChanged();
+    }
+
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         private Context context;
         private int mNum = 0;
-        private boolean showName = true;
+        private int itemCount = 0;
+        private List<Object> mBuyingDatas;
+        private List<Object> mSellingDatas;
+        private List<Object> mDatas;
 
         public MyAdapter(Context context) {
             this.context = context;
+            mBuyingDatas = new ArrayList<>();
+            mSellingDatas = new ArrayList<>();
+            mDatas = new ArrayList<>();
         }
 
         @NonNull
@@ -112,7 +128,8 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.bindData(position);
+            Object object = mDatas.get(position);
+            holder.bindData(position,object);
         }
 
         @Override
@@ -122,13 +139,55 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
 
         @Override
         public int getItemCount() {
-            return mNum;
+            return itemCount;
         }
 
         public void setNum(int mNum) {
-            showName = mNum != -1;
-            this.mNum = mNum == -1 ? 80 : mNum * 2;
+            this.mNum = mNum;
+            initData();
         }
+
+        public void setData(List<? extends Object> buyings, List<? extends Object> sellings) {
+            mBuyingDatas.clear();
+            mSellingDatas.clear();
+            mBuyingDatas.addAll(buyings);
+            mSellingDatas.addAll(sellings);
+            initData();
+        }
+
+        private void initData() {
+            mDatas.clear();
+            int relSize = Math.max(mBuyingDatas.size(), mSellingDatas.size());
+            int lineSize;
+            int spanCount;//一行单边数据条数
+            if (mNum == -1) {
+                spanCount = 4;
+                lineSize = (relSize / spanCount) + (relSize % spanCount == 0 ? 0 : 1);
+            } else {
+                spanCount = 1;
+                lineSize = Math.min(relSize, mNum);
+            }
+            itemCount = lineSize * spanCount * 2;
+            for (int i = 0; i < lineSize; i++) {
+                for (int j = 0; j < spanCount; j++) {
+                    int pos = i * spanCount + j;
+                    if (pos < mBuyingDatas.size()) {
+                        mDatas.add(mBuyingDatas.get(pos));
+                    } else {
+                        mDatas.add(String.valueOf(pos));
+                    }
+                }
+                for (int j = 0; j < spanCount; j++) {
+                    int pos = i * spanCount + j;
+                    if (pos < mSellingDatas.size()) {
+                        mDatas.add(mSellingDatas.get(pos));
+                    } else {
+                        mDatas.add(String.valueOf(pos));
+                    }
+                }
+            }
+        }
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -141,8 +200,9 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             vName = itemView.findViewById(R.id.tv_name);
         }
 
-        public void bindData(int position) {
-            vCode.setText(String.valueOf(80900 + position));
+        public void bindData(int position, Object object) {
+            vCode.setText(String.valueOf(new Random().nextInt(1000) + position));
+            if (vName != null)vName.setText(object.toString());
             itemView.setBackgroundColor(colors[position % colors.length]);
         }
     }

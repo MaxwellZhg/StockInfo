@@ -8,27 +8,18 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.databinding.FragmentMarketTabBinding
+import com.zhuorui.securities.market.ui.presenter.NewStockDatePresenter
+import com.zhuorui.securities.market.ui.view.NewStockDateView
+import com.zhuorui.securities.market.ui.viewmodel.NewStockDateViewModel
+import com.zhuorui.securities.market.databinding.FragmentNewStockDateBinding
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.event.TabPositionEvent
-import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
-import com.zhuorui.securities.market.ui.presenter.MarketTabPresenter
-import com.zhuorui.securities.market.ui.view.MarketTabVierw
-import com.zhuorui.securities.market.ui.viewmodel.MarketTabVierwModel
-import com.zhuorui.securities.personal.ui.MessageFragment
-import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.fragment_search_info.*
-import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
-import kotlinx.android.synthetic.main.fragment_search_info.viewpager
-import kotlinx.android.synthetic.main.fragment_stock_tab.*
-import kotlinx.android.synthetic.main.fragment_stock_tab.top_bar
-import kotlinx.android.synthetic.main.layout_simulation_trading_main_top.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -39,55 +30,42 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 /**
- *    author : PengXianglin
- *    e-mail : peng_xianglin@163.com
- *    date   : 2019/8/27 13:40
- *    desc   : 主页行情Tab页面
+ * Created by Maxwell.
+ * E-mail: maxwell_smith@163.com
+ * Date: 2019/10/23
+ * Desc:
  */
-class MarketTabFragment :
-    AbsBackFinishFragment<FragmentMarketTabBinding, MarketTabVierwModel, MarketTabVierw, MarketTabPresenter>(),
-    MarketTabVierw {
-    private var mfragment:ArrayList<String?> = ArrayList()
-    private val mFragments: Array<HkStockDetailFragment?> = arrayOfNulls<HkStockDetailFragment>(4)
+class NewStockDateFragment :
+    AbsSwipeBackNetFragment<FragmentNewStockDateBinding, NewStockDateViewModel, NewStockDateView, NewStockDatePresenter>(),
+    NewStockDateView {
+    private var tabTitle: ArrayList<String> = ArrayList()
+    private val mFragments: Array<NewStockInfoFragment?> = arrayOfNulls<NewStockInfoFragment>(4)
     private var mIndex = 0
-    companion object {
-        fun newInstance(): MarketTabFragment {
-            return MarketTabFragment()
-        }
-    }
-
     override val layout: Int
-        get() = R.layout.fragment_market_tab
-
+        get() = R.layout.fragment_new_stock_date
     override val viewModelId: Int
         get() = BR.viewModel
-
-    override val createPresenter: MarketTabPresenter
-        get() = MarketTabPresenter()
-
-    override val createViewModel: MarketTabVierwModel?
-        get() = ViewModelProviders.of(this).get(MarketTabVierwModel::class.java)
-
-    override val getView: MarketTabVierw
+    override val createPresenter: NewStockDatePresenter
+        get() = NewStockDatePresenter()
+    override val createViewModel: NewStockDateViewModel?
+        get() = ViewModelProviders.of(this).get(NewStockDateViewModel::class.java)
+    override val getView: NewStockDateView
         get() = this
+
+    companion object {
+        fun newInstance(): NewStockDateFragment {
+            return NewStockDateFragment()
+        }
+    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        top_bar.setRightClickListener {
-            // 消息
-            (parentFragment as AbsFragment<*, *, *, *>).start(MessageFragment.newInstance())
-        }
-        top_bar.setRight2ClickListener {
-            // 搜索
-            (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
-        }
-        mfragment.add(ResUtil.getString(R.string.hk_stock))
-        mfragment.add(ResUtil.getString(R.string.sh_sz_stock))
-        mfragment.add(ResUtil.getString(R.string.all_hk_stock))
-        mfragment.add(ResUtil.getString(R.string.gloab_stock))
-        magic_indicator.navigator = getNavigator()
+        tabTitle.add("已递表")
+        tabTitle.add("可认购")
+        tabTitle.add("待上市")
+        tabTitle.add("已上市")
+        magic_indicator.navigator=getNavigator()
     }
-
     private fun onSelect(index: Int) {
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
@@ -95,12 +73,12 @@ class MarketTabFragment :
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val firstFragment = findChildFragment(HkStockDetailFragment::class.java)
+        val firstFragment = findChildFragment(NewStockInfoFragment::class.java)
         if (firstFragment == null) {
-            mFragments[0] = HkStockDetailFragment.newInstance()
-            mFragments[1] = HkStockDetailFragment.newInstance()
-            mFragments[2] = HkStockDetailFragment.newInstance()
-            mFragments[3] = HkStockDetailFragment.newInstance()
+            mFragments[0] = NewStockInfoFragment.newInstance()
+            mFragments[1] = NewStockInfoFragment.newInstance()
+            mFragments[2] = NewStockInfoFragment.newInstance()
+            mFragments[3] = NewStockInfoFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -112,9 +90,9 @@ class MarketTabFragment :
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
             // 这里我们需要拿到mFragments的引用
             mFragments[0] = firstFragment
-            mFragments[1] = findChildFragment(HkStockDetailFragment::class.java)
-            mFragments[2] = findChildFragment(HkStockDetailFragment::class.java)
-            mFragments[3] = findChildFragment(HkStockDetailFragment::class.java)
+            mFragments[1] = findChildFragment(NewStockInfoFragment::class.java)
+            mFragments[2] = findChildFragment(NewStockInfoFragment::class.java)
+            mFragments[3] = findChildFragment(NewStockInfoFragment::class.java)
         }
     }
 
@@ -128,7 +106,7 @@ class MarketTabFragment :
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
             override fun getCount(): Int {
-                return mfragment?.size!!
+                return tabTitle?.size!!
             }
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
@@ -136,7 +114,7 @@ class MarketTabFragment :
                 colorTransitionPagerTitleView.normalColor = Color.parseColor("#C0CCE0")
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 18f
-                colorTransitionPagerTitleView.text = mfragment!![index]
+                colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
                     magic_indicator.onPageSelected(index)
                     magic_indicator.onPageScrolled(index, 0.0F, 0)
@@ -159,3 +137,4 @@ class MarketTabFragment :
 
 
 }
+

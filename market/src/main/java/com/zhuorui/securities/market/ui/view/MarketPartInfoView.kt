@@ -5,10 +5,9 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
- * Date: 2019/10/22
+ * Date: 2019/10/24
  * Desc:
  */
-interface MarketPointView :AbsView{
-    fun addInfoToAdapter(list: List<Int>)
-    fun addPointInfoAdapter(list: List<Int>)
+interface MarketPartInfoView :AbsView{
+
 }

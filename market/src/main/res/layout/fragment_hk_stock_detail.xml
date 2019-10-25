@@ -25,11 +25,13 @@
                     android:paddingTop="5dp"
             />
             <com.zhuorui.securities.market.customer.view.MarketPartInfoView
+                    android:id="@+id/ll_part_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:market_info_type="1"
             />
             <com.zhuorui.securities.market.customer.view.MarketPartInfoView
+                    android:id="@+id/ll_part_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:market_info_type="2"

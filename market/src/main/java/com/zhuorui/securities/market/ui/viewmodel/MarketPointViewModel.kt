@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,5 +10,6 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class MarketPointViewModel :ViewModel(){
-
+    var infos: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var pointInfos: MutableLiveData<MutableList<Int>> = MutableLiveData()
 }

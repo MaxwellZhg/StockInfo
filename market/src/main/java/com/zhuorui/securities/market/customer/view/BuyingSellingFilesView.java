@@ -1,5 +1,8 @@
 package com.zhuorui.securities.market.customer.view;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -136,7 +139,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         public void bindData(int position, String title) {
             vTitle.setText(title);
             vPirce.setText(String.format("%.3f", 90.253 + position));
-            vNum.setText(String.format("%.1fK", position + 1.2));
+            vNum.setText(String.format("%.1fK(%2d)", position + 1.2,position));
             if (position == 0) {
                 itemView.setBackgroundColor(color1);
             } else if (position == 1) {
@@ -148,8 +151,14 @@ public class BuyingSellingFilesView extends FrameLayout {
                 } else {
                     itemView.setBackgroundColor(color4);
                 }
-
             }
+            itemView.setOnClickListener(v->{
+                ValueAnimator colorAnim = ObjectAnimator.ofInt(vNum,"backgroundColor", 0x00000000,0x33D9001B, 0x00000000);
+                colorAnim.setDuration(400);
+                colorAnim.setEvaluator(new ArgbEvaluator());
+                colorAnim.setRepeatMode(ValueAnimator.REVERSE);
+                colorAnim.start();
+            });
         }
     }
 

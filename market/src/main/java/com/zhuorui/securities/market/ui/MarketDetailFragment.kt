@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -66,20 +68,28 @@ class MarketDetailFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        initView()
+//        initView()
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
+        initView()
         setTestData()
     }
 
-    private fun setTestData(){
+    private fun setTestData() {
         val datas = mutableListOf<Int>()
-        for (i: Int in 1..10){
+        for (i: Int in 1..10) {
             datas.add(i)
         }
-        buyingSellingFiles.setData(7458f,2442f,datas,datas)
+        buyingSellingFiles.setData(7458f, 2442f, datas, datas)
+
+        val datas2 = mutableListOf<String>()
+        for (i: Int in 1..30) {
+            datas2.add("item$i")
+        }
+        orderBroker.setData(datas2, datas2)
+
     }
 
     override fun onClick(v: View?) {
@@ -98,12 +108,25 @@ class MarketDetailFragment :
         top_bar.setPadding(0, StatusBarUtil.getStatusBarHeight(context), 0, 0)
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
-        magic_indicator.navigator = getNavigator()
-
+        magic_indicator.navigator =  getNavigator()
+        top_magic_indicator.navigator =  getNavigator()
         loadRootFragment(R.id.kline_view, KlineFragment())
+        scroll_view.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            if (magic_indicator != null && top_magic_indicator!= null){
+                val visibility = if (magic_indicator.top < scrollY) View.VISIBLE else View.GONE
+                if (visibility != top_magic_indicator.visibility)top_magic_indicator.visibility = visibility
+            }
+        }
     }
 
+    /**
+     * 切换资金，资讯等信息
+     */
     private fun onSelect(index: Int) {
+        magic_indicator.onPageSelected(index)
+        magic_indicator.onPageScrolled(index, 0.0F, 0)
+        top_magic_indicator.onPageSelected(index)
+        top_magic_indicator.onPageScrolled(index, 0.0F, 0)
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
     }
@@ -153,8 +176,6 @@ class MarketDetailFragment :
                 colorTransitionPagerTitleView.textSize = 18f
                 colorTransitionPagerTitleView.text = tabTitle!![index]
                 colorTransitionPagerTitleView.setOnClickListener {
-                    magic_indicator.onPageSelected(index)
-                    magic_indicator.onPageScrolled(index, 0.0F, 0)
                     onSelect(index)
                 }
                 return colorTransitionPagerTitleView
