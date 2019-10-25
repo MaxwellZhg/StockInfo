@@ -40,6 +40,7 @@
                 <TextView android:layout_width="match_parent"
                           android:layout_height="41.5dp"
                           android:text="全部港股"
+                          android:id="@+id/tv_all_hk_stock"
                           android:layout_marginTop="5dp"
                           android:background="@color/color_2D2C35"
                           android:paddingStart="13dp"
