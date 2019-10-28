@@ -2,17 +2,17 @@ package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
+import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel
 import com.zhuorui.securities.market.databinding.FragmentOneDayBinding
+import com.zhuorui.securities.market.socket.vo.kline.MinuteKlineData
 import com.zhuorui.securities.market.ui.kline.presenter.ChartOneDayPresenter
 import com.zhuorui.securities.market.ui.kline.view.OneDayKlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.OneDayKlineViewModel
 import kotlinx.android.synthetic.main.fragment_one_day.*
-import org.json.JSONException
-import org.json.JSONObject
 
 /**
  * 分时页
@@ -54,20 +54,40 @@ class ChartOneDayFragment :
         land = arguments!!.getBoolean("landscape")
         chart!!.initChart(land)
 
-//        presenter?.loadKNetlineMinuteData()
+        presenter?.loadKNetlineMinuteData()
 
         //测试数据
-        try {
-            //上证指数代码000001.IDX.SH
-            val kTimeData = TimeDataManage()
-            kTimeData.parseTimeData(JSONObject(ChartData.TIMEDATA), "000001.IDX.SH", 0.0)
-            chart.setDataToChart(kTimeData)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+//        try {
+//            //上证指数代码000001.IDX.SH
+//            val kTimeData = TimeDataManage()
+//            kTimeData.parseTimeData(JSONObject(ChartData.TIMEDATA), "000001.IDX.SH", 0.0)
+//            chart.setDataToChart(kTimeData)
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
     }
 
     override fun setDataToChart(timeDataManage: TimeDataManage?) {
         chart?.setDataToChart(timeDataManage)
+    }
+
+    override fun dynamicsUpdateOne(data: MinuteKlineData) {
+        val timeData = TimeDataModel()
+        timeData.nowPrice = data.price
+        timeData.averagePrice = data.avgPrice
+        timeData.volume = data.vol.toInt()
+        timeData.timeMills = data.dateTime
+        timeData.open = data.openPrice
+        chart.dynamicsUpdateOne(timeData)
+    }
+
+    override fun dynamicsAddOne(data: MinuteKlineData) {
+        val timeData = TimeDataModel()
+        timeData.nowPrice = data.price
+        timeData.averagePrice = data.avgPrice
+        timeData.volume = data.vol.toInt()
+        timeData.timeMills = data.dateTime
+        timeData.open = data.openPrice
+        chart.dynamicsAddOne(timeData)
     }
 }
