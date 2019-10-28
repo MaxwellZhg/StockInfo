@@ -459,38 +459,40 @@ public class OneDayChart extends BaseChart {
      * 动态增加一个点数据
      *
      * @param timeDatamodel
-     * @param length
      */
-    public void dynamicsAddOne(TimeDataModel timeDatamodel, int length) {
-        int index = length - 1;
-        LineData lineData = lineChart.getData();
-        ILineDataSet d1 = lineData.getDataSetByIndex(0);
-        d1.addEntry(new Entry(index, (float) timeDatamodel.getNowPrice()));
-        ILineDataSet d2 = lineData.getDataSetByIndex(1);
-        d2.addEntry(new Entry(index, (float) timeDatamodel.getAveragePrice()));
+    public void dynamicsAddOne(TimeDataModel timeDatamodel) {
+        if (mData.getDatas().add(timeDatamodel)) {
+            int index = mData.getDatas().size() - 1;
+            LineData lineData = lineChart.getData();
+            ILineDataSet d1 = lineData.getDataSetByIndex(0);
+            d1.addEntry(new Entry(index, (float) timeDatamodel.getNowPrice()));
+            ILineDataSet d2 = lineData.getDataSetByIndex(1);
+            d2.addEntry(new Entry(index, (float) timeDatamodel.getAveragePrice()));
 
-        BarData barData = barChart.getData();
-        IBarDataSet barDataSet = barData.getDataSetByIndex(0);
-        barDataSet.addEntry(new BarEntry(index, timeDatamodel.getVolume()));
-        lineData.notifyDataChanged();
-        lineChart.notifyDataSetChanged();
-        barData.notifyDataChanged();
-        barChart.notifyDataSetChanged();
-        lineChart.setVisibleXRange(maxCount, maxCount);
-        barChart.setVisibleXRange(maxCount, maxCount);
-        //动态添加或移除数据后， 调用invalidate()刷新图表之前 必须调用 notifyDataSetChanged() .
-        lineChart.moveViewToX(index);
-        barChart.moveViewToX(index);
+            BarData barData = barChart.getData();
+            IBarDataSet barDataSet = barData.getDataSetByIndex(0);
+            barDataSet.addEntry(new BarEntry(index, timeDatamodel.getVolume()));
+            lineData.notifyDataChanged();
+            lineChart.notifyDataSetChanged();
+            barData.notifyDataChanged();
+            barChart.notifyDataSetChanged();
+            lineChart.setVisibleXRange(maxCount, maxCount);
+            barChart.setVisibleXRange(maxCount, maxCount);
+            //动态添加或移除数据后， 调用invalidate()刷新图表之前 必须调用 notifyDataSetChanged() .
+            lineChart.moveViewToX(index);
+            barChart.moveViewToX(index);
+        }
     }
 
     /**
      * 动态更新最后一点数据
      *
      * @param timeDatamodel
-     * @param length
      */
-    public void dynamicsUpdateOne(TimeDataModel timeDatamodel, int length) {
-        int index = length - 1;
+    public void dynamicsUpdateOne(TimeDataModel timeDatamodel) {
+        int index = mData.getDatas().size() - 1;
+        mData.getDatas().remove(index);
+        mData.getDatas().add(timeDatamodel);
         LineData lineData = lineChart.getData();
         ILineDataSet d1 = lineData.getDataSetByIndex(0);
         Entry e = d1.getEntryForIndex(index);

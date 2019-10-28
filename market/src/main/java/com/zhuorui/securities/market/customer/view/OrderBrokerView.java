@@ -25,9 +25,11 @@ import java.util.Random;
  * desc   : 买卖盘经济
  */
 public class OrderBrokerView extends FrameLayout implements View.OnClickListener {
-    int color1 = Color.parseColor("#122c51");
-    int color2 = Color.parseColor("#603b16");
+
+    int color1 = Color.parseColor("#0D1A6ED2");
+    int color2 = Color.parseColor("#0DFF8E1B");
     int color3 = Color.parseColor("#211F2A");
+
     private int[] colors;
     private RecyclerView vRv;
     private MyAdapter mAdapter;
@@ -132,7 +134,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Object object = mDatas.get(position);
-            holder.bindData(position,object);
+            holder.bindData(position, object);
         }
 
         @Override
@@ -207,7 +209,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
 
         public void bindData(int position, Object object) {
             vCode.setText(String.valueOf(new Random().nextInt(1000) + position));
-            if (vName != null)vName.setText(object.toString());
+            if (vName != null) vName.setText(object.toString());
             itemView.setBackgroundColor(colors[position % colors.length]);
         }
     }

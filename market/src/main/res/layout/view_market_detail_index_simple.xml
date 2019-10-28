@@ -9,7 +9,7 @@
 
     <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="0.8dp"
             android:background="#191821"
             app:layout_constraintTop_toTopOf="parent"
     />
@@ -84,7 +84,7 @@
 
     <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="0.8dp"
             android:background="#191821"
             app:layout_constraintBottom_toBottomOf="parent"
     />

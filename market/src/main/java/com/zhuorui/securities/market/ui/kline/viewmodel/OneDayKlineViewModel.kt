@@ -1,8 +1,6 @@
 package com.zhuorui.securities.market.ui.kline.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
-import com.zhuorui.securities.market.model.StockTopic
 
 /**
  *    author : PengXianglin
@@ -11,6 +9,4 @@ import com.zhuorui.securities.market.model.StockTopic
  *    desc   : 分时数据
  */
 class OneDayKlineViewModel : ViewModel() {
-    var stockTopic: StockTopic? = null
-    var kDataManager: TimeDataManage? = null
 }
