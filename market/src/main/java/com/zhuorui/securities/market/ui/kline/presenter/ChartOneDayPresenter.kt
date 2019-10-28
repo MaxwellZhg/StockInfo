@@ -31,9 +31,9 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
 
     private var requestIds = ArrayList<String>()
     private val disposables = LinkedList<Disposable>()
-    private val ts = "SZ"
-    private val code = "000001"
-    private val tsCode = "000001.SZ"
+    private val ts = "HK"
+    private val code = "02318"
+    private val tsCode = "02318.HK"
     private var stockTopic: StockTopic? = null
 
     /**

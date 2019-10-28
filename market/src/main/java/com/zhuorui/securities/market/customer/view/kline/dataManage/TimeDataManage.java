@@ -302,21 +302,21 @@ public class TimeDataManage {
     public SparseArray<String> getOneDayXLabels(boolean landscape) {
         SparseArray<String> xLabels = new SparseArray<String>();
         if (assetId.endsWith(".HK")) {
-            if (landscape) {
+//            if (landscape) {
+//                xLabels.put(0, "09:30");
+//                xLabels.put(60, "10:30");
+//                xLabels.put(120, "11:30");
+//                xLabels.put(180, "13:30");
+//                xLabels.put(240, "14:30");
+//                xLabels.put(300, "15:30");
+//                xLabels.put(330, "16:00");
+//            } else {
                 xLabels.put(0, "09:30");
                 xLabels.put(60, "10:30");
-                xLabels.put(120, "11:30");
-                xLabels.put(180, "13:30");
-                xLabels.put(240, "14:30");
-                xLabels.put(300, "15:30");
-                xLabels.put(330, "16:00");
-            } else {
-                xLabels.put(0, "09:30");
-                xLabels.put(75, "");
                 xLabels.put(150, "12:00/13:00");
-                xLabels.put(240, "");
+                xLabels.put(240, "14:30");
                 xLabels.put(330, "16:00");
-            }
+//            }
         } else if (assetId.endsWith(".US")) {
             xLabels.put(0, "09:30");
             xLabels.put(120, "11:30");
