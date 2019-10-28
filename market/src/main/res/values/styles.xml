@@ -59,4 +59,9 @@
         <item name="right2_icon_height">19dp</item>
         <item name="right2_icon_margin">51dp</item>
     </style>
+    <style name="MadrketDetailLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#191821</item>
+    </style>
 </resources>

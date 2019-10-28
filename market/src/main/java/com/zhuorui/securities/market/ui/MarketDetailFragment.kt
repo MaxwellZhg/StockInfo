@@ -147,7 +147,7 @@ class MarketDetailFragment :
                 sm.id = mStock?.id
                 sm.ts = mStock?.ts
                 sm.tsCode = mStock?.tsCode
-                (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance(sm))
+                start(RemindSettingFragment.newInstance(sm))
             }
             tv_follow->{
                 presenter?.collectionStock(mStock!!)
@@ -168,7 +168,7 @@ class MarketDetailFragment :
         loadRootFragment(R.id.kline_view, KlineFragment())
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
-                top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                top_magic_indicator_group?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             }
             if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
                 presenter?.getTopBarPriceInfo()

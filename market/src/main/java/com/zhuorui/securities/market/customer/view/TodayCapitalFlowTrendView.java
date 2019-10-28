@@ -135,7 +135,19 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             Entry entry = new Entry(i, (random.nextInt(60) * d[random.nextInt(d.length)]));
             entrys.add(entry);
         }
-        vChart.setData(getLineData(entrys));
+        LineData lineData = getLineData(entrys);
+        YAxis leftAxis = vChart.getAxisLeft();
+        if (lineData.getYMax() < 0){
+            leftAxis.setAxisMaximum(0f);
+            leftAxis.resetAxisMinimum();
+        }else if (lineData.getYMin() > 0){
+            leftAxis.resetAxisMaximum();
+            leftAxis.setAxisMinimum(0);
+        }else {
+            leftAxis.resetAxisMaximum();
+            leftAxis.resetAxisMinimum();
+        }
+        vChart.setData(lineData);
     }
 
     public void setStockTs(String ts) {

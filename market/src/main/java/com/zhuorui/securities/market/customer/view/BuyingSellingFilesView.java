@@ -127,10 +127,10 @@ public class BuyingSellingFilesView extends FrameLayout {
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            color1 = Color.parseColor("#1d355b");
-            color2 = Color.parseColor("#583b21");
-            color3 = Color.parseColor("#253f6a");
-            color4 = Color.parseColor("#744d2b");
+            color1 = Color.parseColor("#17355E");
+            color2 = Color.parseColor("#5D3A1C");
+            color3 = Color.parseColor("#0D1A6ED2");
+            color4 = Color.parseColor("#0DFF8E1B");
             vTitle = itemView.findViewById(R.id.tv_title);
             vPirce = itemView.findViewById(R.id.tv_price);
             vNum = itemView.findViewById(R.id.tv_num);
