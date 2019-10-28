@@ -3,20 +3,19 @@ package com.zhuorui.securities.market.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
-import com.zhuorui.securities.market.ui.view.MarketPointView
-import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
-import com.zhuorui.securities.market.generated.callback.OnClickListener
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.kline.KlineFragment
-import kotlinx.android.synthetic.main.fragment_hk_stock_detail.*
+import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
+import com.zhuorui.securities.market.ui.view.MarketPointView
+import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
 import kotlinx.android.synthetic.main.fragment_market_point.*
 import kotlinx.android.synthetic.main.layout_market_point_topbar.*
 import kotlinx.android.synthetic.main.layout_market_point_view_tips.*
@@ -35,6 +34,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Desc:
  */
 class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,MarketPointViewModel,MarketPointView,MarketPointPresenter>(),MarketPointView,View.OnClickListener{
+    private var type: Int? = null
     private var infoadapter: MarketPartInfoAdapter? = null
     private var pointInfoAdapter:MarketPointInfoAdapter?=null
     private var tabTitle:ArrayList<String> = ArrayList()
@@ -49,8 +49,14 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
     override val getView: MarketPointView
         get() = this
     companion object {
-        fun newInstance(): MarketPointFragment {
-            return MarketPointFragment()
+        fun newInstance(type:Int): MarketPointFragment {
+            val fragment = MarketPointFragment()
+            if (type != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("type", type)
+                fragment.arguments = bundle
+            }
+            return fragment
         }
     }
 
@@ -60,12 +66,25 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        type = arguments?.getSerializable("type") as Int?
+        when(type){
+            1->{
+                tv_title.text="恒生指数（800000）"
+            }
+            2->{
+                tv_title.text="国企指数（800100）"
+            }
+            3->{
+                tv_title.text="红筹指数（HSCCI.HK）"
+            }
+        }
         tabTitle.add("成分股")
         tabTitle.add("咨讯")
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
         loadRootFragment(R.id.kline_view, KlineFragment())
         magic_indicator.navigator=getNavigator()
+        top_magic_indicator.navigator = getNavigator()
         presenter?.setLifecycleOwner(this)
         infoadapter = presenter?.getMarketInfoAdapter()
         pointInfoAdapter=presenter?.getMarketPointInfoAdapter()
@@ -77,6 +96,17 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         infoadapter?.notifyDataSetChanged()
         rv_point_stock.adapter=infoadapter
         refrsh_layout.setEnableLoadMore(true)
+
+        scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            if (magic_indicator != null) {
+                top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+            }
+         /*   if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
+                presenter?.getTopBarPriceInfo()
+            } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
+                presenter?.getTopBarStockStatusInfo()
+            }*/
+        }
     }
     override fun onClick(v: View?) {
         when(v){

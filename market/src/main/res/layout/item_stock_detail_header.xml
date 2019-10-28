@@ -17,6 +17,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_point_one"
                 android:text="恒生指数"
                 android:layout_marginTop="4dp"
                 android:textColor="#ffffffff"
@@ -56,6 +57,7 @@
     <LinearLayout android:layout_width="0dp"
                   android:layout_weight="1"
                   android:paddingBottom="10dp"
+                  android:id="@+id/ll_country_point"
                   android:layout_centerHorizontal="true"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
@@ -64,6 +66,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_point_two"
                 android:text="国企指数"
                 android:layout_marginTop="4dp"
                 android:textColor="#ffffffff"
@@ -101,6 +104,7 @@
 
     <LinearLayout android:layout_width="0dp"
                   android:layout_weight="1"
+                  android:id="@+id/ll_red_point"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
                   android:paddingBottom="10dp"
@@ -110,6 +114,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_point_three"
                 android:text="红筹指数"
                 android:layout_marginTop="4dp"
                 android:textColor="#ffffffff"

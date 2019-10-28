@@ -158,4 +158,7 @@
     <string name="fifth_data_info" tools:ignore="MissingTranslation">仅展示50条搜索结果</string>
     <string name="str_zr_user">卓锐用户</string>
     <string name="market_part_info" tools:ignore="MissingTranslation">行业板块</string>
+    <string name="lower_mark_one">&#060;1</string>
+    <string name="lower_mark_ten">&#060;10</string>
+    <string name="lower_mark_tips">&#060;1亿</string>
 </resources>

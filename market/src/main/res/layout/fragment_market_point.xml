@@ -4,24 +4,28 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel"/>
     </data>
-    <LinearLayout android:orientation="vertical"
+    <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="vertical"
                   android:background="@color/color_211F2A"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
         <include
+                app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/top_bar"
                 layout="@layout/layout_market_point_topbar"/>
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 android:id="@+id/refrsh_layout"
+                app:layout_constraintTop_toBottomOf="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 app:srlEnableOverScrollBounce="true"
                 app:srlEnableOverScrollDrag="true"
                 app:srlEnableRefresh="false"
                 app:srlEnableLoadMore="false"
                 app:srlReboundDuration="1000">
         <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
+                android:id="@+id/scroll_view"
+              android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="match_parent"
@@ -55,5 +59,13 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-    </LinearLayout>
+        <!--顶部悬浮tab-->
+        <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/top_magic_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/top_bar"
+                android:background="#2D2C35"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

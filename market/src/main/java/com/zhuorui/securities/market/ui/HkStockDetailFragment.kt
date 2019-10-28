@@ -36,6 +36,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class HkStockDetailFragment :
     AbsFragment<com.zhuorui.securities.market.databinding.FragmentHkStockDetailBinding, HkStockDetailViewModel, HkStockDetailView, HkStockDetailPresenter>(),
     HkStockDetailView,View.OnClickListener {
+    private var type: Int? = null
     private var infoadapter: MarketPartInfoAdapter? = null
     private var tabTitle:ArrayList<String> = ArrayList()
     override val layout: Int
@@ -50,8 +51,14 @@ class HkStockDetailFragment :
         get() = this
 
     companion object {
-        fun newInstance(): HkStockDetailFragment {
-            return HkStockDetailFragment()
+        fun newInstance(type:Int): HkStockDetailFragment {
+            val fragment = HkStockDetailFragment()
+            if (type != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("type", type)
+                fragment.arguments = bundle
+            }
+            return fragment
         }
     }
 
@@ -59,6 +66,19 @@ class HkStockDetailFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        type = arguments?.getSerializable("type") as Int?
+        when(type){
+            1->{
+                tv_point_one.text="恒生指数"
+                tv_point_two.text="国企指数"
+                tv_point_three.text="红筹指数"
+            }
+            2->{
+                tv_point_one.text="上证指数"
+                tv_point_two.text="深证成指"
+                tv_point_three.text="创业板指"
+            }
+        }
         tabTitle.add("涨幅榜")
         tabTitle.add("跌幅榜")
         tabTitle.add("成交额")
@@ -96,10 +116,14 @@ class HkStockDetailFragment :
         rv_hk_stock2.adapter=infoadapter
         rv_hk_stock3.adapter=infoadapter
         ll_hs_point.setOnClickListener(this)
+        ll_country_point.setOnClickListener(this)
+        ll_red_point.setOnClickListener(this)
         rl_new_stock_date.setOnClickListener(this)
         ll_part_one.setOnClickListener(this)
         ll_part_two.setOnClickListener(this)
         tv_all_hk_stock.setOnClickListener(this)
+        tv_main_part.setOnClickListener(this)
+        tv_create_newly_part.setOnClickListener(this)
     }
 
     /**
@@ -175,7 +199,13 @@ class HkStockDetailFragment :
         var parent  = pre.getParentFragment() as AbsFragment<*,*,*,*>
        when(p0?.id){
            R.id.ll_hs_point->{
-               parent.start(MarketPointFragment.newInstance())
+               parent.start(MarketPointFragment.newInstance(1))
+           }
+           R.id.ll_country_point->{
+               parent.start(MarketPointFragment.newInstance(2))
+           }
+           R.id.ll_red_point->{
+               parent.start(MarketPointFragment.newInstance(3))
            }
            R.id.rl_new_stock_date->{
                parent.start(NewStockDateFragment.newInstance())
@@ -187,7 +217,13 @@ class HkStockDetailFragment :
                parent.start(MarketPartInfoFragment.newInstance(2))
            }
            R.id.tv_all_hk_stock->{
-               parent.start(AllHkStockFragment.newInstance())
+               parent.start(AllHkStockFragment.newInstance(1))
+           }
+           R.id.tv_main_part->{
+               parent.start(AllHkStockFragment.newInstance(2))
+           }
+           R.id.tv_create_newly_part->{
+               parent.start(AllHkStockFragment.newInstance(3))
            }
        }
     }

@@ -48,7 +48,7 @@ class MarketTabFragment :
     AbsBackFinishFragment<FragmentMarketTabBinding, MarketTabVierwModel, MarketTabVierw, MarketTabPresenter>(),
     MarketTabVierw {
     private var mfragment:ArrayList<String?> = ArrayList()
-    private val mFragments: Array<HkStockDetailFragment?> = arrayOfNulls<HkStockDetailFragment>(4)
+    private val mFragments: Array<AbsFragment<*,*,*,*>?> = arrayOfNulls<AbsFragment<*,*,*,*>>(4)
     private var mIndex = 0
     companion object {
         fun newInstance(): MarketTabFragment {
@@ -97,10 +97,10 @@ class MarketTabFragment :
         super.onActivityCreated(savedInstanceState)
         val firstFragment = findChildFragment(HkStockDetailFragment::class.java)
         if (firstFragment == null) {
-            mFragments[0] = HkStockDetailFragment.newInstance()
-            mFragments[1] = HkStockDetailFragment.newInstance()
-            mFragments[2] = HkStockDetailFragment.newInstance()
-            mFragments[3] = HkStockDetailFragment.newInstance()
+            mFragments[0] = HkStockDetailFragment.newInstance(1)
+            mFragments[1] = HkStockDetailFragment.newInstance(2)
+            mFragments[2] = ChinaHkStockFragment.newInstance()
+            mFragments[3] = HkStockDetailFragment.newInstance(1)
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -113,7 +113,7 @@ class MarketTabFragment :
             // 这里我们需要拿到mFragments的引用
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(HkStockDetailFragment::class.java)
-            mFragments[2] = findChildFragment(HkStockDetailFragment::class.java)
+            mFragments[2] = findChildFragment(ChinaHkStockFragment::class.java)
             mFragments[3] = findChildFragment(HkStockDetailFragment::class.java)
         }
     }
