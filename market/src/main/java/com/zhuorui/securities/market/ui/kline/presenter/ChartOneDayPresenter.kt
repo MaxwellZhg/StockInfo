@@ -31,10 +31,11 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
 
     private var requestIds = ArrayList<String>()
     private val disposables = LinkedList<Disposable>()
-    private val ts = "HK"
-    private val code = "02318"
-    private val tsCode = "02318.HK"
-    
+    private val ts = "SZ"
+    private val code = "000001"
+    private val tsCode = "000001.SZ"
+    private var stockTopic: StockTopic? = null
+
     /**
      * 加载网络数据
      */
@@ -57,10 +58,7 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
             LogInfra.Log.d(TAG, "onGetStocksMinuteKlineResponse ... klineData size = " + klineData?.size)
 
             // 展示K线数据
-            var kDataManager = viewModel?.kDataManager
-            if (kDataManager == null) {
-                kDataManager = TimeDataManage()
-            }
+            val kDataManager = TimeDataManage()
             kDataManager.parseTimeData(klineData, tsCode, 0.0, true)
             val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.setDataToChart(kDataManager)
@@ -71,35 +69,25 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
             disposables.add(disposable)
 
             // 订阅正常数据
-            val stockTopic = StockTopic(StockTopicDataTypeEnum.kminute, ts, code, 1)
+            stockTopic = StockTopic(StockTopicDataTypeEnum.kminute, ts, code, 1)
             SocketClient.getInstance().bindTopic(stockTopic)
-            viewModel?.stockTopic = stockTopic
         }
     }
 
     /**
      * 推送自选股分时数据
      */
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicMinuteKlineResponse(response: StocksTopicMinuteKlineResponse) {
         val klineData = (response.body?.klineData as StockMinuteVo).data
-        LogInfra.Log.d(TAG, "onStocksTopicMinuteKlineResponse ... klineData size = " + klineData?.size)
-
-        // 在子线程中整合新数据再更新到界面
-        val kDataManager = viewModel?.kDataManager
-        kDataManager?.parseTimeData(klineData, tsCode, 0.0, false)
-        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            view?.setDataToChart(kDataManager)
-            emitter.onNext(true)
-            emitter.onComplete()
-        }).subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-        disposables.add(disposable)
+        if (!klineData.isNullOrEmpty()) {
+            LogInfra.Log.d(TAG, "onStocksTopicMinuteKlineResponse ... " + klineData[0])
+            view?.dynamicsAddOne(klineData[0])
+        }
     }
 
     @RxSubscribe(observeOnThread = EventThread.NEW)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
-        val stockTopic = viewModel?.stockTopic
         // 恢复订阅
         if (stockTopic != null) {
             LogInfra.Log.d(TAG, "onSocketAuthCompleteEvent 先再拉一次补偿书记，再恢复订阅")
@@ -110,7 +98,6 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
     override fun destroy() {
         super.destroy()
         // 取消数据订阅
-        val stockTopic = viewModel?.stockTopic
         if (stockTopic != null) {
             SocketClient.getInstance().unBindTopic(stockTopic)
         }
