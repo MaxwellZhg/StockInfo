@@ -4,22 +4,18 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.generated.callback.OnClickListener
 import com.zhuorui.securities.market.ui.adapter.AllHkStockContainerAdapter
 import com.zhuorui.securities.market.ui.adapter.AllHkStockNameAdapter
 import com.zhuorui.securities.market.ui.presenter.AllHkStockPresenter
 import com.zhuorui.securities.market.ui.view.AllHkStockView
 import com.zhuorui.securities.market.ui.viewmodel.AllHkStockViewModel
 import kotlinx.android.synthetic.main.fragment_all_hk_stock.*
-import kotlinx.android.synthetic.main.fragment_all_hk_stock.top_bar
-import kotlinx.android.synthetic.main.fragment_stock_tab.*
 import kotlinx.android.synthetic.main.layout_filters_hk_stock_info.*
-
+import com.zhuorui.securities.market.databinding.FragmentAllHkStockBinding
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
@@ -27,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_filters_hk_stock_info.*
  * Desc:
  */
 class AllHkStockFragment :
-    AbsSwipeBackNetFragment<com.zhuorui.securities.market.databinding.FragmentAllHkStockBinding, AllHkStockViewModel, AllHkStockView, AllHkStockPresenter>(),
+    AbsSwipeBackNetFragment<FragmentAllHkStockBinding, AllHkStockViewModel, AllHkStockView, AllHkStockPresenter>(),
     AllHkStockView, View.OnClickListener {
     private var type: Int? = null
     private var nameAdapter: AllHkStockNameAdapter? = null
