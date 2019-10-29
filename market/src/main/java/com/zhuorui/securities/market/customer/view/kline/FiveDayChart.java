@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.customer.view.kline;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import androidx.annotation.Nullable;
@@ -371,6 +372,16 @@ public class FiveDayChart extends BaseChart {
             d2.setHighlightEnabled(false);
             d1.setDrawCircles(false);
             d2.setDrawCircles(false);
+            d1.setCircleColor(Color.parseColor("#A4B2CB"));
+            d2.setCircleColor(Color.parseColor("#FFDB34"));
+            d1.setCircleRadius(4f);
+            d2.setCircleRadius(4f);
+            d1.setDrawCircleHole(true);
+            d2.setDrawCircleHole(true);
+            d1.setCircleHoleRadius(2f);
+            d2.setCircleHoleRadius(2f);
+            d1.setCircleHoleColor(Color.parseColor("#FFFFFF"));
+            d2.setCircleHoleColor(Color.parseColor("#FFFFFF"));
             d1.setAxisDependency(YAxis.AxisDependency.LEFT);
             d1.setPrecision(precision);
             d1.setTimeDayType(5);//设置分时图类型

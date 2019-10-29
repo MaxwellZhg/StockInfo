@@ -88,6 +88,7 @@ class MarketDetailFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
+        loadRootFragment(R.id.kline_view, KlineFragment())
         presenter?.getData(mStock!!)
     }
 
@@ -165,11 +166,12 @@ class MarketDetailFragment :
         tv_follow.setOnClickListener(this)
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
-        loadRootFragment(R.id.kline_view, KlineFragment())
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            //topTab
             if (magic_indicator != null) {
                 top_magic_indicator_group?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             }
+            //title
             if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
                 presenter?.getTopBarPriceInfo()
             } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
