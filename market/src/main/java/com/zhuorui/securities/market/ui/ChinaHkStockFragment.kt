@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui
 import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -29,7 +30,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Date: 2019/10/28
  * Desc:
  */
-class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBinding,ChinaHkStockTabViewModel,ChinaHkStockTabView,ChinaHkStockTabPresenter>(),ChinaHkStockTabView{
+class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBinding,ChinaHkStockTabViewModel,ChinaHkStockTabView,ChinaHkStockTabPresenter>(),ChinaHkStockTabView,ChinaHkStockAdapter.OnItemClickMoreListener{
     private var tabTitle:ArrayList<String> = ArrayList()
     private var infoadapter: ChinaHkStockAdapter? = null
     override val layout: Int
@@ -74,6 +75,7 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
         magic_indicator.navigator=getNavigator()
         presenter?.setLifecycleOwner(this)
         infoadapter = presenter?.getChinaHkStockAdapter()
+        infoadapter?.onItemClickMoreListener=this
         //解决数据加载不完的问题
         rv_hk_stock.isNestedScrollingEnabled = false
         rv_hk_stock.setHasFixedSize(true)
@@ -133,6 +135,12 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
             infoadapter?.items = ArrayList()
         }
         infoadapter?.addItems(list)
+    }
+
+    override fun onclickMore() {
+        var pre  = parentFragment as AbsFragment<*, *, *, *>
+        var parent  = pre.getParentFragment() as AbsFragment<*, *, *, *>
+         parent.start(ChinaHkStockDetailFragment.newInstance())
     }
 
 }

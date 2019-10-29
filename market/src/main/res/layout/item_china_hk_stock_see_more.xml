@@ -7,6 +7,7 @@
 <TextView android:layout_width="match_parent"
           android:textColor="@color/color_53A0FD"
           android:textSize="15sp"
+          android:id="@+id/tv_see_more"
           android:background="@color/color_2D2C35"
           android:gravity="center"
           android:text="查看更多"

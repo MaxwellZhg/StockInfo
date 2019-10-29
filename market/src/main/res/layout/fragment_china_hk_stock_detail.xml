@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.market.ui.viewmodel.ChinaHkStockDetailViewModel"/>
+    </data>
+    <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/color_211F2A"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.zhuorui.securities.market.custom.MoreIconTitleBar
+                android:id="@+id/top_bar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:zr_topbarTitle="港股通"
+                app:zr_backview_is_visibity="true"
+                style="@style/AllHkStockMoreIconBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        </com.zhuorui.securities.market.custom.MoreIconTitleBar>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:layout_height="wrap_content">
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                    android:id="@+id/magic_indicator"
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:background="@color/color_2D2C35"
+                    android:layout_height="35dp"
+            />
+        <TextView
+                app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/tv_filters"
+                android:drawableLeft="@mipmap/icon_filters"
+                android:textColor="@color/color_53A0FD"
+                android:gravity="center_vertical"
+                android:drawablePadding="10.5dp"
+                android:paddingStart="13dp"
+                android:text="筛选"
+                android:background="@color/color_2D2C35"
+                android:layout_height="35dp"/>
+        </LinearLayout>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                    android:id="@+id/refrsh_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srlEnableOverScrollBounce="true"
+                    app:srlEnableOverScrollDrag="true"
+                    app:srlEnableRefresh="false"
+                    app:srlEnableLoadMore="false"
+                    app:srlReboundDuration="1000">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical">
+                    <!-- 此部分是标题部分 -->
+                    <LinearLayout
+                            android:id="@+id/ll_top_title"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_filters"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:background="@color/color_2D2C35"
+                            android:orientation="horizontal">
+
+                        <!-- 左侧标题的父容器 -->
+
+                        <TextView
+                                android:id="@+id/tv_table_title_left"
+                                android:textColor="@color/color_B3BCD0"
+                                android:textSize="12sp"
+                                android:layout_width="0dp"
+                                android:layout_height="35dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:layout_marginStart="13dp"
+                                android:maxLines="1"
+                                android:text="名称代码"/>
+
+                        <!-- 右侧标题的父容器可实现水平滚动 -->
+                        <com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView
+                                android:id="@+id/title_horsv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:fillViewport="true"
+                                android:scrollbars="none">
+
+                            <LinearLayout
+                                    android:id="@+id/right_title_container"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+                                <!--<include layout="@layout/table_sales_right_tab"/>-->
+                            </LinearLayout>
+                        </com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView>
+                    </LinearLayout>
+
+                    <!-- 此部分是内容部分 用ScrollView实现上下滚动效果 -->
+
+                    <androidx.core.widget.NestedScrollView
+                            android:id="@+id/pull_refresh_scroll"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                            <!-- 左侧内容的父容器 -->
+                            <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/left_container_rv"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                    android:layout_weight="1"
+                                    android:scrollbars="none">
+                            </androidx.recyclerview.widget.RecyclerView>
+
+                            <!-- 右侧内容的父容器 实现水平滚动 -->
+                            <com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView
+                                    android:id="@+id/content_horsv"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fillViewport="true"
+                                    android:scrollbars="none">
+                                <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/right_container_rv"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="#ffffff"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                        android:scrollbars="none">
+                                </androidx.recyclerview.widget.RecyclerView>
+                            </com.zhuorui.securities.market.customer.view.SyncHorizontalScrollView>
+                        </LinearLayout>
+                    </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            <include layout="@layout/layout_filters_hk_stock_info"/>
+        </FrameLayout>
+    </LinearLayout>
+</layout>
