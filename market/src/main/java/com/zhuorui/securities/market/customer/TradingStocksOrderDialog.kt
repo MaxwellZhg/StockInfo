@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.custom
+package com.zhuorui.securities.market.customer
 
 import android.content.Context
 import android.view.View

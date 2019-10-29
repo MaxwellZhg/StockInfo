@@ -20,8 +20,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.R2.id.order
-import com.zhuorui.securities.market.custom.TradingStocksOrderDialog
+import com.zhuorui.securities.market.customer.TradingStocksOrderDialog
 import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocksBinding
 import com.zhuorui.securities.market.model.PushStockTransData
 import com.zhuorui.securities.market.model.STOrderData
