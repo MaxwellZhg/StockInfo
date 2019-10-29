@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,5 +10,5 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class ChinaHkStockTabViewModel :ViewModel(){
-
+ var listInfo : MutableLiveData<MutableList<Int>> =  MutableLiveData()
 }

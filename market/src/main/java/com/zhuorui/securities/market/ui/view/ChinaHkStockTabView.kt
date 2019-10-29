@@ -9,5 +9,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface ChinaHkStockTabView:AbsView{
-
+    fun addIntoRvData(list: List<Int>)
 }
