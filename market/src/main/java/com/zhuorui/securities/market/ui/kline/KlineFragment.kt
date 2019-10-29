@@ -1,31 +1,30 @@
 package com.zhuorui.securities.market.ui.kline
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import kotlinx.android.synthetic.main.fragment_stockdetail.*
 import me.yokeyword.fragmentation.SupportFragment
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 /**
  * 股票K线图
  */
-class KlineFragment : SupportFragment() {
+class KlineFragment : SupportFragment(), OnClickListener {
 
-    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "季K", "年K")
+    //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
+    //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
     private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(7)
     private var mIndex = 0
+    private var lastTitle: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return View.inflate(context, R.layout.fragment_stockdetail, null)
@@ -34,38 +33,15 @@ class KlineFragment : SupportFragment() {
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
-        val commonNavigator = CommonNavigator(requireContext())
-        commonNavigator.isAdjustMode = true
-        commonNavigator.adapter = object : CommonNavigatorAdapter() {
-
-            override fun getCount(): Int {
-                return tabTitle.size
-            }
-
-            override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
-                colorTransitionPagerTitleView.normalColor = Color.parseColor("#C0CCE0")
-                colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
-                colorTransitionPagerTitleView.textSize = 16f
-                colorTransitionPagerTitleView.text = tabTitle[index]
-                colorTransitionPagerTitleView.setOnClickListener {
-                    kline_indicator.onPageSelected(index)
-                    kline_indicator.onPageScrolled(index, 0.0F, 0)
-                    onSelect(index)
-                }
-                return colorTransitionPagerTitleView
-            }
-
-            override fun getIndicator(context: Context): IPagerIndicator {
-                val indicator = LinePagerIndicator(context)
-                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(R.color.tab_select))
-                indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
-                indicator.lineWidth = ResUtil.getDimensionDp2Px(31f).toFloat()
-                return indicator
-            }
+        for (index in 0..kline_indicator.childCount - 3) {
+            val chlidView = kline_indicator.getChildAt(index)
+            chlidView.tag = index
+            chlidView.setOnClickListener(indicatorClickListener)
         }
-        kline_indicator.navigator = commonNavigator
+        title_minute.setOnClickListener(this)
+        title_rehabilitation.setOnClickListener(this)
+        lastTitle = title_day
+        updateIndicatorPosition()
 
         for (i in 0..6) {
             mFragments[i] = getFragment(i)
@@ -81,6 +57,44 @@ class KlineFragment : SupportFragment() {
             mFragments[5],
             mFragments[6]
         )
+    }
+
+    private val indicatorClickListener = OnClickListener { v ->
+        indicator?.visibility = View.VISIBLE
+        lastTitle?.setTextColor(ResUtil.getColor(R.color.color_FFC0CCE0)!!)
+
+        onSelect(v.tag.toString().toInt())
+
+        if (v is TextView) {
+            v.setTextColor(ResUtil.getColor(R.color.color_53A0FD)!!)
+            lastTitle = v
+            mIndex = v.tag.toString().toInt()
+        }
+
+        updateIndicatorPosition()
+    }
+
+    private fun updateIndicatorPosition() {
+        val layoutParams = indicator.layoutParams as LinearLayout.LayoutParams
+        layoutParams.width = lastTitle?.width ?: 0
+        layoutParams.marginStart = lastTitle?.left ?: 0
+        indicator.layoutParams = layoutParams
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            title_minute -> {
+                ToastUtil.instance.toast("分钟")
+                indicator.visibility = View.GONE
+                lastTitle?.setTextColor(ResUtil.getColor(R.color.color_FFC0CCE0)!!)
+
+                lastTitle = tv_minute
+                tv_minute.setTextColor(ResUtil.getColor(R.color.color_53A0FD)!!)
+            }
+            title_rehabilitation -> {
+                ToastUtil.instance.toast("复权")
+            }
+        }
     }
 
     private fun onSelect(index: Int) {

@@ -50,7 +50,6 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
         et_phone.addTextChangedListener(PhoneEtChange())
-
         et_phone_code.addTextChangedListener(this)
         tv_phone_num_login.setOnClickListener(this)
         rl_country_disct.setOnClickListener(this)

@@ -24,6 +24,7 @@
         <item name="right2_icon_height">19dp</item>
         <item name="right2_icon_margin">51dp</item>
     </style>
+
     <style name="TextView_Table_Right">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -34,12 +35,14 @@
         <item name="android:background">@color/color_2D2C35</item>
         <item name="android:textColor">@color/color_B3BCD0</item>
     </style>
+
     <style name="Linelayout_Tab_Right_Content">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">35dp</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@color/color_2D2C35</item>
     </style>
+
     <style name="TextView_Table_Right_Item">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">51dp</item>
@@ -49,6 +52,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:background">@color/color_2D2C35</item>
     </style>
+
     <style name="AllHkStockMoreIconBar">
         <item name="zr_right_icon">@mipmap/icon_fresh</item>
         <item name="zr_right_icon_width">19dp</item>
@@ -59,6 +63,7 @@
         <item name="right2_icon_height">19dp</item>
         <item name="right2_icon_margin">51dp</item>
     </style>
+
     <style name="MadrketDetailLine">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>

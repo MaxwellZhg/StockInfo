@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel"
+                  type="com.zhuorui.securities.market.ui.viewmodel.ChinaHkStockTabViewModel"/>
+    </data>
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0.6dp"
+            android:fadingEdge="none"
+            android:overScrollMode="never">
+        <LinearLayout android:orientation="vertical"
+                      android:id="@+id/root_view"
+                      android:background="@color/color_211F2A"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+            <include layout="@layout/item_stock_detail_header"/>
+            <com.zhuorui.securities.market.customer.view.NorthTrendView
+                    android:id="@+id/trend_one"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <com.zhuorui.securities.market.customer.view.NorthTrendView
+                    android:id="@+id/trend_two"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <com.zhuorui.securities.market.customer.view.ChinaHKFundTransactionView
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"/>
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                    android:id="@+id/magic_indicator"
+                    android:layout_width="match_parent"
+                    android:background="@color/color_2D2C35"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+            />
+            <include layout="@layout/layout_market_point_view_tips"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_hk_stock"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:background="@color/color_2D2C35"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

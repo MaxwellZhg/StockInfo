@@ -201,4 +201,8 @@
         <attr name="integer_part" format="integer"></attr>
         <attr name="decimal_part" format="integer"></attr>
     </declare-styleable>
+
+    <declare-styleable name="ZRAutoSizeTextView">
+        <attr name="textSizePx" format="float"/>
+    </declare-styleable>
 </resources>

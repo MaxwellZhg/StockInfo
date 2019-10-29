@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/color_2D2C35"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+ <LinearLayout android:layout_width="match_parent"
+               android:gravity="center_vertical"
+               android:orientation="horizontal"
+               android:layout_height="41.5dp">
+     <TextView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textColor="@color/color_FFFFFFFF"
+               android:textSize="18sp"
+               android:id="@+id/tv_trend"
+               android:layout_marginStart="13dp"
+               android:text="北向"/>
+     <TextView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textColor="@color/color_B3BCD0"
+               android:textSize="12sp"
+               android:layout_marginStart="15.5dp"
+               android:text="更新于2019-09-26"/>
+ </LinearLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/color_211F2A"/>
+  <androidx.constraintlayout.widget.ConstraintLayout
+                   android:paddingBottom="8dp"
+                   android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+    <LinearLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="23dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="资金净流入"
+                  android:textSize="17sp"
+                  android:textColor="@color/color_FFFFFFFF"
+              />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="10dp"
+                  android:text="+31.42亿"
+                  android:textSize="16sp"
+                  android:textColor="@color/color_D9001B"
+        />
+    </LinearLayout>
+      <LinearLayout
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              android:orientation="vertical"
+              android:id="@+id/ll_part_one_tips"
+              android:layout_marginEnd="25.5dp"
+              android:layout_marginStart="23dp"
+              android:layout_marginTop="8.5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="可用余额501.47亿"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_B3BCD0"
+          />
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8.5dp"
+                    android:text="占限额3.56%"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_B3BCD0"
+          />
+      </LinearLayout>
+      <LinearLayout
+              app:layout_constraintTop_toBottomOf="@+id/ll_part_one_tips"
+              app:layout_constraintEnd_toEndOf="parent"
+              android:orientation="vertical"
+              android:id="@+id/ll_part_two_tips"
+              android:layout_marginEnd="25.5dp"
+              android:layout_marginStart="23dp"
+              android:layout_marginTop="23dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="可用余额508.41亿"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_B3BCD0"
+          />
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8.5dp"
+                    android:text="占限额2.48%"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_B3BCD0"
+          />
+      </LinearLayout>
+      <LinearLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/ll_one_part"
+                    app:layout_constraintEnd_toStartOf="@+id/ll_part_one_tips"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7.5dp"
+                    android:layout_marginEnd="24.5dp"
+                    android:gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+           <TextView android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/tv_sh_trend"
+                     android:text="沪股通"
+                     android:textSize="16sp"
+                     android:textColor="@color/color_FFFFFFFF"
+                    />
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+18.53亿"
+                    android:layout_marginTop="7dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_D9001B"
+          />
+      </LinearLayout>
+      <LinearLayout
+              app:layout_constraintTop_toBottomOf="@+id/ll_one_part"
+              app:layout_constraintEnd_toStartOf="@+id/ll_part_two_tips"
+              android:orientation="vertical"
+              android:layout_marginTop="23.5dp"
+              android:layout_marginEnd="24.5dp"
+              android:gravity="center_horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_sz_trend"
+                    android:text="深股通"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_FFFFFFFF"
+          />
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+18.53亿"
+                    android:layout_marginTop="7dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_D9001B"
+          />
+      </LinearLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

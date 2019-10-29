@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_message.*
  *    date   : 2019/9/5 11:19
  *    desc   : 消息界面
  */
-class MessageFragment :
+class  MessageFragment :
     AbsSwipeBackNetFragment<FragmentMessageBinding, MessageViewModel, MessageView, MessagePresenter>(), MessageView {
 
     var mAdapter: MessageAdapter? = null
