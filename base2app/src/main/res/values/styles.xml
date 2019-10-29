@@ -42,10 +42,6 @@
         </item><!--兼容带刘海平的手机全屏模式下默认不使用刘海平区域-->
     </style>
 
-    <declare-styleable name="AutoTextView">
-        <attr name="textSizePx" format="float"/>
-    </declare-styleable>
-
     <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
