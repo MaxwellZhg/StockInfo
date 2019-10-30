@@ -52,7 +52,7 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         viewModel?.pointInfos?.value = info
     }
     fun getMarketInfoAdapter(): MarketPartInfoAdapter {
-        return MarketPartInfoAdapter(2)
+        return MarketPartInfoAdapter(2,4)
     }
 
 

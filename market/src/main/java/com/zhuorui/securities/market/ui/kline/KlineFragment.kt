@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -12,6 +13,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.RehabilitationPopupWindow
 import kotlinx.android.synthetic.main.fragment_stockdetail.*
 import me.yokeyword.fragmentation.SupportFragment
 
@@ -25,6 +27,7 @@ class KlineFragment : SupportFragment(), OnClickListener {
     private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(7)
     private var mIndex = 0
     private var lastTitle: TextView? = null
+    private var rehabilitationMode = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return View.inflate(context, R.layout.fragment_stockdetail, null)
@@ -63,6 +66,8 @@ class KlineFragment : SupportFragment(), OnClickListener {
         indicator?.visibility = View.VISIBLE
         lastTitle?.setTextColor(ResUtil.getColor(R.color.color_FFC0CCE0)!!)
 
+        minute_triangle.setImageResource(R.mipmap.ic_pull_triangle_normal)
+
         onSelect(v.tag.toString().toInt())
 
         if (v is TextView) {
@@ -85,6 +90,8 @@ class KlineFragment : SupportFragment(), OnClickListener {
         when (v) {
             title_minute -> {
                 ToastUtil.instance.toast("分钟")
+                minute_triangle.setImageResource(R.mipmap.ic_pull_triangle_selected)
+
                 indicator.visibility = View.GONE
                 lastTitle?.setTextColor(ResUtil.getColor(R.color.color_FFC0CCE0)!!)
 
@@ -92,7 +99,32 @@ class KlineFragment : SupportFragment(), OnClickListener {
                 tv_minute.setTextColor(ResUtil.getColor(R.color.color_53A0FD)!!)
             }
             title_rehabilitation -> {
-                ToastUtil.instance.toast("复权")
+                context?.let {
+                    RehabilitationPopupWindow.create(
+                        it,
+                        rehabilitationMode,
+                        object : RehabilitationPopupWindow.CallBack {
+                            override fun onSelected(mode: Int) {
+                                rehabilitationMode = mode
+                                when (mode) {
+                                    0 -> {
+                                        title_rehabilitation.text = getString(R.string.no_rehabilitation)
+                                    }
+                                    1 -> {
+                                        title_rehabilitation.text = getString(R.string.before_rehabilitation)
+                                    }
+                                    2 -> {
+                                        title_rehabilitation.text = getString(R.string.after_rehabilitation)
+                                    }
+                                }
+                            }
+                        }).showAsDropDown(
+                        kline_indicator,
+                        kline_indicator.width - ResUtil.getDimensionDp2Px(50f),
+                        0,
+                        Gravity.TOP
+                    )
+                }
             }
         }
     }

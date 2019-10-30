@@ -100,7 +100,7 @@ class MarketTabFragment :
             mFragments[0] = HkStockDetailFragment.newInstance(1)
             mFragments[1] = HkStockDetailFragment.newInstance(2)
             mFragments[2] = ChinaHkStockFragment.newInstance()
-            mFragments[3] = HkStockDetailFragment.newInstance(1)
+            mFragments[3] = GlobalStockFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -114,7 +114,7 @@ class MarketTabFragment :
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(HkStockDetailFragment::class.java)
             mFragments[2] = findChildFragment(ChinaHkStockFragment::class.java)
-            mFragments[3] = findChildFragment(HkStockDetailFragment::class.java)
+            mFragments[3] = findChildFragment(GlobalStockFragment::class.java)
         }
     }
 

@@ -6,15 +6,13 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.custom.StockPopupWindow
+import com.zhuorui.securities.market.customer.StockPopupWindow
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum

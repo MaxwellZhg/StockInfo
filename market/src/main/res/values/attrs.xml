@@ -27,4 +27,7 @@
     <declare-styleable name="MarketPartInfoView">
         <attr name="market_info_type" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="GlobalStockTipsView">
+        <attr name="global_info_type" format="integer"/>
+    </declare-styleable>
 </resources>

@@ -113,11 +113,12 @@
                             android:text="分钟"/>
 
                     <ImageView
+                            android:id="@+id/minute_triangle"
                             android:layout_width="8dp"
                             android:layout_height="8dp"
                             android:layout_toEndOf="@+id/tv_minute"
                             android:layout_alignBottom="@+id/tv_minute"
-                            android:src="@mipmap/ic_pull_triangle"/>
+                            android:src="@mipmap/ic_pull_triangle_normal"/>
                 </RelativeLayout>
 
                 <TextView

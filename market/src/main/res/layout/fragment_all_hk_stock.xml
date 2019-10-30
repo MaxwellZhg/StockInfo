@@ -9,7 +9,7 @@
             android:background="@color/color_211F2A"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <com.zhuorui.securities.market.custom.MoreIconTitleBar
+        <com.zhuorui.securities.market.customer.MoreIconTitleBar
                 android:id="@+id/top_bar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:zr_topbarTitle="全部港股"
@@ -17,7 +17,7 @@
                 style="@style/AllHkStockMoreIconBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-        </com.zhuorui.securities.market.custom.MoreIconTitleBar>
+        </com.zhuorui.securities.market.customer.MoreIconTitleBar>
         <TextView
                 app:layout_constraintTop_toBottomOf="@+id/top_bar"
                 android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:drawablePadding="10.5dp"
                 android:paddingStart="13dp"
                 android:text="筛选"
-                android:background="@color/color_2D2C35"
+                android:background="@color/color_211F2A"
                 android:layout_height="35dp"/>
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="match_parent">
@@ -51,7 +51,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_filters"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:background="@color/color_2D2C35"
+                    android:background="@color/color_211F2A"
                     android:orientation="horizontal">
 
                 <!-- 左侧标题的父容器 -->

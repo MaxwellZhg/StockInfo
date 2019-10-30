@@ -38,7 +38,7 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
         viewModel?.infos?.value = history
     }
 
-    fun getMarketInfoAdapter(): MarketPartInfoAdapter {
-          return MarketPartInfoAdapter(1)
+    fun getMarketInfoAdapter(state:Int): MarketPartInfoAdapter {
+          return MarketPartInfoAdapter(1,state)
     }
 }

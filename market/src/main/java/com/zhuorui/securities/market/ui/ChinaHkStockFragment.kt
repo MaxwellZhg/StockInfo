@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentChinaHkStockTabBinding
@@ -30,7 +31,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Date: 2019/10/28
  * Desc:
  */
-class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBinding,ChinaHkStockTabViewModel,ChinaHkStockTabView,ChinaHkStockTabPresenter>(),ChinaHkStockTabView,ChinaHkStockAdapter.OnItemClickMoreListener{
+class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBinding,ChinaHkStockTabViewModel,ChinaHkStockTabView,ChinaHkStockTabPresenter>()
+    ,ChinaHkStockTabView,ChinaHkStockAdapter.OnItemClickMoreListener,ChinaHkStockAdapter.OnChinaHkStockClickListener{
     private var tabTitle:ArrayList<String> = ArrayList()
     private var infoadapter: ChinaHkStockAdapter? = null
     override val layout: Int
@@ -76,6 +78,7 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
         presenter?.setLifecycleOwner(this)
         infoadapter = presenter?.getChinaHkStockAdapter()
         infoadapter?.onItemClickMoreListener=this
+        infoadapter?.onChinaHkStockClickListener=this
         //解决数据加载不完的问题
         rv_hk_stock.isNestedScrollingEnabled = false
         rv_hk_stock.setHasFixedSize(true)
@@ -141,6 +144,9 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
         var pre  = parentFragment as AbsFragment<*, *, *, *>
         var parent  = pre.getParentFragment() as AbsFragment<*, *, *, *>
          parent.start(ChinaHkStockDetailFragment.newInstance())
+    }
+    override fun onChianHkStock() {
+        ToastUtil.instance.toastCenter("港股通")
     }
 
 }

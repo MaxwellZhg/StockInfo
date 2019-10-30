@@ -3,7 +3,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
                 android:id="@+id/rl_new_stock_date"
-                android:background="@color/color_2D2C35"
+                android:background="@color/color_211F2A"
                 android:layout_width="match_parent"
                 android:paddingBottom="12dp"
                 android:layout_height="wrap_content">

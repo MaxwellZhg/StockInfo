@@ -14,7 +14,7 @@
             android:overScrollMode="never">
         <LinearLayout android:orientation="vertical"
                       android:id="@+id/root_view"
-                      android:background="@color/color_211F2A"
+                      android:background="@color/color_191821"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent">
             <include layout="@layout/item_stock_detail_header"/>
@@ -35,7 +35,7 @@
             <net.lucode.hackware.magicindicator.MagicIndicator
                     android:id="@+id/magic_indicator"
                     android:layout_width="match_parent"
-                    android:background="@color/color_2D2C35"
+                    android:background="@color/color_211F2A"
                     android:layout_height="35dp"
                     android:layout_marginTop="5dp"
             />

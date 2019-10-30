@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/ll_top_tips"
+              android:background="@color/color_211F2A"
+              android:visibility="gone"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <TextView android:layout_width="match_parent"
+              android:layout_height="41.5dp"
+              android:text="创业板"
+              android:id="@+id/tv_top_tips"
+              android:background="@color/color_211F2A"
+              android:paddingStart="13dp"
+              android:paddingEnd="13dp"
+              android:gravity="center_vertical"
+              android:drawableRight="@mipmap/icon_back_info"
+              android:textColor="@color/color_FFFFFFFF"
+              android:textSize="18sp"
+    />
+    <net.lucode.hackware.magicindicator.MagicIndicator
+            android:id="@+id/magic_indicator_top_tips"
+            android:layout_width="match_parent"
+            android:background="@color/color_211F2A"
+            android:layout_height="35dp"
+            android:layout_marginTop="0.5dp"
+    />
+</LinearLayout>

@@ -19,7 +19,7 @@
             android:animateLayoutChanges="true"
             android:layout_height="match_parent">
 
-        <com.zhuorui.securities.market.custom.MoreIconTitleBar
+        <com.zhuorui.securities.market.customer.MoreIconTitleBar
                 android:id="@+id/top_bar"
                 style="@style/SimulationTradingTitleBar"
                 android:layout_width="match_parent"

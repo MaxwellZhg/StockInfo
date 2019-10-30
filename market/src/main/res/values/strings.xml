@@ -161,4 +161,7 @@
     <string name="lower_mark_one">&#060;1</string>
     <string name="lower_mark_ten">&#060;10</string>
     <string name="lower_mark_tips">&#060;1亿</string>
+    <string name="no_rehabilitation">不复权</string>
+    <string name="before_rehabilitation">前复权</string>
+    <string name="after_rehabilitation">后复权</string>
 </resources>
