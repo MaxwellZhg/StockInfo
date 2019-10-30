@@ -25,6 +25,7 @@
                 android:overScrollMode="never">
         <LinearLayout android:orientation="vertical"
                       android:id="@+id/root_view"
+                      android:background="@color/color_191821"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent">
             <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
@@ -41,6 +42,7 @@
             <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
                     android:id="@+id/tv_global_usa"
                     app:global_info_type="2"
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             <androidx.recyclerview.widget.RecyclerView
@@ -52,6 +54,7 @@
             <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
                     android:id="@+id/tv_global_enu"
                     app:global_info_type="3"
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             <androidx.recyclerview.widget.RecyclerView
@@ -63,6 +66,7 @@
             <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
                     android:id="@+id/tv_global_asia"
                     app:global_info_type="4"
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             <androidx.recyclerview.widget.RecyclerView

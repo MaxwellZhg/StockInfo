@@ -15,9 +15,6 @@ import com.zhuorui.securities.market.ui.presenter.HkStockDetailPresenter
 import com.zhuorui.securities.market.ui.view.HkStockDetailView
 import com.zhuorui.securities.market.ui.viewmodel.HkStockDetailViewModel
 import kotlinx.android.synthetic.main.fragment_hk_stock_detail.*
-import kotlinx.android.synthetic.main.fragment_market_detail.*
-import kotlinx.android.synthetic.main.fragment_search_info.magic_indicator
-import kotlinx.android.synthetic.main.fragment_simulation_trading_main.*
 import kotlinx.android.synthetic.main.item_stock_detail_header.*
 import kotlinx.android.synthetic.main.layout_hk_top_tips_filters.*
 import kotlinx.android.synthetic.main.layout_new_stock_date.*

@@ -2,8 +2,6 @@ package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.market.model.GlobalStockInfo
-import com.zhuorui.securities.market.ui.adapter.GlobalStockInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.GlobalStockInfoTipsAdapter
 import com.zhuorui.securities.market.ui.view.GlobalStockView
 import com.zhuorui.securities.market.ui.viewmodel.GlobalStockViewModel

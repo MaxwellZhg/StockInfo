@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:id="@+id/point_tips"
-                android:background="@color/color_2D2C35"
+                android:background="@color/color_211F2A"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
     <View android:layout_width="match_parent"
