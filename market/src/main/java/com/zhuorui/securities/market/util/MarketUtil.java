@@ -1,5 +1,7 @@
 package com.zhuorui.securities.market.util;
 
+import com.zhuorui.commonwidget.config.LocalSettingsConfig;
+import com.zhuorui.commonwidget.config.StocksThemeColor;
 import com.zhuorui.securities.market.R;
 
 /**
@@ -22,4 +24,24 @@ public class MarketUtil {
         }
         return ic;
     }
+
+    public static int getUpIcon() {
+        StocksThemeColor stocksThemeColor = LocalSettingsConfig.Companion.read().getStocksThemeColor();
+        if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
+            return R.mipmap.ic_stock_up_arrow_red;
+        } else {
+            return R.mipmap.ic_stock_up_arrow_green;
+        }
+    }
+
+    public static int getDownIcon() {
+        StocksThemeColor stocksThemeColor = LocalSettingsConfig.Companion.read().getStocksThemeColor();
+        if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
+            return R.mipmap.ic_stock_down_arrow_green;
+        } else {
+            return R.mipmap.ic_stock_down_arrow_red;
+        }
+    }
+
+
 }

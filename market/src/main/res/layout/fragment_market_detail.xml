@@ -68,7 +68,7 @@
                         android:orientation="vertical">
 
                     <!--股票信息-->
-                    <com.zhuorui.securities.market.customer.view.MarketDetailView
+                    <com.zhuorui.securities.market.customer.view.StockDetailView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="13dp"
