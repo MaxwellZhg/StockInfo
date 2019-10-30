@@ -7,6 +7,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
@@ -33,7 +34,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Date: 2019/10/22
  * Desc:
  */
-class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,MarketPointViewModel,MarketPointView,MarketPointPresenter>(),MarketPointView,View.OnClickListener{
+class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,MarketPointViewModel,MarketPointView,MarketPointPresenter>()
+    ,MarketPointView,View.OnClickListener,MarketPartInfoAdapter.OnCombineInfoClickListener{
     private var type: Int? = null
     private var infoadapter: MarketPartInfoAdapter? = null
     private var pointInfoAdapter:MarketPointInfoAdapter?=null
@@ -88,6 +90,7 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         presenter?.setLifecycleOwner(this)
         infoadapter = presenter?.getMarketInfoAdapter()
         pointInfoAdapter=presenter?.getMarketPointInfoAdapter()
+        infoadapter?.onCombineInfoClickListener=this
         //解决数据加载不完的问题
         rv_point_stock.isNestedScrollingEnabled = false
         rv_point_stock.setHasFixedSize(true)
@@ -144,6 +147,8 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
                 colorTransitionPagerTitleView.setOnClickListener {
                     magic_indicator.onPageSelected(index)
                     magic_indicator.onPageScrolled(index, 0.0F, 0)
+                    top_magic_indicator.onPageSelected(index)
+                    top_magic_indicator.onPageScrolled(index, 0.0F, 0)
                     onSelect(index)
                 }
                 return colorTransitionPagerTitleView
@@ -193,6 +198,10 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         }
         pointInfoAdapter?.addItems(list)
     }
+    override fun onCombineClick() {
+        ToastUtil.instance.toastCenter("成分股")
+    }
+
 
 
 }

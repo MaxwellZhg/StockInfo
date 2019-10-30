@@ -7,6 +7,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
@@ -36,9 +37,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class HkStockDetailFragment :
     AbsFragment<com.zhuorui.securities.market.databinding.FragmentHkStockDetailBinding, HkStockDetailViewModel, HkStockDetailView, HkStockDetailPresenter>(),
-    HkStockDetailView, View.OnClickListener {
+    HkStockDetailView, View.OnClickListener,MarketPartInfoAdapter.OnAllPartInfoClickListener,MarketPartInfoAdapter.OnMainPartInfoClickListener,MarketPartInfoAdapter.OnCreatePartInfoClickListener {
     private var type: Int? = null
-    private var infoadapter: MarketPartInfoAdapter? = null
+    private var allHkPartAdapter: MarketPartInfoAdapter? = null
+    private var allMainPartAdapter: MarketPartInfoAdapter? = null
+    private var allCreatePartAdapter: MarketPartInfoAdapter? = null
     private var tabTitle: ArrayList<String> = ArrayList()
     private var topType:Int = 0;
     private var allHkStockIndex: Int = 0
@@ -101,7 +104,12 @@ class HkStockDetailFragment :
         magic_indicator2.navigator = getNavigator(2)
         magic_indicator3.navigator = getNavigator(3)
         presenter?.setLifecycleOwner(this)
-        infoadapter = presenter?.getMarketInfoAdapter()
+        allHkPartAdapter = presenter?.getMarketInfoAdapter(1)
+        allMainPartAdapter = presenter?.getMarketInfoAdapter(2)
+        allCreatePartAdapter = presenter?.getMarketInfoAdapter(3)
+        allHkPartAdapter?.onPartInfoClickListener=this
+        allMainPartAdapter?.onMainPartInfoClickListener=this
+        allCreatePartAdapter?.onCreatePartInfoClickListener=this
         //解决数据加载不完的问题
         rv_hk_stock1.isNestedScrollingEnabled = false
         rv_hk_stock1.setHasFixedSize(true)
@@ -114,10 +122,12 @@ class HkStockDetailFragment :
         rv_hk_stock2.isFocusable = false
         rv_hk_stock3.isFocusable = false
         presenter?.getData()
-        infoadapter?.notifyDataSetChanged()
-        rv_hk_stock1.adapter = infoadapter
-        rv_hk_stock2.adapter = infoadapter
-        rv_hk_stock3.adapter = infoadapter
+        allHkPartAdapter?.notifyDataSetChanged()
+        allMainPartAdapter?.notifyDataSetChanged()
+        allCreatePartAdapter?.notifyDataSetChanged()
+        rv_hk_stock1.adapter = allHkPartAdapter
+        rv_hk_stock2.adapter = allMainPartAdapter
+        rv_hk_stock3.adapter = allCreatePartAdapter
         ll_hs_point.setOnClickListener(this)
         ll_country_point.setOnClickListener(this)
         ll_red_point.setOnClickListener(this)
@@ -220,11 +230,21 @@ class HkStockDetailFragment :
     }
 
     override fun addInfoToAdapter(list: List<Int>) {
-        infoadapter?.clearItems()
-        if (infoadapter?.items == null) {
-            infoadapter?.items = ArrayList()
+        allHkPartAdapter?.clearItems()
+        if (allHkPartAdapter?.items == null) {
+            allHkPartAdapter?.items = ArrayList()
         }
-        infoadapter?.addItems(list)
+        allHkPartAdapter?.addItems(list)
+        allMainPartAdapter?.clearItems()
+        if (allMainPartAdapter?.items == null) {
+            allMainPartAdapter?.items = ArrayList()
+        }
+        allMainPartAdapter?.addItems(list)
+        allCreatePartAdapter?.clearItems()
+        if (allCreatePartAdapter?.items == null) {
+            allCreatePartAdapter?.items = ArrayList()
+        }
+        allCreatePartAdapter?.addItems(list)
     }
 
     override fun onClick(p0: View?) {
@@ -328,6 +348,19 @@ class HkStockDetailFragment :
             }
         }
         onSelect(index, type)
+    }
+
+    override fun onPartInfoClick() {
+      ToastUtil.instance.toastCenter("全部港股")
+    }
+
+    override fun onMainPartInfoClick() {
+        ToastUtil.instance.toastCenter("主板")
+    }
+
+    override fun onCreatePartInfoClick() {
+        ToastUtil.instance.toastCenter("创业板")
+
     }
 
 
