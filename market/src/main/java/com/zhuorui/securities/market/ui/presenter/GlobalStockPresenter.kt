@@ -19,7 +19,6 @@ class GlobalStockPresenter :AbsNetPresenter<GlobalStockView,GlobalStockViewModel
     var usaList= ArrayList<Int>()
     var enuList= ArrayList<Int>()
     var asiaList= ArrayList<Int>()
-    var dataList = ArrayList<GlobalStockInfo>()
     override fun init() {
         super.init()
     }
@@ -27,41 +26,50 @@ class GlobalStockPresenter :AbsNetPresenter<GlobalStockView,GlobalStockViewModel
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
         // 监听datas的变化
         lifecycleOwner.let {
-            viewModel?.infoList?.observe(it,
-                androidx.lifecycle.Observer<List<GlobalStockInfo>> { t ->
-                    view?.addIntoData(t)
+            viewModel?.coustomList?.observe(it,
+                androidx.lifecycle.Observer<List<Int>> { t ->
+                    view?.addIntoCoustomData(t)
+                })
+            viewModel?.usaList?.observe(it,
+                androidx.lifecycle.Observer<List<Int>> { t ->
+                    view?.addIntoUsaData(t)
+                })
+            viewModel?.enuList?.observe(it,
+                androidx.lifecycle.Observer<List<Int>> { t ->
+                    view?.addIntoEnuData(t)
+                })
+            viewModel?.asiaList?.observe(it,
+                androidx.lifecycle.Observer<List<Int>> { t ->
+                    view?.addIntoAsiaData(t)
                 })
         }
     }
 
-    fun getGlobalInfoAdapter(): GlobalStockInfoAdapter {
-       return  GlobalStockInfoAdapter(context)
+    fun getGlobalInfoTipsAdapter(): GlobalStockInfoTipsAdapter {
+       return  GlobalStockInfoTipsAdapter()
     }
 
+
     fun getData(){
-        usaList.clear()
-        enuList.clear()
-        asiaList.clear()
         coustomList.clear()
-        for (i in 0..4) {
-            usaList.add(i)
-        }
-        for (i in 0..6) {
-            enuList.add(i)
-        }
-        for (i in 0..8) {
-            asiaList.add(i)
-        }
         for (i in 0..9) {
             coustomList.add(i)
         }
-        dataList.add(GlobalStockInfo(1,coustomList))
-        dataList.add(GlobalStockInfo(2,usaList))
-        dataList.add(GlobalStockInfo(3,enuList))
-        dataList.add(GlobalStockInfo(4,asiaList))
-        viewModel?.infoList?.value=dataList
+        enuList.clear()
+        for (i in 0..6) {
+            enuList.add(i)
+        }
+        usaList.clear()
+        for (i in 0..4) {
+            usaList.add(i)
+        }
+        asiaList.clear()
+        for (i in 0..8) {
+            asiaList.add(i)
+        }
+        viewModel?.usaList?.value=usaList
+        viewModel?.coustomList?.value=coustomList
+        viewModel?.enuList?.value=enuList
+        viewModel?.asiaList?.value=asiaList
     }
-
-
-
 }

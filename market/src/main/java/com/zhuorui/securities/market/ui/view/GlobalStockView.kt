@@ -1,7 +1,6 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
-import com.zhuorui.securities.market.model.GlobalStockInfo
 
 /**
  * Created by Maxwell.
@@ -10,5 +9,8 @@ import com.zhuorui.securities.market.model.GlobalStockInfo
  * Desc:
  */
 interface GlobalStockView :AbsView{
-     fun addIntoData(list: List<GlobalStockInfo>)
+     fun addIntoCoustomData(list: List<Int>)
+     fun addIntoUsaData(list: List<Int>)
+     fun addIntoEnuData(list: List<Int>)
+     fun addIntoAsiaData(list: List<Int>)
 }

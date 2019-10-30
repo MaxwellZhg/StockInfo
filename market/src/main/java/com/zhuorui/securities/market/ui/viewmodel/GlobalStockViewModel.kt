@@ -11,5 +11,8 @@ import com.zhuorui.securities.market.model.GlobalStockInfo
  * Desc:
  */
 class GlobalStockViewModel :ViewModel(){
-    var infoList: MutableLiveData<MutableList<GlobalStockInfo>> = MutableLiveData()
+    var coustomList: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var usaList: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var enuList: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var asiaList: MutableLiveData<MutableList<Int>> = MutableLiveData()
 }

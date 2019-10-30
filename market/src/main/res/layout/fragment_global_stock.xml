@@ -4,11 +4,81 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.GlobalStockViewModel"/>
     </data>
-      <androidx.recyclerview.widget.RecyclerView
+      <!--<androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_data"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_211F2A"
+           >
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_global_stock_view"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="0.6dp"
+                android:fadingEdge="none"
+                android:overScrollMode="never">
+        <LinearLayout android:orientation="vertical"
+                      android:id="@+id/root_view"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+            <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
+                    android:id="@+id/tv_global_coustom"
+                    app:global_info_type="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_coustom"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+            <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
+                    android:id="@+id/tv_global_usa"
+                    app:global_info_type="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_usa"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+            <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
+                    android:id="@+id/tv_global_enu"
+                    app:global_info_type="3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_enu"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+            <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
+                    android:id="@+id/tv_global_asia"
+                    app:global_info_type="4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_aisa"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+        <com.zhuorui.securities.market.customer.view.GlobalStockTipsView
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/tv_top_tips"
+                app:global_info_type="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

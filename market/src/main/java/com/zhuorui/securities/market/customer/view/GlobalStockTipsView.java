@@ -32,6 +32,7 @@ public class GlobalStockTipsView extends FrameLayout {
         type = a.getInteger(R.styleable.GlobalStockTipsView_global_info_type,-1);
         inflate(context, R.layout.layout_global_stock_tips,this);
         tv_tips_info = (TextView)findViewById(R.id.tv_tips_info);
+        setTipsData(type);
     }
 
     public void setTipsData(int type){

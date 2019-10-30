@@ -4,8 +4,11 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.HkStockDetailViewModel"/>
     </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_view"
+            android:id="@+id/scroll_hk_detail_view"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -125,5 +128,6 @@
                 </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
+        <include layout="@layout/layout_hk_top_tips_filters"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
