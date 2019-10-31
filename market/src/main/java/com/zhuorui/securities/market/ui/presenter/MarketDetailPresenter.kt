@@ -39,6 +39,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     private var topBarInfoTp = 0 // 0 状态，1 价格
     private var isCollected: Boolean = false
     private var stocksInfo: SearchStockInfo? = null
+    private var stockTopic: StockTopic? = null
 
 
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
@@ -224,8 +225,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             datas2.add("item$i")
         }
         view?.upOrderBrokerData(datas2, datas2)
-        val stock = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
-        SocketClient.getInstance().bindTopic(stock)
+        stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
+        SocketClient.getInstance().bindTopic(stockTopic)
     }
 
     /**
@@ -242,6 +243,14 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 break
             }
         }
+    }
+
+    override fun destroy() {
+        super.destroy()
+        if (stockTopic != null) {
+            SocketClient.getInstance().unBindTopic(stockTopic)
+        }
+
     }
 
 

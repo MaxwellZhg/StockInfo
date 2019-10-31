@@ -262,4 +262,9 @@ class MarketDetailFragment :
         return commonNavigator
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.destroy()
+    }
+
 }
