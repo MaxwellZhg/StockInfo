@@ -16,18 +16,18 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.socket.push.StocksTopicTradeResponse
-import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
+import com.zhuorui.securities.market.socket.push.StocksTopicTradeStaResponse
+import com.zhuorui.securities.market.socket.vo.StockTradeStaData
 import kotlin.random.Random
 
 /**
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
  * date   : 2019/10/30 11:30
- * desc   : 展示股票成交明细
+ * desc   : 展示股票成交统计
  */
 @SuppressLint("ViewConstructor")
-class TradeDetailView(context: Context, val ts: String, val code: String, val type: Int) :
+class TradeStatView(context: Context, val ts: String, val code: String, val type: Int) :
     LinearLayout(context) {
 
     private var recyclerView: RecyclerView? = null
@@ -41,10 +41,10 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
-        val adapter = TradeDetailViewAdapter()
+        val adapter = TradeStatViewAdapter()
         // TODO 测试数据
-        val list = ArrayList<StockTradeDetailData>()
-        for (index in 0..30) {
+        val list = ArrayList<StockTradeStaData>()
+        for (index in 0..19) {
             var diffPreMark = 0
             if (index != 0) {
                 diffPreMark = if (index > 10) {
@@ -53,24 +53,18 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
                     -1
                 }
             }
-            list.add(
-                StockTradeDetailData(
-                    "",
-                    diffPreMark,
-                    1,
-                    "20191030161528333",
-                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
-                    Random.nextLong(1, 10000).toBigDecimal(),
-                    "N",
-                    "11"
-                )
-            )
+            val item = StockTradeStaData()
+            item.diffPreMark = diffPreMark
+            item.price = Random.nextDouble(1.000, 100.000).toBigDecimal()
+            item.todayQty = Random.nextInt(100, 100000).toBigDecimal()
+            item.todayTotalQty = 1000000.toBigDecimal()
+            list.add(item)
         }
         adapter.items = list
         recyclerView?.adapter = adapter
 
         //  // 发起订阅
-        //  stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_TRADE, ts, code, type)
+//          stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_TRADE_STA, ts, code, type)
         //  SocketClient.getInstance().bindTopic(stockTopic)
     }
 
@@ -92,11 +86,11 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
      * 订阅自选股逐笔成交数据推送回调
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStocksTopicTradeResponse(response: StocksTopicTradeResponse) {
+    fun onStocksTopicTradeStaResponse(response: StocksTopicTradeStaResponse) {
         if (response.body != null && recyclerView?.adapter != null) {
-            val adapter = (recyclerView?.adapter as TradeDetailViewAdapter)
+            val adapter = (recyclerView?.adapter as TradeStatViewAdapter)
             if (adapter.items.isNullOrEmpty()) {
-                val items = ArrayList<StockTradeDetailData>()
+                val items = ArrayList<StockTradeStaData>()
                 adapter.items = items
             } else {
                 adapter.addItem(response.body)
