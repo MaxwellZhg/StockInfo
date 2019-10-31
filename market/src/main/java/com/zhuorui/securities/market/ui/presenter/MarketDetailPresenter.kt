@@ -13,6 +13,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
 import com.zhuorui.securities.market.customer.view.StockDetailView
@@ -26,6 +27,7 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
+import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 
 /**
@@ -36,6 +38,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
  */
 class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailViewModel>() {
 
+    private val topbarTxtColor = Color.parseColor("#ffA4B2CB")
     private var topBarInfoTp = 0 // 0 状态，1 价格
     private var isCollected: Boolean = false
     private var stocksInfo: SearchStockInfo? = null
@@ -97,6 +100,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                     view?.upData(data)
                     if (topBarInfoTp == 1) {
                         getTopBarPriceInfo()
+                    } else {
+                        getTopBarStockStatusInfo()
                     }
                 })
         }
@@ -117,7 +122,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 LocalSettingsConfig.read().getUpDownColor(price, preClosePrice)
             )
         } else {
-            view?.upTopBarInfo("--- -- --", Color.WHITE)
+            view?.upTopBarInfo("--- -- --", topbarTxtColor)
         }
     }
 
@@ -126,7 +131,12 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * */
     fun getTopBarStockStatusInfo() {
         topBarInfoTp = 0
-        view?.upTopBarInfo("交易中  08-30  09:45:19", Color.parseColor("#ffA4B2CB"))
+        var closingTimeMillis =
+            if (Integer.valueOf(TimeZoneUtil.currentTime("HH")) >= 16) TimeZoneUtil.currentTimeMillis() else 0
+        view?.upTopBarInfo(
+            MarketUtil.getStockStatusTxt(stocksInfo?.ts, closingTimeMillis, true),
+            topbarTxtColor
+        )
     }
 
     fun getTopBarOnfoType(): Int {
@@ -250,8 +260,6 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         if (stockTopic != null) {
             SocketClient.getInstance().unBindTopic(stockTopic)
         }
-
     }
-
 
 }

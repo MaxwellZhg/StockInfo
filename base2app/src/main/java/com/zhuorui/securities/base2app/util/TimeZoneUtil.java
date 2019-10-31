@@ -42,7 +42,6 @@ public class TimeZoneUtil {
         return offsetMills / 1000 / 60 / 60;
     }
 
-
     /**
      * 字符串时间格式转化
      *
@@ -106,6 +105,23 @@ public class TimeZoneUtil {
             } else if (d1.getTime() < d2.getTime()) {
                 return -1;
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 时间字符串转成毫秒时间戳
+     *
+     * @param time
+     * @param format
+     * @return
+     */
+    public static long parseTime(String time, String format) {
+        try {
+            Date date = new SimpleDateFormat(format).parse(time);
+            return date.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
