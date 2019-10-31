@@ -164,4 +164,5 @@
     <string name="no_rehabilitation">不复权</string>
     <string name="before_rehabilitation">前复权</string>
     <string name="after_rehabilitation">后复权</string>
+    <string name="str_retract">收起</string>
 </resources>

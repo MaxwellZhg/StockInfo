@@ -4,306 +4,131 @@
         android:id="@+id/root_view"
         android:orientation="vertical"
         android:animateLayoutChanges="true"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+
+    <!-- 涨跌动画View -->
+    <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/tv_price"
+            app:layout_constraintLeft_toLeftOf="@id/tv_price"
+            app:layout_constraintBottom_toBottomOf="@id/tv_price"
+            app:layout_constraintRight_toRightOf="@id/tv_price"
+    >
+        <View
+                android:id="@+id/v_price_cahnge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+        />
+    </FrameLayout>
 
     <TextView
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="90.500"
-            android:textColor="#D9001B"
+            android:textColor="@android:color/white"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="bottom"
+            android:layout_marginLeft="7dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="24dp"
+            android:includeFontPadding="false"
+            android:text="———"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+    />
+
+    <ImageView
+            android:id="@+id/iv_diff_logo"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="6dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_price"
+            app:layout_constraintRight_toRightOf="@id/tv_price"
     />
 
     <TextView
             android:id="@+id/tv_currency_code"
             android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:text="HKD"
+            android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="#A4B2CB"
-            android:layout_marginLeft="28dp"
+            android:layout_marginLeft="5dp"
             app:layout_constraintLeft_toRightOf="@+id/tv_price"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_price"
-    />
-
-    <ImageView
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:layout_marginRight="11dp"
-            android:src="@mipmap/ic_stock_up_arrow_red"
-            app:layout_constraintTop_toTopOf="@id/tv_currency_code"
-            app:layout_constraintRight_toLeftOf="@+id/tv_currency_code"
     />
 
     <TextView
             android:id="@+id/tv_diff_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+0.500"
-            android:textColor="#D9001B"
+            android:layout_marginLeft="13dp"
+            android:text="——"
+            android:textColor="@android:color/white"
             android:textSize="13sp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="1dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_price"
             app:layout_constraintLeft_toLeftOf="parent"
     />
+
 
     <TextView
             android:id="@+id/tv_diff_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+0.500"
-            android:textColor="#D9001B"
+            android:text="——"
+            android:textColor="@android:color/white"
             android:textSize="13sp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="52dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="14dp"
+            app:layout_constraintTop_toTopOf="@id/tv_diff_price"
+            app:layout_constraintLeft_toRightOf="@id/tv_diff_price"
     />
 
     <TextView
             android:id="@+id/tv_market"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="保险"
             android:textColor="@android:color/white"
             android:textSize="13sp"
             android:textStyle="bold"
+            android:layout_marginRight="13dp"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_currency_code"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_price"
     />
 
     <TextView
             android:id="@+id/tv_market_diff_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+0.500"
             android:textColor="#D9001B"
             android:textSize="13sp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_diff_price"
+            app:layout_constraintRight_toRightOf="@id/tv_market"
     />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_diff_price"
             app:layout_constraintLeft_toLeftOf="parent"
     />
-
-    <!-- title -->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_1_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="最高"-->
-            <!--android:layout_marginTop="50dp"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--app:layout_constraintRight_toLeftOf="@+id/tv_1_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_1_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="今开"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_marginRight="5dp"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintLeft_toRightOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintRight_toLeftOf="@+id/tv_1_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_1_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="成交量"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintLeft_toRightOf="@+id/tv_1_2"-->
-            <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_2_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="最低"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_1_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_2_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="昨收"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_2_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_1_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_1_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_2_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="成交额"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_2_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_1_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_1_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_3_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="换手率"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_2_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_2_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_2_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_3_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="市盈率(静)"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_3_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_2_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_2_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_3_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="总市值"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_3_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_2_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_2_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_4_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="振幅"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_3_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_3_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_3_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_4_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="今开"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_4_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_3_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_3_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_4_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="总股本"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_4_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_3_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_3_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_5_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="52周最高"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_4_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_4_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_4_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_5_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="股息"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_5_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_4_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_4_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_5_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="流通值"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_5_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_4_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_4_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_6_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="52周最低"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_5_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_5_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_5_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_6_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="委比"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_6_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_5_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_5_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_6_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="流通率"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_6_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_5_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_5_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_7_1"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:text="每手"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_6_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_6_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_6_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_7_2"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="量比"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_7_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_6_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_6_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_7_3"-->
-            <!--style="@style/StockDetailTitle"-->
-            <!--android:text="股息率"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_7_1"-->
-            <!--app:layout_constraintLeft_toLeftOf="@+id/tv_6_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_6_3"-->
-    <!--/>-->
 
     <TextView
             android:id="@+id/more_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="查看更多"
+            android:text="@string/see_more"
             android:textColor="#53A0FD"
             android:textSize="13sp"
             android:textStyle="bold"
@@ -314,206 +139,5 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
     />
-
-    <!--数据展示-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_11"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:textColor="#D9001B"-->
-            <!--android:text="90.950"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_1_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_1_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_12"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="90.100"-->
-            <!--android:textColor="#D9001B"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_1_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_1_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_1_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_13"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="329.27万股"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_1_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_1_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_1_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_21"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="89.600"-->
-            <!--android:textColor="#00CC00"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_2_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_2_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_2_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_22"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="90.100"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_2_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_2_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_2_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_23"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="3.18亿"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_2_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_2_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_2_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_31"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="0.05%"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_3_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_3_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_3_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_32"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="13.56"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_3_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_3_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_3_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_33"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="1.66万亿"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_3_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_3_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_3_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_41"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="1.50%"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_4_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_4_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_4_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_42"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="2.62"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_4_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_4_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_4_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_43"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="182.80亿"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_4_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_4_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_4_3"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_51"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="98.000"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_5_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_5_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_5_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_52"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="2.12"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_5_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_5_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_5_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_53"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="6766.12亿"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_5_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_5_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_5_3"-->
-    <!--/>-->
-    <!--<TextView-->
-            <!--android:id="@+id/tv_61"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="64.666"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_6_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_6_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_6_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_62"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="-7.61%"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_6_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_6_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_6_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_63"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="74.48亿"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_6_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_6_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_6_3"-->
-    <!--/>-->
-    <!--<TextView-->
-            <!--android:id="@+id/tv_71"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="500"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_7_1"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_7_1"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_7_1"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_72"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="0.87"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_7_2"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_7_2"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_7_2"-->
-    <!--/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/tv_73"-->
-            <!--style="@style/StockDetailText"-->
-            <!--android:text="2.34%"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/tv_7_3"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/tv_7_3"-->
-            <!--app:layout_constraintRight_toRightOf="@+id/tv_7_3"-->
-    <!--/>-->
-
-    <!--<androidx.constraintlayout.widget.Group-->
-            <!--android:id="@+id/more_group"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:visibility="visible"-->
-            <!--app:constraint_referenced_ids="tv_4_1,tv_4_2,tv_4_3,tv_5_1,tv_5_2,tv_5_3,tv_6_1,tv_6_2,tv_6_3,tv_7_1,tv_7_2,tv_7_3,tv_41,tv_42,tv_43,tv_51,tv_52,tv_53,tv_61,tv_62,tv_63,tv_71,tv_72,tv_73"-->
-    <!--/>-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

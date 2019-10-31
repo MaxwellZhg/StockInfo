@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.customer.view.StockDetailView
 
 /**
  *    author : liuwei
@@ -13,4 +14,5 @@ interface MarketDetailView : AbsView {
     fun upBuyingSellingFilesData(buy: Float, sell: Float, buyData: MutableList<Int>, sellData: MutableList<Int>)
     fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>)
     fun upFollow(collected: Boolean)
+    fun upData(data: StockDetailView.IStockDatailData)
 }

@@ -1,22 +1,29 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.graphics.Color
+import android.text.TextUtils
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
+import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
+import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
-import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.DeleteStockRequest
+import com.zhuorui.securities.market.socket.SocketClient
+import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
@@ -30,17 +37,87 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailViewModel>() {
 
     private var topBarInfoTp = 0 // 0 状态，1 价格
-    private var isCollected:Boolean = false
+    private var isCollected: Boolean = false
+    private var stocksInfo: SearchStockInfo? = null
+
+
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.pushStockPriceData?.observe(it,
+                androidx.lifecycle.Observer<PushStockPriceData> { t ->
+                    val data = object : StockDetailView.IStockDatailData {
+                        /**
+                         * 当前价
+                         *
+                         * @return
+                         */
+                        override fun getPrice(): Float {
+                            return t.price!!.toFloat()
+                        }
+
+                        /**
+                         * 开盘价
+                         *
+                         * @return
+                         */
+                        override fun getOpenPrice(): Float {
+                            return t.openPrice!!.toFloat()
+                        }
+
+                        /**
+                         * 昨收价
+                         *
+                         * @return
+                         */
+                        override fun getPreClosePrice(): Float {
+                            return t.preClosePrice!!.toFloat()
+                        }
+
+                        /**
+                         * 最低价
+                         *
+                         * @return
+                         */
+                        override fun getLowPrice(): Float {
+                            return 0f
+                        }
+
+                        /**
+                         * 最高价
+                         *
+                         * @return
+                         */
+                        override fun getHighPrice(): Float {
+                            return 0f
+                        }
+
+                    }
+                    view?.upData(data)
+                    if (topBarInfoTp == 1) {
+                        getTopBarPriceInfo()
+                    }
+                })
+        }
+    }
 
     /**
      * 获取topbar 显示股票价格信息
      * */
     fun getTopBarPriceInfo() {
+        val priceData = viewModel?.pushStockPriceData?.value
         topBarInfoTp = 1
-        view?.upTopBarInfo(
-            String.format("%+.3f %+.3f %+.2f%%", 123.43f, -23f, 23.45f),
-            LocalSettingsConfig.read().getUpDownColor(123.0f, 3455.0f)
-        )
+        if (priceData != null) {
+            val price = priceData.price!!.toFloat()
+            val preClosePrice = priceData.preClosePrice!!.toFloat()
+            val diffPrice = price - preClosePrice
+            view?.upTopBarInfo(
+                String.format("%.3f %+.3f %+.2f%%", price, diffPrice, diffPrice * 100 / preClosePrice),
+                LocalSettingsConfig.read().getUpDownColor(price, preClosePrice)
+            )
+        } else {
+            view?.upTopBarInfo("--- -- --", Color.WHITE)
+        }
     }
 
     /**
@@ -125,6 +202,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     }
 
     fun getData(stockInfo: SearchStockInfo) {
+        stocksInfo = stockInfo;
         isCollected = false
         val localStocks = LocalStocksConfig.getInstance().getStocks()
         if (localStocks.isNotEmpty()) {
@@ -146,6 +224,24 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             datas2.add("item$i")
         }
         view?.upOrderBrokerData(datas2, datas2)
+        val stock = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
+        SocketClient.getInstance().bindTopic(stock)
+    }
+
+    /**
+     * 股票价格变化
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
+        if (stocksInfo == null) return
+        val prices: List<PushStockPriceData> = response.body
+        for (price in prices) {
+            val tsCode = price.code + "." + price.ts
+            if (TextUtils.equals(stocksInfo?.tsCode, tsCode)) {
+                viewModel?.pushStockPriceData?.value = price
+                break
+            }
+        }
     }
 
 
