@@ -4,8 +4,12 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.HkStockDetailViewModel"/>
     </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/color_191821"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_view"
+            android:id="@+id/scroll_hk_detail_view"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -19,7 +23,6 @@
             <include layout="@layout/item_stock_detail_header"/>
             <include layout="@layout/layout_new_stock_date"/>
             <com.zhuorui.securities.market.customer.view.MarketUpDownInfoView
-                    android:background="#211F2A"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
@@ -42,7 +45,7 @@
                           android:text="全部港股"
                           android:id="@+id/tv_all_hk_stock"
                           android:layout_marginTop="5dp"
-                          android:background="@color/color_2D2C35"
+                          android:background="@color/color_211F2A"
                           android:paddingStart="13dp"
                           android:paddingEnd="13dp"
                           android:gravity="center_vertical"
@@ -53,7 +56,7 @@
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator1"
                         android:layout_width="match_parent"
-                        android:background="@color/color_2D2C35"
+                        android:background="@color/color_211F2A"
                         android:layout_height="35dp"
                         android:layout_marginTop="0.5dp"
                 />
@@ -61,7 +64,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_hk_stock1"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:background="@color/color_2D2C35"
+                        android:background="@color/color_211F2A"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                 </androidx.recyclerview.widget.RecyclerView>
@@ -72,7 +75,7 @@
                           android:text="主板"
                           android:id="@+id/tv_main_part"
                           android:layout_marginTop="5dp"
-                          android:background="@color/color_2D2C35"
+                          android:background="@color/color_211F2A"
                           android:paddingStart="13dp"
                           android:paddingEnd="13dp"
                           android:gravity="center_vertical"
@@ -83,7 +86,7 @@
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator2"
                         android:layout_width="match_parent"
-                        android:background="@color/color_2D2C35"
+                        android:background="@color/color_211F2A"
                         android:layout_height="35dp"
                         android:layout_marginTop="0.5dp"
                 />
@@ -101,7 +104,7 @@
                           android:text="创业板"
                           android:id="@+id/tv_create_newly_part"
                           android:layout_marginTop="5dp"
-                          android:background="@color/color_2D2C35"
+                          android:background="@color/color_211F2A"
                           android:paddingStart="13dp"
                           android:paddingEnd="13dp"
                           android:gravity="center_vertical"
@@ -112,7 +115,7 @@
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator3"
                         android:layout_width="match_parent"
-                        android:background="@color/color_2D2C35"
+                        android:background="@color/color_211F2A"
                         android:layout_height="35dp"
                         android:layout_marginTop="0.5dp"
                 />
@@ -125,5 +128,6 @@
                 </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
+        <include layout="@layout/layout_hk_top_tips_filters"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

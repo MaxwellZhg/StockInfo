@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/color_211F2A"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+<TextView android:layout_marginStart="13dp"
+          android:layout_marginEnd="17dp"
+          android:layout_marginTop="10dp"
+          android:textColor="@color/color_FFFFFFFF"
+          android:textSize="16sp"
+          android:text="港股异动：中国平安（02318）A股再创历史新高 H股跟涨1.7%"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+    <TextView android:layout_marginStart="13dp"
+              android:layout_marginTop="13dp"
+              android:textColor="@color/color_7B889E"
+              android:textSize="14sp"
+              android:layout_marginBottom="10dp"
+              android:text="17:22"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/color_191821"/>
+</LinearLayout>

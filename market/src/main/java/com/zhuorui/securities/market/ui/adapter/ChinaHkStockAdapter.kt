@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -18,6 +19,7 @@ class ChinaHkStockAdapter :BaseListAdapter<Int>(){
     private val default = 0x00
     private val bottom = 0x01
     var onItemClickMoreListener: OnItemClickMoreListener? = null
+    var onChinaHkStockClickListener:OnChinaHkStockClickListener?=null
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
             default -> R.layout.item_market_part_stock_info
@@ -48,8 +50,21 @@ class ChinaHkStockAdapter :BaseListAdapter<Int>(){
 
     inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean) :
         ListItemViewHolder<Int>(v, needClick, needLongClick) {
+        @BindView(R2.id.rl_content)
+        lateinit var rl_content: RelativeLayout
         override fun bind(item: Int?, position: Int) {
 
+        }
+        init {
+            rl_content.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            if (v == rl_content) {
+               onChinaHkStockClickListener?.onChianHkStock()
+              } else {
+                super.onClick(v)
+            }
         }
     }
 
@@ -98,6 +113,10 @@ class ChinaHkStockAdapter :BaseListAdapter<Int>(){
 
     interface OnItemClickMoreListener{
         fun onclickMore()
+    }
+
+    interface OnChinaHkStockClickListener{
+        fun onChianHkStock()
     }
 
 }

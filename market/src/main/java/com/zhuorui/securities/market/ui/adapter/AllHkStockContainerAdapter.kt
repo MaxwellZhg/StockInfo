@@ -27,10 +27,5 @@ class AllHkStockContainerAdapter : BaseListAdapter<Int>() {
         override fun bind(item: Int?, position: Int) {
         }
     }
-/*    override fun convert(helper: AbsViewHolder?, item: Int?, pos: Int) {
-    }
 
-    override fun addData(mCommonbeans: List<Int>, isMore: Boolean) {
-        super.addData(mCommonbeans, isMore)
-    }*/
 }

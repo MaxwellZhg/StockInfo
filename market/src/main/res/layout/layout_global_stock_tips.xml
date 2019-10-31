@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/color_211F2A"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+<TextView android:layout_width="match_parent"
+          android:layout_height="40dp"
+          android:id="@+id/tv_tips_info"
+          android:text="常用指数"
+          android:paddingStart="13dp"
+          android:textSize="16sp"
+          android:gravity="center_vertical"
+          android:textColor="@color/color_FFFFFFFF"
+          android:background="@color/color_211F2A"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="35dp">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="14sp"
+                  android:layout_marginStart="13dp"
+                  android:layout_centerVertical="true"
+                  android:textColor="@color/color_B3BCD0"
+                  android:text="指数名称"
+          />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="14sp"
+                  android:id="@+id/tv_up_down_rate"
+                  android:layout_alignParentEnd="true"
+                  android:layout_marginEnd="13dp"
+                  android:layout_centerVertical="true"
+                  android:textColor="@color/color_B3BCD0"
+                  android:text="涨跌幅"
+        />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="14sp"
+                  android:layout_toLeftOf="@+id/tv_up_down_rate"
+                  android:layout_marginEnd="27dp"
+                  android:layout_centerVertical="true"
+                  android:textColor="@color/color_B3BCD0"
+                  android:text="最新价"
+        />
+    </RelativeLayout>
+</LinearLayout>

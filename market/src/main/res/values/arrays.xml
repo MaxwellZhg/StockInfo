@@ -5,4 +5,28 @@
         <item>近一月</item>
         <item>近三月</item>
     </string-array>
+    <string-array name="stock_detail_title">
+        <item>最高</item>
+        <item>今开</item>
+        <item>成交量</item>
+        <item>最低</item>
+        <item>昨收</item>
+        <item>成交额</item>
+        <item>换手率</item>
+        <item>市盈率(静)</item>
+        <item>总市值</item>
+        <item>振幅</item>
+        <item>市盈率(TTM)</item>
+        <item>总股本</item>
+        <item>52周最高</item>
+        <item>市净率</item>
+        <item>流通值</item>
+        <item>52周最低</item>
+        <item>委比</item>
+        <item>流通股</item>
+        <item>每手</item>
+        <item>量比</item>
+        <item>股息率</item>
+    </string-array>
+
 </resources>

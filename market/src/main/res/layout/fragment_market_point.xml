@@ -6,7 +6,7 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
                 android:orientation="vertical"
-                  android:background="@color/color_211F2A"
+                  android:background="@color/color_191821"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
         <include
@@ -45,7 +45,7 @@
                 <net.lucode.hackware.magicindicator.MagicIndicator
                         android:id="@+id/magic_indicator"
                         android:layout_width="match_parent"
-                        android:background="@color/color_2D2C35"
+                        android:background="@color/color_211F2A"
                         android:layout_height="35dp"
                         android:layout_marginTop="2dp"
                 />
@@ -66,6 +66,6 @@
                 android:layout_height="45dp"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/top_bar"
-                android:background="#2D2C35"/>
+                android:background="@color/color_211F2A"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

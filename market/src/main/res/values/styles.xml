@@ -32,7 +32,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:drawablePadding">4.5dp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:background">@color/color_2D2C35</item>
+        <item name="android:background">@color/color_211F2A</item>
         <item name="android:textColor">@color/color_B3BCD0</item>
     </style>
 
@@ -40,7 +40,7 @@
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">35dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/color_2D2C35</item>
+        <item name="android:background">@color/color_211F2A</item>
     </style>
 
     <style name="TextView_Table_Right_Item">
@@ -50,7 +50,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:drawablePadding">4.5dp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:background">@color/color_2D2C35</item>
+        <item name="android:background">@color/color_211F2A</item>
     </style>
 
     <style name="AllHkStockMoreIconBar">
@@ -68,19 +68,5 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#191821</item>
-    </style>
-    <style name="StockDetailTitle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#C3CDE3</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="StockDetailText">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 </resources>

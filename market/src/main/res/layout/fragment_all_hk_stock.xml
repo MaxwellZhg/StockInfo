@@ -28,7 +28,7 @@
                 android:drawablePadding="10.5dp"
                 android:paddingStart="13dp"
                 android:text="筛选"
-                android:background="@color/color_2D2C35"
+                android:background="@color/color_211F2A"
                 android:layout_height="35dp"/>
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="match_parent">
@@ -51,7 +51,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_filters"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:background="@color/color_2D2C35"
+                    android:background="@color/color_211F2A"
                     android:orientation="horizontal">
 
                 <!-- 左侧标题的父容器 -->

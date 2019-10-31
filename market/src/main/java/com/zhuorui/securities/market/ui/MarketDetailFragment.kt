@@ -12,6 +12,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
@@ -84,6 +85,7 @@ class MarketDetailFragment :
         super.onLazyInitView(savedInstanceState)
         initView()
         setTopbarData()
+        presenter?.setLifecycleOwner(this)
     }
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
@@ -91,6 +93,11 @@ class MarketDetailFragment :
         loadRootFragment(R.id.kline_view, KlineFragment())
         presenter?.getData(mStock!!)
     }
+
+    override fun upData(data: StockDetailView.IStockDatailData) {
+        stock_detail.setData(data)
+    }
+
 
     private fun setTopbarData() {
         tv_title.text = String.format("%s(%s)", mStock?.name, mStock?.code)
@@ -253,6 +260,11 @@ class MarketDetailFragment :
             }
         }
         return commonNavigator
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.destroy()
     }
 
 }

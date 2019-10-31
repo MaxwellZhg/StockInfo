@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/color_211F2A"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+         <RelativeLayout android:layout_width="match_parent"
+                         android:layout_height="41.5dp">
+             <ImageView android:layout_width="17dp"
+                        android:layout_height="17dp"
+                        android:id="@+id/iv_flag"
+                        android:layout_marginStart="13dp"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/icon_flag"/>
+             <TextView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_centerVertical="true"
+                       android:layout_toRightOf="@+id/iv_flag"
+                       android:layout_marginStart="6dp"
+                       android:text="上证指数"
+                       android:textSize="17sp"
+                       android:textColor="@color/color_FFFFFFFF"
+                />
+             <TextView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_centerVertical="true"
+                       android:layout_alignParentEnd="true"
+                       android:layout_marginEnd="13dp"
+                       android:id="@+id/tv_rate"
+                       android:text="-0.28%"
+                       android:textSize="14sp"
+                       android:textColor="@color/color_00CC00"
+             />
+             <TextView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_centerVertical="true"
+                       android:layout_toLeftOf="@+id/tv_rate"
+                       android:layout_marginEnd="18dp"
+                       android:text="2927.99"
+                       android:textSize="14sp"
+                       android:textColor="@color/color_00CC00"
+             />
+         </RelativeLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/color_191821"/>
+</LinearLayout>
