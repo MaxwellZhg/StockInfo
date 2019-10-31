@@ -164,5 +164,14 @@
     <string name="no_rehabilitation">不复权</string>
     <string name="before_rehabilitation">前复权</string>
     <string name="after_rehabilitation">后复权</string>
+    <string name="kline_day">分时</string>
+    <string name="kline_five_day">五日</string>
+    <string name="kline_days">日K</string>
+    <string name="kline_weeks">周K</string>
+    <string name="kline_months">月K</string>
+    <string name="kline_year">年K</string>
+    <string name="kline_minute">分钟</string>
+    <string name="kline_detail">明细</string>
+    <string name="kline_stat">统计</string>
     <string name="str_retract">收起</string>
 </resources>

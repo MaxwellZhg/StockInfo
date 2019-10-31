@@ -167,7 +167,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     private fun topicPrice(datas: MutableList<StockMarketInfo>): Boolean {
         for (item in datas) {
-            val stockTopic = StockTopic(StockTopicDataTypeEnum.price, item.ts!!, item.code!!, item.type!!)
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, item.ts!!, item.code!!, item.type!!)
             SocketClient.getInstance().bindTopic(stockTopic)
         }
         return true
@@ -229,7 +229,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             datas.add(0, stock)
             view?.notifyDataSetChanged(datas)
             // 发起订阅价格
-            val stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockTs!!, stock.code!!, stock.type!!)
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockTs!!, stock.code!!, stock.type!!)
             SocketClient.getInstance().bindTopic(stockTopic)
             // 刷新股票个数
             RxBus.getDefault().post(NotifyStockCountEvent(ts, datas.size))
@@ -293,7 +293,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                     datas.remove(element)
                     // 取消订阅
                     val stockTopic = StockTopic(
-                        StockTopicDataTypeEnum.price, element.ts!!, element.code!!,
+                        StockTopicDataTypeEnum.STOCK_PRICE, element.ts!!, element.code!!,
                         element.type!!
                     )
                     SocketClient.getInstance().unBindTopic(stockTopic)

@@ -52,19 +52,9 @@ class ChartOneDayFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         land = arguments!!.getBoolean("landscape")
-        chart!!.initChart(land)
+        chart!!.initChart()
 
         presenter?.loadKNetlineMinuteData()
-
-        //测试数据
-//        try {
-//            //上证指数代码000001.IDX.SH
-//            val kTimeData = TimeDataManage()
-//            kTimeData.parseTimeData(JSONObject(ChartData.TIMEDATA), "000001.IDX.SH", 0.0)
-//            chart.setDataToChart(kTimeData)
-//        } catch (e: JSONException) {
-//            e.printStackTrace()
-//        }
     }
 
     override fun setDataToChart(timeDataManage: TimeDataManage?) {

@@ -69,7 +69,7 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
             disposables.add(disposable)
 
             // 订阅正常数据
-            stockTopic = StockTopic(StockTopicDataTypeEnum.kminute, ts, code, 1)
+            stockTopic = StockTopic(StockTopicDataTypeEnum.MINUTE, ts, code, 1)
             SocketClient.getInstance().bindTopic(stockTopic)
         }
     }

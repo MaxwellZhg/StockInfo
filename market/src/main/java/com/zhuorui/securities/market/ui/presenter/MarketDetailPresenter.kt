@@ -225,7 +225,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             datas2.add("item$i")
         }
         view?.upOrderBrokerData(datas2, datas2)
-        stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
+        stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
         SocketClient.getInstance().bindTopic(stockTopic)
     }
 

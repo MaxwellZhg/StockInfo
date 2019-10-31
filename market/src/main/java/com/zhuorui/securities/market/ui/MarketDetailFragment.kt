@@ -90,7 +90,12 @@ class MarketDetailFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
-        loadRootFragment(R.id.kline_view, KlineFragment())
+        if (mStock != null) {
+            loadRootFragment(
+                R.id.kline_view,
+                KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!,false)
+            )
+        }
         presenter?.getData(mStock!!)
     }
 
@@ -107,7 +112,7 @@ class MarketDetailFragment :
 
     override fun upFollow(collected: Boolean) {
         val top = if (collected) R.mipmap.ic_heart_ff8e1b else R.mipmap.ic_heart_c3cde3
-        tv_follow.setCompoundDrawablesWithIntrinsicBounds(0,top,0,0)
+        tv_follow.setCompoundDrawablesWithIntrinsicBounds(0, top, 0, 0)
     }
 
     /**
@@ -148,7 +153,7 @@ class MarketDetailFragment :
             tv_simulation_trading -> {
                 start(SimulationTradingMainFragment.newInstance(mStock!!))
             }
-            tv_remind->{
+            tv_remind -> {
                 val sm = StockMarketInfo()
                 sm.name = mStock?.name
                 sm.code = mStock?.code
@@ -157,7 +162,7 @@ class MarketDetailFragment :
                 sm.tsCode = mStock?.tsCode
                 start(RemindSettingFragment.newInstance(sm))
             }
-            tv_follow->{
+            tv_follow -> {
                 presenter?.collectionStock(mStock!!)
             }
         }

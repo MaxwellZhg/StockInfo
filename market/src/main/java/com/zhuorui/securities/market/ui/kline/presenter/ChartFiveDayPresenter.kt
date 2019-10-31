@@ -72,7 +72,7 @@ class ChartFiveDayPresenter : AbsEventPresenter<FiveDayKlineView, FiveDayKlineVi
 //            disposables.add(disposable)
 
             // 订阅正常数据
-            val stockTopic = StockTopic(StockTopicDataTypeEnum.k5day, "SZ", "000001", 1)
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.FIVE_DAY, "SZ", "000001", 1)
             SocketClient.getInstance().bindTopic(stockTopic)
             viewModel?.stockTopic = stockTopic
         }

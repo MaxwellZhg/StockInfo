@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="12dp">
+
+    <com.zhuorui.commonwidget.ZRStockTextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="--:--"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_7B889E"
+            android:textSize="9sp"
+            tools:ignore="SmallSp"/>
+
+    <TextView
+            android:id="@+id/tv_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@+id/pb_stat"
+            android:layout_marginEnd="15dp"
+            android:text="--.--"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_7B889E"
+            android:textSize="9sp"
+            tools:ignore="SmallSp"/>
+
+    <LinearLayout
+            android:id="@+id/pb_stat"
+            android:layout_width="31.5dp"
+            android:layout_height="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="2.5dp"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+        <View android:id="@+id/buy_qty"
+              android:layout_width="0dp"
+              android:layout_weight="5"
+              android:layout_height="match_parent"/>
+
+        <View android:id="@+id/sell_qty"
+              android:layout_width="0dp"
+              android:layout_weight="2"
+              android:layout_height="match_parent"/>
+
+        <View android:id="@+id/unchange_qty"
+              android:layout_width="0dp"
+              android:layout_weight="3"
+              android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/tv_stat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/pb_stat"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="1.5dp"
+            android:text="--"
+            android:textSize="9sp"
+            android:textColor="@color/color_FFFFFFFF"/>
+</RelativeLayout>

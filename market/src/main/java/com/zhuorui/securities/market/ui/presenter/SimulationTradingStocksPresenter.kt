@@ -345,8 +345,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             SocketClient.getInstance().unBindTopic(stockTopicPrice, stockTopicTrans)
         }
         // 订阅当前的自选股
-        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
-        stockTopicTrans = StockTopic(StockTopicDataTypeEnum.trans, stockInfo.ts!!, stockInfo.code!!, 2)
+        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
+        stockTopicTrans = StockTopic(StockTopicDataTypeEnum.HANDICAP, stockInfo.ts!!, stockInfo.code!!, 2)
         SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
         // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股）
         val getFeeTemplateRequest = GetFeeTemplateRequest(
