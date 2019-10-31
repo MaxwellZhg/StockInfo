@@ -81,7 +81,7 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
             }
         }
         tabTitle.add("成分股")
-        tabTitle.add("咨讯")
+        tabTitle.add("资讯")
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
         loadRootFragment(R.id.kline_view, KlineFragment())

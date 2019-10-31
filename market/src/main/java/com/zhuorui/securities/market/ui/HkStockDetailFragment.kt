@@ -40,9 +40,11 @@ class HkStockDetailFragment :
     private var allMainPartAdapter: MarketPartInfoAdapter? = null
     private var allCreatePartAdapter: MarketPartInfoAdapter? = null
     private var tabTitle: ArrayList<String> = ArrayList()
-    private var topType:Int = 0;
+    private var topType:Int = 0
     private var allHkStockIndex: Int = 0
     private var allHkMainStockIndex: Int = 0
+    private var preTemplete :Int = -1
+    private var templete :Int = 0
     override val layout: Int
         get() = R.layout.fragment_hk_stock_detail
     override val viewModelId: Int
@@ -135,9 +137,8 @@ class HkStockDetailFragment :
         tv_main_part.setOnClickListener(this)
         tv_create_newly_part.setOnClickListener(this)
         tv_top_tips.setOnClickListener(this)
-        scroll_hk_detail_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+        scroll_hk_detail_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
             if (tv_all_hk_stock != null) {
-                //ll_top_tips?.visibility = if (scrollY < tv_all_hk_stock.top) View.GONE else View.VISIBLE
                 if (scrollY < tv_all_hk_stock.top) {
                     topType=0
                     ll_top_tips.visibility = View.GONE
@@ -150,13 +151,16 @@ class HkStockDetailFragment :
                         magic_indicator_top_tips.onPageSelected(allHkStockIndex)
                         magic_indicator_top_tips.onPageScrolled(allHkStockIndex, 0.0F, 0)
                     }
-                } else {
+                } else if(scrollY >= tv_main_part.top) {
                     if (topType==1) {
                         topType=2
                         tv_top_tips.text = "主板"
                         magic_indicator_top_tips.navigator = getTopNavigator(2)
                         magic_indicator_top_tips.onPageSelected(allHkMainStockIndex)
                         magic_indicator_top_tips.onPageScrolled(allHkMainStockIndex, 0.0F, 0)
+                    }
+                    if(oldScrollY-scrollY>0){
+                        topType=0
                     }
                 }
             }

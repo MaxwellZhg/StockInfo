@@ -3,19 +3,15 @@ package com.zhuorui.securities.market.ui
 import android.os.Bundle
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentGlobalStockBinding
-import com.zhuorui.securities.market.model.GlobalStockInfo
-import com.zhuorui.securities.market.ui.adapter.GlobalStockInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.GlobalStockInfoTipsAdapter
 import com.zhuorui.securities.market.ui.presenter.GlobalStockPresenter
 import com.zhuorui.securities.market.ui.view.GlobalStockView
 import com.zhuorui.securities.market.ui.viewmodel.GlobalStockViewModel
 import kotlinx.android.synthetic.main.fragment_global_stock.*
-import kotlinx.android.synthetic.main.fragment_hk_stock_detail.*
 
 /**
  * Created by Maxwell.
