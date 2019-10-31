@@ -42,4 +42,6 @@
     <color name="color_FDFDFD" tools:ignore="MissingDefaultResource">#FDFDFD</color>
     <color name="color_7B889E" tools:ignore="MissingDefaultResource">#7B889E</color>
     <color name="color_FFC0CCE0" tools:ignore="MissingDefaultResource">#FFC0CCE0</color>
+    <color name="color_C1C1C1" tools:ignore="MissingDefaultResource">#B3C1C1C1</color>
+    <color name="color_C0CCE0" tools:ignore="MissingDefaultResource">#C0CCE0</color>
 </resources>
