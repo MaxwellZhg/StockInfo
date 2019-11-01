@@ -18,6 +18,8 @@ import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicTradeStaResponse
 import com.zhuorui.securities.market.socket.vo.StockTradeStaData
+import com.zhuorui.securities.market.util.MathUtil
+import java.math.RoundingMode
 import kotlin.random.Random
 
 /**
@@ -44,6 +46,8 @@ class TradeStatView(context: Context, val ts: String, val code: String, val type
         val adapter = TradeStatViewAdapter()
         // TODO 测试数据
         val list = ArrayList<StockTradeStaData>()
+        // 最大百分比
+        var maxPercent = 0.00
         for (index in 0..19) {
             var diffPreMark = 0
             if (index != 0) {
@@ -56,10 +60,24 @@ class TradeStatView(context: Context, val ts: String, val code: String, val type
             val item = StockTradeStaData()
             item.diffPreMark = diffPreMark
             item.price = Random.nextDouble(1.000, 100.000).toBigDecimal()
+
+            item.todayBuyQty = Random.nextInt(100, 100000).toBigDecimal()
+            item.todaySellQty = Random.nextInt(100, 100000 - item.todayBuyQty!!.toInt()).toBigDecimal()
+            item.todayUnchangeQty =
+                Random.nextInt(100, 100000 - item.todayBuyQty!!.toInt() - item.todaySellQty!!.toInt()).toBigDecimal()
+
             item.todayQty = Random.nextInt(100, 100000).toBigDecimal()
             item.todayTotalQty = 1000000.toBigDecimal()
+
+            // 该价总成交百分比=该价当天成交量/该股票当天总成交量
+            maxPercent = MathUtil.multiply2(
+                item.todayQty?.divide(item.todayTotalQty, 4, RoundingMode.DOWN)!!,
+                100.toBigDecimal()
+            ).toDouble().coerceAtLeast(maxPercent)
+
             list.add(item)
         }
+        adapter.maxPercent = maxPercent.toBigDecimal()
         adapter.items = list
         recyclerView?.adapter = adapter
 
