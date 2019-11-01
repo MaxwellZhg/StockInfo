@@ -33,8 +33,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/23
- * Desc:
- */
+ * Desc:新股日历
+ * */
 class NewStockDateFragment :
     AbsSwipeBackNetFragment<FragmentNewStockDateBinding, NewStockDateViewModel, NewStockDateView, NewStockDatePresenter>(),
     NewStockDateView {

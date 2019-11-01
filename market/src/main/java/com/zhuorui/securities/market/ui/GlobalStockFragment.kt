@@ -17,8 +17,8 @@ import kotlinx.android.synthetic.main.fragment_global_stock.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/29
- * Desc:
- */
+ * Desc:全球指数
+ * */
 class GlobalStockFragment :AbsSwipeBackNetFragment<FragmentGlobalStockBinding,GlobalStockViewModel,GlobalStockView,GlobalStockPresenter>()
     ,GlobalStockView {
     private var coutomAdapter: GlobalStockInfoTipsAdapter? = null

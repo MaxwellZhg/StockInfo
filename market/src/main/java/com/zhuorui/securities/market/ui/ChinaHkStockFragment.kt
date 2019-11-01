@@ -29,8 +29,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/28
- * Desc:
- */
+ * Desc:港股通
+ * */
 class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBinding,ChinaHkStockTabViewModel,ChinaHkStockTabView,ChinaHkStockTabPresenter>()
     ,ChinaHkStockTabView,ChinaHkStockAdapter.OnItemClickMoreListener,ChinaHkStockAdapter.OnChinaHkStockClickListener{
     private var tabTitle:ArrayList<String> = ArrayList()

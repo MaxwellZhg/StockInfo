@@ -32,8 +32,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/22
- * Desc:
- */
+ * Desc:指数模块
+ * */
 class MarketPointFragment :
     AbsSwipeBackNetFragment<FragmentMarketPointBinding, MarketPointViewModel, MarketPointView, MarketPointPresenter>(),
     MarketPointView, View.OnClickListener ,MarketPartInfoAdapter.OnCombineInfoClickListener{

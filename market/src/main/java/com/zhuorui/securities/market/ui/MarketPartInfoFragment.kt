@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.fragment_market_part_info.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/24
- * Desc:
- */
+ * Desc:港股板块
+ * */
 class MarketPartInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPartInfoBinding,MarketPartInfoViewModel,MarketPartInfoView,MarketPartInfoPresenter>(),MarketPartInfoView{
     private var type: Int? = null
     override val layout: Int
