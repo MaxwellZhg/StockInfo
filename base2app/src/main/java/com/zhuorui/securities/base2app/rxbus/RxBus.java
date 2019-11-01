@@ -97,27 +97,27 @@ public class RxBus extends BaseBus {
         this(PublishRelay.create());
     }
 
-    /**
-     * Fire a sticky event.
-     *
-     * @param event sticky event.
-     */
-    public void postSticky(@NonNull Object event) {
-        ObjectHelper.requireNonNull(event, "event == null");
-        synchronized (stickyEventMap) {
-            List<Object> stickyEvents = stickyEventMap.get(event.getClass().hashCode());
-            boolean isStickEventListInMap = true;
-            if (stickyEvents == null) {
-                stickyEvents = new LinkedList<>();
-                isStickEventListInMap = false;
-            }
-            stickyEvents.add(event);
-            if (!isStickEventListInMap) {
-                stickyEventMap.put(event.getClass().hashCode(), stickyEvents);
-            }
-        }
-        post(event);
-    }
+//    /**
+//     * Fire a sticky event.
+//     *
+//     * @param event sticky event.
+//     */
+//    public void postSticky(@NonNull Object event) {
+//        ObjectHelper.requireNonNull(event, "event == null");
+//        synchronized (stickyEventMap) {
+//            List<Object> stickyEvents = stickyEventMap.get(event.getClass().hashCode());
+//            boolean isStickEventListInMap = true;
+//            if (stickyEvents == null) {
+//                stickyEvents = new LinkedList<>();
+//                isStickEventListInMap = false;
+//            }
+//            stickyEvents.add(event);
+//            if (!isStickEventListInMap) {
+//                stickyEventMap.put(event.getClass().hashCode(), stickyEvents);
+//            }
+//        }
+//        post(event);
+//    }
 
     /**
      * Get unmodifiable list of specific type sticky event.

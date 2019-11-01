@@ -299,7 +299,7 @@ public class TimeDataManage {
      *
      * @return
      */
-    public SparseArray<String> getOneDayXLabels(boolean landscape) {
+    public SparseArray<String> getOneDayXLabels() {
         SparseArray<String> xLabels = new SparseArray<String>();
         if (assetId.endsWith(".HK")) {
 //            if (landscape) {

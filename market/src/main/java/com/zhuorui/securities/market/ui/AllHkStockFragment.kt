@@ -20,8 +20,8 @@ import com.zhuorui.securities.market.databinding.FragmentAllHkStockBinding
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/24
- * Desc:
- */
+ * Desc:全部港股
+ * */
 class AllHkStockFragment :
     AbsSwipeBackNetFragment<FragmentAllHkStockBinding, AllHkStockViewModel, AllHkStockView, AllHkStockPresenter>(),
     AllHkStockView, View.OnClickListener {

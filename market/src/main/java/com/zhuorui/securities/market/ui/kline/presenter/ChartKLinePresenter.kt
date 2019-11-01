@@ -113,7 +113,7 @@ class ChartKLinePresenter : AbsEventPresenter<KlineView, KlineViewModel>() {
 //            disposables.add(disposable)
 
             // 订阅正常数据
-            val stockTopic = StockTopic(StockTopicDataTypeEnum.kday, "SZ", "000001", 1)
+            val stockTopic = StockTopic(StockTopicDataTypeEnum.DAY, "SZ", "000001", 1)
             SocketClient.getInstance().bindTopic(stockTopic)
             viewModel?.stockTopic = stockTopic
         }

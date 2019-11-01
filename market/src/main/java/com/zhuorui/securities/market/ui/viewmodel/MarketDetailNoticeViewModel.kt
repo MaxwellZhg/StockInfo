@@ -1,6 +1,8 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.model.TestNoticeData
 
 /**
  *    author : liuwei
@@ -9,4 +11,5 @@ import androidx.lifecycle.ViewModel
  *    desc   :
  */
 class MarketDetailNoticeViewModel:ViewModel() {
+    var infoList:MutableLiveData<MutableList<Int>> = MutableLiveData()
 }

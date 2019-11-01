@@ -5,10 +5,7 @@ import com.zhuorui.securities.market.event.SocketAuthCompleteEvent;
 import com.zhuorui.securities.market.event.SocketConnectEvent;
 import com.zhuorui.securities.market.model.StockTopic;
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum;
-import com.zhuorui.securities.market.socket.push.StocksTopicMinuteKlineResponse;
-import com.zhuorui.securities.market.socket.push.StocksTopicMarketResponse;
-import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse;
-import com.zhuorui.securities.market.socket.push.StocksTopicTransResponse;
+import com.zhuorui.securities.market.socket.push.*;
 import com.zhuorui.securities.market.socket.request.SocketHeader;
 import com.zhuorui.securities.market.socket.request.SocketRequest;
 import com.zhuorui.securities.market.socket.request.StockKlineGetDaily;
@@ -43,7 +40,7 @@ public class SocketClient {
 
     private static SocketClient instance;
     private WebSocketClient client;
-//    private Map<String, SocketRequest> requestMap;
+    //    private Map<String, SocketRequest> requestMap;
     private boolean isConnected = false;
 
     private final boolean openGzip = true;
@@ -121,7 +118,7 @@ public class SocketClient {
                                     String klineType = body.getString("klineType");
 
                                     // TODO 暂时只判断2-1
-                                    if (klineType.equals(StockTopicDataTypeEnum.kminute.getValue())) {
+                                    if (klineType.equals(StockTopicDataTypeEnum.MINUTE.getValue())) {
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
                                     }
                                     break;
@@ -132,6 +129,12 @@ public class SocketClient {
                                 case SocketApi.PUSH_STOCK_PRICE:
                                     // TODO 股价
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicPriceResponse.class));
+                                    break;
+                                case SocketApi.PUSH_STOCK_TRADE:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTradeResponse.class));
+                                    break;
+                                case SocketApi.PUSH_STOCK_TRADESTA:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTradeStaResponse.class));
                                     break;
                             }
                         } else {
@@ -304,6 +307,21 @@ public class SocketClient {
 
         sendRequest(request);
 //        requestMap.put(Objects.requireNonNull(request.getHeader()).getReqId(), request);
+        return socketHeader.getReqId();
+    }
+
+    /**
+     * 发起一个自定义参数的请求
+     *
+     * @return
+     */
+    public String postRequest(Object requestBody, String path) {
+        SocketRequest request = new SocketRequest();
+        SocketHeader socketHeader = getRequestHeader(path);
+        request.setHeader(socketHeader);
+        request.setBody(requestBody);
+
+        sendRequest(request);
         return socketHeader.getReqId();
     }
 

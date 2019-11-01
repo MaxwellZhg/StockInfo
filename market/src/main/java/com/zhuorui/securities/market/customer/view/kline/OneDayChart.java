@@ -106,8 +106,7 @@ public class OneDayChart extends BaseChart {
     /**
      * 初始化图表属性
      */
-    public void initChart(boolean landscape) {
-        this.landscape = landscape;
+    public void initChart() {
         //主图
         lineChart.setScaleEnabled(false);
         lineChart.setDrawBorders(true);
@@ -138,9 +137,9 @@ public class OneDayChart extends BaseChart {
         xAxisLine = (TimeXAxis) lineChart.getXAxis();
         xAxisLine.setDrawAxisLine(false);
         xAxisLine.setTextColor(ContextCompat.getColor(mContext, R.color.label_text));
-        xAxisLine.setTextSize(12f);
+        xAxisLine.setTextSize(9f);
         xAxisLine.setXOffset(5f);
-        xAxisLine.setYOffset(8f);
+        xAxisLine.setYOffset(5f);
         xAxisLine.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisLine.setAvoidFirstLastClipping(true);
         xAxisLine.setGridColor(ContextCompat.getColor(mContext, R.color.grid_color));
@@ -290,7 +289,7 @@ public class OneDayChart extends BaseChart {
      */
     public void setDataToChart(TimeDataManage mData) {
         this.mData = mData;
-        cirCleView.setVisibility(landscape ? View.VISIBLE : View.GONE);
+        cirCleView.setVisibility(View.VISIBLE);
         if (mData.getDatas().size() == 0) {
             cirCleView.setVisibility(View.GONE);
             lineChart.setNoDataText(getResources().getString(R.string.no_data));
@@ -347,7 +346,7 @@ public class OneDayChart extends BaseChart {
                 setPrecision(2);
                 setMaxCount(ChartType.ONE_DAY.getPointNum());
             }
-            setXLabels(mData.getOneDayXLabels(landscape));
+            setXLabels(mData.getOneDayXLabels());
             setShowLabels(true);
             setMarkerView(mData);
 //            setBottomMarkerView(mData);
@@ -381,7 +380,7 @@ public class OneDayChart extends BaseChart {
 
             d1 = new LineDataSet(lineCJEntries, "分时线");
             d2 = new LineDataSet(lineJJEntries, "均价");
-            d1.setDrawCircleDashMarker(landscape);
+            d1.setDrawCircleDashMarker(true);
             d2.setDrawCircleDashMarker(false);
             d1.setDrawValues(false);
             d2.setDrawValues(false);
@@ -397,7 +396,7 @@ public class OneDayChart extends BaseChart {
             // 设置触摸K线显示的指标线宽度
             d1.setHighlightLineWidth(1f);
             // 设置触摸K线是否绘制指标线
-            d1.setHighlightEnabled(landscape);
+            d1.setHighlightEnabled(true);
             d2.setHighlightEnabled(false);
             d1.setDrawCircles(false);
             d1.setCircleColor(Color.parseColor("#A4B2CB"));
@@ -427,7 +426,7 @@ public class OneDayChart extends BaseChart {
             // 设置触摸成交量显示的指标线宽度
             barDataSet.setHighlightLineWidth(1f);
             // 设置触摸成交量是否绘制指标线
-            barDataSet.setHighlightEnabled(landscape);
+            barDataSet.setHighlightEnabled(true);
             barDataSet.setDrawValues(false);
             barDataSet.setNeutralColor(ContextCompat.getColor(mContext, R.color.equal_color));
             barDataSet.setIncreasingColor(ContextCompat.getColor(mContext, R.color.up_color));

@@ -147,7 +147,7 @@
                 android:id="@+id/top_magic_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/top_bar"
                 android:layout_marginTop="1dp"
                 android:background="@color/color_211F2A"/>
@@ -156,14 +156,41 @@
               style="@style/MadrketDetailLine"
               android:layout_width="match_parent"
               app:layout_constraintTop_toBottomOf="@id/top_magic_indicator"/>
-
+<!--       <include layout="@layout/layout_market_info_select_tips"/>-->
+        <LinearLayout
+                app:layout_constraintTop_toBottomOf="@+id/top_magic_indicator_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ll_info_tips"
+                android:visibility="visible"
+                android:background="@color/color_211F2A"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+            <TextView android:layout_width="45dp"
+                      android:layout_height="20dp"
+                      android:id="@+id/tv_info"
+                      android:textSize="12sp"
+                      android:layout_marginStart="12.5dp"
+                      android:gravity="center"
+                      android:textColor="@color/color_53A0FD"
+                      android:background="@drawable/market_info_selected_bg"
+                      android:text="资讯"/>
+            <TextView android:layout_width="45dp"
+                      android:layout_height="20dp"
+                      android:gravity="center"
+                      android:id="@+id/tv_report"
+                      android:textSize="12sp"
+                      android:layout_marginStart="30dp"
+                      android:textColor="@color/color_C0CCE0"
+                      android:background="@drawable/market_info_unselect_bg"
+                      android:text="研报"/>
+        </LinearLayout>
         <androidx.constraintlayout.widget.Group
                 android:id="@+id/top_magic_indicator_group"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:visibility="gone"
                 app:constraint_referenced_ids="top_magic_indicator,top_magic_indicator_line"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

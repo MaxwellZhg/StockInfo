@@ -32,14 +32,15 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/22
- * Desc:
- */
-class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,MarketPointViewModel,MarketPointView,MarketPointPresenter>()
-    ,MarketPointView,View.OnClickListener,MarketPartInfoAdapter.OnCombineInfoClickListener{
+ * Desc:指数模块
+ * */
+class MarketPointFragment :
+    AbsSwipeBackNetFragment<FragmentMarketPointBinding, MarketPointViewModel, MarketPointView, MarketPointPresenter>(),
+    MarketPointView, View.OnClickListener ,MarketPartInfoAdapter.OnCombineInfoClickListener{
     private var type: Int? = null
     private var infoadapter: MarketPartInfoAdapter? = null
-    private var pointInfoAdapter:MarketPointInfoAdapter?=null
-    private var tabTitle:ArrayList<String> = ArrayList()
+    private var pointInfoAdapter: MarketPointInfoAdapter? = null
+    private var tabTitle: ArrayList<String> = ArrayList()
     override val layout: Int
         get() = R.layout.fragment_market_point
     override val viewModelId: Int
@@ -50,8 +51,9 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         get() = ViewModelProviders.of(this).get(MarketPointViewModel::class.java)
     override val getView: MarketPointView
         get() = this
+
     companion object {
-        fun newInstance(type:Int): MarketPointFragment {
+        fun newInstance(type: Int): MarketPointFragment {
             val fragment = MarketPointFragment()
             if (type != null) {
                 val bundle = Bundle()
@@ -69,27 +71,27 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         type = arguments?.getSerializable("type") as Int?
-        when(type){
-            1->{
-                tv_title.text="恒生指数（800000）"
+        when (type) {
+            1 -> {
+                tv_title.text = "恒生指数（800000）"
             }
-            2->{
-                tv_title.text="国企指数（800100）"
+            2 -> {
+                tv_title.text = "国企指数（800100）"
             }
-            3->{
-                tv_title.text="红筹指数（HSCCI.HK）"
+            3 -> {
+                tv_title.text = "红筹指数（HSCCI.HK）"
             }
         }
         tabTitle.add("成分股")
         tabTitle.add("资讯")
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
-        loadRootFragment(R.id.kline_view, KlineFragment())
-        magic_indicator.navigator=getNavigator()
+       // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
+        magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         presenter?.setLifecycleOwner(this)
         infoadapter = presenter?.getMarketInfoAdapter()
-        pointInfoAdapter=presenter?.getMarketPointInfoAdapter()
+        pointInfoAdapter = presenter?.getMarketPointInfoAdapter()
         infoadapter?.onCombineInfoClickListener=this
         //解决数据加载不完的问题
         rv_point_stock.isNestedScrollingEnabled = false
@@ -97,26 +99,27 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
         rv_point_stock.isFocusable = false
         presenter?.getData()
         infoadapter?.notifyDataSetChanged()
-        rv_point_stock.adapter=infoadapter
+        rv_point_stock.adapter = infoadapter
         refrsh_layout.setEnableLoadMore(true)
 
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
                 top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             }
-         /*   if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
-                presenter?.getTopBarPriceInfo()
-            } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
-                presenter?.getTopBarStockStatusInfo()
-            }*/
+            /*   if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
+                   presenter?.getTopBarPriceInfo()
+               } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
+                   presenter?.getTopBarStockStatusInfo()
+               }*/
         }
     }
+
     override fun onClick(v: View?) {
-        when(v){
-            iv_back->{
+        when (v) {
+            iv_back -> {
                 pop()
             }
-            iv_search->{
+            iv_search -> {
                 start(SearchInfoFragment.newInstance())
             }
         }
@@ -167,20 +170,20 @@ class MarketPointFragment :AbsSwipeBackNetFragment<FragmentMarketPointBinding,Ma
     }
 
     private fun onSelect(index: Int) {
-      when(index){
-          0->{
-              presenter?.getData()
-              infoadapter?.notifyDataSetChanged()
-              rv_point_stock.adapter=infoadapter
-              point_tips.visibility=View.VISIBLE
-          }
-          1->{
-              presenter?.getInfoData()
-              pointInfoAdapter?.notifyDataSetChanged()
-              rv_point_stock.adapter=pointInfoAdapter
-              point_tips.visibility=View.GONE
-          }
-      }
+        when (index) {
+            0 -> {
+                presenter?.getData()
+                infoadapter?.notifyDataSetChanged()
+                rv_point_stock.adapter = infoadapter
+                point_tips.visibility = View.VISIBLE
+            }
+            1 -> {
+                presenter?.getInfoData()
+                pointInfoAdapter?.notifyDataSetChanged()
+                rv_point_stock.adapter = pointInfoAdapter
+                point_tips.visibility = View.GONE
+            }
+        }
     }
 
     override fun addInfoToAdapter(list: List<Int>) {

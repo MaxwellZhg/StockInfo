@@ -21,13 +21,14 @@ class ChartOneDayFragment :
     AbsFragment<FragmentOneDayBinding, OneDayKlineViewModel, OneDayKlineView, ChartOneDayPresenter>(),
     OneDayKlineView {
 
-    private var land: Boolean = false // 是否横屏
-
     companion object {
-
-        fun newInstance(land: Boolean): ChartOneDayFragment {
+        fun newInstance(ts: String, code: String, tsCode: String, type: Int, land: Boolean): ChartOneDayFragment {
             val fragment = ChartOneDayFragment()
             val bundle = Bundle()
+            bundle.putString("ts", ts)
+            bundle.putString("code", code)
+            bundle.putString("tsCode", tsCode)
+            bundle.putInt("type", type)
             bundle.putBoolean("landscape", land)
             fragment.arguments = bundle
             return fragment
@@ -51,20 +52,15 @@ class ChartOneDayFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        land = arguments!!.getBoolean("landscape")
-        chart!!.initChart(land)
 
-        presenter?.loadKNetlineMinuteData()
+        val ts = arguments?.getString("ts")
+        val code = arguments?.getString("code")
+        val tsCode = arguments?.getString("tsCode")
+        val type = arguments?.getInt("type")
+        val landscape = arguments?.getBoolean("landscape")!!
 
-        //测试数据
-//        try {
-//            //上证指数代码000001.IDX.SH
-//            val kTimeData = TimeDataManage()
-//            kTimeData.parseTimeData(JSONObject(ChartData.TIMEDATA), "000001.IDX.SH", 0.0)
-//            chart.setDataToChart(kTimeData)
-//        } catch (e: JSONException) {
-//            e.printStackTrace()
-//        }
+        chart!!.initChart()
+        presenter?.init(ts, code, tsCode, type)
     }
 
     override fun setDataToChart(timeDataManage: TimeDataManage?) {

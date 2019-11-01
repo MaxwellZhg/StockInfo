@@ -19,13 +19,15 @@ class ChartFiveDayFragment :
     AbsFragment<FragmentFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayPresenter>(),
     FiveDayKlineView {
 
-    private var land: Boolean = false // 是否横屏
-
     companion object {
 
-        fun newInstance(land: Boolean): ChartFiveDayFragment {
+        fun newInstance(ts: String, code: String, tsCode: String, type: Int, land: Boolean): ChartFiveDayFragment {
             val fragment = ChartFiveDayFragment()
             val bundle = Bundle()
+            bundle.putString("ts", ts)
+            bundle.putString("code", code)
+            bundle.putString("tsCode", tsCode)
+            bundle.putInt("type", type)
             bundle.putBoolean("landscape", land)
             fragment.arguments = bundle
             return fragment
@@ -50,8 +52,14 @@ class ChartFiveDayFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        land = arguments!!.getBoolean("landscape")
-        chart!!.initChart(land)
+
+        val ts = arguments?.getString("ts")
+        val code = arguments?.getString("code")
+        val tsCode = arguments?.getString("tsCode")
+        val type = arguments?.getInt("type")
+        val landscape = arguments?.getBoolean("landscape")!!
+
+        chart!!.initChart(landscape)
 
         presenter?.loadKlineFiveDayData()
     }

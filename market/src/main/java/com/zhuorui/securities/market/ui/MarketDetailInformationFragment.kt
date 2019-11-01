@@ -3,11 +3,13 @@ package com.zhuorui.securities.market.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.ui.adapter.MarketInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailInformationPresenter
@@ -64,12 +66,28 @@ class MarketDetailInformationFragment :
     override fun onClick(p0: View?) {
         when(p0?.id){
             R.id.tv_info->{
+                RxBus.getDefault().post(MarketDetailInfoEvent(1))
+                detailType(1)
+            }
+            R.id.tv_report->{
+                RxBus.getDefault().post(MarketDetailInfoEvent(2))
+                detailType(2)
+            }
+        }
+    }
+    override fun changeInfoTypeData(event: MarketDetailInfoEvent) {
+           detailType(event.type)
+    }
+
+    fun detailType(type:Int){
+        when(type){
+            1->{
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }
                 tv_info.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
                 ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_report.setTextColor(it) }
                 tv_report.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
             }
-            R.id.tv_report->{
+            2->{
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_report.setTextColor(it) }
                 tv_report.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
                 ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_info.setTextColor(it) }
@@ -77,6 +95,7 @@ class MarketDetailInformationFragment :
             }
         }
     }
+
 
 
 }

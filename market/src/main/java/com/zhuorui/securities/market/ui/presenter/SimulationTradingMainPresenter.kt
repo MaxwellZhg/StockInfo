@@ -265,14 +265,14 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         val list: MutableList<StockTopic> = mutableListOf()
         for (data in positionDatas!!) {
             stocksInfo[data.getTsCode()] = PushStockPriceData()
-            list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
+            list.add(StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, data.ts!!, data.code!!, 2))
         }
         //过虑订单需要订阅的股票
         for (data in orderDatas!!) {
             val tsCode = data.getTsCode()
             if (!stocksInfo.containsKey(tsCode)) {
                 stocksInfo[tsCode] = PushStockPriceData()
-                list.add(StockTopic(StockTopicDataTypeEnum.price, data.ts!!, data.code!!, 2))
+                list.add(StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, data.ts!!, data.code!!, 2))
             }
         }
         if (list.isNullOrEmpty()) {

@@ -20,6 +20,8 @@ import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.model.*
+import com.zhuorui.securities.market.event.MarketDetailInfoEvent
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.DeleteStockRequest
@@ -236,7 +238,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             datas2.add("item$i")
         }
         view?.upOrderBrokerData(datas2, datas2)
-        stockTopic = StockTopic(StockTopicDataTypeEnum.price, stockInfo.ts!!, stockInfo.code!!, 2)
+        stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
         SocketClient.getInstance().bindTopic(stockTopic)
     }
 
@@ -254,6 +256,11 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 break
             }
         }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
+        view?.changeInfoTypeData(event)
     }
 
     override fun destroy() {
