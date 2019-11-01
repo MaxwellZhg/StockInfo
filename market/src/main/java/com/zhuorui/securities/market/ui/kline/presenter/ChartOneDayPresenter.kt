@@ -31,19 +31,31 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
 
     private var requestIds = ArrayList<String>()
     private val disposables = LinkedList<Disposable>()
-    private val ts = "HK"
-    private val code = "02318"
-    private val tsCode = "02318.HK"
+    private var ts: String? = null
+    private var code: String? = null
+    private var tsCode: String? = null
+    private var type: Int? = null
     private var stockTopic: StockTopic? = null
+
+    fun init(ts: String?, code: String?, tsCode: String?, type: Int?) {
+        this.ts = ts
+        this.code = code
+        this.tsCode = tsCode
+        this.type = type
+
+        loadKNetlineMinuteData()
+    }
 
     /**
      * 加载网络数据
      */
-    fun loadKNetlineMinuteData() {
-        // 发起自选股K线拉取补偿数据
-        val stockMinuteKline = StockMinuteKline(ts, code, 1)
-        val reqId = SocketClient.getInstance().requestGetMinuteKline(stockMinuteKline)
-        requestIds.add(reqId)
+    private fun loadKNetlineMinuteData() {
+        if (!ts.isNullOrEmpty() && !code.isNullOrEmpty() && type != null) {
+            // 发起自选股K线拉取补偿数据
+            val stockMinuteKline = StockMinuteKline(ts!!, code!!, type!!)
+            val reqId = SocketClient.getInstance().requestGetMinuteKline(stockMinuteKline)
+            requestIds.add(reqId)
+        }
     }
 
 
@@ -68,9 +80,11 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
                 .subscribe()
             disposables.add(disposable)
 
-            // 订阅正常数据
-            stockTopic = StockTopic(StockTopicDataTypeEnum.MINUTE, ts, code, 1)
-            SocketClient.getInstance().bindTopic(stockTopic)
+            if (!ts.isNullOrEmpty() && !code.isNullOrEmpty() && type != null) {
+                // 订阅正常数据
+                stockTopic = StockTopic(StockTopicDataTypeEnum.MINUTE, ts!!, code!!, type!!)
+                SocketClient.getInstance().bindTopic(stockTopic)
+            }
         }
     }
 

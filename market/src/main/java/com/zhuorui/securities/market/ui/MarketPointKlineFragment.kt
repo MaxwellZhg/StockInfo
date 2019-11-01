@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,21 +12,9 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.RehabilitationPopupWindow
-import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
-import com.zhuorui.securities.market.customer.view.kline.stat.TradeStatView
-import com.zhuorui.securities.market.ui.kline.ChartFiveDayFragment
-import com.zhuorui.securities.market.ui.kline.ChartKLineFragment
 import com.zhuorui.securities.market.ui.kline.ChartOneDayFragment
-import com.zhuorui.securities.market.ui.kline.KlineFragment
 import kotlinx.android.synthetic.main.fragment_stockdetail.*
-import kotlinx.android.synthetic.main.layout_kline_stat.*
 import me.yokeyword.fragmentation.SupportFragment
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 /**
  * Created by Maxwell.
@@ -39,8 +26,8 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
 
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
- /*   private val mStatTabTitle: Array<String?> =
-        arrayOf(ResUtil.getString(R.string.kline_detail), ResUtil.getString(R.string.kline_stat))*/
+    /*   private val mStatTabTitle: Array<String?> =
+           arrayOf(ResUtil.getString(R.string.kline_detail), ResUtil.getString(R.string.kline_stat))*/
     private var ts: String? = null
     private var code: String? = null
     private var tsCode: String? = null
@@ -50,7 +37,7 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
     private var mKlineIndex = 0
     private var mLastKlineTitle: TextView? = null
     private var mRehabilitationMode = 0
-   // private var mStatIndex = 0
+    // private var mStatIndex = 0
 
 
     companion object {
@@ -61,7 +48,7 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
             bundle.putString("ts", ts)
             bundle.putString("code", code)
             bundle.putString("tsCode", tsCode)
-           // bundle.putInt("type", type)
+            // bundle.putInt("type", type)
             bundle.putBoolean("landscape", land)
             fragment.arguments = bundle
             return fragment
@@ -186,30 +173,30 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
     }
 
     private fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
-        when (index) {
-            0 -> {
-                return ChartOneDayFragment.newInstance(landscape)
-            }
-            1 -> {
-                return ChartFiveDayFragment.newInstance(landscape)
-            }
-            2 -> {
-                return ChartKLineFragment.newInstance(1, landscape)
-            }
-            3 -> {
-                return ChartKLineFragment.newInstance(7, landscape)
-            }
-            4 -> {
-                return ChartKLineFragment.newInstance(30, landscape)
-            }
-            5 -> {
-                return ChartKLineFragment.newInstance(90, landscape)
-            }
-            6 -> {
-                return ChartKLineFragment.newInstance(365, landscape)
-            }
-        }
-        return null
+//        when (index) {
+//            0 -> {
+                  return ChartOneDayFragment.newInstance("", "", "", 1, landscape)
+//            }
+//            1 -> {
+//                return ChartFiveDayFragment.newInstance(landscape)
+//            }
+//            2 -> {
+//                return ChartKLineFragment.newInstance(1, landscape)
+//            }
+//            3 -> {
+//                return ChartKLineFragment.newInstance(7, landscape)
+//            }
+//            4 -> {
+//                return ChartKLineFragment.newInstance(30, landscape)
+//            }
+//            5 -> {
+//                return ChartKLineFragment.newInstance(90, landscape)
+//            }
+//            6 -> {
+//                return ChartKLineFragment.newInstance(365, landscape)
+//            }
+//        }
+//        return null
     }
 
 

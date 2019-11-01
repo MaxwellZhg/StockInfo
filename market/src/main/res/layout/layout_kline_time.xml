@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical">
@@ -12,7 +11,7 @@
         <com.zhuorui.securities.market.customer.view.kline.charts.TimeLineChart
                 android:id="@+id/line_chart"
                 android:layout_width="match_parent"
-                android:layout_height="202dp"/>
+                android:layout_height="225.5dp"/>
 
         <com.zhuorui.securities.market.customer.view.kline.charts.TimeBarChart
                 android:id="@+id/bar_chart"

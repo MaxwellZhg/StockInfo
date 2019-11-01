@@ -182,25 +182,32 @@ class KlineFragment private constructor() : SupportFragment(), OnClickListener {
     private fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
         when (index) {
             0 -> {
-                return ChartOneDayFragment.newInstance(landscape)
+                // 分时
+                return ChartOneDayFragment.newInstance(ts!!, code!!, tsCode!!, type!!, landscape)
             }
             1 -> {
-                return ChartFiveDayFragment.newInstance(landscape)
+                // 五日
+                return ChartFiveDayFragment.newInstance(ts!!, code!!, tsCode!!, type!!, landscape)
             }
             2 -> {
-                return ChartKLineFragment.newInstance(1, landscape)
+                // 日K
+                return ChartKLineFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 1, landscape)
             }
             3 -> {
-                return ChartKLineFragment.newInstance(7, landscape)
+                // 周K
+                return ChartKLineFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 7, landscape)
             }
             4 -> {
-                return ChartKLineFragment.newInstance(30, landscape)
+                // 月K
+                return ChartKLineFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 30, landscape)
             }
             5 -> {
-                return ChartKLineFragment.newInstance(90, landscape)
+                // 年K
+                return ChartKLineFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 365, landscape)
             }
             6 -> {
-                return ChartKLineFragment.newInstance(365, landscape)
+                // 自定义分钟K
+                return ChartKLineFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 0, landscape)
             }
         }
         return null

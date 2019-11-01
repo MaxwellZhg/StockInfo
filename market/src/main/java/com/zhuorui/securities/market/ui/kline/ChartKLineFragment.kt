@@ -18,14 +18,16 @@ import kotlinx.android.synthetic.main.fragment_kline.*
 class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
     KlineView {
 
-    private var land: Boolean = false//是否横屏
-
     companion object {
 
-        fun newInstance(type: Int, land: Boolean): ChartKLineFragment {
+        fun newInstance(ts: String, code: String, tsCode: String, type: Int, klinType:Int, land: Boolean): ChartKLineFragment {
             val fragment = ChartKLineFragment()
             val bundle = Bundle()
+            bundle.putString("ts", ts)
+            bundle.putString("code", code)
+            bundle.putString("tsCode", tsCode)
             bundle.putInt("type", type)
+            bundle.putInt("klinType", klinType)
             bundle.putBoolean("landscape", land)
             fragment.arguments = bundle
             return fragment
@@ -50,11 +52,16 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
-        land = arguments!!.getBoolean("landscape")
-        combinedchart.initChart(land)
+        val ts = arguments?.getString("ts")
+        val code = arguments?.getString("code")
+        val tsCode = arguments?.getString("tsCode")
+        val type = arguments?.getInt("type")
+        val landscape = arguments?.getBoolean("landscape")!!
 
-        presenter?.kType = arguments!!.getInt("type")
-        presenter?.land = land
+        combinedchart.initChart(landscape)
+
+        presenter?.kType = arguments!!.getInt("klinType")
+        presenter?.land = landscape
 
 //        try {
 //            if (mType == 1) {
@@ -69,7 +76,7 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
 //        }
 
         combinedchart.getGestureListenerBar().setCoupleClick {
-            if (land) {
+            if (landscape) {
                 presenter?.loadIndexData()
             }
         }
