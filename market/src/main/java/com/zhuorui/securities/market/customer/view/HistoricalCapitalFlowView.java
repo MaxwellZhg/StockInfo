@@ -27,6 +27,7 @@ import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.CapitalFlowNumPopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ import java.util.Random;
  * date   : 2019-10-17 11:43
  * desc   : 历史资金流向
  */
-public class HistoricalCapitalFlowView extends FrameLayout implements View.OnClickListener {
+public class HistoricalCapitalFlowView extends FrameLayout implements View.OnClickListener, CapitalFlowNumPopWindow.OnSelectCallBack {
 
     private final int upColor = Color.parseColor("#D9001B");
     private final int downColor = Color.parseColor("#00AB3B");
@@ -228,25 +229,6 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         vChart.invalidate();
     }
 
-    private void changeDateNum() {
-        switch (mDateNum) {
-            case 5:
-                mDateNum = 10;
-                break;
-            case 10:
-                mDateNum = 20;
-                break;
-            case 20:
-                mDateNum = 60;
-                break;
-            case 60:
-                mDateNum = 5;
-                break;
-        }
-        upDateNumText();
-        getTestData();
-    }
-
     private void upDateNumText() {
         vNum.setText(mDateNum + "天");
     }
@@ -254,8 +236,15 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v == vNum) {
-            changeDateNum();
+            CapitalFlowNumPopWindow.Companion.create(getContext(),mDateNum,this).showAsDropDown(vNum);
         }
+    }
+
+    @Override
+    public void onSelected(int num) {
+        mDateNum = num;
+        upDateNumText();
+        getTestData();
     }
 
     class HCFVRenderer extends BarChartRenderer {

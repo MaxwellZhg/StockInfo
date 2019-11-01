@@ -10,7 +10,7 @@
     <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:background="#E9967A"
+            android:src="@mipmap/ic_calendar"
     />
 
     <TextView

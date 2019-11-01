@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:background="@mipmap/bg_popwindow_5f3aa3"
+              android:layout_height="wrap_content">
+
+
+    <FrameLayout
+            android:id="@+id/layout_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+                android:id="@+id/tv_5"
+                style="@style/StockNumPopText"
+                android:text="5"
+        />
+    </FrameLayout>
+
+
+    <FrameLayout
+            android:id="@+id/layout_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+                android:id="@+id/tv_10"
+                style="@style/StockNumPopText"
+                android:text="10"
+        />
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/layout_40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+                android:id="@+id/tv_40"
+                style="@style/StockNumPopText"
+                android:text="40"
+        />
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/layout_multiseriate"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <ImageView
+                android:id="@+id/iv_multiseriate"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_multiseriate"
+        />
+    </FrameLayout>
+
+</LinearLayout>

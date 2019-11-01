@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.OrderBrokerNumPopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.Random;
  * date   : 2019-10-18 17:45
  * desc   : 买卖盘经济
  */
-public class OrderBrokerView extends FrameLayout implements View.OnClickListener {
+public class OrderBrokerView extends FrameLayout implements View.OnClickListener, OrderBrokerNumPopWindow.OnSelectCallBack {
 
     int color1 = Color.parseColor("#0D1A6ED2");
     int color2 = Color.parseColor("#0DFF8E1B");
@@ -34,6 +36,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
     private RecyclerView vRv;
     private MyAdapter mAdapter;
     private TextView vDateNum;
+    private ImageView ivDateNum;
     private int itemType;
     private int mNum = 5;
 
@@ -54,7 +57,9 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
 
     private void initView() {
         vDateNum = findViewById(R.id.tv_date_num);
+        ivDateNum = findViewById(R.id.iv_date_num);
         vDateNum.setOnClickListener(this);
+        ivDateNum.setOnClickListener(this);
         vRv = findViewById(R.id.recycler_view);
         //解决数据加载不完的问题
         vRv.setNestedScrollingEnabled(false);
@@ -68,20 +73,11 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        changeNum();
-    }
-
-    private void changeNum() {
-        if (mNum == 5) {
-            mNum = 10;
-        } else if (mNum == 10) {
-            mNum = 40;
-        } else if (mNum == 40) {
-            mNum = -1;
-        } else if (mNum == -1) {
-            mNum = 5;
+        if (vDateNum == v) {
+            OrderBrokerNumPopWindow.Companion.create(getContext(), mNum, this).showAsDropDown(v);
+        } else if (ivDateNum == v) {
+            OrderBrokerNumPopWindow.Companion.create(getContext(), mNum, this).showAsDropDown(v);
         }
-        setNum();
     }
 
     private void setNum() {
@@ -90,12 +86,16 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             itemType = 1;
             lm.setSpanCount(8);
             colors = new int[]{color1, color3, color1, color3, color2, color3, color2, color3};
+            ivDateNum.setVisibility(VISIBLE);
+            vDateNum.setVisibility(GONE);
         } else {
             lm.setSpanCount(2);
             colors = new int[]{color1, color2};
             itemType = 0;
+            ivDateNum.setVisibility(GONE);
+            vDateNum.setVisibility(VISIBLE);
+            vDateNum.setText(String.valueOf(mNum));
         }
-        vDateNum.setText(String.valueOf(mNum));
         mAdapter.setNum(mNum);
         mAdapter.notifyDataSetChanged();
     }
@@ -103,6 +103,12 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
     public void setData(List<? extends Object> buyings, List<? extends Object> sellings) {
         mAdapter.setData(buyings, sellings);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSelected(int num) {
+        mNum = num;
+        setNum();
     }
 
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {

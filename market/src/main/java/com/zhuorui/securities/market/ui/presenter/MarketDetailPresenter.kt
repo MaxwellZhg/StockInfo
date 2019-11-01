@@ -131,8 +131,9 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * */
     fun getTopBarStockStatusInfo() {
         topBarInfoTp = 0
+        val h = Integer.valueOf(TimeZoneUtil.currentTime("HH"))
         var closingTimeMillis =
-            if (Integer.valueOf(TimeZoneUtil.currentTime("HH")) >= 16) TimeZoneUtil.currentTimeMillis() else 0
+            if (h < 9 || h >= 16) TimeZoneUtil.currentTimeMillis() else 0
         view?.upTopBarInfo(
             MarketUtil.getStockStatusTxt(stocksInfo?.ts, closingTimeMillis, true),
             topbarTxtColor
