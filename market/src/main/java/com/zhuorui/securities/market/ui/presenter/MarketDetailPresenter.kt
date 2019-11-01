@@ -20,6 +20,8 @@ import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.model.*
+import com.zhuorui.securities.market.event.MarketDetailInfoEvent
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.DeleteStockRequest
@@ -253,6 +255,11 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 break
             }
         }
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
+        view?.changeInfoTypeData(event)
     }
 
     override fun destroy() {

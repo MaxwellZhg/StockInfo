@@ -1,7 +1,11 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.market.event.ChageSearchTabEvent
+import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.ui.adapter.MarketInfoAdapter
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.view.MarketDetailInformationView
@@ -39,5 +43,10 @@ class MarketDetailInformationPresenter: AbsNetPresenter<MarketDetailInformationV
     fun getInfoAdapter(): MarketInfoAdapter {
         return MarketInfoAdapter()
     }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
+        view?.changeInfoTypeData(event)
+    }
+
 
 }

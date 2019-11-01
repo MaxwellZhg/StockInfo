@@ -24,7 +24,6 @@ class ChartOneDayFragment :
     private var land: Boolean = false // 是否横屏
 
     companion object {
-
         fun newInstance(land: Boolean): ChartOneDayFragment {
             val fragment = ChartOneDayFragment()
             val bundle = Bundle()
@@ -53,7 +52,6 @@ class ChartOneDayFragment :
         super.onLazyInitView(savedInstanceState)
         land = arguments!!.getBoolean("landscape")
         chart!!.initChart()
-
         presenter?.loadKNetlineMinuteData()
     }
 
