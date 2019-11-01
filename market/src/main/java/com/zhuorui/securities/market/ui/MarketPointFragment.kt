@@ -86,7 +86,7 @@ class MarketPointFragment :
         tabTitle.add("资讯")
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
-        loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
+       // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         presenter?.setLifecycleOwner(this)

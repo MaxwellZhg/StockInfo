@@ -10,5 +10,5 @@ import com.zhuorui.securities.market.model.TestNoticeData
  *    desc   :
  */
 interface MarketDetailNoticeView:AbsView {
-    fun addIntoNoticeData(list:List<TestNoticeData>)
+    fun addIntoNoticeData(list:List<Int>)
 }

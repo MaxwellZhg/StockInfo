@@ -11,5 +11,5 @@ import com.zhuorui.securities.market.model.TestNoticeData
  *    desc   :
  */
 class MarketDetailNoticeViewModel:ViewModel() {
-    var infoList:MutableLiveData<MutableList<TestNoticeData>> = MutableLiveData()
+    var infoList:MutableLiveData<MutableList<Int>> = MutableLiveData()
 }

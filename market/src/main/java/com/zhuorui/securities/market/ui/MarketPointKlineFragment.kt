@@ -12,9 +12,6 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.RehabilitationPopupWindow
-import com.zhuorui.securities.market.ui.kline.ChartFiveDayFragment
-import com.zhuorui.securities.market.ui.kline.ChartKLineFragment
-import com.zhuorui.securities.market.ui.kline.ChartOneDayFragment
 import kotlinx.android.synthetic.main.fragment_stockdetail.*
 import me.yokeyword.fragmentation.SupportFragment
 
@@ -22,13 +19,13 @@ import me.yokeyword.fragmentation.SupportFragment
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/1
- * Desc:指数k线
+ * Desc：指数K线
  */
 class MarketPointKlineFragment private constructor() : SupportFragment(), View.OnClickListener {
 
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
- /*   private val mStatTabTitle: Array<String?> =
+    /*   private val mStatTabTitle: Array<String?> =
         arrayOf(ResUtil.getString(R.string.kline_detail), ResUtil.getString(R.string.kline_stat))*/
     private var ts: String? = null
     private var code: String? = null
@@ -39,7 +36,7 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
     private var mKlineIndex = 0
     private var mLastKlineTitle: TextView? = null
     private var mRehabilitationMode = 0
-   // private var mStatIndex = 0
+    // private var mStatIndex = 0
 
 
     companion object {
@@ -50,7 +47,7 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
             bundle.putString("ts", ts)
             bundle.putString("code", code)
             bundle.putString("tsCode", tsCode)
-           // bundle.putInt("type", type)
+            // bundle.putInt("type", type)
             bundle.putBoolean("landscape", land)
             fragment.arguments = bundle
             return fragment
@@ -175,7 +172,7 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
     }
 
     private fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
-        when (index) {
+        /*  when (index) {
             0 -> {
                 return ChartOneDayFragment.newInstance(landscape)
             }
@@ -197,9 +194,10 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
             6 -> {
                 return ChartKLineFragment.newInstance(365, landscape)
             }
-        }
+        }*/
         return null
     }
+}
 
 
 /*    private fun initStat() {
@@ -250,4 +248,3 @@ class MarketPointKlineFragment private constructor() : SupportFragment(), View.O
             }
         }
     }*/
-}

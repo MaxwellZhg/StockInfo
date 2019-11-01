@@ -6,8 +6,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailNoticeBinding
-import com.zhuorui.securities.market.model.TestNoticeData
-import com.zhuorui.securities.market.ui.adapter.MarketNoticeInfoAdapter
+import com.zhuorui.securities.market.ui.adapter.MarketNoticeInfoTipsAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailNoticePresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailNoticeView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailNoticeViewModel
@@ -22,7 +21,15 @@ import kotlinx.android.synthetic.main.fragment_market_detail_notice.*
 class MarketDetailNoticeFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailNoticeBinding, MarketDetailNoticeViewModel, MarketDetailNoticeView, MarketDetailNoticePresenter>(),
     MarketDetailNoticeView {
-    private var noticeAdapter:MarketNoticeInfoAdapter?=null
+    override fun addIntoNoticeData(list: List<Int>) {
+        noticeAdapter?.clearItems()
+        if (noticeAdapter?.items == null) {
+            noticeAdapter?.items = ArrayList()
+        }
+        noticeAdapter?.addItems(list)
+    }
+
+    private var noticeAdapter: MarketNoticeInfoTipsAdapter?=null
     override val layout: Int
         get() = R.layout.fragment_market_detail_notice
     override val viewModelId: Int
@@ -48,12 +55,5 @@ class MarketDetailNoticeFragment :
         rv_notice.adapter =noticeAdapter
     }
 
-    override fun addIntoNoticeData(list: List<TestNoticeData>) {
-        noticeAdapter?.clearItems()
-        if (noticeAdapter?.items == null) {
-            noticeAdapter?.items = ArrayList()
-        }
-        noticeAdapter?.addItems(list)
-    }
 
 }
