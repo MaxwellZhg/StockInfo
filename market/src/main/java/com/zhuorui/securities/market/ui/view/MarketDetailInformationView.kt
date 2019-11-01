@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 
 /**
  *    author : liuwei
@@ -10,4 +11,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface MarketDetailInformationView:AbsView {
     fun addIntoInfoData(list:List<Int>)
+    fun changeInfoTypeData(event: MarketDetailInfoEvent)
 }

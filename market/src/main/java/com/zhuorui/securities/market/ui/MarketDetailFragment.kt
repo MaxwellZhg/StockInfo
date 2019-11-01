@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -14,6 +15,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.kline.KlineFragment
@@ -23,6 +25,9 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
 import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.fragment_market_detail.magic_indicator
+import kotlinx.android.synthetic.main.fragment_market_detail.tv_info
+import kotlinx.android.synthetic.main.fragment_market_detail.tv_report
+import kotlinx.android.synthetic.main.fragment_market_detail_information.*
 import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
@@ -43,7 +48,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
     MarketDetailView, View.OnClickListener {
-
     private var mStock: SearchStockInfo? = null
 
     companion object {
@@ -165,6 +169,14 @@ class MarketDetailFragment :
             tv_follow -> {
                 presenter?.collectionStock(mStock!!)
             }
+            tv_info->{
+                detailType(1)
+                RxBus.getDefault().postSticky(MarketDetailInfoEvent(1))
+            }
+            tv_report->{
+                detailType(2)
+                RxBus.getDefault().postSticky(MarketDetailInfoEvent(2))
+            }
         }
 
     }
@@ -176,12 +188,19 @@ class MarketDetailFragment :
         tv_simulation_trading.setOnClickListener(this)
         tv_remind.setOnClickListener(this)
         tv_follow.setOnClickListener(this)
+        tv_info.setOnClickListener(this)
+        tv_report.setOnClickListener(this)
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             //topTab
             if (magic_indicator != null) {
                 top_magic_indicator_group?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                if(mIndex==1){
+                    ll_info_tips.visibility=if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                }else{
+                    ll_info_tips.visibility=if (scrollY < magic_indicator.top) View.GONE else View.GONE
+                }
             }
             //title
             if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
@@ -202,6 +221,9 @@ class MarketDetailFragment :
         top_magic_indicator.onPageScrolled(index, 0.0F, 0)
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
+        if(mIndex!=1) {
+            ll_info_tips.visibility = View.GONE
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -271,5 +293,27 @@ class MarketDetailFragment :
         super.onDestroy()
         presenter?.destroy()
     }
+
+    fun detailType(type:Int){
+        when(type){
+            1->{
+                ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }
+                tv_info.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
+                ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_report.setTextColor(it) }
+                tv_report.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
+            }
+            2->{
+                ResUtil.getColor(R.color.color_53A0FD)?.let { tv_report.setTextColor(it) }
+                tv_report.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
+                ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_info.setTextColor(it) }
+                tv_info.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
+            }
+        }
+    }
+
+    override fun changeInfoTypeData(event: MarketDetailInfoEvent) {
+       detailType(event.type)
+    }
+
 
 }
