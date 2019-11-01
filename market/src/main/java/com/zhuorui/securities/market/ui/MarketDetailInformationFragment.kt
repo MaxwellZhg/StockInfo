@@ -66,11 +66,11 @@ class MarketDetailInformationFragment :
     override fun onClick(p0: View?) {
         when(p0?.id){
             R.id.tv_info->{
-                RxBus.getDefault().postSticky(MarketDetailInfoEvent(1))
+                RxBus.getDefault().post(MarketDetailInfoEvent(1))
                 detailType(1)
             }
             R.id.tv_report->{
-                RxBus.getDefault().postSticky(MarketDetailInfoEvent(2))
+                RxBus.getDefault().post(MarketDetailInfoEvent(2))
                 detailType(2)
             }
         }

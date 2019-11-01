@@ -24,10 +24,6 @@ import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
 import kotlinx.android.synthetic.main.fragment_market_detail.*
-import kotlinx.android.synthetic.main.fragment_market_detail.magic_indicator
-import kotlinx.android.synthetic.main.fragment_market_detail.tv_info
-import kotlinx.android.synthetic.main.fragment_market_detail.tv_report
-import kotlinx.android.synthetic.main.fragment_market_detail_information.*
 import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
@@ -97,7 +93,7 @@ class MarketDetailFragment :
         if (mStock != null) {
             loadRootFragment(
                 R.id.kline_view,
-                KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!,false)
+                KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!, false)
             )
         }
         presenter?.getData(mStock!!)
@@ -169,13 +165,13 @@ class MarketDetailFragment :
             tv_follow -> {
                 presenter?.collectionStock(mStock!!)
             }
-            tv_info->{
+            tv_info -> {
                 detailType(1)
-                RxBus.getDefault().postSticky(MarketDetailInfoEvent(1))
+                RxBus.getDefault().post(MarketDetailInfoEvent(1))
             }
-            tv_report->{
+            tv_report -> {
                 detailType(2)
-                RxBus.getDefault().postSticky(MarketDetailInfoEvent(2))
+                RxBus.getDefault().post(MarketDetailInfoEvent(2))
             }
         }
 
@@ -196,10 +192,10 @@ class MarketDetailFragment :
             //topTab
             if (magic_indicator != null) {
                 top_magic_indicator_group?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
-                if(mIndex==1){
-                    ll_info_tips.visibility=if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
-                }else{
-                    ll_info_tips.visibility=if (scrollY < magic_indicator.top) View.GONE else View.GONE
+                if (mIndex == 1) {
+                    ll_info_tips.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                } else {
+                    ll_info_tips.visibility = if (scrollY < magic_indicator.top) View.GONE else View.GONE
                 }
             }
             //title
@@ -221,7 +217,7 @@ class MarketDetailFragment :
         top_magic_indicator.onPageScrolled(index, 0.0F, 0)
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
-        if(mIndex!=1) {
+        if (mIndex != 1) {
             ll_info_tips.visibility = View.GONE
         }
     }
@@ -294,25 +290,25 @@ class MarketDetailFragment :
         presenter?.destroy()
     }
 
-    fun detailType(type:Int){
-        when(type){
-            1->{
+    fun detailType(type: Int) {
+        when (type) {
+            1 -> {
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }
-                tv_info.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
+                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
                 ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_report.setTextColor(it) }
-                tv_report.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
+                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
             }
-            2->{
+            2 -> {
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_report.setTextColor(it) }
-                tv_report.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
+                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
                 ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_info.setTextColor(it) }
-                tv_info.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
+                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
             }
         }
     }
 
     override fun changeInfoTypeData(event: MarketDetailInfoEvent) {
-       detailType(event.type)
+        detailType(event.type)
     }
 
 
