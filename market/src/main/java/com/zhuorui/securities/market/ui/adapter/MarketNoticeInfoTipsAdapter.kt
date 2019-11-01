@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.adapter
 
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -15,6 +16,7 @@ import com.zhuorui.securities.market.R2
  * Desc:
  */
 class MarketNoticeInfoTipsAdapter :BaseListAdapter<Int>(){
+    var onMarketNoticeClickListener:OnMarketNoticeClickListener?=null
     override fun getLayout(viewType: Int): Int {
         return R.layout.item_attention_tips_layout
     }
@@ -27,6 +29,12 @@ class MarketNoticeInfoTipsAdapter :BaseListAdapter<Int>(){
         lateinit var view_header: View
         @BindView(R2.id.view_coustom)
         lateinit var view_coustom: View
+        @BindView(R2.id.ll_content)
+        lateinit var ll_content: LinearLayout
+
+        init {
+            ll_content.setOnClickListener(this)
+        }
         override fun bind(item: Int?, position: Int) {
             when(position){
                 0->{
@@ -40,5 +48,17 @@ class MarketNoticeInfoTipsAdapter :BaseListAdapter<Int>(){
             }
         }
 
+        override fun onClick(v: View) {
+            if(v==ll_content){
+                onMarketNoticeClickListener?.onMarketNoticeClick()
+            }else {
+                super.onClick(v)
+            }
+        }
+
+    }
+
+    interface OnMarketNoticeClickListener{
+        fun onMarketNoticeClick()
     }
 }

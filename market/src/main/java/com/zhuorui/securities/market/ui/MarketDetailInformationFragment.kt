@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail_information.*
  */
 class MarketDetailInformationFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
-    MarketDetailInformationView,View.OnClickListener {
+    MarketDetailInformationView,View.OnClickListener,MarketInfoAdapter.OnMarketInfoClickListener {
     var infoAdapter: MarketInfoAdapter?=null
     override val layout: Int
         get() = R.layout.fragment_market_detail_information
@@ -50,6 +51,7 @@ class MarketDetailInformationFragment :
         super.onLazyInitView(savedInstanceState)
         presenter?.setLifecycleOwner(this)
         infoAdapter=presenter?.getInfoAdapter()
+        infoAdapter?.onMarketInfoClickListener=this
         presenter?.getInfoData()
         rv_market_info.adapter = infoAdapter
         tv_info.setOnClickListener(this)
@@ -94,6 +96,10 @@ class MarketDetailInformationFragment :
                 tv_info.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
             }
         }
+    }
+
+    override fun marketInfoClick() {
+        ToastUtil.instance.toastCenter("资讯")
     }
 
 

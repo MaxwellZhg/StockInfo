@@ -153,7 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ll_info_tips"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@color/color_211F2A"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp">
