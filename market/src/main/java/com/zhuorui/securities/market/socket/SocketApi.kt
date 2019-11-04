@@ -27,6 +27,7 @@ object SocketApi {
     const val GET_KLINE_MINUTE = "kline.getMinute" // 获取分时
     const val PUSH_STOCK_KLINE_COMPENSATION_DATA = "push.stock.compensationData.kline" // 推送股票K线补偿数据
     const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
+    const val GET_STOCK_PRICE = "stock.price.getStockPrice"// 查询股票价格数据
     const val PUSH_STOCK_PRICE = "push.stock.last" // 推送股票价格
     const val PUSH_STOCK_TRADE = "push.stock.trade" // 推送逐笔成交数据
     const val PUSH_STOCK_TRADESTA = "push.stock.tradesta" // 推送逐笔成交统计数据

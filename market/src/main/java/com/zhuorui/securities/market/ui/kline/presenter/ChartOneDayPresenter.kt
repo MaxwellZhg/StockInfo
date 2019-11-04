@@ -10,7 +10,7 @@ import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicMinuteKlineResponse
-import com.zhuorui.securities.market.socket.request.StockMinuteKline
+import com.zhuorui.securities.market.socket.request.GetStockMinuteKlineRequestBody
 import com.zhuorui.securities.market.socket.response.GetStocksMinuteKlineResponse
 import com.zhuorui.securities.market.socket.vo.kline.StockMinuteVo
 import com.zhuorui.securities.market.ui.kline.view.OneDayKlineView
@@ -52,7 +52,7 @@ class ChartOneDayPresenter : AbsEventPresenter<OneDayKlineView, OneDayKlineViewM
     private fun loadKNetlineMinuteData() {
         if (!ts.isNullOrEmpty() && !code.isNullOrEmpty() && type != null) {
             // 发起自选股K线拉取补偿数据
-            val stockMinuteKline = StockMinuteKline(ts!!, code!!, type!!)
+            val stockMinuteKline = GetStockMinuteKlineRequestBody(ts!!, code!!, type!!)
             val reqId = SocketClient.getInstance().requestGetMinuteKline(stockMinuteKline)
             requestIds.add(reqId)
         }

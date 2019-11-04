@@ -9,7 +9,7 @@ import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.socket.request.StockKlineGetDaily
+import com.zhuorui.securities.market.socket.request.GetStockKlineGetDailyRequestBody
 import com.zhuorui.securities.market.socket.response.StocksDayKlineResponse
 import com.zhuorui.securities.market.ui.kline.view.KlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.KlineViewModel
@@ -40,7 +40,7 @@ class ChartKLinePresenter : AbsEventPresenter<KlineView, KlineViewModel>() {
     fun loadKlineData() {
         // TODO 测试代码
         if (kType == 1) {
-            val klineGetDaily = StockKlineGetDaily("SZ", "000001", 0, 0, 0)
+            val klineGetDaily = GetStockKlineGetDailyRequestBody("SZ", "000001", 0, 0, 0)
             val reqId = SocketClient.getInstance().requestGetDailyKline(klineGetDaily)
             requestIds.add(reqId)
         }
