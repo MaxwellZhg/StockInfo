@@ -79,27 +79,27 @@ public class MarketUtil {
     private static String getHKStockStatusTxt(long closingTimeMillis) {
         long timeMillis = TimeZoneUtil.currentTimeMillis();
         String txt;
-        if (timeMillis >= closingTimeMillis) {//收盘-24:00
+        if (closingTimeMillis != 0 && timeMillis >= closingTimeMillis) {//收盘-24:00
             txt = String.format("已收盘 %s", TimeZoneUtil.timeFormat(closingTimeMillis, "MM-dd HH:mm:ss"));
         } else {
             String dateStart = TimeZoneUtil.timeFormat(timeMillis, "yyyy-MM-dd") + "00:00:00";
-            long dateMillis = TimeZoneUtil.parseTime(dateStart, "yyyy-MM-dd HH:mm:ss");
+            long dateMillis = TimeZoneUtil.parseTime(dateStart, "yyyy-MM-ddHH:mm:ss");
             long s = (timeMillis - dateMillis) / 1000;//当前时间是今天的第几秒
             if (s < 32400) {
                 // 00:00-9:00
                 txt = String.format("未开盘 %s", TimeZoneUtil.timeFormat(closingTimeMillis, "MM-dd HH:mm:ss"));
             } else if (s < 33600) {
                 // 09:00-9:20
-                txt = String.format("盘前竞价 %s 09:00:00", TimeZoneUtil.timeFormat(closingTimeMillis, "MM-dd"));
+                txt = String.format("盘前竞价 %s 09:00:00", TimeZoneUtil.timeFormat(timeMillis, "MM-dd"));
             } else if (s < 34200) {
                 // 9:20-9:30
-                txt = String.format("等待开盘 %s 09:20:00", TimeZoneUtil.timeFormat(closingTimeMillis, "MM-dd"));
+                txt = String.format("等待开盘 %s 09:20:00", TimeZoneUtil.timeFormat(timeMillis, "MM-dd"));
             } else if (s < 43200) {
                 // 9:30-12:00
-                txt = String.format("交易中 %s", TimeZoneUtil.timeFormat(closingTimeMillis, "MM-dd HH:mm:ss"));
+                txt = String.format("交易中 %s", TimeZoneUtil.timeFormat(timeMillis, "MM-dd HH:mm:ss"));
             } else if (s < 46800) {
                 // 12:00-13:00
-                txt = String.format("午间休市 %s 12:00:00", TimeZoneUtil.timeFormat(closingTimeMillis, "MM-dd"));
+                txt = String.format("午间休市 %s 12:00:00", TimeZoneUtil.timeFormat(timeMillis, "MM-dd"));
             } else if (s < 57600) {
                 // 13:00-16:00
                 txt = String.format("交易中 %s", TimeZoneUtil.timeFormat(timeMillis, "MM-dd HH:mm:ss"));

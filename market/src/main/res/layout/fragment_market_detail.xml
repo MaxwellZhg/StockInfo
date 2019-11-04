@@ -14,6 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <!--top bar-->
+
         <include
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
@@ -21,6 +23,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 layout="@layout/layout_market_detail_topbar"/>
 
+        <View style="@style/MadrketDetailLine"
+              app:layout_constraintTop_toBottomOf="@id/top_bar"
+              android:layout_width="match_parent"/>
+
+        <!--bottom bar-->
         <include
                 android:id="@+id/bottpm_bar"
                 android:layout_width="match_parent"
@@ -35,10 +42,6 @@
                 android:background="@color/color_211F2A"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
-        <View style="@style/MadrketDetailLine"
-              app:layout_constraintTop_toBottomOf="@id/top_bar"
-              android:layout_width="match_parent"/>
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 android:background="@color/color_211F2A"
@@ -74,44 +77,50 @@
                             android:layout_height="wrap_content"
                     />
 
+                    <!--H/A 信息-->
                     <View style="@style/MadrketDetailLine"/>
 
-                    <!--A股-->
-                    <include
-                            layout="@layout/layout_market_detail_a_shares"/>
-
-                    <View style="@style/MadrketDetailLine"/>
-
-                    <!--除权信息-->
-                    <include
+                    <com.zhuorui.securities.market.customer.view.StockHAView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            layout="@layout/layout_market_detail_ex_rights"/>
+                            android:layout_height="wrap_content"/>
+
+                    <!--消息-->
+
+                    <View style="@style/MadrketDetailLine"/>
+
+                    <com.zhuorui.securities.market.customer.view.StockInformationView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    <!--K线-->
 
                     <View style="@style/MadrketDetailLine" android:layout_height="2dp"/>
 
-                    <!--K线-->
                     <FrameLayout
                             android:id="@+id/kline_view"
                             android:layout_width="match_parent"
                             android:layout_height="337dp"/>
 
+                    <!--买卖盘十档-->
+
                     <View style="@style/MadrketDetailLine"/>
 
-                    <!--买卖盘十档-->
                     <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
                             android:id="@+id/buyingSellingFiles"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
-                    <View style="@style/MadrketDetailLine"/>
-
                     <!--买卖盘经纪-->
+
+                    <View style="@style/MadrketDetailLine"/>
 
                     <com.zhuorui.securities.market.customer.view.OrderBrokerView
                             android:id="@+id/orderBroker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
+
+                    <!-- tab -->
 
                     <View style="@style/MadrketDetailLine" android:layout_height="2dp"/>
 
@@ -153,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ll_info_tips"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@color/color_211F2A"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp">
