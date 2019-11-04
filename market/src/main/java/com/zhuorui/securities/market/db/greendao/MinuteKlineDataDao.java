@@ -27,9 +27,9 @@ public class MinuteKlineDataDao extends AbstractDao<MinuteKlineData, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Vol = new Property(1, double.class, "vol", false, "VOL");
         public final static Property Amount = new Property(2, double.class, "amount", false, "AMOUNT");
-        public final static Property OpenPrice = new Property(3, double.class, "open", false, "OPEN_PRICE");
+        public final static Property OpenPrice = new Property(3, double.class, "openPrice", false, "OPEN_PRICE");
         public final static Property AvgPrice = new Property(4, double.class, "avgPrice", false, "AVG_PRICE");
-        public final static Property Price = new Property(5, double.class, "last", false, "PRICE");
+        public final static Property Price = new Property(5, double.class, "price", false, "PRICE");
         public final static Property High = new Property(6, double.class, "high", false, "HIGH");
         public final static Property Low = new Property(7, double.class, "low", false, "LOW");
         public final static Property DateTime = new Property(8, long.class, "dateTime", false, "DATE_TIME");
@@ -51,9 +51,9 @@ public class MinuteKlineDataDao extends AbstractDao<MinuteKlineData, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"VOL\" REAL NOT NULL ," + // 1: vol
                 "\"AMOUNT\" REAL NOT NULL ," + // 2: amount
-                "\"OPEN_PRICE\" REAL NOT NULL ," + // 3: open
+                "\"OPEN_PRICE\" REAL NOT NULL ," + // 3: openPrice
                 "\"AVG_PRICE\" REAL NOT NULL ," + // 4: avgPrice
-                "\"PRICE\" REAL NOT NULL ," + // 5: last
+                "\"PRICE\" REAL NOT NULL ," + // 5: price
                 "\"HIGH\" REAL NOT NULL ," + // 6: high
                 "\"LOW\" REAL NOT NULL ," + // 7: low
                 "\"DATE_TIME\" INTEGER NOT NULL );"); // 8: dateTime
@@ -112,9 +112,9 @@ public class MinuteKlineDataDao extends AbstractDao<MinuteKlineData, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getDouble(offset + 1), // vol
             cursor.getDouble(offset + 2), // amount
-            cursor.getDouble(offset + 3), // open
+            cursor.getDouble(offset + 3), // openPrice
             cursor.getDouble(offset + 4), // avgPrice
-            cursor.getDouble(offset + 5), // last
+            cursor.getDouble(offset + 5), // price
             cursor.getDouble(offset + 6), // high
             cursor.getDouble(offset + 7), // low
             cursor.getLong(offset + 8) // dateTime

@@ -197,7 +197,7 @@ public class SocketClient {
 
                 @Override
                 public void onClose(int i, String s, boolean b) {
-                    LogInfra.Log.d(TAG, "链接已关闭");
+                    LogInfra.Log.d(TAG, "链接已关闭：" + s);
                     // 通知上层连接断开
                     RxBus.getDefault().post(new SocketConnectEvent(false));
                     isConnected = false;
@@ -206,7 +206,7 @@ public class SocketClient {
                 @Override
                 public void onError(Exception e) {
                     e.printStackTrace();
-                    LogInfra.Log.d(TAG, "发生错误已关闭");
+                    LogInfra.Log.d(TAG, "发生错误已关闭：" + e.getMessage());
                     isConnected = false;
                 }
             };

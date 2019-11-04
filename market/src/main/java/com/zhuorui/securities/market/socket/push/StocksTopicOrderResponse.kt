@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.socket.push
 
 import com.zhuorui.securities.market.socket.request.SocketHeader
 import com.zhuorui.securities.market.socket.response.SocketResponse
+import com.zhuorui.securities.market.socket.vo.OrderData
 
 /**
  * author : PengXianglin
@@ -11,25 +12,5 @@ import com.zhuorui.securities.market.socket.response.SocketResponse
  */
 class StocksTopicOrderResponse : SocketResponse() {
     var header: SocketHeader? = null
-    var body: Body? = null
-
-    data class Body(
-        val ts: String,
-        val code: String,
-        val type: Int,
-        val asklist: List<AskModel>,
-        val bidlist: List<BidModel>
-    )
-
-    data class AskModel(
-        val num: String,
-        val price: String,
-        val qty: String
-    )
-
-    data class BidModel(
-        val num: String,
-        val price: String,
-        val qty: String
-    )
+    var body: OrderData? = null
 }
