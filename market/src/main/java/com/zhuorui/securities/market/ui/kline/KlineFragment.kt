@@ -29,7 +29,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 /**
  * 股票K线图
  */
-class KlineFragment private constructor() : SupportFragment(), OnClickListener {
+class KlineFragment : SupportFragment(), OnClickListener {
 
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
