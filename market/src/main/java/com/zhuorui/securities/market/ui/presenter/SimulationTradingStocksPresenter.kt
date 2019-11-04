@@ -33,7 +33,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
 import java.util.*
-import kotlin.math.sinh
 
 /**
  *    author : PengXianglin
@@ -374,15 +373,15 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     emitter.onComplete()
                 }).subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        viewModel?.price?.value = MathUtil.rounded3(sub.price!!)
+                        viewModel?.price?.value = MathUtil.rounded3(sub.last!!)
                         // 计算跌涨价格
-                        val diffPrice = MathUtil.rounded3(sub.price!!.subtract(sub.openPrice!!))
+                        val diffPrice = MathUtil.rounded3(sub.last!!.subtract(sub.open!!))
                         viewModel?.diffPrice?.value = diffPrice
                         // 计算跌涨幅百分比
                         viewModel?.diffRate?.value =
-                            MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), sub.openPrice!!)
+                            MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), sub.open!!)
                         // 更新界面
-                        view?.updateStockPrice(sub.price!!, diffPrice, viewModel?.diffRate?.value!!)
+                        view?.updateStockPrice(sub.last!!, diffPrice, viewModel?.diffRate?.value!!)
                     }
                 disposables.add(disposable)
                 break

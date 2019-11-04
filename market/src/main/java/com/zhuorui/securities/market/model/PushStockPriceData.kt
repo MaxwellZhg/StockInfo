@@ -8,21 +8,25 @@ import java.math.BigDecimal
  *    date   : 2019/8/6 11:18
  *    desc   : 推送股价数据
  */
-class PushStockPriceData  : BaseStockMarket() {
+class PushStockPriceData : BaseStockMarket() {
     /**
      * 开盘价格
      */
-    var openPrice: BigDecimal? = null
+    var open: BigDecimal? = null
     /**
      * 昨日收盘价格
      */
-    var preClosePrice: BigDecimal? = null
+    var preClose: BigDecimal? = null
     /**
      * 当前价格
      */
-    var price: BigDecimal? = null
+    var last: BigDecimal? = null
     /**
-     * 日期时间
+     * 涨跌标识(1:涨，0:平，-1:跌)
      */
-    var dateTime: Long? = null
+    var pctTag: Int? = null
+    /**
+     * 行情时间
+     */
+    var time: Long? = null
 }

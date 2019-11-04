@@ -59,7 +59,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                          * @return
                          */
                         override fun getPrice(): Float {
-                            return t.price!!.toFloat()
+                            return t.last!!.toFloat()
                         }
 
                         /**
@@ -68,7 +68,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                          * @return
                          */
                         override fun getOpenPrice(): Float {
-                            return t.openPrice!!.toFloat()
+                            return t.open!!.toFloat()
                         }
 
                         /**
@@ -77,7 +77,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                          * @return
                          */
                         override fun getPreClosePrice(): Float {
-                            return t.preClosePrice!!.toFloat()
+                            return t.preClose!!.toFloat()
                         }
 
                         /**
@@ -116,8 +116,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         val priceData = viewModel?.pushStockPriceData?.value
         topBarInfoTp = 1
         if (priceData != null) {
-            val price = priceData.price!!.toFloat()
-            val preClosePrice = priceData.preClosePrice!!.toFloat()
+            val price = priceData.last!!.toFloat()
+            val preClosePrice = priceData.preClose!!.toFloat()
             val diffPrice = price - preClosePrice
             view?.upTopBarInfo(
                 String.format("%.3f %+.3f %+.2f%%", price, diffPrice, diffPrice * 100 / preClosePrice),
