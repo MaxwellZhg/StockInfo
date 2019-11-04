@@ -28,5 +28,15 @@
         <item>量比</item>
         <item>股息率</item>
     </string-array>
-
+    <string-array name="stock_point_detail_title">
+        <item>最高</item>
+        <item>今开</item>
+        <item>成交额</item>
+        <item>最低</item>
+        <item>昨收</item>
+        <item>振幅</item>
+        <item>涨家</item>
+        <item>平家</item>
+        <item>跌家</item>
+    </string-array>
 </resources>
