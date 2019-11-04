@@ -11,6 +11,8 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.event.MarketDetailInfoEvent
+import com.zhuorui.securities.market.model.SearchStokcInfoEnum
+import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.ui.adapter.MarketInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailInformationPresenter
@@ -40,24 +42,32 @@ class MarketDetailInformationFragment :
         get() = ViewModelProviders.of(this).get(MarketDetailInformationViewModel::class.java)
     override val getView: MarketDetailInformationView
         get() = this
-
+    private var stockCode: String? = null
     companion object {
-        fun newInstance(): MarketDetailInformationFragment {
-            return MarketDetailInformationFragment()
+        fun newInstance(stockCode:String): MarketDetailInformationFragment {
+            val fragment = MarketDetailInformationFragment()
+            if (stockCode != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("code", stockCode)
+                fragment.arguments = bundle
+            }
+            return fragment
         }
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        stockCode = arguments?.getSerializable("code") as String?
+        srl_layout.setEnableLoadMore(true)
         presenter?.setLifecycleOwner(this)
         infoAdapter=presenter?.getInfoAdapter()
         infoAdapter?.onMarketInfoClickListener=this
-        presenter?.getInfoData()
+        stockCode?.let { presenter?.getNewsListData(it) }
         rv_market_info.adapter = infoAdapter
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
     }
-    override fun addIntoInfoData(list: List<Int>) {
+    override fun addIntoInfoData(list: List<MarketNewsListResponse.DataList>) {
         infoAdapter?.clearItems()
         if (infoAdapter?.items == null) {
             infoAdapter?.items = ArrayList()

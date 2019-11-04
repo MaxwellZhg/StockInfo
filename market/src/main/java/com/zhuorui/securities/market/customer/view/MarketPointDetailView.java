@@ -75,7 +75,7 @@ public class MarketPointDetailView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         closeNum = CLOSE_LINE * SPAN_COUNT;
         mItemColor = new ArrayMap<>();
-        mItemTitles = context.getResources().getStringArray(R.array.stock_detail_title);
+        mItemTitles = context.getResources().getStringArray(R.array.stock_point_detail_title);
         mItemDatas = new String[mItemTitles.length];
         inflate(context, R.layout.layout_market_point_detail_view,this);
         initView();
