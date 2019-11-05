@@ -28,5 +28,11 @@
         <item>量比</item>
         <item>股息率</item>
     </string-array>
+    <string-array name="stock_detail_tab">
+        <item>资金</item>
+        <item>资讯</item>
+        <item>公告</item>
+        <item>F10</item>
+    </string-array>
 
 </resources>

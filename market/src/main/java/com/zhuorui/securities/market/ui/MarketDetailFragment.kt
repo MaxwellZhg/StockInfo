@@ -44,7 +44,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
     MarketDetailView, View.OnClickListener {
+
     private var mStock: SearchStockInfo? = null
+    private var tabTitle: Array<String>? = null
+    private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(4)
+    private var mIndex = 0
 
     companion object {
         fun newInstance(stock: SearchStockInfo): MarketDetailFragment {
@@ -55,10 +59,6 @@ class MarketDetailFragment :
             return fragment
         }
     }
-
-    private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", "F10")
-    private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(4)
-    private var mIndex = 0
 
     override val layout: Int
         get() = R.layout.fragment_market_detail
@@ -75,10 +75,10 @@ class MarketDetailFragment :
     override val getView: MarketDetailView
         get() = this
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mStock = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)!!
+        tabTitle = ResUtil.getStringArray(R.array.stock_detail_tab)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
@@ -90,19 +90,28 @@ class MarketDetailFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
+        //加载K线Fragment
         if (mStock != null) {
             loadRootFragment(
                 R.id.kline_view,
                 KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!, false)
             )
         }
+        //加载指数Fragment
+        loadRootFragment(
+            R.id.index_view,
+            MarketIndexFragment.newInstance()
+        )
+        //加载数据
         presenter?.getData(mStock!!)
     }
 
+    /**
+     * 更新数据
+     */
     override fun upData(data: StockDetailView.IStockDatailData) {
         stock_detail.setData(data)
     }
-
 
     private fun setTopbarData() {
         tv_title.text = String.format("%s(%s)", mStock?.name, mStock?.code)
@@ -258,7 +267,7 @@ class MarketDetailFragment :
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
             override fun getCount(): Int {
-                return tabTitle.size
+                return if (tabTitle != null) tabTitle!!.size else 0
             }
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
@@ -266,7 +275,7 @@ class MarketDetailFragment :
                 colorTransitionPagerTitleView.normalColor = Color.parseColor("#C0CCE0")
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 18f
-                colorTransitionPagerTitleView.text = tabTitle[index]
+                colorTransitionPagerTitleView.text = tabTitle?.get(index) ?: ""
                 colorTransitionPagerTitleView.setOnClickListener {
                     onSelect(index)
                 }
@@ -276,7 +285,7 @@ class MarketDetailFragment :
             override fun getIndicator(context: Context): IPagerIndicator {
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select))
+                indicator.setColors(ResUtil.getColor(R.color.tab_select))
                 indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
                 indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator

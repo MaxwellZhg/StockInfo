@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:ignore="MissingDefaultResource">
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.market.ui.viewmodel.MarketIndexViewModel"/>
+    </data>
+
+    <FrameLayout
+            android:id="@+id/root_view"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ViewStub
+                android:id="@+id/view_stub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/layout_market_detail_index_detailed"
+        />
+
+        <include
+                layout="@layout/layout_market_detail_index_simple"/>
+
+
+
+    </FrameLayout>
+</layout>
