@@ -23,6 +23,7 @@ import com.zhuorui.securities.market.net.response.GetStockInfoResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicTransResponse
+import com.zhuorui.securities.market.socket.response.GetStockPriceResponse
 import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
@@ -98,7 +99,8 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         val arguments = fragment.arguments
         val orderData = arguments?.getParcelable<STOrderData>(STOrderData::class.java.simpleName)
         val tradType = arguments?.getInt(SimulationTradingStocksFragment.TRAD_TYPE_KEY)
-        val stockInfo = if(orderData == null)arguments?.getParcelable<SearchStockInfo>(SearchStockInfo::class.java.simpleName) else null
+        val stockInfo =
+            if (orderData == null) arguments?.getParcelable<SearchStockInfo>(SearchStockInfo::class.java.simpleName) else null
         if (orderData != null) {
             // 设置股票信息
             val stockInfo = SearchStockInfo()
@@ -171,7 +173,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                     }
                 }
             }
-        }else if (stockInfo != null){
+        } else if (stockInfo != null) {
             // 显示默认购买状态
             view?.changeTrustType(0)
             setStock(stockInfo)
@@ -324,6 +326,10 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         view?.clearBuyCountFocus()
     }
 
+    fun toggleKline() {
+        view?.toggleKline()
+    }
+
     /**
      * 设置选择的自选股
      */
@@ -337,16 +343,22 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.maxBuyCount?.value = null
         viewModel?.enableBuy?.value = false
         viewModel?.enableSell?.value = false
+        view?.initKline(stockInfo.ts!!, stockInfo.code!!, stockInfo.tsCode!!, stockInfo.type!!)
         // 清除上一次的价格信息
         view?.updateStockPrice(BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00))
         // 取消上一次的订阅
-        if (stockTopicPrice != null && stockTopicTrans != null) {
-            SocketClient.getInstance().unBindTopic(stockTopicPrice, stockTopicTrans)
+        if (stockTopicPrice != null) {
+            SocketClient.getInstance().unBindTopic(stockTopicPrice)
         }
-        // 订阅当前的自选股
-        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
-        stockTopicTrans = StockTopic(StockTopicDataTypeEnum.HANDICAP, stockInfo.ts!!, stockInfo.code!!, 2)
-        SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
+        // 查询价格
+        getStockPrice()
+        if (stockTopicTrans != null) {
+            SocketClient.getInstance().unBindTopic(stockTopicTrans)
+        }
+        // 重新订阅当前的自选股
+        stockTopicTrans =
+            StockTopic(StockTopicDataTypeEnum.HANDICAP, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+        SocketClient.getInstance().bindTopic(stockTopicTrans)
         // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股）
         val getFeeTemplateRequest = GetFeeTemplateRequest(
             "1",
@@ -358,6 +370,32 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             ?.enqueue(Network.IHCallBack<GetFeeTemplateResponse>(getFeeTemplateRequest))
     }
 
+    private fun getStockPrice() {
+//        val stockInfo = viewModel?.stockInfo?.value ?: return
+//        // 查询价格
+//        SocketClient.getInstance().postRequest(
+//            GetStockPriceRequestBody(
+//                GetStockPriceRequestBody.StockVo(
+//                    stockInfo.ts!!,
+//                    stockInfo.code!!,
+//                    stockInfo.type!!
+//                )
+//            ), SocketApi.GET_STOCK_PRICE
+//        )
+    }
+
+    /**
+     * 查询价格
+     */
+    fun onGetStockPriceResponse(response: GetStockPriceResponse) {
+        val stockInfo = viewModel?.stockInfo?.value ?: return
+        val stockPriceDatas = response.data ?: return
+        updatePrice(stockInfo, stockPriceDatas)
+        // 订阅价格
+        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
+        SocketClient.getInstance().bindTopic(stockTopicPrice)
+    }
+
     /**
      * 订阅返回股票价格波动
      */
@@ -365,6 +403,16 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
         val stockInfo = viewModel?.stockInfo?.value ?: return
         val stockPriceDatas = response.body
+        updatePrice(stockInfo, stockPriceDatas)
+    }
+
+    private fun updatePrice(
+        stockInfo: SearchStockInfo,
+        stockPriceDatas: List<PushStockPriceData>
+    ) {
+        if (stockPriceDatas.isNullOrEmpty()) {
+            return
+        }
         for (sub in stockPriceDatas) {
             if (stockInfo.ts == sub.ts && stockInfo.code == sub.code) {
                 // 在主线程更新数据
@@ -553,16 +601,21 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
         // 恢复订阅
-        if (stockTopicPrice != null && stockTopicTrans != null) {
-            SocketClient.getInstance().bindTopic(stockTopicPrice, stockTopicTrans)
+        if (stockTopicTrans != null) {
+            SocketClient.getInstance().bindTopic(stockTopicTrans)
         }
+        // 查询价格
+        getStockPrice()
     }
 
     override fun destroy() {
         super.destroy()
         // 取消订阅
-        if (stockTopicPrice != null && stockTopicTrans != null) {
-            SocketClient.getInstance().unBindTopic(stockTopicPrice, stockTopicTrans)
+        if (stockTopicPrice != null) {
+            SocketClient.getInstance().unBindTopic(stockTopicPrice)
+        }
+        if (stockTopicTrans != null) {
+            SocketClient.getInstance().unBindTopic(stockTopicTrans)
         }
 
         // 释放disposable

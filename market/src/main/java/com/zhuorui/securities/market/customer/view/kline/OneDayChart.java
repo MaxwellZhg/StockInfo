@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -24,6 +25,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.CommonUtil;
 import com.github.mikephil.charting.utils.NumberUtils;
 import com.github.mikephil.charting.utils.Transformer;
+import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.rxbus.EventThread;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
@@ -55,14 +57,12 @@ public class OneDayChart extends BaseChart {
     private final String TAG = this.getClass().getSimpleName();
 
     private Context mContext;
+    private int showModel;
     // K线走势图
     TimeLineChart lineChart;
     // 成交量柱图
     TimeBarChart barChart;
     FrameLayout cirCleView;
-
-    private LineDataSet d1, d2;
-    private BarDataSet barDataSet;
 
     // K线底部时间刻度线
     TimeXAxis xAxisLine;
@@ -97,16 +97,19 @@ public class OneDayChart extends BaseChart {
 
         RxBus.getDefault().register(this);
 
-        colorArray = new int[]{ContextCompat.getColor(mContext, R.color.up_color), ContextCompat.getColor(mContext, R.color.equal_color), ContextCompat.getColor(mContext, R.color.down_color)};
+        LocalSettingsConfig settingsConfig = LocalSettingsConfig.Companion.read();
+        colorArray = new int[]{settingsConfig.getUpColor(), settingsConfig.getDefaultColor(), settingsConfig.getDownColor()};
 
         playHeartbeatAnimation(cirCleView.findViewById(R.id.anim_view));
-
     }
 
     /**
      * 初始化图表属性
+     *
+     * @param showModel 0模拟炒股 1个股详情 2个股详情横屏
      */
-    public void initChart() {
+    public void initChart(int showModel) {
+        this.showModel = showModel;
         //主图
         lineChart.setScaleEnabled(false);
         lineChart.setDrawBorders(true);
@@ -132,6 +135,19 @@ public class OneDayChart extends BaseChart {
         description.setXOffset(5f);
         description.setYOffset(7f);
         barChart.setDescription(description);
+
+        // 设置主图高度
+        ViewGroup.LayoutParams layoutParams = lineChart.getLayoutParams();
+        if (showModel == 0) {
+            layoutParams.height = ResUtil.INSTANCE.getDimensionDp2Px(140.5f);
+            lineChart.setDragEnabled(false);
+            barChart.setDragEnabled(false);
+        } else if (showModel == 1) {
+            layoutParams.height = ResUtil.INSTANCE.getDimensionDp2Px(225.5f);
+        } else {
+            // TODO
+        }
+        lineChart.setLayoutParams(layoutParams);
 
         //主图X轴
         xAxisLine = (TimeXAxis) lineChart.getXAxis();
@@ -315,6 +331,9 @@ public class OneDayChart extends BaseChart {
             barEntries.add(new BarEntry(i, mData.getDatas().get(i).getVolume()));
         }
 
+        LineDataSet d1;
+        LineDataSet d2;
+        BarDataSet barDataSet;
         if (lineChart.getData() != null && lineChart.getData().getDataSetCount() > 0
                 && barChart.getData() != null && barChart.getData().getDataSetCount() > 0) {
             d1 = (LineDataSet) lineChart.getData().getDataSetByIndex(0);
@@ -446,7 +465,13 @@ public class OneDayChart extends BaseChart {
 //                lineChart.setViewPortOffsets(left, CommonUtil.dip2px(mContext, 5), right, CommonUtil.dip2px(mContext, 15));
 //                barChart.setViewPortOffsets(left, 0, right, CommonUtil.dip2px(mContext, 15));
 //            } else {
-            lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
+            if (showModel == 0) {
+                lineChart.setViewPortOffsets(0, 0, 0, CommonUtil.dip2px(mContext, 20));
+            } else if (showModel == 1) {
+                lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
+            } else {
+                // TODO
+            }
             barChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 19), 0, 0);
 //            }
 
