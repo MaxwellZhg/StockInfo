@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -39,9 +40,6 @@ class MarketDetailInformationPresenter(): AbsNetPresenter<MarketDetailInformatio
                 })
         }
     }
-    fun getInfoData(){
-       // viewModel?.infoList?.value = listInfo
-    }
 
     fun getInfoAdapter(): MarketInfoAdapter {
         return MarketInfoAdapter()
@@ -51,8 +49,8 @@ class MarketDetailInformationPresenter(): AbsNetPresenter<MarketDetailInformatio
         view?.changeInfoTypeData(event)
     }
 
-    fun getNewsListData(code:String){
-        val requset =  MarketNewsListRequest(code, 1, 15,transactions.createTransaction())
+    fun getNewsListData(code:String,currentPage:Int){
+        val requset =  MarketNewsListRequest(code, currentPage, 15,transactions.createTransaction())
         requset?.let {
             Cache[IStockNet::class.java]?.getMarketNewsList(it)
                 ?.enqueue(Network.IHCallBack<MarketNewsListResponse>(requset))
@@ -62,10 +60,16 @@ class MarketDetailInformationPresenter(): AbsNetPresenter<MarketDetailInformatio
     fun onMarketNewsListResponse(response: MarketNewsListResponse){
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data
-        // totalPage=response.data.totalPage
-        if (datas!=null){
-             viewModel?.infoList?.value=datas.list
-          }
+        if(datas.list.isNullOrEmpty()){
+            view?.noMoreData()
+        }else {
+            viewModel?.infoList?.value = datas.list
+        }
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+        view?.loadFailData()
     }
 
 

@@ -92,7 +92,11 @@ class TopicStockListFragment :
         if (item != null) {
             // 跳转到详情页
 //          startActivity(Intent(context, KlineLandActivity::class.java))
-            (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance(item))
+            (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(
+                MarketDetailFragment.newInstance(item),
+                MarketDetailFragment::class.java,
+                true
+            )
         } else {
             // 跳转到搜索
             (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())

@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
@@ -195,16 +196,18 @@ class MarketDetailFragment :
         tv_follow.setOnClickListener(this)
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
-        magic_indicator.navigator = getNavigator()
+        tab_magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            Log.i("lw","$scrollY  " + tab_magic_indicator.top)
             //topTab
-            if (magic_indicator != null) {
-                top_magic_indicator_group?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+            if (tab_magic_indicator != null) {
+                top_magic_indicator.visibility = if (scrollY < tab_magic_indicator.top) View.GONE else View.VISIBLE
+                top_magic_indicator_line.visibility = top_magic_indicator.visibility
                 if (mIndex == 1) {
-                    ll_info_tips.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                    ll_info_tips.visibility = top_magic_indicator.visibility
                 } else {
-                    ll_info_tips.visibility = if (scrollY < magic_indicator.top) View.GONE else View.GONE
+                    ll_info_tips.visibility = View.GONE
                 }
             }
             //title
@@ -220,8 +223,8 @@ class MarketDetailFragment :
      * 切换资金，资讯等信息
      */
     private fun onSelect(index: Int) {
-        magic_indicator.onPageSelected(index)
-        magic_indicator.onPageScrolled(index, 0.0F, 0)
+        tab_magic_indicator.onPageSelected(index)
+        tab_magic_indicator.onPageScrolled(index, 0.0F, 0)
         top_magic_indicator.onPageSelected(index)
         top_magic_indicator.onPageScrolled(index, 0.0F, 0)
         showHideFragment(mFragments[index], mFragments[mIndex])

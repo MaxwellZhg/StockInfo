@@ -167,14 +167,14 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 for (i in 0..4) {
                     history.add(i)
                 }
-                if(datas.size>5){
+                data = if(datas.size>5){
                     preListStock.clear()
                     for (index in 0 until 5){
-                       preListStock.add(datas[index])
+                        preListStock.add(datas[index])
                     }
-                     data = SearchDeafaultData(preListStock, history)
+                    SearchDeafaultData(preListStock, history)
                 }else{
-                     data = SearchDeafaultData(datas, history)
+                    SearchDeafaultData(datas, history)
                 }
                 list.add(data)
                 list.add(data)

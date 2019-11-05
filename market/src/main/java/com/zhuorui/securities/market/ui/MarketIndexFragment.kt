@@ -19,7 +19,6 @@ import com.zhuorui.securities.market.ui.view.MarketIndexView
 import com.zhuorui.securities.market.ui.viewmodel.MarketIndexViewModel
 import kotlinx.android.synthetic.main.fragment_market_index.*
 import kotlinx.android.synthetic.main.layout_market_detail_index_detailed.*
-import kotlinx.android.synthetic.main.layout_market_detail_index_simple.*
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -38,6 +37,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class MarketIndexFragment :
     AbsFragment<FragmentMarketIndexBinding, MarketIndexViewModel, MarketIndexView, MarketIndexPresenter>(),
     MarketIndexView {
+
+    private var stub = false
 
     companion object {
 
@@ -63,7 +64,13 @@ class MarketIndexFragment :
     }
 
     private fun initView() {
-        open_btn.setOnClickListener { setDetailedView() }
+        change_btn.setOnClickListener {
+            if (simple_rootview.visibility == View.VISIBLE) {
+                setDetailedView()
+            } else {
+                setSimpleView()
+            }
+        }
     }
 
     /**
@@ -71,26 +78,26 @@ class MarketIndexFragment :
      */
     private fun setSimpleView() {
         simple_rootview.visibility = View.VISIBLE
-        if (detailed_rootview != null) detailed_rootview.visibility = View.GONE
+        detailed_rootview.visibility = View.GONE
+        change_btn.setImageResource(R.mipmap.ic_arrow_up_c3cde3)
     }
 
     /**
      * 切换成详细样式
      */
     private fun setDetailedView() {
-        if (view_stub != null) {
-            view_stub.inflate()
+        change_btn.setImageResource(R.mipmap.ic_arrow_down_c3cde3)
+        detailed_rootview.visibility = View.VISIBLE
+        simple_rootview.visibility = View.GONE
+        if (!stub) {
             val titles = arrayOf("恒生指数", "国企指数", "红筹指数")
             val codes = arrayOf("800000", "800100", "800151")
             val tss = arrayOf("HK", "HK", "HK", "HK")
-            retract_btn.setOnClickListener { setSimpleView() }
             initViewPage(viewpager, codes, tss)
             magic_indicator.navigator = getNavigator(viewpager, titles)
             ViewPagerHelper.bind(magic_indicator, viewpager)
+            stub = true
         }
-        detailed_rootview.visibility = View.VISIBLE
-        simple_rootview.visibility = View.GONE
-
     }
 
     private fun initViewPage(viewPager: ViewPager, codes: Array<String>, tss: Array<String>) {

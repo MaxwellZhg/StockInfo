@@ -15,10 +15,13 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
+import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
+import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicTradeResponse
+import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
+import com.zhuorui.securities.market.socket.response.GetStockTradeResponse
 import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
-import kotlin.random.Random
 
 /**
  * author : PengXianglin
@@ -31,6 +34,8 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
     LinearLayout(context) {
 
     private var recyclerView: RecyclerView? = null
+    private var adapter: TradeDetailViewAdapter? = null
+    private var requestIds = java.util.ArrayList<String>()
     private var stockTopic: StockTopic? = null
 
     init {
@@ -41,37 +46,38 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
-        val adapter = TradeDetailViewAdapter()
-        // TODO 测试数据
-        val list = ArrayList<StockTradeDetailData>()
-        for (index in 0..30) {
-            var diffPreMark = 0
-            if (index != 0) {
-                diffPreMark = if (index > 10) {
-                    1
-                } else {
-                    -1
-                }
-            }
-            list.add(
-                StockTradeDetailData(
-                    "",
-                    diffPreMark,
-                    1,
-                    "20191030161528333",
-                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
-                    Random.nextLong(1, 10000).toBigDecimal(),
-                    "N",
-                    "11"
-                )
-            )
-        }
-        adapter.items = list
+        adapter = TradeDetailViewAdapter()
+//        // TODO 测试数据
+//        val list = ArrayList<StockTradeDetailData>()
+//        for (index in 0..30) {
+//            var diffPreMark = 0
+//            if (index != 0) {
+//                diffPreMark = if (index > 10) {
+//                    1
+//                } else {
+//                    -1
+//                }
+//            }
+//            list.add(
+//                StockTradeDetailData(
+//                    "",
+//                    diffPreMark,
+//                    1,
+//                    "20191030161528333",
+//                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
+//                    Random.nextLong(1, 10000).toBigDecimal(),
+//                    "N",
+//                    "11"
+//                )
+//            )
+//        }
+//        adapter.items = list
         recyclerView?.adapter = adapter
 
-        //  // 发起订阅
-        //  stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_TRADE, ts, code, type)
-        //  SocketClient.getInstance().bindTopic(stockTopic)
+        // 拉取数据
+        val requestId =
+            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
+        requestIds.add(requestId)
     }
 
     inner class LinearSpacingItemDecoration : RecyclerView.ItemDecoration() {
@@ -89,17 +95,30 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
     }
 
     /**
+     * 查询选股逐笔成交数据回调
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onGetStockTradeResponse(response: GetStockTradeResponse) {
+        if (requestIds.remove(response.respId)) {
+            adapter?.items = response.data
+
+            // 发起订阅
+            stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_TRADE, ts, code, type)
+            SocketClient.getInstance().bindTopic(stockTopic)
+        }
+    }
+
+    /**
      * 订阅自选股逐笔成交数据推送回调
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicTradeResponse(response: StocksTopicTradeResponse) {
-        if (response.body != null && recyclerView?.adapter != null) {
-            val adapter = (recyclerView?.adapter as TradeDetailViewAdapter)
-            if (adapter.items.isNullOrEmpty()) {
+        if (response.body != null) {
+            if (adapter?.items.isNullOrEmpty()) {
                 val items = ArrayList<StockTradeDetailData>()
-                adapter.items = items
+                adapter?.items = items
             } else {
-                adapter.addItem(response.body)
+                adapter?.addItem(response.body)
             }
         }
     }
