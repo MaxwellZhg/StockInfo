@@ -49,80 +49,103 @@
                     android:textSize="17sp"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ll_stock"
-                android:layout_width="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_title"
-                android:layout_marginTop="10dp"
-                android:background="@color/color_FFFFFFFF"
-                android:layout_height="40dp"
-                android:visibility="@{viewModel.stockInfo == null ? View.GONE : View.VISIBLE}">
+        <LinearLayout android:id="@+id/ll_stock" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      app:layout_constraintTop_toBottomOf="@+id/ll_title"
+                      android:layout_marginTop="10dp"
+                      android:background="@color/color_FFFFFFFF">
 
-            <TextView
-                    android:id="@+id/tv_stock_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="13dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/color_ffa4b2cb"
-                    android:textSize="15sp"
-                    android:text="@{viewModel.stockInfo.name}"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_stock"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:visibility="@{viewModel.stockInfo == null ? View.GONE : View.VISIBLE}">
 
-            <com.zhuorui.commonwidget.ZRStockTextView
-                    android:id="@+id/tv_stock_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="21dp"
-                    app:layout_constraintStart_toEndOf="@id/tv_stock_name"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:drawableEnd="@mipmap/ic_stock_up_arrow_red"
-                    android:drawablePadding="6dp"
-                    android:textColor="@color/color_ffce0019"
-                    android:text="---"
-                    android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tv_stock_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="13dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="@color/color_ffa4b2cb"
+                        android:textSize="15sp"
+                        android:text="@{viewModel.stockInfo.name}"/>
 
-            <com.zhuorui.commonwidget.ZRStockTextView
-                    android:id="@+id/tv_diff_pirce"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toEndOf="@id/tv_stock_price"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/color_ffce0019"
-                    app:zr_showPrecentSymbol="true"
-                    app:zr_showPrecentUpDown="true"
-                    android:text="---"
-                    android:textSize="15sp"/>
+                <com.zhuorui.commonwidget.ZRStockTextView
+                        android:id="@+id/tv_stock_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="21dp"
+                        app:layout_constraintStart_toEndOf="@id/tv_stock_name"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:drawableEnd="@mipmap/ic_stock_up_arrow_red"
+                        android:drawablePadding="6dp"
+                        android:textColor="@color/color_ffce0019"
+                        android:text="---"
+                        android:textSize="15sp"/>
 
-            <com.zhuorui.commonwidget.ZRStockTextView
-                    android:id="@+id/tv_diff_rate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="21dp"
-                    app:layout_constraintStart_toEndOf="@id/tv_diff_pirce"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/color_ffce0019"
-                    app:zr_showPrecentSymbol="true"
-                    app:zr_showPrecentUpDown="true"
-                    android:text="---"
-                    android:textSize="15sp"/>
+                <com.zhuorui.commonwidget.ZRStockTextView
+                        android:id="@+id/tv_diff_pirce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintStart_toEndOf="@id/tv_stock_price"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="@color/color_ffce0019"
+                        app:zr_showPrecentSymbol="true"
+                        app:zr_showPrecentUpDown="true"
+                        android:text="---"
+                        android:textSize="15sp"/>
 
-            <ImageView
-                    android:id="@+id/iv_chart"
-                    android:layout_width="14dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginEnd="13dp"
-                    android:layout_height="14dp"
-                    android:src="@mipmap/ic_chart"/>
+                <com.zhuorui.commonwidget.ZRStockTextView
+                        android:id="@+id/tv_diff_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="21dp"
+                        app:layout_constraintStart_toEndOf="@id/tv_diff_pirce"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="@color/color_ffce0019"
+                        app:zr_showPrecentSymbol="true"
+                        app:zr_showPrecentUpDown="true"
+                        android:text="---"
+                        android:textSize="15sp"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                        android:id="@+id/iv_chart"
+                        android:layout_width="14dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginEnd="13dp"
+                        android:layout_height="14dp"
+                        android:src="@mipmap/ic_kline_close"
+                        android:onClick="@{() -> presenter.toggleKline()}"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:id="@+id/kline_divide"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_f0f0f0"
+                    android:visibility="gone"/>
+
+            <FrameLayout
+                    android:id="@+id/fl_kline"
+                    android:layout_width="match_parent"
+                    android:layout_height="213.5dp"
+                    android:layout_marginStart="12.5dp"
+                    android:layout_marginEnd="12.5dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
+                    android:visibility="gone"/>
+        </LinearLayout>
 
         <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/ll_type"
@@ -402,20 +425,20 @@
                     android:id="@+id/view">
 
                 <com.zhuorui.securities.market.customer.view.StockTransDataView
-                        android:id="@+id/trans_buy1"
+                        android:id="@+id/trans_buy5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:title_text="@string/trans_buy1"
+                        app:title_text="@string/trans_buy5"
                         app:layout_constraintTop_toTopOf="parent"
                         app:title_background="@color/color_ffce0019"
                         app:price_text_color="@color/color_ffce0019"/>
 
                 <com.zhuorui.securities.market.customer.view.StockTransDataView
-                        android:id="@+id/trans_buy2"
+                        android:id="@+id/trans_buy4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:title_text="@string/trans_buy2"
-                        app:layout_constraintTop_toBottomOf="@+id/trans_buy1"
+                        app:title_text="@string/trans_buy4"
+                        app:layout_constraintTop_toBottomOf="@+id/trans_buy5"
                         app:layout_constraintBottom_toTopOf="@id/trans_buy3"
                         app:title_background="@color/color_ffce0019"
                         app:price_text_color="@color/color_ffce0019"/>
@@ -431,20 +454,20 @@
                         app:price_text_color="@color/color_ffce0019"/>
 
                 <com.zhuorui.securities.market.customer.view.StockTransDataView
-                        android:id="@+id/trans_buy4"
+                        android:id="@+id/trans_buy2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:title_text="@string/trans_buy4"
+                        app:title_text="@string/trans_buy2"
                         app:layout_constraintTop_toBottomOf="@+id/trans_buy3"
-                        app:layout_constraintBottom_toTopOf="@+id/trans_buy5"
+                        app:layout_constraintBottom_toTopOf="@+id/trans_buy1"
                         app:title_background="@color/color_ffce0019"
                         app:price_text_color="@color/color_ffce0019"/>
 
                 <com.zhuorui.securities.market.customer.view.StockTransDataView
-                        android:id="@+id/trans_buy5"
+                        android:id="@+id/trans_buy1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:title_text="@string/trans_buy5"
+                        app:title_text="@string/trans_buy1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:title_background="@color/color_ffce0019"
                         app:price_text_color="@color/color_ffce0019"/>

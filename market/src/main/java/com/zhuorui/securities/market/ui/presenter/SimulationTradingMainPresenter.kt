@@ -7,13 +7,11 @@ import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.event.NotifyStockCountEvent
 import com.zhuorui.securities.market.manager.STInfoManager
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
@@ -313,7 +311,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
                 val stockInfo = stocksInfo[data.getTsCode()]
-                val presentPrice = if (stockInfo?.price != null) stockInfo.price!! else BigDecimal(0)
+                val presentPrice = if (stockInfo?.last != null) stockInfo.last!! else BigDecimal(0)
                 val holdStockCount = if (data.holdStockCount != null) data.holdStockCount!! else BigDecimal(0)
                 val holeCost = if (data.holdCost != null) data.holdCost!! else BigDecimal(0)
                 data.presentPrice = presentPrice

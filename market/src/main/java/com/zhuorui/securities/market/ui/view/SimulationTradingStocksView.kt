@@ -13,6 +13,11 @@ import java.math.BigDecimal
 interface SimulationTradingStocksView : AbsView {
 
     /**
+     * 初始化K线
+     */
+    fun initKline(ts: String, code: String, tsCode: String, type: Int)
+
+    /**
      * 更新股价
      */
     fun updateStockPrice(price: BigDecimal, diffPrice: BigDecimal, diffRate: BigDecimal)
@@ -76,7 +81,13 @@ interface SimulationTradingStocksView : AbsView {
     fun tradStocksSuccessful()
 
     /**
+     * 切换K线
+     */
+    fun toggleKline()
+
+    /**
      * 退出界面
      */
     fun exit()
+
 }
