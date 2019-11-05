@@ -3,6 +3,8 @@ package com.zhuorui.securities.market.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -21,6 +23,7 @@ import com.zhuorui.securities.market.ui.view.MarketDetailInformationView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailInformationViewModel
 import kotlinx.android.synthetic.main.fragment_market_detail_information.*
+import kotlinx.android.synthetic.main.fragment_search_result_info.*
 
 /**
  *    author : liuwei
@@ -30,7 +33,8 @@ import kotlinx.android.synthetic.main.fragment_market_detail_information.*
  */
 class MarketDetailInformationFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
-    MarketDetailInformationView,View.OnClickListener,MarketInfoAdapter.OnMarketInfoClickListener {
+    MarketDetailInformationView,View.OnClickListener,MarketInfoAdapter.OnMarketInfoClickListener, OnRefreshLoadMoreListener{
+    var currentPage :Int = 1
     var infoAdapter: MarketInfoAdapter?=null
     override val layout: Int
         get() = R.layout.fragment_market_detail_information
@@ -59,21 +63,35 @@ class MarketDetailInformationFragment :
         super.onLazyInitView(savedInstanceState)
         stockCode = arguments?.getSerializable("code") as String?
         srl_layout.setEnableLoadMore(true)
+        srl_layout.setOnRefreshLoadMoreListener(this)
         presenter?.setLifecycleOwner(this)
         infoAdapter=presenter?.getInfoAdapter()
         infoAdapter?.onMarketInfoClickListener=this
-        stockCode?.let { presenter?.getNewsListData(it) }
+        stockCode?.let { presenter?.getNewsListData(it,currentPage) }
         rv_market_info.adapter = infoAdapter
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
     }
     override fun addIntoInfoData(list: List<MarketNewsListResponse.DataList>) {
-        infoAdapter?.clearItems()
+        if(currentPage==0) {
+            infoAdapter?.clearItems()
+        }
         if (infoAdapter?.items == null) {
             infoAdapter?.items = ArrayList()
         }
+        srl_layout.finishLoadMore(true)
         infoAdapter?.addItems(list)
+
     }
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        currentPage++
+        stockCode?.let { presenter?.getNewsListData(it,currentPage) }
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+
+    }
+
 
     override fun onClick(p0: View?) {
         when(p0?.id){
@@ -111,6 +129,17 @@ class MarketDetailInformationFragment :
     override fun marketInfoClick() {
         ToastUtil.instance.toastCenter("资讯")
     }
+    override fun noMoreData() {
+        srl_layout.finishLoadMore(true)//结束加载（加载失败）
+        srl_layout.finishLoadMoreWithNoMoreData()
+        srl_layout.setNoMoreData(true)
+    }
+
+    override fun loadFailData() {
+        srl_layout.finishLoadMore(false)
+    }
+
+
 
 
 
