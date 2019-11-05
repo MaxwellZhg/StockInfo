@@ -13,17 +13,12 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.event.MarketDetailInfoEvent
-import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.ui.adapter.MarketInfoAdapter
-import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailInformationPresenter
-import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.view.MarketDetailInformationView
-import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailInformationViewModel
 import kotlinx.android.synthetic.main.fragment_market_detail_information.*
-import kotlinx.android.synthetic.main.fragment_search_result_info.*
 
 /**
  *    author : liuwei
@@ -34,8 +29,8 @@ import kotlinx.android.synthetic.main.fragment_search_result_info.*
 class MarketDetailInformationFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
     MarketDetailInformationView,View.OnClickListener,MarketInfoAdapter.OnMarketInfoClickListener, OnRefreshLoadMoreListener{
-    var currentPage :Int = 1
-    var infoAdapter: MarketInfoAdapter?=null
+    private var currentPage :Int = 1
+    private var infoAdapter: MarketInfoAdapter?=null
     override val layout: Int
         get() = R.layout.fragment_market_detail_information
     override val viewModelId: Int
@@ -73,7 +68,7 @@ class MarketDetailInformationFragment :
         tv_report.setOnClickListener(this)
     }
     override fun addIntoInfoData(list: List<MarketNewsListResponse.DataList>) {
-        if(currentPage==0) {
+        if(currentPage==1) {
             infoAdapter?.clearItems()
         }
         if (infoAdapter?.items == null) {
@@ -109,7 +104,9 @@ class MarketDetailInformationFragment :
            detailType(event.type)
     }
 
-    fun detailType(type:Int){
+    private fun detailType(type:Int){
+        srl_layout.setNoMoreData(false)
+        currentPage=1
         when(type){
             1->{
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }

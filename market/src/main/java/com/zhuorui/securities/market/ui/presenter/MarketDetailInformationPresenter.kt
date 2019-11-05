@@ -40,9 +40,6 @@ class MarketDetailInformationPresenter(): AbsNetPresenter<MarketDetailInformatio
                 })
         }
     }
-    fun getInfoData(){
-       // viewModel?.infoList?.value = listInfo
-    }
 
     fun getInfoAdapter(): MarketInfoAdapter {
         return MarketInfoAdapter()
