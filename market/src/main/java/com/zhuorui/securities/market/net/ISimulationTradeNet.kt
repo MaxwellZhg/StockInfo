@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.net
 import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.market.net.api.SimulationTradeApi
+import com.zhuorui.securities.market.net.api.StockApi
 import com.zhuorui.securities.market.net.request.*
 import com.zhuorui.securities.market.net.response.*
 import io.reactivex.Observable
@@ -65,5 +66,6 @@ interface ISimulationTradeNet {
 
     @POST(SimulationTradeApi.CANCEL_SELL_TRUST)
     fun cancelSellTrust(@Body request: CancelTrustRequest): Call<BaseResponse>
+
 
 }

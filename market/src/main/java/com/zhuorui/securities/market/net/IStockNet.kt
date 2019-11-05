@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.net
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.market.net.api.StockApi
 import com.zhuorui.securities.market.net.request.*
+import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
 import com.zhuorui.securities.market.net.response.StockSearchResponse
 import com.zhuorui.securities.market.net.response.SynStockResponse
@@ -29,4 +30,7 @@ interface IStockNet {
 
     @POST(StockApi.SYN)
     fun synStock(@Body request: SynStockRequest): Call<SynStockResponse>
+
+    @POST(StockApi.NEWS_LIST)
+    fun getMarketNewsList(@Body request:MarketNewsListRequest) :Call<MarketNewsListResponse>
 }

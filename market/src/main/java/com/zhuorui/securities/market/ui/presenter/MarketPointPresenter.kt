@@ -2,10 +2,12 @@ package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.view.MarketPointView
 import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
+import com.zhuorui.securities.market.util.MarketUtil
 
 /**
  * Created by Maxwell.
@@ -59,4 +61,19 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
     fun getMarketPointInfoAdapter():MarketPointInfoAdapter{
         return  MarketPointInfoAdapter()
     }
+
+
+    /**
+     * 获取topbar 显示股票状态信息
+     * */
+    fun getTopBarStockStatusInfo() {
+        val h = Integer.valueOf(TimeZoneUtil.currentTime("HH"))
+        var closingTimeMillis =
+            if (h < 9 || h >= 16) TimeZoneUtil.currentTimeMillis() else 0
+       /* view?.upTopBarInfo(
+            MarketUtil.getStockStatusTxt(stocksInfo?.ts, closingTimeMillis, true),
+            topbarTxtColor
+        )*/
+    }
+
 }

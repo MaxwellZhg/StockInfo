@@ -44,8 +44,14 @@ class MarketDetailNoticeFragment :
         get() = this
 
     companion object {
-        fun newInstance(): MarketDetailNoticeFragment {
-            return MarketDetailNoticeFragment()
+        fun newInstance(stockCode:String): MarketDetailNoticeFragment {
+            val fragment = MarketDetailNoticeFragment()
+            if (stockCode != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("code", stockCode)
+                fragment.arguments = bundle
+            }
+            return fragment
         }
     }
 

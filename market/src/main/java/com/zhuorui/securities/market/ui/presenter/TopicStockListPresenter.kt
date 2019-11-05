@@ -4,7 +4,6 @@ import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
-import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -185,11 +184,11 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                 if (item.ts == sub.ts && item.code == sub.code) {
                     // 更新数据
                     val item = datas[index]
-                    item.price = sub.price!!
-                    item.diffPrice = sub.price!!.subtract(sub.openPrice)
+                    item.price = sub.last!!
+                    item.diffPrice = sub.last!!.subtract(sub.open)
                     item.diffRate = MathUtil.divide2(
                         item.diffPrice!!.multiply(BigDecimal.valueOf(100)),
-                        sub.openPrice!!
+                        sub.open!!
                     )
                     view?.notifyItemChanged(index)
                     break
@@ -252,7 +251,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
     }
 
-    private fun stickyOnTop(item: StockMarketInfo?) {
+    private fun   stickyOnTop(item: StockMarketInfo?) {
         // 更换自选股位置
         val datas = viewModel?.datas?.value ?: return
         datas.remove(item)

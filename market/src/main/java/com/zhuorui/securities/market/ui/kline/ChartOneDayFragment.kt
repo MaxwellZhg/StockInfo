@@ -22,14 +22,18 @@ class ChartOneDayFragment :
     OneDayKlineView {
 
     companion object {
-        fun newInstance(ts: String, code: String, tsCode: String, type: Int, land: Boolean): ChartOneDayFragment {
+
+        /**
+         * @param model 0模拟炒股 1个股详情 2个股详情横屏
+         */
+        fun newInstance(ts: String, code: String, tsCode: String, type: Int, model:Int): ChartOneDayFragment {
             val fragment = ChartOneDayFragment()
             val bundle = Bundle()
             bundle.putString("ts", ts)
             bundle.putString("code", code)
             bundle.putString("tsCode", tsCode)
             bundle.putInt("type", type)
-            bundle.putBoolean("landscape", land)
+            bundle.putInt("model", model)
             fragment.arguments = bundle
             return fragment
         }
@@ -57,9 +61,9 @@ class ChartOneDayFragment :
         val code = arguments?.getString("code")
         val tsCode = arguments?.getString("tsCode")
         val type = arguments?.getInt("type")
-        val landscape = arguments?.getBoolean("landscape")!!
+        val model = arguments?.getInt("model")!!
 
-        chart!!.initChart()
+        chart!!.initChart(model)
         presenter?.init(ts, code, tsCode, type)
     }
 

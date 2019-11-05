@@ -25,6 +25,7 @@ import com.zhuorui.securities.market.databinding.FragmentSimulationTradingStocks
 import com.zhuorui.securities.market.model.PushStockTransData
 import com.zhuorui.securities.market.model.STOrderData
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.ui.kline.ChartOneDayFragment
 import com.zhuorui.securities.market.ui.presenter.SimulationTradingStocksPresenter
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
@@ -33,6 +34,7 @@ import com.zhuorui.securities.personal.ui.MessageFragment
 import kotlinx.android.synthetic.main.fragment_simulation_trading_stocks.*
 import me.yokeyword.fragmentation.ISupportFragment
 import java.math.BigDecimal
+
 
 /**
  *    author : PengXianglin
@@ -47,6 +49,7 @@ class SimulationTradingStocksFragment :
     private val SEARCH_STOCK_CODE = 1000
     private var upArrowResId = 0
     private var downArrowResId = 0
+    private var klineFragment: ChartOneDayFragment? = null
 
     companion object {
         const val TRAD_TYPE_KEY = "trad_type"
@@ -98,7 +101,6 @@ class SimulationTradingStocksFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        iv_chart.setOnClickListener(this)
         tv_code.setOnClickListener(this)
         top_bar.setRightClickListener {
             // 消息
@@ -129,15 +131,21 @@ class SimulationTradingStocksFragment :
 
     override fun onClick(p0: View?) {
         when (p0) {
-            iv_chart -> {
-                // 查看k线
-
-            }
             tv_code -> {
                 // 模拟炒股搜索
                 startForResult(SimulationTradingSearchFragment.newInstance(), SEARCH_STOCK_CODE)
             }
         }
+    }
+
+    override fun initKline(ts: String, code: String, tsCode: String, type: Int) {
+        val fm = childFragmentManager
+        val ft = fm.beginTransaction()
+        if (klineFragment != null) {
+            ft.remove(klineFragment!!)
+        }
+        klineFragment = ChartOneDayFragment.newInstance(ts, code, tsCode, type, 0)
+        ft.add(R.id.fl_kline, klineFragment!!).commit()
     }
 
     override fun changeTrustType(trustType: Int) {
@@ -323,6 +331,18 @@ class SimulationTradingStocksFragment :
 
                     }
                 }).show()
+
+    override fun toggleKline() {
+        if (kline_divide.visibility == View.GONE) {
+            kline_divide.visibility = View.VISIBLE
+            fl_kline.visibility = View.VISIBLE
+            iv_chart.setImageResource(R.mipmap.ic_kline_expaned)
+        } else {
+            kline_divide.visibility = View.GONE
+            fl_kline.visibility = View.GONE
+            iv_chart.setImageResource(R.mipmap.ic_kline_close)
+        }
+    }
 
     override fun exit() {
         pop()

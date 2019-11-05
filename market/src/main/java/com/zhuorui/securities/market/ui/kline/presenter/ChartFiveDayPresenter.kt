@@ -9,7 +9,7 @@ import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.socket.request.StockKlineGetDaily
+import com.zhuorui.securities.market.socket.request.GetStockKlineGetDailyRequestBody
 import com.zhuorui.securities.market.socket.response.StocksFiveDayKlineResponse
 import com.zhuorui.securities.market.ui.kline.view.FiveDayKlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.FiveDayKlineViewModel
@@ -32,7 +32,7 @@ class ChartFiveDayPresenter : AbsEventPresenter<FiveDayKlineView, FiveDayKlineVi
 
     fun loadKlineFiveDayData() {
         // 发起自选股K线拉取补偿数据
-        val klineGetDaily = StockKlineGetDaily("SZ", "000001", 0, 0, 0)
+        val klineGetDaily = GetStockKlineGetDailyRequestBody("SZ", "000001", 0, 0, 0)
         val reqId = SocketClient.getInstance().requestGetFiveDayKline(klineGetDaily)
         requestIds.add(reqId)
     }

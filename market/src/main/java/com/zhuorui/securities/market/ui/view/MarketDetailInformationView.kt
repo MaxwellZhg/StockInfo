@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 import com.zhuorui.securities.market.event.MarketDetailInfoEvent
+import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 
 /**
  *    author : liuwei
@@ -10,6 +11,6 @@ import com.zhuorui.securities.market.event.MarketDetailInfoEvent
  *    desc   :
  */
 interface MarketDetailInformationView:AbsView {
-    fun addIntoInfoData(list:List<Int>)
+    fun addIntoInfoData(list:List<MarketNewsListResponse.DataList>)
     fun changeInfoTypeData(event: MarketDetailInfoEvent)
 }

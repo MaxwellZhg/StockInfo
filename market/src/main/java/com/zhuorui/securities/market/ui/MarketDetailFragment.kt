@@ -236,8 +236,8 @@ class MarketDetailFragment :
         val firstFragment = findChildFragment(MarketDetailCapitalFragment::class.java)
         if (firstFragment == null) {
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
-            mFragments[1] = MarketDetailInformationFragment.newInstance()
-            mFragments[2] = MarketDetailNoticeFragment.newInstance()
+            mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
+            mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
             mFragments[3] = MarketDetailF10Fragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,

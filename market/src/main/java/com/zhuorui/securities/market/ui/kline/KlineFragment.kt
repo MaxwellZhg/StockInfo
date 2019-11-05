@@ -183,7 +183,7 @@ class KlineFragment : SupportFragment(), OnClickListener {
         when (index) {
             0 -> {
                 // 分时
-                return ChartOneDayFragment.newInstance(ts!!, code!!, tsCode!!, type!!, landscape)
+                return ChartOneDayFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 1)
             }
             1 -> {
                 // 五日
