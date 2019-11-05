@@ -223,6 +223,7 @@ class SimulationTradingMainFragment :
         stock.ts = ts
         stock.tsCode = tsCode
         stock.name = name
+        stock.type = 2
         start(MarketDetailFragment.newInstance(stock))
     }
 
