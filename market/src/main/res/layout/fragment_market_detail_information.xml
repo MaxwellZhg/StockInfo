@@ -11,8 +11,9 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_191821">
+            android:layout_height="wrap_content"
+            android:minHeight="350dp"
+           android:background="@color/color_211F2A">
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:background="@color/color_211F2A"
@@ -37,23 +38,38 @@
                       android:background="@drawable/market_info_unselect_bg"
                       android:text="研报"/>
         </LinearLayout>
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                android:background="@color/color_211F2A"
-                android:id="@+id/srl_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srlEnableOverScrollBounce="false"
-                app:srlEnableOverScrollDrag="false"
-                app:srlEnableRefresh="false"
-                app:srlEnableLoadMore="false"
-                app:srlReboundDuration="1000"
-                android:layout_marginTop="1dp">
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_market_info"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                    android:background="@color/color_211F2A"
+                    android:id="@+id/srl_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srlEnableOverScrollBounce="false"
+                    app:srlEnableOverScrollDrag="false"
+                    app:srlEnableRefresh="false"
+                    app:srlEnableLoadMore="false"
+                    app:srlReboundDuration="1000"
+                    android:layout_marginTop="1dp">
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_market_info"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            <com.zhuorui.commonwidget.ZREmptyView
+                    android:id="@+id/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:background="@color/color_211F2A"
+                    app:empty_img_width="64dp"
+                    app:empty_img_height="64dp"
+                    app:empty_img_tips_margin="45dp"
+                    android:visibility="invisible"
+                    app:empty_img_src="@mipmap/empty_content"
+                    app:empty_img_tips="@string/temp_no_data"
+            />
+        </FrameLayout>
     </LinearLayout>
 </layout>

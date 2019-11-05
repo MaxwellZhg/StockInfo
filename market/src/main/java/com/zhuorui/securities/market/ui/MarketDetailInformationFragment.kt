@@ -69,6 +69,7 @@ class MarketDetailInformationFragment :
     }
     override fun addIntoInfoData(list: List<MarketNewsListResponse.DataList>) {
         if(currentPage==1) {
+            empty_view.visibility=View.INVISIBLE
             infoAdapter?.clearItems()
         }
         if (infoAdapter?.items == null) {
@@ -127,9 +128,17 @@ class MarketDetailInformationFragment :
         ToastUtil.instance.toastCenter("资讯")
     }
     override fun noMoreData() {
-        srl_layout.finishLoadMore(true)//结束加载（加载失败）
-        srl_layout.finishLoadMoreWithNoMoreData()
-        srl_layout.setNoMoreData(true)
+        when(currentPage){
+            1->{
+                empty_view.visibility=View.VISIBLE
+            }
+            else->{
+                srl_layout.finishLoadMore(true)//结束加载（加载失败）
+                srl_layout.finishLoadMoreWithNoMoreData()
+                srl_layout.setNoMoreData(true)
+            }
+        }
+
     }
 
     override fun loadFailData() {
