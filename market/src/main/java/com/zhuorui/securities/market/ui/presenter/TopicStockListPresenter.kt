@@ -251,7 +251,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
     }
 
-    private fun stickyOnTop(item: StockMarketInfo?) {
+    private fun   stickyOnTop(item: StockMarketInfo?) {
         // 更换自选股位置
         val datas = viewModel?.datas?.value ?: return
         datas.remove(item)

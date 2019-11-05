@@ -45,5 +45,10 @@ interface StockApi {
          */
         const val SEARCH_TOPIC = "as_market/api/stock/view/v1/search"
 
+        /**
+         * 个股行情资讯
+         */
+        const val NEWS_LIST = "as_market/api/news_hk/v1/news/list"
+
     }
 }

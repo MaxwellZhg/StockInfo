@@ -37,11 +37,24 @@
                       android:background="@drawable/market_info_unselect_bg"
                       android:text="研报"/>
         </LinearLayout>
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:background="@color/color_211F2A"
+                android:layout_weight="1"
+                android:id="@+id/srl_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:srlEnableOverScrollBounce="false"
+                app:srlEnableOverScrollDrag="false"
+                app:srlEnableRefresh="false"
+                app:srlEnableLoadMore="false"
+                app:srlReboundDuration="1000"
+                android:layout_marginTop="1dp">
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_market_info"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </androidx.recyclerview.widget.RecyclerView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </layout>
