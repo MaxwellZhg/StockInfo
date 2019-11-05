@@ -223,7 +223,7 @@ class SimulationTradingMainFragment :
         stock.ts = ts
         stock.tsCode = tsCode
         stock.name = name
-        start(MarketDetailFragment.newInstance(stock))
+        startWithPopTo(MarketDetailFragment.newInstance(stock), MarketDetailFragment::class.java, true)
     }
 
     /**

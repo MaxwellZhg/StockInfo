@@ -228,7 +228,9 @@ class SearchResultInfoFragment :
         gotoDetail(stock)
     }
     fun gotoDetail(stock:SearchStockInfo){
-        (parentFragment as AbsFragment<*, *, *, *>).start(MarketDetailFragment.newInstance(stock))
+        (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(MarketDetailFragment.newInstance(stock),
+            MarketDetailFragment::class.java,
+            true)
     }
 
 }
