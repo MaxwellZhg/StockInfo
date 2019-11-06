@@ -14,6 +14,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.model.STFundAccountData;
+import com.zhuorui.securities.market.util.MarketUtil;
+import com.zhuorui.securities.market.util.MathUtil;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -38,6 +41,8 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
     private TextView vAvailableFunds;
     private TextView vTotalProfitLoss;
     private TextView vTips;
+    private int upColor;
+    private int downColor;
 
     public SimulationTradingFundAccountView(Context context) {
         this(context, null);
@@ -49,6 +54,9 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
 
     public SimulationTradingFundAccountView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        LocalSettingsConfig config = LocalSettingsConfig.Companion.read();
+        upColor = config.getUpColor();
+        downColor = config.getDownColor();
         initView();
 
     }
@@ -82,7 +90,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         }
     }
 
-    public void setData(IFundAccountData data) {
+    public void setData(STFundAccountData data) {
         vTips.setVisibility(GONE);
         if (!data.isCreate()) {
             inflateNotAccount();
@@ -90,24 +98,35 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         }
         vTotalAssets.setText(String.valueOf(data.getTotalAssets()));
         vMarketValue.setText(String.valueOf(data.getMarketValue()));
-        vAvailableFunds.setText(String.valueOf(data.getAvailableFunds()));
+        vAvailableFunds.setText(String.valueOf(data.getAvailableFund()));
         vTotalProfitLoss.setText(String.valueOf(data.getTotalProfitAndLoss()));
         float todayPL = data.getTodayProfitAndLoss();
         vTodayProfitLoss.setText(String.valueOf(todayPL));
         int color;
+        String percentageTxt;
         if (todayPL > 0) {
-            color = LocalSettingsConfig.Companion.read().getUpColor();
-            vTodayProfitLossB.setText("+" + new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
+            color = upColor;
+            percentageTxt = getPercentageText(data.getTodayProfitAndLossPercentage().multiply(new BigDecimal(100)).floatValue());
         } else if (todayPL < 0) {
-            color = LocalSettingsConfig.Companion.read().getDownColor();
-            vTodayProfitLossB.setText(new DecimalFormat("0.00%").format(data.getTodayProfitAndLossPercentage()));
+            color = downColor;
+            percentageTxt = getPercentageText(data.getTodayProfitAndLossPercentage().multiply(new BigDecimal(100)).floatValue());
         } else {
             color = Color.parseColor("#282828");
-            vTodayProfitLossB.setText("--");
+            percentageTxt = "--";
         }
+        vTodayProfitLossB.setText(percentageTxt);
         vTodayProfitLossB.setTextColor(color);
         vTodayProfitLoss.setTextColor(color);
 
+    }
+
+    private String getPercentageText(float percentage) {
+        String s = String.valueOf(Math.abs(percentage));
+        if (s.startsWith("0.00")) {
+            return String.format("%1s%2s%%", percentage > 0 ? "+" : "-", MathUtil.INSTANCE.subZeroAndDot(s));
+        } else {
+            return String.format("%+.2f%%", percentage);
+        }
     }
 
     public void createFundAccountSuccess() {
@@ -117,57 +136,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
         }
     }
 
-    public interface IFundAccountData {
-        /**
-         * 是否创建
-         *
-         * @return
-         */
-        boolean isCreate();
 
-        /**
-         * 帐户总资产
-         *
-         * @return
-         */
-        float getTotalAssets();
-
-        /**
-         * 持仓市值
-         *
-         * @return
-         */
-        float getMarketValue();
-
-        /**
-         * 可用资金
-         *
-         * @return
-         */
-        BigDecimal getAvailableFunds();
-
-        /**
-         * 总盈亏金额
-         *
-         * @return
-         */
-        float getTotalProfitAndLoss();
-
-        /**
-         * 当日盈亏
-         *
-         * @return
-         */
-        float getTodayProfitAndLoss();
-
-        /**
-         * 当日盈亏比例
-         *
-         * @return
-         */
-        float getTodayProfitAndLossPercentage();
-
-    }
 
     public interface OnMockStockFundAccountListener {
 

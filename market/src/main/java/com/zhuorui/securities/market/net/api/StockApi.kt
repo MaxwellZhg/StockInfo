@@ -50,5 +50,9 @@ interface StockApi {
          */
         const val NEWS_LIST = "as_market/api/news_hk/v1/news/list"
 
+        /**
+         * 公告列表
+         */
+        const val BASE_INFO = "/as_market/api/stock/iis_oss_record/v1/getBaseInfo"
     }
 }

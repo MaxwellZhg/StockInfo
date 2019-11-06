@@ -3,10 +3,12 @@ package com.zhuorui.securities.market.ui
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
@@ -26,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
 import me.yokeyword.fragmentation.ISupportFragment
+import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -44,7 +47,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
     MarketDetailView, View.OnClickListener {
+
     private var mStock: SearchStockInfo? = null
+    private var tabTitle: Array<String>? = null
+    private val mFragments = arrayOfNulls<SupportFragment>(4)
+    private var mIndex = 0
 
     companion object {
         fun newInstance(stock: SearchStockInfo): MarketDetailFragment {
@@ -55,16 +62,6 @@ class MarketDetailFragment :
             return fragment
         }
     }
-
-    private var tabTitle: Array<String> =
-        arrayOf(
-            ResUtil.getString(R.string.capital)!!,
-            ResUtil.getString(R.string.stock_search_info)!!,
-            ResUtil.getString(R.string.announcement)!!,
-            ResUtil.getString(R.string.f10_brief)!!
-        )
-    private val mFragments = arrayOfNulls<ISupportFragment>(4)
-    private var mIndex = 0
 
     override val layout: Int
         get() = R.layout.fragment_market_detail
@@ -81,10 +78,10 @@ class MarketDetailFragment :
     override val getView: MarketDetailView
         get() = this
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mStock = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)!!
+        tabTitle = ResUtil.getStringArray(R.array.stock_detail_tab)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
@@ -96,19 +93,28 @@ class MarketDetailFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
+        //加载K线Fragment
         if (mStock != null) {
             loadRootFragment(
                 R.id.kline_view,
                 KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!, false)
             )
         }
+        //加载指数Fragment
+        loadRootFragment(
+            R.id.index_view,
+            MarketIndexFragment.newInstance()
+        )
+        //加载数据
         presenter?.getData(mStock!!)
     }
 
+    /**
+     * 更新数据
+     */
     override fun upData(data: StockDetailView.IStockDatailData) {
         stock_detail.setData(data)
     }
-
 
     private fun setTopbarData() {
         tv_title.text = String.format("%s(%s)", mStock?.name, mStock?.code)
@@ -192,16 +198,18 @@ class MarketDetailFragment :
         tv_follow.setOnClickListener(this)
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
-        magic_indicator.navigator = getNavigator()
+        tab_magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
+            Log.i("lw","$scrollY  " + tab_magic_indicator.top)
             //topTab
-            if (magic_indicator != null) {
-                top_magic_indicator_group?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+            if (tab_magic_indicator != null) {
+                top_magic_indicator.visibility = if (scrollY < tab_magic_indicator.top) View.GONE else View.VISIBLE
+                top_magic_indicator_line.visibility = top_magic_indicator.visibility
                 if (mIndex == 1) {
-                    ll_info_tips.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                    ll_info_tips.visibility = top_magic_indicator.visibility
                 } else {
-                    ll_info_tips.visibility = if (scrollY < magic_indicator.top) View.GONE else View.GONE
+                    ll_info_tips.visibility = View.GONE
                 }
             }
             //title
@@ -217,8 +225,8 @@ class MarketDetailFragment :
      * 切换资金，资讯等信息
      */
     private fun onSelect(index: Int) {
-        magic_indicator.onPageSelected(index)
-        magic_indicator.onPageScrolled(index, 0.0F, 0)
+        tab_magic_indicator.onPageSelected(index)
+        tab_magic_indicator.onPageScrolled(index, 0.0F, 0)
         top_magic_indicator.onPageSelected(index)
         top_magic_indicator.onPageScrolled(index, 0.0F, 0)
         showHideFragment(mFragments[index], mFragments[mIndex])
@@ -235,7 +243,7 @@ class MarketDetailFragment :
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = MarketDetailF10BriefFragment.newInstance()
+            mFragments[3] = MarketDetailF10Fragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -249,7 +257,7 @@ class MarketDetailFragment :
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
             mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
-            mFragments[3] = findChildFragment(MarketDetailF10BriefFragment::class.java)
+            mFragments[3] = findChildFragment(MarketDetailF10Fragment::class.java)
         }
     }
 
@@ -264,7 +272,7 @@ class MarketDetailFragment :
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
 
             override fun getCount(): Int {
-                return tabTitle.size
+                return if (tabTitle != null) tabTitle!!.size else 0
             }
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
@@ -272,7 +280,7 @@ class MarketDetailFragment :
                 colorTransitionPagerTitleView.normalColor = Color.parseColor("#C0CCE0")
                 colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
                 colorTransitionPagerTitleView.textSize = 18f
-                colorTransitionPagerTitleView.text = tabTitle[index]
+                colorTransitionPagerTitleView.text = tabTitle?.get(index) ?: ""
                 colorTransitionPagerTitleView.setOnClickListener {
                     onSelect(index)
                 }
@@ -282,7 +290,7 @@ class MarketDetailFragment :
             override fun getIndicator(context: Context): IPagerIndicator {
                 val indicator = LinePagerIndicator(context)
                 indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(com.zhuorui.securities.market.R.color.tab_select))
+                indicator.setColors(ResUtil.getColor(R.color.tab_select))
                 indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
                 indicator.lineWidth = ResUtil.getDimensionDp2Px(33f).toFloat()
                 return indicator
