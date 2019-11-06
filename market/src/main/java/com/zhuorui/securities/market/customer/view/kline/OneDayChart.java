@@ -55,6 +55,7 @@ import java.util.ArrayList;
 public class OneDayChart extends BaseChart {
 
     private final String TAG = this.getClass().getSimpleName();
+    private LocalSettingsConfig settingsConfig = LocalSettingsConfig.Companion.read();
 
     private Context mContext;
     private int showModel;
@@ -97,7 +98,7 @@ public class OneDayChart extends BaseChart {
 
         RxBus.getDefault().register(this);
 
-        LocalSettingsConfig settingsConfig = LocalSettingsConfig.Companion.read();
+
         colorArray = new int[]{settingsConfig.getUpColor(), settingsConfig.getDefaultColor(), settingsConfig.getDownColor()};
 
         playHeartbeatAnimation(cirCleView.findViewById(R.id.anim_view));
@@ -408,7 +409,7 @@ public class OneDayChart extends BaseChart {
             d1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
             d2.setColor(ContextCompat.getColor(mContext, R.color.minute_yellow));
             d1.setDrawFilled(true);
-            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_33FF8DB9E4));
+            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.fill_Color));
             d1.setFillDrawable(drawable);
             // 设置触摸K线显示的指标线颜色
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
@@ -422,13 +423,13 @@ public class OneDayChart extends BaseChart {
             d1.setCircleRadius(4f);
             d1.setDrawCircleHole(true);
             d1.setCircleHoleRadius(2f);
-            d1.setCircleHoleColor(Color.parseColor("#FFFFFF"));
+            d1.setCircleHoleColor(Color.WHITE);
             d2.setDrawCircles(false);
             d2.setCircleColor(Color.parseColor("#FFDB34"));
             d2.setCircleRadius(4f);
             d2.setDrawCircleHole(true);
             d2.setCircleHoleRadius(2f);
-            d2.setCircleHoleColor(Color.parseColor("#FFFFFF"));
+            d2.setCircleHoleColor(Color.WHITE);
             d1.setAxisDependency(YAxis.AxisDependency.LEFT);
             d1.setPrecision(precision);
             d1.setTimeDayType(1);//设置分时图类型
@@ -447,9 +448,9 @@ public class OneDayChart extends BaseChart {
             // 设置触摸成交量是否绘制指标线
             barDataSet.setHighlightEnabled(true);
             barDataSet.setDrawValues(false);
-            barDataSet.setNeutralColor(ContextCompat.getColor(mContext, R.color.equal_color));
-            barDataSet.setIncreasingColor(ContextCompat.getColor(mContext, R.color.up_color));
-            barDataSet.setDecreasingColor(ContextCompat.getColor(mContext, R.color.down_color));
+            barDataSet.setNeutralColor(Color.WHITE);
+            barDataSet.setIncreasingColor(settingsConfig.getUpColor());
+            barDataSet.setDecreasingColor(settingsConfig.getDownColor());
             barDataSet.setIncreasingPaintStyle(Paint.Style.FILL);
             barDataSet.setDecreasingPaintStyle(Paint.Style.FILL);
             BarData barData = new BarData(barDataSet);

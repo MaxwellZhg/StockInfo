@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
@@ -24,26 +24,36 @@ import kotlinx.android.synthetic.main.fragment_market_detail_information.*
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
  *    date   : 2019-10-12 15:51
- *    desc   :
+ *    desc   : 个股详情资讯页面
  */
 class MarketDetailInformationFragment :
-    AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
-    MarketDetailInformationView,View.OnClickListener,MarketInfoAdapter.OnMarketInfoClickListener, OnRefreshLoadMoreListener{
-    private var currentPage :Int = 1
-    private var infoAdapter: MarketInfoAdapter?=null
+    AbsFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
+    MarketDetailInformationView, View.OnClickListener, MarketInfoAdapter.OnMarketInfoClickListener,
+    OnRefreshLoadMoreListener {
+
+    private var currentPage: Int = 1
+
+    private var infoAdapter: MarketInfoAdapter? = null
+
     override val layout: Int
         get() = R.layout.fragment_market_detail_information
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: MarketDetailInformationPresenter
         get() = MarketDetailInformationPresenter()
+
     override val createViewModel: MarketDetailInformationViewModel?
         get() = ViewModelProviders.of(this).get(MarketDetailInformationViewModel::class.java)
+
     override val getView: MarketDetailInformationView
         get() = this
+
     private var stockCode: String? = null
+
     companion object {
-        fun newInstance(stockCode:String): MarketDetailInformationFragment {
+        fun newInstance(stockCode: String): MarketDetailInformationFragment {
             val fragment = MarketDetailInformationFragment()
             if (stockCode != null) {
                 val bundle = Bundle()
@@ -60,16 +70,17 @@ class MarketDetailInformationFragment :
         srl_layout.setEnableLoadMore(true)
         srl_layout.setOnRefreshLoadMoreListener(this)
         presenter?.setLifecycleOwner(this)
-        infoAdapter=presenter?.getInfoAdapter()
-        infoAdapter?.onMarketInfoClickListener=this
-        stockCode?.let { presenter?.getNewsListData(it,currentPage) }
+        infoAdapter = presenter?.getInfoAdapter()
+        infoAdapter?.onMarketInfoClickListener = this
+        stockCode?.let { presenter?.getNewsListData(it, currentPage) }
         rv_market_info.adapter = infoAdapter
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
     }
+
     override fun addIntoInfoData(list: List<MarketNewsListResponse.DataList>) {
-        if(currentPage==1) {
-            empty_view.visibility=View.INVISIBLE
+        if (currentPage == 1) {
+            empty_view.visibility = View.INVISIBLE
             infoAdapter?.clearItems()
         }
         if (infoAdapter?.items == null) {
@@ -79,9 +90,10 @@ class MarketDetailInformationFragment :
         infoAdapter?.addItems(list)
 
     }
+
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         currentPage++
-        stockCode?.let { presenter?.getNewsListData(it,currentPage) }
+        stockCode?.let { presenter?.getNewsListData(it, currentPage) }
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
@@ -90,36 +102,37 @@ class MarketDetailInformationFragment :
 
 
     override fun onClick(p0: View?) {
-        when(p0?.id){
-            R.id.tv_info->{
+        when (p0?.id) {
+            R.id.tv_info -> {
                 RxBus.getDefault().post(MarketDetailInfoEvent(1))
                 detailType(1)
             }
-            R.id.tv_report->{
+            R.id.tv_report -> {
                 RxBus.getDefault().post(MarketDetailInfoEvent(2))
                 detailType(2)
             }
         }
     }
+
     override fun changeInfoTypeData(event: MarketDetailInfoEvent) {
-           detailType(event.type)
+        detailType(event.type)
     }
 
-    private fun detailType(type:Int){
+    private fun detailType(type: Int) {
         srl_layout.setNoMoreData(false)
-        currentPage=1
-        when(type){
-            1->{
+        currentPage = 1
+        when (type) {
+            1 -> {
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }
-                tv_info.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
+                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
                 ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_report.setTextColor(it) }
-                tv_report.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
+                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
             }
-            2->{
+            2 -> {
                 ResUtil.getColor(R.color.color_53A0FD)?.let { tv_report.setTextColor(it) }
-                tv_report.background=ResUtil.getDrawable(R.drawable.market_info_selected_bg)
+                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
                 ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_info.setTextColor(it) }
-                tv_info.background=ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
+                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
             }
         }
     }
@@ -127,12 +140,13 @@ class MarketDetailInformationFragment :
     override fun marketInfoClick() {
         ToastUtil.instance.toastCenter("资讯")
     }
+
     override fun noMoreData() {
-        when(currentPage){
-            1->{
-                empty_view.visibility=View.VISIBLE
+        when (currentPage) {
+            1 -> {
+                empty_view.visibility = View.VISIBLE
             }
-            else->{
+            else -> {
                 srl_layout.finishLoadMore(true)//结束加载（加载失败）
                 srl_layout.finishLoadMoreWithNoMoreData()
                 srl_layout.setNoMoreData(true)
@@ -144,9 +158,6 @@ class MarketDetailInformationFragment :
     override fun loadFailData() {
         srl_layout.finishLoadMore(false)
     }
-
-
-
 
 
 }
