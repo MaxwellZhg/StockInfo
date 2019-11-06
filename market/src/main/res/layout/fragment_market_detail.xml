@@ -80,7 +80,7 @@
 
                     <!--K线-->
 
-                    <View style="@style/MadrketDetailLine" android:layout_height="2dp"/>
+                    <View style="@style/MadrketDetailLine"/>
 
                     <FrameLayout
                             android:id="@+id/kline_view"
@@ -107,7 +107,7 @@
 
                     <!-- tab -->
 
-                    <View style="@style/MadrketDetailLine" android:layout_height="2dp"/>
+                    <View style="@style/MadrketDetailLine"/>
 
                     <net.lucode.hackware.magicindicator.MagicIndicator
                             android:id="@+id/tab_magic_indicator"

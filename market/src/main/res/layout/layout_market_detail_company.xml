@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="15dp">
+
+    <TextView
+            android:id="@+id/tv_company_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_profile"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="13dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_name"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tv_company_profile"
+            app:layout_constraintTop_toBottomOf="@id/tv_company_profile"
+            android:layout_marginTop="15dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_name_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_company_name_label"
+            android:layout_marginStart="21dp"
+            android:layout_marginEnd="31dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_industry_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_industry"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_name_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_name"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_company_industry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_53A0FD"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_industry_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_company_industry_label"
+            android:layout_marginStart="21dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_chairman_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_chairman"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_industry_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_industry_label"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_company_chairman"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_chairman_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_company_chairman_label"
+            android:layout_marginStart="21dp"
+            android:layout_marginEnd="31dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_mdate_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_market_date"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_industry_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_chairman"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_company_mdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_mdate_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_company_mdate_label"
+            android:layout_marginStart="21dp"/>
+
+    <TextView
+            android:id="@+id/tv_offering_price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/issue_price"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_mdate_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_mdate_label"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_offering_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_offering_price_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_offering_price_label"
+            android:layout_marginStart="21dp"/>
+
+    <TextView
+            android:id="@+id/tv_issue_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/issue_number"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_offering_price_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_offering_price_label"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_issue_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_issue_number_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_issue_number_label"
+            android:layout_marginStart="21dp"/>
+
+    <TextView
+            android:id="@+id/tv_total_capital_stock_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_capital_stock"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_issue_number_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_issue_number_label"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_total_capital_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_total_capital_stock_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_total_capital_stock_label"
+            android:layout_marginStart="33dp"/>
+
+    <TextView
+            android:id="@+id/tv_equity_hk_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/equity_hk"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_total_capital_stock_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_total_capital_stock_label"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_equity_hk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_equity_hk_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_equity_hk_label"
+            android:layout_marginStart="21dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_business_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_business"
+            android:textColor="@color/color_ffa4b2cb"
+            app:layout_constraintStart_toStartOf="@+id/tv_equity_hk_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_equity_hk_label"
+            android:layout_marginTop="14.5dp"
+            android:textSize="12sp"/>
+
+    <TextView
+            android:id="@+id/tv_company_business"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="12sp"
+            android:maxLines="4"
+            android:ellipsize="marquee"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_business_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_company_business_label"
+            android:layout_marginStart="21dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
