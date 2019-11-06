@@ -177,4 +177,30 @@
     <string name="temp_no_data" tools:ignore="MissingTranslation">暂无数据</string>
     <string name="f10_brief">简况</string>
     <string name="f10_financial_report">财报</string>
+    <string name="company_profile">公司简介</string>
+    <string name="company_name">公司名称</string>
+    <string name="company_industry">所属板块</string>
+    <string name="company_chairman">公司主席</string>
+    <string name="company_market_date">上市日期</string>
+    <string name="issue_price">发行价格</string>
+    <string name="issue_number">发行数量</string>
+    <string name="total_capital_stock">总股本</string>
+    <string name="equity_hk">港股股本</string>
+    <string name="company_business">公司业务</string>
+    <string name="company_manager">公司高管</string>
+    <string name="company_manager_label">高管</string>
+    <string name="manager_jobtitle">职务</string>
+    <string name="manager_salary">年薪(币种：%1$s)</string>
+    <string name="hareholder_change">持股变动</string>
+    <string name="hareholder_name">股东名称</string>
+    <string name="hareholder_change_number">变动(股)</string>
+    <string name="hareholder_number">持股数(股)</string>
+    <string name="date">日期</string>
+    <string name="company_dividend">分红送配</string>
+    <string name="exemption_date">除权除息日</string>
+    <string name="dividend_date">派息日</string>
+    <string name="allocation_plan">分配方案</string>
+    <string name="company_repo">公司回购</string>
+    <string name="repo_number">数量(股)</string>
+    <string name="repo_price">均价(元)</string>
 </resources>

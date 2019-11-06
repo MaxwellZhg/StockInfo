@@ -58,7 +58,7 @@ class MarketDetailFragment :
         }
     }
 
-    private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", "F10")
+    private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", ResUtil.getString(R.string.f10_brief)!!)
     private val mFragments = arrayOfNulls<ISupportFragment>(4)
     private var mIndex = 0
 
@@ -231,7 +231,7 @@ class MarketDetailFragment :
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = MarketDetailF10Fragment.newInstance()
+            mFragments[3] = MarketDetailF10BriefFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -245,7 +245,7 @@ class MarketDetailFragment :
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
             mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
-            mFragments[3] = findChildFragment(MarketDetailF10Fragment::class.java)
+            mFragments[3] = findChildFragment(MarketDetailF10BriefFragment::class.java)
         }
     }
 

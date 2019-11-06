@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:ignore="MissingDefaultResource">
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.market.ui.viewmodel.MarketDetailF10BriefViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <include layout="@layout/layout_market_detail_company"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
+        <include layout="@layout/layout_market_detail_manager"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
+        <include layout="@layout/layout_market_detail_shareholderchange"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
+        <include layout="@layout/layout_market_detail_company_dividend"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
+        <include layout="@layout/layout_market_detail_company_repo"/>
+    </LinearLayout>
+
+</layout>

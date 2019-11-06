@@ -8,5 +8,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    date   : 2019-10-12 15:56
  *    desc   :
  */
-interface MarketDetailCapitalView:AbsView {
+interface MarketDetailCapitalView : AbsView {
 }
