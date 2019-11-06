@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail_information.*
  *    desc   : 个股详情资讯页面
  */
 class MarketDetailInformationFragment :
-    AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
+    AbsFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
     MarketDetailInformationView, View.OnClickListener, MarketInfoAdapter.OnMarketInfoClickListener,
     OnRefreshLoadMoreListener {
 

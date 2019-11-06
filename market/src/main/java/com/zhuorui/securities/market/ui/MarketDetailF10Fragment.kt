@@ -34,23 +34,22 @@ class MarketDetailF10Fragment : SupportFragment(), View.OnClickListener {
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
 
-//        TODO
 //        mFragments[0] = MarketDetailF10BriefFragment.newInstance()
 //        mFragments[1] = MarketDetailF10FinancialFragment.newInstance()
-//        loadMultipleRootFragment(R.id.fl_container, 0, mFragments[0], mFragments[1])
+        loadMultipleRootFragment(R.id.fl_container, 0, mFragments[0], mFragments[1])
     }
 
     override fun onClick(v: View?) {
-        // TODO
-//        when (v) {
-//            tv_info -> {
-//                // 简况
-//                showHideFragment(mFragments[0], mFragments[1])
-//            }
-//            tv_report -> {
-//                // 财报
-//                showHideFragment(mFragments[1], mFragments[0])
-//            }
-//        }
+
+        when (v) {
+            tv_info -> {
+                // 简况
+                showHideFragment(mFragments[0], mFragments[1])
+            }
+            tv_report -> {
+                // 财报
+                showHideFragment(mFragments[1], mFragments[0])
+            }
+        }
     }
 }

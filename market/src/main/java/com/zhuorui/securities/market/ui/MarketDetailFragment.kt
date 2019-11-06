@@ -26,6 +26,8 @@ import com.zhuorui.securities.market.util.MarketUtil
 import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
+import me.yokeyword.fragmentation.ISupportFragment
+import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -57,7 +59,7 @@ class MarketDetailFragment :
     }
 
     private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", "F10")
-    private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(4)
+    private val mFragments = arrayOfNulls<ISupportFragment>(4)
     private var mIndex = 0
 
     override val layout: Int
