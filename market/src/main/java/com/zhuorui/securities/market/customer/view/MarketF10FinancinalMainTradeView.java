@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -21,6 +23,8 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.CapitalFlowNumPopWindow;
+import com.zhuorui.securities.market.customer.MainTradeYearsInfoPopWindow;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -32,13 +36,16 @@ import java.util.List;
  * Date: 2019/11/6
  * Desc:
  */
-public class MarketF10FinancinalMainTradeView extends FrameLayout {
+public class MarketF10FinancinalMainTradeView extends FrameLayout implements View.OnClickListener,MainTradeYearsInfoPopWindow.OnYearInfoCallBack {
     private PieChart vPieChart;
     private int mOut1Color;
     private int mOut2Color;
     private int mOut3Color;
     private int mOut4Color;
     ArrayList<Integer> colors = new ArrayList<Integer>();
+    private TextView tv_years;
+    private int mDateNum = 1;
+
     public MarketF10FinancinalMainTradeView(Context context) {
         this(context,null);
     }
@@ -52,6 +59,12 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout {
         initColor();
         inflate(context, R.layout.layout_f10_financinal_main_trade,this);
         initPieChart();
+        initView();
+    }
+
+    private void initView() {
+        tv_years = findViewById(R.id.tv_years);
+        tv_years.setOnClickListener(this);
     }
 
     private void initColor() {
@@ -126,6 +139,20 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout {
         vPieChart.setData(getPieData(getPieEntrys(outData)));
         vPieChart.highlightValues(null);
         vPieChart.invalidate();                    //将图表重绘以显示设置的属性和数据
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == tv_years) {
+            MainTradeYearsInfoPopWindow.Companion.create(getContext(),mDateNum,this).showAsDropDown(tv_years);
+        }
+    }
+
+    @Override
+    public void onYearsInfoClick(int num) {
+        mDateNum = num;
+       // upDateNumText();
+       // getTestData();
     }
 
     /**
