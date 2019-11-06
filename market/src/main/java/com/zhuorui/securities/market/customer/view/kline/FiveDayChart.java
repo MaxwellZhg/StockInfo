@@ -365,7 +365,7 @@ public class FiveDayChart extends BaseChart {
             d1.setColor(ContextCompat.getColor(mContext, R.color.minute_blue));
             d2.setColor(ContextCompat.getColor(mContext, R.color.minute_yellow));
             d1.setDrawFilled(true);
-            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.color_33FF8DB9E4));
+            Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.fill_Color));
             d1.setFillDrawable(drawable);
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
             d1.setHighlightEnabled(landscape);
