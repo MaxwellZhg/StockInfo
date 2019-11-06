@@ -179,7 +179,12 @@ public class SocketClient {
                                     case SocketApi.GET_STOCK_ORDER_BROKER:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetStocksOrderBrokerResponse.class));
                                         break;
-
+                                    case SocketApi.GET_STOCK_TRADE:
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetStockTradeResponse.class));
+                                        break;
+                                    case SocketApi.GET_STOCK_TRADESTA:
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetStockTradeStaResponse.class));
+                                        break;
                                 }
 
                             }
