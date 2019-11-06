@@ -21,7 +21,7 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketDetailNoticeViewModel
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
  *    date   : 2019-10-12 15:51
- *    desc   :
+ *    desc   : 个股详情F10页面
  */
 class MarketDetailF10Fragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailF10Binding, MarketDetailF10ViewModel, MarketDetailF10View, MarketDetailF10Presenter>(),
@@ -29,12 +29,16 @@ class MarketDetailF10Fragment :
 
     override val layout: Int
         get() = R.layout.fragment_market_detail_f10
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: MarketDetailF10Presenter
         get() = MarketDetailF10Presenter()
+
     override val createViewModel: MarketDetailF10ViewModel?
         get() = ViewModelProviders.of(this).get(MarketDetailF10ViewModel::class.java)
+
     override val getView: MarketDetailF10View
         get() = this
 
