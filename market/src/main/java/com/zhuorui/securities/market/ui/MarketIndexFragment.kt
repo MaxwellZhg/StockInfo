@@ -1,18 +1,25 @@
 package com.zhuorui.securities.market.ui
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.TranslateAnimation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.StockIndexSimpleView
 import com.zhuorui.securities.market.databinding.FragmentMarketIndexBinding
 import com.zhuorui.securities.market.ui.presenter.MarketIndexPresenter
 import com.zhuorui.securities.market.ui.view.MarketIndexView
@@ -38,13 +45,19 @@ class MarketIndexFragment :
     AbsFragment<FragmentMarketIndexBinding, MarketIndexViewModel, MarketIndexView, MarketIndexPresenter>(),
     MarketIndexView {
 
-    private var stub = false
+    private var index = 0
 
     companion object {
 
         fun newInstance(): MarketIndexFragment {
             return MarketIndexFragment()
         }
+    }
+
+    val handler = Handler()
+
+    val runnable = Runnable {
+        nextText()
     }
 
     override val layout: Int
@@ -61,6 +74,7 @@ class MarketIndexFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         initView()
+        presenter?.getData()
     }
 
     private fun initView() {
@@ -73,45 +87,102 @@ class MarketIndexFragment :
         }
     }
 
+    override fun onUpdata() {
+        if (change_btn.visibility != View.VISIBLE) {
+            change_btn.visibility = View.VISIBLE
+            setSimpleView()
+        }
+
+    }
+
     /**
      * 切换成简要样式
      */
     private fun setSimpleView() {
         simple_rootview.visibility = View.VISIBLE
         detailed_rootview.visibility = View.GONE
+        if (simple_rootview.childCount == 0) {
+            val config = LocalSettingsConfig.read()
+            val upcolor = config.getUpColor()
+            val downcolor = config.getDownColor()
+            simple_rootview.setFactory {
+                val v = StockIndexSimpleView(context)
+                v.setColor(upcolor, downcolor)
+                v
+            }
+            val inAnimation = TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT,
+                0f,
+                Animation.RELATIVE_TO_PARENT,
+                0f,
+                Animation.RELATIVE_TO_PARENT,
+                1f,
+                Animation.RELATIVE_TO_PARENT,
+                0f
+            )
+            inAnimation.duration = 300
+            simple_rootview.inAnimation = inAnimation
+            val outAnimation = TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT,
+                0f,
+                Animation.RELATIVE_TO_PARENT,
+                0f,
+                Animation.RELATIVE_TO_PARENT,
+                0f,
+                Animation.RELATIVE_TO_PARENT,
+                -1f
+            )
+            outAnimation.duration = 300
+            simple_rootview.outAnimation = outAnimation
+        }
         change_btn.setImageResource(R.mipmap.ic_arrow_up_c3cde3)
+        nextText()
     }
 
     /**
      * 切换成详细样式
      */
     private fun setDetailedView() {
+        handler.removeCallbacks(runnable)
         change_btn.setImageResource(R.mipmap.ic_arrow_down_c3cde3)
         detailed_rootview.visibility = View.VISIBLE
-        simple_rootview.visibility = View.GONE
-        if (!stub) {
-            val titles = arrayOf("恒生指数", "国企指数", "红筹指数")
-            val codes = arrayOf("800000", "800100", "800151")
-            val tss = arrayOf("HK", "HK", "HK", "HK")
-            initViewPage(viewpager, codes, tss)
-            magic_indicator.navigator = getNavigator(viewpager, titles)
+        simple_rootview.visibility = View.INVISIBLE
+        if (viewpager.adapter == null) {
+            val codes = presenter!!.getCodes()!!
+            val tss = presenter!!.getTss()!!
+            viewpager.offscreenPageLimit = codes.size
+            viewpager.adapter = object : FragmentPagerAdapter(childFragmentManager) {
+                override fun getItem(position: Int): Fragment {
+                    return StockDetailIndexFragment.newInstance(codes[position], tss[position])
+                }
+
+                override fun getCount(): Int {
+                    return codes.size
+                }
+            }
+            magic_indicator.navigator = getNavigator(viewpager, presenter!!.getTitles()!!)
             ViewPagerHelper.bind(magic_indicator, viewpager)
-            stub = true
         }
+        viewpager.currentItem = index
     }
 
-    private fun initViewPage(viewPager: ViewPager, codes: Array<String>, tss: Array<String>) {
-        viewPager.offscreenPageLimit = codes.size
-        viewPager.adapter = object : FragmentPagerAdapter(childFragmentManager) {
-            override fun getItem(position: Int): Fragment {
-                return StockDetailIndexFragment.newInstance(codes[position], tss[position])
+    /**
+     * 切换下一指数信息
+     */
+    private fun nextText() {
+        if (presenter != null && presenter?.getCodes() != null) {
+            val pos = if (index < presenter!!.getCodes()!!.size - 1) index + 1 else 0
+            val v = simple_rootview.nextView
+            if (v != null) {
+                val simple = v as StockIndexSimpleView
+                simple.setData(presenter?.getTitles()!![pos], 123.9f, 100f)
+                simple_rootview.showNext()
             }
-
-            override fun getCount(): Int {
-                return codes.size
-            }
+            index = pos
         }
+        handler.postDelayed(runnable, 4000)
     }
+
 
     /**
      * 获取指示器适配器
@@ -187,6 +258,23 @@ class MarketIndexFragment :
             val contentWidth = bound.width()
             return contentLeft + contentWidth
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(runnable)
+    }
+
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        if (simple_rootview.visibility == View.VISIBLE) {
+            nextText()
+        }
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        handler.removeCallbacks(runnable)
     }
 
 

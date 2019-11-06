@@ -9,6 +9,7 @@
 
 
     <TextView
+            android:id="@+id/tv_simple_title"
             android:layout_marginLeft="13dp"
             android:layout_weight="1"
             android:layout_width="wrap_content"
@@ -20,37 +21,36 @@
     />
 
     <TextView
-            android:id="@+id/ups_downs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+0.20%"
-            android:textColor="#D9001B"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginRight="6dp"
-    />
-
-    <TextView
-            android:id="@+id/ups_downs_pirce"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+5.05"
-            android:textColor="#D9001B"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginRight="17dp"
-    />
-
-    <TextView
-            android:id="@+id/tv_price"
+            android:id="@+id/tv_simple_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="26653"
             android:textColor="#D9001B"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="18dp"
     />
 
+    <TextView
+            android:id="@+id/tv_simple_ups_downs_pirce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+5.05"
+            android:textColor="#D9001B"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginRight="18dp"
+    />
+
+    <TextView
+            android:id="@+id/tv_simple_ups_downs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+0.20%"
+            android:textColor="#D9001B"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginRight="5dp"
+    />
 
 </LinearLayout>

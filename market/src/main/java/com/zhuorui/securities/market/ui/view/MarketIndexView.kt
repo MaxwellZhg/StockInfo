@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
  *    author : liuwei
@@ -9,4 +10,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface MarketIndexView:AbsView {
+    fun onUpdata()
 }

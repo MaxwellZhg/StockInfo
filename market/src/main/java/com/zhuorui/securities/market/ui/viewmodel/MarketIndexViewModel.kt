@@ -9,4 +9,7 @@ import androidx.lifecycle.ViewModel
  *    desc   :
  */
 class MarketIndexViewModel:ViewModel() {
+    var titles:Array<String> ? = null
+    var codes:Array<String> ? = null
+    var tss:Array<String> ? = null
 }
