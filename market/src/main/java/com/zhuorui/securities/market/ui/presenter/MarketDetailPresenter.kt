@@ -215,8 +215,11 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         }
     }
 
+    /**
+     *
+     */
     fun getData(stockInfo: SearchStockInfo) {
-        stocksInfo = stockInfo;
+        stocksInfo = stockInfo
         isCollected = false
         val localStocks = LocalStocksConfig.getInstance().getStocks()
         if (localStocks.isNotEmpty()) {

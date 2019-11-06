@@ -42,6 +42,9 @@ public class TodayFundTransactionView extends FrameLayout {
     private int mIn1Color;
     private int mIn2Color;
     private int mIn3Color;
+    private int defColor;
+    private int inValueColor;
+    private int outValueColor;
 
     ArrayList<Integer> colors = new ArrayList<Integer>();
 
@@ -55,13 +58,16 @@ public class TodayFundTransactionView extends FrameLayout {
 
     public TodayFundTransactionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initColor();
         inflate(context, R.layout.view_today_fund_transaction, this);
+        initColor();
         initPieChart();
         initComparisonMap();
     }
 
     private void initColor() {
+        defColor = Color.parseColor("#C3CDE3");
+        inValueColor = Color.parseColor("#D9001B");
+        outValueColor = Color.parseColor("#00CC00");
         mOut1Color = Color.parseColor("#00AB3B");
         mOut2Color = Color.parseColor("#336666");
         mOut3Color = Color.parseColor("#339966");
@@ -81,7 +87,7 @@ public class TodayFundTransactionView extends FrameLayout {
         vPieChart = findViewById(R.id.pie_cahart);
         vPieChart.setRenderer(new MyPieChartRenderer(vPieChart, vPieChart.getAnimator(), vPieChart.getViewPortHandler()));
         vPieChart.setNoDataText("暂无数据");
-        vPieChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
+        vPieChart.setNoDataTextColor(defColor);
         vPieChart.setUsePercentValues(true);//使用百分比显示
         vPieChart.getDescription().setEnabled(false);//是否启用描述
         vPieChart.getLegend().setEnabled(false);//是否启用图列
@@ -99,7 +105,7 @@ public class TodayFundTransactionView extends FrameLayout {
         vPieChart.setHoleColor(Color.parseColor("#211F2A"));             //设置PieChart内部圆的颜色
         vPieChart.setDrawCenterText(true);               //是否绘制PieChart内部中心文本（true：下面属性才有意义）
         vPieChart.setCenterText("今日资金");                 //设置PieChart内部圆文字的内容
-        vPieChart.setCenterTextSize(18f);                //设置PieChart内部圆文字的大小
+        vPieChart.setCenterTextSize(14f);                //设置PieChart内部圆文字的大小
         vPieChart.setCenterTextColor(Color.WHITE);         //设置PieChart内部圆文字的颜色
         vPieChart.setTransparentCircleRadius(0f);       //设置PieChart内部透明圆的半径(这里设置31.0f)
 
@@ -123,9 +129,17 @@ public class TodayFundTransactionView extends FrameLayout {
     }
 
     private PieData getPieData(ArrayList<PieEntry> data) {
-        //饼状图数据集 PieDataSet
-        PieDataSet pieDataSet = new PieDataSet(data, "今日资金成交分布");
-        pieDataSet.setColors(colors);           //为DataSet中的数据匹配上颜色集(饼图Item颜色)
+        PieDataSet pieDataSet;
+        if (data.isEmpty()) {
+            data.add(new PieEntry(100, "占位"));
+            pieDataSet = new PieDataSet(data, "");
+            pieDataSet.setColor(Color.parseColor("#B3BCD0"));
+            pieDataSet.setDrawValues(false);
+        } else {
+            pieDataSet = new PieDataSet(data, "");
+            pieDataSet.setColors(colors);
+            pieDataSet.setDrawValues(true);
+        }
         pieDataSet.setValueTextColor(Color.WHITE);
         pieDataSet.setValueTextSize(14f);
         pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
@@ -134,13 +148,12 @@ public class TodayFundTransactionView extends FrameLayout {
         PercentFormatter formatter = new PercentFormatter(vPieChart, false);
         formatter.mFormat = new DecimalFormat("###,###,##0.00");
         pieDataSet.setValueFormatter(formatter);
-        pieDataSet.setDrawValues(true);
         pieDataSet.setValueLinePart1Length(0.4f);
         pieDataSet.setValueLinePart2Length(0.4f);
         return new PieData(pieDataSet);
     }
 
-    private List<ComparisonMapView.IComparisonMapData> getComparisonMapData(List<Float> outData, List<Float> inData) {
+    private void setComparisonMapData(List<Float> outData, List<Float> inData) {
         List<Float> list = new ArrayList<>();
         list.addAll(outData);
         list.addAll(inData);
@@ -149,18 +162,22 @@ public class TodayFundTransactionView extends FrameLayout {
             float idata = list.get(i);
             max = max < idata ? idata : max;
         }
+        if (max == 0) {
+            vComparisonMap.setValueTextColor(defColor, defColor);
+        } else {
+            vComparisonMap.setValueTextColor(inValueColor, outValueColor);
+        }
         List<ComparisonMapView.IComparisonMapData> datas = new ArrayList<>();
         datas.add(new ComparisonMapData("大单", inData.get(0), mIn1Color, outData.get(0), mOut1Color, max));
         datas.add(new ComparisonMapData("中单", inData.get(1), mIn2Color, outData.get(1), mOut2Color, max));
         datas.add(new ComparisonMapData("小单", inData.get(2), mIn3Color, outData.get(2), mOut3Color, max));
-        return datas;
+        vComparisonMap.setData(datas);
     }
 
     public void setData(List<Float> outData, List<Float> inData) {
-        vComparisonMap.setData(getComparisonMapData(outData, inData));
+        setComparisonMapData(outData, inData);
         vPieChart.setData(getPieData(getPieEntrys(outData, inData)));
-        vPieChart.highlightValues(null);
-        vPieChart.invalidate();                    //将图表重绘以显示设置的属性和数据
+        vPieChart.invalidate();
     }
 
 

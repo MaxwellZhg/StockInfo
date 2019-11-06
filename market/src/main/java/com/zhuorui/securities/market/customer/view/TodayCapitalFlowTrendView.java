@@ -32,7 +32,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
 
     private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
-
+    private boolean mEmpty;
     private LineChart vChart;
 
     public TodayCapitalFlowTrendView(Context context) {
@@ -47,8 +47,6 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_today_capital_flow_trend, this);
         initLineChart();
-        setStockTs("HK");
-        setData();
     }
 
     private void initLineChart() {
@@ -108,7 +106,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value == 0 ? "0" : String.format("%.2f", value);
+                return value == 0 || mEmpty ? "0" : String.format("%.2f", value);
             }
         });
         MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(vChart.getViewPortHandler(), vChart.getAxisLeft(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
@@ -116,38 +114,46 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
     }
 
     private LineData getLineData(List<Entry> entrys) {
-        LineDataSet lineDataSet = new LineDataSet(entrys, "");
+        mEmpty = entrys.isEmpty();
+        LineDataSet lineDataSet;
+        if (mEmpty) {
+            entrys.add(new Entry(0, 1));
+            entrys.add(new Entry(0, -1));
+            lineDataSet = new LineDataSet(entrys, "");
+            lineDataSet.setColor(Color.parseColor("#00FF8E1B"));
+        } else {
+            lineDataSet = new LineDataSet(entrys, "");
+            lineDataSet.setColor(Color.parseColor("#FF8E1B"));
+        }
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawValues(false);
         lineDataSet.setLineWidth(0.5f);
-        lineDataSet.setColor(Color.parseColor("#FF8E1B"));
         LineData lineData = new LineData(lineDataSet);
         lineData.setValueTextColor(Color.WHITE);
         return lineData;
     }
 
-
-    private void setData() {
-        int[] d = {1, 1, -1};
+    public void setData(String ts, List<Float> datas) {
+        setStockTs(ts);
         List<Entry> entrys = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 149; i += 4) {
-            Entry entry = new Entry(i, (random.nextInt(60) * d[random.nextInt(d.length)]));
+        for (int i = 0, len = datas.size(); i < len; i += 4) {
+            Entry entry = new Entry(i, datas.get(i));
             entrys.add(entry);
         }
         LineData lineData = getLineData(entrys);
         YAxis leftAxis = vChart.getAxisLeft();
-        if (lineData.getYMax() < 0){
+        if (lineData.getYMax() < 0) {
             leftAxis.setAxisMaximum(0f);
             leftAxis.resetAxisMinimum();
-        }else if (lineData.getYMin() > 0){
+        } else if (lineData.getYMin() > 0) {
             leftAxis.resetAxisMaximum();
             leftAxis.setAxisMinimum(0);
-        }else {
+        } else {
             leftAxis.resetAxisMaximum();
             leftAxis.resetAxisMinimum();
         }
         vChart.setData(lineData);
+        vChart.invalidate();
     }
 
     public void setStockTs(String ts) {
@@ -247,6 +253,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
                     break;
             }
             mXAxis.setAxisMaximum(maxX);
+            mXAxis.setAxisMinimum(0);
         }
 
         @Override

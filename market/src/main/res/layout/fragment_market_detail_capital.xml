@@ -15,7 +15,6 @@
 
         <com.zhuorui.securities.market.customer.view.TodayFundTransactionView
                 android:id="@+id/todayFundTransaction"
-                android:background="#211F2A"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="13dp"
@@ -26,7 +25,7 @@
         <View style="@style/MadrketDetailLine"/>
 
         <com.zhuorui.securities.market.customer.view.TodayCapitalFlowTrendView
-                android:background="#211F2A"
+                android:id="@+id/todatCapitalFlowTrend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="13dp"
@@ -38,7 +37,6 @@
         <View style="@style/MadrketDetailLine"/>
 
         <com.zhuorui.securities.market.customer.view.HistoricalCapitalFlowView
-                android:background="#211F2A"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="13dp"
