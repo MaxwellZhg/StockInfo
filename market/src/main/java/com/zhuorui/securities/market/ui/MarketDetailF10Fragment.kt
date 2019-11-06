@@ -35,7 +35,8 @@ class MarketDetailF10Fragment : SupportFragment(), View.OnClickListener {
         tv_report.setOnClickListener(this)
 
 //        mFragments[0] = MarketDetailF10BriefFragment.newInstance()
-    //   mFragments[0] = MarketDetailF10FinancialFragment.newInstance()
+        mFragments[0] = MarketDetailF10FinancialFragment.newInstance()
+        mFragments[1] = MarketDetailF10FinancialFragment.newInstance()
         loadMultipleRootFragment(R.id.fl_container, 0, mFragments[0], mFragments[1])
     }
 

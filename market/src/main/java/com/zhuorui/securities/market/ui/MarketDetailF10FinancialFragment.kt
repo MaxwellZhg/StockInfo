@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
@@ -7,6 +8,8 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.ui.presenter.MarketDetailF10FinancialPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailF10FinancialView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailF10FinancialViewModel
+import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
+import kotlinx.android.synthetic.main.fragment_market_detail_f10_financial.*
 
 /**
  *    author : PengXianglin
@@ -31,5 +34,15 @@ class MarketDetailF10FinancialFragment : AbsSwipeBackNetFragment<com.zhuorui.sec
             return MarketDetailF10FinancialFragment()
 
         }
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        val outData = mutableListOf<Float>()
+        outData.add(4158.15f)
+        outData.add(1249.04f)
+        outData.add(1149.74f)
+        outData.add(345.53f)
+        financial_view.setData(outData)
     }
 }
