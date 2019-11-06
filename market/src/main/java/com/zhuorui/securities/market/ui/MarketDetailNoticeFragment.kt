@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail_notice.*
  *    desc   :
  */
 class MarketDetailNoticeFragment :
-    AbsSwipeBackNetFragment<FragmentMarketDetailNoticeBinding, MarketDetailNoticeViewModel, MarketDetailNoticeView, MarketDetailNoticePresenter>(),
+    AbsFragment<FragmentMarketDetailNoticeBinding, MarketDetailNoticeViewModel, MarketDetailNoticeView, MarketDetailNoticePresenter>(),
     MarketDetailNoticeView,MarketNoticeInfoTipsAdapter.OnMarketNoticeClickListener{
     private var currentPage :Int = 1
     private var noticeAdapter: MarketNoticeInfoTipsAdapter?=null

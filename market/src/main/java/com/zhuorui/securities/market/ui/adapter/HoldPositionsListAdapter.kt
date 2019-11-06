@@ -49,7 +49,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         initItemViewType()
     }
 
-    fun clearSelectd(){
+    fun clearSelectd() {
         selected.clear()
     }
 
@@ -133,21 +133,26 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
                 }
                 itemViewHolder.business?.setOnClickListener {
                     val pos: Int = it.tag as Int
-                    hideMu(itemViewHolder,pos)
+                    hideMu(itemViewHolder, pos)
                     listener?.toBusiness(SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT, datas!![pos])
                 }
                 itemViewHolder.quotation?.setOnClickListener {
                     val pos: Int = it.tag as Int
                     val data = datas!![pos]
-                    hideMu(itemViewHolder,pos)
-                    listener?.toQuotation(data.code.toString(), data.ts.toString(),data.getTsCode(),data.stockName.toString())
+                    hideMu(itemViewHolder, pos)
+                    listener?.toQuotation(
+                        data.code.toString(),
+                        data.ts.toString(),
+                        data.getTsCode(),
+                        data.stockName.toString()
+                    )
                 }
                 itemViewHolder
             }
         }
     }
 
-    private fun hideMu(itemViewHolder:ItemViewHolder,pos: Int) {
+    private fun hideMu(itemViewHolder: ItemViewHolder, pos: Int) {
         itemViewHolder.btnGroup?.visibility = View.GONE
         selected.remove(pos)
         datas?.get(pos)?.selected = false
@@ -193,7 +198,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
 
 
         init {
-            (v.findViewById(R.id.root_view)as ViewGroup).setLayoutTransition(LayoutTransition())
+            (v.findViewById(R.id.root_view) as ViewGroup).setLayoutTransition(LayoutTransition())
             item = v.findViewById(R.id.item_bg)
             btnGroup = v.findViewById(R.id.btn_group)
             business = v.findViewById(R.id.tv_business)
@@ -254,7 +259,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         /**
          * 去行情
          */
-        fun toQuotation(code: String, ts: String,tsCode:String,name:String)
+        fun toQuotation(code: String, ts: String, tsCode: String, name: String)
 
         /**
          * 选择监听

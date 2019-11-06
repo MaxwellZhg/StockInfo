@@ -105,6 +105,17 @@ object MathUtil {
     }
 
     /**
+     * 除法保留指定小数位
+     */
+    fun divide(number1: BigDecimal, number2: BigDecimal ,scale:Int): BigDecimal {
+        if (rounded(number1).toInt() == 0 || rounded(number2).toInt() == 0) {
+            return rounded3(BigDecimal.ZERO)
+        }
+        return number1.divide(number2, scale, RoundingMode.DOWN)
+    }
+
+
+    /**
      * 转换成带有逗号的字符串
      */
     fun convertToString(number: BigDecimal): String {

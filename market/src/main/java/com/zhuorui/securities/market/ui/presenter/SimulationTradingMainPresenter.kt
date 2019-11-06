@@ -115,7 +115,12 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         disposable = Cache[ISimulationTradeNet::class.java]?.createFundAccount(request)
             ?.flatMap { t ->
                 if (t.isSuccess()) {
-                    Cache[ISimulationTradeNet::class.java]?.getFundAccount(FundAccountRequest(1, transactions.createTransaction()))
+                    Cache[ISimulationTradeNet::class.java]?.getFundAccount(
+                        FundAccountRequest(
+                            1,
+                            transactions.createTransaction()
+                        )
+                    )
                 } else {
                     Observable.create(ObservableOnSubscribe<FundAccountResponse> { emitter ->
                         emitter.onError(RuntimeException(t.msg))
@@ -322,11 +327,11 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 val profitAndLoss = MathUtil.subtract3(MathUtil.multiply3(presentPrice, holdStockCount), holeCost)
                 data.profitAndLoss = profitAndLoss
                 //持仓盈亏比例=盈亏金额/成本
-                data.profitAndLossPercentage = MathUtil.divide3(profitAndLoss, holeCost)
+                data.profitAndLossPercentage = MathUtil.divide(profitAndLoss, holeCost,4)
                 totalMarketValue = MathUtil.add3(marketValue, totalMarketValue)
                 //总盈亏 -- 累计持仓盈亏金额
                 totalProfitAndLoss = MathUtil.add3(profitAndLoss, totalProfitAndLoss)
-                data.unitCost = MathUtil.divide3(holeCost,holdStockCount);
+                data.unitCost = MathUtil.divide3(holeCost, holdStockCount);
             }
         }
         val todayProfitAndLossData = mTodayProfitAndLoss!!
@@ -337,15 +342,14 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         todayProfitAndLoss = MathUtil.add3(todayProfitAndLoss, todayProfitAndLossData.todaySellAmount)
         todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, todayProfitAndLossData.todayBuyAmount)
         //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
-        val todayProfitAndLossPercentage =
-            MathUtil.divide3(todayProfitAndLoss, MathUtil.add3(todayProfitAndLoss.abs(), totalAssets))
-        val fundAccount =
-            STFundAccountData(accountId, availableFunds)
-        fundAccount.marketValue = totalMarketValue.toFloat()
-        fundAccount.totalAssets = totalAssets.toFloat()
+        val d = MathUtil.add3(todayProfitAndLoss.abs(), totalAssets)
+        val todayProfitAndLossPercentage = MathUtil.divide(todayProfitAndLoss,d,6)
+        val fundAccount = STFundAccountData(accountId, availableFunds)
+        fundAccount.marketValue = totalMarketValue
+        fundAccount.totalAssets = totalAssets
         fundAccount.totalProfitAndLoss = totalProfitAndLoss.toFloat()
         fundAccount.todayProfitAndLoss = todayProfitAndLoss.toFloat()
-        fundAccount.todayProfitAndLossPercentage = todayProfitAndLossPercentage.toFloat()
+        fundAccount.todayProfitAndLossPercentage = todayProfitAndLossPercentage
         STInfoManager.getInstance().setSTFundAccountData(fundAccount)
         view?.hideLoading()
         viewModel?.positionDatas?.value = positionDatas
