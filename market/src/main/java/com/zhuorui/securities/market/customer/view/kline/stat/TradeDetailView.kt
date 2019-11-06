@@ -16,12 +16,11 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
-import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicTradeResponse
-import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockTradeResponse
 import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
+import kotlin.random.Random
 
 /**
  * author : PengXianglin
@@ -47,37 +46,37 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
         adapter = TradeDetailViewAdapter()
-//        // TODO 测试数据
-//        val list = ArrayList<StockTradeDetailData>()
-//        for (index in 0..30) {
-//            var diffPreMark = 0
-//            if (index != 0) {
-//                diffPreMark = if (index > 10) {
-//                    1
-//                } else {
-//                    -1
-//                }
-//            }
-//            list.add(
-//                StockTradeDetailData(
-//                    "",
-//                    diffPreMark,
-//                    1,
-//                    "20191030161528333",
-//                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
-//                    Random.nextLong(1, 10000).toBigDecimal(),
-//                    "N",
-//                    "11"
-//                )
-//            )
-//        }
-//        adapter.items = list
+        // TODO 测试数据
+        val list = ArrayList<StockTradeDetailData>()
+        for (index in 0..30) {
+            var diffPreMark = 0
+            if (index != 0) {
+                diffPreMark = if (index > 10) {
+                    1
+                } else {
+                    -1
+                }
+            }
+            list.add(
+                StockTradeDetailData(
+                    "",
+                    diffPreMark,
+                    1,
+                    "20191030161528333",
+                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
+                    Random.nextLong(1, 10000).toBigDecimal(),
+                    "N",
+                    "11"
+                )
+            )
+        }
+        adapter?.items = list
         recyclerView?.adapter = adapter
 
-        // 拉取数据
-        val requestId =
-            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
-        requestIds.add(requestId)
+//        // 拉取数据
+//        val requestId =
+//            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
+//        requestIds.add(requestId)
     }
 
     inner class LinearSpacingItemDecoration : RecyclerView.ItemDecoration() {

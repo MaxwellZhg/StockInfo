@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 import com.zhuorui.securities.market.model.TestNoticeData
+import com.zhuorui.securities.market.net.response.MarketBaseInfoResponse
 
 /**
  *    author : liuwei
@@ -11,4 +12,5 @@ import com.zhuorui.securities.market.model.TestNoticeData
  */
 interface MarketDetailNoticeView:AbsView {
     fun addIntoNoticeData(list:List<Int>)
+    fun noMoreData()
 }

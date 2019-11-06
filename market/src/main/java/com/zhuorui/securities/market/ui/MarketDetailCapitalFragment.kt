@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -15,10 +16,10 @@ import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
  *    author : liuwei
  *    e-mail : vsanliu@foxmail.com
  *    date   : 2019-10-12 15:51
- *    desc   :
+ *    desc   : 个股详情资金页面
  */
 class MarketDetailCapitalFragment :
-    AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailCapitalViewModel, MarketDetailCapitalView, MarketDetailCapitalPresenter>(),
+    AbsFragment<FragmentMarketDetailBinding, MarketDetailCapitalViewModel, MarketDetailCapitalView, MarketDetailCapitalPresenter>(),
     MarketDetailCapitalView {
 
     override val layout: Int
@@ -48,6 +49,6 @@ class MarketDetailCapitalFragment :
         inData.add(3400.60f)
         inData.add(9999.99f)
         inData.add(7028.76f)
-        todayFundTransaction.setData(outData,inData)
+        todayFundTransaction.setData(outData, inData)
     }
 }

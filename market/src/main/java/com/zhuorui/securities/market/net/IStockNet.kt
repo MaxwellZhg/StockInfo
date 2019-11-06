@@ -3,10 +3,7 @@ package com.zhuorui.securities.market.net
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.market.net.api.StockApi
 import com.zhuorui.securities.market.net.request.*
-import com.zhuorui.securities.market.net.response.MarketNewsListResponse
-import com.zhuorui.securities.market.net.response.RecommendStocklistResponse
-import com.zhuorui.securities.market.net.response.StockSearchResponse
-import com.zhuorui.securities.market.net.response.SynStockResponse
+import com.zhuorui.securities.market.net.response.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -33,4 +30,7 @@ interface IStockNet {
 
     @POST(StockApi.NEWS_LIST)
     fun getMarketNewsList(@Body request:MarketNewsListRequest) :Call<MarketNewsListResponse>
+
+    @POST(StockApi.BASE_INFO)
+    fun getMarketBaseInfoList(@Body request:MarketBaseInfoRequest) :Call<MarketBaseInfoResponse>
 }

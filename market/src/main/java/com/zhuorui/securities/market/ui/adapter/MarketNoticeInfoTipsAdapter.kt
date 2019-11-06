@@ -8,6 +8,7 @@ import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.net.response.MarketBaseInfoResponse
 
 /**
  * Created by Maxwell.
