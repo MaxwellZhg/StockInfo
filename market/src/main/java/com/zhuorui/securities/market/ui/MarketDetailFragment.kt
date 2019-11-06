@@ -7,7 +7,6 @@ import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
@@ -27,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_market_detail.*
 import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
 import kotlinx.android.synthetic.main.layout_market_detail_topbar.*
 import me.yokeyword.fragmentation.ISupportFragment
-import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -58,7 +56,13 @@ class MarketDetailFragment :
         }
     }
 
-    private var tabTitle: Array<String> = arrayOf("资金", "资讯", "公告", ResUtil.getString(R.string.f10_brief)!!)
+    private var tabTitle: Array<String> =
+        arrayOf(
+            ResUtil.getString(R.string.capital)!!,
+            ResUtil.getString(R.string.stock_search_info)!!,
+            ResUtil.getString(R.string.announcement)!!,
+            ResUtil.getString(R.string.f10_brief)!!
+        )
     private val mFragments = arrayOfNulls<ISupportFragment>(4)
     private var mIndex = 0
 

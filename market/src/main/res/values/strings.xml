@@ -175,6 +175,8 @@
     <string name="kline_stat">统计</string>
     <string name="str_retract">收起</string>
     <string name="temp_no_data" tools:ignore="MissingTranslation">暂无数据</string>
+    <string name="capital">资金</string>
+    <string name="announcement">公告</string>
     <string name="f10_brief">简况</string>
     <string name="f10_financial_report">财报</string>
     <string name="company_profile">公司简介</string>
