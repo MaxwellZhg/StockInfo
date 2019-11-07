@@ -145,7 +145,9 @@ public class OneDayChart extends BaseChart {
             barChart.setDragEnabled(false);
         } else if (showModel == 1) {
             layoutParams.height = ResUtil.INSTANCE.getDimensionDp2Px(225.5f);
-        } else {
+        } else if (showModel == 3){
+            barChart.setVisibility(GONE);
+        }else {
             // TODO
         }
         lineChart.setLayoutParams(layoutParams);

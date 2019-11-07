@@ -24,7 +24,7 @@ class ChartOneDayFragment :
     companion object {
 
         /**
-         * @param model 0模拟炒股 1个股详情 2个股详情横屏
+         * @param model 0模拟炒股 1个股详情 2个股详情横屏 3指数-简单样式
          */
         fun newInstance(ts: String, code: String, tsCode: String, type: Int, model:Int): ChartOneDayFragment {
             val fragment = ChartOneDayFragment()

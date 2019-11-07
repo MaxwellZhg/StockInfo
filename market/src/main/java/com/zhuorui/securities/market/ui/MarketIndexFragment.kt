@@ -26,6 +26,8 @@ import com.zhuorui.securities.market.ui.view.MarketIndexView
 import com.zhuorui.securities.market.ui.viewmodel.MarketIndexViewModel
 import kotlinx.android.synthetic.main.fragment_market_index.*
 import kotlinx.android.synthetic.main.layout_market_detail_index_detailed.*
+import me.yokeyword.fragmentation.ISupportFragment
+import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -153,7 +155,10 @@ class MarketIndexFragment :
             viewpager.offscreenPageLimit = codes.size
             viewpager.adapter = object : FragmentPagerAdapter(childFragmentManager) {
                 override fun getItem(position: Int): Fragment {
-                    return StockDetailIndexFragment.newInstance(codes[position], tss[position])
+                    val ts = tss[position]
+                    val code = codes[position]
+                    val tsCode = "$code. $ts"
+                    return StockDetailIndexFragment.newInstance(code, ts, tsCode, 1)
                 }
 
                 override fun getCount(): Int {
@@ -263,6 +268,10 @@ class MarketIndexFragment :
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(runnable)
+    }
+
+    override fun start(toFragment: ISupportFragment?) {
+        (parentFragment as SupportFragment).start(toFragment)
     }
 
     override fun onSupportVisible() {
