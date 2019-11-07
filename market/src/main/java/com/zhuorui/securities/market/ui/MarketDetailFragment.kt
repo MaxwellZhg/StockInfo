@@ -243,7 +243,7 @@ class MarketDetailFragment :
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = MarketDetailF10BriefFragment.newInstance()
+            mFragments[3] = mStock?.tsCode?.let {MarketDetailF10BriefFragment.newInstance(it)}
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],

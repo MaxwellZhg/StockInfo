@@ -1,8 +1,9 @@
 package com.zhuorui.securities.market.util
 
+import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.market.R
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.DecimalFormat
 
 /**
  * author : PengXianglin
@@ -64,12 +65,14 @@ object MathUtil {
     fun subtract3(number1: BigDecimal, number2: BigDecimal): BigDecimal {
         return rounded3(number1.subtract(number2))
     }
+
     /**
      * 减法保留两位小数
      */
     fun subtract2(number1: BigDecimal, number2: BigDecimal): BigDecimal {
         return rounded2(number1.subtract(number2))
     }
+
     /**
      * 乘法保留两位小数
      */
@@ -107,7 +110,7 @@ object MathUtil {
     /**
      * 除法保留指定小数位
      */
-    fun divide(number1: BigDecimal, number2: BigDecimal ,scale:Int): BigDecimal {
+    fun divide(number1: BigDecimal, number2: BigDecimal, scale: Int): BigDecimal {
         if (rounded(number1).toInt() == 0 || rounded(number2).toInt() == 0) {
             return rounded3(BigDecimal.ZERO)
         }
@@ -144,7 +147,10 @@ object MathUtil {
     private val K = BigDecimal.valueOf(1000)
     private val M = BigDecimal.valueOf(1000000)
     private val B = BigDecimal.valueOf(1000000000)
-
+    /**
+     * 格式化数字加单位
+     * @return 返回示例 10、10K、10M、10B
+     */
     fun convertToUnitString(number: BigDecimal): String {
         return when {
             // 是否大于十亿
@@ -155,5 +161,37 @@ object MathUtil {
             number.compareTo(K) == 1 -> divide2(number, K).toString() + "K"
             else -> number.toString()
         }
+    }
+
+    /**
+     * W代表万，Y代表亿
+     */
+    private val W = BigDecimal.valueOf(100000)
+    private val Y = BigDecimal.valueOf(100000000)
+    /**
+     * 格式化数字加单位
+     * @param formatType 1金额 2持股
+     * @return 返回示例 金额：10、10万、10亿 持股：10、10万股、10亿股
+     */
+    fun convertToUnitString(number: BigDecimal, formatType: Int): String? {
+        if (formatType == 1) {
+            return when {
+                // 是否大于亿
+                number.compareTo(Y) == 1 -> divide2(number, Y).toString() + ResUtil.getString(R.string.unit_y)
+                // 是否大于万
+                number.compareTo(W) == 1 -> divide2(number, W).toString() + ResUtil.getString(R.string.unit_w)
+                else -> rounded(number).toString()
+            }
+        } else if (formatType == 2) {
+            return when {
+                // 是否大于亿
+                number.compareTo(Y) == 1 -> divide2(number, Y).toString() + ResUtil.getString(R.string.unit_stock_y)
+                // 是否大于万
+                number.compareTo(W) == 1 -> divide2(number, W).toString() + ResUtil.getString(R.string.unit_stock_w)
+                else -> rounded(number).toString()
+            }
+        }
+
+        return null
     }
 }

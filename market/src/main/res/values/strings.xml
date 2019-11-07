@@ -188,7 +188,7 @@
     <string name="company_manager">公司高管</string>
     <string name="company_manager_label">高管</string>
     <string name="manager_jobtitle">职务</string>
-    <string name="manager_salary">年薪(币种：%1$s)</string>
+    <string name="manager_salary">年薪(币种：HKD)</string>
     <string name="hareholder_change">持股变动</string>
     <string name="hareholder_name">股东名称</string>
     <string name="hareholder_change_number">变动(股)</string>
@@ -201,4 +201,10 @@
     <string name="company_repo">公司回购</string>
     <string name="repo_number">数量(股)</string>
     <string name="repo_price">均价(元)</string>
+    <string name="unit_w">万</string>
+    <string name="unit_y">亿</string>
+    <string name="unit_stock_w">万股</string>
+    <string name="unit_stock_y">亿股</string>
+    <string name="hareholder_change_add">增持</string>
+    <string name="hareholder_change_sub">减持</string>
 </resources>
