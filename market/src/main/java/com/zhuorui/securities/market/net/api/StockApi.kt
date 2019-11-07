@@ -53,6 +53,11 @@ interface StockApi {
         /**
          * 公告列表
          */
-        const val BASE_INFO = "/as_market/api/stock/iis_oss_record/v1/getBaseInfo"
+        const val BASE_INFO = "as_market/api/stock/iis_oss_record/v1/getBaseInfo"
+
+        /**
+         * F10简况
+         */
+        const val F10_BRIE="as_market/api/f10/v1/profile"
     }
 }

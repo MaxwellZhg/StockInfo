@@ -29,8 +29,11 @@ interface IStockNet {
     fun synStock(@Body request: SynStockRequest): Call<SynStockResponse>
 
     @POST(StockApi.NEWS_LIST)
-    fun getMarketNewsList(@Body request:MarketNewsListRequest) :Call<MarketNewsListResponse>
+    fun getMarketNewsList(@Body request: MarketNewsListRequest): Call<MarketNewsListResponse>
 
     @POST(StockApi.BASE_INFO)
-    fun getMarketBaseInfoList(@Body request:MarketBaseInfoRequest) :Call<MarketBaseInfoResponse>
+    fun getMarketBaseInfoList(@Body request: MarketBaseInfoRequest): Call<MarketBaseInfoResponse>
+
+    @POST(StockApi.F10_BRIE)
+    fun getF10BrieInfo(@Body request: F10BrieRequest): Call<F10BrieResponse>
 }
