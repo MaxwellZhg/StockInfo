@@ -44,7 +44,7 @@ class F10BrieResponse(val data: Data) : BaseResponse() {
         val holdStockRatio: BigDecimal,// 持股比例
         val changeNumber: BigDecimal,// 变动
         val date: String,// 日期
-        val changeTyp: Int// 变化类型(1增持/2减持)
+        val changeType: Int// 变化类型(1增持/2减持)
     )
 
     /**

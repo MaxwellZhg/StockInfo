@@ -107,9 +107,9 @@
     <string name="search_history_stock" tools:ignore="MissingTranslation">历史搜索股票</string>
     <string name="cancle" tools:ignore="MissingTranslation">取消</string>
     <string name="search_tips" tools:ignore="MissingTranslation">请输入股票名称/代码/全拼</string>
-    <string name="stock_search_all"  tools:ignore="MissingTranslation">综合</string>
-    <string name="stock_search_topic"  tools:ignore="MissingTranslation">股票</string>
-    <string name="stock_search_info"  tools:ignore="MissingTranslation">资讯</string>
+    <string name="stock_search_all" tools:ignore="MissingTranslation">综合</string>
+    <string name="stock_search_topic" tools:ignore="MissingTranslation">股票</string>
+    <string name="stock_search_info" tools:ignore="MissingTranslation">资讯</string>
     <string name="str_tips" translatable="false">提示</string>
     <string name="str_retry" translatable="false">重试</string>
     <string name="str_back" translatable="false">返回</string>
@@ -152,7 +152,7 @@
     <string name="add_stocks_str">添加自选股</string>
     <string name="setting_no_info" tools:ignore="MissingTranslation">请输入目标价</string>
     <string name="market_info" tools:ignore="MissingTranslation">行情</string>
-    <string name="sh_sz_stock"  tools:ignore="MissingTranslation">沪深</string>
+    <string name="sh_sz_stock" tools:ignore="MissingTranslation">沪深</string>
     <string name="all_hk_stock" tools:ignore="MissingTranslation">港股通</string>
     <string name="gloab_stock" tools:ignore="MissingTranslation">全球</string>
     <string name="fifth_data_info" tools:ignore="MissingTranslation">仅展示50条搜索结果</string>
@@ -207,4 +207,6 @@
     <string name="unit_stock_y">亿股</string>
     <string name="hareholder_change_add">增持</string>
     <string name="hareholder_change_sub">减持</string>
+    <string name="more">更多</string>
+    <string name="pack_up">收起</string>
 </resources>

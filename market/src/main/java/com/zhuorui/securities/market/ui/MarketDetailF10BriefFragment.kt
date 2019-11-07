@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.layout_market_detail_company_repo.*
 import kotlinx.android.synthetic.main.layout_market_detail_manager.*
 import kotlinx.android.synthetic.main.layout_market_detail_shareholderchange.*
 
+
 /**
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
@@ -64,6 +65,7 @@ class MarketDetailF10BriefFragment :
         val code = arguments?.getString("code")
 
         iv_company_manager_more.setOnClickListener(this)
+        tv_company_business_more.setOnClickListener(this)
         iv_hareholder_change_more.setOnClickListener(this)
         iv_company_dividend_more.setOnClickListener(this)
         iv_company_repo_more.setOnClickListener(this)
@@ -76,6 +78,10 @@ class MarketDetailF10BriefFragment :
             iv_company_manager_more -> {
                 // 更多高管信息
             }
+            tv_company_business_more -> {
+                // 查看完整公司业务
+                toggleViewCompanyBusiness()
+            }
             iv_hareholder_change_more -> {
                 // 更多股东信息
             }
@@ -85,6 +91,18 @@ class MarketDetailF10BriefFragment :
             iv_company_repo_more -> {
                 // 更多回购信息
             }
+        }
+    }
+
+    private fun toggleViewCompanyBusiness() {
+        // 获取省略的字符数，大于0表示存在省略
+        val ellipsisCount = tv_company_business.layout.getEllipsisCount(tv_company_business.lineCount - 1)
+        if (ellipsisCount > 0) {
+            tv_company_business.maxHeight = resources.displayMetrics.heightPixels
+            tv_company_business_more.text = ResUtil.getString(R.string.pack_up)
+        } else {
+            tv_company_business.maxLines = 4
+            tv_company_business_more.text = ResUtil.getString(R.string.more)
         }
     }
 
@@ -106,7 +124,14 @@ class MarketDetailF10BriefFragment :
             company.issueNumber?.let { tv_issue_number.text = MathUtil.convertToUnitString(it, 2) }
             company.totalCapitalStock?.let { tv_total_capital_stock.text = MathUtil.convertToUnitString(it, 2) }
             company.equityHK?.let { tv_equity_hk.text = MathUtil.convertToUnitString(it, 2) }
-            company.business?.let { tv_company_business.text = it }
+            company.business?.let {
+                tv_company_business.text = it + it + it
+                // 判断公司业务是否需要显示更多
+                val ellipsisCount = tv_company_business.layout.getEllipsisCount(tv_company_business.lineCount - 1)
+                if (ellipsisCount > 0) {
+                    tv_company_business_more.visibility = View.VISIBLE
+                }
+            }
         }
 
         // 高管信息
@@ -141,7 +166,7 @@ class MarketDetailF10BriefFragment :
                 val item = shareHolderChange[i]
                 item.name?.let { itemView.findViewById<TextView>(R.id.tv_name).text = it }
                 val changeNumberText = itemView.findViewById<ZRStockTextView>(R.id.tv_hareholder_change_number)
-                if (item.changeTyp == 1) {
+                if (item.changeType == 1) {
                     if (item.changeNumber == null) {
                         changeNumberText.setText(ResUtil.getString(R.string.hareholder_change_add), 1)
                     } else {
