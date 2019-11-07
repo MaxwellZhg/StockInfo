@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.ui
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
@@ -8,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.animation.Animation
-import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -90,11 +88,10 @@ class MarketIndexFragment :
     }
 
     override fun onUpdata() {
-        if (change_btn.visibility != View.VISIBLE) {
-            change_btn.visibility = View.VISIBLE
+        if (root_view.visibility != View.VISIBLE) {
+            root_view.visibility = View.VISIBLE
             setSimpleView()
         }
-
     }
 
     /**
@@ -157,7 +154,7 @@ class MarketIndexFragment :
                 override fun getItem(position: Int): Fragment {
                     val ts = tss[position]
                     val code = codes[position]
-                    val tsCode = "$code. $ts"
+                    val tsCode = "$code.$ts"
                     return StockDetailIndexFragment.newInstance(code, ts, tsCode, 1)
                 }
 

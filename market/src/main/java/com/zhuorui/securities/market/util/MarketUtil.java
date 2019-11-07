@@ -5,6 +5,7 @@ import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.commonwidget.config.StocksThemeColor;
 import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.personal.config.LocalAccountConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +48,9 @@ public class MarketUtil {
         }
     }
 
+    public static boolean isBMP(String ts) {
+        return TextUtils.equals("HK", ts) && !LocalAccountConfig.Companion.read().isLogin();
+    }
 
     /**
      * @param ts                股票市场
