@@ -151,8 +151,28 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
     @Override
     public void onYearsInfoClick(int num) {
         mDateNum = num;
-       // upDateNumText();
+        upDateNumText();
        // getTestData();
+    }
+
+    private void upDateNumText() {
+        switch (mDateNum){
+            case 1:
+                tv_years.setText("2019中报");
+                break;
+            case 2:
+                tv_years.setText("2018年报");
+                break;
+            case 3:
+                tv_years.setText("2018中报");
+                break;
+            case 4:
+                tv_years.setText("2017年报");
+                break;
+            case 5:
+                tv_years.setText("2017中报");
+                break;
+        }
     }
 
     /**

@@ -118,7 +118,7 @@ class MainTradeYearsInfoPopWindow(contentView: View, num: Int, width: Int, heigh
     override fun showAsDropDown(anchor: View?) {
         //计算三角到anchor中间位置偏移量
         val anchorW = anchor!!.width
-        val xoff = anchorW * 0.5 - (popwidth - 80)//背景三角到最右侧距离
+        val xoff = anchorW * 0.5 - (popwidth - 80      )//背景三角到最右侧距离
         showAsDropDown(anchor, xoff.toInt(), (anchor.resources.displayMetrics.density * 3).toInt())
     }
 
