@@ -93,6 +93,8 @@ class MarketDetailFragment :
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
         super.onEnterAnimationEnd(savedInstanceState)
+        //加载数据
+        presenter?.getData(mStock!!)
         //加载K线Fragment
         if (mStock != null) {
             loadRootFragment(
@@ -105,9 +107,8 @@ class MarketDetailFragment :
             R.id.index_view,
             MarketIndexFragment.newInstance()
         )
-        //加载数据
-        presenter?.getData(mStock!!)
     }
+
 
     /**
      * 更新数据
@@ -201,7 +202,6 @@ class MarketDetailFragment :
         tab_magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
-            Log.i("lw","$scrollY  " + tab_magic_indicator.top)
             //topTab
             if (tab_magic_indicator != null) {
                 top_magic_indicator.visibility = if (scrollY < tab_magic_indicator.top) View.GONE else View.VISIBLE
@@ -243,7 +243,7 @@ class MarketDetailFragment :
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = MarketDetailF10Fragment.newInstance()
+            mFragments[3] = MarketDetailF10BriefFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -253,11 +253,11 @@ class MarketDetailFragment :
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
-            // 这里我们需要拿到mFragments的引用
+            // 这里我们需要拿到mFragments的引用、
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
             mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
-            mFragments[3] = findChildFragment(MarketDetailF10Fragment::class.java)
+            mFragments[3] = findChildFragment(MarketDetailF10BriefFragment::class.java)
         }
     }
 

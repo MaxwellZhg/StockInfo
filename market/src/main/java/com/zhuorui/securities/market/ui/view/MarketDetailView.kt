@@ -11,6 +11,13 @@ import com.zhuorui.securities.market.customer.view.StockDetailView
  *    desc   :
  */
 interface MarketDetailView : AbsView {
+    val Suspension: Int
+        get() = 1
+    val Delisting: Int
+        get() = 2
+    val Opening_zero: Int
+        get() = 2
+
     fun upTopBarInfo(info: String, color: Int)
     fun upBuyingSellingFilesData(buy: Float, sell: Float, buyData: MutableList<Int>, sellData: MutableList<Int>)
     fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>)

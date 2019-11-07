@@ -33,7 +33,7 @@
         <item>资金</item>
         <item>资讯</item>
         <item>公告</item>
-        <item>F10</item>
+        <item>简况</item>
     </string-array>
 
     <string-array name="stock_point_detail_title">

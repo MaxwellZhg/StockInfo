@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="14.5dp">
+
+    <TextView
+            android:id="@+id/tv_company_dividend_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_dividend"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="13dp"/>
+
+    <ImageView
+            android:id="@+id/iv_company_dividend_more"
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:src="@mipmap/ic_right_more_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="12.5dp"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_dividend_label"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_company_dividend_label"/>
+
+    <TextView
+            android:id="@+id/tv_exemption_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exemption_date"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_dividend_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_dividend_label"
+            android:layout_marginTop="13dp"/>
+
+    <TextView
+            android:id="@+id/tv_dividend_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dividend_date"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_exemption_date_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="175.5dp"/>
+
+    <TextView
+            android:id="@+id/tv_allocation_plan_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/allocation_plan"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_exemption_date_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="13dp"/>
+
+    <!--在此处动态添加分红信息-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_manager_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_exemption_date_label"
+            android:layout_marginTop="14.5dp">
+
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/tv_exemption_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="73dp"
+                    android:text="--"
+                    android:textColor="@color/color_FFFFFFFF"
+                    android:textSize="12sp"
+                    android:layout_marginStart="17.5dp"
+                    android:layout_centerVertical="true"/>
+
+            <TextView
+                    android:id="@+id/tv_dividend_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="@color/color_FFFFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="175.5dp"
+                    android:layout_centerVertical="true"/>
+
+            <TextView
+                    android:id="@+id/tv_allocation_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="116dp"
+                    android:text="--"
+                    android:textColor="@color/color_FFFFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="13dp"
+                    android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="14.5dp">
+
+    <TextView
+            android:id="@+id/tv_company_manager_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_manager"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="13dp"/>
+
+    <ImageView
+            android:id="@+id/iv_company_manager_more"
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:src="@mipmap/ic_right_more_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="12.5dp"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_manager_label"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_company_manager_label"/>
+
+    <TextView
+            android:id="@+id/tv_manager_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_manager_label"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_manager_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_manager_label"
+            android:layout_marginTop="13dp"/>
+
+    <TextView
+            android:id="@+id/tv_jobtitle_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manager_jobtitle"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_manager_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="162.5dp"/>
+
+    <TextView
+            android:id="@+id/tv_salary_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manager_salary"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@+id/tv_manager_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="13dp"/>
+
+    <!--在此处动态添加高管信息-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_manager_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_manager_label"
+            android:layout_marginTop="14.5dp">
+
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="@color/color_FFFFFFFF"
+                    android:textSize="12sp"
+                    android:layout_marginStart="13dp"/>
+
+            <TextView
+                    android:id="@+id/tv_jobtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="@color/color_FFFFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="162.5dp"/>
+
+            <TextView
+                    android:id="@+id/tv_salary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="@color/color_FFFFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="13dp"/>
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

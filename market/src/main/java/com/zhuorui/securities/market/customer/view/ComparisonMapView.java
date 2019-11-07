@@ -161,6 +161,7 @@ public class ComparisonMapView extends LinearLayout {
         private View vValue2;
         private TextView vValue2Text;
         private TextView vValue3;
+        private View vGuideLine;
 
         public ItemHolder(View v) {
             vTitle = v.findViewById(R.id.tv_title);
@@ -169,14 +170,12 @@ public class ComparisonMapView extends LinearLayout {
             vValue2 = v.findViewById(R.id.v_right);
             vValue2Text = v.findViewById(R.id.tv_right_text);
             vValue3 = v.findViewById(R.id.tv_text3);
-            v.post(new Runnable() {
-                @Override
-                public void run() {
-                    mMaxValueWidth = v.getWidth() - vTitle.getWidth() - vValue1Text.getWidth() - vValue2Text.getWidth() - vValue3.getWidth();
-                    mMaxValueWidth = mMaxValueWidth * 0.5f;
-                    if (isReComputation) {
-                        computationWidth();
-                    }
+            vGuideLine = v.findViewById(R.id.guide_line);
+            v.post(() -> {
+                mMaxValueWidth = v.getWidth() - vTitle.getWidth() - vValue1Text.getWidth() - vValue2Text.getWidth() - vValue3.getWidth();
+                mMaxValueWidth = mMaxValueWidth * 0.5f;
+                if (isReComputation) {
+                    computationWidth();
                 }
             });
         }
@@ -192,21 +191,30 @@ public class ComparisonMapView extends LinearLayout {
 
         @Override
         public void setData(IComparisonMapData data) {
-            vTitle.setText(data.getTitle());
-            vValue1.setBackgroundColor(data.getValue1Color());
-            vValue2.setBackgroundColor(data.getValue2Color());
             mValue1 = data.getValue1();
             mValue2 = data.getValue2();
             mMaxValue = data.getMaxValue();
+            vTitle.setText(data.getTitle());
+            vValue1.setBackgroundColor(data.getValue1Color());
+            vValue2.setBackgroundColor(data.getValue2Color());
             setText3Color();
-            vValue1Text.setText(String.format("%.2f", mValue1));
-            vValue2Text.setText(String.format("%.2f", mValue2));
+            if (mMaxValue == 0) {
+                vValue1Text.setText("0");
+                vValue2Text.setText("0");
+                vValue3.setText("0");
+                vGuideLine.setVisibility(VISIBLE);
+            } else {
+                vGuideLine.setVisibility(GONE);
+                vValue1Text.setText(String.format("%.2f", mValue1));
+                vValue2Text.setText(String.format("%.2f", mValue2));
+                float x = mValue1 - mValue2;
+                vValue3.setText(String.format(x == 0 ? "%.2f" : "%+.2f", x));
+            }
             if (mMaxValueWidth > 0) {
                 computationWidth();
             } else {
                 isReComputation = true;
             }
-            vValue3.setText(String.format("%+.2f", mValue1 - mValue2));
         }
 
         private void setText3Color() {
@@ -215,11 +223,19 @@ public class ComparisonMapView extends LinearLayout {
 
         private void computationWidth() {
             isReComputation = false;
-            int v1w = (int) (mValue1 / mMaxValue * mMaxValueWidth);
+            int v1w = 0;
+            if (mValue1 != 0) {
+                v1w = (int) (mValue1 / mMaxValue * mMaxValueWidth);
+                v1w = v1w == 0 ? 1 : v1w;
+            }
             ViewGroup.LayoutParams v1lp = vValue1.getLayoutParams();
             v1lp.width = v1w;
             vValue1.setLayoutParams(v1lp);
-            int v2w = (int) (mValue2 / mMaxValue * mMaxValueWidth);
+            int v2w = 0;
+            if (mValue2 != 0) {
+                v2w = (int) (mValue2 / mMaxValue * mMaxValueWidth);
+                v2w = v2w == 0 ? 1 : v2w;
+            }
             ViewGroup.LayoutParams v2lp = vValue2.getLayoutParams();
             v2lp.width = v2w;
             vValue2.setLayoutParams(v2lp);

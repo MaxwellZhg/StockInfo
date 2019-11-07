@@ -3,7 +3,6 @@ package com.zhuorui.securities.market.ui
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
-import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
@@ -24,12 +23,16 @@ class MarketDetailCapitalFragment :
 
     override val layout: Int
         get() = R.layout.fragment_market_detail_capital
+
     override val viewModelId: Int
         get() = BR.viewModel
+
     override val createPresenter: MarketDetailCapitalPresenter
         get() = MarketDetailCapitalPresenter()
+
     override val createViewModel: MarketDetailCapitalViewModel?
         get() = ViewModelProviders.of(this).get(MarketDetailCapitalViewModel::class.java)
+
     override val getView: MarketDetailCapitalView
         get() = this
 
@@ -42,13 +45,15 @@ class MarketDetailCapitalFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         val outData = mutableListOf<Float>()
-        outData.add(4322.9f)
-        outData.add(7999.99f)
-        outData.add(10307.56f)
+        outData.add(0f)
+        outData.add(0f)
+        outData.add(0f)
         val inData = mutableListOf<Float>()
-        inData.add(3400.60f)
-        inData.add(9999.99f)
-        inData.add(7028.76f)
+        inData.add(0f)
+        inData.add(0f)
+        inData.add(0f)
         todayFundTransaction.setData(outData, inData)
+        todatCapitalFlowTrend.setData("HK", mutableListOf<Float>())
+
     }
 }
