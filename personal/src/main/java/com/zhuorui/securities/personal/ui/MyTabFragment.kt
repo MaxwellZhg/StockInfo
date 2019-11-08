@@ -72,12 +72,12 @@ class MyTabFragment :
         ll_about_us.setOnClickListener(this)
         ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
         ll_setting_language.setRightTips(presenter?.setConfigValue(2))
-        if(!LocalAccountConfig.read().isLogin()){
+        if(!LocalAccountConfig.getInstance().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().zrNo.toString()
+            tv_login_tips.text=LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         }
     }
     override fun onClick(p0: View?) {
@@ -97,7 +97,7 @@ class MyTabFragment :
                 presenter?.requestUserLoginOut()
             }
             R.id.ll_login -> {
-                if(LocalAccountConfig.read().getAccountInfo().token==""||LocalAccountConfig.read().getAccountInfo().token==null) {
+                if(LocalAccountConfig.getInstance().getAccountInfo().token==""||LocalAccountConfig.getInstance().getAccountInfo().token==null) {
                     (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
                 }
             }
@@ -131,21 +131,21 @@ class MyTabFragment :
         }
     }*/
     override fun loginStateChange() {
-        if(!LocalAccountConfig.read().isLogin()){
+        if(!LocalAccountConfig.getInstance().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().zrNo.toString()
+            tv_login_tips.text=LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         }
     }
     override fun changeMyTabInfoView() {
-        if(!LocalAccountConfig.read().isLogin()){
+        if(!LocalAccountConfig.getInstance().isLogin()){
             ll_login_out.visibility=View.INVISIBLE
             tv_login_tips.text=ResUtil.getString(R.string.login_register)
         }else{
             ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.read().getAccountInfo().zrNo.toString()
+            tv_login_tips.text=LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         }
     }
     override fun changeSetChooseSet(type: Int, str: String?) {

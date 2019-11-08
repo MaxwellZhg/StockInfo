@@ -49,7 +49,7 @@ class SimulationTradingOrdersPresenter :
     }
 
     private fun getOrders(sDate: String, eDate: String, page: Int, refresh: Boolean) {
-        val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val accountInfo = LocalAccountConfig.getInstance().getAccountInfo()
         val request = OrderListRequest(
             STInfoManager.getInstance().getSTFundAccountData().accountId,
             sDate,

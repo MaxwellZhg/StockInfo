@@ -70,7 +70,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
 
     private View getUpCentView(int up) {
         ImageView iv = new ImageView(getContext());
-        iv.setBackgroundColor(LocalSettingsConfig.Companion.read().getUpColor());
+        iv.setBackgroundColor(LocalSettingsConfig.Companion.getInstance().getUpColor());
         int wh = mWidth * up / allCount;
         int height = ResUtil.INSTANCE.getDimensionDp2Px(3f);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, height);
@@ -80,7 +80,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
 
     private View getZeroCentView(int zero) {
         ImageView iv = new ImageView(getContext());
-        iv.setBackgroundColor(LocalSettingsConfig.Companion.read().getDefaultColor());
+        iv.setBackgroundColor(LocalSettingsConfig.Companion.getInstance().getDefaultColor());
         int wh = mWidth * zero / allCount;
         int height = ResUtil.INSTANCE.getDimensionDp2Px(3f);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, height);
@@ -93,7 +93,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
 
     private View getDownCentView(int down) {
         ImageView iv = new ImageView(getContext());
-        iv.setBackgroundColor(LocalSettingsConfig.Companion.read().getDownColor());
+        iv.setBackgroundColor(LocalSettingsConfig.Companion.getInstance().getDownColor());
         int wh = mWidth * down / allCount;
         int height = ResUtil.INSTANCE.getDimensionDp2Px(3f);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(wh, height);

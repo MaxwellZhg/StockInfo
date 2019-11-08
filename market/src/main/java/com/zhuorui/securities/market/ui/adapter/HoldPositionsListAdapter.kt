@@ -193,8 +193,8 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
         var profitAndLossPercentage: TextView? = null
         val color1 = Color.parseColor("#232323")
         val color2 = Color.parseColor("#A1A1A1")
-        val upColor = LocalSettingsConfig.read().getUpColor()
-        val downColor = LocalSettingsConfig.read().getDownColor()
+        val upColor = LocalSettingsConfig.getInstance().getUpColor()
+        val downColor = LocalSettingsConfig.getInstance().getDownColor()
 
 
         init {

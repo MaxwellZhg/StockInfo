@@ -142,7 +142,7 @@ public class StockDetailView extends FrameLayout {
 
     private void setPrice(IStockDatailData data) {
         if (upColor == 0) {
-            LocalSettingsConfig config = LocalSettingsConfig.Companion.read();
+            LocalSettingsConfig config = LocalSettingsConfig.Companion.getInstance();
             upColor = config.getUpColor();
             downColor = config.getDownColor();
         }

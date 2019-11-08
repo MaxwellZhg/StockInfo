@@ -154,7 +154,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 获取持仓
      */
     private fun getPosition() {
-        val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val accountInfo = LocalAccountConfig.getInstance().getAccountInfo()
         val request = GetPositionRequest(accountInfo.token!!, accountId, transactions.createTransaction())
         Cache[ISimulationTradeNet::class.java]?.getPosition(request)
             ?.enqueue(Network.IHCallBack<GetPositionResponse>(request))
@@ -164,7 +164,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
      * 获取今日订单
      */
     private fun getTodayOrders() {
-        val accountInfo = LocalAccountConfig.read().getAccountInfo()
+        val accountInfo = LocalAccountConfig.getInstance().getAccountInfo()
         val todayTime = TimeZoneUtil.currentTime("yyyy-MM-dd")
         val request =
             OrderListRequest(

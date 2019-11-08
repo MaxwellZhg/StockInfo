@@ -35,7 +35,7 @@ class OpenAccountTabPresenter : AbsNetPresenter<OpenAccountTabView, OpenAccountT
     }
 
     fun getLoginStatus(): Boolean {
-        return LocalAccountConfig.read().isLogin()
+        return LocalAccountConfig.getInstance().isLogin()
     }
 
     /**

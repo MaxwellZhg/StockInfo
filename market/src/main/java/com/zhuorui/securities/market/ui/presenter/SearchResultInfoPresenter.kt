@@ -203,7 +203,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     fun collectionStock(stockInfo: SearchStockInfo, isCollected: Boolean) {
         // 点击添加到自选列表
-        if (LocalAccountConfig.read().isLogin()) {
+        if (LocalAccountConfig.getInstance().isLogin()) {
             // 已登录
             if (isCollected) {
                 //取消收藏

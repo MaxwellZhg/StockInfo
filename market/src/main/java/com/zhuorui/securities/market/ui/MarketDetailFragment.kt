@@ -130,7 +130,7 @@ class MarketDetailFragment :
             context!!.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
         } else if (v == close_bmp_tip) {
             bmp_tip.visibility = View.GONE
-        } else if (!LocalAccountConfig.read().isLogin()) {
+        } else if (!LocalAccountConfig.getInstance().isLogin()) {
             start(LoginRegisterFragment.newInstance(1))
         } else {
             when (v) {

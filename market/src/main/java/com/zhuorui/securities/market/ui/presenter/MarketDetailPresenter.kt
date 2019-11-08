@@ -125,7 +125,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             val diffPrice = price - preClosePrice
             view?.upTopBarInfo(
                 String.format("%.3f  %+.3f  %+.2f%%", price, diffPrice, diffPrice * 100 / preClosePrice),
-                LocalSettingsConfig.read().getUpDownColor(price, preClosePrice)
+                LocalSettingsConfig.getInstance().getUpDownColor(price, preClosePrice)
             )
         } else {
             view?.upTopBarInfo("--- -- --", topbarTxtColor)
@@ -150,7 +150,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * 添加删除自选到自选
      */
     fun collectionStock(stockInfo: SearchStockInfo) {
-        if (LocalAccountConfig.read().isLogin()) {
+        if (LocalAccountConfig.getInstance().isLogin()) {
             // 已登录
             if (isCollected) {
                 //取消收藏

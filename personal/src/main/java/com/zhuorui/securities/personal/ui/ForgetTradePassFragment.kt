@@ -45,8 +45,8 @@ class ForgetTradePassFragment :AbsSwipeBackNetFragment<com.zhuorui.securities.pe
     }
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        if(LocalAccountConfig.read().getAccountInfo().phone!=null) {
-            tv_phone_tips.text= PhoneHideUtils.hidePhoneNum(LocalAccountConfig.read().getAccountInfo().phone)
+        if(LocalAccountConfig.getInstance().getAccountInfo().phone!=null) {
+            tv_phone_tips.text= PhoneHideUtils.hidePhoneNum(LocalAccountConfig.getInstance().getAccountInfo().phone)
         }
         et_license_code.addTextChangedListener(this)
         tv_btn_complete.setOnClickListener(this)

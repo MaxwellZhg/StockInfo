@@ -25,7 +25,7 @@ class TradeStatViewAdapter : BaseListAdapter<StockTradeStaData>() {
     var maxPercent: BigDecimal = BigDecimal.ONE
 
     init {
-        settingsConfig = LocalSettingsConfig.read()
+        settingsConfig = LocalSettingsConfig.getInstance()
     }
 
     override fun getLayout(viewType: Int): Int {

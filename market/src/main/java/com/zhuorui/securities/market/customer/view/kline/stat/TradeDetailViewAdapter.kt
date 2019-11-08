@@ -19,7 +19,7 @@ class TradeDetailViewAdapter : BaseListAdapter<StockTradeDetailData>() {
     private var stocksThemeColor: StocksThemeColor? = null
 
     init {
-        stocksThemeColor = LocalSettingsConfig.read().stocksThemeColor
+        stocksThemeColor = LocalSettingsConfig.getInstance().stocksThemeColor
     }
 
     override fun getLayout(viewType: Int): Int {

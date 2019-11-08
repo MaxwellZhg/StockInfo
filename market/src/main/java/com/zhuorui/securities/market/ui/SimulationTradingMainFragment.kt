@@ -130,7 +130,7 @@ class SimulationTradingMainFragment :
         fund_account.setOnMockStockFundAccountListener(this)
         magic_indicator.navigator = getNavigator()
         presenter?.setLifecycleOwner(this)
-        val zrNo = LocalAccountConfig.read().getAccountInfo().zrNo.toString()
+        val zrNo = LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         user_name.text = ResUtil.getString(R.string.str_zr_user) + zrNo
         zr_no.text = ResUtil.getString(R.string.str_zr_no) + ":" + zrNo
     }
