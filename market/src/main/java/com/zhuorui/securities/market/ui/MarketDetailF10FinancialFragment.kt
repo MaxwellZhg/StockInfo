@@ -27,16 +27,23 @@ class MarketDetailF10FinancialFragment : AbsSwipeBackNetFragment<com.zhuorui.sec
         get() = ViewModelProviders.of(this).get(MarketDetailF10FinancialViewModel::class.java)
     override val getView: MarketDetailF10FinancialView
         get() = this
-
+    private var stockCode: String? = null
     companion object {
-        fun newInstance(): MarketDetailF10FinancialFragment {
-            return MarketDetailF10FinancialFragment()
+        fun newInstance(stockCode:String): MarketDetailF10FinancialFragment {
+            val fragment = MarketDetailF10FinancialFragment()
+            if (stockCode != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("code", stockCode)
+                fragment.arguments = bundle
+            }
+            return fragment
 
         }
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        stockCode = arguments?.getSerializable("code") as String?
         val outData = mutableListOf<Float>()
         outData.add(4158.15f)
         outData.add(1249.04f)

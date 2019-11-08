@@ -276,7 +276,6 @@ class MarketDetailFragment :
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
             mFragments[3] = mStock?.tsCode?.let {MarketDetailF10BriefFragment.newInstance(it)}
-            mFragments[3] = MarketDetailF10FinancialFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -290,7 +289,7 @@ class MarketDetailFragment :
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
             mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
-            mFragments[3] = findChildFragment(MarketDetailF10FinancialFragment::class.java)
+            mFragments[3] = findChildFragment(MarketDetailF10BriefFragment::class.java)
         }
     }
 
