@@ -20,8 +20,8 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketDetailF10BriefViewModel
 class MarketDetailF10BriefPresenter : AbsNetPresenter<MarketDetailF10BriefView, MarketDetailF10BriefViewModel>() {
 
 
-    fun loadData(code: String) {
-        val requset = F10BrieRequest(code, transactions.createTransaction())
+    fun loadData(ts: String, code: String) {
+        val requset = F10BrieRequest(ts, code, transactions.createTransaction())
         Cache[IStockNet::class.java]?.getF10BrieInfo(requset)
             ?.enqueue(Network.IHCallBack<F10BrieResponse>(requset))
     }

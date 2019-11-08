@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+    <ImageView
+            android:id="@+id/iv_ts_logo"
+            android:layout_width="12dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="13dp"
+            android:layout_centerVertical="true"
+            android:src="@color/color_FFFFFFFF"/>
+
+    <TextView
+            android:id="@+id/tv_stock_name"
+            android:layout_width="124.5dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="16sp"
+            android:text="--"
+            android:layout_toEndOf="@+id/iv_ts_logo"
+            android:layout_marginStart="2.5dp"
+            android:layout_centerVertical="true"/>
+
+    <com.zhuorui.commonwidget.ZRStockTextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="15sp"
+            android:text="--"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/tv_stock_name"
+            android:layout_marginStart="29.5dp"/>
+
+    <com.zhuorui.commonwidget.ZRStockTextView
+            android:id="@+id/tv_diff_pirce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="15sp"
+            android:text="--"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/tv_stock_name"
+            android:layout_marginStart="95dp"/>
+
+    <com.zhuorui.commonwidget.ZRStockTextView
+            android:id="@+id/tv_diff_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_FFFFFFFF"
+            android:textSize="15sp"
+            android:text="--"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="13dp"/>
+</RelativeLayout>
