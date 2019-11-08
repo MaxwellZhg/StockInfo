@@ -134,6 +134,7 @@ public class StockDetailView extends FrameLayout {
     }
 
     public void setData(IStockDatailData data) {
+        if (data == null)return;
         setPrice(data);
         readData(data, mPreClosePrice);
         mAdapter.notifyDataSetChanged();

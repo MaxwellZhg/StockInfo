@@ -1,14 +1,17 @@
 package com.zhuorui.securities.market.ui
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -27,7 +30,9 @@ import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import kotlinx.android.synthetic.main.fragment_market_detail.*
+import kotlinx.android.synthetic.main.layout_hk_bmp_tip.*
 import kotlinx.android.synthetic.main.layout_market_detail_bottom.*
+import kotlinx.android.synthetic.main.layout_network_unavailable_tips.*
 import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -52,6 +57,7 @@ class MarketDetailFragment :
     private var tabTitle: Array<String>? = null
     private val mFragments = arrayOfNulls<SupportFragment>(4)
     private var mIndexFragment: SupportFragment? = null //指数Fragment
+    private var loading: ProgressDialog? = null
     private var mIndex = 0
     private var inNum = 0
     private var mBMP = false
@@ -101,6 +107,7 @@ class MarketDetailFragment :
         if (mBMP) {
             buyingSellingFiles.visibility = View.GONE
             orderBroker.visibility = View.GONE
+            bmp_tip.visibility = View.VISIBLE
             sm_refrsh.setOnRefreshListener(this)
             sm_refrsh.setEnableRefresh(true)
         }
@@ -110,14 +117,20 @@ class MarketDetailFragment :
         tv_follow.setOnClickListener(this)
         tv_info.setOnClickListener(this)
         tv_report.setOnClickListener(this)
+        btn_check_netwoke.setOnClickListener(this)
+        close_bmp_tip.setOnClickListener(this)
         scroll_view.setOnScrollChangeListener(this)
-        top_bar.setRefreshClickListener { getData() }
+        top_bar.setRefreshClickListener { onRefresh(sm_refrsh) }
         top_bar.setSearchClickListener { start(SearchInfoFragment.newInstance()) }
     }
 
     override fun onClick(v: View?) {
         if (v == tv_follow) {
             presenter?.collectionStock(mStock)
+        } else if (v == btn_check_netwoke) {
+            context!!.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
+        } else if (v == close_bmp_tip) {
+            bmp_tip.visibility = View.GONE
         } else if (!LocalAccountConfig.read().isLogin()) {
             start(LoginRegisterFragment.newInstance(1))
         } else {
@@ -181,13 +194,35 @@ class MarketDetailFragment :
 
     }
 
+    fun showLoading() {
+        if (loading == null) {
+            loading = context?.let { ProgressDialog(it) }
+        }
+        if (!loading!!.isShowing) {
+            loading?.show()
+        }
+    }
+
+    fun hideLoading() {
+        if (loading != null && loading!!.isShowing)
+            loading?.dismiss()
+    }
+
     private fun getData() {
         //加载数据
         presenter?.getData(mBMP)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
+        showLoading()
         getData()
+    }
+
+    /**
+     * 长连接连接状态
+     */
+    override fun updateNetworkState(connected: Boolean) {
+        network_unavailable_tips.visibility = if (connected) View.GONE else View.VISIBLE
     }
 
     override fun onScrollChange(v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
@@ -212,8 +247,9 @@ class MarketDetailFragment :
     /**
      * 更新数据
      */
-    override fun upData(data: StockDetailView.IStockDatailData) {
+    override fun upData(data: StockDetailView.IStockDatailData?) {
         stock_detail.setData(data)
+        hideLoading()
         if (!sm_refrsh.state.isFinishing) {
             sm_refrsh.finishRefresh()
         }
@@ -275,7 +311,7 @@ class MarketDetailFragment :
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = mStock?.tsCode?.let {MarketDetailF10BriefFragment.newInstance(it)}
+            mFragments[3] = mStock?.tsCode?.let { MarketDetailF10BriefFragment.newInstance(it) }
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -360,7 +396,7 @@ class MarketDetailFragment :
     override fun onSupportVisible() {
         super.onSupportVisible()
         if (inNum > 0) {
-            //每次重新进入界面检但bmp状态
+            //每次重新进入界面检查bmp状态
             inNum++
             val bmp = MarketUtil.isBMP(mStock.ts)
             if (mBMP != bmp) {
@@ -383,10 +419,12 @@ class MarketDetailFragment :
             index_view.removeAllViews()
             buyingSellingFiles.visibility = View.GONE
             orderBroker.visibility = View.GONE
+            bmp_tip.visibility = View.VISIBLE
         } else {
             loadIndexFragment()
             buyingSellingFiles.visibility = View.VISIBLE
             orderBroker.visibility = View.VISIBLE
+            bmp_tip.visibility = View.GONE
         }
         top_bar.setRefreshButton(mBMP)
         sm_refrsh.setEnableRefresh(mBMP)
