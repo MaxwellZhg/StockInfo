@@ -220,7 +220,7 @@ class HoldPositionsListAdapter(context: Context) : RecyclerView.Adapter<Recycler
             stockName?.text = data.stockName
             stockTsCode?.text = data.code + "." + data.ts
             marketValue?.text = data.marketValue.toString()
-            presentPrice?.text = data.presentPrice.toString()
+            presentPrice?.text = data.currentPrice.toString()
             number?.text = data.holdStockCount.toString()
             cost?.text = data.unitCost.toString()
             profitAndLoss?.text = data.profitAndLoss.toString()

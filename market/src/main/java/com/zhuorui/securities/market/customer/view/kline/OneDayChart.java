@@ -502,6 +502,7 @@ public class OneDayChart extends BaseChart {
         if (mData.getDatas().add(timeDatamodel)) {
             int index = mData.getDatas().size() - 1;
             LineData lineData = lineChart.getData();
+            if (lineData == null)return;
             ILineDataSet d1 = lineData.getDataSetByIndex(0);
             d1.addEntry(new Entry(index, (float) timeDatamodel.getNowPrice()));
             ILineDataSet d2 = lineData.getDataSetByIndex(1);

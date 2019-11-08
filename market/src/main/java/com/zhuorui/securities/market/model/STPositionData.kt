@@ -10,7 +10,7 @@ import java.math.BigDecimal
  */
 class STPositionData : STOrderData() {
     var marketValue: BigDecimal? = null//市值
-    var presentPrice: BigDecimal? = null//现价
+    var currentPrice: BigDecimal? = null//现价
     var profitAndLoss: BigDecimal? = null//盈亏
     var profitAndLossPercentage: BigDecimal? = null//盈亏比
     var unitCost: BigDecimal? = null//成本单价

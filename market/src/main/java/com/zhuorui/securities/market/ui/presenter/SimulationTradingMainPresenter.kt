@@ -265,6 +265,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             return
         }
         stocksInfo.clear()
+        calculation()
         val list: MutableList<StockTopic> = mutableListOf()
         for (data in positionDatas!!) {
             stocksInfo[data.getTsCode()] = PushStockPriceData()
@@ -278,12 +279,11 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 list.add(StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, data.ts!!, data.code!!, 2))
             }
         }
-        if (list.isNullOrEmpty()) {
-            stockTopics = null
-            calculation()
-        } else {
+        if (!list.isNullOrEmpty()) {
             stockTopics = list
             SocketClient.getInstance().bindTopic(*list.toTypedArray())
+        } else {
+            stockTopics = null
         }
     }
 
@@ -316,10 +316,10 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
                 val stockInfo = stocksInfo[data.getTsCode()]
-                val presentPrice = if (stockInfo?.last != null) stockInfo.last!! else BigDecimal(0)
+                val presentPrice = if (stockInfo?.last != null) stockInfo.last!! else data.currentPrice!!
                 val holdStockCount = if (data.holdStockCount != null) data.holdStockCount!! else BigDecimal(0)
                 val holeCost = if (data.holdCost != null) data.holdCost!! else BigDecimal(0)
-                data.presentPrice = presentPrice
+                data.currentPrice = presentPrice
                 //持仓市值=现价*持仓数
                 val marketValue = MathUtil.multiply3(presentPrice, holdStockCount)
                 data.marketValue = marketValue
