@@ -8,7 +8,6 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.ui.presenter.MarketDetailF10FinancialPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailF10FinancialView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailF10FinancialViewModel
-import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
 import kotlinx.android.synthetic.main.fragment_market_detail_f10_financial.*
 
 /**

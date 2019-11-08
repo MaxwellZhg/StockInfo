@@ -64,6 +64,7 @@
                        android:background="@color/color_3A79C8"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:id="@+id/tv_tips_one"
                   android:layout_marginStart="3.5dp"
                   android:text="收入总计"
                   android:textColor="@color/color_FFFFFFFF"/>
@@ -78,6 +79,7 @@
                        android:background="@color/color_5DA6F2"/>
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
+                      android:id="@+id/tv_tips_two"
                       android:layout_marginStart="3.5dp"
                       android:text="除税后溢价"
                       android:textColor="@color/color_FFFFFFFF"/>
@@ -92,6 +94,7 @@
                        android:background="@color/color_FF8E1B"/>
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
+                      android:id="@+id/tv_tips_three"
                       android:layout_marginStart="3.5dp"
                       android:text="净利润率"
                       android:textColor="@color/color_FFFFFFFF"/>
