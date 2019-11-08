@@ -12,6 +12,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailF10BriefBinding
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.response.F10BrieResponse
 import com.zhuorui.securities.market.ui.presenter.MarketDetailF10BriefPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailF10BriefView
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.layout_market_detail_company_dividend.*
 import kotlinx.android.synthetic.main.layout_market_detail_company_repo.*
 import kotlinx.android.synthetic.main.layout_market_detail_manager.*
 import kotlinx.android.synthetic.main.layout_market_detail_shareholderchange.*
-
+import me.yokeyword.fragmentation.SupportFragment
 
 /**
  *    author : PengXianglin
@@ -35,11 +36,13 @@ class MarketDetailF10BriefFragment :
     AbsFragment<FragmentMarketDetailF10BriefBinding, MarketDetailF10BriefViewModel, MarketDetailF10BriefView, MarketDetailF10BriefPresenter>(),
     MarketDetailF10BriefView, View.OnClickListener {
 
+    private var mStock: SearchStockInfo? = null
+
     companion object {
-        fun newInstance(code: String): MarketDetailF10BriefFragment {
+        fun newInstance(stock: SearchStockInfo): MarketDetailF10BriefFragment {
             val fragment = MarketDetailF10BriefFragment()
             val arguments = Bundle()
-            arguments.putString("code", code)
+            arguments.putParcelable(SearchStockInfo::class.java.simpleName, stock)
             fragment.arguments = arguments
             return fragment
         }
@@ -62,7 +65,7 @@ class MarketDetailF10BriefFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        val code = arguments?.getString("code")
+        mStock = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)!!
 
         iv_company_manager_more.setOnClickListener(this)
         tv_company_business_more.setOnClickListener(this)
@@ -70,13 +73,16 @@ class MarketDetailF10BriefFragment :
         iv_company_dividend_more.setOnClickListener(this)
         iv_company_repo_more.setOnClickListener(this)
 
-        code?.let { presenter?.loadData(it) }
+        presenter?.loadData(mStock?.ts!!, mStock?.code!!)
     }
 
     override fun onClick(v: View?) {
+        var type = 0
+
         when (v) {
             iv_company_manager_more -> {
                 // 更多高管信息
+                type = 1
             }
             tv_company_business_more -> {
                 // 查看完整公司业务
@@ -84,14 +90,20 @@ class MarketDetailF10BriefFragment :
             }
             iv_hareholder_change_more -> {
                 // 更多股东信息
+                type = 2
             }
             iv_company_dividend_more -> {
                 // 更多分红信息
+                type = 3
             }
             iv_company_repo_more -> {
                 // 更多回购信息
+                type = 4
             }
         }
+
+        if (type != 0 && mStock != null)
+            (parentFragment as SupportFragment).start(CompanyBrieViewMoreFragment.newInstance(mStock!!, type))
     }
 
     private fun toggleViewCompanyBusiness() {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:ignore="MissingDefaultResource">
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.market.ui.viewmodel.CompanyBrieViewMoreViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:id="@+id/root_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/color_211F2A">
+
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:id="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <View style="@style/MadrketDetailLine" android:layout_height="1dp"/>
+
+        <include layout="@layout/layout_topic_stock_item"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
+        <ViewStub android:id="@+id/company_manager_bar"
+                  android:layout="@layout/layout_company_manager_bar"
+                  android:layout_width="match_parent"
+                  android:layout_height="38dp"/>
+
+        <ViewStub android:id="@+id/shareholder_change_bar"
+                  android:layout="@layout/layout_shareholderchange_bar"
+                  android:layout_width="match_parent"
+                  android:layout_height="38dp"/>
+
+        <ViewStub android:id="@+id/company_dividend_bar"
+                  android:layout="@layout/layout_company_dividend_bar"
+                  android:layout_width="match_parent"
+                  android:layout_height="38dp"/>
+
+        <ViewStub android:id="@+id/company_repo_bar"
+                  android:layout="@layout/layout_company_repo_bar"
+                  android:layout_width="match_parent"
+                  android:layout_height="38dp"/>
+
+        <View style="@style/MadrketDetailLine" android:layout_height="1dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</layout>
