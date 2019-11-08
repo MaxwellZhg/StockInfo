@@ -74,60 +74,11 @@
 
     <!--在此处动态添加股东变动信息-->
     <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/ll_manager_list"
+            android:id="@+id/ll_shareholder_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/tv_hareholder_name_label"
-            android:layout_marginTop="14.5dp">
-
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-
-            <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="73dp"
-                    android:text="--"
-                    android:textColor="@color/color_FFFFFFFF"
-                    android:textSize="12sp"
-                    android:layout_marginStart="13dp"/>
-
-            <TextView
-                    android:id="@+id/tv_hareholder_change_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textColor="@color/color_FFFFFFFF"
-                    android:textSize="12sp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="197.5dp"
-                    android:layout_centerVertical="true"/>
-
-            <TextView
-                    android:id="@+id/tv_hareholder_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textColor="@color/color_FFFFFFFF"
-                    android:textSize="12sp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="107.5dp"
-                    android:layout_centerVertical="true"/>
-
-
-            <TextView
-                    android:id="@+id/tv_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textColor="@color/color_FFFFFFFF"
-                    android:textSize="12sp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="13dp"
-                    android:layout_centerVertical="true"/>
-        </RelativeLayout>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            android:layout_marginTop="14.5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

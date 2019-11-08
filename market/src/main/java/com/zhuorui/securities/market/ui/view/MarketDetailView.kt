@@ -18,11 +18,30 @@ interface MarketDetailView : AbsView {
     val Opening_zero: Int
         get() = 2
 
-    fun upTopBarInfo(info: String, color: Int)
-    fun upBuyingSellingFilesData(buy: Float, sell: Float, buyData: MutableList<Int>, sellData: MutableList<Int>)
-    fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>)
-    fun upFollow(collected: Boolean)
+    /**
+     * 更新股票数据
+     */
     fun upData(data: StockDetailView.IStockDatailData)
+
+    /**
+     * 更新topBar状态
+     */
+    fun upTopBarInfo(info: String, color: Int)
+
+    /**
+     * 更新买卖十挡数据
+     */
+    fun upBuyingSellingFilesData(buy: Float, sell: Float, buyData: MutableList<Int>, sellData: MutableList<Int>)
+
+    /**
+     * 更新买卖经纪数据
+     */
+    fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>)
+
+    /**
+     * 更新关注状态
+     */
+    fun upFollow(collected: Boolean)
 
     fun changeInfoTypeData(event: MarketDetailInfoEvent)
 }

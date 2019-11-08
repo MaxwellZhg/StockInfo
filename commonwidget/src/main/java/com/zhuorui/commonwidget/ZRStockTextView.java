@@ -82,7 +82,6 @@ public class ZRStockTextView extends AppCompatTextView implements Observer {
             }
             super.setText(changTvColor());
         } catch (Exception e) {
-            Log.e("tttttt", e.toString());
             originValue = text.toString();
             super.setText(changTvColor());
         }

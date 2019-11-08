@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root_view"
             android:orientation="vertical"
+            android:visibility="gone"
             android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -22,7 +23,6 @@
 
         <ImageView
                 android:id="@+id/change_btn"
-                android:visibility="gone"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:paddingLeft="13dp"
@@ -36,31 +36,24 @@
                 app:layout_constraintRight_toRightOf="parent"
         />
 
-
         <ViewSwitcher
                 android:id="@+id/simple_rootview"
                 android:layout_width="match_parent"
-                android:layout_height="39dp"
+                android:layout_height="38dp"
                 android:layout_marginTop="1dp"
-                android:paddingBottom="1dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
         />
-
 
         <include
                 android:id="@+id/detailed_rootview"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
                 layout="@layout/layout_market_detail_index_detailed"/>
 
 
-        <View android:layout_width="match_parent"
-              android:layout_height="1dp"
-              android:background="#191821"
-              app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

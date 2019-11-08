@@ -64,6 +64,18 @@
             app:layout_constraintStart_toEndOf="@+id/tv_company_industry_label"
             android:layout_marginStart="21dp"/>
 
+    <com.zhuorui.commonwidget.ZRStockTextView
+            android:id="@+id/tv_industry_uprate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textSize="12sp"
+            app:zr_showPrecentUpDown="true"
+            app:zr_showPrecentSymbol="true"
+            app:layout_constraintTop_toTopOf="@+id/tv_company_industry_label"
+            app:layout_constraintStart_toEndOf="@+id/tv_company_industry"
+            android:layout_marginStart="15.5dp"/>
+
     <TextView
             android:id="@+id/tv_company_chairman_label"
             android:layout_width="wrap_content"
@@ -211,14 +223,29 @@
 
     <TextView
             android:id="@+id/tv_company_business"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="--"
             android:textColor="@color/color_FFFFFFFF"
             android:textSize="12sp"
             android:maxLines="4"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
             app:layout_constraintTop_toTopOf="@+id/tv_company_business_label"
             app:layout_constraintStart_toEndOf="@+id/tv_company_business_label"
-            android:layout_marginStart="21dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="21dp"
+            android:layout_marginEnd="13dp"/>
+
+    <TextView
+            android:id="@+id/tv_company_business_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/more"
+            android:textSize="12sp"
+            android:textColor="@color/color_53A0FD"
+            app:layout_constraintTop_toBottomOf="@+id/tv_company_business"
+            app:layout_constraintStart_toStartOf="@+id/tv_company_business"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
