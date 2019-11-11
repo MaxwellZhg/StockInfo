@@ -43,5 +43,5 @@ interface MarketDetailView : AbsView {
      */
     fun upFollow(collected: Boolean)
 
-    fun changeInfoTypeData(event: MarketDetailInfoEvent)
+
 }

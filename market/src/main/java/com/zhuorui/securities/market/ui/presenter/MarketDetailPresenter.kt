@@ -242,10 +242,10 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+  /*  @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
         view?.changeInfoTypeData(event)
-    }
+    }*/
 
     override fun destroy() {
         super.destroy()

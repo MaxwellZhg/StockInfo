@@ -228,7 +228,14 @@ class SearchResultInfoFragment :
         gotoDetail(stock)
     }
     fun gotoDetail(stock:SearchStockInfo){
-        (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(MarketDetailFragment.newInstance(stock),
+        // 跳转到详情页
+        val stockInfo = SearchStockInfo()
+        stockInfo.code = stock.code
+        stockInfo.ts = stock.ts
+        stockInfo.tsCode = stock.code+"."+stock.ts
+        stockInfo.name = stock.name
+        stockInfo.type = 2
+        (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(MarketDetailFragment.newInstance(stockInfo),
             MarketDetailFragment::class.java,
             true)
     }

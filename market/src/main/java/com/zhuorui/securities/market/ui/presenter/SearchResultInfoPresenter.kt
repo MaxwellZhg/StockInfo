@@ -339,7 +339,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
               viewModel?.searchInfoDatas?.value.let {
                   if(it!=null){
                       for(data in it[0].hotlist){
-                          if(stockInfo.id==data?.id){
+                          if(stockInfo.code==data?.code){
                               data?.collect=collect
                           }
                       }
@@ -351,7 +351,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                viewModel?.stockdatas?.value.let {
                    if (it != null) {
                        for(data in it){
-                           if(stockInfo.id==data?.id){
+                           if(stockInfo.code==data?.code){
                                data?.collect=collect
                            }
                        }
