@@ -54,7 +54,7 @@ public class SimulationTradingFundAccountView extends FrameLayout implements Vie
 
     public SimulationTradingFundAccountView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LocalSettingsConfig config = LocalSettingsConfig.Companion.read();
+        LocalSettingsConfig config = LocalSettingsConfig.Companion.getInstance();
         upColor = config.getUpColor();
         downColor = config.getDownColor();
         initView();

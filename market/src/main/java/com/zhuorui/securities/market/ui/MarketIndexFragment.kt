@@ -101,7 +101,7 @@ class MarketIndexFragment :
         simple_rootview.visibility = View.VISIBLE
         detailed_rootview.visibility = View.GONE
         if (simple_rootview.childCount == 0) {
-            val config = LocalSettingsConfig.read()
+            val config = LocalSettingsConfig.getInstance()
             val upcolor = config.getUpColor()
             val downcolor = config.getDownColor()
             simple_rootview.setFactory {

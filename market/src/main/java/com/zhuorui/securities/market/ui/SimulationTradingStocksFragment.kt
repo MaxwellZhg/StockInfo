@@ -196,7 +196,7 @@ class SimulationTradingStocksFragment :
     @SuppressLint("SetTextI18n")
     override fun updateStockPrice(price: BigDecimal, diffPrice: BigDecimal, diffRate: BigDecimal) {
         if (upArrowResId == 0 || downArrowResId == 0) {
-            val stocksThemeColor = LocalSettingsConfig.read().stocksThemeColor
+            val stocksThemeColor = LocalSettingsConfig.getInstance().stocksThemeColor
             if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
                 upArrowResId = R.mipmap.ic_stock_up_arrow_red
                 downArrowResId = R.mipmap.ic_stock_down_arrow_green

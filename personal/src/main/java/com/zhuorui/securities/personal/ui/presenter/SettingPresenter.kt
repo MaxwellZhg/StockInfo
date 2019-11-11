@@ -62,24 +62,24 @@ class SettingPresenter : AbsNetPresenter<SettingView, SettingViewModel>() {
         when(type){
             1->{
                if(str.equals(ResUtil.getString(R.string.red_up_green_down))){
-                   LocalSettingsConfig.read().saveStockColor(StocksThemeColor.redUpGreenDown)
+                   LocalSettingsConfig.getInstance().saveStockColor(StocksThemeColor.redUpGreenDown)
                }else{
-                   LocalSettingsConfig.read().saveStockColor(StocksThemeColor.greenUpRedDown)
+                   LocalSettingsConfig.getInstance().saveStockColor(StocksThemeColor.greenUpRedDown)
                }
             }
             2->{
              when(str){
                    ResUtil.getString(R.string.auto)->{
-                       LocalSettingsConfig.read().saveLanguage(AppLanguage.auto)
+                       LocalSettingsConfig.getInstance().saveLanguage(AppLanguage.auto)
                    }
                    ResUtil.getString(R.string.simple_cn)->{
-                       LocalSettingsConfig.read().saveLanguage(AppLanguage.zh_CN)
+                       LocalSettingsConfig.getInstance().saveLanguage(AppLanguage.zh_CN)
                    }
                    ResUtil.getString(R.string.unsimple_cn)->{
-                       LocalSettingsConfig.read().saveLanguage(AppLanguage.zh_HK)
+                       LocalSettingsConfig.getInstance().saveLanguage(AppLanguage.zh_HK)
                    }
                    ResUtil.getString(R.string.english)->{
-                       LocalSettingsConfig.read().saveLanguage(AppLanguage.en_US)
+                       LocalSettingsConfig.getInstance().saveLanguage(AppLanguage.en_US)
                    }
                }
             }

@@ -70,7 +70,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     fun requestStocks() {
         val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-            emitter.onNext(LocalAccountConfig.read().isLogin())
+            emitter.onNext(LocalAccountConfig.getInstance().isLogin())
             emitter.onComplete()
         }).subscribeOn(Schedulers.io())
             .subscribe { isLogin ->
@@ -242,7 +242,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
      */
     fun onStickyOnTop(item: StockMarketInfo?) {
         // 判断是否登录
-        if (LocalAccountConfig.read().isLogin()) {
+        if (LocalAccountConfig.getInstance().isLogin()) {
             val request = StickyOnTopStockRequest(item?.id!!, transactions.createTransaction())
             Cache[IStockNet::class.java]?.stickyOnTop(request)
                 ?.enqueue(Network.IHCallBack<BaseResponse>(request))
@@ -270,7 +270,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
 
     fun onDeleteStock(item: StockMarketInfo?) {
         // 判断是否登录
-        if (LocalAccountConfig.read().isLogin()) {
+        if (LocalAccountConfig.getInstance().isLogin()) {
             val ids = arrayOf(item?.id)
             val request = DeleteStockRequest(ids, item?.ts!!, item.code!!, transactions.createTransaction())
             Cache[IStockNet::class.java]?.delelte(request)

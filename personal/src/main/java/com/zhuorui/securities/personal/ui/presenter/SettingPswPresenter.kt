@@ -57,7 +57,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginPwdResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginRegisterRequest) {
-            if (LocalAccountConfig.read().saveLogin(
+            if (LocalAccountConfig.getInstance().saveLogin(
                     response.data.userId,
                     response.data.phone,
                     response.data.token
@@ -114,7 +114,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetUserInfoDataResponse(response: GetUserInfoResponse) {
         if (!transactions.isMyTransaction(response)) return
-        LocalAccountConfig.read().setZrNo(response.data.zrNo)
+        LocalAccountConfig.getInstance().setZrNo(response.data.zrNo)
         view?.gotomain()
         // 通知登录状态发生改变
         RxBus.getDefault().post(LoginStateChangeEvent(true))

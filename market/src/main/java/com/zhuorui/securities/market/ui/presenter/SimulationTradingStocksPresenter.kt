@@ -108,6 +108,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             stockInfo.code = orderData.code
             stockInfo.tsCode = orderData.code + "." + orderData.ts
             stockInfo.name = orderData.stockName
+            stockInfo.type = 2
             setStock(stockInfo)
 
             // 已持仓

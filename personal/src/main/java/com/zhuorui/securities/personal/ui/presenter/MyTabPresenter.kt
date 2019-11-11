@@ -47,13 +47,13 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
         if (response.request is UserLoginOutRequest) {
             // 通知登录状态发生改变
             RxBus.getDefault().post(LoginStateChangeEvent(false))
-            if (LocalAccountConfig.read().saveLogin(
+            if (LocalAccountConfig.getInstance().saveLogin(
                     "",
                     "",
                     ""
                 )
             ) {
-                LocalAccountConfig.read().setZrNo(0)
+                LocalAccountConfig.getInstance().setZrNo(0)
                 view?.gotomain()
             }
         }
@@ -72,7 +72,7 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
     fun setConfigValue(type: Int): String? {
         when (type) {
             1 -> {
-                return when (LocalSettingsConfig.read().stocksThemeColor) {
+                return when (LocalSettingsConfig.getInstance().stocksThemeColor) {
                     StocksThemeColor.redUpGreenDown -> {
                         ResUtil.getString(R.string.red_up_green_down)
                     }
@@ -82,7 +82,7 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
                 }
             }
             2 -> {
-                return when (LocalSettingsConfig.read().appLanguage) {
+                return when (LocalSettingsConfig.getInstance().appLanguage) {
                     AppLanguage.auto -> {
                         ResUtil.getString(R.string.auto)
                     }
