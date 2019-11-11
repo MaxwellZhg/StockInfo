@@ -156,14 +156,20 @@ class MarketDetailF10BriefFragment :
             ll_manager_list.layoutManager = LinearLayoutManager(context)
             ll_manager_list.addItemDecoration(LinearSpacingItemDecoration(ResUtil.getDimensionDp2Px(14.5f), 0, false))
             val adapter = CompanyBrieManagerAdapter()
-            adapter.items = manager
+            adapter.items = if (manager.size > 5) manager.subList(0, 5) else manager
             ll_manager_list.adapter = adapter
         }
 
         // 股东变动
         if (!shareHolderChange.isNullOrEmpty()) {
             ll_shareholder_list.layoutManager = LinearLayoutManager(context)
-            ll_shareholder_list.addItemDecoration(LinearSpacingItemDecoration(ResUtil.getDimensionDp2Px(14.5f), 0, false))
+            ll_shareholder_list.addItemDecoration(
+                LinearSpacingItemDecoration(
+                    ResUtil.getDimensionDp2Px(14.5f),
+                    0,
+                    false
+                )
+            )
             val adapter = CompanyBrieShareHolderChangeAdapter()
             adapter.items = shareHolderChange
             ll_shareholder_list.adapter = adapter
