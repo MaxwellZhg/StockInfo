@@ -56,9 +56,8 @@ class MarketDetailNoticeFragment :
         presenter?.setLifecycleOwner(this)
         noticeAdapter=presenter?.getNoticeAdapter()
         noticeAdapter?.onMarketNoticeClickListener=this
-        //stockCode?.let { presenter?.getMarketBaseInfoData(it,currentPage) }
-       // presenter?.getMarketBaseInfoData("1138",1)
-        presenter?.getModelData()
+        stockCode?.let { presenter?.getMarketBaseInfoData(it,currentPage) }
+       // presenter?.getModelData()
         rv_notice.adapter =noticeAdapter
     }
 
@@ -66,7 +65,7 @@ class MarketDetailNoticeFragment :
       ToastUtil.instance.toastCenter("公告")
     }
 
-    override fun addIntoNoticeData(list: List<Int>) {
+    override fun addIntoNoticeData(list: List<MarketBaseInfoResponse.Source>) {
         noticeAdapter?.clearItems()
         if (noticeAdapter?.items == null) {
             noticeAdapter?.items = ArrayList()

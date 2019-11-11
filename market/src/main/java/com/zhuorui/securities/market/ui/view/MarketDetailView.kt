@@ -44,7 +44,6 @@ interface MarketDetailView : AbsView {
     fun upFollow(collected: Boolean)
 
 
-    fun changeInfoTypeData(event: MarketDetailInfoEvent)
     /**
      * 长连接状态更新
      */

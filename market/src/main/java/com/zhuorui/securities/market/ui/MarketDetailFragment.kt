@@ -12,14 +12,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.zhuorui.commonwidget.dialog.ProgressDialog
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
-import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.kline.KlineFragment
@@ -114,8 +112,6 @@ class MarketDetailFragment :
         tv_simulation_trading.setOnClickListener(this)
         tv_remind.setOnClickListener(this)
         tv_follow.setOnClickListener(this)
-        tv_info.setOnClickListener(this)
-        tv_report.setOnClickListener(this)
         btn_check_netwoke.setOnClickListener(this)
         close_bmp_tip.setOnClickListener(this)
         scroll_view.setOnScrollChangeListener(this)
@@ -289,10 +285,8 @@ class MarketDetailFragment :
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[3] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[4] = mStock?.tsCode?.let {MarketDetailF10BriefFragment.newInstance(it)}
+            mFragments[4] = MarketDetailF10BriefFragment.newInstance(mStock)
             mFragments[5] = mStock?.tsCode?.let {MarketDetailF10FinancialFragment.newInstance(it)}
-            mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = MarketDetailF10BriefFragment.newInstance(mStock)
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
@@ -307,9 +301,9 @@ class MarketDetailFragment :
             // 这里我们需要拿到mFragments的引用、
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
-            mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
+            mFragments[2] = findChildFragment(MarketDetailInformationFragment::class.java)
             mFragments[3] = findChildFragment(MarketDetailNoticeFragment::class.java)
-            mFragments[4] = findChildFragment(MarketDetailF10FinancialFragment::class.java)
+            mFragments[4] = findChildFragment(MarketDetailF10BriefFragment::class.java)
             mFragments[5] = findChildFragment(MarketDetailF10FinancialFragment::class.java)
         }
     }

@@ -22,7 +22,7 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketDetailNoticeViewModel
  *    desc   :
  */
 class MarketDetailNoticePresenter: AbsNetPresenter<MarketDetailNoticeView, MarketDetailNoticeViewModel>() {
-    var list :ArrayList<Int> = ArrayList()
+    var list :ArrayList<MarketBaseInfoResponse.Source> = ArrayList()
     override fun init() {
         super.init()
     }
@@ -30,7 +30,7 @@ class MarketDetailNoticePresenter: AbsNetPresenter<MarketDetailNoticeView, Marke
         // 监听datas的变化
         lifecycleOwner.let {
             viewModel?.infoList?.observe(it,
-                androidx.lifecycle.Observer<List<Int>> { t ->
+                androidx.lifecycle.Observer<List<MarketBaseInfoResponse.Source>> { t ->
                     view?.addIntoNoticeData(t)
                 })
         }
@@ -47,23 +47,23 @@ class MarketDetailNoticePresenter: AbsNetPresenter<MarketDetailNoticeView, Marke
     fun onMarketNewsListResponse(response: MarketBaseInfoResponse){
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data
-      /*  if(datas.sourceList.isNullOrEmpty()){
+       if(datas.sourceList.isNullOrEmpty()){
             view?.noMoreData()
         }else {
             viewModel?.infoList?.value = datas.sourceList
-        }*/
+        }
     }
 
     fun getNoticeAdapter(): MarketNoticeInfoTipsAdapter {
         return MarketNoticeInfoTipsAdapter()
     }
 
-    fun getModelData(){
+/*    fun getModelData(){
         list.clear()
         for(i in 0..19){
             list.add(i)
         }
         viewModel?.infoList?.value = list
-    }
+    }*/
 
 }
