@@ -344,7 +344,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.maxBuyCount?.value = null
         viewModel?.enableBuy?.value = false
         viewModel?.enableSell?.value = false
-        view?.initKline(stockInfo.ts!!, stockInfo.code!!, stockInfo.tsCode!!, stockInfo.type!!)
+        view?.initKline(stockInfo.ts!!, stockInfo.code!!, stockInfo.tsCode ?: stockInfo.code!!+"."+stockInfo.ts!!, stockInfo.type!!)
         // 清除上一次的价格信息
         view?.updateStockPrice(BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00))
         // 取消上一次的订阅

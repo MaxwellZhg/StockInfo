@@ -1,10 +1,14 @@
 package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.kline.BaseChart
+import com.zhuorui.securities.market.customer.view.kline.KLineHighlightView
+import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
 import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel
 import com.zhuorui.securities.market.databinding.FragmentOneDayBinding
@@ -19,14 +23,17 @@ import kotlinx.android.synthetic.main.fragment_one_day.*
  */
 class ChartOneDayFragment :
     AbsFragment<FragmentOneDayBinding, OneDayKlineViewModel, OneDayKlineView, ChartOneDayPresenter>(),
-    OneDayKlineView {
+    OneDayKlineView, IKLine, BaseChart.OnHighlightValueSelectedListener {
+
+    private var mHighlightListener: OnKlineHighlightListener? = null
+    private var mHighlightShow = false
 
     companion object {
 
         /**
          * @param model 0模拟炒股 1个股详情 2个股详情横屏 3指数-简单样式
          */
-        fun newInstance(ts: String, code: String, tsCode: String, type: Int, model:Int): ChartOneDayFragment {
+        fun newInstance(ts: String, code: String, tsCode: String, type: Int, model: Int): ChartOneDayFragment {
             val fragment = ChartOneDayFragment()
             val bundle = Bundle()
             bundle.putString("ts", ts)
@@ -64,6 +71,7 @@ class ChartOneDayFragment :
         val model = arguments?.getInt("model")!!
 
         chart!!.initChart(model)
+        chart.setHighlightValueSelectedListener(this)
         presenter?.init(ts, code, tsCode, type)
     }
 
@@ -89,5 +97,36 @@ class ChartOneDayFragment :
         timeData.timeMills = data.dateTime
         timeData.open = data.openPrice
         chart.dynamicsAddOne(timeData)
+    }
+
+    override fun onDayHighlightValueListener(mData: TimeDataManage?, index: Int, isSelect: Boolean) {
+        val data = mData?.realTimeData?.get(index)
+        if (isSelect && data != null) {
+            if (mHighlightShow != isSelect) {
+                mHighlightListener?.onShowHighlightView(getHighlightView(data))
+            } else {
+                mHighlightListener?.onUpHighlightData(data)
+            }
+            mHighlightShow = isSelect
+        } else if (mHighlightShow != isSelect) {
+            mHighlightShow = false
+            mHighlightListener?.onHideHighlightView()
+        }
+
+    }
+
+    private fun getHighlightView(data: TimeDataModel): KLineHighlightView {
+        val v = KLineHighlightView(context)
+        v.setData(data)
+        return v
+    }
+
+    override fun onKHighlightValueListener(data: KLineDataManage?, index: Int, isSelect: Boolean) {
+
+
+    }
+
+    override fun setHighlightListener(l: OnKlineHighlightListener?) {
+        mHighlightListener = l
     }
 }
