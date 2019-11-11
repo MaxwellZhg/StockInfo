@@ -66,8 +66,9 @@ class CompanyBrieViewMorePresenter : AbsNetPresenter<CompanyBrieViewMoreView, Co
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onF10BrieResponse(response: F10DividentListResponse) {
+    fun onF10DividentListResponse(response: F10DividentListResponse) {
         val data = response.data
+        view?.updateDividentList(data)
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)

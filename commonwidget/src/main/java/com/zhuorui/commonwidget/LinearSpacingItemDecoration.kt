@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class LinearSpacingItemDecoration(
     private val spacing: Int, //间隔
-    private val topEdgeoffset: Int, //顶部边缘偏移量
+    private val edgeoffset: Int, //顶部边缘偏移量
     private val includeEdge: Boolean // 是否包含边缘
 ) : RecyclerView.ItemDecoration() {
 
@@ -18,6 +18,7 @@ class LinearSpacingItemDecoration(
 
         //这里是关键，需要根据你有几列来判断
         val position = parent.getChildAdapterPosition(view) // item position
+        val childCount = parent.layoutManager?.childCount
 
         if (includeEdge) {
             outRect.top = spacing// top edge
@@ -27,8 +28,11 @@ class LinearSpacingItemDecoration(
         } else {
             if (position > 0) { // top edge
                 outRect.top = spacing
+                if (position == childCount) {
+                    outRect.bottom = edgeoffset
+                }
             } else if (position == 0) {
-                outRect.top = topEdgeoffset
+                outRect.top = edgeoffset
             }
         }
     }

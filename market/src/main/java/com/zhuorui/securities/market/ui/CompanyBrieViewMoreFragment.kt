@@ -10,9 +10,11 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailF10BriefBinding
+import com.zhuorui.securities.market.model.F10DividendModel
 import com.zhuorui.securities.market.model.F10ManagerModel
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.response.F10ShareHolderListResponse
+import com.zhuorui.securities.market.ui.adapter.CompanyBrieDividendAdapter
 import com.zhuorui.securities.market.ui.adapter.CompanyBrieManagerAdapter
 import com.zhuorui.securities.market.ui.adapter.CompanyBrieShareHolderChangeAdapter
 import com.zhuorui.securities.market.ui.presenter.CompanyBrieViewMorePresenter
@@ -79,9 +81,10 @@ class CompanyBrieViewMoreFragment :
         setStock(stock)
 
         if (type != 1) {
-            refrsh_layout.setEnableLoadMore(true)
-            refrsh_layout.setOnLoadMoreListener { presenter?.loadMoreData(stock.ts!!, stock.code!!, type!!) }
-
+            if (type == 2) {
+                refrsh_layout.setEnableLoadMore(true)
+                refrsh_layout.setOnLoadMoreListener { presenter?.loadMoreData(stock.ts!!, stock.code!!, type!!) }
+            }
             presenter?.loadData(stock.ts!!, stock.code!!, type!!)
         } else {
             val managers = arguments?.getParcelableArrayList<F10ManagerModel>("managers")
@@ -119,6 +122,8 @@ class CompanyBrieViewMoreFragment :
             3 -> {
                 top_bar.setTitle(getString(R.string.company_dividend))
                 company_dividend_bar.visibility = View.VISIBLE
+
+                recycler_view.adapter = CompanyBrieDividendAdapter()
             }
             4 -> {
                 top_bar.setTitle(getString(R.string.company_repo))
@@ -139,6 +144,13 @@ class CompanyBrieViewMoreFragment :
             if (data.list.isNullOrEmpty() || data.list.size < data.pageSize) {
                 refrsh_layout.setNoMoreData(true)
             }
+        }
+    }
+
+    override fun updateDividentList(data: List<F10DividendModel>?) {
+        if (data != null) {
+            val adapter = recycler_view.adapter as CompanyBrieDividendAdapter
+            adapter.items = data
         }
     }
 }
