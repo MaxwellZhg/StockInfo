@@ -131,15 +131,15 @@ class MarketDetailFragment :
         } else {
             when (v) {
                 tv_simulation_trading -> {
-                    start(SimulationTradingMainFragment.newInstance(mStock!!))
+                    start(SimulationTradingMainFragment.newInstance(mStock))
                 }
                 tv_remind -> {
                     val sm = StockMarketInfo()
-                    sm.name = mStock?.name
-                    sm.code = mStock?.code
-                    sm.id = mStock?.id
-                    sm.ts = mStock?.ts
-                    sm.tsCode = mStock?.tsCode
+                    sm.name = mStock.name
+                    sm.code = mStock.code
+                    sm.id = mStock.id
+                    sm.ts = mStock.ts
+                    sm.tsCode = mStock.tsCode
                     start(RemindSettingFragment.newInstance(sm))
                 }
             }
@@ -161,7 +161,13 @@ class MarketDetailFragment :
         //加载K线Fragment
         loadRootFragment(
             R.id.kline_view,
-            KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!, false)
+            KlineFragment.newInstance(
+                mStock.ts ?: "",
+                mStock.code ?: "",
+                mStock.tsCode ?: mStock.code + "." + mStock.ts,
+                mStock.type ?: 2,
+                false
+            )
         )
         //加载指数Fragment
         if (!mBMP) {
@@ -224,7 +230,7 @@ class MarketDetailFragment :
      * 更新数据
      */
     override fun upData(data: StockDetailView.IStockDatailData?) {
-        stock_detail.setData(data)
+        stock_detail?.setData(data)
         hideLoading()
         if (!sm_refrsh.state.isFinishing) {
             sm_refrsh.finishRefresh()

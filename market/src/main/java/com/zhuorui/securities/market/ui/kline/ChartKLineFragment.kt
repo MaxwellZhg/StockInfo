@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_kline.*
  * K线
  */
 class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
-    KlineView {
+    KlineView,IKLine {
 
     companion object {
 
@@ -90,5 +90,10 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
 
     override fun setDataToChart(kLineDataManage: KLineDataManage?) {
         combinedchart.setDataToChart(kLineDataManage)
+    }
+
+    override fun setHighlightListener(l: OnKlineHighlightListener?) {
+
+
     }
 }

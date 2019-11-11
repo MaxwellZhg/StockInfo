@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_five_day.*
  */
 class ChartFiveDayFragment :
     AbsFragment<FragmentFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayPresenter>(),
-    FiveDayKlineView {
+    FiveDayKlineView,IKLine {
 
     companion object {
 
@@ -66,5 +66,9 @@ class ChartFiveDayFragment :
 
     override fun setDataToChart(timeDataManage: TimeDataManage?) {
         chart?.setDataToChart(timeDataManage)
+    }
+
+    override fun setHighlightListener(l: OnKlineHighlightListener?) {
+
     }
 }

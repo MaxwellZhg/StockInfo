@@ -145,9 +145,9 @@ public class OneDayChart extends BaseChart {
             barChart.setDragEnabled(false);
         } else if (showModel == 1) {
             layoutParams.height = ResUtil.INSTANCE.getDimensionDp2Px(225.5f);
-        } else if (showModel == 3){
+        } else if (showModel == 3) {
             barChart.setVisibility(GONE);
-        }else {
+        } else {
             // TODO
         }
         lineChart.setLayoutParams(layoutParams);
@@ -254,11 +254,15 @@ public class OneDayChart extends BaseChart {
             public void onValueSelected(Entry e, Highlight h) {
                 // 当触摸K线时，配置参数显示成交量对应的指标线
                 barChart.highlightValue(new Highlight(h.getX(), h.getDataSetIndex(), -1));
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, h.getDataIndex(), true);
             }
 
             @Override
             public void onNothingSelected() {
                 barChart.highlightValue(null);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, -1, false);
             }
         });
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
@@ -279,11 +283,15 @@ public class OneDayChart extends BaseChart {
                     }
                 }
                 lineChart.highlightValue(highlight);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, h.getDataIndex(), true);
             }
 
             @Override
             public void onNothingSelected() {
                 lineChart.highlightValue(null);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, -1, false);
             }
         });
 
@@ -502,7 +510,7 @@ public class OneDayChart extends BaseChart {
         if (mData.getDatas().add(timeDatamodel)) {
             int index = mData.getDatas().size() - 1;
             LineData lineData = lineChart.getData();
-            if (lineData == null)return;
+            if (lineData == null) return;
             ILineDataSet d1 = lineData.getDataSetByIndex(0);
             d1.addEntry(new Entry(index, (float) timeDatamodel.getNowPrice()));
             ILineDataSet d2 = lineData.getDataSetByIndex(1);
