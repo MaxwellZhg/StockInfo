@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.layout_market_detail_company_repo.*
 import kotlinx.android.synthetic.main.layout_market_detail_manager.*
 import kotlinx.android.synthetic.main.layout_market_detail_shareholderchange.*
 import me.yokeyword.fragmentation.SupportFragment
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -192,5 +193,10 @@ class MarketDetailF10BriefFragment :
             adapter.items = repo
             ll_repo_list.adapter = adapter
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun updateIndustryUprate(upRate: BigDecimal, diffState: Int) {
+        tv_industry_uprate.setText(upRate.toString(), diffState)
     }
 }

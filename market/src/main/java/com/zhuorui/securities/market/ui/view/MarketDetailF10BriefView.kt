@@ -6,6 +6,7 @@ import com.zhuorui.securities.market.model.F10ManagerModel
 import com.zhuorui.securities.market.model.F10RepoModel
 import com.zhuorui.securities.market.model.F10ShareHolderModel
 import com.zhuorui.securities.market.net.response.F10BrieResponse
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -30,4 +31,9 @@ interface MarketDetailF10BriefView : AbsView {
         dividend: List<F10DividendModel>?,
         repo: List<F10RepoModel>?
     )
+
+    /**
+     * 更新所属板块跌涨幅
+     */
+    fun updateIndustryUprate(upRate: BigDecimal, diffState:Int)
 }
