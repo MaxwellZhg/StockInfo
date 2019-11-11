@@ -36,4 +36,13 @@ interface IStockNet {
 
     @POST(StockApi.F10_BRIE)
     fun getF10BrieInfo(@Body request: F10BrieRequest): Call<F10BrieResponse>
+
+    @POST(StockApi.SHARE_HOLDER_LIST)
+    fun getShareHolderList(@Body request: F10BrieListRequest): Call<F10ShareHolderListResponse>
+
+    @POST(StockApi.DIVIDENT_LIST)
+    fun getDividentList(@Body request: F10BrieRequest): Call<F10DividentListResponse>
+
+    @POST(StockApi.REPO_LIST)
+    fun getRepoList(@Body request: F10BrieListRequest): Call<F10RepoListResponse>
 }

@@ -58,6 +58,21 @@ interface StockApi {
         /**
          * F10简况
          */
-        const val F10_BRIE="as_market/api/f10/v1/profile"
+        const val F10_BRIE = "as_market/api/f10/v1/profile"
+
+        /**
+         * F10获取持股变动列表分页
+         */
+        const val SHARE_HOLDER_LIST ="as_market/api/f10/v1/share_holder/list"
+
+        /**
+         * F10获取分红派息列表
+         */
+        const val DIVIDENT_LIST = "as_market/api/f10/v1/divident/list"
+
+        /**
+         * F10获取回购列表分页
+         */
+        const val REPO_LIST = "as_market/api/f10/v1/repo/list"
     }
 }

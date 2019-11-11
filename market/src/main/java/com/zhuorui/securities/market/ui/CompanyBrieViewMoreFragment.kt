@@ -1,13 +1,19 @@
 package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.zhuorui.commonwidget.LinearSpacingItemDecoration
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailF10BriefBinding
+import com.zhuorui.securities.market.model.F10ManagerModel
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.ui.adapter.CompanyBrieManagerAdapter
 import com.zhuorui.securities.market.ui.presenter.CompanyBrieViewMorePresenter
 import com.zhuorui.securities.market.ui.view.CompanyBrieViewMoreView
 import com.zhuorui.securities.market.ui.viewmodel.CompanyBrieViewMoreViewModel
@@ -29,11 +35,18 @@ class CompanyBrieViewMoreFragment :
         /**
          * @param type 1公司高管 2持股变动 3分红配送 4公司回购
          */
-        fun newInstance(stock: SearchStockInfo, type: Int): CompanyBrieViewMoreFragment {
+        fun newInstance(
+            stock: SearchStockInfo,
+            managers: ArrayList<F10ManagerModel>?,
+            type: Int
+        ): CompanyBrieViewMoreFragment {
             val fragment = CompanyBrieViewMoreFragment()
             val arguments = Bundle()
             arguments.putParcelable(SearchStockInfo::class.java.simpleName, stock)
             arguments.putInt("type", type)
+            if (type == 1) {
+                arguments.putParcelableArrayList("managers", managers)
+            }
             fragment.arguments = arguments
             return fragment
         }
@@ -54,14 +67,24 @@ class CompanyBrieViewMoreFragment :
     override val getView: CompanyBrieViewMoreView
         get() = this
 
+    @Suppress("UNCHECKED_CAST")
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
         val type = arguments?.getInt("type")
-        setTitle(type)
+        initUi(type)
 
         val stock = arguments?.getParcelable<SearchStockInfo>(SearchStockInfo::class.java.simpleName)!!
         setStock(stock)
+
+        if (type != 1) {
+            presenter?.loadData(stock.ts!!, stock.code!!, type!!)
+        } else {
+            val managers = arguments?.getParcelableArrayList<F10ManagerModel>("managers")
+            val adapter = CompanyBrieManagerAdapter()
+            recycler_view.adapter = adapter
+            adapter.items = managers
+        }
     }
 
     private fun setStock(stock: SearchStockInfo) {
@@ -69,7 +92,15 @@ class CompanyBrieViewMoreFragment :
         tv_stock_name.text = stock.name
     }
 
-    private fun setTitle(type: Int?) {
+    private fun initUi(type: Int?) {
+        recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.addItemDecoration(
+            LinearSpacingItemDecoration(
+                ResUtil.getDimensionDp2Px(14.5f),
+                ResUtil.getDimensionDp2Px(12.5f),
+                false
+            )
+        )
         when (type) {
             1 -> {
                 top_bar.setTitle(getString(R.string.company_manager))

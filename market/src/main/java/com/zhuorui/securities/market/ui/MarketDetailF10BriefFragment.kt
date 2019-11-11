@@ -12,7 +12,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailF10BriefBinding
-import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.response.F10BrieResponse
 import com.zhuorui.securities.market.ui.presenter.MarketDetailF10BriefPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailF10BriefView
@@ -102,8 +102,10 @@ class MarketDetailF10BriefFragment :
             }
         }
 
-        if (type != 0 && mStock != null)
-            (parentFragment as SupportFragment).start(CompanyBrieViewMoreFragment.newInstance(mStock!!, type))
+        if (type != 0 && mStock != null) {
+            val managers = presenter?.getManagers()
+            (parentFragment as SupportFragment).start(CompanyBrieViewMoreFragment.newInstance(mStock!!, managers, type))
+        }
     }
 
     private fun toggleViewCompanyBusiness() {
@@ -121,10 +123,10 @@ class MarketDetailF10BriefFragment :
     @SuppressLint("SetTextI18n")
     override fun updateBrieInfo(
         company: F10BrieResponse.Company?,
-        manager: List<F10BrieResponse.Manager>?,
-        shareHolderChange: List<F10BrieResponse.ShareHolderChange>?,
-        dividend: List<F10BrieResponse.Dividend>?,
-        repo: List<F10BrieResponse.Repo>?
+        manager: List<F10ManagerModel>?,
+        shareHolderChange: List<F10ShareHolderModel>?,
+        dividend: List<F10DividendModel>?,
+        repo: List<F10RepoModel>?
     ) {
         // 公司简介
         if (company != null) {
@@ -149,6 +151,7 @@ class MarketDetailF10BriefFragment :
         // 高管信息
         if (!manager.isNullOrEmpty()) {
             for (i in manager.indices) {
+                if (i > 4) break
                 val itemView = View.inflate(context, R.layout.layout_item_company_manager, null)
                 ll_manager_list.addView(itemView)
                 if (i != 0) {

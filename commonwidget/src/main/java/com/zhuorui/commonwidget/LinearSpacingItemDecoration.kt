@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
  * 用于Linear模式RecyclerView控制间距
  */
 class LinearSpacingItemDecoration(
-    private val spacing: Int //间隔
-    , private val includeEdge: Boolean //是否包含边缘
+    private val spacing: Int, //间隔
+    private val topEdgeoffset: Int, //顶部边缘偏移量
+    private val includeEdge: Boolean // 是否包含边缘
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
@@ -26,6 +27,8 @@ class LinearSpacingItemDecoration(
         } else {
             if (position > 0) { // top edge
                 outRect.top = spacing
+            } else if (position == 0) {
+                outRect.top = topEdgeoffset
             }
         }
     }
