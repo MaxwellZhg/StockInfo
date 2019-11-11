@@ -69,7 +69,7 @@ class TopicStockListFragment :
 
     override fun init() {
         val type = arguments?.getSerializable("type") as StockTsEnum?
-        if (type == null && !LocalAccountConfig.read().isLogin()) {
+        if (type == null && !LocalAccountConfig.getInstance().isLogin()) {
             guide_open_accout.inflate()
             tv_register_now.setOnClickListener(this)
         }

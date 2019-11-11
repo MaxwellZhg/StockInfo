@@ -31,7 +31,7 @@ public class MarketUtil {
     }
 
     public static int getUpIcon() {
-        StocksThemeColor stocksThemeColor = LocalSettingsConfig.Companion.read().getStocksThemeColor();
+        StocksThemeColor stocksThemeColor = LocalSettingsConfig.Companion.getInstance().getStocksThemeColor();
         if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
             return R.mipmap.ic_stock_up_arrow_red;
         } else {
@@ -40,7 +40,7 @@ public class MarketUtil {
     }
 
     public static int getDownIcon() {
-        StocksThemeColor stocksThemeColor = LocalSettingsConfig.Companion.read().getStocksThemeColor();
+        StocksThemeColor stocksThemeColor = LocalSettingsConfig.Companion.getInstance().getStocksThemeColor();
         if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
             return R.mipmap.ic_stock_down_arrow_green;
         } else {
@@ -49,7 +49,7 @@ public class MarketUtil {
     }
 
     public static boolean isBMP(String ts) {
-        return TextUtils.equals("HK", ts) && !LocalAccountConfig.Companion.read().isLogin();
+        return TextUtils.equals("HK", ts) && !LocalAccountConfig.Companion.getInstance().isLogin();
     }
 
     /**

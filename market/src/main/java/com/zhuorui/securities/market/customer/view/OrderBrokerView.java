@@ -1,15 +1,16 @@
 package com.zhuorui.securities.market.customer.view;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -133,7 +134,18 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(context).inflate(itemType == 0 ? R.layout.item_order_broker : R.layout.item_order_broker_code, parent, false);
+            View v;
+            if (itemType == 0) {
+                v = LayoutInflater.from(context).inflate(R.layout.item_order_broker, parent, false);
+            } else {
+                v = LayoutInflater.from(context).inflate(R.layout.item_order_broker_code, parent, false);
+                v.setOnClickListener(v1 -> {
+                    int pos = (int) v1.getTag();
+                    Toast toast = Toast.makeText(context, mDatas.get(pos).toString(), Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                });
+            }
             return new MyViewHolder(v);
         }
 
@@ -141,6 +153,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Object object = mDatas.get(position);
             holder.bindData(position, object);
+            holder.itemView.setTag(position);
         }
 
         @Override

@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  *    date   : 2019/11/7 10:25
  *    desc   : F10简况
  */
-class F10BrieRequest(val code: String, transaction: String) : BaseRequest(transaction) {
+class F10BrieRequest(val ts: String, val code: String, transaction: String) : BaseRequest(transaction) {
     init {
         generateSign()
     }

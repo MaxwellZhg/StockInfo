@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+    <TextView
+            android:id="@+id/tv_hareholder_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shareholder_name"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            android:layout_marginStart="13dp"/>
+
+    <TextView
+            android:id="@+id/tv_hareholder_change_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shareholder_change_number"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="197dp"/>
+
+    <TextView
+            android:id="@+id/tv_hareholder_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shareholder_number"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="107.5dp"/>
+
+    <TextView
+            android:id="@+id/tv_hareholder_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textColor="@color/color_ffa4b2cb"
+            android:textSize="14sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="13dp"/>
+</RelativeLayout>

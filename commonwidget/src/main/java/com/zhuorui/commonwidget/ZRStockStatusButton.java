@@ -27,7 +27,7 @@ public class ZRStockStatusButton extends StateButton implements Observer {
 
     public ZRStockStatusButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        settingsConfig = LocalSettingsConfig.Companion.read();
+        settingsConfig = LocalSettingsConfig.Companion.getInstance();
         // 监听修改配置颜色
         settingsConfig.registerObserver(this);
 

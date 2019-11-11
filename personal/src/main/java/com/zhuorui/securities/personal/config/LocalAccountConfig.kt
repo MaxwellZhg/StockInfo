@@ -10,7 +10,7 @@ import com.zhuorui.securities.personal.model.AccountInfo
  * Date: 2019/8/20
  * Desc:保存账号信息
  */
-class LocalAccountConfig : AbsConfig() {
+class LocalAccountConfig private constructor() : AbsConfig() {
 
     private var accountInfo: AccountInfo = AccountInfo()
 
@@ -21,8 +21,8 @@ class LocalAccountConfig : AbsConfig() {
     /**
      * 是否登录
      */
-    fun isLogin():Boolean{
-        return accountInfo.token?.isNotEmpty()?:false
+    fun isLogin(): Boolean {
+        return accountInfo.token?.isNotEmpty() ?: false
     }
 
     /**
@@ -43,8 +43,8 @@ class LocalAccountConfig : AbsConfig() {
         write()
     }
 
-    fun setZrNo(zrNo:Int){
-        accountInfo.zrNo=zrNo
+    fun setZrNo(zrNo: Int) {
+        accountInfo.zrNo = zrNo
         write()
     }
 
@@ -53,7 +53,22 @@ class LocalAccountConfig : AbsConfig() {
     }
 
     companion object {
-        fun read(): LocalAccountConfig {
+
+        private var instance: LocalAccountConfig? = null
+
+        fun getInstance(): LocalAccountConfig {//使用同步锁
+            if (instance == null) {
+                synchronized(LocalAccountConfig::class.java) {
+                    if (instance == null) {
+                        instance = read()
+                    }
+                }
+            }
+            return instance!!
+        }
+
+
+        private fun read(): LocalAccountConfig {
             var config: LocalAccountConfig? =
                 StorageInfra.get(LocalAccountConfig::class.java.simpleName, LocalAccountConfig::class.java)
             if (config == null) {
@@ -63,8 +78,9 @@ class LocalAccountConfig : AbsConfig() {
             return config
         }
 
-        fun clear(){
+        fun clear() {
             StorageInfra.remove(LocalAccountConfig::class.java.simpleName, LocalAccountConfig::class.java.name)
+            instance = null
         }
 
     }

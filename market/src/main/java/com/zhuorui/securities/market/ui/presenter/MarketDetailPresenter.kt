@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -13,6 +14,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ThreadPoolUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
@@ -21,6 +23,7 @@ import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.event.MarketDetailInfoEvent
+import com.zhuorui.securities.market.event.SocketConnectEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
@@ -31,6 +34,8 @@ import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import java.lang.Exception
+import java.util.logging.Handler
 
 /**
  *    author : liuwei
@@ -80,6 +85,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     private fun getStockData(isBMP: Boolean) {
         stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs, mCode, mType)
         SocketClient.getInstance().bindTopic(stockTopic)
+        android.os.Handler().postDelayed(Runnable { view?.upData(null) },2000)
+
     }
 
     /**
@@ -118,7 +125,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             val diffPrice = price - preClosePrice
             view?.upTopBarInfo(
                 String.format("%.3f  %+.3f  %+.2f%%", price, diffPrice, diffPrice * 100 / preClosePrice),
-                LocalSettingsConfig.read().getUpDownColor(price, preClosePrice)
+                LocalSettingsConfig.getInstance().getUpDownColor(price, preClosePrice)
             )
         } else {
             view?.upTopBarInfo("--- -- --", topbarTxtColor)
@@ -143,7 +150,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * 添加删除自选到自选
      */
     fun collectionStock(stockInfo: SearchStockInfo) {
-        if (LocalAccountConfig.read().isLogin()) {
+        if (LocalAccountConfig.getInstance().isLogin()) {
             // 已登录
             if (isCollected) {
                 //取消收藏
@@ -246,6 +253,11 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
         view?.changeInfoTypeData(event)
     }*/
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSocketDisconnectEvent(event: SocketConnectEvent) {
+        view?.updateNetworkState(event.connected)
+    }
 
     override fun destroy() {
         super.destroy()

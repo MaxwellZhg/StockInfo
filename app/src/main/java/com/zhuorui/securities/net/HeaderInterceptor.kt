@@ -19,7 +19,7 @@ class HeaderInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
 
-        val token = LocalAccountConfig.read().getAccountInfo().token
+        val token = LocalAccountConfig.getInstance().getAccountInfo().token
 //        val lang = DeviceUtil.getSystemLanguage()
         val osType = "android"
         val appVersion = BaseApplication.context?.let { AppUtil.getVersionName(it) }

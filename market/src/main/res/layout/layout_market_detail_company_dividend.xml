@@ -28,46 +28,22 @@
             app:layout_constraintTop_toTopOf="@+id/tv_company_dividend_label"
             app:layout_constraintBottom_toBottomOf="@+id/tv_company_dividend_label"/>
 
-    <TextView
-            android:id="@+id/tv_exemption_date_label"
-            android:layout_width="wrap_content"
+    <include
+            android:id="@+id/layout_company_dividend_bar"
+            layout="@layout/layout_company_dividend_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/exemption_date"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_company_dividend_label"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_company_dividend_label"
             android:layout_marginTop="13dp"/>
 
-    <TextView
-            android:id="@+id/tv_dividend_date_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dividend_date"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_exemption_date_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="175.5dp"/>
-
-    <TextView
-            android:id="@+id/tv_allocation_plan_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/allocation_plan"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_exemption_date_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="13dp"/>
-
     <!--在此处动态添加分红信息-->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ll_dividend_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/tv_exemption_date_label"
+            app:layout_constraintTop_toBottomOf="@+id/layout_company_dividend_bar"
             android:layout_marginTop="14.5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

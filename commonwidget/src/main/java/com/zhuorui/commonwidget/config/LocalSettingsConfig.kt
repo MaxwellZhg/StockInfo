@@ -13,7 +13,14 @@ import com.zhuorui.securities.base2app.infra.StorageInfra
  *    date   : 2019/9/11 14:52
  *    desc   : 保存本地设置信息
  */
-class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
+class LocalSettingsConfig private constructor(): AbsConfig(), Subject<Observer> {
+
+    val sorckColorRed = Color.parseColor("#FFD9001B")
+    val sorckColorGreen = Color.parseColor("#FF00CC00")
+    val sorckColor = Color.parseColor("#FF7B889E")
+    val stockbtnRedColor = Color.parseColor("#FFAC3E19")
+    val stockbtnGreenColor = Color.parseColor("#FF37672E")
+
 
     // 默认为红涨绿跌
     var stocksThemeColor: StocksThemeColor = StocksThemeColor.redUpGreenDown
@@ -113,15 +120,24 @@ class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
         }
     }
 
+
     companion object {
 
-        val sorckColorRed = Color.parseColor("#FFD9001B")
-        val sorckColorGreen = Color.parseColor("#FF00CC00")
-        val sorckColor = Color.parseColor("#FF7B889E")
-        val stockbtnRedColor = Color.parseColor("#FFAC3E19")
-        val stockbtnGreenColor = Color.parseColor("#FF37672E")
 
-        fun read(): LocalSettingsConfig {
+        private var instance: LocalSettingsConfig? = null
+
+        fun getInstance(): LocalSettingsConfig {//使用同步锁
+            if (instance == null) {
+                synchronized(LocalSettingsConfig::class.java) {
+                    if (instance == null) {
+                        instance = read()
+                    }
+                }
+            }
+            return instance!!
+        }
+
+        private fun read(): LocalSettingsConfig {
             var config: LocalSettingsConfig? =
                 StorageInfra.get(LocalSettingsConfig::class.java.simpleName, LocalSettingsConfig::class.java)
             if (config == null) {
@@ -133,6 +149,7 @@ class LocalSettingsConfig : AbsConfig(), Subject<Observer> {
 
         fun clear() {
             StorageInfra.remove(LocalSettingsConfig::class.java.simpleName, LocalSettingsConfig::class.java.name)
+            instance = null
         }
     }
 

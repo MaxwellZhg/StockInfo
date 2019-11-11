@@ -1,6 +1,10 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.model.F10DividendModel
+import com.zhuorui.securities.market.model.F10ManagerModel
+import com.zhuorui.securities.market.model.F10RepoModel
+import com.zhuorui.securities.market.model.F10ShareHolderModel
 import com.zhuorui.securities.market.net.response.F10BrieResponse
 
 /**
@@ -21,9 +25,9 @@ interface MarketDetailF10BriefView : AbsView {
      */
     fun updateBrieInfo(
         company: F10BrieResponse.Company?,
-        manager: List<F10BrieResponse.Manager>?,
-        shareHolderChange: List<F10BrieResponse.ShareHolderChange>?,
-        dividend: List<F10BrieResponse.Dividend>?,
-        repo: List<F10BrieResponse.Repo>?
+        manager: List<F10ManagerModel>?,
+        shareHolderChange: List<F10ShareHolderModel>?,
+        dividend: List<F10DividendModel>?,
+        repo: List<F10RepoModel>?
     )
 }

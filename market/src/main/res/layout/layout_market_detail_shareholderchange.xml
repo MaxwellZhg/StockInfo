@@ -11,7 +11,7 @@
             android:id="@+id/tv_hareholder_change_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hareholder_change"
+            android:text="@string/shareholder_change"
             android:textColor="@color/color_FFFFFFFF"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,57 +28,21 @@
             app:layout_constraintTop_toTopOf="@+id/tv_hareholder_change_label"
             app:layout_constraintBottom_toBottomOf="@+id/tv_hareholder_change_label"/>
 
-    <TextView
-            android:id="@+id/tv_hareholder_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hareholder_name"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_hareholder_change_label"
-            app:layout_constraintTop_toBottomOf="@+id/tv_hareholder_change_label"
-            android:layout_marginTop="13dp"/>
-
-    <TextView
-            android:id="@+id/tv_hareholder_change_number_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hareholder_change_number"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_hareholder_name_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="197dp"/>
-
-    <TextView
-            android:id="@+id/tv_hareholder_number_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hareholder_number"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_hareholder_name_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="107.5dp"/>
-
-    <TextView
-            android:id="@+id/tv_hareholder_date_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_hareholder_name_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="13dp"/>
+    <include android:id="@+id/layout_shareholderchange_bar"
+             layout="@layout/layout_shareholderchange_bar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/tv_hareholder_change_label"
+             android:layout_marginTop="13dp"/>
 
     <!--在此处动态添加股东变动信息-->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ll_shareholder_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/tv_hareholder_name_label"
+            app:layout_constraintTop_toBottomOf="@+id/layout_shareholderchange_bar"
             android:layout_marginTop="14.5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

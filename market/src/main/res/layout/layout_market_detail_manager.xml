@@ -28,46 +28,21 @@
             app:layout_constraintTop_toTopOf="@+id/tv_company_manager_label"
             app:layout_constraintBottom_toBottomOf="@+id/tv_company_manager_label"/>
 
-    <TextView
-            android:id="@+id/tv_manager_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/company_manager_label"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_company_manager_label"
-            app:layout_constraintTop_toBottomOf="@+id/tv_company_manager_label"
-            android:layout_marginTop="13dp"/>
-
-    <TextView
-            android:id="@+id/tv_jobtitle_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/manager_jobtitle"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_manager_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="162.5dp"/>
-
-    <TextView
-            android:id="@+id/tv_salary_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/manager_salary"
-            android:textColor="@color/color_ffa4b2cb"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/tv_manager_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="13dp"/>
+    <include android:id="@+id/company_manager_bar"
+             layout="@layout/layout_company_manager_bar"
+             android:layout_height="match_parent"
+             android:layout_width="wrap_content"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/tv_company_manager_label"
+             android:layout_marginTop="13dp"/>
 
     <!--在此处动态添加高管信息-->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ll_manager_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/tv_manager_label"
+            app:layout_constraintTop_toBottomOf="@+id/company_manager_bar"
             android:layout_marginTop="14.5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

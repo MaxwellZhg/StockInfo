@@ -41,8 +41,8 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        if(LocalAccountConfig.read().getAccountInfo().phone!=null) {
-            tv_hide_phone.text = ResUtil.getString(R.string.phone_tips_hide)+PhoneHideUtils.hidePhoneNum(LocalAccountConfig.read().getAccountInfo().phone)
+        if(LocalAccountConfig.getInstance().getAccountInfo().phone!=null) {
+            tv_hide_phone.text = ResUtil.getString(R.string.phone_tips_hide)+PhoneHideUtils.hidePhoneNum(LocalAccountConfig.getInstance().getAccountInfo().phone)
 
         }
         tv_get_code.setOnClickListener(this)
@@ -57,12 +57,12 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
     override fun onClick(p0: View?) {
        when(p0?.id){
            R.id.tv_get_code->{
-               LocalAccountConfig.read().getAccountInfo().phone?.let { presenter?.requestSendOldRepaiedCode(it) }
+               LocalAccountConfig.getInstance().getAccountInfo().phone?.let { presenter?.requestSendOldRepaiedCode(it) }
            }
            R.id.tv_btn_next->{
-               if(LocalAccountConfig.read().getAccountInfo().phone!="") {
+               if(LocalAccountConfig.getInstance().getAccountInfo().phone!="") {
                    presenter?.requestModifyOldPhone(
-                       LocalAccountConfig.read().getAccountInfo().phone,
+                       LocalAccountConfig.getInstance().getAccountInfo().phone,
                        et_verify_code.text.toString()
                    )
                }else{
@@ -95,7 +95,7 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
     }
 
     override fun gotonext() {
-     start(ChangeNewPhoneFragment.newInstance(LocalAccountConfig.read().getAccountInfo().phone,et_verify_code.text.toString()))
+     start(ChangeNewPhoneFragment.newInstance(LocalAccountConfig.getInstance().getAccountInfo().phone,et_verify_code.text.toString()))
     }
     override fun showGetCode(str: String) {
         et_verify_code.setText(str)

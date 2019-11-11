@@ -21,7 +21,7 @@ interface MarketDetailView : AbsView {
     /**
      * 更新股票数据
      */
-    fun upData(data: StockDetailView.IStockDatailData)
+    fun upData(data: StockDetailView.IStockDatailData?)
 
     /**
      * 更新topBar状态
@@ -44,4 +44,9 @@ interface MarketDetailView : AbsView {
     fun upFollow(collected: Boolean)
 
 
+    fun changeInfoTypeData(event: MarketDetailInfoEvent)
+    /**
+     * 长连接状态更新
+     */
+    fun updateNetworkState(connected: Boolean)
 }
