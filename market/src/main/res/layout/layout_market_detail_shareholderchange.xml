@@ -37,7 +37,7 @@
              android:layout_marginTop="13dp"/>
 
     <!--在此处动态添加股东变动信息-->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ll_shareholder_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
