@@ -29,18 +29,18 @@ class CompanyBrieManagerAdapter : BaseListAdapter<F10ManagerModel>() {
     inner class ViewHolder(v: View?) : ListItemViewHolder<F10ManagerModel>(v, false, false) {
 
         @BindView(R2.id.tv_name)
-        lateinit var tv_name: TextView
+        lateinit var tvName: TextView
 
         @BindView(R2.id.tv_jobtitle)
-        lateinit var tv_jobtitle: TextView
+        lateinit var tvJobtitle: TextView
 
         @BindView(R2.id.tv_salary)
-        lateinit var tv_salary: TextView
+        lateinit var tvSalary: TextView
 
         override fun bind(item: F10ManagerModel?, position: Int) {
-            item?.name?.let { tv_name.text = it }
-            item?.jobTitle?.let { tv_jobtitle.text = it }
-            item?.salary?.let { tv_salary.text = MathUtil.convertToUnitString(it, 1) }
+            item?.name?.let { tvName.text = it }
+            item?.jobTitle?.let { tvJobtitle.text = it }
+            item?.salary?.let { tvSalary.text = MathUtil.convertToUnitString(it, 1) }
         }
     }
 }

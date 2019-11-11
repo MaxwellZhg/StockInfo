@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.net.response.F10ShareHolderListResponse
 
 /**
  *    author : PengXianglin
@@ -9,4 +10,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface CompanyBrieViewMoreView : AbsView {
+
+    fun updateShareHolderList(data: F10ShareHolderListResponse.Data?)
 }

@@ -1,7 +1,6 @@
 package com.zhuorui.securities.market.ui
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +12,9 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailF10BriefBinding
 import com.zhuorui.securities.market.model.F10ManagerModel
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.net.response.F10ShareHolderListResponse
 import com.zhuorui.securities.market.ui.adapter.CompanyBrieManagerAdapter
+import com.zhuorui.securities.market.ui.adapter.CompanyBrieShareHolderChangeAdapter
 import com.zhuorui.securities.market.ui.presenter.CompanyBrieViewMorePresenter
 import com.zhuorui.securities.market.ui.view.CompanyBrieViewMoreView
 import com.zhuorui.securities.market.ui.viewmodel.CompanyBrieViewMoreViewModel
@@ -78,6 +79,9 @@ class CompanyBrieViewMoreFragment :
         setStock(stock)
 
         if (type != 1) {
+            refrsh_layout.setEnableLoadMore(true)
+            refrsh_layout.setOnLoadMoreListener { presenter?.loadMoreData(stock.ts!!, stock.code!!, type!!) }
+
             presenter?.loadData(stock.ts!!, stock.code!!, type!!)
         } else {
             val managers = arguments?.getParcelableArrayList<F10ManagerModel>("managers")
@@ -107,8 +111,10 @@ class CompanyBrieViewMoreFragment :
                 company_manager_bar.visibility = View.VISIBLE
             }
             2 -> {
-                top_bar.setTitle(getString(R.string.hareholder_change))
+                top_bar.setTitle(getString(R.string.shareholder_change))
                 shareholder_change_bar.visibility = View.VISIBLE
+
+                recycler_view.adapter = CompanyBrieShareHolderChangeAdapter()
             }
             3 -> {
                 top_bar.setTitle(getString(R.string.company_dividend))
@@ -117,6 +123,21 @@ class CompanyBrieViewMoreFragment :
             4 -> {
                 top_bar.setTitle(getString(R.string.company_repo))
                 company_repo_bar.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    override fun updateShareHolderList(data: F10ShareHolderListResponse.Data?) {
+        if (data != null) {
+            val adapter = recycler_view.adapter as CompanyBrieShareHolderChangeAdapter
+            if (adapter.items == null) {
+                adapter.items = data.list
+            } else {
+                refrsh_layout.finishLoadMore()
+                adapter.addItems(data.list)
+            }
+            if (data.list.isNullOrEmpty() || data.list.size < data.pageSize) {
+                refrsh_layout.setNoMoreData(true)
             }
         }
     }

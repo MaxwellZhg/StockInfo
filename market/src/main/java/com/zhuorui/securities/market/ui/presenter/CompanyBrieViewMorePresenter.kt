@@ -54,9 +54,15 @@ class CompanyBrieViewMorePresenter : AbsNetPresenter<CompanyBrieViewMoreView, Co
         }
     }
 
+    fun loadMoreData(ts: String, code: String, type: Int) {
+        currentPage++
+        loadData(ts, code, type)
+    }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onF10ShareHolderListResponse(response: F10ShareHolderListResponse) {
         val data = response.data
+        view?.updateShareHolderList(data)
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
@@ -68,4 +74,5 @@ class CompanyBrieViewMorePresenter : AbsNetPresenter<CompanyBrieViewMoreView, Co
     fun onF10RepoListResponse(response: F10RepoListResponse) {
         val data = response.data
     }
+
 }
