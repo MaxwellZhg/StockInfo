@@ -45,4 +45,7 @@ interface IStockNet {
 
     @POST(StockApi.REPO_LIST)
     fun getRepoList(@Body request: F10BrieListRequest): Call<F10RepoListResponse>
+
+    @POST(StockApi.GET_ALL_ATTACHMENT)
+    fun getAllAttachment(@Body request: GetAllAttachmentRequest): Call<GetAllAttachmentResponse>
 }

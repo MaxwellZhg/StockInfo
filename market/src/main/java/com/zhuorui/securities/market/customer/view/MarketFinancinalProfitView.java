@@ -14,6 +14,7 @@ import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.renderer.CombinedChartRenderer;
 import com.github.mikephil.charting.renderer.DataRenderer;
@@ -92,6 +93,7 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         chart.getLegend().setEnabled(false);
         chart.setMinOffset(0f);
         chart.setExtraBottomOffset(2f);
+        chart.setDrawBorders(true);
         // draw bars behind lines
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE
@@ -123,13 +125,12 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         });
         if(type==1){
             YAxis rightAxis = chart.getAxisRight();
+            rightAxis.setEnabled(true);
             rightAxis.setDrawGridLines(true);
-            rightAxis.setDrawAxisLine(true);
-            rightAxis.setDrawGridLines(true);
+            rightAxis.setDrawAxisLine(false);
             rightAxis.setTextColor(mTextColor);
             rightAxis.setGridColor(mGridColor);
             rightAxis.setDrawZeroLine(true);
-            rightAxis.setAxisMinimum(0f);
             rightAxis.setTextSize(12f);
             rightAxis.setGridLineWidth(0.5f);
             // 设置文字偏移量
@@ -146,6 +147,8 @@ public class MarketFinancinalProfitView  extends FrameLayout {
                     return value+"亿";
                 }
             });
+            rightAxis.setAxisMaximum(1f);
+            rightAxis.setAxisMinimum(0f);
         }
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -153,6 +156,7 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
         xAxis.setXOffset(1f);
+        xAxis.setAxisLineColor(mGridColor);
         xAxis.setAxisMinimum(1f);
         xAxis.setLabelCount(7, true);
         MyXAxisRenderer xAxisRenderer = new MyXAxisRenderer(chart.getViewPortHandler(), chart.getXAxis(), chart.getTransformer(YAxis.AxisDependency.LEFT));
@@ -318,11 +322,11 @@ public class MarketFinancinalProfitView  extends FrameLayout {
 
         public void setStockTs() {
             maxX=7.5f;
-            opening = "2017-06-30";//开市时间
-            second = "2017-12-31";//休盘时间
-            thrid = "2018-06-30";//收市时间
-            fourth = "2018-12-31";//收市时间
-            fifth = "2019-06-30";//收市时间
+            opening = "2017-06-30";
+            second = "2017-12-31";
+            thrid = "2018-06-30";
+            fourth = "2018-12-31";
+            fifth = "2019-06-30";
             mXAxis.setAxisMaximum(maxX);
             mXAxis.setAxisMinimum(0);
         }
@@ -345,13 +349,13 @@ public class MarketFinancinalProfitView  extends FrameLayout {
          * @param c
          */
         private void drawCustomGridLine(Canvas c) {
-    /*        int clipRestoreCount = c.save();
+   /*      int clipRestoreCount = c.save();
             c.clipRect(getGridClippingRect());
             Path gridLinePath = mRenderGridLinesPath;
             gridLinePath.reset();
-            int index = 6 ;
-            float[] positions = new float[maxX];
-            positions[index] = 7;
+            int index = 6;
+            float[] positions = new float[7];
+            positions[index] = 7.5f;
             mTrans.pointValuesToPixel(positions);
             drawGridLine(c, positions[index], positions[index], gridLinePath);
             c.restoreToCount(clipRestoreCount);*/
@@ -365,11 +369,11 @@ public class MarketFinancinalProfitView  extends FrameLayout {
          * @param anchor
          */
         private void drawCustomLabel(Canvas c, float pos, MPPointF anchor) {
-      /*      float[] positions = new float[maxX];
-            int index = maxX-1;
-            positions[index] = maxX;
+/*            int index = 6;
+            float[] positions = new float[7];
+            positions[index] = 7.5f;
             mTrans.pointValuesToPixel(positions);
-            drawLabel(c, fifth, positions[index], pos, anchor, mXAxis.getLabelRotationAngle());*/
+            drawLabel(c, "", positions[index], pos, anchor, mXAxis.getLabelRotationAngle());*/
         }
 
     }

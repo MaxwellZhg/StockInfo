@@ -72,7 +72,7 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
         chart.getLegend().setEnabled(false);
         chart.setMinOffset(0f);
         chart.setExtraBottomOffset(2f);
-
+        chart.setDrawBorders(true);
         // 图表左边的y坐标轴线
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawAxisLine(true);
