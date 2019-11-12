@@ -37,4 +37,8 @@
     <declare-styleable name="MarketFinancinalProfitView">
         <attr name="fina_type" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="MarketPieChatView">
+        <attr name="piechat_type" format="integer"/>
+    </declare-styleable>
 </resources>

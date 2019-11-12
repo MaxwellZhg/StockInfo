@@ -147,8 +147,6 @@ public class MarketFinancinalProfitView  extends FrameLayout {
                     return value+"亿";
                 }
             });
-            rightAxis.setAxisMaximum(1f);
-            rightAxis.setAxisMinimum(0f);
         }
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
