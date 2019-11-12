@@ -44,11 +44,6 @@ class MarketDetailInformationPresenter(): AbsNetPresenter<MarketDetailInformatio
     fun getInfoAdapter(): MarketInfoAdapter {
         return MarketInfoAdapter()
     }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
-        view?.changeInfoTypeData(event)
-    }
-
     fun getNewsListData(code:String,currentPage:Int){
         val requset =  MarketNewsListRequest(code, currentPage, 15,transactions.createTransaction())
         requset?.let {

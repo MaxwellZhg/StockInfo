@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail_information.*
  */
 class MarketDetailInformationFragment :
     AbsFragment<FragmentMarketDetailBinding, MarketDetailInformationViewModel, MarketDetailInformationView, MarketDetailInformationPresenter>(),
-    MarketDetailInformationView, View.OnClickListener, MarketInfoAdapter.OnMarketInfoClickListener,
+    MarketDetailInformationView,MarketInfoAdapter.OnMarketInfoClickListener,
     OnRefreshLoadMoreListener {
 
     private var currentPage: Int = 1
@@ -74,8 +74,6 @@ class MarketDetailInformationFragment :
         infoAdapter?.onMarketInfoClickListener = this
         stockCode?.let { presenter?.getNewsListData(it, currentPage) }
         rv_market_info.adapter = infoAdapter
-        tv_info.setOnClickListener(this)
-        tv_report.setOnClickListener(this)
     }
 
     override fun addIntoInfoData(list: List<MarketNewsListResponse.DataList>) {
@@ -101,41 +99,8 @@ class MarketDetailInformationFragment :
     }
 
 
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
-            R.id.tv_info -> {
-                RxBus.getDefault().post(MarketDetailInfoEvent(1))
-                detailType(1)
-            }
-            R.id.tv_report -> {
-                RxBus.getDefault().post(MarketDetailInfoEvent(2))
-                detailType(2)
-            }
-        }
-    }
 
-    override fun changeInfoTypeData(event: MarketDetailInfoEvent) {
-        detailType(event.type)
-    }
 
-    private fun detailType(type: Int) {
-        srl_layout.setNoMoreData(false)
-        currentPage = 1
-        when (type) {
-            1 -> {
-                ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }
-                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
-                ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_report.setTextColor(it) }
-                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
-            }
-            2 -> {
-                ResUtil.getColor(R.color.color_53A0FD)?.let { tv_report.setTextColor(it) }
-                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
-                ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_info.setTextColor(it) }
-                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
-            }
-        }
-    }
 
     override fun marketInfoClick() {
         ToastUtil.instance.toastCenter("资讯")

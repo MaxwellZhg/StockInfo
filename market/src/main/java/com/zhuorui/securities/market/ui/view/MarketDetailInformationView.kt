@@ -12,7 +12,6 @@ import com.zhuorui.securities.market.net.response.MarketNewsListResponse
  */
 interface MarketDetailInformationView:AbsView {
     fun addIntoInfoData(list:List<MarketNewsListResponse.DataList>)
-    fun changeInfoTypeData(event: MarketDetailInfoEvent)
     fun noMoreData()
     fun loadFailData()
 }

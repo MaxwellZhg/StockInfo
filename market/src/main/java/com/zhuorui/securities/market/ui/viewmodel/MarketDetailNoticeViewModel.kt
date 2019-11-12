@@ -12,5 +12,5 @@ import com.zhuorui.securities.market.net.response.MarketBaseInfoResponse
  *    desc   :
  */
 class MarketDetailNoticeViewModel:ViewModel() {
-    var infoList:MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var infoList:MutableLiveData<MutableList<MarketBaseInfoResponse.Source>> = MutableLiveData()
 }

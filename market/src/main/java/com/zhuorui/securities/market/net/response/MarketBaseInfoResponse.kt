@@ -17,7 +17,7 @@ class MarketBaseInfoResponse(val data:Data) :BaseResponse(){
         val lineId:String,
         val attachmentId:String,
         val headLine:String,
-        val publishDate:String,
+        val publishDate:Long,
         val languageId:Int
     )
 

@@ -11,6 +11,6 @@ import com.zhuorui.securities.market.net.response.MarketBaseInfoResponse
  *    desc   :
  */
 interface MarketDetailNoticeView:AbsView {
-    fun addIntoNoticeData(list:List<Int>)
+    fun addIntoNoticeData(list:List<MarketBaseInfoResponse.Source>)
     fun noMoreData()
 }
