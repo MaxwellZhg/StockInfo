@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+      <data>
+          <variable name="viewModel"
+                    type="com.zhuorui.securities.market.ui.viewmodel.MarketDetailNoticeDetailViewModel"/>
+      </data>
+    <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/color_191821"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.zhuorui.commonwidget.ZhuoRuiTopBar
+                android:id="@+id/top_bar"
+                app:zr_topbarTitle="公告详情"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+        <WebView android:id="@+id/webview"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+        </WebView>
+    </LinearLayout>
+</layout>

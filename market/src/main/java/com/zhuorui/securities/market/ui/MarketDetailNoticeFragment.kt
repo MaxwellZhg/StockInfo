@@ -61,8 +61,9 @@ class MarketDetailNoticeFragment :
         rv_notice.adapter =noticeAdapter
     }
 
-    override fun onMarketNoticeClick() {
-      ToastUtil.instance.toastCenter("公告")
+    override fun onMarketNoticeClick(lineId:String) {
+        var pre = parentFragment as AbsFragment<*, *, *, *>
+        pre.start(MarketDetailNoticeDetailFragment.newInstance(lineId))
     }
 
     override fun addIntoNoticeData(list: List<MarketBaseInfoResponse.Source>) {

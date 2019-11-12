@@ -54,6 +54,10 @@ interface StockApi {
          * 公告列表
          */
         const val BASE_INFO = "as_market/api/stock/iis_oss_record/v1/getBaseInfo"
+        /**
+         * 公告查询
+         */
+        const val GET_ALL_ATTACHMENT = "as_market/api/stock/iis_oss_record/v1/getAllAttachmentByLineId"
 
         /**
          * F10简况
@@ -74,5 +78,10 @@ interface StockApi {
          * F10获取回购列表分页
          */
         const val REPO_LIST = "as_market/api/f10/v1/repo/list"
+
+        /**
+         * F10财报信息
+         */
+      //  const val REPO_LIST = "as_market/api/f10/v1/repo/list"
     }
 }

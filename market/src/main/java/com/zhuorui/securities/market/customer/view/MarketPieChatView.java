@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.customer.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 
 import java.text.DecimalFormat;
@@ -27,69 +29,77 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author : liuwei
- * e-mail : vsanliu@foxmail.com
- * date   : 2019-10-14 13:45
- * desc   : 今日资金成交分布
+ * Created by Maxwell.
+ * E-mail: maxwell_smith@163.com
+ * Date: 2019/11/12
+ * Desc:
  */
-public class TodayFundTransactionView extends FrameLayout {
+public class MarketPieChatView extends FrameLayout {
 
-    private PieChart vPieChart;
-    private ComparisonMapView vComparisonMap;
+    private int type;
     private int mOut1Color;
     private int mOut2Color;
     private int mOut3Color;
+    private int mOut4Color;
     private int mIn1Color;
     private int mIn2Color;
     private int mIn3Color;
     private int defColor;
     private int inValueColor;
     private int outValueColor;
-
     ArrayList<Integer> colors = new ArrayList<Integer>();
-    private MarketPieChatView pie_cahart_view;
+    private PieChart vPieChart;
 
-    public TodayFundTransactionView(Context context) {
-        this(context, null);
+    public MarketPieChatView(Context context) {
+        this(context,null);
     }
 
-    public TodayFundTransactionView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public MarketPieChatView(Context context, AttributeSet attrs) {
+        this(context, attrs,0);
     }
 
-    public TodayFundTransactionView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MarketPieChatView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        inflate(context, R.layout.view_today_fund_transaction, this);
-        //initColor();
-       // initPieChart();
-        initComparisonMap();
-        initPieChartView();
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MarketPieChatView);//获得属性值
+        type = a.getInt(R.styleable.MarketPieChatView_piechat_type,-1);
+        initColor();
+        inflate(context,R.layout.layout_market_pie_chat_view,this);
+        initPieChart();
     }
 
-    private void initPieChartView() {
-        pie_cahart_view = findViewById(R.id.pie_cahart_view);
+
+    private void initColor() {
+        if(type==1) {
+            defColor = Color.parseColor("#C3CDE3");
+            inValueColor = Color.parseColor("#D9001B");
+            outValueColor = Color.parseColor("#00CC00");
+            mOut1Color = Color.parseColor("#00AB3B");
+            mOut2Color = Color.parseColor("#336666");
+            mOut3Color = Color.parseColor("#339966");
+            mIn1Color = Color.parseColor("#C4000A");
+            mIn2Color = Color.parseColor("#D73239");
+            mIn3Color = Color.parseColor("#CC6666");
+            colors = new ArrayList();
+            colors.add(mOut1Color);
+            colors.add(mOut2Color);
+            colors.add(mOut3Color);
+            colors.add(mIn3Color);
+            colors.add(mIn2Color);
+            colors.add(mIn1Color);
+        }else{
+            mOut1Color = Color.parseColor("#EEA74D");
+            mOut2Color = Color.parseColor("#5DA6F2");
+            mOut3Color = Color.parseColor("#3A79C8");
+            mOut4Color = Color.parseColor("#6F6F6F");
+            colors = new ArrayList();
+            colors.add(mOut1Color);
+            colors.add(mOut2Color);
+            colors.add(mOut3Color);
+            colors.add(mOut4Color);
+        }
     }
 
-  /*  private void initColor() {
-        defColor = Color.parseColor("#C3CDE3");
-        inValueColor = Color.parseColor("#D9001B");
-        outValueColor = Color.parseColor("#00CC00");
-        mOut1Color = Color.parseColor("#00AB3B");
-        mOut2Color = Color.parseColor("#336666");
-        mOut3Color = Color.parseColor("#339966");
-        mIn1Color = Color.parseColor("#C4000A");
-        mIn2Color = Color.parseColor("#D73239");
-        mIn3Color = Color.parseColor("#CC6666");
-        colors = new ArrayList();
-        colors.add(mOut1Color);
-        colors.add(mOut2Color);
-        colors.add(mOut3Color);
-        colors.add(mIn3Color);
-        colors.add(mIn2Color);
-        colors.add(mIn1Color);
-    }*/
-
-/*    private void initPieChart() {
+    private void initPieChart() {
         vPieChart = findViewById(R.id.pie_cahart);
         vPieChart.setRenderer(new MyPieChartRenderer(vPieChart, vPieChart.getAnimator(), vPieChart.getViewPortHandler()));
         vPieChart.setNoDataText("暂无数据");
@@ -110,19 +120,29 @@ public class TodayFundTransactionView extends FrameLayout {
         vPieChart.setHoleRadius(60);
         vPieChart.setHoleColor(Color.parseColor("#211F2A"));             //设置PieChart内部圆的颜色
         vPieChart.setDrawCenterText(true);               //是否绘制PieChart内部中心文本（true：下面属性才有意义）
-        vPieChart.setCenterText("今日资金");                 //设置PieChart内部圆文字的内容
+        if(type==1) {
+            vPieChart.setCenterText(ResUtil.INSTANCE.getString(R.string.today_fund));                 //设置PieChart内部圆文字的内容
+        }else{
+            vPieChart.setCenterText(ResUtil.INSTANCE.getString(R.string.mian_buisness));                 //设置PieChart内部圆文字的内容
+        }
         vPieChart.setCenterTextSize(14f);                //设置PieChart内部圆文字的大小
         vPieChart.setCenterTextColor(Color.WHITE);         //设置PieChart内部圆文字的颜色
         vPieChart.setTransparentCircleRadius(0f);       //设置PieChart内部透明圆的半径(这里设置31.0f)
 
-    }*/
-
-    private void initComparisonMap() {
-        vComparisonMap = findViewById(R.id.comparison_map);
-        vComparisonMap.setTitle("流入", "流出", "净流入");
     }
 
-/*    private ArrayList<PieEntry> getPieEntrys(List<Float> out, List<Float> in) {
+
+    public void setData(List<Float> outData, List<Float> inData) {
+        if(type==1) {
+            vPieChart.setData(getPieData(getPieEntrys(outData, inData)));
+        }else{
+            vPieChart.setData(getPieData(getOutPieEntrys(outData)));
+        }
+        vPieChart.invalidate();
+    }
+
+
+    private ArrayList<PieEntry> getPieEntrys(List<Float> out, List<Float> in) {
         ArrayList<PieEntry> pieEntryList = new ArrayList<PieEntry>();
         //饼图实体 PieEntry
         if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "大单流出"));
@@ -132,115 +152,22 @@ public class TodayFundTransactionView extends FrameLayout {
         if (in.get(1) > 0) pieEntryList.add(new PieEntry(in.get(1), "中单流入"));
         if (in.get(0) > 0) pieEntryList.add(new PieEntry(in.get(0), "大单流入"));
         return pieEntryList;
-    }*/
-
-/*    private PieData getPieData(ArrayList<PieEntry> data) {
-        PieDataSet pieDataSet;
-        if (data.isEmpty()) {
-            data.add(new PieEntry(100, "占位"));
-            pieDataSet = new PieDataSet(data, "");
-            pieDataSet.setColor(Color.parseColor("#B3BCD0"));
-            pieDataSet.setDrawValues(false);
-        } else {
-            pieDataSet = new PieDataSet(data, "");
-            pieDataSet.setColors(colors);
-            pieDataSet.setDrawValues(true);
-        }
-        pieDataSet.setValueTextColor(Color.WHITE);
-        pieDataSet.setValueTextSize(14f);
-        pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        pieDataSet.setUsingSliceColorAsValueLineColor(true);
-        PercentFormatter formatter = new PercentFormatter(vPieChart, false);
-        formatter.mFormat = new DecimalFormat("###,###,##0.00");
-        pieDataSet.setValueFormatter(formatter);
-        pieDataSet.setValueLinePart1Length(0.4f);
-        pieDataSet.setValueLinePart2Length(0.4f);
-        return new PieData(pieDataSet);
-    }*/
-
-    private void setComparisonMapData(List<Float> outData, List<Float> inData) {
-        List<Float> list = new ArrayList<>();
-        list.addAll(outData);
-        list.addAll(inData);
-        float max = 0;
-        for (int i = 0, s = list.size(); i < s; i++) {
-            float idata = list.get(i);
-            max = max < idata ? idata : max;
-        }
-        if (max == 0) {
-            vComparisonMap.setValueTextColor(defColor, defColor);
-        } else {
-            vComparisonMap.setValueTextColor(inValueColor, outValueColor);
-        }
-        List<ComparisonMapView.IComparisonMapData> datas = new ArrayList<>();
-        datas.add(new ComparisonMapData("大单", inData.get(0), mIn1Color, outData.get(0), mOut1Color, max));
-        datas.add(new ComparisonMapData("中单", inData.get(1), mIn2Color, outData.get(1), mOut2Color, max));
-        datas.add(new ComparisonMapData("小单", inData.get(2), mIn3Color, outData.get(2), mOut3Color, max));
-        vComparisonMap.setData(datas);
     }
 
-    public void setData(List<Float> outData, List<Float> inData) {
-        setComparisonMapData(outData, inData);
-     /*   vPieChart.setData(getPieData(getPieEntrys(outData, inData)));
-        vPieChart.invalidate();*/
-        pie_cahart_view.setData(outData,inData);
+    private ArrayList<PieEntry> getOutPieEntrys(List<Float> out) {
+        ArrayList<PieEntry> pieEntryList = new ArrayList<PieEntry>();
+        //饼图实体 PieEntry
+        if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "寿险及健康险"));
+        if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "财产保险"));
+        if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "银行"));
+        if (out.get(3) > 0) pieEntryList.add(new PieEntry(out.get(3), "其他收入"));
+        return pieEntryList;
     }
 
 
-    class ComparisonMapData implements ComparisonMapView.IComparisonMapData {
-
-        private final CharSequence title;
-        private final float value1;
-        private final int v1Color;
-        private final float value2;
-        private final int v2Color;
-        private final float maxValue;
-
-        public ComparisonMapData(CharSequence title, float value1, int v1Color, float value2, int v2Color, float maxValue) {
-            this.title = title;
-            this.value1 = value1;
-            this.v1Color = v1Color;
-            this.value2 = value2;
-            this.v2Color = v2Color;
-            this.maxValue = maxValue;
-        }
-
-        @Override
-        public CharSequence getTitle() {
-            return title;
-        }
-
-        @Override
-        public float getValue1() {
-            return value1;
-        }
-
-        @Override
-        public int getValue1Color() {
-            return v1Color;
-        }
-
-        @Override
-        public float getValue2() {
-            return value2;
-        }
-
-        @Override
-        public int getValue2Color() {
-            return v2Color;
-        }
-
-        @Override
-        public float getMaxValue() {
-            return maxValue;
-        }
-    }
-
-
-   /* *//**
+    /**
      * 解决两端线条对齐问题(解决文法：在源码上基础上修改第二条线结束位置，固定最左使用270度的值，最右使用270度的值)
-     *//*
+     */
     class MyPieChartRenderer extends PieChartRenderer {
 
 
@@ -513,6 +440,30 @@ public class TodayFundTransactionView extends FrameLayout {
         }
 
 
-    }*/
+    }
 
+    private PieData getPieData(ArrayList<PieEntry> data) {
+        PieDataSet pieDataSet;
+        if (data.isEmpty()) {
+            data.add(new PieEntry(100, "占位"));
+            pieDataSet = new PieDataSet(data, "");
+            pieDataSet.setColor(Color.parseColor("#B3BCD0"));
+            pieDataSet.setDrawValues(false);
+        } else {
+            pieDataSet = new PieDataSet(data, "");
+            pieDataSet.setColors(colors);
+            pieDataSet.setDrawValues(true);
+        }
+        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setValueTextSize(14f);
+        pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        pieDataSet.setUsingSliceColorAsValueLineColor(true);
+        PercentFormatter formatter = new PercentFormatter(vPieChart, false);
+        formatter.mFormat = new DecimalFormat("###,###,##0.00");
+        pieDataSet.setValueFormatter(formatter);
+        pieDataSet.setValueLinePart1Length(0.4f);
+        pieDataSet.setValueLinePart2Length(0.4f);
+        return new PieData(pieDataSet);
+    }
 }

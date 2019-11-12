@@ -57,7 +57,7 @@ class MarketNoticeInfoTipsAdapter :BaseListAdapter<MarketBaseInfoResponse.Source
 
         override fun onClick(v: View) {
             if(v==ll_content){
-                onMarketNoticeClickListener?.onMarketNoticeClick()
+                onMarketNoticeClickListener?.onMarketNoticeClick(getItem(position).lineId)
             }else {
                 super.onClick(v)
             }
@@ -66,6 +66,6 @@ class MarketNoticeInfoTipsAdapter :BaseListAdapter<MarketBaseInfoResponse.Source
     }
 
     interface OnMarketNoticeClickListener{
-        fun onMarketNoticeClick()
+        fun onMarketNoticeClick(lineId:String)
     }
 }
