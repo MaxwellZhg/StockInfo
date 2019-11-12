@@ -12,14 +12,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.zhuorui.commonwidget.dialog.ProgressDialog
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
-import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.kline.KlineFragment
@@ -54,7 +52,7 @@ class MarketDetailFragment :
 
     private var mStock: SearchStockInfo = SearchStockInfo()
     private var tabTitle: Array<String>? = null
-    private val mFragments = arrayOfNulls<SupportFragment>(4)
+    private val mFragments = arrayOfNulls<SupportFragment>(6)
     private var mIndexFragment: SupportFragment? = null //指数Fragment
     private var loading: ProgressDialog? = null
     private var mIndex = 0
@@ -114,8 +112,6 @@ class MarketDetailFragment :
         tv_simulation_trading.setOnClickListener(this)
         tv_remind.setOnClickListener(this)
         tv_follow.setOnClickListener(this)
-        tv_info.setOnClickListener(this)
-        tv_report.setOnClickListener(this)
         btn_check_netwoke.setOnClickListener(this)
         close_bmp_tip.setOnClickListener(this)
         scroll_view.setOnScrollChangeListener(this)
@@ -135,24 +131,16 @@ class MarketDetailFragment :
         } else {
             when (v) {
                 tv_simulation_trading -> {
-                    start(SimulationTradingMainFragment.newInstance(mStock!!))
+                    start(SimulationTradingMainFragment.newInstance(mStock))
                 }
                 tv_remind -> {
                     val sm = StockMarketInfo()
-                    sm.name = mStock?.name
-                    sm.code = mStock?.code
-                    sm.id = mStock?.id
-                    sm.ts = mStock?.ts
-                    sm.tsCode = mStock?.tsCode
+                    sm.name = mStock.name
+                    sm.code = mStock.code
+                    sm.id = mStock.id
+                    sm.ts = mStock.ts
+                    sm.tsCode = mStock.tsCode
                     start(RemindSettingFragment.newInstance(sm))
-                }
-                tv_info -> {
-                    detailType(1)
-                    RxBus.getDefault().post(MarketDetailInfoEvent(1))
-                }
-                tv_report -> {
-                    detailType(2)
-                    RxBus.getDefault().post(MarketDetailInfoEvent(2))
                 }
             }
         }
@@ -173,7 +161,13 @@ class MarketDetailFragment :
         //加载K线Fragment
         loadRootFragment(
             R.id.kline_view,
-            KlineFragment.newInstance(mStock!!.ts!!, mStock!!.code!!, mStock!!.tsCode!!, mStock!!.type!!, false)
+            KlineFragment.newInstance(
+                mStock.ts ?: "",
+                mStock.code ?: "",
+                mStock.tsCode ?: mStock.code + "." + mStock.ts,
+                mStock.type ?: 2,
+                false
+            )
         )
         //加载指数Fragment
         if (!mBMP) {
@@ -229,17 +223,6 @@ class MarketDetailFragment :
         if (tab_magic_indicator != null) {
             top_magic_indicator.visibility = if (scrollY < tab_magic_indicator.top) View.GONE else View.VISIBLE
             top_magic_indicator_line.visibility = top_magic_indicator.visibility
-            if (mIndex == 1) {
-                ll_info_tips.visibility = top_magic_indicator.visibility
-            } else {
-                ll_info_tips.visibility = View.GONE
-            }
-        }
-        //title
-        if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
-            presenter?.getTopBarPriceInfo()
-        } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
-            presenter?.getTopBarStockStatusInfo()
         }
     }
 
@@ -247,7 +230,7 @@ class MarketDetailFragment :
      * 更新数据
      */
     override fun upData(data: StockDetailView.IStockDatailData?) {
-        stock_detail.setData(data)
+        stock_detail?.setData(data)
         hideLoading()
         if (!sm_refrsh.state.isFinishing) {
             sm_refrsh.finishRefresh()
@@ -299,9 +282,6 @@ class MarketDetailFragment :
         top_magic_indicator.onPageScrolled(index, 0.0F, 0)
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
-        if (mIndex != 1) {
-            ll_info_tips.visibility = View.GONE
-        }
     }
 
     private fun initTabFragment() {
@@ -309,22 +289,28 @@ class MarketDetailFragment :
         if (firstFragment == null) {
             mFragments[0] = MarketDetailCapitalFragment.newInstance()
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
-            mFragments[2] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
-            mFragments[3] = MarketDetailF10BriefFragment.newInstance(mStock)
+            mFragments[2] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
+            mFragments[3] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
+            mFragments[4] = MarketDetailF10BriefFragment.newInstance(mStock)
+            mFragments[5] = mStock?.tsCode?.let {MarketDetailF10FinancialFragment.newInstance(it)}
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
                 mFragments[1],
                 mFragments[2],
-                mFragments[3]
+                mFragments[3],
+                mFragments[4],
+                mFragments[5]
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
             // 这里我们需要拿到mFragments的引用、
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(MarketDetailInformationFragment::class.java)
-            mFragments[2] = findChildFragment(MarketDetailNoticeFragment::class.java)
-            mFragments[3] = findChildFragment(MarketDetailF10BriefFragment::class.java)
+            mFragments[2] = findChildFragment(MarketDetailInformationFragment::class.java)
+            mFragments[3] = findChildFragment(MarketDetailNoticeFragment::class.java)
+            mFragments[4] = findChildFragment(MarketDetailF10BriefFragment::class.java)
+            mFragments[5] = findChildFragment(MarketDetailF10FinancialFragment::class.java)
         }
     }
 
@@ -371,26 +357,6 @@ class MarketDetailFragment :
         presenter?.destroy()
     }
 
-    fun detailType(type: Int) {
-        when (type) {
-            1 -> {
-                ResUtil.getColor(R.color.color_53A0FD)?.let { tv_info.setTextColor(it) }
-                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
-                ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_report.setTextColor(it) }
-                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
-            }
-            2 -> {
-                ResUtil.getColor(R.color.color_53A0FD)?.let { tv_report.setTextColor(it) }
-                tv_report.background = ResUtil.getDrawable(R.drawable.market_info_selected_bg)
-                ResUtil.getColor(R.color.color_C0CCE0)?.let { tv_info.setTextColor(it) }
-                tv_info.background = ResUtil.getDrawable(R.drawable.market_info_unselect_bg)
-            }
-        }
-    }
-
-    override fun changeInfoTypeData(event: MarketDetailInfoEvent) {
-        detailType(event.type)
-    }
 
     override fun onSupportVisible() {
         super.onSupportVisible()

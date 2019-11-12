@@ -187,7 +187,7 @@
               app:layout_constraintTop_toBottomOf="@id/top_magic_indicator"/>
 
         <!--       <include layout="@layout/layout_market_info_select_tips"/>-->
-        <LinearLayout
+      <!--  <LinearLayout
                 app:layout_constraintTop_toBottomOf="@+id/top_magic_indicator_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -216,7 +216,7 @@
                       android:textColor="@color/color_C0CCE0"
                       android:background="@drawable/market_info_unselect_bg"
                       android:text="研报"/>
-        </LinearLayout>
+        </LinearLayout>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,22 +1,19 @@
 package com.zhuorui.securities.market.customer.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.renderer.CombinedChartRenderer;
-import com.github.mikephil.charting.renderer.DataRenderer;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
@@ -28,57 +25,40 @@ import java.util.List;
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
- * Date: 2019/11/7
+ * Date: 2019/11/11
  * Desc:
  */
-public class MarketFinancinalProfitView  extends FrameLayout {
+public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     private int mOut1Color;
     private int mOut2Color;
     private int mOut3Color;
     ArrayList<Integer> colors = new ArrayList<Integer>();
-    private CombinedChart chart;
-    private final int count = 5;
+    private LineChart chart;
     private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
-    private TextView tv_tips_one;
-    private TextView tv_tips_two;
-    private TextView tv_tips_three;
-    private int type;
-    private TextView tv_title;
-
-    public MarketFinancinalProfitView(Context context) {
-        this(context,null);
+    private boolean mEmpty;
+    public MarketFinanicalDetailCrashFlowView(Context context) {
+       this(context,null);
     }
 
-    public MarketFinancinalProfitView(Context context, AttributeSet attrs) {
-        this(context,attrs,0);
+    public MarketFinanicalDetailCrashFlowView(Context context, AttributeSet attrs) {
+        this(context, attrs,0);
     }
 
-    public MarketFinancinalProfitView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MarketFinanicalDetailCrashFlowView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.MarketFinancinalProfitView);//获得属性值
-        type = a.getInt(R.styleable.MarketFinancinalProfitView_fina_type,-1);
         initColor();
-        inflate(context, R.layout.layout_market_profit_view,this);
+        inflate(context, R.layout.layout_market_finacinal_crash_flow,this);
         initChart();
         initView();
     }
 
     private void initView() {
-        tv_title = findViewById(R.id.tv_title);
-        tv_tips_one = findViewById(R.id.tv_tips_one);
-        tv_tips_two = findViewById(R.id.tv_tips_two);
-        tv_tips_three = findViewById(R.id.tv_tips_three);
-        if(type==2){
-            tv_title.setText("资产负债表");
-            tv_tips_one.setText("总资产");
-            tv_tips_two.setText("总负债");
-            tv_tips_three.setText("资产负债率");
-        }
+
     }
 
     private void initChart() {
-        chart = findViewById(R.id.combine_chart);
+        chart = findViewById(R.id.line_chart);
         chart.setNoDataText("暂无数据");
         chart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         chart.setTouchEnabled(false);//是否有触摸事件
@@ -92,61 +72,32 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         chart.getLegend().setEnabled(false);
         chart.setMinOffset(0f);
         chart.setExtraBottomOffset(2f);
-        // draw bars behind lines
-        chart.setDrawOrder(new CombinedChart.DrawOrder[]{
-                CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE
-        });
 
+        // 图表左边的y坐标轴线
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(mTextColor);
         leftAxis.setGridColor(mGridColor);
-        leftAxis.setDrawZeroLine(true);
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(8500f);
         leftAxis.setTextSize(12f);
         leftAxis.setGridLineWidth(0.5f);
         // 设置文字偏移量
         leftAxis.setXOffset(5f);
         leftAxis.setEdgeYOffset(5f);
-        leftAxis.setSpaceBottom(0f);
-        leftAxis.setSpaceTop(6f);
-        leftAxis.setLabelCount(5, true);
+        leftAxis.setSpaceBottom(5f);
+        leftAxis.setSpaceTop(5f);
+        leftAxis.setLabelCount(2, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value+"亿";
+                return value == 0 || mEmpty ? "0" : String.format("%.2f", value)+"亿";
             }
         });
-        if(type==1){
-            YAxis rightAxis = chart.getAxisRight();
-            rightAxis.setDrawGridLines(true);
-            rightAxis.setDrawAxisLine(true);
-            rightAxis.setDrawGridLines(true);
-            rightAxis.setTextColor(mTextColor);
-            rightAxis.setGridColor(mGridColor);
-            rightAxis.setDrawZeroLine(true);
-            rightAxis.setAxisMinimum(0f);
-            rightAxis.setTextSize(12f);
-            rightAxis.setGridLineWidth(0.5f);
-            // 设置文字偏移量
-            rightAxis.setXOffset(5f);
-            rightAxis.setEdgeYOffset(5f);
-            rightAxis.setSpaceBottom(0f);
-            rightAxis.setSpaceTop(6f);
-            rightAxis.setLabelCount(5, true);
-            rightAxis.setValueLineInside(true);
-            rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-            rightAxis.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return value+"亿";
-                }
-            });
-        }
+        MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(chart.getViewPortHandler(), chart.getAxisLeft(), chart.getTransformer(YAxis.AxisDependency.LEFT));
+        chart.setRendererLeftYAxis(yAxisRenderer);
+
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(1f);
@@ -157,50 +108,62 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         xAxis.setLabelCount(7, true);
         MyXAxisRenderer xAxisRenderer = new MyXAxisRenderer(chart.getViewPortHandler(), chart.getXAxis(), chart.getTransformer(YAxis.AxisDependency.LEFT));
         chart.setXAxisRenderer(xAxisRenderer);
-
-
-        CombinedData data = new CombinedData();
-
-        data.setData(generateLineData());
-        data.setData(generateBarData());
-        xAxis.setAxisMaximum(data.getXMax() + 2f);
-        ((MyXAxisRenderer) chart.getRendererXAxis()).setStockTs();
-        chart.setData(data);
-        //柱形图使用自定义BarChartRenderer ，必须在setData 后设置
-        List<DataRenderer> renders = new ArrayList<>();
-        renders.add(new CombineLineRender(chart, chart.getAnimator(), chart.getViewPortHandler()));
-        ((CombinedChartRenderer) chart.getRenderer()).setSubRenderers(renders);
-        chart.getRenderer().initBuffers();
-        chart.invalidate();
     }
 
-    private BarData generateBarData() {
-        ArrayList<BarEntry> entries1 = new ArrayList<>();
-        ArrayList<BarEntry> entries2 = new ArrayList<>();
-        entries1.add(new BarEntry(0.9f, 4500f));
-        entries1.add(new BarEntry(1.75f, 5400f));
-        entries1.add(new BarEntry(2, 6500f));
-        entries1.add(new BarEntry(3, 7000f));
-        entries1.add(new BarEntry(4, 7500f));
-        // stacked
-        entries2.add(new BarEntry(0, 1500f));
-        entries2.add(new BarEntry(1, 1600f));
-        entries2.add(new BarEntry(2, 1400f));
-        entries2.add(new BarEntry(3, 1700f));
-        entries2.add(new BarEntry(4, 1900f));
-
-        BarDataSet set1 = new BarDataSet(entries1, "Bar 1");
+    private LineData getLineData(/*List<Entry> entrys*/) {
+       // mEmpty = entrys.isEmpty();
+ /*       LineDataSet lineDataSet;
+        if (mEmpty) {
+            entrys.add(new Entry(0, 1));
+            entrys.add(new Entry(0, -1));
+            lineDataSet = new LineDataSet(entrys, "");
+            lineDataSet.setColor(Color.parseColor("#00FF8E1B"));
+        } else {
+            lineDataSet = new LineDataSet(entrys, "");
+            lineDataSet.setColor(Color.parseColor("#FF8E1B"));
+        }*/
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        List<Entry> entries1 =new ArrayList<>();
+        List<Entry> entries2 =new ArrayList<>();
+        List<Entry> entries3 =new ArrayList<>();
+        entries1.add(new Entry(1.25f,300f));
+        entries1.add(new Entry(2.50f,800f));
+        entries1.add(new Entry(3.75f, 1000f));
+        entries1.add(new Entry(5.00f,900f));
+        entries1.add(new Entry(6.25f,1200f));
+        entries2.add(new Entry(1.25f,-200f));
+        entries2.add(new Entry(2.50f,0.00f));
+        entries2.add(new Entry(3.75f, 350f));
+        entries2.add(new Entry(5.00f,0.00f));
+        entries2.add(new Entry(6.25f,450f));
+        entries3.add(new Entry(1.25f,900f));
+        entries3.add(new Entry(2.50f,750f));
+        entries3.add(new Entry(3.75f, 700f));
+        entries3.add(new Entry(5.00f,1000f));
+        entries3.add(new Entry(6.25f,600f));
+        LineDataSet set1 = new LineDataSet(entries1, "Line DataSet");
         set1.setColor(colors.get(0));
+        set1.setLineWidth(0.8f);
+        set1.setCircleColor(colors.get(0));
+        set1.setCircleRadius(1f);
+        set1.setFillColor(colors.get(0));
+        set1.setMode(LineDataSet.Mode.LINEAR);
+        set1.setDrawValues(true);
+        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
         set1.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return "";
             }
         });
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-        BarDataSet set2 = new BarDataSet(entries2, "");
-        set2.setColors(colors.get(1));
+        LineDataSet set2 = new LineDataSet(entries2, "Line DataSet");
+        set2.setColor(colors.get(1));
+        set2.setLineWidth(0.8f);
+        set2.setCircleColor(colors.get(1));
+        set2.setCircleRadius(1f);
+        set2.setFillColor(colors.get(1));
+        set2.setMode(LineDataSet.Mode.LINEAR);
+        set2.setDrawValues(true);
         set2.setAxisDependency(YAxis.AxisDependency.LEFT);
         set2.setValueFormatter(new ValueFormatter() {
             @Override
@@ -208,45 +171,58 @@ public class MarketFinancinalProfitView  extends FrameLayout {
                 return "";
             }
         });
-        float groupSpace = 0.30f;
-        float barSpace = 0.03f; // x2 dataset
-        float barWidth = 0.40f; // x2 dataset
-        // (0.45 + 0.02) * 2 + 0.06 = 1.00 -> interval per "group"
-        BarData d = new BarData(set1, set2);
-        d.setBarWidth(barWidth);
 
-        // make this BarData object grouped
-        d.groupBars(1.0f, groupSpace, barSpace); // start at x = 0
-
-        return d;
-    }
-
-    private LineData generateLineData(){
-        LineData d = new LineData();
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1.60f,2500f));
-        entries.add(new Entry(2.75f,3500f));
-        entries.add(new Entry(3.90f, 2400f));
-        entries.add(new Entry(5.05f,2800f));
-        entries.add(new Entry(6.25f,3800f));
-        LineDataSet set = new LineDataSet(entries, "Line DataSet");
-        set.setColor(colors.get(2));
-        set.setLineWidth(0.8f);
-        set.setCircleColor(colors.get(2));
-        set.setCircleRadius(1f);
-        set.setFillColor(colors.get(2));
-        set.setMode(LineDataSet.Mode.LINEAR);
-        set.setDrawValues(true);
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setValueFormatter(new ValueFormatter() {
+        LineDataSet set3 = new LineDataSet(entries3, "Line DataSet");
+        set3.setColor(colors.get(2));
+        set3.setLineWidth(0.8f);
+        set3.setCircleColor(colors.get(2));
+        set3.setCircleRadius(1f);
+        set3.setFillColor(colors.get(2));
+        set3.setMode(LineDataSet.Mode.LINEAR);
+        set3.setDrawValues(true);
+        set3.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set3.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return "";
             }
         });
-        d.addDataSet(set);
-        return d;
+        dataSets.add(set1);
+        dataSets.add(set2);
+        dataSets.add(set3);
+        LineData data = new LineData(dataSets);
+        return data;
     }
+
+    public void setData() {
+        setStockTs();
+/*        List<Entry> entrys = new ArrayList<>();
+        for (int i = 0, len = datas.size(); i < len; i += 4) {
+            Entry entry = new Entry(i, datas.get(i));
+            entrys.add(entry);
+        }*/
+        LineData lineData = getLineData();
+        YAxis leftAxis = chart.getAxisLeft();
+        if (lineData.getYMax() < 0) {
+            leftAxis.setAxisMaximum(0f);
+            leftAxis.resetAxisMinimum();
+        } else if (lineData.getYMin() > 0) {
+            leftAxis.resetAxisMaximum();
+            leftAxis.setAxisMinimum(0);
+        } else {
+            leftAxis.resetAxisMaximum();
+            leftAxis.resetAxisMinimum();
+        }
+        chart.setData(lineData);
+        chart.invalidate();
+    }
+
+    public void setStockTs() {
+        ((MyXAxisRenderer) chart.getRendererXAxis()).setStockTs();
+        chart.invalidate();
+    }
+
+
 
     private void initColor() {
         mOut1Color = Color.parseColor("#3A79C8");
@@ -258,33 +234,8 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         colors.add(mOut3Color);
     }
 
-    class CombineLineRender extends CombinedChartRenderer{
-        private double zeroX = 0;//0 的y值
-        private float space = 0;
-        private float zeroLineWidth = 0;
-        private float textSpace = 0;
-        private final float testSizePx = Utils.convertDpToPixel(10f);
-        public CombineLineRender(CombinedChart chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
-            super(chart, animator, viewPortHandler);
-        }
-
-        @Override
-        public void drawValues(Canvas c) {
-            MPPointD pos = chart.getTransformer(YAxis.AxisDependency.LEFT).getPixelForValues(0f, 0f);
-            zeroX = pos.x;
-            super.drawValues(c);
-        }
-
-        @Override
-        public void drawValue(Canvas c, String valueText, float x, float y, int color) {
-            x= (float) (zeroX+5f);
-            super.drawValue(c, valueText, x, y, color);
-        }
-
-    }
 
     class MyXAxisRenderer extends XAxisRenderer {
-
         private float maxX;//最大数据点1分钟占一点
         private String opening;//开市时间
         private String second;//休盘时间
@@ -296,7 +247,7 @@ public class MarketFinancinalProfitView  extends FrameLayout {
             xAxis.setValueFormatter(new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                   if (value == 0) {
+                    if (value == 0) {
                         return "";
                     } else if (value == 1.25f) {
                         return opening;
@@ -307,10 +258,10 @@ public class MarketFinancinalProfitView  extends FrameLayout {
                     }else if (value == 5.00f) {
                         return fourth;
                     }else if (value == 6.25f) {
-                       return fifth;
-                   }else if(value==7.50f){
-                       return "";
-                   }
+                        return fifth;
+                    }else if(value==7.50f){
+                        return "";
+                    }
                     return super.getFormattedValue(value);
                 }
             });

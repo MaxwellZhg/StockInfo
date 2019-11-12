@@ -85,7 +85,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     private fun getStockData(isBMP: Boolean) {
         stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs, mCode, mType)
         SocketClient.getInstance().bindTopic(stockTopic)
-        android.os.Handler().postDelayed(Runnable { view?.upData(null) },2000)
+        android.os.Handler().postDelayed({ viewModel?.pushStockPriceData?.value = null }, 2000)
 
     }
 
@@ -249,10 +249,10 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         }
     }
 
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
+  /*  @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
         view?.changeInfoTypeData(event)
-    }
+    }*/
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSocketDisconnectEvent(event: SocketConnectEvent) {
@@ -269,54 +269,60 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
         // 监听datas的变化
         lifecycleOwner.let {
-            viewModel?.pushStockPriceData?.observe(it,
+            viewModel?.pushStockPriceData?.observe(
+                it,
                 androidx.lifecycle.Observer<PushStockPriceData> { t ->
-                    val data = object : StockDetailView.IStockDatailData {
-                        /**
-                         * 当前价
-                         *
-                         * @return
-                         */
-                        override fun getPrice(): Float {
-                            return t.last!!.toFloat()
-                        }
+                    val data = if (t != null) {
+                        object : StockDetailView.IStockDatailData {
 
-                        /**
-                         * 开盘价
-                         *
-                         * @return
-                         */
-                        override fun getOpenPrice(): Float {
-                            return t.open!!.toFloat()
-                        }
+                            /**
+                             * 当前价
+                             *
+                             * @return
+                             */
+                            override fun getPrice(): Float {
+                                return t.last!!.toFloat()
+                            }
 
-                        /**
-                         * 昨收价
-                         *
-                         * @return
-                         */
-                        override fun getPreClosePrice(): Float {
-                            return t.preClose!!.toFloat()
-                        }
+                            /**
+                             * 开盘价
+                             *
+                             * @return
+                             */
+                            override fun getOpenPrice(): Float {
+                                return t.open!!.toFloat()
+                            }
 
-                        /**
-                         * 最低价
-                         *
-                         * @return
-                         */
-                        override fun getLowPrice(): Float {
-                            return 0f
-                        }
+                            /**
+                             * 昨收价
+                             *
+                             * @return
+                             */
+                            override fun getPreClosePrice(): Float {
+                                return t.preClose!!.toFloat()
+                            }
 
-                        /**
-                         * 最高价
-                         *
-                         * @return
-                         */
-                        override fun getHighPrice(): Float {
-                            return 0f
-                        }
+                            /**
+                             * 最低价
+                             *
+                             * @return
+                             */
+                            override fun getLowPrice(): Float {
+                                return 0f
+                            }
 
+                            /**
+                             * 最高价
+                             *
+                             * @return
+                             */
+                            override fun getHighPrice(): Float {
+                                return 0f
+                            }
+
+                        }
+                    } else {
+                        null
                     }
                     view?.upData(data)
                     if (topBarInfoTp == 1) {

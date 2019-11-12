@@ -14,6 +14,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.StockPopupWindow
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
+import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.ui.adapter.TopicStocksAdapter
@@ -91,9 +92,15 @@ class TopicStockListFragment :
     override fun onClickItem(pos: Int, item: StockMarketInfo?, v: View?) {
         if (item != null) {
             // 跳转到详情页
+            val stock = SearchStockInfo()
+            stock.code = item.code
+            stock.ts = item.ts
+            stock.tsCode = item.code+"."+item.ts
+            stock.name = item.name
+            stock.type = 2
 //          startActivity(Intent(context, KlineLandActivity::class.java))
             (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(
-                MarketDetailFragment.newInstance(item),
+                MarketDetailFragment.newInstance(stock),
                 MarketDetailFragment::class.java,
                 true
             )

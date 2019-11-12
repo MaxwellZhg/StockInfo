@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
@@ -29,7 +30,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 /**
  * 股票K线图
  */
-class KlineFragment : SupportFragment(), OnClickListener {
+class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListener {
 
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
@@ -45,6 +46,7 @@ class KlineFragment : SupportFragment(), OnClickListener {
     private var mLastKlineTitle: TextView? = null
     private var mRehabilitationMode = 0
     private var mStatIndex = 0
+    private var mHightligh: IKLineHighlightView? = null
 
 
     companion object {
@@ -175,6 +177,10 @@ class KlineFragment : SupportFragment(), OnClickListener {
     }
 
     private fun onSelectKline(index: Int) {
+        val show: IKLine = mFragments[index] as IKLine
+        val hide: IKLine = mFragments[mKlineIndex] as IKLine
+        show.setHighlightListener(this)
+        hide.setHighlightListener(null)
         showHideFragment(mFragments[index], mFragments[mKlineIndex])
         mKlineIndex = index
     }
@@ -262,4 +268,23 @@ class KlineFragment : SupportFragment(), OnClickListener {
             }
         }
     }
+
+
+    override fun onShowHighlightView(v: IKLineHighlightView) {
+        mHightligh = v
+        highlight_info.removeAllViews()
+        highlight_info.addView(
+            v.getView(),
+            FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        )
+    }
+
+    override fun onHideHighlightView() {
+        highlight_info.removeAllViews()
+    }
+
+    override fun onUpHighlightData(obj: Any) {
+        mHightligh?.setData(obj)
+    }
+
 }

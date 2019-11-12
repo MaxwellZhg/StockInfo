@@ -15,6 +15,7 @@
                 android:layout_height="wrap_content"/>
         <com.zhuorui.securities.market.customer.view.MarketFinancinalProfitView
                 android:layout_width="match_parent"
+                app:fina_type="1"
                 android:layout_marginTop="2dp"
                 android:layout_height="wrap_content"/>
         <com.zhuorui.securities.market.customer.view.MarketFinancinalProfitView
@@ -22,5 +23,11 @@
                 app:fina_type="2"
                 android:layout_marginTop="2dp"
                 android:layout_height="wrap_content"/>
+        <com.zhuorui.securities.market.customer.view.MarketFinanicalDetailCrashFlowView
+                android:layout_width="match_parent"
+                android:id="@+id/crash_flow"
+                android:layout_marginTop="2dp"
+                android:layout_height="wrap_content"/>
+
     </LinearLayout>
 </layout>

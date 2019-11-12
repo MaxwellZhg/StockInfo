@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.net.response.MarketBaseInfoResponse
@@ -16,7 +17,7 @@ import com.zhuorui.securities.market.net.response.MarketBaseInfoResponse
  * Date: 2019/10/31
  * Desc:
  */
-class MarketNoticeInfoTipsAdapter :BaseListAdapter<Int>(){
+class MarketNoticeInfoTipsAdapter :BaseListAdapter<MarketBaseInfoResponse.Source>(){
     var onMarketNoticeClickListener:OnMarketNoticeClickListener?=null
     override fun getLayout(viewType: Int): Int {
         return R.layout.item_attention_tips_layout
@@ -25,18 +26,21 @@ class MarketNoticeInfoTipsAdapter :BaseListAdapter<Int>(){
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(v,needClick = true,needLongClick = false)
     }
-    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean):ListItemViewHolder<Int>(v, needClick, needLongClick){
+    inner class ViewHolder(v: View?, needClick: Boolean, needLongClick: Boolean):ListItemViewHolder<MarketBaseInfoResponse.Source>(v, needClick, needLongClick){
         @BindView(R2.id.view_header)
         lateinit var view_header: View
         @BindView(R2.id.view_coustom)
         lateinit var view_coustom: View
         @BindView(R2.id.ll_content)
         lateinit var ll_content: LinearLayout
-
+        @BindView(R2.id.tv_headline)
+        lateinit var tv_headline: TextView
+        @BindView(R2.id.tv_time)
+        lateinit var tv_time: TextView
         init {
             ll_content.setOnClickListener(this)
         }
-        override fun bind(item: Int?, position: Int) {
+        override fun bind(item: MarketBaseInfoResponse.Source?, position: Int) {
             when(position){
                 0->{
                     view_header.visibility=View.VISIBLE
@@ -47,6 +51,8 @@ class MarketNoticeInfoTipsAdapter :BaseListAdapter<Int>(){
                     view_header.visibility=View.GONE
                 }
             }
+            tv_headline.text=item?.headLine
+            tv_time.text=item?.publishDate?.let { TimeZoneUtil.timeFormat(it, "HH:mm") }
         }
 
         override fun onClick(v: View) {

@@ -50,5 +50,6 @@ class MarketDetailF10FinancialFragment : AbsSwipeBackNetFragment<com.zhuorui.sec
         outData.add(1149.74f)
         outData.add(345.53f)
         financial_view.setData(outData)
+        crash_flow.setData()
     }
 }
