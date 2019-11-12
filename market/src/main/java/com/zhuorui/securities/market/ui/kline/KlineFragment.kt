@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -30,7 +31,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 /**
  * 股票K线图
  */
-class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListener {
+class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListener,
+    AbsActivity.OnOrientationChangedListener {
 
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
     //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
@@ -80,6 +82,16 @@ class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListen
         initKline()
 
         initStat()
+
+        if (landscape) {
+            (activity as AbsActivity).addOrientationChangedListener(this)
+        }
+    }
+
+    override fun onChange(landscape: Boolean) {
+        if (!landscape) {
+            pop()
+        }
     }
 
     private fun initKline() {
@@ -287,4 +299,12 @@ class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListen
         mHightligh?.setData(obj)
     }
 
+    override fun onBackPressedSupport(): Boolean {
+        return true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as AbsActivity).removeOrientationChangedListener(this)
+    }
 }

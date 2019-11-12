@@ -1,6 +1,7 @@
 package com.zhuorui.securities.base2app.ui.activity
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import com.zhuorui.securities.base2app.util.QuickClickUtil
 import com.zhuorui.securities.base2app.util.StatusBarUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import me.yokeyword.fragmentation.SupportActivity
+import java.util.*
 
 
 /**
@@ -47,7 +49,8 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
     protected val isDestroy: Boolean
         get() = isFinishing || isDestroyed
 
-    private var dispatchTouchEventListener: OnDispatchTouchEventListener? = null
+    private var dispatchTouchEventListener: LinkedList<OnDispatchTouchEventListener>? = LinkedList()
+    private var orientationChangedListener: LinkedList<OnOrientationChangedListener>? = LinkedList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +73,17 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            orientationChangedListener?.forEach { it.onChange(true) }
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            orientationChangedListener?.forEach { it.onChange(false) }
+        }
+
     }
 
     override fun onResume() {
@@ -190,12 +204,28 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
         fun onTouch(ev: MotionEvent?)
     }
 
-    public fun setDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener?) {
-        this.dispatchTouchEventListener = dispatchTouchEventListener
+    interface OnOrientationChangedListener {
+        fun onChange(landscape: Boolean)
+    }
+
+    fun addOrientationChangedListener(orientationChangedListener: OnOrientationChangedListener) {
+        this.orientationChangedListener?.add(orientationChangedListener)
+    }
+
+    fun removeOrientationChangedListener(orientationChangedListener: OnOrientationChangedListener) {
+        this.orientationChangedListener?.remove(orientationChangedListener)
+    }
+
+    fun addDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener) {
+        this.dispatchTouchEventListener?.add(dispatchTouchEventListener)
+    }
+
+    fun removeDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener) {
+        this.dispatchTouchEventListener?.remove(dispatchTouchEventListener)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        dispatchTouchEventListener?.onTouch(ev)
+        dispatchTouchEventListener?.forEach { it.onTouch(ev) }
         return super.dispatchTouchEvent(ev)
     }
 }
