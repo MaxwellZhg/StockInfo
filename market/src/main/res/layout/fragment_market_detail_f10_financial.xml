@@ -5,28 +5,34 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.MarketDetailF10FinancialViewModel"/>
     </data>
+
     <LinearLayout android:orientation="vertical"
-                  android:background="@color/color_191821"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
+
         <com.zhuorui.securities.market.customer.view.MarketF10FinancinalMainTradeView
                 android:id="@+id/financial_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+        <View style="@style/MadrketDetailLine"/>
+
         <com.zhuorui.securities.market.customer.view.MarketFinancinalProfitView
                 android:layout_width="match_parent"
                 app:fina_type="1"
-                android:layout_marginTop="2dp"
                 android:layout_height="wrap_content"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
         <com.zhuorui.securities.market.customer.view.MarketFinancinalProfitView
                 android:layout_width="match_parent"
                 app:fina_type="2"
-                android:layout_marginTop="2dp"
                 android:layout_height="wrap_content"/>
+
+        <View style="@style/MadrketDetailLine"/>
+
         <com.zhuorui.securities.market.customer.view.MarketFinanicalDetailCrashFlowView
                 android:layout_width="match_parent"
                 android:id="@+id/crash_flow"
-                android:layout_marginTop="2dp"
                 android:layout_height="wrap_content"/>
 
     </LinearLayout>
