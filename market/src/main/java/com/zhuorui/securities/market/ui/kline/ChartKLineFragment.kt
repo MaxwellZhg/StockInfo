@@ -6,6 +6,10 @@ import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataMan
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.kline.BaseChart
+import com.zhuorui.securities.market.customer.view.kline.KLineHighlightView
+import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
+import com.zhuorui.securities.market.customer.view.kline.model.KLineDataModel
 import com.zhuorui.securities.market.databinding.FragmentKlineBinding
 import com.zhuorui.securities.market.ui.kline.presenter.ChartKLinePresenter
 import com.zhuorui.securities.market.ui.kline.view.KlineView
@@ -16,7 +20,10 @@ import kotlinx.android.synthetic.main.fragment_kline.*
  * K线
  */
 class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
-    KlineView,IKLine {
+    KlineView,IKLine, BaseChart.OnHighlightValueSelectedListener {
+
+    private var mHighlightListener: OnKlineHighlightListener? = null
+    private var mHighlightShow = false
 
     companion object {
 
@@ -59,7 +66,7 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
         val landscape = arguments?.getBoolean("landscape")!!
 
         combinedchart.initChart(landscape)
-
+        combinedchart.setHighlightValueSelectedListener(this)
         presenter?.kType = arguments!!.getInt("klinType")
         presenter?.land = landscape
 
@@ -92,8 +99,32 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
         combinedchart.setDataToChart(kLineDataManage)
     }
 
+    override fun onDayHighlightValueListener(mData: TimeDataManage?, index: Int, isSelect: Boolean) {
+
+    }
+
+    override fun onKHighlightValueListener(data: KLineDataManage?, index: Int, isSelect: Boolean) {
+        val d = data?.kLineDatas?.get(index)
+        if (isSelect && d != null) {
+            if (mHighlightShow != isSelect) {
+                mHighlightListener?.onShowHighlightView(getHighlightView(d))
+            } else {
+                mHighlightListener?.onUpHighlightData(d)
+            }
+            mHighlightShow = isSelect
+        } else if (mHighlightShow != isSelect) {
+            mHighlightShow = false
+            mHighlightListener?.onHideHighlightView()
+        }
+    }
+
+    private fun getHighlightView(data: KLineDataModel): KLineHighlightView {
+        val v = KLineHighlightView(context)
+        v.setData(data)
+        return v
+    }
+
     override fun setHighlightListener(l: OnKlineHighlightListener?) {
-
-
+        mHighlightListener = l
     }
 }
