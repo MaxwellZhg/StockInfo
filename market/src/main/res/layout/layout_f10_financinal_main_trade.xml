@@ -4,7 +4,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:paddingBottom="14.5dp"
-        android:background="@color/color_211F2A"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -32,6 +31,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             app:layout_constraintLeft_toLeftOf="parent"
     />
+
     <TextView
             android:id="@+id/tv_years"
             android:layout_width="wrap_content"
@@ -46,9 +46,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="13dp"
             android:drawablePadding="2dp"
-            app:layout_constraintLeft_toRightOf="@+id/tv_title"
-    />
-
+            app:layout_constraintLeft_toRightOf="@+id/tv_title"/>
 
     <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pie_cahart"
@@ -61,15 +59,16 @@
             app:layout_constraintDimensionRatio="349:196"
     />
 
- <TextView android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:textSize="14sp"
-           android:id="@+id/tv_trade_info"
-           android:layout_marginStart="13dp"
-           android:textColor="@color/color_A4B2CB"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toBottomOf="@+id/pie_cahart"
-           android:text="业务"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="14sp"
+              android:id="@+id/tv_trade_info"
+              android:layout_marginStart="13dp"
+              android:textColor="@color/color_A4B2CB"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/pie_cahart"
+              android:text="业务"/>
+
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textSize="14sp"
@@ -80,17 +79,17 @@
               app:layout_constraintTop_toBottomOf="@+id/pie_cahart"
               android:text="主营收入"/>
     <RelativeLayout
-                    app:layout_constraintTop_toBottomOf="@+id/tv_trade_info"
-                    android:id="@+id/rl_frist_trade"
-                    android:layout_marginTop="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-      <ImageView android:layout_width="5dp"
-                 android:layout_height="5dp"
-                 android:layout_centerVertical="true"
-                 android:id="@+id/iv_point_one"
-                 android:layout_marginStart="12.5dp"
-                 android:background="@color/color_EEA74D"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_trade_info"
+            android:id="@+id/rl_frist_trade"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageView android:layout_width="5dp"
+                   android:layout_height="5dp"
+                   android:layout_centerVertical="true"
+                   android:id="@+id/iv_point_one"
+                   android:layout_marginStart="12.5dp"
+                   android:background="@color/color_EEA74D"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textSize="12sp"
