@@ -97,7 +97,7 @@
                   android:layout_marginStart="5dp"
                   android:layout_toRightOf="@+id/iv_point_one"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="寿险及健康险"/>
+                  android:text="--"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textSize="12sp"
@@ -106,7 +106,7 @@
                   android:layout_marginEnd="13dp"
                   android:layout_marginStart="5dp"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="4158.15亿元"/>
+                  android:text="--"/>
     </RelativeLayout>
     <RelativeLayout
             app:layout_constraintTop_toBottomOf="@+id/rl_frist_trade"
@@ -127,7 +127,7 @@
                   android:layout_marginStart="5dp"
                   android:layout_toRightOf="@+id/iv_point_sec"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="财产保险"/>
+                  android:text="--"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textSize="12sp"
@@ -136,7 +136,7 @@
                   android:layout_marginEnd="13dp"
                   android:layout_marginStart="5dp"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="1249.04亿元"/>
+                  android:text="--"/>
     </RelativeLayout>
     <RelativeLayout
             app:layout_constraintTop_toBottomOf="@+id/rl_sec_trade"
@@ -157,7 +157,7 @@
                   android:layout_marginStart="5dp"
                   android:layout_toRightOf="@+id/iv_point_three"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="银行"/>
+                  android:text="--"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textSize="12sp"
@@ -166,7 +166,7 @@
                   android:layout_marginEnd="13dp"
                   android:layout_marginStart="5dp"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="1149.74亿元"/>
+                  android:text="--"/>
     </RelativeLayout>
     <RelativeLayout
             app:layout_constraintTop_toBottomOf="@+id/rl_thrid_trade"
@@ -187,7 +187,7 @@
                   android:layout_marginStart="5dp"
                   android:layout_toRightOf="@+id/iv_point_four"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="其他收入"/>
+                  android:text="--"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textSize="12sp"
@@ -196,6 +196,6 @@
                   android:layout_marginEnd="13dp"
                   android:layout_marginStart="5dp"
                   android:textColor="@color/color_FEFEFF"
-                  android:text="345.53亿元"/>
+                  android:text="--"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

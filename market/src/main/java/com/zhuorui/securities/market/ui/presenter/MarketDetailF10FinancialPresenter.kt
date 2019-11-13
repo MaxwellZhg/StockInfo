@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -34,6 +35,18 @@ class MarketDetailF10FinancialPresenter :AbsNetPresenter<MarketDetailF10Financia
                 androidx.lifecycle.Observer<FinancialReportResponse.Business> { t ->
                     view?.updataBuisnessData(t)
                 })
+            viewModel?.crashLineData?.observe(it,
+                androidx.lifecycle.Observer<List<FinancialReportResponse.CashFlowReport>> { t ->
+                    view?.updataProfitListData(t)
+                })
+            viewModel?.profitData?.observe(it,
+                androidx.lifecycle.Observer<List<FinancialReportResponse.ProfitReport>> { t ->
+                    view?.updataProfitChatData(t)
+                })
+            viewModel?.outProfitData?.observe(it,
+                androidx.lifecycle.Observer<List<FinancialReportResponse.LiabilistyReport>> { t ->
+                    view?.updataOutProfitChatData(t)
+                })
         }
     }
 
@@ -48,6 +61,14 @@ class MarketDetailF10FinancialPresenter :AbsNetPresenter<MarketDetailF10Financia
     fun onFinancialData(response: FinancialReportResponse){
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data
-        viewModel?.pieChartData?.value =response.data.mainBusinessReport
+        viewModel?.pieChartData?.value =datas.mainBusinessReport
+        viewModel?.crashLineData?.value=datas.cashFlowReport
+        viewModel?.profitData?.value=datas.profitReport
+        viewModel?.outProfitData?.value=datas.liabilistyReport
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+         view?.updataErrorData()
     }
 }

@@ -70,8 +70,13 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
 
     public void setPieCharBean(FinancialReportResponse.Business business){
          this.business = business;
-        listinfo= business.get20181231();
-        detailData(listinfo);
+         if(business!=null) {
+             listinfo = business.get20181231();
+             detailData(listinfo);
+         }else{
+             ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+             detailData(listinfo);
+         }
     }
 
     @Override

@@ -64,10 +64,25 @@ class MarketDetailF10FinancialFragment :
         outData.add(1249.04f)
         outData.add(1149.74f)
         outData.add(345.53f)*/
-        crash_flow.setData()
     }
 
     override fun updataBuisnessData(data: FinancialReportResponse.Business) {
         financial_view.setPieCharBean(data)
     }
+
+    override fun updataProfitListData(profitList: List<FinancialReportResponse.CashFlowReport>) {
+        crash_flow.setProfitListData(profitList)
+    }
+
+    override fun updataErrorData() {
+        financial_view.setPieCharBean(null)
+    }
+    override fun updataProfitChatData(profitList: List<FinancialReportResponse.ProfitReport>) {
+       profit_chat_one.setProfitChatData(profitList)
+    }
+
+    override fun updataOutProfitChatData(profitList: List<FinancialReportResponse.LiabilistyReport>) {
+        profit_chat_two.setOutProfitChatData(profitList)
+    }
+
 }

@@ -12,9 +12,9 @@ import java.math.BigDecimal
 class FinancialReportResponse (val data:Data):BaseResponse(){
     data class Data(
         val mainBusinessReport:Business,
-        val listProfitReport:ArrayList<ProfitReport>,
-        val listLiabilistyReport:ArrayList<LiabilistyReport>,
-        val listCashFlowReport:ArrayList<CashFlowReport>
+        val profitReport:ArrayList<ProfitReport>,
+        val liabilistyReport:ArrayList<LiabilistyReport>,
+        val cashFlowReport:ArrayList<CashFlowReport>
     )
     data class Business(
         val `20161231`: ArrayList<BusinessReport>,

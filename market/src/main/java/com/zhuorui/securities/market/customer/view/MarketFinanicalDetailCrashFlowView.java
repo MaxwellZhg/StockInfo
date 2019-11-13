@@ -18,6 +18,9 @@ import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.net.response.FinancialReportResponse;
+import com.zhuorui.securities.market.util.MathUtil;
+import me.jessyan.autosize.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,11 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
     private boolean mEmpty;
+    private List<FinancialReportResponse.CashFlowReport> profitList ;
+    List<Entry> entries1 =new ArrayList<>();
+    List<Entry> entries2 =new ArrayList<>();
+    List<Entry> entries3 =new ArrayList<>();
+    List<String> xAisxDate =new ArrayList<>();
     public MarketFinanicalDetailCrashFlowView(Context context) {
        this(context,null);
     }
@@ -123,24 +131,6 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
             lineDataSet.setColor(Color.parseColor("#FF8E1B"));
         }*/
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        List<Entry> entries1 =new ArrayList<>();
-        List<Entry> entries2 =new ArrayList<>();
-        List<Entry> entries3 =new ArrayList<>();
-        entries1.add(new Entry(1.25f,300f));
-        entries1.add(new Entry(2.50f,800f));
-        entries1.add(new Entry(3.75f, 1000f));
-        entries1.add(new Entry(5.00f,900f));
-        entries1.add(new Entry(6.25f,1200f));
-        entries2.add(new Entry(1.25f,-200f));
-        entries2.add(new Entry(2.50f,0.00f));
-        entries2.add(new Entry(3.75f, 350f));
-        entries2.add(new Entry(5.00f,0.00f));
-        entries2.add(new Entry(6.25f,450f));
-        entries3.add(new Entry(1.25f,900f));
-        entries3.add(new Entry(2.50f,750f));
-        entries3.add(new Entry(3.75f, 700f));
-        entries3.add(new Entry(5.00f,1000f));
-        entries3.add(new Entry(6.25f,600f));
         LineDataSet set1 = new LineDataSet(entries1, "Line DataSet");
         set1.setColor(colors.get(0));
         set1.setLineWidth(0.8f);
@@ -196,11 +186,6 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
 
     public void setData() {
         setStockTs();
-/*        List<Entry> entrys = new ArrayList<>();
-        for (int i = 0, len = datas.size(); i < len; i += 4) {
-            Entry entry = new Entry(i, datas.get(i));
-            entrys.add(entry);
-        }*/
         LineData lineData = getLineData();
         YAxis leftAxis = chart.getAxisLeft();
         if (lineData.getYMax() < 0) {
@@ -215,6 +200,44 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
         }
         chart.setData(lineData);
         chart.invalidate();
+    }
+
+    public void setProfitListData(List<FinancialReportResponse.CashFlowReport>  profitList ){
+        this.profitList =profitList;
+        detailListData(profitList);
+    }
+
+    private void detailListData(List<FinancialReportResponse.CashFlowReport> profitList) {
+         entries1.clear();
+         entries2.clear();
+         entries3.clear();
+         if(profitList!=null) {
+             for (int i = 0; i < profitList.size(); i++) {
+                 xAisxDate.add(profitList.get(i).getDate());
+             }
+             entries1.add(new Entry(1.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(0).getNetOperating())));
+             entries1.add(new Entry(2.50f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(1).getNetOperating())));
+             entries1.add(new Entry(3.75f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(2).getNetOperating())));
+             entries1.add(new Entry(5.00f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(3).getNetOperating())));
+             entries1.add(new Entry(6.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(4).getNetOperating())));
+             entries2.add(new Entry(1.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(0).getNetInvestment())));
+             entries2.add(new Entry(2.50f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(1).getNetInvestment())));
+             entries2.add(new Entry(3.75f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(2).getNetInvestment())));
+             entries2.add(new Entry(5.00f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(3).getNetInvestment())));
+             entries2.add(new Entry(6.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(4).getNetInvestment())));
+             entries3.add(new Entry(1.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(0).getNetFinancing())));
+             entries3.add(new Entry(2.50f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(1).getNetFinancing())));
+             entries3.add(new Entry(3.75f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(2).getNetFinancing())));
+             entries3.add(new Entry(5.00f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(3).getNetFinancing())));
+             entries3.add(new Entry(6.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(4).getNetFinancing())));
+             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(0).getNetOperating()).toString());
+             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(1).getNetOperating()).toString());
+             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(2).getNetOperating()).toString());
+             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(3).getNetOperating()).toString());
+             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(4).getNetOperating()).toString());
+
+             setData();
+         }
     }
 
     public void setStockTs() {
@@ -269,11 +292,11 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
 
         public void setStockTs() {
             maxX=7.5f;
-            opening = "2017-06-30";//开市时间
-            second = "2017-12-31";//休盘时间
-            thrid = "2018-06-30";//收市时间
-            fourth = "2018-12-31";//收市时间
-            fifth = "2019-06-30";//收市时间
+            opening = xAisxDate.get(0);//开市时间
+            second = xAisxDate.get(1);//休盘时间
+            thrid = xAisxDate.get(2);//收市时间
+            fourth =xAisxDate.get(3);//收市时间
+            fifth = xAisxDate.get(4);//收市时间
             mXAxis.setAxisMaximum(maxX);
             mXAxis.setAxisMinimum(0);
         }
