@@ -241,6 +241,12 @@ class MarketDetailFragment :
             top_magic_indicator.visibility = if (scrollY < tab_magic_indicator.top) View.GONE else View.VISIBLE
             top_magic_indicator_line.visibility = top_magic_indicator.visibility
         }
+        //title
+        if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
+            presenter?.getTopBarPriceInfo()
+        } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
+            presenter?.getTopBarStockStatusInfo()
+        }
     }
 
     /**
