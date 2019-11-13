@@ -3,9 +3,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:background="@color/color_211F2A"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     <TextView android:layout_width="wrap_content"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"
@@ -16,6 +16,7 @@
               android:layout_marginStart="13dp"
               android:textColor="@color/color_FFFFFFFF"
               android:text="现金流量表"/>
+
     <TextView android:layout_width="wrap_content"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toBottomOf="@+id/tv_title"
@@ -26,6 +27,7 @@
               android:layout_marginStart="13dp"
               android:textColor="@color/color_A4B2CB"
               android:text="单位：人民币"/>
+
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               app:layout_constraintTop_toTopOf="parent"
@@ -36,6 +38,7 @@
               android:layout_marginEnd="12.5dp"
               android:drawableRight="@mipmap/icon_more_info"
               android:text="查看详情"/>
+
     <com.github.mikephil.charting.charts.LineChart
             app:layout_constraintTop_toBottomOf="@+id/tv_price"
             android:id="@+id/line_chart"
@@ -47,6 +50,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintDimensionRatio="349:196"/>
+
     <RelativeLayout
             app:layout_constraintTop_toBottomOf="@+id/line_chart"
             android:layout_width="match_parent"

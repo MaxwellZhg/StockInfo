@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.layout_market_detail_company_repo.*
 import kotlinx.android.synthetic.main.layout_market_detail_manager.*
 import kotlinx.android.synthetic.main.layout_market_detail_shareholderchange.*
 import me.yokeyword.fragmentation.SupportFragment
+import java.math.BigDecimal
 
 /**
  *    author : PengXianglin
@@ -156,14 +157,20 @@ class MarketDetailF10BriefFragment :
             ll_manager_list.layoutManager = LinearLayoutManager(context)
             ll_manager_list.addItemDecoration(LinearSpacingItemDecoration(ResUtil.getDimensionDp2Px(14.5f), 0, false))
             val adapter = CompanyBrieManagerAdapter()
-            adapter.items = manager
+            adapter.items = if (manager.size > 5) manager.subList(0, 5) else manager
             ll_manager_list.adapter = adapter
         }
 
         // 股东变动
         if (!shareHolderChange.isNullOrEmpty()) {
             ll_shareholder_list.layoutManager = LinearLayoutManager(context)
-            ll_shareholder_list.addItemDecoration(LinearSpacingItemDecoration(ResUtil.getDimensionDp2Px(14.5f), 0, false))
+            ll_shareholder_list.addItemDecoration(
+                LinearSpacingItemDecoration(
+                    ResUtil.getDimensionDp2Px(14.5f),
+                    0,
+                    false
+                )
+            )
             val adapter = CompanyBrieShareHolderChangeAdapter()
             adapter.items = shareHolderChange
             ll_shareholder_list.adapter = adapter
@@ -186,5 +193,10 @@ class MarketDetailF10BriefFragment :
             adapter.items = repo
             ll_repo_list.adapter = adapter
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun updateIndustryUprate(upRate: BigDecimal, diffState: Int) {
+        tv_industry_uprate.setText(upRate.toString(), diffState)
     }
 }
