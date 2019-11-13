@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
@@ -22,6 +23,7 @@ import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.kline.KlineFragment
+import com.zhuorui.securities.market.ui.kline.KlineLandFragment
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
@@ -60,6 +62,7 @@ class MarketDetailFragment :
     private var mIndex = 0
     private var inNum = 0
     private var mBMP = false
+    private var lazyInit = false
 
     companion object {
         fun newInstance(stock: SearchStockInfo): MarketDetailFragment {
@@ -100,7 +103,9 @@ class MarketDetailFragment :
         presenter?.setStockInfo(mStock.ts!!, mStock.code!!, mStock.type!!)
         presenter?.getTopBarStockStatusInfo()
         presenter?.setLifecycleOwner(this)
-        (activity as AbsActivity).addOrientationChangedListener(this)
+
+        toggleScreenOrientation(true)
+        lazyInit = true
     }
 
     private fun initView() {
@@ -158,9 +163,9 @@ class MarketDetailFragment :
     }
 
     override fun onChange(landscape: Boolean) {
-        if (landscape) {
+        if (landscape && topFragment == this) {
             start(
-                KlineFragment.newInstance(
+                KlineLandFragment.newInstance(
                     mStock.ts ?: "",
                     mStock.code ?: "",
                     mStock.tsCode ?: mStock.code + "." + mStock.ts,
@@ -371,6 +376,12 @@ class MarketDetailFragment :
 
     override fun onSupportVisible() {
         super.onSupportVisible()
+
+        if (lazyInit) {
+            // 当前界面每次重新可见时，需设置activity允许旋屏
+            toggleScreenOrientation(true)
+        }
+
         if (inNum > 0) {
             //每次重新进入界面检查bmp状态
             inNum++
@@ -380,6 +391,30 @@ class MarketDetailFragment :
                 getData()
                 cahngeBMP()
             }
+        }
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+
+        // 当前界面不可见时，获取栈顶的fragment若不是当前界面也不是横屏K线界面时，说明已跳到其他界面，需设置activity不允许旋屏
+        if (topFragment != this && topFragment.javaClass.name != KlineLandFragment::class.java.name) {
+            toggleScreenOrientation(false)
+        }
+    }
+
+    /**
+     * 切换是否允许横屏
+     */
+    private fun toggleScreenOrientation(allowLandscape: Boolean) {
+        if (allowLandscape) {
+            // 添加setRequestedOrientation方法实现屏幕允许旋转
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            (activity as AbsActivity).addOrientationChangedListener(this)
+        } else {
+            // 添加setRequestedOrientation方法实现屏幕不允许旋转
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            (activity as AbsActivity).removeOrientationChangedListener(this)
         }
     }
 
@@ -409,6 +444,7 @@ class MarketDetailFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as AbsActivity).removeOrientationChangedListener(this)
+
+
     }
 }
