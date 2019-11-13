@@ -82,6 +82,6 @@ interface StockApi {
         /**
          * F10财报信息
          */
-      //  const val REPO_LIST = "as_market/api/f10/v1/repo/list"
+        const val FINANCIAL_REPORT = "as_market/api/f10/v1/financial/report"
     }
 }

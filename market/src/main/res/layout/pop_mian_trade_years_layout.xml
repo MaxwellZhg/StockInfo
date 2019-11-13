@@ -8,34 +8,34 @@
     <TextView
             android:id="@+id/tv_1"
             style="@style/MainTradeYearsInfoText"
-            android:text="2019中报"
+            android:text="2018年报"
     />
 
 
     <TextView
             android:id="@+id/tv_2"
             style="@style/MainTradeYearsInfoText"
-            android:text="2018年报"
+            android:text="2018中报"
     />
 
     <TextView
             android:id="@+id/tv_3"
-            style="@style/MainTradeYearsInfoText"
-            android:text="2018中报"
-    />
-
-
-    <TextView
-            android:id="@+id/tv_4"
             style="@style/MainTradeYearsInfoText"
             android:text="2017年报"
     />
 
 
     <TextView
-            android:id="@+id/tv_5"
+            android:id="@+id/tv_4"
             style="@style/MainTradeYearsInfoText"
             android:text="2017中报"
+    />
+
+
+    <TextView
+            android:id="@+id/tv_5"
+            style="@style/MainTradeYearsInfoText"
+            android:text="2016年报"
     />
 
 

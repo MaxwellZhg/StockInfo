@@ -212,4 +212,14 @@
     <string name="bmp_tip">港股行情需要手动刷新，【基本报价】服务仅供参考。</string>
     <string name="today_fund">今日资金</string>
     <string name="mian_buisness">主营业务</string>
+    <string name="business">业务</string>
+    <string name="mian_income">主营业务</string>
+    <string name="income_cout_all">收入总计</string>
+    <string name="outcome_cout_all">除税后溢价</string>
+    <string name="only_profit_count_rate">净利润率</string>
+    <string name="all_total_count">总资产</string>
+    <string name="all_total_to_pay">总负债</string>
+    <string name="all_total_topay_rate">资产负债率</string>
+    <string name="profit_chat">利润表</string>
+    <string name="outcome_chat">资产负债表</string>
 </resources>
