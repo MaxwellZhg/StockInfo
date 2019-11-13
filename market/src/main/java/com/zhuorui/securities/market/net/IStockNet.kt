@@ -48,4 +48,7 @@ interface IStockNet {
 
     @POST(StockApi.GET_ALL_ATTACHMENT)
     fun getAllAttachment(@Body request: GetAllAttachmentRequest): Call<GetAllAttachmentResponse>
+
+    @POST(StockApi.FINANCIAL_REPORT)
+    fun getFinancialReport(@Body request: FinancialReportRequest): Call<FinancialReportResponse>
 }

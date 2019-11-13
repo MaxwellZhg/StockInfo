@@ -1,6 +1,8 @@
 package com.zhuorui.securities.market.ui.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.net.response.FinancialReportResponse
 
 /**
  * Created by Maxwell.
@@ -9,5 +11,5 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class MarketDetailF10FinancialViewModel :ViewModel(){
-
+  var pieChartData : MutableLiveData<FinancialReportResponse.Business> =MutableLiveData()
 }

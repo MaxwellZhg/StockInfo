@@ -212,4 +212,6 @@
     <string name="bmp_tip">港股行情需要手动刷新，【基本报价】服务仅供参考。</string>
     <string name="today_fund">今日资金</string>
     <string name="mian_buisness">主营业务</string>
+    <string name="business">业务</string>
+    <string name="mian_income">主营业务</string>
 </resources>

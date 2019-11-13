@@ -157,10 +157,16 @@ public class MarketPieChatView extends FrameLayout {
     private ArrayList<PieEntry> getOutPieEntrys(List<Float> out) {
         ArrayList<PieEntry> pieEntryList = new ArrayList<PieEntry>();
         //饼图实体 PieEntry
-        if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "寿险及健康险"));
-        if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "财产保险"));
-        if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "银行"));
-        if (out.get(3) > 0) pieEntryList.add(new PieEntry(out.get(3), "其他收入"));
+        if(out.size()>0 &&out.size()==4) {
+            if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "寿险及健康险"));
+            if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "财产保险"));
+            if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "银行"));
+            if (out.get(3) > 0) pieEntryList.add(new PieEntry(out.get(3), "其他收入"));
+        }else if(out.size()>0 &&out.size()==3){
+            if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "寿险及健康险"));
+            if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "财产保险"));
+            if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "银行"));
+        }
         return pieEntryList;
     }
 

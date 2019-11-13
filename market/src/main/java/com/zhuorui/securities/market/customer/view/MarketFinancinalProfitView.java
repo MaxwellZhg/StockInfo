@@ -104,16 +104,16 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(mTextColor);
         leftAxis.setGridColor(mGridColor);
-        leftAxis.setDrawZeroLine(true);
         leftAxis.setAxisMinimum(0f);
         leftAxis.setAxisMaximum(8500f);
         leftAxis.setTextSize(12f);
-        leftAxis.setGridLineWidth(0.5f);
         // 设置文字偏移量
         leftAxis.setXOffset(5f);
         leftAxis.setEdgeYOffset(5f);
         leftAxis.setSpaceBottom(0f);
         leftAxis.setSpaceTop(6f);
+        leftAxis.setZeroLineColor(mGridColor);
+        leftAxis.setDrawZeroLine(true);
         leftAxis.setLabelCount(5, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
@@ -153,8 +153,10 @@ public class MarketFinancinalProfitView  extends FrameLayout {
         xAxis.setAxisMinimum(1f);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
+        xAxis.setAxisLineWidth(0.1f);
         xAxis.setXOffset(1f);
         xAxis.setAxisLineColor(mGridColor);
+        xAxis.setGridColor(mGridColor);
         xAxis.setAxisMinimum(1f);
         xAxis.setLabelCount(7, true);
         MyXAxisRenderer xAxisRenderer = new MyXAxisRenderer(chart.getViewPortHandler(), chart.getXAxis(), chart.getTransformer(YAxis.AxisDependency.LEFT));
