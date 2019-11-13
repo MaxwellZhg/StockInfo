@@ -296,6 +296,7 @@ public class KLineDataManage {
         candleDataSet.setShadowColorSameAsCandle(true);
         candleDataSet.setValueTextSize(10);
         candleDataSet.setDrawValues(true);
+        candleDataSet.setHighlightEnabled(true);
 
         return candleDataSet;
     }

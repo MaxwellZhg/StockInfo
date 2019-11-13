@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.customer.view.kline;
+package com.zhuorui.securities.market.customer.view.kline.markerView;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * date   : 2019-11-11 16:47
  * desc   :
  */
-public class KLineHighlightView extends FrameLayout implements IKLineHighlightView {
+public class KLineDayHighlightView extends FrameLayout implements IKLineHighlightView {
 
     private int defColor = Color.parseColor("#C0CCE0");
     private TextView vPrice;
@@ -28,19 +28,19 @@ public class KLineHighlightView extends FrameLayout implements IKLineHighlightVi
     private TextView vAveragePrice;
     private LocalSettingsConfig config;
 
-    public KLineHighlightView(Context context) {
+    public KLineDayHighlightView(Context context) {
         this(context, null);
     }
 
-    public KLineHighlightView(Context context, AttributeSet attrs) {
+    public KLineDayHighlightView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public KLineHighlightView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KLineDayHighlightView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        inflate(context, R.layout.view_kline_highlight, this);
+        inflate(context, R.layout.view_kline_day_highlight, this);
         vPrice = findViewById(R.id.tv_price);
-        vDiffPrice = findViewById(R.id.tv_diff_pirce);
+        vDiffPrice = findViewById(R.id.tv_diff_price);
         vDiffRate = findViewById(R.id.tv_diff_rate);
         vVolume = findViewById(R.id.tv_volume);
         vAveragePrice = findViewById(R.id.tv_average_price);

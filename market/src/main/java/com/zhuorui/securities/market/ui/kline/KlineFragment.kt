@@ -96,7 +96,7 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
         for (i in 0..6) {
             mFragments[i] = getFragment(i)
         }
-
+        (mFragments[0] as IKLine).setHighlightListener(this)
         loadMultipleRootFragment(
             R.id.kline_container, mKlineIndex,
             mFragments[0],

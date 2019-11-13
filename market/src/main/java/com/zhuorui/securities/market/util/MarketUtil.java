@@ -114,4 +114,20 @@ public class MarketUtil {
         }
         return txt;
     }
+
+    /**
+     * 根据TS获取货币代码
+     *
+     * @param ts
+     * @return
+     */
+    public static String getCurrencyCodeByTs(String ts) {
+        String code = "";
+        switch (ts) {
+            case "HK":
+                code = "HKD";
+                break;
+        }
+        return code;
+    }
 }

@@ -8,20 +8,13 @@ import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
+import com.github.mikephil.charting.data.*;
 import com.zhuorui.securities.market.R;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.CandleData;
-import com.github.mikephil.charting.data.CandleDataSet;
-import com.github.mikephil.charting.data.CandleEntry;
-import com.github.mikephil.charting.data.CombinedData;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.VolFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -97,7 +90,7 @@ public class KLineChart extends BaseChart {
         candleChart.setDrawBorders(true);
         candleChart.setBorderWidth(0.7f);
         candleChart.setBorderColor(ContextCompat.getColor(mContext, R.color.border_color));
-        candleChart.setDragEnabled(landscape);
+        candleChart.setDragEnabled(true);
         candleChart.setScaleXEnabled(landscape);
         candleChart.setScaleYEnabled(false);
         candleChart.setHardwareAccelerationEnabled(true);
@@ -112,7 +105,7 @@ public class KLineChart extends BaseChart {
         barChart.setDrawBorders(true);
         barChart.setBorderWidth(0.7f);
         barChart.setBorderColor(ContextCompat.getColor(mContext, R.color.border_color));
-        barChart.setDragEnabled(landscape);
+        barChart.setDragEnabled(true);
         barChart.setScaleXEnabled(landscape);
         barChart.setScaleYEnabled(false);
         barChart.setHardwareAccelerationEnabled(true);
@@ -219,12 +212,18 @@ public class KLineChart extends BaseChart {
                     barChart.highlightValues(new Highlight[]{highlight});
                 }
                 updateText((int) e.getX(), true);
+
+                int dataIndex = candleChart.getData().getCandleData().getDataSetByIndex(h.getDataSetIndex()).getEntryIndex((CandleEntry) e);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onKHighlightValueListener(kLineData,dataIndex , true);
             }
 
             @Override
             public void onNothingSelected() {
                 barChart.highlightValues(null);
                 updateText(kLineData.getKLineDatas().size() - 1, false);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onKHighlightValueListener(kLineData, -1, false);
             }
         });
         //移动十字标数据监听
@@ -236,14 +235,18 @@ public class KLineChart extends BaseChart {
                 Highlight highlight = new Highlight(h.getX(), 0, h.getStackIndex());
                 highlight.setDataIndex(1);
                 candleChart.highlightValues(new Highlight[]{highlight});
-
                 updateText((int) e.getX(), true);
+                int dataIndex = barChart.getData().getBarData().getDataSetByIndex(h.getDataSetIndex()).getEntryIndex((BarEntry) e);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onKHighlightValueListener(kLineData,dataIndex , true);
             }
 
             @Override
             public void onNothingSelected() {
                 candleChart.highlightValues(null);
                 updateText(kLineData.getKLineDatas().size() - 1, false);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onKHighlightValueListener(kLineData, -1, false);
             }
         });
 
@@ -288,9 +291,11 @@ public class KLineChart extends BaseChart {
         candleChart.setData(candleChartData);
         /*************************************成交量数据*****************************************************/
         barChartData = new CombinedData();
-        barChartData.setData(new BarData(kLineData.getVolumeDataSet()));
-        barChartData.setData(new LineData());
-        barChartData.setData(new CandleData());
+        BarDataSet volume = kLineData.getVolumeDataSet();
+        volume.setHighlightEnabled(true);
+        barChartData.setData(new BarData(volume));
+//        barChartData.setData(new LineData());
+//        barChartData.setData(new CandleData());
         //重新请求数据时保持副图指标还是显示原来的指标
         if (chartType1 == 1) {
             barChart.setData(barChartData);
