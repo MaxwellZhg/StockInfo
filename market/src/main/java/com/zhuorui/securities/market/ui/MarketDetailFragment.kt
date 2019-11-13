@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.zhuorui.commonwidget.dialog.ProgressDialog
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -48,7 +49,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
-    MarketDetailView, View.OnClickListener, NestedScrollView.OnScrollChangeListener, OnRefreshListener {
+    MarketDetailView, View.OnClickListener, NestedScrollView.OnScrollChangeListener, OnRefreshListener,
+    AbsActivity.OnOrientationChangedListener {
 
     private var mStock: SearchStockInfo = SearchStockInfo()
     private var tabTitle: Array<String>? = null
@@ -98,6 +100,7 @@ class MarketDetailFragment :
         presenter?.setStockInfo(mStock.ts!!, mStock.code!!, mStock.type!!)
         presenter?.getTopBarStockStatusInfo()
         presenter?.setLifecycleOwner(this)
+        (activity as AbsActivity).addOrientationChangedListener(this)
     }
 
     private fun initView() {
@@ -152,6 +155,20 @@ class MarketDetailFragment :
         loadFragment()
         getData()
         inNum = 1
+    }
+
+    override fun onChange(landscape: Boolean) {
+        if (landscape) {
+            start(
+                KlineFragment.newInstance(
+                    mStock.ts ?: "",
+                    mStock.code ?: "",
+                    mStock.tsCode ?: mStock.code + "." + mStock.ts,
+                    mStock.type ?: 2,
+                    true
+                )
+            )
+        }
     }
 
     /**
@@ -292,6 +309,7 @@ class MarketDetailFragment :
             mFragments[2] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[3] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }
             mFragments[4] = MarketDetailF10BriefFragment.newInstance(mStock)
+            mFragments[5] = mStock?.tsCode?.let { MarketDetailF10FinancialFragment.newInstance(it) }
             mFragments[5] = MarketDetailF10FinancialFragment.newInstance(mStock)
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
@@ -352,12 +370,6 @@ class MarketDetailFragment :
         return commonNavigator
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter?.destroy()
-    }
-
-
     override fun onSupportVisible() {
         super.onSupportVisible()
         if (inNum > 0) {
@@ -396,5 +408,8 @@ class MarketDetailFragment :
 
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as AbsActivity).removeOrientationChangedListener(this)
+    }
 }

@@ -8,7 +8,6 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -25,7 +24,6 @@ import com.zhuorui.securities.market.databinding.FragmentSearchInfoBinding
 import com.zhuorui.securities.market.event.ChageSearchTabEvent
 import com.zhuorui.securities.market.event.SelectsSearchTabEvent
 import com.zhuorui.securities.market.event.TabPositionEvent
-import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
 import com.zhuorui.securities.market.model.StockPageInfo
 import com.zhuorui.securities.market.model.TestSeachDefaultData
@@ -98,7 +96,7 @@ class SearchInfoFragment :
         iv_detele.setOnClickListener(this)
         et_search_info.addTextChangedListener(this)
         et_search_info.setOnEditorActionListener(this)
-        (activity as AbsActivity).setDispatchTouchEventListener(this)
+        (activity as AbsActivity).addDispatchTouchEventListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -283,7 +281,7 @@ class SearchInfoFragment :
     }
     override fun onDetach() {
         super.onDetach()
-        (activity as AbsActivity).setDispatchTouchEventListener(null)
+        (activity as AbsActivity).addDispatchTouchEventListener(this)
     }
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         detailAction(actionId)
