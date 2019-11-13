@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.customer.view.kline;
+package com.zhuorui.securities.market.customer.view.kline.markerView;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -40,7 +40,7 @@ public class KLineDayHighlightView extends FrameLayout implements IKLineHighligh
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_kline_day_highlight, this);
         vPrice = findViewById(R.id.tv_price);
-        vDiffPrice = findViewById(R.id.tv_diff_pirce);
+        vDiffPrice = findViewById(R.id.tv_diff_price);
         vDiffRate = findViewById(R.id.tv_diff_rate);
         vVolume = findViewById(R.id.tv_volume);
         vAveragePrice = findViewById(R.id.tv_average_price);

@@ -217,17 +217,16 @@ public class FiveDayChart extends BaseChart {
             public void onValueSelected(Entry e, Highlight h) {
                 lineChart.highlightValue(h);
                 barChart.highlightValue(new Highlight(h.getX(), h.getDataSetIndex(), -1));
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, (int) e.getX(), true);
-                }
+                int dataIndex = lineChart.getData().getDataSetByIndex(h.getDataSetIndex()).getEntryIndex(e);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData,dataIndex , true);
             }
 
             @Override
             public void onNothingSelected() {
                 barChart.highlightValues(null);
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, 0, false);
-                }
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, -1, false);
             }
         });
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
@@ -235,17 +234,16 @@ public class FiveDayChart extends BaseChart {
             public void onValueSelected(Entry e, Highlight h) {
                 barChart.highlightValue(h);
                 lineChart.highlightValue(new Highlight(h.getX(), h.getDataSetIndex(), -1));
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, (int) e.getX(), true);
-                }
+                int dataIndex = barChart.getData().getDataSetByIndex(h.getDataSetIndex()).getEntryIndex((BarEntry) e);
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData,dataIndex, true);
             }
 
             @Override
             public void onNothingSelected() {
                 lineChart.highlightValues(null);
-                if (mHighlightValueSelectedListener != null) {
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, 0, false);
-                }
+                if (mHighlightValueSelectedListener != null)
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, -1, false);
             }
         });
 
@@ -368,7 +366,7 @@ public class FiveDayChart extends BaseChart {
             Drawable drawable = new ColorDrawable(ResUtil.INSTANCE.getColor(R.color.fill_Color));
             d1.setFillDrawable(drawable);
             d1.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
-            d1.setHighlightEnabled(landscape);
+            d1.setHighlightEnabled(true);
             d2.setHighlightEnabled(false);
             d1.setDrawCircles(false);
             d2.setDrawCircles(false);
@@ -395,7 +393,7 @@ public class FiveDayChart extends BaseChart {
             barDataSet = new BarDataSet(barEntries, "成交量");
             barDataSet.setHighLightColor(ContextCompat.getColor(mContext, R.color.highLight_Color));
             barDataSet.setDrawValues(false);
-            barDataSet.setHighlightEnabled(landscape);
+            barDataSet.setHighlightEnabled(true);
             barDataSet.setNeutralColor(ContextCompat.getColor(mContext, R.color.equal_color));
             barDataSet.setIncreasingColor(ContextCompat.getColor(mContext, R.color.up_color));
             barDataSet.setDecreasingColor(ContextCompat.getColor(mContext, R.color.down_color));

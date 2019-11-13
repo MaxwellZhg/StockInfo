@@ -1,4 +1,4 @@
-package com.zhuorui.securities.market.customer.view.kline;
+package com.zhuorui.securities.market.customer.view.kline.markerView;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -46,10 +46,10 @@ public class KLineHighlightView extends FrameLayout implements IKLineHighlightVi
         vLowPrice = findViewById(R.id.tv_low_price);
         vOpenPrice = findViewById(R.id.tv_open_price);
         vClosePrice = findViewById(R.id.tv_close_price);
-        vDiffPrice = findViewById(R.id.tv_diff_pirce);
+        vDiffPrice = findViewById(R.id.tv_diff_price);
         vDiffRate = findViewById(R.id.tv_diff_rate);
         vVolume = findViewById(R.id.tv_volume);
-        vTotalPrice = findViewById(R.id.tv_total);
+        vTotalPrice = findViewById(R.id.tv_total_price);
         config = LocalSettingsConfig.Companion.getInstance();
     }
 

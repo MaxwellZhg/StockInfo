@@ -7,7 +7,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.kline.BaseChart
-import com.zhuorui.securities.market.customer.view.kline.KLineHighlightView
+import com.zhuorui.securities.market.customer.view.kline.markerView.KLineHighlightView
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
 import com.zhuorui.securities.market.customer.view.kline.model.KLineDataModel
 import com.zhuorui.securities.market.databinding.FragmentKlineBinding
@@ -104,7 +104,8 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
     }
 
     override fun onKHighlightValueListener(data: KLineDataManage?, index: Int, isSelect: Boolean) {
-        val d = data?.kLineDatas?.get(index)
+        val datas = data?.kLineDatas
+        val d = if (isSelect && datas != null && datas.size > index && index > -1) datas[index] else KLineDataModel()
         if (isSelect && d != null) {
             if (mHighlightShow != isSelect) {
                 mHighlightListener?.onShowHighlightView(getHighlightView(d))

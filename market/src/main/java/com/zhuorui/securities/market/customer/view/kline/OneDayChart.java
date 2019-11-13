@@ -254,8 +254,9 @@ public class OneDayChart extends BaseChart {
             public void onValueSelected(Entry e, Highlight h) {
                 // 当触摸K线时，配置参数显示成交量对应的指标线
                 barChart.highlightValue(new Highlight(h.getX(), h.getDataSetIndex(), -1));
+                int dataIndex = lineChart.getData().getDataSetByIndex(h.getDataSetIndex()).getEntryIndex(e);
                 if (mHighlightValueSelectedListener != null)
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, h.getDataIndex(), true);
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData,dataIndex , true);
             }
 
             @Override
@@ -283,8 +284,9 @@ public class OneDayChart extends BaseChart {
                     }
                 }
                 lineChart.highlightValue(highlight);
+                int dataIndex = barChart.getData().getDataSetByIndex(h.getDataSetIndex()).getEntryIndex((BarEntry) e);
                 if (mHighlightValueSelectedListener != null)
-                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData, h.getDataIndex(), true);
+                    mHighlightValueSelectedListener.onDayHighlightValueListener(mData,dataIndex, true);
             }
 
             @Override

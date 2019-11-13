@@ -7,7 +7,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.kline.BaseChart
-import com.zhuorui.securities.market.customer.view.kline.KLineDayHighlightView
+import com.zhuorui.securities.market.customer.view.kline.markerView.KLineDayHighlightView
 import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel
 import com.zhuorui.securities.market.databinding.FragmentFiveDayBinding
@@ -77,7 +77,8 @@ class ChartFiveDayFragment :
     }
 
     override fun onDayHighlightValueListener(mData: TimeDataManage?, index: Int, isSelect: Boolean) {
-        val data = mData?.realTimeData?.get(index)
+        val datas = mData?.realTimeData
+        val data = if (isSelect && datas != null && datas.size > index && index > -1) datas[index] else TimeDataModel()
         if (isSelect && data != null) {
             if (mHighlightShow != isSelect) {
                 mHighlightListener?.onShowHighlightView(getHighlightView(data))
