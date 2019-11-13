@@ -208,20 +208,22 @@ abstract class AbsActivity : SupportActivity(), QuickClickUtil.Callback {
         fun onChange(landscape: Boolean)
     }
 
-    fun addOrientationChangedListener(orientationChangedListener: OnOrientationChangedListener) {
-        this.orientationChangedListener?.add(orientationChangedListener)
+    fun addOrientationChangedListener(listener: OnOrientationChangedListener) {
+        removeOrientationChangedListener(listener)
+        this.orientationChangedListener?.add(listener)
     }
 
-    fun removeOrientationChangedListener(orientationChangedListener: OnOrientationChangedListener) {
-        this.orientationChangedListener?.remove(orientationChangedListener)
+    fun removeOrientationChangedListener(listener: OnOrientationChangedListener) {
+        this.orientationChangedListener?.remove(listener)
     }
 
-    fun addDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener) {
-        this.dispatchTouchEventListener?.add(dispatchTouchEventListener)
+    fun addDispatchTouchEventListener(listener: OnDispatchTouchEventListener) {
+        removeDispatchTouchEventListener(listener)
+        this.dispatchTouchEventListener?.add(listener)
     }
 
-    fun removeDispatchTouchEventListener(dispatchTouchEventListener: OnDispatchTouchEventListener) {
-        this.dispatchTouchEventListener?.remove(dispatchTouchEventListener)
+    fun removeDispatchTouchEventListener(listener: OnDispatchTouchEventListener) {
+        this.dispatchTouchEventListener?.remove(listener)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

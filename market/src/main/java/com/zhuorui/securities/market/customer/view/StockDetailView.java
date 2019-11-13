@@ -64,6 +64,7 @@ public class StockDetailView extends FrameLayout {
     private View vAnimator;
     private TextView vMoreBtn;
     private RecyclerView vRv;
+    private TextView vStatis;
     private MyAdapter mAdapter;
     private final int CLOSE_LINE = 3;
     private final int SPAN_COUNT = 3;
@@ -107,6 +108,7 @@ public class StockDetailView extends FrameLayout {
         vMarket = findViewById(R.id.tv_market);
         vMarketDiffPrice = findViewById(R.id.tv_market_diff_price);
         vMoreBtn = findViewById(R.id.more_btn);
+        vStatis = findViewById(R.id.tv_status);
         vMoreBtn.setOnClickListener(v -> changeMore());
         vRv = findViewById(R.id.recycler_view);
         vRv.setNestedScrollingEnabled(false);
@@ -148,7 +150,13 @@ public class StockDetailView extends FrameLayout {
         }
         final Float price = data.getPrice() != null ? data.getPrice() : mPrice;
         final Float preClosePrice = data.getPreClosePrice() != null ? data.getPreClosePrice() : mPreClosePrice;
-        if (price == null || preClosePrice == null) return;
+        if (price == null || preClosePrice == null) {
+            vPrice.setText("_____");
+            vDiffPrice.setText("___");
+            vDiffRate.setText("___");
+            vCurrencyCode.setText("");
+            return;
+        }
         int priceColor;
         int updownIc;
         if (price > preClosePrice) {
@@ -172,6 +180,7 @@ public class StockDetailView extends FrameLayout {
         if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
             priceAnimator(price.floatValue() > mPrice.floatValue());
         }
+        vCurrencyCode.setText(MarketUtil.getCurrencyCodeByTs("HK"));
         mPreClosePrice = preClosePrice;
         mPrice = price;
     }
