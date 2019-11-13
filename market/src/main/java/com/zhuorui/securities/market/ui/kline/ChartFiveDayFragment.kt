@@ -10,17 +10,17 @@ import com.zhuorui.securities.market.customer.view.kline.BaseChart
 import com.zhuorui.securities.market.customer.view.kline.markerView.KLineDayHighlightView
 import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel
-import com.zhuorui.securities.market.databinding.FragmentFiveDayBinding
+import com.zhuorui.securities.market.databinding.FragmentKlineFiveDayBinding
 import com.zhuorui.securities.market.ui.kline.presenter.ChartFiveDayPresenter
 import com.zhuorui.securities.market.ui.kline.view.FiveDayKlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.FiveDayKlineViewModel
-import kotlinx.android.synthetic.main.fragment_five_day.*
+import kotlinx.android.synthetic.main.fragment_kline_five_day.*
 
 /**
- * 五日分时页
+ * 五日K线
  */
 class ChartFiveDayFragment :
-    AbsFragment<FragmentFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayPresenter>(),
+    AbsFragment<FragmentKlineFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayPresenter>(),
     FiveDayKlineView,IKLine, BaseChart.OnHighlightValueSelectedListener {
 
     private var mHighlightListener: OnKlineHighlightListener? = null
@@ -42,8 +42,7 @@ class ChartFiveDayFragment :
     }
 
     override val layout: Int
-        get() = R.layout.fragment_five_day
-
+        get() = R.layout.fragment_kline_five_day
 
     override val viewModelId: Int
         get() = BR.viewModel

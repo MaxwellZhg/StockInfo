@@ -1,9 +1,13 @@
 package com.zhuorui.securities.market.ui.kline
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
+import com.zhuorui.securities.market.R
 import me.jessyan.autosize.internal.CustomAdapt
 
 /**
@@ -30,6 +34,10 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return View.inflate(context, R.layout.fragment_kline, null)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {

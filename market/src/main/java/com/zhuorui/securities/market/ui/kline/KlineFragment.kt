@@ -17,7 +17,7 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.RehabilitationPopupWindow
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeStatView
-import kotlinx.android.synthetic.main.fragment_stockdetail.*
+import kotlinx.android.synthetic.main.fragment_kline.*
 import kotlinx.android.synthetic.main.layout_kline_stat.*
 import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -65,7 +65,7 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return View.inflate(context, R.layout.fragment_stockdetail, null)
+        return View.inflate(context, R.layout.fragment_kline, null)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {

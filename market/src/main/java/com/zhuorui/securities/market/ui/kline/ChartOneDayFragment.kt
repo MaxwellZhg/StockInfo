@@ -20,7 +20,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 /**
- * 分时页
+ * 分时K线
  */
 class ChartOneDayFragment :
     AbsFragment<FragmentOneDayBinding, OneDayKlineViewModel, OneDayKlineView, ChartOneDayPresenter>(),
