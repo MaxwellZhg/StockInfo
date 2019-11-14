@@ -17,6 +17,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
+import com.zhuorui.commonwidget.ZREmptyView;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.net.response.FinancialReportResponse;
 import com.zhuorui.securities.market.util.MathUtil;
@@ -45,6 +47,8 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     List<Entry> entries2 =new ArrayList<>();
     List<Entry> entries3 =new ArrayList<>();
     List<String> xAisxDate =new ArrayList<>();
+    private ZREmptyView empty_view;
+
     public MarketFinanicalDetailCrashFlowView(Context context) {
        this(context,null);
     }
@@ -62,12 +66,12 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     }
 
     private void initView() {
-
+        empty_view = findViewById(R.id.empty_view);
     }
 
     private void initChart() {
         chart = findViewById(R.id.line_chart);
-        chart.setNoDataText("暂无数据");
+        chart.setNoDataText("");
         chart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         chart.setTouchEnabled(false);//是否有触摸事件
         chart.setDrawGridBackground(false);//是否展示网格线
@@ -204,7 +208,12 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
 
     public void setProfitListData(List<FinancialReportResponse.CashFlowReport>  profitList ){
         this.profitList =profitList;
-        detailListData(profitList);
+        if(profitList!=null) {
+            empty_view.setVisibility(INVISIBLE);
+            detailListData(profitList);
+        }else{
+            empty_view.setVisibility(  VISIBLE);
+        }
     }
 
     private void detailListData(List<FinancialReportResponse.CashFlowReport> profitList) {

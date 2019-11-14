@@ -15,11 +15,12 @@ import com.zhuorui.securities.market.R
  * Date: 2019/11/6
  * Desc:
  */
-class MainTradeYearsInfoPopWindow(contentView: View, num: Int, width: Int, height: Int) :
+class MainTradeYearsInfoPopWindow(contentView: View, num: Int, strList:ArrayList<String>,width: Int, height: Int) :
     PopupWindow(contentView, width, height),
     View.OnClickListener {
 
     private val mNum = num
+    private val strInfo = strList
     private var callBack: OnYearInfoCallBack? = null
     private var popwidth = 0
 
@@ -34,11 +35,16 @@ class MainTradeYearsInfoPopWindow(contentView: View, num: Int, width: Int, heigh
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
         popwidth = contentView.measuredWidth
-        contentView.findViewById<View>(R.id.tv_1).setOnClickListener(this)
-        contentView.findViewById<View>(R.id.tv_2).setOnClickListener(this)
-        contentView.findViewById<View>(R.id.tv_3).setOnClickListener(this)
-        contentView.findViewById<View>(R.id.tv_4).setOnClickListener(this)
-        contentView.findViewById<View>(R.id.tv_5).setOnClickListener(this)
+        contentView.findViewById<TextView>(R.id.tv_1).setOnClickListener(this)
+        contentView.findViewById<TextView>(R.id.tv_1).text=strInfo[0]
+        contentView.findViewById<TextView>(R.id.tv_2).setOnClickListener(this)
+        contentView.findViewById<TextView>(R.id.tv_2).text=strInfo[1]
+        contentView.findViewById<TextView>(R.id.tv_3).setOnClickListener(this)
+        contentView.findViewById<TextView>(R.id.tv_3).text=strInfo[2]
+        contentView.findViewById<TextView>(R.id.tv_4).setOnClickListener(this)
+        contentView.findViewById<TextView>(R.id.tv_4).text=strInfo[3]
+        contentView.findViewById<TextView>(R.id.tv_5).setOnClickListener(this)
+        contentView.findViewById<TextView>(R.id.tv_5).text=strInfo[4]
         var id = when (num) {
             1 -> {
                 R.id.tv_1
@@ -96,12 +102,13 @@ class MainTradeYearsInfoPopWindow(contentView: View, num: Int, width: Int, heigh
 
     companion object {
 
-        fun create(context: Context, mode: Int, callback: OnYearInfoCallBack): MainTradeYearsInfoPopWindow {
+        fun create(context: Context, mode: Int, strList:ArrayList<String>,callback: OnYearInfoCallBack): MainTradeYearsInfoPopWindow {
             val popupWindowView =
                 View.inflate(context, R.layout.pop_mian_trade_years_layout, null)
             val popupWindow = MainTradeYearsInfoPopWindow(
                 popupWindowView,
                 mode,
+                strList,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )

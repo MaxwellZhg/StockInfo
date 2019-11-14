@@ -76,6 +76,9 @@ class MarketDetailF10FinancialFragment :
 
     override fun updataErrorData() {
         financial_view.setPieCharBean(null)
+        profit_chat_one.setProfitChatData(null)
+        profit_chat_two.setOutProfitChatData(null)
+        crash_flow.setProfitListData(null)
     }
     override fun updataProfitChatData(profitList: List<FinancialReportResponse.ProfitReport>) {
        profit_chat_one.setProfitChatData(profitList)

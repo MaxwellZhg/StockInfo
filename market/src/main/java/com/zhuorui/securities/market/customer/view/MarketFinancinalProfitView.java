@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.github.mikephil.charting.animation.ChartAnimator;
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.renderer.DataRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
+import com.zhuorui.commonwidget.ZREmptyView;
 import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
@@ -61,8 +63,11 @@ public class MarketFinancinalProfitView extends FrameLayout {
     ArrayList<Entry>  entries3 = new ArrayList<>();
     ArrayList<Float> yAxisData = new ArrayList<>();
     List<String> xAisxDate = new ArrayList<>();
+    ArrayList<Float> listBarChart1 =new ArrayList<>();
+    ArrayList<Float> listBarChart2 =new ArrayList<>();
     private YAxis leftAxis;
     private YAxis rightAxis;
+    private ZREmptyView empty_view;
 
     public MarketFinancinalProfitView(Context context) {
         this(context, null);
@@ -82,6 +87,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
     }
 
     private void initView() {
+        empty_view = findViewById(R.id.empty_view);
         tv_title = findViewById(R.id.tv_title);
         tv_tips_one = findViewById(R.id.tv_tips_one);
         tv_tips_two = findViewById(R.id.tv_tips_two);
@@ -96,13 +102,12 @@ public class MarketFinancinalProfitView extends FrameLayout {
 
     private void initChart() {
         chart = findViewById(R.id.combine_chart);
-        chart.setNoDataText(ResUtil.INSTANCE.getString(R.string.temp_no_data));
-        chart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         chart.setTouchEnabled(false);//是否有触摸事件
         chart.setDrawGridBackground(false);//是否展示网格线
         chart.setDragEnabled(false); //是否可以拖动
         chart.setScaleEnabled(false);// 可缩放
         chart.setBorderWidth(0.5f);
+        chart.setVisibility(View.INVISIBLE);
         chart.setBorderColor(Color.parseColor("#337B889E"));
         chart.getDescription().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
@@ -114,7 +119,6 @@ public class MarketFinancinalProfitView extends FrameLayout {
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE
         });
-
         leftAxis = chart.getAxis(YAxis.AxisDependency.LEFT);
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawGridLines(true);
@@ -176,8 +180,6 @@ public class MarketFinancinalProfitView extends FrameLayout {
         xAxis.setLabelCount(7, true);
         MyXAxisRenderer xAxisRenderer = new MyXAxisRenderer(chart.getViewPortHandler(), chart.getXAxis(), chart.getTransformer(YAxis.AxisDependency.LEFT));
         chart.setXAxisRenderer(xAxisRenderer);
-
-
         CombinedData data = new CombinedData();
         data.setData(generateBarData());
         data.setData(generateLineData());
@@ -189,32 +191,37 @@ public class MarketFinancinalProfitView extends FrameLayout {
         chart.setData(data);
         //柱形图使用自定义BarChartRenderer ，必须在setData 后设置
         chart.invalidate();
-    }
-
-    private void setRateData(CombinedData data) {
-        LogUtils.e(data.getYMax()+"");
-        data.setData(generateLineData());
-
+        chart.setNoDataText("");
+        chart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
     }
 
     public void setProfitChatData(List<FinancialReportResponse.ProfitReport> profitReport) {
         this.profitReport = profitReport;
         if (profitReport != null) {
+            empty_view.setVisibility(INVISIBLE);
             detailProfitData(profitReport);
+        }else{
+            empty_view.setVisibility(VISIBLE);
         }
     }
 
     public void setOutProfitChatData(List<FinancialReportResponse.LiabilistyReport> liabilistyReport) {
         this.liabilistyReport = liabilistyReport;
         if (liabilistyReport != null) {
+            empty_view.setVisibility(INVISIBLE);
             detailLibProfitData(liabilistyReport);
+        }else{
+            empty_view.setVisibility(VISIBLE);
         }
     }
 
     private void detailLibProfitData(List<FinancialReportResponse.LiabilistyReport> liabilistyReport) {
         entries1.clear();
-        entries1.clear();
+        entries2.clear();
+        entries3.clear();
         xAisxDate.clear();
+        yAxisData.clear();
+        listBarChart2.clear();
         entries1.add(new BarEntry(0.9f, MathUtil.INSTANCE.convertToUnitFloat(liabilistyReport.get(0).getTotalAssets())));
         entries1.add(new BarEntry(1.75f, MathUtil.INSTANCE.convertToUnitFloat(liabilistyReport.get(1).getTotalAssets())));
         entries1.add(new BarEntry(2, MathUtil.INSTANCE.convertToUnitFloat(liabilistyReport.get(2).getTotalAssets())));
@@ -240,8 +247,11 @@ public class MarketFinancinalProfitView extends FrameLayout {
 
     private void detailProfitData(List<FinancialReportResponse.ProfitReport> profitReport) {
         entries1.clear();
-        entries1.clear();
+        entries2.clear();
+        entries3.clear();
         xAisxDate.clear();
+        yAxisData.clear();
+        listBarChart1.clear();
         entries1.add(new BarEntry(0.9f, MathUtil.INSTANCE.convertToUnitFloat(profitReport.get(0).getIncome())));
         entries1.add(new BarEntry(1.75f, MathUtil.INSTANCE.convertToUnitFloat(profitReport.get(1).getIncome())));
         entries1.add(new BarEntry(2, MathUtil.INSTANCE.convertToUnitFloat(profitReport.get(2).getIncome())));

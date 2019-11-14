@@ -40,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="13dp"
             android:textColor="@color/color_A4B2CB"
-            android:text="2018年报"
+            android:text="--"
             android:drawableRight="@mipmap/icon_pull_down_triangle"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

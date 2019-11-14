@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.customer.MainTradeYearsInfoPopWindow;
 import com.zhuorui.securities.market.net.response.FinancialReportResponse;
@@ -20,7 +21,9 @@ import java.util.List;
  * Desc:
  */
 public class MarketF10FinancinalMainTradeView extends FrameLayout implements View.OnClickListener,MainTradeYearsInfoPopWindow.OnYearInfoCallBack {
-    ArrayList<FinancialReportResponse.BusinessReport> listinfo;
+    ArrayList<FinancialReportResponse.BusinessReport> listinfo1;
+    ArrayList<FinancialReportResponse.BusinessReport> listinfo2;
+    ArrayList<String> showDate =new ArrayList<>();
     ArrayList<Float> pieData=new ArrayList<>();
     private TextView tv_years;
     private int mDateNum = 1;
@@ -70,10 +73,42 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
 
     public void setPieCharBean(FinancialReportResponse.Business business){
          this.business = business;
-         if(business!=null) {
-             listinfo = business.get20181231();
-             detailData(listinfo);
+         if(this.business!=null) {
+             listinfo1 = business.get20190630();
+             listinfo2 = business.get20181231();
+             if(listinfo1!=null&&listinfo2!=null){
+                 detailData(listinfo1);
+                 showDate.add("2019"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 tv_years.setText(showDate.get(0));
+             }else if(listinfo1==null&&listinfo2!=null){
+                 showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 showDate.add("2016"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 tv_years.setText(showDate.get(0));
+                 detailData(listinfo2);
+             }else{
+                 showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+                 showDate.add("2016"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+                 ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+                 tv_years.setText(showDate.get(0));
+                 detailData(listinfo);
+             }
          }else{
+             showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+             showDate.add("2018"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+             showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+             showDate.add("2017"+ ResUtil.INSTANCE.getString(R.string.middele_years_report));
+             showDate.add("2016"+ ResUtil.INSTANCE.getString(R.string.all_years_report));
+             tv_years.setText(showDate.get(0));
              ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
              detailData(listinfo);
          }
@@ -82,7 +117,7 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
     @Override
     public void onClick(View v) {
         if (v == tv_years) {
-            MainTradeYearsInfoPopWindow.Companion.create(getContext(),mDateNum,this).showAsDropDown(tv_years);
+            MainTradeYearsInfoPopWindow.Companion.create(getContext(),mDateNum,showDate,this).showAsDropDown(tv_years);
         }
     }
 
@@ -96,29 +131,84 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
     private void upDateNumText() {
         switch (mDateNum){
             case 1:
-                tv_years.setText("2018年报");
-                listinfo= business.get20181231();
-                detailData(listinfo);
+                tv_years.setText(showDate.get(0));
+                if(business !=null) {
+                    if (showDate.get(0).contains("2019")) {
+                        listinfo1 = business.get20190630();
+                    } else {
+                        listinfo1 = business.get20181231();
+                    }
+                }
+                if(listinfo1 !=null) {
+                    detailData(listinfo1);
+                }else{
+                    ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+                    detailData(listinfo);
+                }
                 break;
             case 2:
-                tv_years.setText("2018中报");
-                listinfo= business.get20180630();
-                detailData(listinfo);
+                tv_years.setText(showDate.get(1));
+                if(business !=null) {
+                    if (showDate.get(0).contains("2019")) {
+                        listinfo1 = business.get20181231();
+                    } else {
+                        listinfo1 = business.get20180630();
+                    }
+                }
+                if(listinfo1 !=null) {
+                    detailData(listinfo1);
+                }else{
+                    ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+                    detailData(listinfo);
+                }
                 break;
             case 3:
-                tv_years.setText("2017年报");
-                listinfo= business.get20171231();
-                detailData(listinfo);
+                tv_years.setText(showDate.get(2));
+                if(business !=null) {
+                    if (showDate.get(0).contains("2019")) {
+                        listinfo1 = business.get20190630();
+                    } else {
+                        listinfo1 = business.get20171231();
+                    }
+                }
+                if(listinfo1 !=null) {
+                    detailData(listinfo1);
+                }else{
+                    ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+                    detailData(listinfo);
+                }
                 break;
             case 4:
-                tv_years.setText("2017中报");
-                listinfo= business.get20170630();
-                detailData(listinfo);
+                tv_years.setText(showDate.get(3));
+                if(business !=null) {
+                    if (showDate.get(0).contains("2019")) {
+                        listinfo1 = business.get20171231();
+                    } else {
+                        listinfo1 = business.get20170630();
+                    }
+                }
+                if(listinfo1 !=null) {
+                    detailData(listinfo1);
+                }else{
+                    ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+                    detailData(listinfo);
+                }
                 break;
             case 5:
-                tv_years.setText("2016年报");
-                listinfo= business.get20161231();
-                detailData(listinfo);
+                tv_years.setText(showDate.get(4));
+                if(business !=null) {
+                    if (showDate.get(0).contains("2019")) {
+                        listinfo1 = business.get20170630();
+                    } else {
+                        listinfo1 = business.get20161231();
+                    }
+                }
+                if(listinfo1 !=null) {
+                    detailData(listinfo1);
+                }else{
+                    ArrayList<FinancialReportResponse.BusinessReport> listinfo =new ArrayList<>();
+                    detailData(listinfo);
+                }
                 break;
         }
     }
@@ -126,7 +216,11 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
     public void detailData(ArrayList<FinancialReportResponse.BusinessReport> listinfo){
           pieData.clear();
          for(int i=0;i<listinfo.size();i++){
-             pieData.add(MathUtil.INSTANCE.convertToUnitFloat(listinfo.get(i).getCurrentYearTurnover()));
+             if(MathUtil.INSTANCE.convertToUnitFloat(listinfo.get(i).getCurrentYearTurnover())<0f){
+                 pieData.add(MathUtil.INSTANCE.convertToUnitFloat(listinfo.get(i).getCurrentYearTurnover())*-1f);
+             }else {
+                 pieData.add(MathUtil.INSTANCE.convertToUnitFloat(listinfo.get(i).getCurrentYearTurnover()));
+             }
          }
          setData(pieData);
          if(pieData.size()>3){
