@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.customer.view;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -51,8 +52,14 @@ public class BuyingSellingFilesView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         defColor = Color.parseColor("#C0CCE0");
         config = LocalSettingsConfig.Companion.getInstance();
-        int type = 1;
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BuyingSellingFilesView);
+        int type = a.getInt(R.styleable.BuyingSellingFilesView_zr_LayoutManager, 0);
         if (type == 1) {
+            inflate(context, R.layout.view_buying_selling_files_grid, this);
+            initView();
+            vRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            vRv.setAdapter(mAdapter = new GridAdapter(getContext()));
+        } else {
             inflate(context, R.layout.view_buying_selling_files_linear, this);
             initView();
             vRv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -63,11 +70,6 @@ public class BuyingSellingFilesView extends FrameLayout {
                 lp.height = itemHight;
                 vPB.requestLayout();
             });
-        } else {
-            inflate(context, R.layout.view_buying_selling_files_grid, this);
-            initView();
-            vRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            vRv.setAdapter(mAdapter = new GridAdapter(getContext()));
         }
     }
 
@@ -176,7 +178,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         @Override
         public int calculationItemHight(int totalHight) {
             mItemHight = totalHight / mTitles.length;
-            mItemHight = (int) Math.max(mItemHight , context.getResources().getDisplayMetrics().density * 25);
+            mItemHight = (int) Math.max(mItemHight, context.getResources().getDisplayMetrics().density * 25);
             return mItemHight;
         }
 
