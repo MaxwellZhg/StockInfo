@@ -151,7 +151,7 @@ public class MarketUtil {
         view.setBackgroundColor(isUp ? 0x33D9001B : 0x3300CC00);
         animator = new ObjectAnimator().ofFloat(view, "translationY", 0, view.getHeight() * (isUp ? -1 : 1));
         animator.setInterpolator(new AccelerateInterpolator());
-        animator.setDuration(300);
+        animator.setDuration(500);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {

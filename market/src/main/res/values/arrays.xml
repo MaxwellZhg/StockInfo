@@ -53,6 +53,7 @@
     <string-array name="buy_sell_file_grid">
         <item>买一</item>
         <item>卖一</item>
+        <item>买二</item>
         <item>卖二</item>
         <item>买三</item>
         <item>卖三</item>

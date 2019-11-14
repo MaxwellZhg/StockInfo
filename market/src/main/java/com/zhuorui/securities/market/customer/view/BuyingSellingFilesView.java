@@ -50,7 +50,7 @@ public class BuyingSellingFilesView extends FrameLayout {
 
     public BuyingSellingFilesView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        defColor = Color.parseColor("C0CCE0");
+        defColor = Color.parseColor("#C0CCE0");
         config = LocalSettingsConfig.Companion.getInstance();
         int type = 0;
         if (type == 1) {
@@ -88,7 +88,7 @@ public class BuyingSellingFilesView extends FrameLayout {
      * @param buyingData
      * @param sellingData
      */
-    public void setData(float buyingValue, float sellingValue, List<Object> buyingData, List<Object> sellingData) {
+    public void setData(float buyingValue, float sellingValue, List<? extends Object> buyingData, List<? extends Object> sellingData) {
         float total = buyingValue + sellingValue;
         float buyingB = buyingValue / total;
         float sellingB = 1 - buyingB;
@@ -148,7 +148,7 @@ public class BuyingSellingFilesView extends FrameLayout {
 
 
         @Override
-        public void setData(List<Object> buyingData, List<Object> sellingData) {
+        public void setData(List<? extends Object> buyingData, List<? extends Object> sellingData) {
             int size = Math.min(buyingData.size(), sellingData.size());
             List<Object> datas = new ArrayList<>();
             for (int i = 0; i < size; i++) {
@@ -202,7 +202,7 @@ public class BuyingSellingFilesView extends FrameLayout {
 
 
         @Override
-        public void setData(List<Object> buyingData, List<Object> sellingData) {
+        public void setData(List<? extends Object> buyingData, List<? extends Object> sellingData) {
             int size = (mTitles.length - 1) / 2;
             size = Math.min(size, Math.min(buyingData.size(), sellingData.size()));
             List<Object> datas = new ArrayList<>();
@@ -219,7 +219,7 @@ public class BuyingSellingFilesView extends FrameLayout {
 
     private abstract class BuySellFileAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
-        public abstract void setData(List<Object> buyingData, List<Object> sellingData);
+        public abstract void setData(List<? extends Object> buyingData, List<? extends Object> sellingData);
 
         public int calculationItemHight(int totalHight) {
             return 0;
@@ -232,7 +232,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         private TextView vTitle;
         private TextView vPirce;
         private TextView vNum;
-        private TextView vAnim;
+        private View vAnim;
 
         private ObjectAnimator animator;
 
