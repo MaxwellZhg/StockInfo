@@ -52,7 +52,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         defColor = Color.parseColor("#C0CCE0");
         config = LocalSettingsConfig.Companion.getInstance();
-        int type = 0;
+        int type = 1;
         if (type == 1) {
             inflate(context, R.layout.view_buying_selling_files_linear, this);
             initView();
@@ -92,7 +92,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         float total = buyingValue + sellingValue;
         float buyingB = buyingValue / total;
         float sellingB = 1 - buyingB;
-        vPB.setProgress((int) (buyingB * 1000));
+        vPB.setProgress((int) (buyingB * 10000));
         vBuyingValue.setText(String.format(ResUtil.INSTANCE.getString(R.string.buying_percentage), buyingB * 100));
         vSellingValue.setText(String.format(ResUtil.INSTANCE.getString(R.string.selling_percentage), sellingB * 100));
         mAdapter.setData(buyingData, sellingData);
@@ -177,6 +177,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         @Override
         public int calculationItemHight(int totalHight) {
             mItemHight = totalHight / mTitles.length;
+            mItemHight = (int) Math.max(mItemHight , context.getResources().getDisplayMetrics().density * 25);
             return mItemHight;
         }
 
@@ -209,6 +210,7 @@ public class BuyingSellingFilesView extends FrameLayout {
             for (int i = size - 1; i >= 0; i--) {
                 datas.add(buyingData.get(i));
             }
+            datas.add(0);
             for (int i = 0; i < size; i++) {
                 datas.add(sellingData.get(i));
             }
