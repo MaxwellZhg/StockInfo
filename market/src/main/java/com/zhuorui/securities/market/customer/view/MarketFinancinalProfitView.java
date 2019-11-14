@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.github.mikephil.charting.animation.ChartAnimator;
@@ -21,12 +22,15 @@ import com.github.mikephil.charting.renderer.DataRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
+import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.net.response.FinancialReportResponse;
 import com.zhuorui.securities.market.util.MathUtil;
+import me.jessyan.autosize.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,7 +58,12 @@ public class MarketFinancinalProfitView extends FrameLayout {
     private TextView tv_title;
     ArrayList<BarEntry> entries1 = new ArrayList<>();
     ArrayList<BarEntry> entries2 = new ArrayList<>();
-    List<String> xAisxDate =new ArrayList<>();
+    ArrayList<Entry>  entries3 = new ArrayList<>();
+    ArrayList<Float> yAxisData = new ArrayList<>();
+    List<String> xAisxDate = new ArrayList<>();
+    private YAxis leftAxis;
+    private YAxis rightAxis;
+
     public MarketFinancinalProfitView(Context context) {
         this(context, null);
     }
@@ -106,7 +115,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
                 CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE
         });
 
-        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis = chart.getAxis(YAxis.AxisDependency.LEFT);
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(mTextColor);
@@ -116,7 +125,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
         leftAxis.setXOffset(5f);
         leftAxis.setEdgeYOffset(5f);
         leftAxis.setSpaceBottom(0f);
-        leftAxis.setSpaceTop(6f);
+        leftAxis.setSpaceTop(10f);
         leftAxis.setZeroLineColor(mGridColor);
         leftAxis.setDrawZeroLine(false);
         leftAxis.setLabelCount(5, true);
@@ -125,34 +134,35 @@ public class MarketFinancinalProfitView extends FrameLayout {
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value == 0 || mEmpty ? "0" : String.format("%.2f", value)+"亿";
+                return value == 0 || mEmpty ? "0" : String.format("%.2f", value) + "亿";
             }
         });
-        if (type == 1) {
-            YAxis rightAxis = chart.getAxisRight();
-            rightAxis.setEnabled(true);
-            rightAxis.setDrawGridLines(true);
-            rightAxis.setDrawAxisLine(false);
-            rightAxis.setTextColor(mTextColor);
-            rightAxis.setGridColor(mGridColor);
-            rightAxis.setDrawZeroLine(true);
-            rightAxis.setTextSize(12f);
-            rightAxis.setGridLineWidth(0.5f);
-            // 设置文字偏移量
-            rightAxis.setXOffset(5f);
-            rightAxis.setEdgeYOffset(5f);
-            rightAxis.setSpaceBottom(0f);
-            rightAxis.setSpaceTop(6f);
-            rightAxis.setLabelCount(5, true);
-            rightAxis.setValueLineInside(true);
-            rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-            rightAxis.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return value == 0 || mEmpty ? "0" : String.format("%.2f", value)+"亿";
-                }
-            });
-        }
+        rightAxis = chart.getAxis(YAxis.AxisDependency.RIGHT);
+
+        rightAxis.setEnabled(true);
+        rightAxis.setDrawGridLines(true);
+        rightAxis.setDrawAxisLine(false);
+        rightAxis.setTextColor(mTextColor);
+        rightAxis.setGridColor(mGridColor);
+        rightAxis.setDrawZeroLine(false);
+        rightAxis.setTextSize(12f);
+        rightAxis.setGridLineWidth(0.5f);
+        rightAxis.setAxisMinimum(yAxisData.get(0) - 10f);
+        rightAxis.setAxisMaximum(yAxisData.get(4) + 10f);
+        // 设置文字偏移量
+        rightAxis.setXOffset(5f);
+        rightAxis.setEdgeYOffset(5f);
+        rightAxis.setSpaceBottom(0f);
+        rightAxis.setSpaceTop(10f);
+        rightAxis.setLabelCount(5, true);
+        rightAxis.setValueLineInside(true);
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        rightAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return value == 0 || mEmpty ? "0" : String.format("%.2f", value) + "%";
+            }
+        });
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(1f);
@@ -169,21 +179,22 @@ public class MarketFinancinalProfitView extends FrameLayout {
 
 
         CombinedData data = new CombinedData();
-
-       // data.setData(generateLineData());
         data.setData(generateBarData());
+        data.setData(generateLineData());
         xAxis.setAxisMaximum(data.getXMax() + 2f);
-        if(type==2) {
+        if (type == 2) {
             leftAxis.setAxisMinimum(data.getYMin() - 100f);
         }
         ((MyXAxisRenderer) chart.getRendererXAxis()).setStockTs();
         chart.setData(data);
         //柱形图使用自定义BarChartRenderer ，必须在setData 后设置
-   /*     List<DataRenderer> renders = new ArrayList<>();
-        renders.add(new CombineLineRender(chart, chart.getAnimator(), chart.getViewPortHandler()));
-        ((CombinedChartRenderer) chart.getRenderer()).setSubRenderers(renders);
-        chart.getRenderer().initBuffers();*/
         chart.invalidate();
+    }
+
+    private void setRateData(CombinedData data) {
+        LogUtils.e(data.getYMax()+"");
+        data.setData(generateLineData());
+
     }
 
     public void setProfitChatData(List<FinancialReportResponse.ProfitReport> profitReport) {
@@ -214,9 +225,16 @@ public class MarketFinancinalProfitView extends FrameLayout {
         entries2.add(new BarEntry(2, MathUtil.INSTANCE.convertToUnitFloat(liabilistyReport.get(2).getTotalLiability())));
         entries2.add(new BarEntry(3, MathUtil.INSTANCE.convertToUnitFloat(liabilistyReport.get(3).getTotalLiability())));
         entries2.add(new BarEntry(4, MathUtil.INSTANCE.convertToUnitFloat(liabilistyReport.get(4).getTotalLiability())));
-        for(int i =0; i<liabilistyReport.size();i++){
+        entries3.add(new Entry(1.60f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(0).getLiabilityRate())));
+        entries3.add(new Entry(2.75f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(1).getLiabilityRate())));
+        entries3.add(new Entry(3.90f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(2).getLiabilityRate())));
+        entries3.add(new Entry(5.05f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(3).getLiabilityRate())));
+        entries3.add(new Entry(6.25f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(4).getLiabilityRate())));
+        for (int i = 0; i < liabilistyReport.size(); i++) {
             xAisxDate.add(liabilistyReport.get(i).getDate());
+            yAxisData.add(MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(i).getLiabilityRate()));
         }
+        Collections.sort(yAxisData);
         initChart();
     }
 
@@ -234,9 +252,16 @@ public class MarketFinancinalProfitView extends FrameLayout {
         entries2.add(new BarEntry(2, MathUtil.INSTANCE.convertToUnitFloat(profitReport.get(2).getProfit())));
         entries2.add(new BarEntry(3, MathUtil.INSTANCE.convertToUnitFloat(profitReport.get(3).getProfit())));
         entries2.add(new BarEntry(4, MathUtil.INSTANCE.convertToUnitFloat(profitReport.get(4).getProfit())));
-        for(int i =0; i<profitReport.size();i++){
+        entries3.add(new Entry(1.60f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(0).getProfitRate())));
+        entries3.add(new Entry(2.75f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(1).getProfitRate())));
+        entries3.add(new Entry(3.90f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(2).getProfitRate())));
+        entries3.add(new Entry(5.05f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(3).getProfitRate())));
+        entries3.add(new Entry(6.25f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(4).getProfitRate())));
+        for (int i = 0; i < profitReport.size(); i++) {
             xAisxDate.add(profitReport.get(i).getDate());
+            yAxisData.add(MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(i).getProfitRate()));
         }
+        Collections.sort(yAxisData);
         initChart();
     }
 
@@ -276,13 +301,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
 
     private LineData generateLineData() {
         LineData d = new LineData();
-        ArrayList<Entry> entries = new ArrayList<>();
-     /*   entries.add(new Entry(1.60f, 2500f));
-        entries.add(new Entry(2.75f, 3500f));
-        entries.add(new Entry(3.90f, 2400f));
-        entries.add(new Entry(5.05f, 2800f));
-        entries.add(new Entry(6.25f, 3800f));*/
-        LineDataSet set = new LineDataSet(entries, "Line DataSet");
+        LineDataSet set = new LineDataSet(entries3, "Line DataSet");
         set.setColor(colors.get(2));
         set.setLineWidth(0.8f);
         set.setCircleColor(colors.get(2));
@@ -290,13 +309,13 @@ public class MarketFinancinalProfitView extends FrameLayout {
         set.setFillColor(colors.get(2));
         set.setMode(LineDataSet.Mode.LINEAR);
         set.setDrawValues(true);
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-     /*   set.setValueFormatter(new ValueFormatter() {
+        set.setAxisDependency(YAxis.AxisDependency.RIGHT);
+        set.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return "";
             }
-        });*/
+        });
         d.addDataSet(set);
         return d;
     }
@@ -309,32 +328,6 @@ public class MarketFinancinalProfitView extends FrameLayout {
         colors.add(mOut1Color);
         colors.add(mOut2Color);
         colors.add(mOut3Color);
-    }
-
-    class CombineLineRender extends CombinedChartRenderer {
-        private double zeroX = 0;//0 的y值
-        private float space = 0;
-        private float zeroLineWidth = 0;
-        private float textSpace = 0;
-        private final float testSizePx = Utils.convertDpToPixel(10f);
-
-        public CombineLineRender(CombinedChart chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
-            super(chart, animator, viewPortHandler);
-        }
-
-        @Override
-        public void drawValues(Canvas c) {
-            MPPointD pos = chart.getTransformer(YAxis.AxisDependency.LEFT).getPixelForValues(0f, 0f);
-            zeroX = pos.x;
-            super.drawValues(c);
-        }
-
-        @Override
-        public void drawValue(Canvas c, String valueText, float x, float y, int color) {
-            x = (float) (zeroX + 5f);
-            super.drawValue(c, valueText, x, y, color);
-        }
-
     }
 
     class MyXAxisRenderer extends XAxisRenderer {
@@ -417,48 +410,5 @@ public class MarketFinancinalProfitView extends FrameLayout {
             drawLabel(c, "", positions[index], pos, anchor, mXAxis.getLabelRotationAngle());*/
         }
 
-    }
-
-    class MyYAxisRenderer extends YAxisRenderer {
-
-        private float dividerY;
-        private float dividerValue;
-
-        public MyYAxisRenderer(ViewPortHandler viewPortHandler, YAxis yAxis, Transformer trans) {
-            super(viewPortHandler, yAxis, trans);
-        }
-
-        @Override
-        public void computeAxis(float min, float max, boolean inverted) {
-            super.computeAxis(min, max, inverted);
-            if (max > 0 && min < 0) {
-                dividerValue = 0;
-            } else {
-                double range = Math.abs(max - min);
-                dividerValue = (float) (max - (range / 2));
-            }
-            MPPointD pos = mTrans.getPixelForValues(0f, dividerValue);
-            dividerY = (float) pos.y;
-        }
-
-        @Override
-        protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
-            super.drawYLabels(c, fixedPosition, positions, offset);
-            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
-        }
-
-        @Override
-        public void renderGridLines(Canvas c) {
-            super.renderGridLines(c);
-            int clipRestoreCount = c.save();
-            c.clipRect(getGridClippingRect());
-            Path gridLinePath = mRenderGridLinesPath;
-            gridLinePath.reset();
-            gridLinePath.moveTo(mViewPortHandler.offsetLeft(), dividerY);
-            gridLinePath.lineTo(mViewPortHandler.contentRight(), dividerY);
-            c.drawPath(gridLinePath, mGridPaint);
-            gridLinePath.reset();
-            c.restoreToCount(clipRestoreCount);
-        }
     }
 }

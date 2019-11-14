@@ -144,6 +144,7 @@ object MathUtil {
     /**
      * k代表千，M代表百万，B代表十亿
      */
+    private val H = BigDecimal.valueOf(100)
     private val K = BigDecimal.valueOf(1000)
     private val M = BigDecimal.valueOf(1000000)
     private val B = BigDecimal.valueOf(1000000000)
@@ -218,6 +219,17 @@ object MathUtil {
                 else -> rounded(number).toFloat()
             }
         }
+        return null
+    }
+
+    fun convertToUnitRateFloat(number: BigDecimal): Float? {
+        return when {
+                //大于100
+                multiply2(number,H).compareTo(H) == 1 -> subtract2(H,multiply2(number,H)).toFloat()
+                // 是否小于100
+                multiply2(number,H).compareTo(W) == -1 -> multiply2(number,H).toFloat()
+                else -> rounded(number).toFloat()
+            }
         return null
     }
 }
