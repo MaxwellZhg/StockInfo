@@ -146,6 +146,9 @@ public class OneDayChart extends BaseChart {
         } else if (showModel == 1) {
             layoutParams.height = ResUtil.INSTANCE.getDimensionDp2Px(225.5f);
         } else if (showModel == 3) {
+            lineChart.setExtraOffsets(0,0,0,0);
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
             barChart.setVisibility(GONE);
         } else {
             // TODO
@@ -482,6 +485,8 @@ public class OneDayChart extends BaseChart {
                 lineChart.setViewPortOffsets(0, 0, 0, CommonUtil.dip2px(mContext, 20));
             } else if (showModel == 1) {
                 lineChart.setViewPortOffsets(0, CommonUtil.dip2px(mContext, 3), 0, CommonUtil.dip2px(mContext, 25));
+            } else if (showModel == 3){
+                lineChart.setViewPortOffsets(0, 0, 0, CommonUtil.dip2px(mContext, 26));
             } else {
                 // TODO
             }

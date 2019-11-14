@@ -13,15 +13,16 @@
             android:id="@+id/root_view"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="211dp">
+            android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/info"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="130:185"
                 android:layout_marginTop="1dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="22dp"
+                app:layout_constraintWidth_percent="0.344"
+                app:layout_constraintDimensionRatio="130:185"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

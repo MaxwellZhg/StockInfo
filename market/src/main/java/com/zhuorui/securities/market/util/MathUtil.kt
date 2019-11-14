@@ -144,6 +144,7 @@ object MathUtil {
     /**
      * k代表千，M代表百万，B代表十亿
      */
+    private val H = BigDecimal.valueOf(100)
     private val K = BigDecimal.valueOf(1000)
     private val M = BigDecimal.valueOf(1000000)
     private val B = BigDecimal.valueOf(1000000000)
@@ -192,6 +193,43 @@ object MathUtil {
             }
         }
 
+        return null
+    }
+
+    /**
+     * 格式化数字为亿float
+     * @param formatType 1金额 2持股
+     * @return 返回示例 金额：10、10万、10亿 持股：10、10万股、10亿股
+     */
+    fun convertToUnitFloat(number: BigDecimal): Float? {
+        if(number> BigDecimal.ZERO) {
+            return when {
+                // 是否大于亿
+                number.compareTo(Y) == 1 -> divide2(number, Y).toFloat()
+                // 是否大于万
+                number.compareTo(W) == 1 -> divide2(number, W).toFloat()
+                else -> rounded(number).toFloat()
+            }
+        }else{
+            return when {
+                // 是否大于亿
+                number.compareTo(Y) == -1 -> divide2(number, Y).toFloat()
+                // 是否大于万
+                number.compareTo(W) == -1 -> divide2(number, W).toFloat()
+                else -> rounded(number).toFloat()
+            }
+        }
+        return null
+    }
+
+    fun convertToUnitRateFloat(number: BigDecimal): Float? {
+        return when {
+                //大于100
+                multiply2(number,H).compareTo(H) == 1 -> subtract2(H,multiply2(number,H)).toFloat()
+                // 是否小于100
+                multiply2(number,H).compareTo(W) == -1 -> multiply2(number,H).toFloat()
+                else -> rounded(number).toFloat()
+            }
         return null
     }
 }

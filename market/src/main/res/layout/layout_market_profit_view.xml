@@ -15,7 +15,7 @@
               android:id="@+id/tv_title"
               android:layout_marginStart="13dp"
               android:textColor="@color/color_FFFFFFFF"
-              android:text="利润表"/>
+              android:text="@string/profit_chat"/>
 
     <TextView android:layout_width="wrap_content"
               app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
                       android:layout_height="wrap_content"
                       android:id="@+id/tv_tips_one"
                       android:layout_marginStart="3.5dp"
-                      android:text="收入总计"
+                      android:text="@string/income_cout_all"
                       android:textColor="@color/color_FFFFFFFF"/>
         </LinearLayout>
 
@@ -87,7 +87,7 @@
                       android:layout_height="wrap_content"
                       android:id="@+id/tv_tips_two"
                       android:layout_marginStart="3.5dp"
-                      android:text="除税后溢价"
+                      android:text="@string/outcome_cout_all"
                       android:textColor="@color/color_FFFFFFFF"/>
         </LinearLayout>
 
@@ -103,7 +103,7 @@
                       android:layout_height="wrap_content"
                       android:id="@+id/tv_tips_three"
                       android:layout_marginStart="3.5dp"
-                      android:text="净利润率"
+                      android:text="@string/only_profit_count_rate"
                       android:textColor="@color/color_FFFFFFFF"/>
         </LinearLayout>
     </RelativeLayout>
