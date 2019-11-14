@@ -117,7 +117,9 @@
                     <com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
                             android:id="@+id/buyingSellingFiles"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            app:zr_LayoutManager="grid"
+                    />
 
                     <!--买卖盘经纪-->
 

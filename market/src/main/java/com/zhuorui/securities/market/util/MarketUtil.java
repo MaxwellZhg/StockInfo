@@ -1,6 +1,11 @@
 package com.zhuorui.securities.market.util;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.commonwidget.config.StocksThemeColor;
 import com.zhuorui.securities.base2app.util.TimeZoneUtil;
@@ -129,5 +134,46 @@ public class MarketUtil {
                 break;
         }
         return code;
+    }
+
+    /**
+     * 涨跌动画
+     *
+     * @param animator 正在执行的动画
+     * @param view     执行动画的view
+     * @param isUp     是否涨
+     * @return
+     */
+    public static ObjectAnimator showUpDownAnim(ObjectAnimator animator, View view, boolean isUp) {
+        if (animator != null && animator.isRunning()) {
+            animator.cancel();
+        }
+        view.setBackgroundColor(isUp ? 0x33D9001B : 0x3300CC00);
+        animator = new ObjectAnimator().ofFloat(view, "translationY", 0, view.getHeight() * (isUp ? -1 : 1));
+        animator.setInterpolator(new AccelerateInterpolator());
+        animator.setDuration(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setBackground(null);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
+        return animator;
     }
 }

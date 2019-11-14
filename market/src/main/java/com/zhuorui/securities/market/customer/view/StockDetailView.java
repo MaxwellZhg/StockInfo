@@ -79,6 +79,7 @@ public class StockDetailView extends FrameLayout {
     private Float mOpenPrice;
     private Float mHighPricel;
     private Float mLowPricel;
+    private ObjectAnimator priceAnimator;
 
     public StockDetailView(Context context) {
         this(context, null);
@@ -119,8 +120,8 @@ public class StockDetailView extends FrameLayout {
         decoration.setDrawable(getResources().getDrawable(R.drawable.stock_detail_item_divider));
         vRv.addItemDecoration(decoration);
         vRv.setAdapter(mAdapter = new MyAdapter(getContext()));
-        vDiffPrice.setOnClickListener(v -> priceAnimator(true));
-        vDiffRate.setOnClickListener(v -> priceAnimator(false));
+        vDiffPrice.setOnClickListener(v -> priceAnimator = MarketUtil.showUpDownAnim(priceAnimator,vAnimator,true));
+        vDiffRate.setOnClickListener(v -> priceAnimator = MarketUtil.showUpDownAnim(priceAnimator,vAnimator,false));
     }
 
     private void changeMore() {
@@ -178,7 +179,7 @@ public class StockDetailView extends FrameLayout {
         vDiffPrice.setText(String.format("%+.3f", diffPrice));
         vDiffRate.setText(String.format("%+.2f%%", diffPrice * 100 / preClosePrice));
         if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
-            priceAnimator(price.floatValue() > mPrice.floatValue());
+            priceAnimator = MarketUtil.showUpDownAnim(priceAnimator,vAnimator,price.floatValue() > mPrice.floatValue());
         }
         vCurrencyCode.setText(MarketUtil.getCurrencyCodeByTs("HK"));
         mPreClosePrice = preClosePrice;
@@ -265,49 +266,6 @@ public class StockDetailView extends FrameLayout {
         }
     }
 
-    private ObjectAnimator priceAnimator;
-    private int upAnimatorColor = Color.parseColor("#26D9001B");
-    private int downAnimatorColor = Color.parseColor("#2600CC00");
-
-    /**
-     * 涨跌动画
-     *
-     * @param isUp
-     */
-    private void priceAnimator(boolean isUp) {
-        if (priceAnimator != null && priceAnimator.isRunning()) {
-            priceAnimator.cancel();
-            priceAnimator = null;
-        }
-        vAnimator.setBackgroundColor(isUp ? upAnimatorColor : downAnimatorColor);
-        priceAnimator = new ObjectAnimator().ofFloat(vAnimator, "translationY", 0, vAnimator.getHeight() * (isUp ? -1 : 1));
-        priceAnimator.setInterpolator(new AccelerateInterpolator());
-        priceAnimator.setDuration(300);
-        priceAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                vAnimator.setBackground(null);
-                priceAnimator = null;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        priceAnimator.start();
-
-    }
 
     class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
 
