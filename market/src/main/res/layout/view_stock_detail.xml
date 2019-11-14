@@ -61,7 +61,6 @@
             android:textSize="12sp"
             android:textColor="#A4B2CB"
             android:layout_marginLeft="5dp"
-            android:text="HKD"
             app:layout_constraintLeft_toRightOf="@+id/tv_price"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_price"
     />

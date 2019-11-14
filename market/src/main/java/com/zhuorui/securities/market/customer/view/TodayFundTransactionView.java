@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class TodayFundTransactionView extends FrameLayout {
 
-    private PieChart vPieChart;
+//    private PieChart vPieChart;
     private ComparisonMapView vComparisonMap;
     private int mOut1Color;
     private int mOut2Color;
@@ -60,7 +60,7 @@ public class TodayFundTransactionView extends FrameLayout {
     public TodayFundTransactionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_today_fund_transaction, this);
-        //initColor();
+        initColor();
        // initPieChart();
         initComparisonMap();
         initPieChartView();
@@ -70,7 +70,7 @@ public class TodayFundTransactionView extends FrameLayout {
         pie_cahart_view = findViewById(R.id.pie_cahart_view);
     }
 
-  /*  private void initColor() {
+    private void initColor() {
         defColor = Color.parseColor("#C3CDE3");
         inValueColor = Color.parseColor("#D9001B");
         outValueColor = Color.parseColor("#00CC00");
@@ -87,7 +87,7 @@ public class TodayFundTransactionView extends FrameLayout {
         colors.add(mIn3Color);
         colors.add(mIn2Color);
         colors.add(mIn1Color);
-    }*/
+    }
 
 /*    private void initPieChart() {
         vPieChart = findViewById(R.id.pie_cahart);
