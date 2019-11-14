@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -34,6 +35,8 @@ public class BuyingSellingFilesView extends FrameLayout {
     private TextView vBuyingValue;
     private TextView vSellingValue;
     private MyAdapter mAdapter;
+    // 是否是横屏展示
+    private boolean isLand;
 
     public BuyingSellingFilesView(Context context) {
         this(context, null);
@@ -46,6 +49,9 @@ public class BuyingSellingFilesView extends FrameLayout {
     public BuyingSellingFilesView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_buying_selling_files, this);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.BuyingSellingFilesView);
+        isLand = typedArray.getBoolean(R.styleable.BuyingSellingFilesView_isLand, false);
+        typedArray.recycle();
         initView();
     }
 
@@ -139,7 +145,7 @@ public class BuyingSellingFilesView extends FrameLayout {
         public void bindData(int position, String title) {
             vTitle.setText(title);
             vPirce.setText(String.format("%.3f", 90.253 + position));
-            vNum.setText(String.format("%.1fK(%2d)", position + 1.2,position));
+            vNum.setText(String.format("%.1fK(%2d)", position + 1.2, position));
             if (position == 0) {
                 itemView.setBackgroundColor(color1);
             } else if (position == 1) {
@@ -152,8 +158,8 @@ public class BuyingSellingFilesView extends FrameLayout {
                     itemView.setBackgroundColor(color4);
                 }
             }
-            itemView.setOnClickListener(v->{
-                ValueAnimator colorAnim = ObjectAnimator.ofInt(vNum,"backgroundColor", 0x00000000,0x33D9001B, 0x00000000);
+            itemView.setOnClickListener(v -> {
+                ValueAnimator colorAnim = ObjectAnimator.ofInt(vNum, "backgroundColor", 0x00000000, 0x33D9001B, 0x00000000);
                 colorAnim.setDuration(400);
                 colorAnim.setEvaluator(new ArgbEvaluator());
                 colorAnim.setRepeatMode(ValueAnimator.REVERSE);

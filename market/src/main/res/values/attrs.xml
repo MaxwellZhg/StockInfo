@@ -41,4 +41,8 @@
     <declare-styleable name="MarketPieChatView">
         <attr name="piechat_type" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="BuyingSellingFilesView">
+        <attr name="isLand" format="boolean"/>
+    </declare-styleable>
 </resources>
