@@ -230,12 +230,6 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
              entries3.add(new Entry(3.75f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(2).getNetFinancing())));
              entries3.add(new Entry(5.00f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(3).getNetFinancing())));
              entries3.add(new Entry(6.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(4).getNetFinancing())));
-             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(0).getNetOperating()).toString());
-             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(1).getNetOperating()).toString());
-             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(2).getNetOperating()).toString());
-             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(3).getNetOperating()).toString());
-             LogUtils.e(MathUtil.INSTANCE.convertToUnitFloat(profitList.get(4).getNetOperating()).toString());
-
              setData();
          }
     }
