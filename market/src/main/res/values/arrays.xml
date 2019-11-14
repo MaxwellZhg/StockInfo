@@ -49,4 +49,39 @@
         <item>平家</item>
         <item>跌家</item>
     </string-array>
+
+    <string-array name="buy_sell_file_grid">
+        <item>买一</item>
+        <item>卖一</item>
+        <item>卖二</item>
+        <item>买三</item>
+        <item>卖三</item>
+        <item>买四</item>
+        <item>卖四</item>
+        <item>买五</item>
+        <item>卖五</item>
+        <item>买六</item>
+        <item>卖六</item>
+        <item>买七</item>
+        <item>卖七</item>
+        <item>买八</item>
+        <item>卖八</item>
+        <item>买九</item>
+        <item>卖九</item>
+        <item>买十</item>
+        <item>卖十</item>
+    </string-array>
+    <string-array name="buy_sell_file_linear">
+        <item>买五</item>
+        <item>买四</item>
+        <item>买三</item>
+        <item>买二</item>
+        <item>买一</item>
+        <item>""</item>
+        <item>卖一</item>
+        <item>卖二</item>
+        <item>卖三</item>
+        <item>卖四</item>
+        <item>卖五</item>
+    </string-array>
 </resources>
