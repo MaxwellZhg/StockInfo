@@ -60,7 +60,6 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         vDateNum = findViewById(R.id.tv_date_num);
         ivDateNum = findViewById(R.id.iv_date_num);
         vDateNum.setOnClickListener(this);
-        ivDateNum.setOnClickListener(this);
         vRv = findViewById(R.id.recycler_view);
         //解决数据加载不完的问题
         vRv.setNestedScrollingEnabled(false);
@@ -76,8 +75,6 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
     public void onClick(View v) {
         if (vDateNum == v) {
             OrderBrokerNumPopWindow.Companion.create(getContext(), mNum, this).showAsDropDown(v);
-        } else if (ivDateNum == v) {
-            OrderBrokerNumPopWindow.Companion.create(getContext(), mNum, this).showAsDropDown(v);
         }
     }
 
@@ -88,13 +85,12 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             lm.setSpanCount(8);
             colors = new int[]{color1, color3, color1, color3, color2, color3, color2, color3};
             ivDateNum.setVisibility(VISIBLE);
-            vDateNum.setVisibility(GONE);
+            vDateNum.setText("");
         } else {
             lm.setSpanCount(2);
             colors = new int[]{color1, color2};
             itemType = 0;
             ivDateNum.setVisibility(GONE);
-            vDateNum.setVisibility(VISIBLE);
             vDateNum.setText(String.valueOf(mNum));
         }
         mAdapter.setNum(mNum);
@@ -118,7 +114,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         private int mNum = 0;
         private int itemCount = 0;
         private int lineSize = 0;
-        private int mItemHeight = 0;
+//        private int mItemHeight = 0;
         private List<Object> mBuyingDatas;
         private List<Object> mSellingDatas;
         private List<Object> mDatas;
@@ -128,7 +124,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             mBuyingDatas = new ArrayList<>();
             mSellingDatas = new ArrayList<>();
             mDatas = new ArrayList<>();
-            mItemHeight = (int) (context.getResources().getDisplayMetrics().density * 24);
+//            mItemHeight = (int) (context.getResources().getDisplayMetrics().density * 24);
         }
 
         @NonNull
@@ -211,9 +207,9 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             }
         }
 
-        public int getHeight() {
-            return lineSize * mItemHeight;
-        }
+//        public int getHeight() {
+//            return lineSize * mItemHeight;
+//        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

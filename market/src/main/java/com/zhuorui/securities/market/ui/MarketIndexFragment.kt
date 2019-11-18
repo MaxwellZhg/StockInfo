@@ -17,6 +17,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.PaddingCommonNavigatorAdapter
 import com.zhuorui.securities.market.customer.view.StockIndexSimpleView
 import com.zhuorui.securities.market.databinding.FragmentMarketIndexBinding
 import com.zhuorui.securities.market.ui.presenter.MarketIndexPresenter
@@ -190,55 +191,14 @@ class MarketIndexFragment :
      * 获取指示器适配器
      */
     private fun getNavigator(viewPager: ViewPager, titles: Array<String>): IPagerNavigator {
-        val textSize = 14f
-        val totalWidth = resources.displayMetrics.widthPixels / resources.displayMetrics.density - 38f - 14f
-        var textWidth = 0f
-        for (i in 0 until titles.size) {
-            textWidth += textSize * titles[i].length
-        }
-        val padding = (totalWidth - textWidth) / (titles.size - 1) * 0.5f
-        val paddingPx: Int = (padding * resources.displayMetrics.density).toInt()
+        val totalWidth = resources.displayMetrics.widthPixels - (resources.displayMetrics.density * (38f + 14f))
         val commonNavigator = CommonNavigator(context)
         commonNavigator.isAdjustMode = true
-        commonNavigator.adapter = object : CommonNavigatorAdapter() {
-
-            override fun getCount(): Int {
-                return titles.size
-            }
-
-            override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                val titleView = PaddinTitleView(context)
-                titleView.normalColor = Color.parseColor("#C3CDE3")
-                titleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
-                titleView.textSize = textSize
-                titleView.text = titles[index]
-                titleView.setOnClickListener { viewPager.currentItem = index }
-                when (index) {
-                    0 -> titleView.setPadding(0, 0, paddingPx, 0)
-                    titles.size - 1 -> titleView.setPadding(paddingPx, 0, 0, 0)
-                    else -> titleView.setPadding(paddingPx, 0, paddingPx, 0)
-                }
-                return titleView
-            }
-
-            override fun getTitleWeight(context: Context?, index: Int): Float {
-                commonNavigator.titleContainer.weightSum = totalWidth
-                val textWidth = textSize * titles[index].length
-                return when (index) {
-                    0 -> textWidth + padding
-                    titles.size - 1 -> textWidth + padding
-                    else -> textWidth + padding + padding
-                }
-            }
-
-            override fun getIndicator(context: Context): IPagerIndicator {
-                val indicator = LinePagerIndicator(context)
-                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(R.color.tab_select)!!)
-                indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
-                return indicator
-            }
-        }
+        val adapter = PaddingCommonNavigatorAdapter(titles)
+        adapter.bindViewPager(viewPager)
+        adapter.setTextSizeDp(14f)
+        adapter.setTotalWidthPx(totalWidth)
+        commonNavigator.adapter = adapter
         return commonNavigator
     }
 
