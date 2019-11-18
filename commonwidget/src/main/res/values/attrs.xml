@@ -205,4 +205,20 @@
     <declare-styleable name="ZRAutoSizeTextView">
         <attr name="textSizePx" format="float"/>
     </declare-styleable>
+
+
+    <declare-styleable name="MoreIconTitleBar">
+
+        <!--设置左边返回键侧边的icon-->
+        <attr name="left_icon" format="reference"/>
+        <attr name="left_icon_width" format="dimension"/>
+        <attr name="left_icon_height" format="dimension"/>
+        <attr name="left_icon_margin" format="dimension"/>
+
+        <!--设置右侧第二个icon-->
+        <attr name="right2_icon" format="reference"/>
+        <attr name="right2_icon_width" format="dimension"/>
+        <attr name="right2_icon_height" format="dimension"/>
+        <attr name="right2_icon_margin" format="dimension"/>
+    </declare-styleable>
 </resources>

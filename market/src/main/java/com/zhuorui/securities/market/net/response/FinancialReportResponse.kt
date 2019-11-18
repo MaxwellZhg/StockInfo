@@ -32,21 +32,21 @@ class FinancialReportResponse (val data:Data):BaseResponse(){
     )
     data class ProfitReport(
         val currency:String,
-        val date:String,
+        val date:Long,
         val income:BigDecimal,
         val profit:BigDecimal,
         val profitRate:BigDecimal
     )
     data class LiabilistyReport(
         val currency:String,
-        val date:String,
+        val date:Long,
         val totalAssets:BigDecimal,
         val totalLiability:BigDecimal,
         val liabilityRate:BigDecimal
     )
     data class CashFlowReport(
         val  currency:String,
-        val date:String,
+        val date:Long,
         val netOperating:BigDecimal,
         val netInvestment:BigDecimal,
         val netFinancing:BigDecimal

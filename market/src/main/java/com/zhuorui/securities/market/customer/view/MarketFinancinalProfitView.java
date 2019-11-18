@@ -26,6 +26,7 @@ import com.github.mikephil.charting.utils.*;
 import com.zhuorui.commonwidget.ZREmptyView;
 import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.util.ResUtil;
+import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.net.response.FinancialReportResponse;
 import com.zhuorui.securities.market.util.MathUtil;
@@ -99,6 +100,11 @@ public class MarketFinancinalProfitView extends FrameLayout {
             tv_tips_two.setText(ResUtil.INSTANCE.getString(R.string.all_total_to_pay));
             tv_tips_three.setText(ResUtil.INSTANCE.getString(R.string.all_total_topay_rate));
         }
+        xAisxDate.add("2019-06-30");
+        xAisxDate.add("2018-12-31");
+        xAisxDate.add("2018-06-30");
+        xAisxDate.add("2017-12-31");
+        xAisxDate.add("2017-06-30");
     }
 
     private void initChart() {
@@ -120,7 +126,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
         chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                 CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE
         });
-        leftAxis = chart.getAxis(YAxis.AxisDependency.LEFT);
+        leftAxis = chart.getAxisLeft();
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(mTextColor);
@@ -144,8 +150,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
                 }
             });
         }
-        rightAxis = chart.getAxis(YAxis.AxisDependency.RIGHT);
-
+        rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(true);
         rightAxis.setDrawGridLines(true);
         rightAxis.setDrawAxisLine(false);
@@ -191,7 +196,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
         data.setData(generateBarData());
         data.setData(generateLineData());
           xAxis.setAxisMaximum(data.getXMax() + 2f);
-        if (type == 2) {
+        if (type == 2&&yAxisData.size()>0) {
             leftAxis.setAxisMinimum(data.getYMin() - 100f);
         }
         ((MyXAxisRenderer) chart.getRendererXAxis()).setStockTs();
@@ -242,7 +247,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
         entries3.add(new Entry(5.05f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(3).getLiabilityRate())));
         entries3.add(new Entry(6.25f,MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(4).getLiabilityRate())));
         for (int i = 0; i < liabilistyReport.size(); i++) {
-            xAisxDate.add(liabilistyReport.get(i).getDate());
+            xAisxDate.add(TimeZoneUtil.timeFormat(liabilistyReport.get(i).getDate(), "yyyy-MM-dd"));
             yAxisData.add(MathUtil.INSTANCE.convertToUnitRateFloat(liabilistyReport.get(i).getLiabilityRate()));
         }
         Collections.sort(yAxisData);
@@ -272,7 +277,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
         entries3.add(new Entry(5.05f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(3).getProfitRate())));
         entries3.add(new Entry(6.25f,MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(4).getProfitRate())));
         for (int i = 0; i < profitReport.size(); i++) {
-            xAisxDate.add(profitReport.get(i).getDate());
+            xAisxDate.add(TimeZoneUtil.timeFormat(profitReport.get(i).getDate(), "yyyy-MM-dd"));
             yAxisData.add(MathUtil.INSTANCE.convertToUnitRateFloat(profitReport.get(i).getProfitRate()));
         }
         Collections.sort(yAxisData);

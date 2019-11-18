@@ -1,21 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <declare-styleable name="MoreIconTitleBar">
-
-        <!--设置左边返回键侧边的icon-->
-        <attr name="left_icon" format="reference"/>
-        <attr name="left_icon_width" format="dimension"/>
-        <attr name="left_icon_height" format="dimension"/>
-        <attr name="left_icon_margin" format="dimension"/>
-
-        <!--设置右侧第二个icon-->
-        <attr name="right2_icon" format="reference"/>
-        <attr name="right2_icon_width" format="dimension"/>
-        <attr name="right2_icon_height" format="dimension"/>
-        <attr name="right2_icon_margin" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="StockTransDataView">
         <attr name="title_text" format="string|reference"/>
         <attr name="title_background" format="color"/>
