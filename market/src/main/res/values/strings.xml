@@ -226,4 +226,7 @@
     <string name="outcome_chat">资产负债表</string>
     <string name="buying_percentage">买%.2f%%</string>
     <string name="selling_percentage">%.2f%%卖</string>
+    <string name="middele_years_report">中报</string>
+    <string name="all_years_report">年报</string>
+    <string name="coins_mark">HKD</string>
 </resources>

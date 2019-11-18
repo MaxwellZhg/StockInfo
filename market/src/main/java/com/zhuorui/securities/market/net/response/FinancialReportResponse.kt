@@ -21,7 +21,8 @@ class FinancialReportResponse (val data:Data):BaseResponse(){
         val `20170630`: ArrayList<BusinessReport>,
         val `20171231`: ArrayList<BusinessReport>,
         val `20180630`: ArrayList<BusinessReport>,
-        val `20181231`: ArrayList<BusinessReport>
+        val `20181231`: ArrayList<BusinessReport>,
+        val `20190630`: ArrayList<BusinessReport>
     )
     data class BusinessReport(
        val  yearEndDate:String,

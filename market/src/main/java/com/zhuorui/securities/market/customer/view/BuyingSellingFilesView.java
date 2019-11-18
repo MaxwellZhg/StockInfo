@@ -71,6 +71,7 @@ public class BuyingSellingFilesView extends FrameLayout {
                 vPB.requestLayout();
             });
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
@@ -139,12 +140,12 @@ public class BuyingSellingFilesView extends FrameLayout {
             } else {
                 backgroundColor = sellColor;
             }
-            holder.bindData(position, mTitles[position], mDatas.get(position), backgroundColor);
+            holder.bindData(position, mTitles[position], position < mDatas.size() ? mDatas.get(position) : null, backgroundColor);
         }
 
         @Override
         public int getItemCount() {
-            return mDatas.size() > mTitles.length ? mTitles.length : mDatas.size();
+            return mTitles.length;
         }
 
 
@@ -186,20 +187,24 @@ public class BuyingSellingFilesView extends FrameLayout {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(context).inflate(R.layout.item_buying_selling_files, parent, false);
-            View rootView = v.findViewById(R.id.root_view);
-            RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, mItemHight);
-            rootView.setLayoutParams(lp);
             return new MyViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            holder.bindData(position, mTitles[position], mDatas.get(position), 0);
+            ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if (lp == null) {
+                lp = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, mItemHight);
+            } else {
+                lp.height = mItemHight;
+            }
+            holder.itemView.setLayoutParams(lp);
+            holder.bindData(position, mTitles[position], position < mDatas.size() ? mDatas.get(position) : null, 0);
         }
 
         @Override
         public int getItemCount() {
-            return mDatas.size() > mTitles.length ? mTitles.length : mDatas.size();
+            return mTitles.length;
         }
 
 
@@ -236,11 +241,12 @@ public class BuyingSellingFilesView extends FrameLayout {
         private TextView vPirce;
         private TextView vNum;
         private View vAnim;
-
+        private View rootView;
         private ObjectAnimator animator;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            rootView = itemView.findViewById(R.id.root_view);
             vTitle = itemView.findViewById(R.id.tv_title);
             vPirce = itemView.findViewById(R.id.tv_price);
             vNum = itemView.findViewById(R.id.tv_num);
@@ -250,12 +256,19 @@ public class BuyingSellingFilesView extends FrameLayout {
 
         public void bindData(int position, String title, Object data, int backgroundColor) {
             vTitle.setText(title);
-            float price = 90.253f + position;
-            float preClosePrice = 0;
-            vPirce.setTextColor(config.getUpDownColor(price, preClosePrice, defColor));
-            vPirce.setText(String.format("%.3f", price));
-            vNum.setText(String.format("%.1fK(%2d)", position + 1.2, position));
             itemView.setBackgroundColor(backgroundColor);
+            if (data == null) {
+                vPirce.setTextColor(defColor);
+                vPirce.setText("--");
+                vNum.setText("--(--)");
+            } else {
+                float price = 90.253f + position;
+                float preClosePrice = 0;
+                vPirce.setTextColor(config.getUpDownColor(price, preClosePrice, defColor));
+                vPirce.setText(String.format("%.3f", price));
+                vNum.setText(String.format("%.1fK(%2d)", position + 1.2, position));
+
+            }
         }
 
 
