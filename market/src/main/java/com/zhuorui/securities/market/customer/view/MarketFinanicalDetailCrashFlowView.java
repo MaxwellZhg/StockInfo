@@ -19,6 +19,7 @@ import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
 import com.zhuorui.commonwidget.ZREmptyView;
 import com.zhuorui.securities.base2app.util.ResUtil;
+import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.net.response.FinancialReportResponse;
 import com.zhuorui.securities.market.util.MathUtil;
@@ -222,7 +223,7 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
          entries3.clear();
          if(profitList!=null) {
              for (int i = 0; i < profitList.size(); i++) {
-                 xAisxDate.add(profitList.get(i).getDate());
+                 xAisxDate.add(TimeZoneUtil.timeFormat(profitList.get(i).getDate(), "yyyy-MM-dd"));
              }
              entries1.add(new Entry(1.25f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(0).getNetOperating())));
              entries1.add(new Entry(2.50f, MathUtil.INSTANCE.convertToUnitFloat(profitList.get(1).getNetOperating())));
