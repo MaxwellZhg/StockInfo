@@ -84,6 +84,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
         initColor();
         inflate(context, R.layout.layout_market_profit_view, this);
         initView();
+        initChart();
     }
 
     private void initView() {
@@ -102,12 +103,12 @@ public class MarketFinancinalProfitView extends FrameLayout {
 
     private void initChart() {
         chart = findViewById(R.id.combine_chart);
+        chart.setNoDataText("");
         chart.setTouchEnabled(false);//是否有触摸事件
         chart.setDrawGridBackground(false);//是否展示网格线
         chart.setDragEnabled(false); //是否可以拖动
         chart.setScaleEnabled(false);// 可缩放
         chart.setBorderWidth(0.5f);
-        chart.setVisibility(View.INVISIBLE);
         chart.setBorderColor(Color.parseColor("#337B889E"));
         chart.getDescription().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
@@ -135,12 +136,14 @@ public class MarketFinancinalProfitView extends FrameLayout {
         leftAxis.setLabelCount(5, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        leftAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return value == 0 || mEmpty ? "0" : String.format("%.2f", value) + "亿";
-            }
-        });
+        if(yAxisData.size()>0) {
+            leftAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return value == 0 || mEmpty ? "0" : String.format("%.2f", value) + "亿";
+                }
+            });
+        }
         rightAxis = chart.getAxis(YAxis.AxisDependency.RIGHT);
 
         rightAxis.setEnabled(true);
@@ -151,8 +154,10 @@ public class MarketFinancinalProfitView extends FrameLayout {
         rightAxis.setDrawZeroLine(false);
         rightAxis.setTextSize(12f);
         rightAxis.setGridLineWidth(0.5f);
-        rightAxis.setAxisMinimum(yAxisData.get(0) - 10f);
-        rightAxis.setAxisMaximum(yAxisData.get(4) + 10f);
+        if(yAxisData.size()>0) {
+            rightAxis.setAxisMinimum(yAxisData.get(0) - 10f);
+            rightAxis.setAxisMaximum(yAxisData.get(4) + 10f);
+        }
         // 设置文字偏移量
         rightAxis.setXOffset(5f);
         rightAxis.setEdgeYOffset(5f);
@@ -161,12 +166,14 @@ public class MarketFinancinalProfitView extends FrameLayout {
         rightAxis.setLabelCount(5, true);
         rightAxis.setValueLineInside(true);
         rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        rightAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return value == 0 || mEmpty ? "0" : String.format("%.2f", value) + "%";
-            }
-        });
+        if(yAxisData.size()>0) {
+            rightAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return value == 0 || mEmpty ? "0" : String.format("%.2f", value) + "%";
+                }
+            });
+        }
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(1f);
@@ -183,16 +190,13 @@ public class MarketFinancinalProfitView extends FrameLayout {
         CombinedData data = new CombinedData();
         data.setData(generateBarData());
         data.setData(generateLineData());
-        xAxis.setAxisMaximum(data.getXMax() + 2f);
+          xAxis.setAxisMaximum(data.getXMax() + 2f);
         if (type == 2) {
             leftAxis.setAxisMinimum(data.getYMin() - 100f);
         }
         ((MyXAxisRenderer) chart.getRendererXAxis()).setStockTs();
         chart.setData(data);
-        //柱形图使用自定义BarChartRenderer ，必须在setData 后设置
         chart.invalidate();
-        chart.setNoDataText("");
-        chart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
     }
 
     public void setProfitChatData(List<FinancialReportResponse.ProfitReport> profitReport) {
@@ -349,20 +353,22 @@ public class MarketFinancinalProfitView extends FrameLayout {
             xAxis.setValueFormatter(new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    if (value == 0) {
-                        return "";
-                    } else if (value == 1.25f) {
-                        return xAisxDate.get(0);
-                    } else if (value == 2.50f) {
-                        return xAisxDate.get(1);
-                    } else if (value == 3.75f) {
-                        return xAisxDate.get(2);
-                    } else if (value == 5.00f) {
-                        return xAisxDate.get(3);
-                    } else if (value == 6.25f) {
-                        return xAisxDate.get(4);
-                    } else if (value == 7.50f) {
-                        return "";
+                    if(xAisxDate.size()>0) {
+                        if (value == 0) {
+                            return "";
+                        } else if (value == 1.25f) {
+                            return xAisxDate.get(0);
+                        } else if (value == 2.50f) {
+                            return xAisxDate.get(1);
+                        } else if (value == 3.75f) {
+                            return xAisxDate.get(2);
+                        } else if (value == 5.00f) {
+                            return xAisxDate.get(3);
+                        } else if (value == 6.25f) {
+                            return xAisxDate.get(4);
+                        } else if (value == 7.50f) {
+                            return "";
+                        }
                     }
                     return super.getFormattedValue(value);
                 }
