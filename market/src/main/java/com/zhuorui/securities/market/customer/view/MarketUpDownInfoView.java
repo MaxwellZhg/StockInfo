@@ -91,11 +91,15 @@ public class MarketUpDownInfoView extends FrameLayout {
               if(value==0){
                   str= "≥6%";
               }else if(value==1){
-                  str="5~1%";
+                  str="6~3%";
               }else if(value==2){
-                  str="0%";
+                  str="3~0%";
               }else if(value==3){
-                  str="-1~-5%";
+                  str="0%";
+              }else if(value==4){
+                  str="0~-3%";
+              }else if(value==5){
+                  str="-3~-6%";
               }else{
                   str="≤-6%";
               }
@@ -119,7 +123,7 @@ public class MarketUpDownInfoView extends FrameLayout {
                 return "";
             }
         });
-        vChart.setRenderer(new HCFVRenderer(vChart, vChart.getAnimator(), vChart.getViewPortHandler()));
+       // vChart.setRenderer(new HCFVRenderer(vChart, vChart.getAnimator(), vChart.getViewPortHandler()));
     }
 
     private void getTestData() {
@@ -129,15 +133,21 @@ public class MarketUpDownInfoView extends FrameLayout {
         entryList.add(barEntry);
         BarEntry barEntry1 = new BarEntry(1, 788);
         entryList.add(barEntry1);
-        BarEntry barEntry2= new BarEntry(2, 344);
+        BarEntry barEntry2 = new BarEntry(2, 788);
         entryList.add(barEntry2);
-        BarEntry barEntry3= new BarEntry(3, 577);
+        BarEntry barEntry3= new BarEntry(3, 344);
         entryList.add(barEntry3);
-        BarEntry barEntry4= new BarEntry(4, 20);
+        BarEntry barEntry4= new BarEntry(4, 577);
         entryList.add(barEntry4);
+        BarEntry barEntry5= new BarEntry(5, 577);
+        entryList.add(barEntry5);
+        BarEntry barEntry6= new BarEntry(6, 20);
+        entryList.add(barEntry6);
+        color.add(upColor);
         color.add(upColor);
         color.add(upColor);
         color.add(zeroColor);
+        color.add(downColor);
         color.add(downColor);
         color.add(downColor);
         setData(entryList, color);
@@ -161,7 +171,7 @@ public class MarketUpDownInfoView extends FrameLayout {
             }
         });
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.5f);
+        barData.setBarWidth(0.8f);
         //数据上下留空间出显示Values
   /*     float max = barDataSet.getYMax();
         float min = barDataSet.getYMin();
@@ -183,36 +193,4 @@ public class MarketUpDownInfoView extends FrameLayout {
         vChart.invalidate();
     }
 
-
-    class HCFVRenderer extends BarChartRenderer {
-        private double zeroY = 0;//0 的y值
-        private float space = 0;
-        private float zeroLineWidth = 0;
-        private float textSpace = 0;
-        private final float testSizePx = Utils.convertDpToPixel(10f);
-
-        public HCFVRenderer(BarDataProvider chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
-            super(chart, animator, viewPortHandler);
-            space = Utils.convertDpToPixel(5f);
-            zeroLineWidth = Utils.convertDpToPixel(1f);
-            textSpace = Utils.convertDpToPixel(1f);
-        }
-
-        @Override
-        public void drawValues(Canvas c) {
-            MPPointD pos = mChart.getTransformer(YAxis.AxisDependency.LEFT).getPixelForValues(0f, 0f);
-            zeroY = pos.y;
-            super.drawValues(c);
-        }
-
-        @Override
-        public void drawValue(Canvas c, String valueText, float x, float y, int color) {
-   /*         if (y > zeroY) {
-                y = (float) (zeroY - space - zeroLineWidth);
-            } else {
-                y = (float) zeroY + space + testSizePx - textSpace;
-            }*/
-            super.drawValue(c, valueText, x, y, color);
-        }
-    }
 }

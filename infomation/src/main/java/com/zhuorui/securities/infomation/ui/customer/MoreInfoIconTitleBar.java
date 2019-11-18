@@ -1,4 +1,5 @@
-package com.zhuorui.securities.market.customer;
+/*
+package com.zhuorui.securities.infomation.ui.customer;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,47 +9,49 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.zhuorui.commonwidget.ZhuoRuiTopBar;
-import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.infomation.R;
 
+*/
 /**
  * author : PengXianglin
  * e-mail : peng_xianglin@163.com
  * date   : 2019/9/11 10:26
  * desc   : 左右各两个点击图标的TitleBar
- */
-public class MoreIconTitleBar extends ZhuoRuiTopBar {
+ *//*
+
+public class MoreInfoIconTitleBar extends ZhuoRuiTopBar {
 
     private View mLeftView;
     private View mRight2View;
 
-    public MoreIconTitleBar(Context context) {
+    public MoreInfoIconTitleBar(Context context) {
         this(context, null);
     }
 
-    public MoreIconTitleBar(Context context, AttributeSet attrs) {
+    public MoreInfoIconTitleBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MoreIconTitleBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MoreInfoIconTitleBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MoreIconTitleBar);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MoreInfoIconTitleBar);
 
         // 左侧返回键旁的icon
-        int resId = a.getResourceId(R.styleable.MoreIconTitleBar_left_icon, -1);
+        int resId = a.getResourceId(R.styleable.MoreInfoIconTitleBar_left_icon, -1);
         if (resId != -1) {
-            int width = a.getDimensionPixelOffset(R.styleable.MoreIconTitleBar_left_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
-            int hight = a.getDimensionPixelOffset(R.styleable.MoreIconTitleBar_left_icon_height, ViewGroup.LayoutParams.WRAP_CONTENT);
-            int margin = a.getDimensionPixelOffset(R.styleable.MoreIconTitleBar_left_icon_margin, 55);
+            int width = a.getDimensionPixelOffset(R.styleable.MoreInfoIconTitleBar_left_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int hight = a.getDimensionPixelOffset(R.styleable.MoreInfoIconTitleBar_left_icon_height, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int margin = a.getDimensionPixelOffset(R.styleable.MoreInfoIconTitleBar_left_icon_margin, 55);
             mLeftView = getView(resId, width, hight, Gravity.START, margin);
             addView(mLeftView);
         }
 
         // 右侧第二个icon
-        resId = a.getResourceId(R.styleable.MoreIconTitleBar_right2_icon, -1);
+        resId = a.getResourceId(R.styleable.MoreInfoIconTitleBar_right2_icon, -1);
         if (resId != -1) {
-            int width = a.getDimensionPixelOffset(R.styleable.MoreIconTitleBar_right2_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
-            int hight = a.getDimensionPixelOffset(R.styleable.MoreIconTitleBar_right2_icon_height, ViewGroup.LayoutParams.WRAP_CONTENT);
-            int margin = a.getDimensionPixelOffset(R.styleable.MoreIconTitleBar_right2_icon_margin, 55);
+            int width = a.getDimensionPixelOffset(R.styleable.MoreInfoIconTitleBar_right2_icon_width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int hight = a.getDimensionPixelOffset(R.styleable.MoreInfoIconTitleBar_right2_icon_height, ViewGroup.LayoutParams.WRAP_CONTENT);
+            int margin = a.getDimensionPixelOffset(R.styleable.MoreInfoIconTitleBar_right2_icon_margin, 55);
             mRight2View = getView(resId, width, hight, Gravity.END, margin);
             addView(mRight2View);
         }
@@ -77,3 +80,4 @@ public class MoreIconTitleBar extends ZhuoRuiTopBar {
         return iv;
     }
 }
+*/
