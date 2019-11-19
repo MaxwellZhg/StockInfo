@@ -169,8 +169,7 @@ class MarketDetailFragment :
                     mStock.ts ?: "",
                     mStock.code ?: "",
                     mStock.tsCode ?: mStock.code + "." + mStock.ts,
-                    mStock.type ?: 2,
-                    true
+                    mStock.type ?: 2
                 )
             )
         }

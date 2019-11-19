@@ -25,10 +25,11 @@ class ChartKLineLandFragment : ChartKLineFragment(), CustomAdapt {
     }
 
     override fun isBaseOnWidth(): Boolean {
-        return true
+        return false
     }
 
     override fun getSizeInDp(): Float {
-        return 667f
+        return 375f
     }
+
 }

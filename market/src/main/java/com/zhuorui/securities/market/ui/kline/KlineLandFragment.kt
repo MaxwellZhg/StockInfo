@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.kline
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.FrameLayout
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
@@ -24,14 +26,14 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
 
     companion object {
 
-        fun newInstance(ts: String, code: String, tsCode: String, type: Int, land: Boolean): KlineLandFragment {
+        fun newInstance(ts: String, code: String, tsCode: String, type: Int): KlineLandFragment {
             val fragment = KlineLandFragment()
             val bundle = Bundle()
             bundle.putString("ts", ts)
             bundle.putString("code", code)
             bundle.putString("tsCode", tsCode)
             bundle.putInt("type", type)
-            bundle.putBoolean("landscape", land)
+            bundle.putBoolean("landscape", true)
             fragment.arguments = bundle
             return fragment
         }
@@ -51,6 +53,9 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
         )
 
         (activity as AbsActivity).addOrientationChangedListener(this)
+
+        iv_serach.setOnClickListener(this)
+        iv_back.setOnClickListener(this)
     }
 
     override fun getStatTabTitle(): Array<String>? {
@@ -92,6 +97,14 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
         when (v) {
             rl_rehabilitation -> {
                 toggleRehabilitation(kline_indicator, title_reha)
+            }
+            iv_back -> {
+                // 添加setRequestedOrientation方法实现屏幕不允许旋转
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                // 当由横屏切换到竖屏时会触发onChange(landscape: Boolean)回调来关闭界面
+            }
+            iv_serach -> {
+                ToastUtil.instance.toast("搜索")
             }
             else -> {
             }
@@ -173,11 +186,11 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
     }
 
     override fun isBaseOnWidth(): Boolean {
-        return true
+        return false
     }
 
     override fun getSizeInDp(): Float {
-        return 667f
+        return 375f
     }
 
     override fun onChange(landscape: Boolean) {

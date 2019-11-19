@@ -290,7 +290,9 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
     }
 
     override fun onHideHighlightView() {
-        highlight_info.removeAllViews()
+        if (highlight_info != null) {
+            highlight_info.removeAllViews()
+        }
     }
 
     override fun onUpHighlightData(obj: Any) {
