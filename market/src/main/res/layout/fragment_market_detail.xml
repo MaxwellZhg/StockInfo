@@ -119,6 +119,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:zr_LayoutManager="grid"
+                            app:zr_paddingLeft="13dp"
+                            app:zr_paddingRight="13dp"
                     />
 
                     <!--买卖盘经纪-->

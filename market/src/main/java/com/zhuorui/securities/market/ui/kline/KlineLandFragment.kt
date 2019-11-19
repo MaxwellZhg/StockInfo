@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -14,6 +15,7 @@ import com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeStatView
 import kotlinx.android.synthetic.main.fragment_kline_land.*
+import kotlinx.android.synthetic.main.layout_kline_stat.*
 import me.jessyan.autosize.internal.CustomAdapt
 
 /**
@@ -157,6 +159,8 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
+                    val lp:LinearLayout.LayoutParams = stat_indicator.layoutParams as LinearLayout.LayoutParams
+                    view.setPadding(lp.marginStart,lp.marginEnd)
                     view
                 }
             }

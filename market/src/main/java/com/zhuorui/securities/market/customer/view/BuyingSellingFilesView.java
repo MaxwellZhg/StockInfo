@@ -37,10 +37,14 @@ public class BuyingSellingFilesView extends FrameLayout {
     private ProgressBar vPB;
     private TextView vBuyingValue;
     private TextView vSellingValue;
+    private TextView vBuyingTitle;
+    private TextView vSellingTitle;
     private BuySellFileAdapter mAdapter;
     private final int defColor;
     private final LocalSettingsConfig config;
     private float preClosePrice = 0;
+    private int mPaddingLeft = 0;
+    private int mPaddingRight = 0;
 
     public BuyingSellingFilesView(Context context) {
         this(context, null);
@@ -55,12 +59,16 @@ public class BuyingSellingFilesView extends FrameLayout {
         defColor = Color.parseColor("#C0CCE0");
         config = LocalSettingsConfig.Companion.getInstance();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BuyingSellingFilesView);
+        mPaddingLeft = a.getDimensionPixelOffset(R.styleable.BuyingSellingFilesView_zr_paddingLeft, mPaddingLeft);
+        mPaddingRight = a.getDimensionPixelOffset(R.styleable.BuyingSellingFilesView_zr_paddingRight, mPaddingRight);
         int type = a.getInt(R.styleable.BuyingSellingFilesView_zr_LayoutManager, 0);
+        a.recycle();
         if (type == 1) {
             inflate(context, R.layout.view_buying_selling_files_grid, this);
             initView();
             vRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
             vRv.setAdapter(mAdapter = new GridAdapter(getContext()));
+            mAdapter.notifyDataSetChanged();
         } else {
             inflate(context, R.layout.view_buying_selling_files_linear, this);
             initView();
@@ -71,13 +79,16 @@ public class BuyingSellingFilesView extends FrameLayout {
                 ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) vPB.getLayoutParams();
                 lp.height = itemHight;
                 vPB.requestLayout();
+                mAdapter.notifyDataSetChanged();
             });
         }
-        mAdapter.notifyDataSetChanged();
+        setPadding(mPaddingLeft, mPaddingRight);
     }
 
     private void initView() {
         vPB = findViewById(R.id.progress_bar);
+        vBuyingTitle = findViewById(R.id.tv_title1);
+        vSellingTitle = findViewById(R.id.tv_title2);
         vBuyingValue = findViewById(R.id.tv_progress1_value);
         vSellingValue = findViewById(R.id.tv_progress2_value);
         vRv = findViewById(R.id.recycler_view);
@@ -85,6 +96,16 @@ public class BuyingSellingFilesView extends FrameLayout {
         vRv.setHasFixedSize(true);
         vRv.setFocusable(false);
     }
+
+    public void setPadding(int left, int right) {
+        mPaddingLeft = left;
+        mPaddingRight = right;
+        vBuyingValue.setPadding(mPaddingLeft, 0, 0, 0);
+        vSellingValue.setPadding(0, 0, mPaddingRight, 0);
+        if (vBuyingTitle != null) vBuyingTitle.setPadding(mPaddingLeft, 0, mPaddingRight, 0);
+        if (vSellingTitle != null) vSellingTitle.setPadding(mPaddingLeft, 0, mPaddingRight, 0);
+    }
+
 
     /**
      * 设置昨收价
@@ -215,7 +236,7 @@ public class BuyingSellingFilesView extends FrameLayout {
                 lp.height = mItemHight;
             }
             holder.itemView.setLayoutParams(lp);
-            holder.bindData(position, mTitles[position], position < mDatas.size() ? mDatas.get(position) : null, 0);
+            holder.bindData(position, mTitles[position], mDatas.get(position), 0);
         }
 
         @Override
@@ -255,12 +276,10 @@ public class BuyingSellingFilesView extends FrameLayout {
         private TextView vPirce;
         private TextView vNum;
         private View vAnim;
-        private View rootView;
         private ObjectAnimator animator;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            rootView = itemView.findViewById(R.id.root_view);
             vTitle = itemView.findViewById(R.id.tv_title);
             vPirce = itemView.findViewById(R.id.tv_price);
             vNum = itemView.findViewById(R.id.tv_num);
@@ -270,6 +289,8 @@ public class BuyingSellingFilesView extends FrameLayout {
 
         public void bindData(int position, String title, OrderData.AskBidModel data, int backgroundColor) {
             vTitle.setText(title);
+            vTitle.setPadding(mPaddingLeft, vTitle.getPaddingTop(), vTitle.getPaddingRight(), vTitle.getPaddingBottom());
+            vNum.setPadding(vNum.getPaddingLeft(), vTitle.getPaddingTop(), mPaddingRight, vNum.getPaddingBottom());
             itemView.setBackgroundColor(backgroundColor);
             if (data == null) {
                 vPirce.setTextColor(defColor);
