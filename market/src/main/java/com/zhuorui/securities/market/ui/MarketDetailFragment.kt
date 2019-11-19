@@ -22,6 +22,7 @@ import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
+import com.zhuorui.securities.market.socket.vo.OrderData
 import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.kline.KlineLandFragment
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
@@ -259,6 +260,7 @@ class MarketDetailFragment :
      */
     override fun upData(data: StockDetailView.IStockDatailData?) {
         stock_detail?.setData(data)
+        buyingSellingFiles.setPreClosePrice(data?.preClosePrice ?: 0f)
         hideLoading()
         if (!sm_refrsh.state.isFinishing) {
             sm_refrsh.finishRefresh()
@@ -284,12 +286,10 @@ class MarketDetailFragment :
      * 更新买卖盘档数据
      */
     override fun upBuyingSellingFilesData(
-        buy: Float,
-        sell: Float,
-        buyData: MutableList<Int>,
-        sellData: MutableList<Int>
+        asklist: List<OrderData.AskBidModel>,
+        bidlist: List<OrderData.AskBidModel>
     ) {
-        buyingSellingFiles.setData(buy, sell, buyData, sellData)
+        buyingSellingFiles.setData(asklist, bidlist)
     }
 
     /**

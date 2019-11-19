@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.view
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.customer.view.StockDetailView
+import com.zhuorui.securities.market.socket.vo.OrderData
 
 /**
  *    author : liuwei
@@ -28,10 +29,11 @@ interface MarketDetailView : AbsView {
      */
     fun upTopBarInfo(info: String, color: Int)
 
+
     /**
      * 更新买卖十挡数据
      */
-    fun upBuyingSellingFilesData(buy: Float, sell: Float, buyData: MutableList<Int>, sellData: MutableList<Int>)
+    fun upBuyingSellingFilesData(asklist: List<OrderData.AskBidModel>, bidlist: List<OrderData.AskBidModel>)
 
     /**
      * 更新买卖经纪数据
