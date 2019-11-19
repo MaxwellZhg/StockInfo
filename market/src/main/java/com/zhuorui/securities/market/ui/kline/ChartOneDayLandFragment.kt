@@ -28,10 +28,11 @@ class ChartOneDayLandFragment :
     }
 
     override fun isBaseOnWidth(): Boolean {
-        return true
+        return false
     }
 
     override fun getSizeInDp(): Float {
-        return 667f
+        return 375f
     }
+
 }
