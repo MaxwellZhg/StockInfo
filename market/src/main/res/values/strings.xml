@@ -227,4 +227,6 @@
     <string name="middele_years_report">中报</string>
     <string name="all_years_report">年报</string>
     <string name="coins_mark">HKD</string>
+    <string name="no_net_point">0.00   0.00%</string>
+    <string name="no_ponit_content">暂无内容，等待开盘</string>
 </resources>

@@ -56,7 +56,7 @@ public class MarketUpDownInfoView extends FrameLayout {
     private void initBarChart() {
         ll_three_part = findViewById(R.id.ll_three_part);
         vChart = findViewById(R.id.bar_market_infochart);
-        vChart.setNoDataText("暂无数据");
+        vChart.setNoDataText("");
         vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         //是否有触摸事件
         vChart.setTouchEnabled(false);

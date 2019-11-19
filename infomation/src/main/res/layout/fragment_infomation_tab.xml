@@ -6,6 +6,7 @@
                   type="com.zhuorui.securities.infomation.ui.viewmodel.InfomationTabViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/color_f0f0f0"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
       <com.zhuorui.commonwidget.MoreIconTitleBar
@@ -16,5 +17,15 @@
                 android:layout_height="wrap_content"
                 app:zr_backview_is_visibity="false"
                 app:zr_topbarTitle="@string/infomation"/>
+        <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/magic_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="40.5dp"
+                app:layout_constraintTop_toBottomOf="@id/top_bar"
+                android:background="@color/color_f0f0f0"/>
+        <View android:layout_width="match_parent"
+              app:layout_constraintTop_toBottomOf="@+id/magic_indicator"
+              android:layout_height="0.5dp"
+              android:background="@color/color_A1A1A1"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

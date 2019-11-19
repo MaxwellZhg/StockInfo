@@ -15,10 +15,14 @@
                     android:layout_marginLeft="13.5dp"
                     android:layout_marginTop="12dp"
                     android:text="市场涨跌概况"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintTop_toBottomOf="@+id/tv_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <com.github.mikephil.charting.charts.BarChart
             android:layout_width="0dp"
             android:layout_height="155dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tips"
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/bar_market_infochart"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -62,5 +66,15 @@
               android:textColor="@color/color_00CC00"
               android:textSize="9sp"/>
     </RelativeLayout>
-
+        <com.zhuorui.commonwidget.ZREmptyView
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="185dp"
+                android:background="@color/color_211F2A"
+                app:empty_img_width="64dp"
+                app:empty_img_height="64dp"
+                app:empty_img_tips_margin="45dp"
+                app:empty_img_src="@mipmap/icon_no_content"
+                app:empty_img_tips="@string/no_ponit_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

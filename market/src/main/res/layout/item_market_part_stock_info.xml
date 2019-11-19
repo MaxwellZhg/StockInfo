@@ -51,8 +51,8 @@
             android:layout_marginEnd="12dp"
             android:id="@+id/tv_stock_rate"
             android:textSize="14sp"
-            android:textColor="@color/color_D9001B"
-            android:text="48.91%"
+            android:textColor="@color/color_FFFFFFFF"
+            android:text="--"
             android:layout_alignParentRight="true"
             />
 
@@ -63,9 +63,9 @@
             android:layout_toLeftOf="@+id/tv_stock_rate"
             android:layout_marginEnd="27dp"
             android:id="@+id/tv_price"
-            android:text="6.800"
+            android:text="--"
             android:textSize="14sp"
-            android:textColor="@color/color_D9001B"/>
+            android:textColor="@color/color_FFFFFFFF"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
