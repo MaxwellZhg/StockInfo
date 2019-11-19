@@ -10,16 +10,16 @@ import com.zhuorui.securities.market.customer.view.kline.BaseChart
 import com.zhuorui.securities.market.customer.view.kline.markerView.KLineHighlightView
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
 import com.zhuorui.securities.market.customer.view.kline.model.KLineDataModel
-import com.zhuorui.securities.market.databinding.FragmentKlineBinding
+import com.zhuorui.securities.market.databinding.FragmentKlineDwmyBinding
 import com.zhuorui.securities.market.ui.kline.presenter.ChartKLinePresenter
 import com.zhuorui.securities.market.ui.kline.view.KlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.KlineViewModel
-import kotlinx.android.synthetic.main.fragment_kline.*
+import kotlinx.android.synthetic.main.fragment_kline_dwmy.*
 
 /**
- * K线
+ * 日、周、月、年K线
  */
-class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
+open class ChartKLineFragment : AbsFragment<FragmentKlineDwmyBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
     KlineView,IKLine, BaseChart.OnHighlightValueSelectedListener {
 
     private var mHighlightListener: OnKlineHighlightListener? = null
@@ -42,7 +42,7 @@ class ChartKLineFragment : AbsFragment<FragmentKlineBinding, KlineViewModel, Kli
     }
 
     override val layout: Int
-        get() = R.layout.fragment_kline
+        get() = R.layout.fragment_kline_dwmy
 
     override val viewModelId: Int
         get() = BR.viewModel

@@ -20,13 +20,13 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdapter() {
 
-    val mTitles: Array<String> = titles
-    var mViewPager: ViewPager? = null
-    var mListener: OnCommonNavigatorSelectListener? = null
-    var mTextSizeSp: Float = 14f
-    var mTotalWidthDp: Int = 0
-    var mPaddingPx: Int = 0
-    var mPaddingDp: Int = 0
+    private val mTitles: Array<String> = titles
+    private var mViewPager: ViewPager? = null
+    private var mListener: OnCommonNavigatorSelectListener? = null
+    private var mTextSizeSp: Float = 14f
+    private var mTotalWidthDp: Int = 0
+    private var mPaddingPx: Int = 0
+    private var mPaddingDp: Int = 0
 
     fun setTotalWidthPx(widthPx: Float) {
         mTotalWidthDp = ResUtil.getDimensionPx2Dp(widthPx)
@@ -40,8 +40,8 @@ class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdap
 
     private fun calculation() {
         var textWidth = 0f
-        for (i in 0 until mTitles.size) {
-            textWidth += mTextSizeSp * mTitles[i].length
+        for (element in mTitles) {
+            textWidth += mTextSizeSp * element.length
         }
         mPaddingDp = ((mTotalWidthDp - textWidth) / (mTitles.size - 1) * 0.5f).toInt()
         mPaddingPx = ResUtil.getDimensionDp2Px(mPaddingDp.toFloat())
@@ -53,7 +53,7 @@ class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdap
 
     override fun getTitleView(context: Context?, index: Int): IPagerTitleView {
         val titleView = PaddinTitleView(context!!)
-        titleView.normalColor = Color.parseColor("#C3CDE3")
+        titleView.normalColor = ResUtil.getColor(R.color.color_FFFFFFFF)!!
         titleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
         titleView.textSize = mTextSizeSp
         titleView.text = mTitles[index]
@@ -61,16 +61,21 @@ class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdap
             mViewPager?.currentItem = index
             mListener?.onSelected(index)
         }
-        when (index) {
-            0 -> titleView.setPadding(0, 0, mPaddingPx, 0)
-            mTitles.size - 1 -> titleView.setPadding(mPaddingPx, 0, 0, 0)
-            else -> titleView.setPadding(mPaddingPx, 0, mPaddingPx, 0)
+        if (mTotalWidthDp > 0) {
+            when (index) {
+                0 -> titleView.setPadding(0, 0, mPaddingPx, 0)
+                mTitles.size - 1 -> titleView.setPadding(mPaddingPx, 0, 0, 0)
+                else -> titleView.setPadding(mPaddingPx, 0, mPaddingPx, 0)
+            }
         }
         return titleView
     }
 
     override fun getTitleWeight(context: Context?, index: Int): Float {
 //        commonNavigator.titleContainer.weightSum = totalWidth
+        if (mTotalWidthDp == 0) {
+            return super.getTitleWeight(context, index)
+        }
         val textWidth = mTextSizeSp * mTitles[index].length
         return when (index) {
             0 -> textWidth + mPaddingDp

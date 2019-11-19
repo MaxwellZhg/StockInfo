@@ -22,7 +22,6 @@ import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.socket.vo.OrderData;
 import com.zhuorui.securities.market.util.MarketUtil;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

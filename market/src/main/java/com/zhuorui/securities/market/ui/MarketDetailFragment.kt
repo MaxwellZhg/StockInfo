@@ -450,7 +450,6 @@ class MarketDetailFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-
+        toggleScreenOrientation(false)
     }
 }
