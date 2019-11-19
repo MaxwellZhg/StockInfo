@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.zhuorui.securities.base2app.infra.LogInfra
+import android.widget.FrameLayout
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
+import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
+import com.zhuorui.securities.market.customer.view.kline.stat.TradeStatView
 import me.jessyan.autosize.internal.CustomAdapt
 
 /**
@@ -16,10 +20,7 @@ import me.jessyan.autosize.internal.CustomAdapt
 class KlineLandFragment : KlineFragment(), CustomAdapt,
     AbsActivity.OnOrientationChangedListener {
 
-
-    init {
-        LogInfra.Log.d("KlineLandFragment", this.toString())
-    }
+    private var paddingPx = 0
 
     companion object {
 
@@ -37,24 +38,62 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return View.inflate(context, R.layout.fragment_kline, null)
+        return View.inflate(context, R.layout.fragment_kline_land, null)
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
         // 全屏
-        activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
         (activity as AbsActivity).addOrientationChangedListener(this)
     }
 
+    override fun getStatTabTitle(): Array<String>? {
+        return ResUtil.getStringArray(R.array.stock_stat_tab_land_title)
+    }
+
+    override fun initKline() {
+    }
+
+    override fun indicatorAlignEdge(): Boolean {
+        return true
+    }
+
+    override fun getTradeView(ts: String, code: String, type: Int, index: Int): View? {
+        return when (index) {
+            0 -> {
+                context?.let {
+                    val view = BuyingSellingFilesView(it)
+                    view.layoutParams = FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    view
+                }
+            }
+            1 -> {
+                context?.let { TradeDetailView(it, ts, code, type) }
+            }
+            2 -> {
+                context?.let { TradeStatView(it, ts, code, type) }
+            }
+            else -> {
+                null
+            }
+        }
+    }
+
     override fun isBaseOnWidth(): Boolean {
-        return false
+        return true
     }
 
     override fun getSizeInDp(): Float {
-        return 375f
+        return 667f
     }
 
     override fun onChange(landscape: Boolean) {

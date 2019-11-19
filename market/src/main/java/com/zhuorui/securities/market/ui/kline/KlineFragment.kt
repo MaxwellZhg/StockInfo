@@ -14,6 +14,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.PaddingCommonNavigatorAdapter
 import com.zhuorui.securities.market.customer.RehabilitationPopupWindow
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeStatView
@@ -30,12 +31,10 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 /**
  * 股票K线图
  */
-open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListener {
+open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightListener,
+    PaddingCommonNavigatorAdapter.OnCommonNavigatorSelectListener {
 
-    //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "分钟", "不复权")
-    //    private val tabTitle: Array<String> = arrayOf("分时", "五日", "日K", "周K", "月K", "年K", "5分", "15分", "30分", "60分", "不复权")
-    private val mStatTabTitle: Array<String?> =
-        arrayOf(ResUtil.getString(R.string.kline_detail), ResUtil.getString(R.string.kline_stat))
+    private var mStatTabTitle: Array<String>? = null
     private var ts: String? = null
     private var code: String? = null
     private var tsCode: String? = null
@@ -77,12 +76,16 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
         type = arguments?.getInt("type")
         landscape = arguments?.getBoolean("landscape")!!
 
+        mStatTabTitle = getStatTabTitle()
         initKline()
-
         initStat()
     }
 
-    private fun initKline() {
+    open fun getStatTabTitle(): Array<String>? {
+        return ResUtil.getStringArray(R.array.stock_stat_tab_title)
+    }
+
+    open fun initKline() {
         for (index in 0..kline_indicator.childCount - 3) {
             val chlidView = kline_indicator.getChildAt(index)
             chlidView.tag = index
@@ -185,6 +188,10 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
         mKlineIndex = index
     }
 
+    override fun onSelected(index: Int) {
+        onSelectStat(index)
+    }
+
     private fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
         when (index) {
             0 -> {
@@ -223,52 +230,54 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
     private fun initStat() {
         val commonNavigator = CommonNavigator(requireContext())
         commonNavigator.isAdjustMode = true
-        commonNavigator.adapter = object : CommonNavigatorAdapter() {
-
-            override fun getCount(): Int {
-                return mStatTabTitle.size
-            }
-
-            override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
-                colorTransitionPagerTitleView.normalColor = ResUtil.getColor(R.color.color_FFFFFFFF)!!
-                colorTransitionPagerTitleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
-                colorTransitionPagerTitleView.textSize = 13f
-                colorTransitionPagerTitleView.text = mStatTabTitle[index]
-                colorTransitionPagerTitleView.setOnClickListener {
-                    stat_indicator.onPageSelected(index)
-                    stat_indicator.onPageScrolled(index, 0.0F, 0)
-                    onSelectStat(index)
-                }
-                return colorTransitionPagerTitleView
-            }
-
-            override fun getIndicator(context: Context): IPagerIndicator {
-                val indicator = LinePagerIndicator(context)
-                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-                indicator.setColors(ResUtil.getColor(R.color.tab_select))
-                indicator.lineHeight = ResUtil.getDimensionDp2Px(1f).toFloat()
-                return indicator
-            }
+        val adapter = PaddingCommonNavigatorAdapter(mStatTabTitle!!)
+        adapter.setTextSizeDp(13f)
+        if (indicatorAlignEdge()) {
+            adapter.setTotalWidthPx(stat_indicator.width.toFloat())
         }
+        adapter.bindListener(this)
+        commonNavigator.adapter = adapter
+
         stat_indicator.navigator = commonNavigator
         onSelectStat(mStatIndex)
     }
 
+    open fun indicatorAlignEdge(): Boolean {
+        return false
+    }
+
     private fun onSelectStat(index: Int) {
-        stat_container.removeAllViews()
-        if (ts != null && code != null && type != null) {
-            when (index) {
-                0 -> {
-                    stat_container.addView(context?.let { TradeDetailView(it, ts!!, code!!, type!!) })
-                }
-                1 -> {
-                    stat_container.addView(context?.let { TradeStatView(it, ts!!, code!!, type!!) })
-                }
+        stat_indicator.onPageSelected(index)
+        stat_indicator.onPageScrolled(index, 0.0F, 0)
+
+        if (stat_container.childCount > 0) {
+            for (i in 0 until stat_container.childCount) {
+                stat_container.getChildAt(i).visibility = View.GONE
             }
+
+            if (index <= stat_container.childCount - 1) {
+                stat_container.getChildAt(index).visibility = View.VISIBLE
+                return
+            }
+        }
+        if (ts != null && code != null && type != null) {
+            stat_container.addView(getTradeView(ts!!, code!!, type!!, index))
         }
     }
 
+    open fun getTradeView(ts: String, code: String, type: Int, index: Int): View? {
+        return when (index) {
+            0 -> {
+                context?.let { TradeDetailView(it, ts, code, type) }
+            }
+            1 -> {
+                context?.let { TradeStatView(it, ts, code, type) }
+            }
+            else -> {
+                null
+            }
+        }
+    }
 
     override fun onShowHighlightView(v: IKLineHighlightView) {
         mHightligh = v

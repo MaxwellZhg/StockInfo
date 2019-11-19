@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/root_view"
+        android:background="@color/color_2D2C35">
+
+    <LinearLayout
+            android:id="@+id/tab_ll"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="12.5dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kline_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="36.5dp"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/title_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_53A0FD"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/kline_day"/>
+
+            <TextView
+                    android:id="@+id/title_fday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_day"
+                    app:layout_constraintEnd_toStartOf="@id/title_dayk"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_five_day"/>
+
+            <TextView
+                    android:id="@+id/title_dayk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_fday"
+                    app:layout_constraintEnd_toStartOf="@id/title_weekk"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_days"/>
+
+            <TextView
+                    android:id="@+id/title_weekk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_dayk"
+                    app:layout_constraintEnd_toStartOf="@id/title_monthk"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_weeks"/>
+
+            <TextView
+                    android:id="@+id/title_monthk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_weekk"
+                    app:layout_constraintEnd_toStartOf="@id/title_yeark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_months"/>
+
+            <TextView
+                    android:id="@+id/title_yeark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_monthk"
+                    app:layout_constraintEnd_toStartOf="@id/title_5min"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_year"/>
+
+            <TextView
+                    android:id="@+id/title_5min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_yeark"
+                    app:layout_constraintEnd_toStartOf="@id/title_15min"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_minute_5"/>
+
+            <TextView
+                    android:id="@+id/title_15min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_5min"
+                    app:layout_constraintEnd_toStartOf="@id/title_30min"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_minute_15"/>
+
+            <TextView
+                    android:id="@+id/title_30min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/title_15min"
+                    app:layout_constraintEnd_toStartOf="@id/title_60min"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_minute_30"/>
+
+            <TextView
+                    android:id="@+id/title_60min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="70dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/color_FFC0CCE0"
+                    android:text="@string/kline_minute_60"/>
+
+            <RelativeLayout
+                    android:id="@+id/rl_rehabilitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                        android:id="@+id/title_reha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center"
+                        android:textColor="@color/color_53A0FD"
+                        android:text="@string/no_rehabilitation"/>
+
+                <ImageView
+                        android:id="@+id/reha_triangle"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:layout_toEndOf="@+id/title_reha"
+                        android:layout_alignBottom="@+id/title_reha"
+                        android:src="@mipmap/ic_pull_triangle_selected"/>
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+                android:id="@+id/indicator"
+                android:layout_width="31dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_53A0FD"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/color_211F2A"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tab_ll">
+
+        <FrameLayout
+                android:id="@+id/kline_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="80.51"
+                android:background="@color/color_3A79C8"/>
+
+        <include layout="@layout/layout_kline_stat"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="19.49"/>
+    </LinearLayout>
+
+    <FrameLayout
+            android:id="@+id/highlight_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/tab_ll"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
