@@ -50,6 +50,17 @@
         <item>跌家</item>
     </string-array>
 
+    <string-array name="stock_stat_tab_title">
+        <item>明细</item>
+        <item>统计</item>
+    </string-array>
+
+    <string-array name="stock_stat_tab_land_title">
+        <item>五档</item>
+        <item>明细</item>
+        <item>统计</item>
+    </string-array>
+
     <string-array name="buy_sell_file_grid">
         <item>买一</item>
         <item>卖一</item>
@@ -72,6 +83,7 @@
         <item>买十</item>
         <item>卖十</item>
     </string-array>
+
     <string-array name="buy_sell_file_linear">
         <item>买五</item>
         <item>买四</item>

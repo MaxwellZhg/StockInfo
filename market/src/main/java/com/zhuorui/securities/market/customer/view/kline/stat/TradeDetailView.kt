@@ -16,8 +16,10 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
+import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicTradeResponse
+import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockTradeResponse
 import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
 import kotlin.random.Random
@@ -73,10 +75,10 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         adapter?.items = list
         recyclerView?.adapter = adapter
 
-//        // 拉取数据
-//        val requestId =
-//            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
-//        requestIds.add(requestId)
+        // 拉取数据
+        val requestId =
+            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
+        requestIds.add(requestId)
     }
 
     inner class LinearSpacingItemDecoration : RecyclerView.ItemDecoration() {

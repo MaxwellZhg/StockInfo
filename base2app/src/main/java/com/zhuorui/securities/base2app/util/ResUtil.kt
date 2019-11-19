@@ -37,6 +37,11 @@ object ResUtil {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, displayMetrics).toInt()
     }
 
+    fun getDimensionPx2Dp(pxValue: Float): Int {
+        val displayMetrics = BaseApplication.context?.resources?.displayMetrics
+        return if (displayMetrics != null) (pxValue / displayMetrics!!.density).toInt() else pxValue.toInt()
+    }
+
     fun getStringArray(@ArrayRes stringArrayResId: Int): Array<String>? {
         return BaseApplication.context?.resources?.getStringArray(stringArrayResId)
     }

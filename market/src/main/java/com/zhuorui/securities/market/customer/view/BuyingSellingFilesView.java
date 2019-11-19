@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.socket.vo.OrderData;
 import com.zhuorui.securities.market.util.MarketUtil;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +37,14 @@ public class BuyingSellingFilesView extends FrameLayout {
     private ProgressBar vPB;
     private TextView vBuyingValue;
     private TextView vSellingValue;
+    private TextView vBuyingTitle;
+    private TextView vSellingTitle;
     private BuySellFileAdapter mAdapter;
     private final int defColor;
     private final LocalSettingsConfig config;
+    private float preClosePrice = 0;
+    private int mPaddingLeft = 0;
+    private int mPaddingRight = 0;
 
     public BuyingSellingFilesView(Context context) {
         this(context, null);
@@ -54,12 +59,16 @@ public class BuyingSellingFilesView extends FrameLayout {
         defColor = Color.parseColor("#C0CCE0");
         config = LocalSettingsConfig.Companion.getInstance();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BuyingSellingFilesView);
+        mPaddingLeft = a.getDimensionPixelOffset(R.styleable.BuyingSellingFilesView_zr_paddingLeft, mPaddingLeft);
+        mPaddingRight = a.getDimensionPixelOffset(R.styleable.BuyingSellingFilesView_zr_paddingRight, mPaddingRight);
         int type = a.getInt(R.styleable.BuyingSellingFilesView_zr_LayoutManager, 0);
+        a.recycle();
         if (type == 1) {
             inflate(context, R.layout.view_buying_selling_files_grid, this);
             initView();
             vRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
             vRv.setAdapter(mAdapter = new GridAdapter(getContext()));
+            mAdapter.notifyDataSetChanged();
         } else {
             inflate(context, R.layout.view_buying_selling_files_linear, this);
             initView();
@@ -70,13 +79,16 @@ public class BuyingSellingFilesView extends FrameLayout {
                 ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) vPB.getLayoutParams();
                 lp.height = itemHight;
                 vPB.requestLayout();
+                mAdapter.notifyDataSetChanged();
             });
         }
-        mAdapter.notifyDataSetChanged();
+        setPadding(mPaddingLeft, mPaddingRight);
     }
 
     private void initView() {
         vPB = findViewById(R.id.progress_bar);
+        vBuyingTitle = findViewById(R.id.tv_title1);
+        vSellingTitle = findViewById(R.id.tv_title2);
         vBuyingValue = findViewById(R.id.tv_progress1_value);
         vSellingValue = findViewById(R.id.tv_progress2_value);
         vRv = findViewById(R.id.recycler_view);
@@ -85,27 +97,46 @@ public class BuyingSellingFilesView extends FrameLayout {
         vRv.setFocusable(false);
     }
 
+    public void setPadding(int left, int right) {
+        mPaddingLeft = left;
+        mPaddingRight = right;
+        vBuyingValue.setPadding(mPaddingLeft, 0, 0, 0);
+        vSellingValue.setPadding(0, 0, mPaddingRight, 0);
+        if (vBuyingTitle != null) vBuyingTitle.setPadding(mPaddingLeft, 0, mPaddingRight, 0);
+        if (vSellingTitle != null) vSellingTitle.setPadding(mPaddingLeft, 0, mPaddingRight, 0);
+    }
+
+
     /**
-     * @param buyingValue
-     * @param sellingValue
-     * @param buyingData
-     * @param sellingData
+     * 设置昨收价
+     *
+     * @param preClosePrice
      */
-    public void setData(float buyingValue, float sellingValue, List<? extends Object> buyingData, List<? extends Object> sellingData) {
+    public void setPreClosePrice(float preClosePrice) {
+        this.preClosePrice = preClosePrice;
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 设置买卖盘数据
+     */
+    public void setData(List<OrderData.AskBidModel> askData, List<OrderData.AskBidModel> bidData) {
+        float buyingValue = Float.valueOf(askData.get(0).getQty());
+        float sellingValue = Float.valueOf(askData.get(0).getQty());
         float total = buyingValue + sellingValue;
         float buyingB = buyingValue / total;
         float sellingB = 1 - buyingB;
         vPB.setProgress((int) (buyingB * 10000));
         vBuyingValue.setText(String.format(ResUtil.INSTANCE.getString(R.string.buying_percentage), buyingB * 100));
         vSellingValue.setText(String.format(ResUtil.INSTANCE.getString(R.string.selling_percentage), sellingB * 100));
-        mAdapter.setData(buyingData, sellingData);
+        mAdapter.setData(askData, bidData);
         mAdapter.notifyDataSetChanged();
     }
 
     class GridAdapter extends BuySellFileAdapter {
 
         private Context context;
-        private final List<Object> mDatas;
+        private final List<OrderData.AskBidModel> mDatas;
         private final int bay1color;
         private final int sell1color;
         private final int bayColor;
@@ -114,8 +145,11 @@ public class BuyingSellingFilesView extends FrameLayout {
 
         public GridAdapter(Context context) {
             this.context = context;
-            mDatas = new ArrayList<>();
             mTitles = context.getResources().getStringArray(R.array.buy_sell_file_grid);
+            mDatas = new ArrayList<>();
+            for (int i = 0; i < mTitles.length; i++) {
+                mDatas.add(null);
+            }
             bay1color = Color.parseColor("#17355E");
             sell1color = Color.parseColor("#5D3A1C");
             bayColor = Color.parseColor("#0D1A6ED2");
@@ -141,7 +175,7 @@ public class BuyingSellingFilesView extends FrameLayout {
             } else {
                 backgroundColor = sellColor;
             }
-            holder.bindData(position, mTitles[position], position < mDatas.size() ? mDatas.get(position) : null, backgroundColor);
+            holder.bindData(position, mTitles[position], mDatas.get(position), backgroundColor);
         }
 
         @Override
@@ -151,12 +185,11 @@ public class BuyingSellingFilesView extends FrameLayout {
 
 
         @Override
-        public void setData(List<? extends Object> buyingData, List<? extends Object> sellingData) {
-            int size = Math.min(buyingData.size(), sellingData.size());
-            List<Object> datas = new ArrayList<>();
-            for (int i = 0; i < size; i++) {
-                datas.add(buyingData.get(i));
-                datas.add(sellingData.get(i));
+        public void setData(List<OrderData.AskBidModel> buyingData, List<OrderData.AskBidModel> sellingData) {
+            List<OrderData.AskBidModel> datas = new ArrayList<>();
+            for (int i = 0, size = getItemCount() / 2; i < size; i++) {
+                datas.add(i < buyingData.size() ? buyingData.get(i) : null);
+                datas.add(i < sellingData.size() ? sellingData.get(i) : null);
             }
             mDatas.clear();
             mDatas.addAll(datas);
@@ -167,14 +200,17 @@ public class BuyingSellingFilesView extends FrameLayout {
     class LinearAdapter extends BuySellFileAdapter {
 
         private Context context;
-        private final List<Object> mDatas;
+        private final List<OrderData.AskBidModel> mDatas;
         private final String[] mTitles;
         private int mItemHight;
 
         public LinearAdapter(Context context) {
             this.context = context;
-            mDatas = new ArrayList<>();
             mTitles = context.getResources().getStringArray(R.array.buy_sell_file_linear);
+            mDatas = new ArrayList<>();
+            for (int i = 0; i < mTitles.length; i++) {
+                mDatas.add(null);
+            }
         }
 
         @Override
@@ -200,7 +236,7 @@ public class BuyingSellingFilesView extends FrameLayout {
                 lp.height = mItemHight;
             }
             holder.itemView.setLayoutParams(lp);
-            holder.bindData(position, mTitles[position], position < mDatas.size() ? mDatas.get(position) : null, 0);
+            holder.bindData(position, mTitles[position], mDatas.get(position), 0);
         }
 
         @Override
@@ -208,18 +244,16 @@ public class BuyingSellingFilesView extends FrameLayout {
             return mTitles.length;
         }
 
-
         @Override
-        public void setData(List<? extends Object> buyingData, List<? extends Object> sellingData) {
+        public void setData(List<OrderData.AskBidModel> buyingData, List<OrderData.AskBidModel> sellingData) {
             int size = (mTitles.length - 1) / 2;
-            size = Math.min(size, Math.min(buyingData.size(), sellingData.size()));
-            List<Object> datas = new ArrayList<>();
+            List<OrderData.AskBidModel> datas = new ArrayList<>();
             for (int i = size - 1; i >= 0; i--) {
-                datas.add(buyingData.get(i));
+                datas.add(i < buyingData.size() ? buyingData.get(i) : null);
             }
-            datas.add(0);
+            datas.add(null);
             for (int i = 0; i < size; i++) {
-                datas.add(sellingData.get(i));
+                datas.add(i < sellingData.size() ? sellingData.get(i) : null);
             }
             mDatas.clear();
             mDatas.addAll(datas);
@@ -228,7 +262,7 @@ public class BuyingSellingFilesView extends FrameLayout {
 
     private abstract class BuySellFileAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
-        public abstract void setData(List<? extends Object> buyingData, List<? extends Object> sellingData);
+        public abstract void setData(List<OrderData.AskBidModel> buyingData, List<OrderData.AskBidModel> sellingData);
 
         public int calculationItemHight(int totalHight) {
             return 0;
@@ -242,12 +276,10 @@ public class BuyingSellingFilesView extends FrameLayout {
         private TextView vPirce;
         private TextView vNum;
         private View vAnim;
-        private View rootView;
         private ObjectAnimator animator;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            rootView = itemView.findViewById(R.id.root_view);
             vTitle = itemView.findViewById(R.id.tv_title);
             vPirce = itemView.findViewById(R.id.tv_price);
             vNum = itemView.findViewById(R.id.tv_num);
@@ -255,20 +287,21 @@ public class BuyingSellingFilesView extends FrameLayout {
             itemView.setOnClickListener(v -> animator = MarketUtil.showUpDownAnim(animator, vAnim, true));
         }
 
-        public void bindData(int position, String title, Object data, int backgroundColor) {
+        public void bindData(int position, String title, OrderData.AskBidModel data, int backgroundColor) {
             vTitle.setText(title);
+            vTitle.setPadding(mPaddingLeft, vTitle.getPaddingTop(), vTitle.getPaddingRight(), vTitle.getPaddingBottom());
+            vNum.setPadding(vNum.getPaddingLeft(), vTitle.getPaddingTop(), mPaddingRight, vNum.getPaddingBottom());
             itemView.setBackgroundColor(backgroundColor);
             if (data == null) {
                 vPirce.setTextColor(defColor);
                 vPirce.setText("--");
                 vNum.setText("--(--)");
             } else {
-                float price = 90.253f + position;
-                float preClosePrice = 0;
+                float price = Float.valueOf(data.getPrice());
                 vPirce.setTextColor(config.getUpDownColor(price, preClosePrice, defColor));
                 vPirce.setText(String.format("%.3f", price));
-                vNum.setText(String.format("%.1fK(%2d)", position + 1.2, position));
-
+                float qty = Float.valueOf(data.getQty());
+                vNum.setText(String.format("%.1fK(%S)", qty, data.getNum()));
             }
         }
 

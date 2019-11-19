@@ -30,6 +30,7 @@ import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.DeleteStockRequest
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
+import com.zhuorui.securities.market.socket.vo.OrderData
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
@@ -105,11 +106,11 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * 获取买卖十档数据
      */
     private fun getBuyingSellingFilesData() {
-        val datas = mutableListOf<Int>()
+        val datas = mutableListOf<OrderData.AskBidModel>()
         for (i: Int in 1..10) {
-            datas.add(i)
+            datas.add(OrderData.AskBidModel(i.toString(),i.toString(),i.toString()))
         }
-        view?.upBuyingSellingFilesData(7458f, 2442f, datas, datas)
+        view?.upBuyingSellingFilesData(datas, datas)
 
     }
 

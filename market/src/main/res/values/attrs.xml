@@ -25,10 +25,13 @@
     <declare-styleable name="MarketPieChatView">
         <attr name="piechat_type" format="integer"/>
     </declare-styleable>
+
     <declare-styleable name="BuyingSellingFilesView">
         <attr name="zr_LayoutManager" format="enum">
             <enum name="linear" value="0"></enum>
             <enum name="grid" value="1"></enum>
         </attr>
+        <attr name="zr_paddingLeft" format="dimension|reference"/>
+        <attr name="zr_paddingRight" format="dimension|reference"/>
     </declare-styleable>
 </resources>

@@ -171,8 +171,10 @@
     <string name="kline_months">月K</string>
     <string name="kline_year">年K</string>
     <string name="kline_minute">分钟</string>
-    <string name="kline_detail">明细</string>
-    <string name="kline_stat">统计</string>
+    <string name="kline_minute_5">5分</string>
+    <string name="kline_minute_15">15分</string>
+    <string name="kline_minute_30">30分</string>
+    <string name="kline_minute_60">60分</string>
     <string name="str_retract">收起</string>
     <string name="temp_no_data" tools:ignore="MissingTranslation">暂无数据</string>
     <string name="company_profile">公司简介</string>
