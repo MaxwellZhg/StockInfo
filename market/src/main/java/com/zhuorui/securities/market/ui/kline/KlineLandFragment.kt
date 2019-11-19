@@ -20,8 +20,6 @@ import me.jessyan.autosize.internal.CustomAdapt
 class KlineLandFragment : KlineFragment(), CustomAdapt,
     AbsActivity.OnOrientationChangedListener {
 
-    private var paddingPx = 0
-
     companion object {
 
         fun newInstance(ts: String, code: String, tsCode: String, type: Int, land: Boolean): KlineLandFragment {
