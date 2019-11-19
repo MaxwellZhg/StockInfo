@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_kline_five_day.*
 /**
  * 五日K线
  */
-class ChartFiveDayFragment :
+open class ChartFiveDayFragment :
     AbsFragment<FragmentKlineFiveDayBinding, FiveDayKlineViewModel, FiveDayKlineView, ChartFiveDayPresenter>(),
     FiveDayKlineView,IKLine, BaseChart.OnHighlightValueSelectedListener {
 

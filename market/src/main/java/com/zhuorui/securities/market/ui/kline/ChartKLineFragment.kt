@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_kline_dwmy.*
 /**
  * 日、周、月、年K线
  */
-class ChartKLineFragment : AbsFragment<FragmentKlineDwmyBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
+open class ChartKLineFragment : AbsFragment<FragmentKlineDwmyBinding, KlineViewModel, KlineView, ChartKLinePresenter>(),
     KlineView,IKLine, BaseChart.OnHighlightValueSelectedListener {
 
     private var mHighlightListener: OnKlineHighlightListener? = null

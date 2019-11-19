@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.BuyingSellingFilesView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeDetailView
 import com.zhuorui.securities.market.customer.view.kline.stat.TradeStatView
+import kotlinx.android.synthetic.main.fragment_kline_land.*
 import me.jessyan.autosize.internal.CustomAdapt
 
 /**
@@ -56,6 +58,90 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
     }
 
     override fun initKline() {
+        mFragments = arrayOfNulls(10)
+
+        for (index in 0..kline_indicator.childCount - 2) {
+            val chlidView = kline_indicator.getChildAt(index)
+            chlidView.tag = index
+            chlidView.setOnClickListener(indicatorClickListener)
+        }
+        rl_rehabilitation.setOnClickListener(this)
+        mLastKlineTitle = title_day
+        updateIndicatorPosition()
+
+        for (i in mFragments!!.indices) {
+            mFragments!![i] = getFragment(i)
+        }
+        (mFragments!![0] as IKLine).setHighlightListener(this)
+        loadMultipleRootFragment(
+            R.id.kline_container, mKlineIndex,
+            mFragments!![0],
+            mFragments!![1],
+            mFragments!![2],
+            mFragments!![3],
+            mFragments!![4],
+            mFragments!![5],
+            mFragments!![6],
+            mFragments!![7],
+            mFragments!![8],
+            mFragments!![9]
+        )
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            rl_rehabilitation -> {
+                toggleRehabilitation(kline_indicator, title_reha)
+            }
+            else -> {
+            }
+        }
+    }
+
+    override fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
+        when (index) {
+            0 -> {
+                // 分时
+                return ChartOneDayLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 1)
+            }
+            1 -> {
+                // 五日
+                return ChartFiveDayLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!)
+            }
+            2 -> {
+                // 日K
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 1)
+            }
+            3 -> {
+                // 周K
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 7)
+            }
+            4 -> {
+                // 月K
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 30)
+            }
+            5 -> {
+                // 年K
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 365)
+            }
+            6 -> {
+                // 5分
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 0)
+            }
+            7 -> {
+                // 15分
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 0)
+            }
+            8 -> {
+                // 30分
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 0)
+            }
+            9 -> {
+                // 60分
+                return ChartKLineLandFragment.newInstance(ts!!, code!!, tsCode!!, type!!, 0)
+            }
+        }
+        return null
     }
 
     override fun indicatorAlignEdge(): Boolean {

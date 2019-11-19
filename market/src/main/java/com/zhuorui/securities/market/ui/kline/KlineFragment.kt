@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.ui.kline
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -22,11 +21,6 @@ import kotlinx.android.synthetic.main.fragment_kline.*
 import kotlinx.android.synthetic.main.layout_kline_stat.*
 import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 /**
  * 股票K线图
@@ -35,14 +29,14 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
     PaddingCommonNavigatorAdapter.OnCommonNavigatorSelectListener {
 
     private var mStatTabTitle: Array<String>? = null
-    private var ts: String? = null
-    private var code: String? = null
-    private var tsCode: String? = null
-    private var type: Int? = null
+    protected var ts: String? = null
+    protected var code: String? = null
+    protected var tsCode: String? = null
+    protected var type: Int? = null
     private var landscape: Boolean = false
-    private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(7)
-    private var mKlineIndex = 0
-    private var mLastKlineTitle: TextView? = null
+    protected var mFragments: Array<AbsFragment<*, *, *, *>?>? = null
+    protected var mKlineIndex = 0
+    protected var mLastKlineTitle: TextView? = null
     private var mRehabilitationMode = 0
     private var mStatIndex = 0
     private var mHightligh: IKLineHighlightView? = null
@@ -86,6 +80,8 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
     }
 
     open fun initKline() {
+        mFragments = arrayOfNulls(7)
+
         for (index in 0..kline_indicator.childCount - 3) {
             val chlidView = kline_indicator.getChildAt(index)
             chlidView.tag = index
@@ -96,28 +92,29 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
         mLastKlineTitle = title_day
         updateIndicatorPosition()
 
-        for (i in 0..6) {
-            mFragments[i] = getFragment(i)
+        for (i in mFragments!!.indices) {
+            mFragments!![i] = getFragment(i)
         }
-        (mFragments[0] as IKLine).setHighlightListener(this)
+        (mFragments!![0] as IKLine).setHighlightListener(this)
         loadMultipleRootFragment(
             R.id.kline_container, mKlineIndex,
-            mFragments[0],
-            mFragments[1],
-            mFragments[2],
-            mFragments[3],
-            mFragments[4],
-            mFragments[5],
-            mFragments[6]
+            mFragments!![0],
+            mFragments!![1],
+            mFragments!![2],
+            mFragments!![3],
+            mFragments!![4],
+            mFragments!![5],
+            mFragments!![6]
         )
     }
 
-    private val indicatorClickListener = OnClickListener { v ->
+    protected val indicatorClickListener = OnClickListener { v ->
         indicator?.visibility = View.VISIBLE
         mLastKlineTitle?.setTextColor(ResUtil.getColor(R.color.color_FFC0CCE0)!!)
 
-        minute_triangle.setImageResource(R.mipmap.ic_pull_triangle_normal)
-
+        if (minute_triangle != null) {
+            minute_triangle.setImageResource(R.mipmap.ic_pull_triangle_normal)
+        }
         onSelectKline(v.tag.toString().toInt())
 
         if (v is TextView) {
@@ -129,7 +126,7 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
         updateIndicatorPosition()
     }
 
-    private fun updateIndicatorPosition() {
+    protected fun updateIndicatorPosition() {
         val layoutParams = indicator.layoutParams as LinearLayout.LayoutParams
         layoutParams.width = mLastKlineTitle?.width ?: 0
         layoutParams.marginStart = mLastKlineTitle?.left ?: 0
@@ -149,42 +146,46 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
                 tv_minute.setTextColor(ResUtil.getColor(R.color.color_53A0FD)!!)
             }
             title_rehabilitation -> {
-                context?.let {
-                    RehabilitationPopupWindow.create(
-                        it,
-                        mRehabilitationMode,
-                        object : RehabilitationPopupWindow.CallBack {
-                            override fun onSelected(mode: Int) {
-                                mRehabilitationMode = mode
-                                when (mode) {
-                                    0 -> {
-                                        title_rehabilitation.text = getString(R.string.no_rehabilitation)
-                                    }
-                                    1 -> {
-                                        title_rehabilitation.text = getString(R.string.before_rehabilitation)
-                                    }
-                                    2 -> {
-                                        title_rehabilitation.text = getString(R.string.after_rehabilitation)
-                                    }
-                                }
-                            }
-                        }).showAsDropDown(
-                        kline_indicator,
-                        kline_indicator.width - ResUtil.getDimensionDp2Px(50f),
-                        0,
-                        Gravity.TOP
-                    )
-                }
+                toggleRehabilitation(kline_indicator, title_rehabilitation)
             }
         }
     }
 
+    protected fun toggleRehabilitation(v: View, textView: TextView) {
+        context?.let {
+            RehabilitationPopupWindow.create(
+                it,
+                mRehabilitationMode,
+                object : RehabilitationPopupWindow.CallBack {
+                    override fun onSelected(mode: Int) {
+                        mRehabilitationMode = mode
+                        when (mode) {
+                            0 -> {
+                                textView.text = getString(R.string.no_rehabilitation)
+                            }
+                            1 -> {
+                                textView.text = getString(R.string.before_rehabilitation)
+                            }
+                            2 -> {
+                                textView.text = getString(R.string.after_rehabilitation)
+                            }
+                        }
+                    }
+                }).showAsDropDown(
+                v,
+                kline_indicator.width - ResUtil.getDimensionDp2Px(50f),
+                0,
+                Gravity.TOP
+            )
+        }
+    }
+
     private fun onSelectKline(index: Int) {
-        val show: IKLine = mFragments[index] as IKLine
-        val hide: IKLine = mFragments[mKlineIndex] as IKLine
+        val show: IKLine = mFragments?.get(index) as IKLine
+        val hide: IKLine = mFragments?.get(mKlineIndex) as IKLine
         show.setHighlightListener(this)
         hide.setHighlightListener(null)
-        showHideFragment(mFragments[index], mFragments[mKlineIndex])
+        showHideFragment(mFragments!![index], mFragments!![mKlineIndex])
         mKlineIndex = index
     }
 
@@ -192,7 +193,7 @@ open class KlineFragment : SupportFragment(), OnClickListener, OnKlineHighlightL
         onSelectStat(index)
     }
 
-    private fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
+    protected open fun getFragment(index: Int): AbsFragment<*, *, *, *>? {
         when (index) {
             0 -> {
                 // 分时

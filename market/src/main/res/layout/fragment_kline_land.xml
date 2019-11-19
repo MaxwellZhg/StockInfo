@@ -190,8 +190,8 @@
                 android:id="@+id/kline_container"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="80.51"
-                android:background="@color/color_3A79C8"/>
+                android:layout_marginStart="5.5dp"
+                android:layout_weight="80.51"/>
 
         <include layout="@layout/layout_kline_stat"
                  android:layout_width="0dp"

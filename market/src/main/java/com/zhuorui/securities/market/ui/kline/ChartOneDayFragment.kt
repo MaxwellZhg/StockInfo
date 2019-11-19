@@ -22,7 +22,7 @@ import org.json.JSONObject
 /**
  * 分时K线
  */
-class ChartOneDayFragment :
+open class ChartOneDayFragment :
     AbsFragment<FragmentOneDayBinding, OneDayKlineViewModel, OneDayKlineView, ChartOneDayPresenter>(),
     OneDayKlineView, IKLine, BaseChart.OnHighlightValueSelectedListener {
 
