@@ -1,9 +1,19 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.Network
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import com.zhuorui.securities.market.net.IStockNet
+import com.zhuorui.securities.market.net.request.StockConsInfoRequest
+import com.zhuorui.securities.market.net.request.StockSearchRequest
+import com.zhuorui.securities.market.net.response.StockConsInfoResponse
+import com.zhuorui.securities.market.net.response.StockSearchResponse
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
+import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.view.MarketPointView
 import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
@@ -26,7 +36,7 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         // 监听datas的变化
         lifecycleOwner.let {
             viewModel?.infos?.observe(it,
-                androidx.lifecycle.Observer<List<Int>> { t ->
+                androidx.lifecycle.Observer<List<StockConsInfoResponse.ListInfo>> { t ->
                     view?.addInfoToAdapter(t)
                 })
         }
@@ -38,13 +48,13 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
                 })
         }
     }
-    fun getData(){
+/*    fun getData(){
         history.clear()
         for (i in 0..19) {
             history.add(i)
         }
         viewModel?.infos?.value = history
-    }
+    }*/
 
     fun getInfoData(){
         info.clear()
@@ -53,8 +63,8 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         }
         viewModel?.pointInfos?.value = info
     }
-    fun getMarketInfoAdapter(): MarketPartInfoAdapter {
-        return MarketPartInfoAdapter(2,4)
+    fun getMarketInfoAdapter(): MarketPointConsInfoAdapter {
+        return MarketPointConsInfoAdapter()
     }
 
 
@@ -74,6 +84,21 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
             MarketUtil.getStockStatusTxt(stocksInfo?.ts, closingTimeMillis, true),
             topbarTxtColor
         )*/
+    }
+
+    fun getStockConsInfo(){
+        val requset = StockConsInfoRequest("HSI", 5,1,1,"HK" ,transactions.createTransaction())
+        Cache[IStockNet::class.java]?.getStockConsInfo(requset)
+            ?.enqueue(Network.IHCallBack<StockConsInfoResponse>(requset))
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStockConsInfoResponse(response: StockConsInfoResponse) {
+        if (!transactions.isMyTransaction(response)) return
+        val datas = response.data
+        if(datas.list.isNotEmpty()){
+            viewModel?.infos?.value=datas.list
+        }
     }
 
 }

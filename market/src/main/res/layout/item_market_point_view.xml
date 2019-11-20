@@ -45,35 +45,38 @@
     </RelativeLayout>
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="54dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
-            android:id="@+id/tv_stock_rate"
+            android:id="@+id/tv_trade_nums"
             android:textSize="14sp"
+            android:gravity="center"
             android:textColor="@color/color_FFFFFFFF"
-            android:text="39.12亿"
+            android:text="0"
             android:layout_alignParentRight="true"
     />
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="54dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/tv_stock_rate"
-            android:layout_marginEnd="27dp"
-            android:id="@+id/tv_price"
-            android:text="+1.87%"
+            android:layout_toLeftOf="@+id/tv_trade_nums"
+            android:layout_marginEnd="18.5dp"
+            android:id="@+id/tv_consprice_rate"
+            android:text="0"
+            android:gravity="center"
             android:textSize="14sp"
             android:textColor="@color/color_D9001B"/>
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="54dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/tv_price"
-            android:layout_marginEnd="27dp"
+            android:layout_toLeftOf="@+id/tv_consprice_rate"
+            android:layout_marginEnd="18.5dp"
             android:id="@+id/tv_newly_price"
-            android:text="36.150"
+            android:text="0"
+            android:gravity="center"
             android:textSize="14sp"
             android:textColor="@color/color_D9001B"/>
 

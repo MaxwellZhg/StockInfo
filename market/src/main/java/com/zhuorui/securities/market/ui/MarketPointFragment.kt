@@ -11,7 +11,9 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
+import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
+import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
@@ -36,9 +38,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * */
 class MarketPointFragment :
     AbsSwipeBackNetFragment<FragmentMarketPointBinding, MarketPointViewModel, MarketPointView, MarketPointPresenter>(),
-    MarketPointView, View.OnClickListener ,MarketPartInfoAdapter.OnCombineInfoClickListener{
+    MarketPointView, View.OnClickListener ,MarketPointConsInfoAdapter.OnCombineInfoClickListener{
     private var type: Int? = null
-    private var infoadapter: MarketPartInfoAdapter? = null
+    private var infoadapter: MarketPointConsInfoAdapter? = null
     private var pointInfoAdapter: MarketPointInfoAdapter? = null
     private var tabTitle: ArrayList<String> = ArrayList()
     override val layout: Int
@@ -87,6 +89,7 @@ class MarketPointFragment :
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
        // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
+        presenter?.getStockConsInfo()
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         presenter?.setLifecycleOwner(this)
@@ -97,11 +100,8 @@ class MarketPointFragment :
         rv_point_stock.isNestedScrollingEnabled = false
         rv_point_stock.setHasFixedSize(true)
         rv_point_stock.isFocusable = false
-        presenter?.getData()
         infoadapter?.notifyDataSetChanged()
         rv_point_stock.adapter = infoadapter
-        refrsh_layout.setEnableLoadMore(true)
-
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
                 top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
@@ -172,7 +172,8 @@ class MarketPointFragment :
     private fun onSelect(index: Int) {
         when (index) {
             0 -> {
-                presenter?.getData()
+                //presenter?.getData()
+                presenter?.getStockConsInfo()
                 infoadapter?.notifyDataSetChanged()
                 rv_point_stock.adapter = infoadapter
                 point_tips.visibility = View.VISIBLE
@@ -186,7 +187,7 @@ class MarketPointFragment :
         }
     }
 
-    override fun addInfoToAdapter(list: List<Int>) {
+    override fun addInfoToAdapter(list: List<StockConsInfoResponse.ListInfo>) {
         infoadapter?.clearItems()
         if (infoadapter?.items == null) {
             infoadapter?.items = ArrayList()

@@ -8,6 +8,7 @@ import butterknife.BindView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
+import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 
 /**
  * Created by Maxwell.
@@ -15,22 +16,13 @@ import com.zhuorui.securities.market.R2
  * Date: 2019/10/22
  * Desc:
  */
-class MarketPartInfoAdapter(type:Int,state:Int) :BaseListAdapter<Int>(){
-    var type =type
+class MarketPartInfoAdapter(state:Int) :BaseListAdapter<Int>(){
     var state :Int = state
-    var onPartInfoClickListener:OnAllPartInfoClickListener?=null
     var onMainPartInfoClickListener:OnMainPartInfoClickListener?=null
     var onCreatePartInfoClickListener:OnCreatePartInfoClickListener?=null
-    var onCombineInfoClickListener:OnCombineInfoClickListener?=null
+    var onPartInfoClickListener:OnAllPartInfoClickListener?=null
     override fun getLayout(viewType: Int): Int {
-       return when(type){
-           1->{
-               R.layout.item_market_part_stock_info
-           }
-           else->{
-               R.layout.item_market_point_view
-           }
-       }
+       return R.layout.item_market_part_stock_info
     }
 
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
@@ -61,9 +53,6 @@ class MarketPartInfoAdapter(type:Int,state:Int) :BaseListAdapter<Int>(){
                  3->{
                      onCreatePartInfoClickListener?.onCreatePartInfoClick()
                  }
-                 4->{
-                     onCombineInfoClickListener?.onCombineClick()
-                 }
               }
             } else {
                 super.onClick(v)
@@ -79,9 +68,6 @@ class MarketPartInfoAdapter(type:Int,state:Int) :BaseListAdapter<Int>(){
     }
     interface OnCreatePartInfoClickListener{
         fun onCreatePartInfoClick()
-    }
-    interface OnCombineInfoClickListener{
-        fun onCombineClick()
     }
 
 }

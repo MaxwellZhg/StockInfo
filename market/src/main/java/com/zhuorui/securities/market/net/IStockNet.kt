@@ -51,4 +51,7 @@ interface IStockNet {
 
     @POST(StockApi.FINANCIAL_REPORT)
     fun getFinancialReport(@Body request: FinancialReportRequest): Call<FinancialReportResponse>
+
+    @POST(StockApi.STOCK_CONS_INFO)
+    fun getStockConsInfo(@Body request: StockConsInfoRequest): Call<StockConsInfoResponse>
 }
