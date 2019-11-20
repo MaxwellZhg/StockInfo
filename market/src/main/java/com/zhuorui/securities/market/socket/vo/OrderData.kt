@@ -11,16 +11,10 @@ class OrderData {
     var ts: String? = null
     var code: String? = null
     var type: Int? = null
-    var asklist: List<AskModel>? = null
-    var bidlist: List<BidModel>? = null
+    var asklist: List<AskBidModel>? = null
+    var bidlist: List<AskBidModel>? = null
 
-    data class AskModel(
-        val num: String,
-        val price: String,
-        val qty: String
-    )
-
-    data class BidModel(
+    data class AskBidModel(
         val num: String,
         val price: String,
         val qty: String

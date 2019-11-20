@@ -27,12 +27,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="27498.770"
+                android:id="@+id/tv_one_ponit_num"
                 android:textColor="@color/color_D9001B"
                 android:textSize="16sp"/>
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_one_point_rate"
                 android:text="+271.610  +1.45%"
                 android:textColor="@color/color_D9001B"
                 android:layout_marginBottom="4.5dp"
@@ -76,6 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="9903.409"
+                android:id="@+id/tv_two_ponit_num"
                 android:textColor="@color/color_D9001B"
                 android:textSize="16sp"/>
 
@@ -83,6 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+37.299   +1.45%"
+                android:id="@+id/tv_two_point_rate"
                 android:textColor="@color/color_D9001B"
                 android:layout_marginBottom="4.5dp"
                 android:textSize="12sp"/>
@@ -124,6 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4024.340"
+                android:id="@+id/tv_three_ponit_num"
                 android:textColor="@color/color_00cc00"
                 android:textSize="16sp"/>
 
@@ -131,6 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-37.160 -0.93%"
+                android:id="@+id/tv_three_ponit_rate"
                 android:textColor="@color/color_00cc00"
                 android:layout_marginBottom="4.5dp"
                 android:textSize="12sp"/>

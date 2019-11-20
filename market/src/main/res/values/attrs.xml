@@ -31,5 +31,7 @@
             <enum name="linear" value="0"></enum>
             <enum name="grid" value="1"></enum>
         </attr>
+        <attr name="zr_paddingLeft" format="dimension|reference"/>
+        <attr name="zr_paddingRight" format="dimension|reference"/>
     </declare-styleable>
 </resources>

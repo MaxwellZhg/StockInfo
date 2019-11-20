@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">infomation</string>
     <string name="infomation">资讯</string>
+    <string name="main_news">要闻</string>
+    <string name="topic_news">自选</string>
+    <string name="frist_news">快讯</string>
+    <string name="china_stock_news">港股</string>
+    <string name="hk_stock_news">沪深</string>
+    <string name="date_news">财经日历</string>
 </resources>

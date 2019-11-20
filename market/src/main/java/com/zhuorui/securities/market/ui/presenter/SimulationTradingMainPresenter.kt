@@ -316,9 +316,9 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         if (!positionDatas.isNullOrEmpty()) {
             for (data in positionDatas!!) {
                 val stockInfo = stocksInfo[data.getTsCode()]
-                val presentPrice = if (stockInfo?.last != null) stockInfo.last!! else data.currentPrice!!
-                val holdStockCount = if (data.holdStockCount != null) data.holdStockCount!! else BigDecimal(0)
-                val holeCost = if (data.holdCost != null) data.holdCost!! else BigDecimal(0)
+                val presentPrice = stockInfo?.last ?: data.currentPrice ?: BigDecimal(0)
+                val holdStockCount = data.holdStockCount?:BigDecimal(0)
+                val holeCost = data.holdCost ?: BigDecimal(0)
                 data.currentPrice = presentPrice
                 //持仓市值=现价*持仓数
                 val marketValue = MathUtil.multiply3(presentPrice, holdStockCount)

@@ -149,7 +149,8 @@ public class MarketUtil {
             animator.cancel();
         }
         view.setBackgroundColor(isUp ? 0x33D9001B : 0x3300CC00);
-        animator = new ObjectAnimator().ofFloat(view, "translationY", 0, view.getHeight() * (isUp ? -1 : 1));
+        float start = view.getHeight() * (isUp ? 1 : -1);
+        animator = new ObjectAnimator().ofFloat(view, "translationY", start, 0, -start);
         animator.setInterpolator(new AccelerateInterpolator());
         animator.setDuration(500);
         animator.addListener(new Animator.AnimatorListener() {

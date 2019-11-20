@@ -30,6 +30,7 @@ import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.DeleteStockRequest
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
+import com.zhuorui.securities.market.socket.vo.OrderData
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
@@ -93,9 +94,9 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * 获取买卖经纪数据
      */
     private fun getOrderBrokerData() {
-        val datas2 = mutableListOf<String>()
+        val datas2 = mutableListOf<OrderBrokerModel>()
         for (i: Int in 1..30) {
-            datas2.add("item$i")
+            datas2.add(OrderBrokerModel(i.toString(),"item$i"))
         }
         view?.upOrderBrokerData(datas2, datas2)
 
@@ -105,11 +106,11 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * 获取买卖十档数据
      */
     private fun getBuyingSellingFilesData() {
-        val datas = mutableListOf<Int>()
+        val datas = mutableListOf<OrderData.AskBidModel>()
         for (i: Int in 1..10) {
-            datas.add(i)
+            datas.add(OrderData.AskBidModel(i.toString(),i.toString(),i.toString()))
         }
-        view?.upBuyingSellingFilesData(7458f, 2442f, datas, datas)
+        view?.upBuyingSellingFilesData(datas, datas)
 
     }
 
