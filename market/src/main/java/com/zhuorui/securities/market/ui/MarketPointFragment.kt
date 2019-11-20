@@ -7,21 +7,17 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
-import com.zhuorui.securities.market.net.response.StockConsInfoResponse
-import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
-import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
 import com.zhuorui.securities.market.ui.view.MarketPointView
 import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
 import kotlinx.android.synthetic.main.fragment_market_point.*
 import kotlinx.android.synthetic.main.layout_market_point_topbar.*
-import kotlinx.android.synthetic.main.layout_market_point_view_tips.*
+import me.yokeyword.fragmentation.SupportFragment
 import net.lucode.hackware.magicindicator.abs.IPagerNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -38,11 +34,13 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * */
 class MarketPointFragment :
     AbsSwipeBackNetFragment<FragmentMarketPointBinding, MarketPointViewModel, MarketPointView, MarketPointPresenter>(),
-    MarketPointView, View.OnClickListener ,MarketPointConsInfoAdapter.OnCombineInfoClickListener{
+    MarketPointView, View.OnClickListener {
     private var type: Int? = null
     private var infoadapter: MarketPointConsInfoAdapter? = null
     private var pointInfoAdapter: MarketPointInfoAdapter? = null
     private var tabTitle: ArrayList<String> = ArrayList()
+    private val mFragments = arrayOfNulls<SupportFragment>(2)
+    private var mIndex = 0
     override val layout: Int
         get() = R.layout.fragment_market_point
     override val viewModelId: Int
@@ -89,28 +87,10 @@ class MarketPointFragment :
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
        // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
-        presenter?.getStockConsInfo()
-        magic_indicator.navigator = getNavigator()
-        top_magic_indicator.navigator = getNavigator()
-        presenter?.setLifecycleOwner(this)
-        infoadapter = presenter?.getMarketInfoAdapter()
-        pointInfoAdapter = presenter?.getMarketPointInfoAdapter()
-        infoadapter?.onCombineInfoClickListener=this
-        //解决数据加载不完的问题
-        rv_point_stock.isNestedScrollingEnabled = false
-        rv_point_stock.setHasFixedSize(true)
-        rv_point_stock.isFocusable = false
-        infoadapter?.notifyDataSetChanged()
-        rv_point_stock.adapter = infoadapter
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
                 top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             }
-            /*   if (scrollY > 10 && presenter?.getTopBarOnfoType() != 1) {
-                   presenter?.getTopBarPriceInfo()
-               } else if (scrollY < 10 && presenter?.getTopBarOnfoType() != 0) {
-                   presenter?.getTopBarStockStatusInfo()
-               }*/
         }
     }
 
@@ -170,42 +150,58 @@ class MarketPointFragment :
     }
 
     private fun onSelect(index: Int) {
-        when (index) {
-            0 -> {
-                //presenter?.getData()
-                presenter?.getStockConsInfo()
-                infoadapter?.notifyDataSetChanged()
-                rv_point_stock.adapter = infoadapter
-                point_tips.visibility = View.VISIBLE
-            }
-            1 -> {
-                presenter?.getInfoData()
-                pointInfoAdapter?.notifyDataSetChanged()
-                rv_point_stock.adapter = pointInfoAdapter
-                point_tips.visibility = View.GONE
-            }
+        showHideFragment(mFragments[index], mFragments[mIndex])
+        mIndex = index
+    }
+
+
+
+    override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
+        super.onEnterAnimationEnd(savedInstanceState)
+        loadFragment()
+    }
+
+    /**
+     * 加载界面中的fragment
+     */
+    private fun loadFragment() {
+        //加载K线Fragment
+   /*     loadRootFragment(
+            R.id.kline_view,
+            KlineFragment.newInstance(
+                mStock.ts ?: "",
+                mStock.code ?: "",
+                mStock.tsCode ?: mStock.code + "." + mStock.ts,
+                mStock.type ?: 2,
+                false
+            )
+        )
+        //加载指数Fragment
+        if (!mBMP) {
+            loadIndexFragment()
+        }*/
+        initTabFragment()
+        magic_indicator.navigator = getNavigator()
+        top_magic_indicator.navigator = getNavigator()
+    }
+
+    private fun initTabFragment() {
+        val firstFragment = findChildFragment(MarketStockConsFragment::class.java)
+        if (firstFragment == null) {
+            mFragments[0] = MarketStockConsFragment.newInstance()
+            mFragments[1] = MarketPointConsInfoFragment.newInstance()
+
+            loadMultipleRootFragment(
+                R.id.fl_tab_container, mIndex,
+                mFragments[0],
+                mFragments[1]
+            )
+        } else {
+            // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
+            // 这里我们需要拿到mFragments的引用、
+            mFragments[0] = firstFragment
+            mFragments[1] = findChildFragment(MarketPointConsInfoFragment::class.java)
         }
     }
-
-    override fun addInfoToAdapter(list: List<StockConsInfoResponse.ListInfo>) {
-        infoadapter?.clearItems()
-        if (infoadapter?.items == null) {
-            infoadapter?.items = ArrayList()
-        }
-        infoadapter?.addItems(list)
-    }
-
-    override fun addPointInfoAdapter(list: List<Int>) {
-        pointInfoAdapter?.clearItems()
-        if (pointInfoAdapter?.items == null) {
-            pointInfoAdapter?.items = ArrayList()
-        }
-        pointInfoAdapter?.addItems(list)
-    }
-    override fun onCombineClick() {
-        ToastUtil.instance.toastCenter("成分股")
-    }
-
-
 
 }
