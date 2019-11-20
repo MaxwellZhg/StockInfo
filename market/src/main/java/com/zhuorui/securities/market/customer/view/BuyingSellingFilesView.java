@@ -121,8 +121,8 @@ public class BuyingSellingFilesView extends FrameLayout {
      * 设置买卖盘数据
      */
     public void setData(List<OrderData.AskBidModel> askData, List<OrderData.AskBidModel> bidData) {
-        float buyingValue = Float.valueOf(askData.get(0).getQty());
-        float sellingValue = Float.valueOf(askData.get(0).getQty());
+        float buyingValue = askData != null && !askData.isEmpty() ? Float.valueOf(askData.get(0).getQty()) : 0;
+        float sellingValue = bidData != null && !bidData.isEmpty() ? Float.valueOf(bidData.get(0).getQty()) : 0;
         float total = buyingValue + sellingValue;
         float buyingB = buyingValue / total;
         float sellingB = 1 - buyingB;
@@ -188,8 +188,8 @@ public class BuyingSellingFilesView extends FrameLayout {
         public void setData(List<OrderData.AskBidModel> buyingData, List<OrderData.AskBidModel> sellingData) {
             List<OrderData.AskBidModel> datas = new ArrayList<>();
             for (int i = 0, size = getItemCount() / 2; i < size; i++) {
-                datas.add(i < buyingData.size() ? buyingData.get(i) : null);
-                datas.add(i < sellingData.size() ? sellingData.get(i) : null);
+                datas.add(buyingData != null && i < buyingData.size() ? buyingData.get(i) : null);
+                datas.add(sellingData != null && i < sellingData.size() ? sellingData.get(i) : null);
             }
             mDatas.clear();
             mDatas.addAll(datas);
@@ -249,11 +249,11 @@ public class BuyingSellingFilesView extends FrameLayout {
             int size = (mTitles.length - 1) / 2;
             List<OrderData.AskBidModel> datas = new ArrayList<>();
             for (int i = size - 1; i >= 0; i--) {
-                datas.add(i < buyingData.size() ? buyingData.get(i) : null);
+                datas.add(buyingData != null && i < buyingData.size() ? buyingData.get(i) : null);
             }
             datas.add(null);
             for (int i = 0; i < size; i++) {
-                datas.add(i < sellingData.size() ? sellingData.get(i) : null);
+                datas.add(sellingData != null && i < sellingData.size() ? sellingData.get(i) : null);
             }
             mDatas.clear();
             mDatas.addAll(datas);
