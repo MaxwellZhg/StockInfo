@@ -94,9 +94,9 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      * 获取买卖经纪数据
      */
     private fun getOrderBrokerData() {
-        val datas2 = mutableListOf<String>()
+        val datas2 = mutableListOf<OrderBrokerModel>()
         for (i: Int in 1..30) {
-            datas2.add("item$i")
+            datas2.add(OrderBrokerModel(i.toString(),"item$i"))
         }
         view?.upOrderBrokerData(datas2, datas2)
 

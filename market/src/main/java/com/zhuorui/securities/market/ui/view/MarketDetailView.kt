@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.view
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
 import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.customer.view.StockDetailView
+import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.socket.vo.OrderData
 
 /**
@@ -38,7 +39,7 @@ interface MarketDetailView : AbsView {
     /**
      * 更新买卖经纪数据
      */
-    fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>)
+    fun upOrderBrokerData(buyData: MutableList<OrderBrokerModel>, sellData: MutableList<OrderBrokerModel>)
 
     /**
      * 更新关注状态
