@@ -14,8 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.customer.OrderBrokerNumPopWindow;
+import com.zhuorui.securities.market.model.OrderBrokerModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +99,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         mAdapter.notifyDataSetChanged();
     }
 
-    public void setData(List<? extends Object> buyings, List<? extends Object> sellings) {
+    public void setData(List<OrderBrokerModel> buyings, List<OrderBrokerModel> sellings) {
         mAdapter.setData(buyings, sellings);
         mAdapter.notifyDataSetChanged();
     }
@@ -114,17 +116,15 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         private int mNum = 0;
         private int itemCount = 0;
         private int lineSize = 0;
-//        private int mItemHeight = 0;
-        private List<Object> mBuyingDatas;
-        private List<Object> mSellingDatas;
-        private List<Object> mDatas;
+        private List<OrderBrokerModel> mBuyingDatas;
+        private List<OrderBrokerModel> mSellingDatas;
+        private List<OrderBrokerModel> mDatas;
 
         public MyAdapter(Context context) {
             this.context = context;
             mBuyingDatas = new ArrayList<>();
             mSellingDatas = new ArrayList<>();
             mDatas = new ArrayList<>();
-//            mItemHeight = (int) (context.getResources().getDisplayMetrics().density * 24);
         }
 
         @NonNull
@@ -137,18 +137,33 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
                 v = LayoutInflater.from(context).inflate(R.layout.item_order_broker_code, parent, false);
                 v.setOnClickListener(v1 -> {
                     int pos = (int) v1.getTag();
-                    Toast toast = Toast.makeText(context, mDatas.get(pos).toString(), Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+                    OrderBrokerModel data = mDatas.get(pos);
+                    if (data == null || data.getCode().startsWith("+") || data.getCode().startsWith("-")) {
+                        return;
+                    }
+                    showToast(data.getCode() + " " + data.getName());
                 });
             }
             return new MyViewHolder(v);
         }
 
+        private void showToast(String text) {
+            TextView tv = new TextView(context);
+            tv.setText(text);
+            tv.setTextColor(Color.WHITE);
+            int padding = ResUtil.INSTANCE.getDimensionDp2Px(10f);
+            tv.setPadding(padding, padding, padding, padding);
+            tv.setBackgroundColor(Color.parseColor("#e0000000"));
+            Toast toast = new Toast(context);
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
+
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Object object = mDatas.get(position);
-            holder.bindData(position, object);
+            holder.bindData(position, mDatas.get(position));
             holder.itemView.setTag(position);
         }
 
@@ -167,7 +182,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             initData();
         }
 
-        public void setData(List<? extends Object> buyings, List<? extends Object> sellings) {
+        public void setData(List<OrderBrokerModel> buyings, List<OrderBrokerModel> sellings) {
             mBuyingDatas.clear();
             mSellingDatas.clear();
             mBuyingDatas.addAll(buyings);
@@ -193,7 +208,7 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
                     if (pos < mBuyingDatas.size()) {
                         mDatas.add(mBuyingDatas.get(pos));
                     } else {
-                        mDatas.add(String.valueOf(pos));
+                        mDatas.add(null);
                     }
                 }
                 for (int j = 0; j < spanCount; j++) {
@@ -201,15 +216,12 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
                     if (pos < mSellingDatas.size()) {
                         mDatas.add(mSellingDatas.get(pos));
                     } else {
-                        mDatas.add(String.valueOf(pos));
+                        mDatas.add(null);
                     }
                 }
             }
         }
 
-//        public int getHeight() {
-//            return lineSize * mItemHeight;
-//        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -222,9 +234,14 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
             vName = itemView.findViewById(R.id.tv_name);
         }
 
-        public void bindData(int position, Object object) {
-            vCode.setText(String.valueOf(new Random().nextInt(1000) + position));
-            if (vName != null) vName.setText(object.toString());
+        public void bindData(int position, OrderBrokerModel data) {
+            if (data != null) {
+                vCode.setText(data.getCode());
+                if (vName != null) vName.setText(data.getName());
+            } else {
+                vCode.setText("");
+                if (vName != null) vName.setText("");
+            }
             itemView.setBackgroundColor(colors[position % colors.length]);
         }
     }

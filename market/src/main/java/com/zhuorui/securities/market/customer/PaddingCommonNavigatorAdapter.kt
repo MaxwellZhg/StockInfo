@@ -1,7 +1,6 @@
 package com.zhuorui.securities.market.customer
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Rect
 import androidx.viewpager.widget.ViewPager
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -20,6 +19,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  */
 class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdapter() {
 
+    /*如已显示在界面，再设置相关属性，需要调用view的更新方法*/
+
     private val mTitles: Array<String> = titles
     private var mViewPager: ViewPager? = null
     private var mListener: OnCommonNavigatorSelectListener? = null
@@ -27,6 +28,21 @@ class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdap
     private var mTotalWidthDp: Int = 0
     private var mPaddingPx: Int = 0
     private var mPaddingDp: Int = 0
+    private var selectedColor = 0
+    private var normalColor = 0
+
+    init {
+        selectedColor = ResUtil.getColor(R.color.tab_select)!!
+        normalColor = ResUtil.getColor(R.color.color_FFFFFFFF)!!
+    }
+
+    fun setNormalColor(color: Int) {
+        normalColor = color
+    }
+
+    fun setSelectedColor(color: Int) {
+        selectedColor = color
+    }
 
     fun setTotalWidthPx(widthPx: Float) {
         mTotalWidthDp = ResUtil.getDimensionPx2Dp(widthPx)
@@ -53,8 +69,8 @@ class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdap
 
     override fun getTitleView(context: Context?, index: Int): IPagerTitleView {
         val titleView = PaddinTitleView(context!!)
-        titleView.normalColor = ResUtil.getColor(R.color.color_FFFFFFFF)!!
-        titleView.selectedColor = ResUtil.getColor(R.color.tab_select)!!
+        titleView.normalColor = normalColor
+        titleView.selectedColor = selectedColor
         titleView.textSize = mTextSizeSp
         titleView.text = mTitles[index]
         titleView.setOnClickListener {
@@ -87,7 +103,7 @@ class PaddingCommonNavigatorAdapter(titles: Array<String>) : CommonNavigatorAdap
     override fun getIndicator(context: Context?): IPagerIndicator {
         val indicator = LinePagerIndicator(context)
         indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
-        indicator.setColors(ResUtil.getColor(R.color.tab_select)!!)
+        indicator.setColors(selectedColor)
         indicator.lineHeight = ResUtil.getDimensionDp2Px(2f).toFloat()
         return indicator
     }

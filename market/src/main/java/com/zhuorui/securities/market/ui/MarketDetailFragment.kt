@@ -20,6 +20,7 @@ import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.socket.vo.OrderData
@@ -294,7 +295,7 @@ class MarketDetailFragment :
     /**
      * 更新买卖经纪数据
      */
-    override fun upOrderBrokerData(buyData: MutableList<String>, sellData: MutableList<String>) {
+    override fun upOrderBrokerData(buyData: MutableList<OrderBrokerModel>, sellData: MutableList<OrderBrokerModel>) {
         orderBroker.setData(buyData, sellData)
     }
 
