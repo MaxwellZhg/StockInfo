@@ -96,7 +96,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     private fun getOrderBrokerData() {
         val datas2 = mutableListOf<OrderBrokerModel>()
         for (i: Int in 1..30) {
-            datas2.add(OrderBrokerModel(i.toString(),"item$i"))
+            datas2.add(OrderBrokerModel(i.toString(), "item$i"))
         }
         view?.upOrderBrokerData(datas2, datas2)
 
@@ -108,7 +108,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     private fun getBuyingSellingFilesData() {
         val datas = mutableListOf<OrderData.AskBidModel>()
         for (i: Int in 1..10) {
-            datas.add(OrderData.AskBidModel(i.toString(),i.toString(),i.toString()))
+            datas.add(OrderData.AskBidModel(i.toString(), i.toString(), i.toString()))
         }
         view?.upBuyingSellingFilesData(datas, datas)
 
@@ -155,17 +155,9 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             // 已登录
             if (isCollected) {
                 //取消收藏
-                val ids = arrayOf(stockInfo.id)
                 val request =
-                    DeleteStockRequest(
-                        stockInfo,
-                        ids,
-                        stockInfo.ts!!,
-                        stockInfo.code!!,
-                        transactions.createTransaction()
-                    )
-                Cache[IStockNet::class.java]?.delelte(request)
-                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+                    DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
+                Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             } else {
                 //添加收藏
                 val requset =
@@ -209,7 +201,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         } else if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.codes[0]!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
             isCollected = false
             view?.upFollow(false)
@@ -250,10 +242,10 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         }
     }
 
-  /*  @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
-        view?.changeInfoTypeData(event)
-    }*/
+    /*  @RxSubscribe(observeOnThread = EventThread.MAIN)
+      fun onChangeInfoTypeEvent(event: MarketDetailInfoEvent) {
+          view?.changeInfoTypeData(event)
+      }*/
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSocketDisconnectEvent(event: SocketConnectEvent) {

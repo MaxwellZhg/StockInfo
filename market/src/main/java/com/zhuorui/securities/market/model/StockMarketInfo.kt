@@ -14,6 +14,9 @@ import java.math.BigDecimal
 @Parcelize
 class StockMarketInfo : SearchStockInfo(), Parcelable {
 
+    //登录后拉取列表会返回id
+    @IgnoredOnParcel
+    var id: String? = null
     // 排序
     @IgnoredOnParcel
     var sort: Int = 0

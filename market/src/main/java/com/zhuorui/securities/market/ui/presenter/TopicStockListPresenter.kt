@@ -219,7 +219,6 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
 
             // 显示新添加的自选股
             val stock = StockMarketInfo()
-            stock.id = event.stock.id
             stock.ts = stockTs
             stock.code = event.stock.code
             stock.name = event.stock.name
@@ -272,8 +271,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     fun onDeleteStock(item: StockMarketInfo?) {
         // 判断是否登录
         if (LocalAccountConfig.getInstance().isLogin()) {
-            val ids = arrayOf(item?.id)
-            val request = DeleteStockRequest(ids, item?.ts!!, item.code!!, transactions.createTransaction())
+            val request = DeleteStockRequest(transactions.createTransaction(), item?.ts!!, item.code!!)
             Cache[IStockNet::class.java]?.delelte(request)
                 ?.enqueue(Network.IHCallBack<BaseResponse>(request))
         } else {
@@ -314,7 +312,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.codes[0]!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
         } else if (response.request is StickyOnTopStockRequest) {
             val id = (response.request as StickyOnTopStockRequest).id

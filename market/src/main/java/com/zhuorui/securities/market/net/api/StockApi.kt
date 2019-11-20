@@ -28,7 +28,7 @@ interface StockApi {
         /**
          * 删除自选股
          */
-        const val DEL = "as_market/api/stock/selected/v1/view/del"
+        const val DEL = "as_market/api/stock/selected/v1/view/code_del"
 
         /**
          * 置顶自选股
