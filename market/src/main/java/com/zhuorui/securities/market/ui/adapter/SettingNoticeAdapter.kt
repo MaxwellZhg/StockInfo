@@ -16,7 +16,6 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.SettingNoticeData
-import com.zhuorui.securities.market.util.MathUtil
 import java.math.BigDecimal
 
 
@@ -100,7 +99,7 @@ class SettingNoticeAdapter : BaseListAdapter<SettingNoticeData>() {
                 count= p0.toString().toBigDecimal()
                when(pos){
                    0->{
-                       if(count < iteminfo.stockInfo?.price){
+                       if(count < iteminfo.stockInfo?.last){
                            ResUtil.getColor(R.color.color_FF0000)?.let { et_setting.setTextColor(it) }
                            tv_nomatch_tips.visibility=View.VISIBLE
                            tv_nomatch_tips.text = ResUtil.getString(R.string.up_setting_tips)
@@ -113,7 +112,7 @@ class SettingNoticeAdapter : BaseListAdapter<SettingNoticeData>() {
                        }
                    }
                    1->{
-                       if(count > iteminfo.stockInfo?.price){
+                       if(count > iteminfo.stockInfo?.last){
                            ResUtil.getColor(R.color.color_FF0000)?.let { et_setting.setTextColor(it) }
                            tv_nomatch_tips.visibility=View.VISIBLE
                            tv_nomatch_tips.text = ResUtil.getString(R.string.down_setting_tips)

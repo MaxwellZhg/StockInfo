@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+                                              android:id="@+id/retry_root"
+                                              android:orientation="vertical"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              android:gravity="center_horizontal"
+                                              android:background="@color/color_211F2A">
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="171dp"
+            android:src="@mipmap/ic_retry"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/color_FFE1E4F0"
+              android:textSize="15sp"
+              android:layout_marginTop="17dp"
+              android:text="@string/retry_load"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

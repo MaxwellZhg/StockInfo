@@ -132,6 +132,12 @@
                         android:id="@+id/list_empty_view"
                         layout="@layout/layout_topic_stock_list_empty"
                         android:visibility="gone"/>
+
+                <ViewStub
+                        android:id="@+id/layout_network_error"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout="@layout/layout_network_error"/>
             </FrameLayout>
 
             <ViewStub

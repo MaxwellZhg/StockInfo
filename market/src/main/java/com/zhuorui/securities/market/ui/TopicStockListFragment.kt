@@ -25,6 +25,7 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.ui.LoginRegisterFragment
 import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.layout_guide_open_accout.*
+import kotlinx.android.synthetic.main.layout_network_error.*
 import kotlinx.android.synthetic.main.layout_topic_stock_list_empty.*
 
 /**
@@ -95,7 +96,7 @@ class TopicStockListFragment :
             val stock = SearchStockInfo()
             stock.code = item.code
             stock.ts = item.ts
-            stock.tsCode = item.code+"."+item.ts
+            stock.tsCode = item.code + "." + item.ts
             stock.name = item.name
             stock.type = 2
 //          startActivity(Intent(context, KlineLandActivity::class.java))
@@ -170,19 +171,34 @@ class TopicStockListFragment :
         _mActivity?.runOnUiThread { mAdapter?.notifyItemChanged(index) }
     }
 
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
-            R.id.tv_register_now -> {
+    override fun onClick(v: View?) {
+        when (v) {
+            tv_register_now -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
             }
-            R.id.btn_add_stotcks -> {
+            btn_add_stotcks -> {
                 // 跳转到搜索
                 (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
+            }
+            retry_root -> {
+                // 重新加载
+                presenter?.loadStocklist()
             }
         }
     }
 
     override fun hideRegisterNow() {
         _mActivity?.runOnUiThread { viewInfalatedRootId?.visibility = View.GONE }
+    }
+
+    override fun showRetry(visible: Boolean) {
+        if (visible) {
+            if (mAdapter?.itemCount!! > 0 || layout_network_error == null) return
+            layout_network_error.inflate()
+            retry_root?.visibility = View.VISIBLE
+            retry_root?.setOnClickListener(this)
+        } else {
+            retry_root?.visibility = View.GONE
+        }
     }
 }

@@ -180,30 +180,13 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             // 已登录
             if (isCollected) {
                 //取消收藏
-                val ids = arrayOf(stockInfo.id)
                 val request =
-                    DeleteStockRequest(
-                        stockInfo,
-                        ids,
-                        stockInfo.ts!!,
-                        stockInfo.code!!,
-                        transactions.createTransaction()
-                    )
-                Cache[IStockNet::class.java]?.delelte(request)
-                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+                    DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
+                Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             } else {
                 //添加收藏
-                val requset =
-                    CollectionStockRequest(
-                        stockInfo,
-                        stockInfo.type!!,
-                        stockInfo.ts!!,
-                        stockInfo.code!!,
-                        0,
-                        transactions.createTransaction()
-                    )
-                Cache[IStockNet::class.java]?.collection(requset)
-                    ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
+                val request = DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
+                Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             }
         } else {
             // 未登录
@@ -227,14 +210,13 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         if (response.request is CollectionStockRequest) {
             // 传递添加自选股事件
             RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
-            //updateCurrentFragmentData(str)
             ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
             isCollected = true
             view?.upFollow(true)
         } else if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.codes[0]!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
             isCollected = false
             view?.upFollow(false)

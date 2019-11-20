@@ -8,14 +8,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.commonwidget.ZRStockStatusButton
 import com.zhuorui.commonwidget.ZRStockTextView
-import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
+import com.zhuorui.securities.market.model.StockSuspension
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.util.MathUtil
 
@@ -108,24 +108,42 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 }
             }
 
-            // 跌涨幅是否大于0或者等于0
-            item?.diffRate?.let {
-                val diffPriceVal = MathUtil.rounded(it).toInt()
-                when {
-                    diffPriceVal == 0 -> {
-                        tv_price.setText(item.price.toString(), 0)
-                        stock_up_down.setUpDown(0)
-                        stock_up_down.text = item.diffRate.toString() + "%"
-                    }
-                    diffPriceVal > 0 -> {
-                        tv_price.setText(item.price.toString(), 1)
-                        stock_up_down.setUpDown(1)
-                        stock_up_down.text = "+" + item.diffRate + "%"
-                    }
-                    else -> {
-                        tv_price.setText(item.price.toString(), 2)
-                        stock_up_down.setUpDown(2)
-                        stock_up_down.text = item.diffRate.toString() + "%"
+
+            when (item?.suspension) {
+                StockSuspension.empty -> {
+                    // 无状态
+                    tv_price.setText("--", 0)
+                    stock_up_down.setUpDown(0)
+                    stock_up_down.text = "--"
+                }
+                StockSuspension.suspension -> {
+                    // 停牌状态
+                    tv_price.setText("--", 0)
+                    stock_up_down.setUpDown(0)
+                    stock_up_down.text = ResUtil.getString(R.string.suspension)
+                }
+                else -> {
+                    // 正常状态
+                    // 跌涨幅是否大于0或者等于0
+                    item?.diffRate?.let {
+                        val diffPriceVal = MathUtil.rounded(it).toInt()
+                        when {
+                            diffPriceVal == 0 -> {
+                                tv_price.setText(item.last.toString(), 0)
+                                stock_up_down.setUpDown(0)
+                                stock_up_down.text = item.diffRate.toString() + "%"
+                            }
+                            diffPriceVal > 0 -> {
+                                tv_price.setText(item.last.toString(), 1)
+                                stock_up_down.setUpDown(1)
+                                stock_up_down.text = "+" + item.diffRate + "%"
+                            }
+                            else -> {
+                                tv_price.setText(item.last.toString(), 2)
+                                stock_up_down.setUpDown(2)
+                                stock_up_down.text = item.diffRate.toString() + "%"
+                            }
+                        }
                     }
                 }
             }

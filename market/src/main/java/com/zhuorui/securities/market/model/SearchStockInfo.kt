@@ -15,8 +15,6 @@ import kotlinx.android.parcel.Parcelize
 open class SearchStockInfo : BaseStockMarket(), Parcelable {
 
     @IgnoredOnParcel
-    var id: String? = null//登录后拉取列表会返回id
-    @IgnoredOnParcel
     var tsCode: String? = null//股票代码 600004.SH
     @IgnoredOnParcel
     var name: String? = null//名称

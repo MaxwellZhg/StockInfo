@@ -13,7 +13,10 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.event.*
+import com.zhuorui.securities.market.event.AddTopicStockEvent
+import com.zhuorui.securities.market.event.DeleteTopicStockEvent
+import com.zhuorui.securities.market.event.SelectsSearchTabEvent
+import com.zhuorui.securities.market.event.TabPositionEvent
 import com.zhuorui.securities.market.model.SearchDeafaultData
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.SearchStokcInfoEnum
@@ -32,7 +35,6 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import kotlin.collections.ArrayList
 
 /**
  * Created by Maxwell.
@@ -40,7 +42,9 @@ import kotlin.collections.ArrayList
  * Date: 2019/9/20
  * Desc:
  */
+@Suppress("INACCESSIBLE_TYPE")
 class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchResultInfoViewModel>() {
+
     private val disposables = ArrayList<Disposable>()
     var ts: SearchStokcInfoEnum? = null
     var str: String? = null
@@ -48,10 +52,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     var listhot = ArrayList<SearchStockInfo>()
     var preListStock = ArrayList<SearchStockInfo>()
     var history = ArrayList<Int>()
-    var totalPage: Int =0
-    override fun init() {
-        super.init()
-    }
+    var totalPage: Int = 0
 
     fun setType(type: SearchStokcInfoEnum?) {
         ts = type
@@ -67,13 +68,13 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 })
             viewModel?.stockdatas?.observe(it,
                 androidx.lifecycle.Observer<List<SearchStockInfo>> { t ->
-                    if(ts==SearchStokcInfoEnum.Stock) {
+                    if (ts == SearchStokcInfoEnum.Stock) {
                         view?.addStockToAdapter(t, totalPage)
                     }
                 })
             viewModel?.infos?.observe(it,
                 androidx.lifecycle.Observer<List<Int>> { t ->
-                    view?.addInfoToAdapter(t,totalPage)
+                    view?.addInfoToAdapter(t, totalPage)
                 })
         }
     }
@@ -82,7 +83,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         listhot.clear()
         history.clear()
         list.clear()
-        getTopicStockData(str, 0,5)
+        getTopicStockData(str, 0, 5)
     }
 
 
@@ -98,9 +99,9 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         return StockInfoAdapter()
     }
 
-    fun getStockData(str: String,currentPage:Int) {
+    fun getStockData(str: String, currentPage: Int) {
         listhot.clear()
-        getTopicStockData(str, currentPage,20)
+        getTopicStockData(str, currentPage, 20)
     }
 
     fun getStockInfoData() {
@@ -112,7 +113,7 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
 
     }
 
-    fun getTopicStockData(keyWord: String,currentPage:Int, count: Int) {
+    fun getTopicStockData(keyWord: String, currentPage: Int, count: Int) {
         val requset = StockSearchRequest(keyWord, count, transactions.createTransaction())
         Cache[IStockNet::class.java]?.search(requset)
             ?.enqueue(Network.IHCallBack<StockSearchResponse>(requset))
@@ -121,18 +122,18 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onStockSearchResponse(response: StockSearchResponse) {
         if (!transactions.isMyTransaction(response)) return
-  /*      if (response.data == null&&response.code=="000000"){
-            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                view?.showEmpty()
-                emitter.onNext(true)
-                emitter.onComplete()
-            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
-            disposables.add(disposable)
-            return
-        }*/
+        /*      if (response.data == null&&response.code=="000000"){
+                  val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                      view?.showEmpty()
+                      emitter.onNext(true)
+                      emitter.onComplete()
+                  }).subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                  disposables.add(disposable)
+                  return
+              }*/
         val datas = response.data
-       // totalPage=response.data.totalPage
-        if (datas.isNullOrEmpty()){
+        // totalPage=response.data.totalPage
+        if (datas.isNullOrEmpty()) {
             val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 view?.showEmpty()
                 emitter.onNext(true)
@@ -161,19 +162,19 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         }
         when ((response.request as StockSearchRequest).pageSize) {
             5 -> {
-                var data:SearchDeafaultData
+                var data: SearchDeafaultData
                 history.clear()
                 list.clear()
                 for (i in 0..4) {
                     history.add(i)
                 }
-                data = if(datas.size>5){
+                data = if (datas.size > 5) {
                     preListStock.clear()
-                    for (index in 0 until 5){
+                    for (index in 0 until 5) {
                         preListStock.add(datas[index])
                     }
                     SearchDeafaultData(preListStock, history)
-                }else{
+                } else {
                     SearchDeafaultData(datas, history)
                 }
                 list.add(data)
@@ -207,17 +208,9 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             // 已登录
             if (isCollected) {
                 //取消收藏
-                val ids = arrayOf(stockInfo.id)
                 val request =
-                    DeleteStockRequest(
-                        stockInfo,
-                        ids,
-                        stockInfo.ts!!,
-                        stockInfo.code!!,
-                        transactions.createTransaction()
-                    )
-                Cache[IStockNet::class.java]?.delelte(request)
-                    ?.enqueue(Network.IHCallBack<BaseResponse>(request))
+                    DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
+                Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             } else {
                 //添加收藏
                 val requset =
@@ -240,12 +233,12 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
                 // 传递删除自选股事件
                 RxBus.getDefault().post(DeleteTopicStockEvent(stockInfo.ts!!, stockInfo.code!!))
                 ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
-                setAdapterDataNotify(stockInfo,stockInfo.collect)
+                setAdapterDataNotify(stockInfo, stockInfo.collect)
             } else {
                 // 传递添加自选股事件
                 RxBus.getDefault().post(AddTopicStockEvent(stockInfo))
                 ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
-                setAdapterDataNotify(stockInfo,stockInfo.collect)
+                setAdapterDataNotify(stockInfo, stockInfo.collect)
             }
         }
     }
@@ -300,7 +293,10 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             toast(R.string.add_topic_successful)
             (response.request as CollectionStockRequest).stockInfo.collect = true
             //updateCurrentFragmentData(str)
-            setAdapterDataNotify(  (response.request as CollectionStockRequest).stockInfo, (response.request as CollectionStockRequest).stockInfo.collect)
+            setAdapterDataNotify(
+                (response.request as CollectionStockRequest).stockInfo,
+                (response.request as CollectionStockRequest).stockInfo.collect
+            )
             ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
         } else if (response.request is DeleteStockRequest) {
             val request = response.request as DeleteStockRequest
@@ -308,19 +304,8 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
             //updateCurrentFragmentData(str)
             request.stockInfo?.let { request.stockInfo?.collect?.let { it1 -> setAdapterDataNotify(it, it1) } }
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.code!!))
+            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.codes[0]!!))
             ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
-        }
-    }
-
-    fun updateCurrentFragmentData(str: String?) {
-        when (ts) {
-            SearchStokcInfoEnum.All -> {
-                str?.let { view?.detailInfo(it) }
-            }
-            SearchStokcInfoEnum.Stock -> {
-                str?.let { view?.detailStock(it) }
-            }
         }
     }
 
@@ -333,30 +318,30 @@ class SearchResultInfoPresenter : AbsNetPresenter<SearchResultInfoView, SearchRe
         disposables.clear()
     }
 
-    fun setAdapterDataNotify(stockInfo: SearchStockInfo,collect:Boolean){
-        when(ts){
+    private fun setAdapterDataNotify(stockInfo: SearchStockInfo, collect: Boolean) {
+        when (ts) {
             SearchStokcInfoEnum.All -> {
-              viewModel?.searchInfoDatas?.value.let {
-                  if(it!=null){
-                      for(data in it[0].hotlist){
-                          if(stockInfo.code==data?.code){
-                              data?.collect=collect
-                          }
-                      }
-                  }
-              }
+                viewModel?.searchInfoDatas?.value.let {
+                    if (it != null) {
+                        for (data in it[0].hotlist) {
+                            if (stockInfo.code == data?.code) {
+                                data?.collect = collect
+                            }
+                        }
+                    }
+                }
                 view?.notifyAdapter()
             }
             SearchStokcInfoEnum.Stock -> {
-               viewModel?.stockdatas?.value.let {
-                   if (it != null) {
-                       for(data in it){
-                           if(stockInfo.code==data?.code){
-                               data?.collect=collect
-                           }
-                       }
-                   }
-               }
+                viewModel?.stockdatas?.value.let {
+                    if (it != null) {
+                        for (data in it) {
+                            if (stockInfo.code == data?.code) {
+                                data?.collect = collect
+                            }
+                        }
+                    }
+                }
                 view?.notifyAdapter()
             }
         }

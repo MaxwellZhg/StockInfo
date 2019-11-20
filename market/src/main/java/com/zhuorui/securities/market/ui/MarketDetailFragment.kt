@@ -148,7 +148,7 @@ class MarketDetailFragment :
                     val sm = StockMarketInfo()
                     sm.name = mStock.name
                     sm.code = mStock.code
-                    sm.id = mStock.id
+//                    sm.id = mStock.id
                     sm.ts = mStock.ts
                     sm.tsCode = mStock.tsCode
                     start(RemindSettingFragment.newInstance(sm))

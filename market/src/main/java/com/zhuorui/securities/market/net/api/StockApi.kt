@@ -28,7 +28,7 @@ interface StockApi {
         /**
          * 删除自选股
          */
-        const val DEL = "as_market/api/stock/selected/v1/view/del"
+        const val DEL = "as_market/api/stock/selected/v1/view/code_del"
 
         /**
          * 置顶自选股
@@ -83,5 +83,10 @@ interface StockApi {
          * F10财报信息
          */
         const val FINANCIAL_REPORT = "as_market/api/f10/v1/financial/report"
+
+        /**
+         * 成分股信息
+         */
+        const val STOCK_CONS_INFO = "as_market/api/hk_stock_index_cons/v1/get_info"
     }
 }
