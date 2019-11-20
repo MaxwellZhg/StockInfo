@@ -19,7 +19,7 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
     var sort: Int = 0
     // 当前价格：如13.75
     @IgnoredOnParcel
-    var price: BigDecimal? = null
+    var last: BigDecimal? = null
     // 跌涨价格：如1.33
     @IgnoredOnParcel
     var diffPrice: BigDecimal? = null
@@ -29,6 +29,9 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
     // 创建时间
     @IgnoredOnParcel
     var createTime: Long = 0
+    // 股市状态
+    @IgnoredOnParcel
+    var suspension: StockSuspension = StockSuspension.empty
     // 长按
     @IgnoredOnParcel
     var longClick: Boolean = false
@@ -45,7 +48,7 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
             target.name = origin.name
             target.type = origin.type
             target.sort = origin.sort
-            target.price = origin.price
+            target.last = origin.last
             target.diffPrice = origin.diffPrice
             target.diffRate = origin.diffRate
             target.createTime = origin.createTime

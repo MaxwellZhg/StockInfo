@@ -229,4 +229,6 @@
     <string name="middele_years_report">中报</string>
     <string name="all_years_report">年报</string>
     <string name="coins_mark">HKD</string>
+    <string name="suspension">停牌</string>
+    <string name="retry_load">点击屏幕，重新加载</string>
 </resources>

@@ -4,6 +4,7 @@ import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -68,7 +69,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     /**
      * 加载推荐自选股列表
      */
-    fun requestStocks() {
+    private fun requestStocks() {
         val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             emitter.onNext(LocalAccountConfig.getInstance().isLogin())
             emitter.onComplete()
@@ -80,7 +81,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                     view?.notifyDataSetChanged(viewModel?.datas?.value)
                     // 加载网络数据
                     if (isLogin) {
-                        loadRecommendStocklist()
+                        loadStocklist()
                     }
                 } else {
                     // 本地有缓存，读取本地缓存的自选股
@@ -114,7 +115,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                                 view?.notifyDataSetChanged(viewModel?.datas?.value)
                                 // 加载网络数据
                                 if (isLogin) {
-                                    loadRecommendStocklist()
+                                    loadStocklist()
                                 }
                             }
                     disposables.add(disposable)
@@ -123,12 +124,11 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         disposables.add(disposable)
     }
 
-    private fun loadRecommendStocklist() {
+    fun loadStocklist() {
         val request = RecommendStocklistRequest(
             if (ts == StockTsEnum.HS) StockTsEnum.SH.name + "," + StockTsEnum.SZ.name else ts?.name,
             transactions.createTransaction()
         )
-        // 已登录
         Cache[IStockNet::class.java]?.myList(request)
             ?.enqueue(Network.IHCallBack<RecommendStocklistResponse>(request))
     }
@@ -136,6 +136,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onRecommendStocklistResponse(response: RecommendStocklistResponse) {
         if (!transactions.isMyTransaction(response)) return
+        view?.showRetry(false)
         val datas = response.data
         if (datas.isNullOrEmpty()) return
         // 刷新数据时要清掉老数据
@@ -184,7 +185,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
                 if (item.ts == sub.ts && item.code == sub.code) {
                     // 更新数据
                     val item = datas[index]
-                    item.price = sub.last!!
+                    item.last = sub.last!!
                     item.diffPrice = sub.last!!.subtract(sub.open)
                     item.diffRate = MathUtil.divide2(
                         item.diffPrice!!.multiply(BigDecimal.valueOf(100)),
@@ -251,7 +252,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
     }
 
-    private fun   stickyOnTop(item: StockMarketInfo?) {
+    private fun stickyOnTop(item: StockMarketInfo?) {
         // 更换自选股位置
         val datas = viewModel?.datas?.value ?: return
         datas.remove(item)
@@ -326,13 +327,21 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         }
     }
 
+    override fun onErrorResponse(response: ErrorResponse) {
+        if (response.request is RecommendStocklistRequest) {
+            view?.showRetry(true)
+            return
+        }
+        super.onErrorResponse(response)
+    }
+
     /**
      * 同步自选股完成
      */
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSynStockResponse(response: SynStockResponse) {
         // 同步完成，重新拉取自选股列表
-        loadRecommendStocklist()
+        loadStocklist()
     }
 
     /**
@@ -376,7 +385,8 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
         viewModel?.datas?.value?.let {
             //使用克隆数据，防止在迭代时，数据发生改变而奔溃
-            topicPrice(it.clone() as ArrayList<StockMarketInfo>) }
+            topicPrice(it.clone() as ArrayList<StockMarketInfo>)
+        }
     }
 
     override fun destroy() {

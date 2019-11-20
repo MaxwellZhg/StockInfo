@@ -18,4 +18,6 @@ interface TopicStockListView : AbsView {
     fun notifyItemChanged(index: Int)
 
     fun hideRegisterNow()
+
+    fun showRetry(visible: Boolean)
 }
