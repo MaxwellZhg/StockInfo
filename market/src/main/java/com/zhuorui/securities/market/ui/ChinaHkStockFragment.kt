@@ -56,7 +56,22 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
         tv_point_one.text="沪港通"
         tv_point_two.text="沪港通100"
         tv_point_three.text="沪港通300"
+        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_one_ponit_num.setTextColor(it) }
+        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_two_ponit_num.setTextColor(it) }
+        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_three_ponit_num.setTextColor(it) }
+        tv_one_point_rate.text=ResUtil.getString(R.string.no_net_point)
+        tv_two_point_rate.text=ResUtil.getString(R.string.no_net_point)
+        tv_three_ponit_rate.text=ResUtil.getString(R.string.no_net_point)
+        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_one_point_rate.setTextColor(it) }
+        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_two_point_rate.setTextColor(it) }
+        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_three_ponit_rate.setTextColor(it) }
         zr_line.setType(1)
+        zr_line.setValues(0, 1, 0)
+        zr_line1.setType(1)
+        zr_line1.setValues(0, 1, 0)
+        zr_line2.setType(1)
+        zr_line2.setValues(0, 1, 0)
+/*        zr_line.setType(1)
         zr_line.setValues(40,10,50)
         zr_line_text.setType(0)
         zr_line_text.setValues(40,10,50)
@@ -67,7 +82,7 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
         zr_line2.setType(1)
         zr_line2.setValues(20,40,50)
         zr_line_text2.setType(0)
-        zr_line_text2.setValues(20,40,50)
+        zr_line_text2.setValues(20,40,50)*/
         trend_one.setType(1)
         trend_two.setType(2)
         tabTitle.add("沪股通")

@@ -35,6 +35,7 @@ public class ChinaHKFundTransactionView extends FrameLayout {
     private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
     private boolean isSelect=false;
+    private boolean mEmpty;
     private LineChart vChart;
     private TextView tv_north_trend;
     private TextView tv_sourth_trend;
@@ -85,14 +86,16 @@ public class ChinaHKFundTransactionView extends FrameLayout {
 
     private void initLineChart() {
         vChart = findViewById(R.id.line_cahart);
-        vChart.setNoDataText("暂无数据");
+        vChart.setNoDataText("");
         vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         //是否有触摸事件
         vChart.setTouchEnabled(false);
         //是否展示网格线
         vChart.setDrawGridBackground(false);
         //是否显示边界
-        vChart.setDrawBorders(false);
+        vChart.setDrawBorders(true);
+        vChart.setBorderWidth(0.5f);
+        vChart.setBorderColor(mGridColor);
         //是否可以拖动
         vChart.setDragEnabled(false);
         // 可缩放
@@ -108,7 +111,7 @@ public class ChinaHKFundTransactionView extends FrameLayout {
         // x坐标轴
         XAxis xl = vChart.getXAxis();
         xl.setDrawAxisLine(false);
-        xl.setDrawGridLines(true);
+        xl.setDrawGridLines(false);
         xl.setTextColor(mTextColor);
         xl.setGridColor(mGridColor);
         xl.setTextSize(12f);
@@ -140,7 +143,7 @@ public class ChinaHKFundTransactionView extends FrameLayout {
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value == 0 ? "0" : String.format("%.2f", value);
+                return value == 0 || mEmpty ? "0" : String.format("%.2f", value);
             }
         });
        MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(vChart.getViewPortHandler(), vChart.getAxisLeft(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
@@ -148,15 +151,24 @@ public class ChinaHKFundTransactionView extends FrameLayout {
     }
 
     private LineData getLineData(List<Entry> entrys) {
-        LineDataSet lineDataSet = new LineDataSet(entrys, "");
+        LineDataSet lineDataSet;
+        mEmpty = entrys.isEmpty();
+        if (mEmpty) {
+            entrys.add(new Entry(0, 1));
+            entrys.add(new Entry(0, -1));
+            lineDataSet = new LineDataSet(entrys, "");
+            lineDataSet.setColor(mGridColor);
+        }else {
+            lineDataSet = new LineDataSet(entrys, "");
+            if(isSelect) {
+                lineDataSet.setColor(Color.parseColor("#53A0FD"));
+            }else{
+                lineDataSet.setColor(Color.parseColor("#FF8E1B"));
+            }
+        }
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawValues(false);
         lineDataSet.setLineWidth(0.5f);
-        if(isSelect) {
-            lineDataSet.setColor(Color.parseColor("#53A0FD"));
-        }else{
-            lineDataSet.setColor(Color.parseColor("#FF8E1B"));
-        }
         LineData lineData = new LineData(lineDataSet);
         lineData.setValueTextColor(Color.WHITE);
         return lineData;
@@ -166,11 +178,11 @@ public class ChinaHKFundTransactionView extends FrameLayout {
     private void setData() {
         int[] d = {1, 1, -1};
         List<Entry> entrys = new ArrayList<>();
-        Random random = new Random();
+    /*    Random random = new Random();
         for (int i = 0; i < 149; i += 4) {
             Entry entry = new Entry(i, (random.nextInt(60) * d[random.nextInt(d.length)]));
             entrys.add(entry);
-        }
+        }*/
         LineData lineData = getLineData(entrys);
         YAxis leftAxis = vChart.getAxisLeft();
         if (lineData.getYMax() < 0){
@@ -184,6 +196,7 @@ public class ChinaHKFundTransactionView extends FrameLayout {
             leftAxis.resetAxisMinimum();
         }
         vChart.setData(lineData);
+        //vChart.invalidate();
     }
 
     public void setStockTs(String ts) {
