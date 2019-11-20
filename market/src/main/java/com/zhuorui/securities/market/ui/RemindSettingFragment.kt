@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
@@ -104,7 +103,7 @@ class RemindSettingFragment :
         // 跌涨幅是否大于0或者等于0
         val diffPriceVal = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()
         if (diffPriceVal == 0 || diffPriceVal > 0) {
-            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(), diffPriceVal)
+            tv_price.setText(if (stockInfo?.last == null) "0.00" else stockInfo?.last.toString(), diffPriceVal)
             tv_diff_price_count.setText(
                 if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),
                 diffPriceVal
@@ -114,7 +113,7 @@ class RemindSettingFragment :
                 diffPriceVal
             )
         } else {
-            tv_price.setText(if (stockInfo?.price == null) "0.00" else stockInfo?.price.toString(), 2)
+            tv_price.setText(if (stockInfo?.last == null) "0.00" else stockInfo?.last.toString(), 2)
             tv_diff_price_count.setText(
                 if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),
                 2
@@ -270,7 +269,7 @@ class RemindSettingFragment :
         when (edittext) {
             et_up_price -> {
                 upPrice = true
-                if (str.toBigDecimal() < stockInfo?.price) {
+                if (str.toBigDecimal() < stockInfo?.last) {
                     tv.visibility = View.VISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
@@ -282,7 +281,7 @@ class RemindSettingFragment :
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
-                    var count: BigDecimal? = stockInfo?.price?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
+                    var count: BigDecimal? = stockInfo?.last?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
                         MathUtil.multiply2(
                             it, 100.toBigDecimal()
                         ) - 100.toBigDecimal()
@@ -295,7 +294,7 @@ class RemindSettingFragment :
             }
             et_down_price -> {
                 downPrice = true
-                if (str.toBigDecimal() > stockInfo?.price) {
+                if (str.toBigDecimal() > stockInfo?.last) {
                     tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
@@ -307,8 +306,8 @@ class RemindSettingFragment :
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
-                    var count: BigDecimal? = stockInfo?.price?.let {
-                        stockInfo?.price?.let { MathUtil.subtract2(it, str.toBigDecimal()) }?.let { it1 ->
+                    var count: BigDecimal? = stockInfo?.last?.let {
+                        stockInfo?.last?.let { MathUtil.subtract2(it, str.toBigDecimal()) }?.let { it1 ->
                             MathUtil.divide2(
                                 it1,
                                 it
@@ -339,7 +338,7 @@ class RemindSettingFragment :
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     var count: BigDecimal =
                         MathUtil.add2(MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()), 1.toBigDecimal())
-                    var upprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
+                    var upprice: BigDecimal? = stockInfo?.last?.let { MathUtil.multiply2(it, count) }
                     tv.text = ResUtil.getString(R.string.compare_price_to) + upprice
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
@@ -363,7 +362,7 @@ class RemindSettingFragment :
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     var count: BigDecimal =
                         MathUtil.subtract2(1.toBigDecimal(), MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()))
-                    var downprice: BigDecimal? = stockInfo?.price?.let { MathUtil.multiply2(it, count) }
+                    var downprice: BigDecimal? = stockInfo?.last?.let { MathUtil.multiply2(it, count) }
                     tv.text = ResUtil.getString(R.string.compare_price_to) + downprice
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }

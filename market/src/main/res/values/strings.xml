@@ -231,4 +231,6 @@
     <string name="coins_mark">HKD</string>
     <string name="no_net_point">0.00   0.00%</string>
     <string name="no_ponit_content">暂无内容，等待开盘</string>
+    <string name="suspension">停牌</string>
+    <string name="retry_load">点击屏幕，重新加载</string>
 </resources>

@@ -30,10 +30,10 @@ class RemindSettingPresenter(context: Context) : AbsEventPresenter<RemindSetting
     }
 
     fun deatilSave(upprice: String, downprice: String, uprate: String, downrate: String, stockinfo: StockMarketInfo?) {
-        if (!TextUtils.isEmpty(upprice) && upprice.toBigDecimal() < stockinfo?.price) {
+        if (!TextUtils.isEmpty(upprice) && upprice.toBigDecimal() < stockinfo?.last) {
             context?.let { ResUtil.getString(R.string.up_setting_tips)?.let { it1 -> setDailog(it, it1) } }
             phoneDevDailog.show()
-        } else if (!TextUtils.isEmpty(downprice) && downprice.toBigDecimal() > stockinfo?.price) {
+        } else if (!TextUtils.isEmpty(downprice) && downprice.toBigDecimal() > stockinfo?.last) {
             context?.let { ResUtil.getString(R.string.down_setting_tips)?.let { it1 -> setDailog(it, it1) } }
             phoneDevDailog.show()
         } else if (!TextUtils.isEmpty(uprate) && !Pattern.compile(pattern).matcher(uprate).find()) {

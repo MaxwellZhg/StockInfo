@@ -8,10 +8,8 @@ import butterknife.BindView
 import com.zhuorui.commonwidget.ZrCompareTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
-import com.zhuorui.securities.market.config.LocalSearchConfig
 import com.zhuorui.securities.market.model.SearchStockInfo
 
 /**
@@ -20,10 +18,11 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Date: 2019/9/23
  * Desc:
  */
-class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
+class StockAdapter : BaseListAdapter<SearchStockInfo>() {
     private val default = 0x00
     private val bottom = 0x01
-    private lateinit var keywords:String
+    private lateinit var keywords: String
+
     override fun getLayout(viewType: Int): Int {
         return when (viewType) {
             default -> R.layout.item_stock_search_layout
@@ -33,9 +32,10 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         }
     }
 
+    var onClickStockIntoStockDetailListener: OnClickStockIntoStockDetailListener? = null
 
-    var onClickStockIntoStockDetailListener:OnClickStockIntoStockDetailListener?=null
-    var onStockColollectListenner:OnStockColollectListenner?=null
+    var onStockColollectListenner: OnStockColollectListenner? = null
+
     override fun createViewHolder(v: View?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             default -> ViewHolder(v, false, false)
@@ -58,14 +58,15 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         lateinit var iv_topic: AppCompatImageView
         @BindView(R2.id.rl_stock)
         lateinit var rl_stock: ConstraintLayout
+
         init {
             iv_topic.setOnClickListener(this)
             rl_stock.setOnClickListener(this)
         }
 
         override fun bind(item: SearchStockInfo?, position: Int) {
-            tv_stock_info_name.setText(item?.name,keywords)
-            tv_stock_code.setText(item?.code,keywords)
+            tv_stock_info_name.setText(item?.name, keywords)
+            tv_stock_code.setText(item?.code, keywords)
             when (item?.ts) {
                 "SH" -> {
                     iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_sh)
@@ -77,12 +78,12 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
                     iv_stock_logo.background = ResUtil.getDrawable(R.mipmap.ic_ts_hk)
                 }
             }
-            when(item?.collect){
-                true->{
-                    iv_topic.background=ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
+            when (item?.collect) {
+                true -> {
+                    iv_topic.background = ResUtil.getDrawable(R.mipmap.icon_stock_topiced)
                 }
-                false->{
-                    iv_topic.background=ResUtil.getDrawable(R.mipmap.ic_topic_history_d)
+                false -> {
+                    iv_topic.background = ResUtil.getDrawable(R.mipmap.ic_topic_history_d)
                 }
             }
         }
@@ -103,15 +104,18 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         }
     }
 
-    fun setkeywords(str:String){
-        keywords=str
+    fun setkeywords(str: String) {
+        keywords = str
     }
-   interface OnStockColollectListenner{
-       fun onStockCollectionStock(stockInfo:SearchStockInfo)
-     }
-    interface OnClickStockIntoStockDetailListener{
-        fun onClickStockIntoDetail(stockInfo:SearchStockInfo)
+
+    interface OnStockColollectListenner {
+        fun onStockCollectionStock(stockInfo: SearchStockInfo)
     }
+
+    interface OnClickStockIntoStockDetailListener {
+        fun onClickStockIntoDetail(stockInfo: SearchStockInfo)
+    }
+
     override fun getItemCount(): Int {
         return when {
             items == null -> return 0
@@ -120,6 +124,7 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
             else -> items.size
         }
     }
+
     override fun getItemViewType(position: Int): Int {
         return if (items.size > 50) {
             default
@@ -142,6 +147,4 @@ class StockAdapter() :BaseListAdapter<SearchStockInfo>(){
         if (position > items.size || position == items.size) return null
         return super.getItem(position)
     }
-
-
 }

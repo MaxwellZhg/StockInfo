@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.customer.view;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.commonwidget.ZRDividerItemDecoration;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.socket.vo.StockHandicapData;
 import com.zhuorui.securities.market.util.MarketUtil;
 
 /**
@@ -120,8 +119,8 @@ public class StockDetailView extends FrameLayout {
         decoration.setDrawable(getResources().getDrawable(R.drawable.stock_detail_item_divider));
         vRv.addItemDecoration(decoration);
         vRv.setAdapter(mAdapter = new MyAdapter(getContext()));
-        vDiffPrice.setOnClickListener(v -> priceAnimator = MarketUtil.showUpDownAnim(priceAnimator,vAnimator,true));
-        vDiffRate.setOnClickListener(v -> priceAnimator = MarketUtil.showUpDownAnim(priceAnimator,vAnimator,false));
+        vDiffPrice.setOnClickListener(v -> priceAnimator = MarketUtil.showUpDownAnim(priceAnimator, vAnimator, true));
+        vDiffRate.setOnClickListener(v -> priceAnimator = MarketUtil.showUpDownAnim(priceAnimator, vAnimator, false));
     }
 
     private void changeMore() {
@@ -136,83 +135,91 @@ public class StockDetailView extends FrameLayout {
         }
     }
 
-    public void setData(IStockDatailData data) {
-        if (data == null)return;
+    public void setData(StockHandicapData data) {
         setPrice(data);
-        readData(data, mPreClosePrice);
+        readData(data, mPreClosePrice, false);
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setPrice(IStockDatailData data) {
+    public void upData(StockHandicapData data) {
+        setPrice(data);
+        readData(data, mPreClosePrice, true);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void setPrice(StockHandicapData data) {
         if (upColor == 0) {
             LocalSettingsConfig config = LocalSettingsConfig.Companion.getInstance();
             upColor = config.getUpColor();
             downColor = config.getDownColor();
         }
-        final Float price = data.getPrice() != null ? data.getPrice() : mPrice;
-        final Float preClosePrice = data.getPreClosePrice() != null ? data.getPreClosePrice() : mPreClosePrice;
+        final Float price = data != null && data.getLast() != null ? data.getLast() : mPrice;
+        final Float preClosePrice = data != null && data.getPreClose() != null ? data.getPreClose() : mPreClosePrice;
+        int priceColor = Color.WHITE;
+        int updownIc = 0;
         if (price == null || preClosePrice == null) {
             vPrice.setText("_____");
             vDiffPrice.setText("___");
             vDiffRate.setText("___");
             vCurrencyCode.setText("");
-            return;
-        }
-        int priceColor;
-        int updownIc;
-        if (price > preClosePrice) {
-            priceColor = upColor;
-            updownIc = MarketUtil.getUpIcon();
-        } else if (price < preClosePrice) {
-            priceColor = downColor;
-            updownIc = MarketUtil.getDownIcon();
         } else {
-            priceColor = Color.WHITE;
-            updownIc = 0;
+            if (price > preClosePrice) {
+                priceColor = upColor;
+                updownIc = MarketUtil.getUpIcon();
+            } else if (price < preClosePrice) {
+                priceColor = downColor;
+                updownIc = MarketUtil.getDownIcon();
+            }
+            vPrice.setText(String.format("%.3f", price));
+            float diffPrice = price - preClosePrice;
+            vDiffPrice.setText(String.format("%+.3f", diffPrice));
+            vDiffRate.setText(String.format("%+.2f%%", diffPrice * 100 / preClosePrice));
+            if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
+                priceAnimator = MarketUtil.showUpDownAnim(priceAnimator, vAnimator, price.floatValue() > mPrice.floatValue());
+            }
+            vCurrencyCode.setText(MarketUtil.getCurrencyCodeByTs("HK"));
+            mPreClosePrice = preClosePrice;
+            mPrice = price;
         }
         vPrice.setTextColor(priceColor);
         vDiffPrice.setTextColor(priceColor);
         vDiffRate.setTextColor(priceColor);
         vDiffLogo.setImageResource(updownIc);
-        vPrice.setText(String.format("%.3f", price));
-        float diffPrice = price - preClosePrice;
-        vDiffPrice.setText(String.format("%+.3f", diffPrice));
-        vDiffRate.setText(String.format("%+.2f%%", diffPrice * 100 / preClosePrice));
-        if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
-            priceAnimator = MarketUtil.showUpDownAnim(priceAnimator,vAnimator,price.floatValue() > mPrice.floatValue());
-        }
-        vCurrencyCode.setText(MarketUtil.getCurrencyCodeByTs("HK"));
-        mPreClosePrice = preClosePrice;
-        mPrice = price;
     }
 
-    private void readData(IStockDatailData data, Float preClosePrice) {
+    private void readData(StockHandicapData data, Float preClosePrice, boolean isUpdata) {
         mItemColor.clear();
         //最高
-        Float highPrice = data.getHighPrice() != null ? data.getHighPrice() : mHighPricel;
+        Float highPrice = data != null && data.getHigh() != null ? data.getHigh() : mHighPricel;
         if (highPrice != null) {
             mHighPricel = highPrice;
-            mItemDatas[ITEMPOS_HIGH_PRICE] = String.format("%.3f", data.getHighPrice());
+            mItemDatas[ITEMPOS_HIGH_PRICE] = String.format("%.3f", mHighPricel);
+        } else {
+            mItemDatas[ITEMPOS_HIGH_PRICE] = getDefText(isUpdata, ITEMPOS_HIGH_PRICE);
         }
         if (highPrice != null && preClosePrice != null) {
             mItemColor.put(ITEMPOS_HIGH_PRICE, getUpDownColor(highPrice, preClosePrice, Color.WHITE));
         }
         //今开
-        Float openPrice = data.getOpenPrice() != null ? data.getOpenPrice() : mOpenPrice;
+        Float openPrice = data != null && data.getOpen() != null ? data.getOpen() : mOpenPrice;
         if (openPrice != null) {
             mOpenPrice = openPrice;
             mItemDatas[ITEMPOS_OPEN_PRICE] = String.format("%.3f", openPrice);
+        } else {
+            mItemDatas[ITEMPOS_OPEN_PRICE] = getDefText(isUpdata, ITEMPOS_OPEN_PRICE);
         }
         if (openPrice != null && preClosePrice != null) {
             mItemColor.put(ITEMPOS_OPEN_PRICE, getUpDownColor(openPrice, preClosePrice, Color.WHITE));
         }
         //成交量
-        mItemDatas[ITEMPOS_SHARESTRADED] = "--";
+        mItemDatas[ITEMPOS_SHARESTRADED] = data == null || data.getSharestraded() == null ? getDefText(isUpdata, ITEMPOS_SHARESTRADED) : data.getSharestraded().toString();
         //最低
-        Float lowPrice = data.getLowPrice() != null ? data.getLowPrice() : mLowPricel;
+        Float lowPrice = data != null && data.getLow() != null ? data.getLow() : mLowPricel;
         if (lowPrice != null) {
             mLowPricel = lowPrice;
             mItemDatas[ITEMPOS_LOW_PRICE] = String.format("%.3f", lowPrice);
+        } else {
+            mItemDatas[ITEMPOS_LOW_PRICE] = getDefText(isUpdata, ITEMPOS_LOW_PRICE);
         }
         if (lowPrice != null && preClosePrice != null) {
             mItemColor.put(ITEMPOS_LOW_PRICE, getUpDownColor(lowPrice, preClosePrice, Color.WHITE));
@@ -220,40 +227,46 @@ public class StockDetailView extends FrameLayout {
         //昨收
         if (preClosePrice != null) {
             mItemDatas[ITEMPOS_PRE_CLOSE_PRICE] = String.format("%5.3f", preClosePrice);
+        } else {
+            mItemDatas[ITEMPOS_PRE_CLOSE_PRICE] = getDefText(isUpdata, ITEMPOS_PRE_CLOSE_PRICE);
         }
         //成交额
-        mItemDatas[ITEMPOS_TURNOVER] = "--";
+        mItemDatas[ITEMPOS_TURNOVER] = data == null || data.getTurnover() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getTurnover().toString();
         //换手率
-        mItemDatas[ITEMPOS_TURNOVER_RATE] = "--";
+        mItemDatas[ITEMPOS_TURNOVER_RATE] = data == null || data.getTurnoverRate() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER_RATE) : data.getTurnoverRate();
         //市盈率(静)
-        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = "--";
+        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = data == null || data.getPeRatioStatic() == null ? getDefText(isUpdata, ITEMPOS_PE_RATIO_STATIC) : data.getPeRatioStatic().toString();
         //总市值
-        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = "--";
+        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getTotalMarkValue() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE) : data.getTotalMarkValue().toString();
         //振幅
-        mItemDatas[ITEMPOS_AMPLITUDE] = "--";
+        mItemDatas[ITEMPOS_AMPLITUDE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_AMPLITUDE) : data.getAmplitude();
         //市盈率(TTM)
-        mItemDatas[ITEMPOS_PERATIO_TTM] = "--";
+        mItemDatas[ITEMPOS_PERATIO_TTM] = data == null || data.getPeRatioTTM() == null ? getDefText(isUpdata, ITEMPOS_PERATIO_TTM) : data.getPeRatioTTM().toString();
         //总股本
-        mItemDatas[ITEMPOS_TOTAL_CAPITAL_STOCK] = "--";
+        mItemDatas[ITEMPOS_TOTAL_CAPITAL_STOCK] = data == null || data.getTotalCapitalStock() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_CAPITAL_STOCK) : data.getTotalCapitalStock().toString();
         //52周最高
-        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_HIGH] = "--";
+        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_HIGH] = data == null || data.getFiftyTwoWeeksHigh() == null ? getDefText(isUpdata, ITEMPOS_FIFTY_TWO_WEEKS_HIGH) : data.getFiftyTwoWeeksHigh().toString();
         //市净率
-        mItemDatas[ITEMPOS_MARKET_RATE] = "--";
+        mItemDatas[ITEMPOS_MARKET_RATE] = data == null || data.getMarketRate() == null ? getDefText(isUpdata, ITEMPOS_MARKET_RATE) : data.getMarketRate().toString();
         //流通值
-        mItemDatas[ITEMPOS_CIRCULATION_VALUE] = "--";
+        mItemDatas[ITEMPOS_CIRCULATION_VALUE] = getDefText(isUpdata, ITEMPOS_CIRCULATION_VALUE);
         //52周最低
-        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_LOW] = "--";
+        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_LOW] = data == null || data.getFiftyTwoWeeksLow() == null ? getDefText(isUpdata, ITEMPOS_FIFTY_TWO_WEEKS_LOW) : data.getFiftyTwoWeeksLow().toString();
         //委比
-        mItemDatas[ITEMPOS_COMPARISON] = "--";
+        mItemDatas[ITEMPOS_COMPARISON] = data == null || data.getComparison() == null ? getDefText(isUpdata, ITEMPOS_COMPARISON) : data.getComparison();
         //流通股
-        mItemDatas[ITEMPOS_CIRCULATING_SHARES] = "--";
+        mItemDatas[ITEMPOS_CIRCULATING_SHARES] = getDefText(isUpdata, ITEMPOS_CIRCULATING_SHARES);
         //每手
-        mItemDatas[ITEMPOS_HANDS] = "--";
+        mItemDatas[ITEMPOS_HANDS] = data == null || data.getHands() == null ? getDefText(isUpdata, ITEMPOS_HANDS) : data.getHands().toString();
         //量比
-        mItemDatas[ITEMPOS_VOLUME_RATIO] = "--";
+        mItemDatas[ITEMPOS_VOLUME_RATIO] = data == null || data.getVolumeRatio() == null ? getDefText(isUpdata, ITEMPOS_VOLUME_RATIO) : data.getVolumeRatio();
         //股息率
-        mItemDatas[ITEMPOS_DIVIDEND_RATE] = "--";
+        mItemDatas[ITEMPOS_DIVIDEND_RATE] = data == null || data.getDividendRateFLY() == null ? getDefText(isUpdata, ITEMPOS_DIVIDEND_RATE) : data.getDividendRateFLY();
 
+    }
+
+    private String getDefText(boolean isUpdata, int position) {
+        return isUpdata ? mItemDatas[position] : "--";
     }
 
     private int getUpDownColor(float price1, float price2, int defColor) {
@@ -316,43 +329,6 @@ public class StockDetailView extends FrameLayout {
             vText.setTextColor(color);
             vText.setText(TextUtils.isEmpty(text) ? "--" : text);
         }
-    }
-
-    public interface IStockDatailData {
-        /**
-         * 当前价
-         *
-         * @return
-         */
-        Float getPrice();
-
-        /**
-         * 开盘价
-         *
-         * @return
-         */
-        Float getOpenPrice();
-
-        /**
-         * 昨收价
-         *
-         * @return
-         */
-        Float getPreClosePrice();
-
-        /**
-         * 最高价
-         *
-         * @return
-         */
-        Float getHighPrice();
-
-        /**
-         * 最低价
-         *
-         * @return
-         */
-        Float getLowPrice();
     }
 
 
