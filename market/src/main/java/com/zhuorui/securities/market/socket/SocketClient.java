@@ -123,11 +123,9 @@ public class SocketClient {
                                     }
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
-                                    // TODO 盘口
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTransResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_PRICE:
-                                    // TODO 股价
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicPriceResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_TRADE:

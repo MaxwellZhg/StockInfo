@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.customer.view.kline.stat
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.LinearLayout
@@ -19,6 +20,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class TradeStatViewAdapter : BaseListAdapter<StockTradeStaData>() {
+
+    private var showUpDownAnim: ObjectAnimator? = null
 
     private var settingsConfig: LocalSettingsConfig? = null
 
@@ -79,10 +82,10 @@ class TradeStatViewAdapter : BaseListAdapter<StockTradeStaData>() {
             if (position == itemCount - 1) {
                 if (item.diffPreMark == 1) {
                     // 闪涨
-                    MarketUtil.showUpDownAnim(null, diffMark, true)
+                    showUpDownAnim = MarketUtil.showUpDownAnim(showUpDownAnim, diffMark, true)
                 } else if (item.diffPreMark == -1) {
                     // 闪涨
-                    MarketUtil.showUpDownAnim(null, diffMark, false)
+                    showUpDownAnim = MarketUtil.showUpDownAnim(showUpDownAnim, diffMark, false)
                 }
             }
             tvVolume.text = item?.todayQty?.let { MathUtil.convertToUnitString(it) }

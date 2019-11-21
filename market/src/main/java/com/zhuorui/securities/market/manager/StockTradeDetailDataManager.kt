@@ -106,6 +106,11 @@ class StockTradeDetailDataManager private constructor(val ts: String, val code: 
     }
 
     private fun destroy() {
+        // 取消订阅
+        if (stockTopic != null) {
+            SocketClient.getInstance().unBindTopic(stockTopic)
+        }
+
         if (RxBus.getDefault().isRegistered(this)) {
             RxBus.getDefault().unregister(this)
         }

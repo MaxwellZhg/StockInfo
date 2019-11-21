@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.customer.view.kline.stat
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
@@ -18,6 +19,7 @@ import com.zhuorui.securities.market.util.MathUtil
 
 class TradeDetailViewAdapter : BaseListAdapter<StockTradeDetailData>() {
 
+    private var showUpDownAnim: ObjectAnimator? = null
     private var stocksThemeColor: StocksThemeColor? = null
 
     init {
@@ -50,7 +52,7 @@ class TradeDetailViewAdapter : BaseListAdapter<StockTradeDetailData>() {
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockTradeDetailData?, position: Int) {
             try {
-                tvTime.text = item?.time?.let { DataTimeUtil.secToDate(it) }
+                tvTime.text = item?.time?.let { DataTimeUtil.secToTime(it) }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -64,7 +66,7 @@ class TradeDetailViewAdapter : BaseListAdapter<StockTradeDetailData>() {
                     1 -> {
                         if (position == itemCount - 1) {
                             // 闪涨
-                            MarketUtil.showUpDownAnim(null, diffMark, true)
+                            showUpDownAnim = MarketUtil.showUpDownAnim(showUpDownAnim, diffMark, true)
                         }
                         if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
                             tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_price_up_red, 0)
@@ -80,7 +82,7 @@ class TradeDetailViewAdapter : BaseListAdapter<StockTradeDetailData>() {
                     -1 -> {
                         if (position == itemCount - 1) {
                             // 闪跌
-                            MarketUtil.showUpDownAnim(null, diffMark, false)
+                            showUpDownAnim = MarketUtil.showUpDownAnim(showUpDownAnim, diffMark, false)
                         }
                         if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
                             tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
