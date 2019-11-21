@@ -71,17 +71,7 @@ class TradeStatViewAdapter : BaseListAdapter<StockTradeStaData>() {
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockTradeStaData?, position: Int) {
-            when (item?.diffPreMark) {
-                0 -> {
-                    tvPrice.setText(item.price?.let { MathUtil.rounded3(it).toString() }, 0)
-                }
-                1 -> {
-                    tvPrice.setText(item.price?.let { MathUtil.rounded3(it).toString() }, 1)
-                }
-                -1 -> {
-                    tvPrice.setText(item.price?.let { MathUtil.rounded3(it).toString() }, 2)
-                }
-            }
+            tvPrice.setText(item?.price?.let { MathUtil.rounded3(it).toString() }, item?.diffPreMark!!)
             tvVolume.text = item?.todayQty?.let { MathUtil.convertToUnitString(it) }
             // 百分比=该档价格成交总量/总成交量
             tvStat.text = MathUtil.multiply2(
