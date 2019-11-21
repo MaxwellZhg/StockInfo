@@ -11,7 +11,7 @@ import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicTradeResponse
-import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
+import com.zhuorui.securities.market.socket.request.GetStockDataByTsCodeRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockTradeResponse
 import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
 import java.util.*
@@ -50,7 +50,7 @@ class StockTradeDetailDataManager private constructor(val ts: String, val code: 
 
         // 加载成交明细
         val requestId =
-            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
+            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
         requestIds.add(requestId)
     }
 

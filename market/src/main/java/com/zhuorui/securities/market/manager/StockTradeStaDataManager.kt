@@ -12,7 +12,7 @@ import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicTradeStaResponse
-import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
+import com.zhuorui.securities.market.socket.request.GetStockDataByTsCodeRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockTradeStaResponse
 import com.zhuorui.securities.market.socket.vo.StockTradeStaData
 import com.zhuorui.securities.market.util.MathUtil
@@ -59,7 +59,7 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
 
         // 加载成交统计
         val requestId =
-            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADESTA)
+            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_STOCK_TRADESTA)
         requestIds.add(requestId)
     }
 
