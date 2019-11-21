@@ -142,6 +142,9 @@ public class SocketClient {
                                 case SocketApi.PUSH_STOCK_ORDERBROKER:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicOrderBrokerResponse.class));
                                     break;
+                                    case SocketApi.PUSH_STOCK_HANDICAP:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
+                                    break;
                             }
                         } else {
                             SocketResponse response = JsonUtil.fromJson(message, SocketResponse.class);
@@ -184,6 +187,9 @@ public class SocketClient {
                                         break;
                                     case SocketApi.GET_STOCK_TRADESTA:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetStockTradeStaResponse.class));
+                                        break;
+                                        case SocketApi.GET_STOCK_HANDICAP:
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetStockHandicapResponse.class));
                                         break;
                                 }
 

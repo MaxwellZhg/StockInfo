@@ -34,7 +34,7 @@ object SocketApi {
     const val GET_STOCK_PRICE = "stock.price.getStockPrice"// 查询股票价格数据
     const val PUSH_STOCK_PRICE = "push.stock.last" // 推送股票价格
 
-    const val GET_STOCK_TRADE="trade.getToday"// 查询逐笔成交数据
+    const val GET_STOCK_TRADE = "trade.getToday"// 查询逐笔成交数据
     const val PUSH_STOCK_TRADE = "push.stock.trade" // 推送逐笔成交数据
 
     const val GET_STOCK_TRADESTA = "trade.getStaToday"// 查询逐笔成交统计数据
@@ -45,5 +45,8 @@ object SocketApi {
 
     const val GET_STOCK_ORDER_BROKER = "orderbroker.getToday" // 查询最新买卖经纪数据(买卖盘席位)
     const val PUSH_STOCK_ORDERBROKER = "push.stock.orderbroker" // 推送买卖经纪席位数据(买卖盘席位)
+
+    const val GET_STOCK_HANDICAP = "handicap.getStockHandicap" // 查询股票盘口数据
+    const val PUSH_STOCK_HANDICAP = "push.stock.stockhandicap" // 推送股票盘口数据
 
 }

@@ -24,6 +24,7 @@ import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.socket.vo.OrderData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.kline.KlineLandFragment
 import com.zhuorui.securities.market.ui.presenter.MarketDetailPresenter
@@ -255,16 +256,21 @@ class MarketDetailFragment :
         }
     }
 
-    /**
-     * 更新数据
-     */
-    override fun upData(data: StockDetailView.IStockDatailData?) {
+
+    override fun setData(data: StockHandicapData?) {
         stock_detail?.setData(data)
-        buyingSellingFiles.setPreClosePrice(data?.preClosePrice ?: 0f)
+        buyingSellingFiles.setPreClosePrice(data?.preClose ?: 0f)
         hideLoading()
         if (!sm_refrsh.state.isFinishing) {
             sm_refrsh.finishRefresh()
         }
+    }
+
+    /**
+     * 更新数据
+     */
+    override fun upData(data: StockHandicapData?) {
+        stock_detail?.upData(data)
     }
 
     /**
@@ -285,10 +291,7 @@ class MarketDetailFragment :
     /**
      * 更新买卖盘档数据
      */
-    override fun upBuyingSellingFilesData(
-        asklist: List<OrderData.AskBidModel>,
-        bidlist: List<OrderData.AskBidModel>
-    ) {
+    override fun upBuyingSellingFilesData(asklist: List<OrderData.AskBidModel>?, bidlist: List<OrderData.AskBidModel>?) {
         buyingSellingFiles.setData(asklist, bidlist)
     }
 

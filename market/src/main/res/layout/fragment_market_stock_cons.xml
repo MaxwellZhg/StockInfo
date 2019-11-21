@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:ignore="MissingDefaultResource">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.zhuorui.securities.market.ui.viewmodel.MarketStockConsViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="350dp">
+        <include layout="@layout/layout_market_point_view_tips"/>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                    android:id="@+id/srl_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srlEnableOverScrollBounce="false"
+                    app:srlEnableOverScrollDrag="false"
+                    app:srlEnableRefresh="false"
+                    app:srlEnableLoadMore="false"
+                    app:srlReboundDuration="1000"
+                    android:layout_marginTop="1dp">
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_point_stock"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <com.zhuorui.commonwidget.ZREmptyView
+                    android:id="@+id/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    app:empty_img_width="64dp"
+                    app:empty_img_height="64dp"
+                    app:empty_img_tips_margin="45dp"
+                    android:visibility="invisible"
+                    app:empty_img_src="@mipmap/empty_content"
+                    app:empty_img_tips="@string/temp_no_data"/>
+        </FrameLayout>
+    </LinearLayout>
+</layout>

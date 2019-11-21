@@ -5,6 +5,7 @@ import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.socket.vo.OrderData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 
 /**
  *    author : liuwei
@@ -20,10 +21,16 @@ interface MarketDetailView : AbsView {
     val Opening_zero: Int
         get() = 2
 
+
+    /**
+     * 查询设置股票数据
+     */
+    fun setData(data:StockHandicapData?)
+
     /**
      * 更新股票数据
      */
-    fun upData(data: StockDetailView.IStockDatailData?)
+    fun upData(data:StockHandicapData?)
 
     /**
      * 更新topBar状态
@@ -34,7 +41,7 @@ interface MarketDetailView : AbsView {
     /**
      * 更新买卖十挡数据
      */
-    fun upBuyingSellingFilesData(asklist: List<OrderData.AskBidModel>, bidlist: List<OrderData.AskBidModel>)
+    fun upBuyingSellingFilesData(asklist: List<OrderData.AskBidModel>?, bidlist: List<OrderData.AskBidModel>?)
 
     /**
      * 更新买卖经纪数据
