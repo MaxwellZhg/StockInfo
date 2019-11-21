@@ -49,43 +49,41 @@ class TradeDetailViewAdapter : BaseListAdapter<StockTradeDetailData>() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            when (item?.diffPreMark) {
-                0 -> {
-                    tvPrice.setText(MathUtil.rounded3(item.price).toString(), 0)
-                    tvVolume.setText(MathUtil.convertToUnitString(item.qty), 0)
-                    tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_price_def, 0)
-                }
-                1 -> {
-                    tvPrice.setText(MathUtil.rounded3(item.price).toString(), 1)
-                    tvVolume.setText(MathUtil.convertToUnitString(item.qty), 1)
-                    if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
-                        tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_price_up_red, 0)
-                    } else {
-                        tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                            0,
-                            0,
-                            R.mipmap.ic_price_up_green,
-                            0
-                        )
+
+            if (item != null) {
+                tvPrice.setText(MathUtil.rounded3(item.price).toString(), item.diffPreMark)
+                tvVolume.setText(MathUtil.convertToUnitString(item.qty), item.diffPreMark)
+                tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_price_def, 0)
+
+                when (item.diffPreMark) {
+                    1 -> {
+                        if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
+                            tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.mipmap.ic_price_up_red, 0)
+                        } else {
+                            tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                0,
+                                0,
+                                R.mipmap.ic_price_up_green,
+                                0
+                            )
+                        }
                     }
-                }
-                -1 -> {
-                    tvPrice.setText(MathUtil.rounded3(item.price).toString(), 2)
-                    tvVolume.setText(MathUtil.convertToUnitString(item.qty), 2)
-                    if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
-                        tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                            0,
-                            0,
-                            R.mipmap.ic_price_down_green,
-                            0
-                        )
-                    } else {
-                        tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                            0,
-                            0,
-                            R.mipmap.ic_price_down_red,
-                            0
-                        )
+                    -1 -> {
+                        if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
+                            tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                0,
+                                0,
+                                R.mipmap.ic_price_down_green,
+                                0
+                            )
+                        } else {
+                            tvVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                0,
+                                0,
+                                R.mipmap.ic_price_down_red,
+                                0
+                            )
+                        }
                     }
                 }
             }
