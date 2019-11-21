@@ -53,7 +53,7 @@ public class ZRStockTextView extends AppCompatTextView implements Observer {
      * 设置显示内容
      *
      * @param text      内容
-     * @param diffState 根据类型显示不同的颜色 0无涨跌 1涨 2跌
+     * @param diffState 根据类型显示不同的颜色-1跌 1涨 0无涨跌
      * @param {@link    android.widget.TextView.BufferType} which defines whether the text is
      *                  stored as a static text, styleable/spannable text, or editable text
      */

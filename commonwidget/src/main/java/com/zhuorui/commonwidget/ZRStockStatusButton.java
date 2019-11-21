@@ -13,7 +13,7 @@ import com.zhuorui.commonwidget.model.Subject;
  * Desc:
  */
 public class ZRStockStatusButton extends StateButton implements Observer {
-    // 0无涨跌 1涨 2跌
+    // -1跌 0无涨跌 1涨
     private int diffState = 0;
     private LocalSettingsConfig settingsConfig;
 
@@ -46,7 +46,7 @@ public class ZRStockStatusButton extends StateButton implements Observer {
             case 1:
                 super.setUnableBackgroundColor(settingsConfig.getUpBtnColor());
                 break;
-            case 2:
+            case -1:
                 super.setUnableBackgroundColor(settingsConfig.getDownBtnColor());
                 break;
         }

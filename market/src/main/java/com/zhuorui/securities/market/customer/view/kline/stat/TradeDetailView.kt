@@ -48,31 +48,31 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
         adapter = TradeDetailViewAdapter()
-        // TODO 测试数据
-        val list = ArrayList<StockTradeDetailData>()
-        for (index in 0..30) {
-            var diffPreMark = 0
-            if (index != 0) {
-                diffPreMark = if (index > 10) {
-                    1
-                } else {
-                    -1
-                }
-            }
-            list.add(
-                StockTradeDetailData(
-                    "",
-                    diffPreMark,
-                    1,
-                    "20191030161528333",
-                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
-                    Random.nextLong(1, 10000).toBigDecimal(),
-                    "N",
-                    "11"
-                )
-            )
-        }
-        adapter?.items = list
+//        // TODO 测试数据
+//        val list = ArrayList<StockTradeDetailData>()
+//        for (index in 0..30) {
+//            var diffPreMark = 0
+//            if (index != 0) {
+//                diffPreMark = if (index > 10) {
+//                    1
+//                } else {
+//                    -1
+//                }
+//            }
+//            list.add(
+//                StockTradeDetailData(
+//                    "",
+//                    diffPreMark,
+//                    1,
+//                    "20191030161528333",
+//                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
+//                    Random.nextLong(1, 10000).toBigDecimal(),
+//                    "N",
+//                    "11"
+//                )
+//            )
+//        }
+//        adapter?.items = list
         recyclerView?.adapter = adapter
 
         // 拉取数据
