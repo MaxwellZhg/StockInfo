@@ -139,8 +139,8 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                                 stock_up_down.text = "+" + item.diffRate + "%"
                             }
                             else -> {
-                                tv_price.setText(item.last.toString(), 2)
-                                stock_up_down.setUpDown(2)
+                                tv_price.setText(item.last.toString(), -1)
+                                stock_up_down.setUpDown(-1)
                                 stock_up_down.text = item.diffRate.toString() + "%"
                             }
                         }
