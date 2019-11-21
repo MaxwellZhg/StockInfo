@@ -20,9 +20,11 @@ import com.zhuorui.securities.market.net.request.StockTradRequest
 import com.zhuorui.securities.market.net.response.FeeComputeResponse
 import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
 import com.zhuorui.securities.market.net.response.GetStockInfoResponse
+import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicTransResponse
+import com.zhuorui.securities.market.socket.request.GetStockPriceRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockPriceResponse
 import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
@@ -74,7 +76,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                 }
 
                 // 是否与每手股数不匹配
-                viewModel?.stockInfoData?.value?.perShareNumber?.let {
+                viewModel?.stockInfoData?.value?.hands?.let {
                     if (buyCount % it != 0) {
                         ToastUtil.instance.toastCenter(R.string.count_invalid)
                         viewModel?.enableBuy?.value = false
@@ -225,7 +227,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                         // 中央结算系统交收费
                         val systemPaysFee = viewModel?.getFee(buyMoney, stockFeeRules.getValue(4))
                         // 一手股数
-                        val perShareNumber = viewModel?.stockInfoData?.value?.perShareNumber
+                        val perShareNumber = viewModel?.stockInfoData?.value?.hands
                         ///////////////////////////////////////////////////////////////////////////////////////////
                         // 一、最大可买手 = 可用资金 / 委托价格 / 每手股数
                         val accountMoney = STInfoManager.getInstance().getSTFundAccountData().availableFund.toDouble()
@@ -317,10 +319,10 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             return
         }
         if (type == 1) {
-            viewModel?.buyCount?.value = count + viewModel?.stockInfoData?.value?.perShareNumber!!
+            viewModel?.buyCount?.value = count + viewModel?.stockInfoData?.value?.hands!!
         } else {
             if (count == 0) return
-            count -= viewModel?.stockInfoData?.value?.perShareNumber!!
+            count -= viewModel?.stockInfoData?.value?.hands!!
             if (count < 0) count = 0
             viewModel?.buyCount?.value = count
         }
@@ -344,9 +346,14 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         viewModel?.maxBuyCount?.value = null
         viewModel?.enableBuy?.value = false
         viewModel?.enableSell?.value = false
-        view?.initKline(stockInfo.ts!!, stockInfo.code!!, stockInfo.tsCode ?: stockInfo.code!!+"."+stockInfo.ts!!, stockInfo.type!!)
+        view?.initKline(
+            stockInfo.ts!!,
+            stockInfo.code!!,
+            stockInfo.tsCode ?: stockInfo.code!! + "." + stockInfo.ts!!,
+            stockInfo.type!!
+        )
         // 清除上一次的价格信息
-        view?.updateStockPrice(BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00), BigDecimal.valueOf(0.00))
+        view?.updateStockPrice(null, null, null, 0)
         // 取消上一次的订阅
         if (stockTopicPrice != null) {
             SocketClient.getInstance().unBindTopic(stockTopicPrice)
@@ -358,7 +365,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         }
         // 重新订阅当前的自选股
         stockTopicTrans =
-            StockTopic(StockTopicDataTypeEnum.HANDICAP, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+            StockTopic(StockTopicDataTypeEnum.STOCK_ORDER, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
         SocketClient.getInstance().bindTopic(stockTopicTrans)
         // 获取股票计算交易费用规则模版，股票市场（1-港股 2-美股 3-A股）
         val getFeeTemplateRequest = GetFeeTemplateRequest(
@@ -372,22 +379,23 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     }
 
     private fun getStockPrice() {
-//        val stockInfo = viewModel?.stockInfo?.value ?: return
-//        // 查询价格
-//        SocketClient.getInstance().postRequest(
-//            GetStockPriceRequestBody(
-//                GetStockPriceRequestBody.StockVo(
-//                    stockInfo.ts!!,
-//                    stockInfo.code!!,
-//                    stockInfo.type!!
-//                )
-//            ), SocketApi.GET_STOCK_PRICE
-//        )
+        val stockInfo = viewModel?.stockInfo?.value ?: return
+        // 查询价格
+        SocketClient.getInstance().postRequest(
+            GetStockPriceRequestBody(
+                GetStockPriceRequestBody.StockVo(
+                    stockInfo.ts!!,
+                    stockInfo.code!!,
+                    stockInfo.type!!
+                )
+            ), SocketApi.GET_STOCK_PRICE
+        )
     }
 
     /**
      * 查询价格
      */
+    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onGetStockPriceResponse(response: GetStockPriceResponse) {
         val stockInfo = viewModel?.stockInfo?.value ?: return
         val stockPriceDatas = response.data ?: return
@@ -430,7 +438,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
                         viewModel?.diffRate?.value =
                             MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), sub.open!!)
                         // 更新界面
-                        view?.updateStockPrice(sub.last!!, diffPrice, viewModel?.diffRate?.value!!)
+                        view?.updateStockPrice(sub.last, diffPrice, viewModel?.diffRate?.value, sub.pctTag)
                     }
                 disposables.add(disposable)
                 break
@@ -469,11 +477,11 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun onGetStockInfoResponse(response: GetStockInfoResponse) {
         val stockInfoData = response.data
         viewModel?.stockInfoData?.value = stockInfoData
-        viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.realPrice)
+        viewModel?.minChangesPrice?.value = StockPrice.getMinChangesPrice(stockInfoData.last)
         // 当改单时不取最新的实时股价和每手股数
         if (viewModel?.updateOrderId?.value == null) {
-            viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.realPrice)
-            viewModel?.buyCount?.value = stockInfoData.perShareNumber
+            viewModel?.buyPrice?.value = MathUtil.rounded3(stockInfoData.last)
+            viewModel?.buyCount?.value = stockInfoData.hands
         } else {
             calculateBuyMoney()
         }
