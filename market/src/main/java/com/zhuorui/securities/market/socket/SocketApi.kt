@@ -49,4 +49,6 @@ object SocketApi {
     const val GET_STOCK_HANDICAP = "handicap.getStockHandicap" // 查询股票盘口数据
     const val PUSH_STOCK_HANDICAP = "push.stock.stockhandicap" // 推送股票盘口数据
 
+    const val GET_INDEX_HANDICAP = "handicap.getIndexHandicap" // 查询指数盘口数据
+    const val PUSH_INDEX_HANDICAP = "push.stock.indexhandicap" // 推送指数盘口数据
 }
