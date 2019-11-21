@@ -3,6 +3,11 @@
                 xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="12dp">
+
+    <View android:id="@+id/diff_mark"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
     <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"

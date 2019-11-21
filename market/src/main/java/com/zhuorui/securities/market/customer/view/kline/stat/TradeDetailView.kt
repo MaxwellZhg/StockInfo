@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhuorui.commonwidget.model.Observer
 import com.zhuorui.commonwidget.model.Subject
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.manager.StockTradeDetailDataManager
@@ -30,9 +29,6 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_stock_trade_detail, this, true)
-
-        RxBus.getDefault().register(this)
-
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
@@ -48,33 +44,6 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         }
         // 添加监听
         manager.registerObserver(this)
-    }
-
-    private fun testData(){
-        //        // TODO 测试数据
-//        val list = ArrayList<StockTradeDetailData>()
-//        for (index in 0..30) {
-//            var diffPreMark = 0
-//            if (index != 0) {
-//                diffPreMark = if (index > 10) {
-//                    1
-//                } else {
-//                    -1
-//                }
-//            }
-//            list.add(
-//                StockTradeDetailData(
-//                    "",
-//                    diffPreMark,
-//                    1,
-//                    "20191030161528333",
-//                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
-//                    Random.nextLong(1, 10000).toBigDecimal(),
-//                    "N",
-//                    "11"
-//                )
-//            )
-//        }
     }
 
     inner class LinearSpacingItemDecoration : RecyclerView.ItemDecoration() {
@@ -110,4 +79,31 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         // 删除监听
         StockTradeDetailDataManager.getInstance(ts, code, type).removeObserver(this)
     }
+
+//    private fun testData(){
+    //        // TODO 测试数据
+//        val list = ArrayList<StockTradeDetailData>()
+//        for (index in 0..30) {
+//            var diffPreMark = 0
+//            if (index != 0) {
+//                diffPreMark = if (index > 10) {
+//                    1
+//                } else {
+//                    -1
+//                }
+//            }
+//            list.add(
+//                StockTradeDetailData(
+//                    "",
+//                    diffPreMark,
+//                    1,
+//                    "20191030161528333",
+//                    Random.nextDouble(1.000, 100.000).toBigDecimal(),
+//                    Random.nextLong(1, 10000).toBigDecimal(),
+//                    "N",
+//                    "11"
+//                )
+//            )
+//        }
+//    }
 }
