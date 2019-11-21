@@ -24,9 +24,9 @@ object SocketApi {
     const val PUSH_STOCK_INFO = "push.stock.info" //  推送股票行情
     const val PUSH_STOCK_KLINE = "push.stock.kline" // 推送股票K线
 
-    const val GET_KLINE_FIVE_DAY = "kline.getFiveDay" // 获取五日K
-    const val GET_KLINE_GET_DAILY = "kline.getDaily" // 获取日K
-    const val GET_KLINE_MINUTE = "kline.getMinute" // 获取分时
+    const val GET_KLINE_FIVE_DAY = "stock.kline.getFiveDay" // 获取五日K
+    const val GET_KLINE_GET_DAILY = "stock.kline.getDay" // 获取日K
+    const val GET_KLINE_MINUTE = "stock.kline.getMinute" // 获取分时
 
     const val PUSH_STOCK_KLINE_COMPENSATION_DATA = "push.stock.compensationData.kline" // 推送股票K线补偿数据
     const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
