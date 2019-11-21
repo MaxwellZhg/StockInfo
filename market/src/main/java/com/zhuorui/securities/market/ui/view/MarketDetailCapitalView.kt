@@ -9,4 +9,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface MarketDetailCapitalView : AbsView {
+
+    fun onTodayFundTransactionData(outData: List<Float>, inData: List<Float>)
 }

@@ -49,4 +49,7 @@ object SocketApi {
     const val GET_STOCK_HANDICAP = "handicap.getStockHandicap" // 查询股票盘口数据
     const val PUSH_STOCK_HANDICAP = "push.stock.stockhandicap" // 推送股票盘口数据
 
+    const val GET_CAPITAL = "capital.getCapital" //查询资金统计数据
+    const val PUSH_STOCK_CAPITAL = "push.stock.capital" //服务器推送资金统计数据
+
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -14,17 +13,16 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.ThreadPoolUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.config.LocalStocksConfig
-import com.zhuorui.securities.market.customer.view.StockDetailView
 import com.zhuorui.securities.market.event.AddTopicStockEvent
 import com.zhuorui.securities.market.event.DeleteTopicStockEvent
-import com.zhuorui.securities.market.model.*
-import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.event.SocketConnectEvent
+import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.model.SearchStockInfo
+import com.zhuorui.securities.market.model.StockTopic
+import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.CollectionStockRequest
 import com.zhuorui.securities.market.net.request.DeleteStockRequest
@@ -33,20 +31,16 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicOrderBrokerResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicOrderResponse
-import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
-import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
+import com.zhuorui.securities.market.socket.request.GetStockRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderBrokerResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderResponse
 import com.zhuorui.securities.market.socket.vo.OrderBrokerData
 import com.zhuorui.securities.market.socket.vo.OrderData
-import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import java.lang.Exception
-import java.util.logging.Handler
 
 /**
  *    author : liuwei
@@ -106,7 +100,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     private fun getStockData() {
         getStockHandicapReqId =
-            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(mTs, mCode), SocketApi.GET_STOCK_HANDICAP)
+            SocketClient.getInstance().postRequest(GetStockRequestBody(mTs, mCode), SocketApi.GET_STOCK_HANDICAP)
         android.os.Handler().postDelayed({ viewModel?.mStockHandicapData?.value = null }, 2000)
 
     }
@@ -116,7 +110,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     private fun getOrderBrokerData() {
         getStockOrderBrokerReqId = SocketClient.getInstance()
-            .postRequest(GetStockTradeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER_BROKER)
+            .postRequest(GetStockRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER_BROKER)
         val datas2 = mutableListOf<OrderBrokerModel>()
         for (i: Int in 1..30) {
             datas2.add(OrderBrokerModel(i.toString(), "item$i"))
@@ -130,7 +124,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     private fun getBuyingSellingFilesData() {
         getStockOrderReqId =
-            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER)
+            SocketClient.getInstance().postRequest(GetStockRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER)
         val datas = mutableListOf<OrderData.AskBidModel>()
         for (i: Int in 1..10) {
             datas.add(OrderData.AskBidModel(i.toString(), i.toString(), i.toString()))
@@ -185,7 +179,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             } else {
                 //添加收藏
-                val request = DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
+                val request =
+                    DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
                 Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             }
         } else {
@@ -242,9 +237,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicHandicap(response: StocksTopicHandicapResponse) {
-        if (TextUtils.equals(getStockHandicapReqId, response.respId)) {
-            viewModel?.mPushStockHandicapData?.value = response.body
-        }
+        viewModel?.mPushStockHandicapData?.value = response.body
     }
 
     /**
@@ -264,9 +257,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicOrderBroker(response: StocksTopicOrderBrokerResponse) {
-        if (TextUtils.equals(getStockHandicapReqId, response.respId)) {
-            val data = response.body
-        }
+        val data = response.body
     }
 
     /**
@@ -287,9 +278,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicOrder(response: StocksTopicOrderResponse) {
-        if (TextUtils.equals(getStockHandicapReqId, response.respId)) {
-            viewModel?.mOrderData?.value = response.body
-        }
+        viewModel?.mOrderData?.value = response.body
     }
 
 

@@ -21,6 +21,9 @@ class MarketDetailCapitalFragment :
     AbsFragment<FragmentMarketDetailBinding, MarketDetailCapitalViewModel, MarketDetailCapitalView, MarketDetailCapitalPresenter>(),
     MarketDetailCapitalView {
 
+    private var mTs: String = ""
+    private var mCode: String = ""
+
     override val layout: Int
         get() = R.layout.fragment_market_detail_capital
 
@@ -37,23 +40,34 @@ class MarketDetailCapitalFragment :
         get() = this
 
     companion object {
-        fun newInstance(): MarketDetailCapitalFragment {
-            return MarketDetailCapitalFragment()
+        fun newInstance(ts: String, code: String): MarketDetailCapitalFragment {
+            val b = Bundle()
+            b.putString("ts", ts)
+            b.putString("code", code)
+            val fragment = MarketDetailCapitalFragment()
+            fragment.arguments = b
+            return fragment
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mTs = arguments?.getString("ts") ?: mTs
+        mCode = arguments?.getString("code") ?: mCode
+
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        val outData = mutableListOf<Float>()
-        outData.add(0f)
-        outData.add(0f)
-        outData.add(0f)
-        val inData = mutableListOf<Float>()
-        inData.add(0f)
-        inData.add(0f)
-        inData.add(0f)
-        todayFundTransaction.setData(outData, inData)
         todatCapitalFlowTrend.setData("HK", mutableListOf<Float>())
+        getData()
+    }
 
+    override fun onTodayFundTransactionData(outData: List<Float>, inData: List<Float>) {
+        todayFundTransaction.setData(outData, inData)
+    }
+
+    fun getData() {
+        presenter?.getData(mTs, mCode)
     }
 }
