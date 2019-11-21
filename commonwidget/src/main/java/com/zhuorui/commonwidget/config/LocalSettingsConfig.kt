@@ -3,9 +3,9 @@ package com.zhuorui.commonwidget.config
 import android.graphics.Color
 import com.zhuorui.commonwidget.model.Observer
 import com.zhuorui.commonwidget.model.Subject
-import com.zhuorui.commonwidget.model.Subject.list
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
+import java.util.ArrayList
 
 /**
  *    author : PengXianglin
@@ -15,11 +15,14 @@ import com.zhuorui.securities.base2app.infra.StorageInfra
  */
 class LocalSettingsConfig private constructor(): AbsConfig(), Subject<Observer> {
 
-    val sorckColorRed = Color.parseColor("#FFD9001B")
-    val sorckColorGreen = Color.parseColor("#FF00CC00")
-    val sorckColor = Color.parseColor("#FF7B889E")
-    val stockbtnRedColor = Color.parseColor("#FFAC3E19")
-    val stockbtnGreenColor = Color.parseColor("#FF37672E")
+    // 存储订阅者
+    private val observerList = ArrayList<Observer>()
+
+    private val sorckColorRed = Color.parseColor("#FFD9001B")
+    private val sorckColorGreen = Color.parseColor("#FF00CC00")
+    private val sorckColor = Color.parseColor("#FF7B889E")
+    private val stockbtnRedColor = Color.parseColor("#FFAC3E19")
+    private val stockbtnGreenColor = Color.parseColor("#FF37672E")
 
 
     // 默认为红涨绿跌
@@ -76,16 +79,16 @@ class LocalSettingsConfig private constructor(): AbsConfig(), Subject<Observer> 
         write()
     }
 
-    override fun registerObserver(obs: Observer?) {
-        list.add(obs)
+    override fun registerObserver(obs: Observer) {
+        observerList.add(obs)
     }
 
-    override fun removeObserver(obs: Observer?) {
-        list.remove(obs)
+    override fun removeObserver(obs: Observer) {
+        observerList.remove(obs)
     }
 
     override fun notifyAllObservers() {
-        for (obs in list) {
+        for (obs in observerList) {
             // 更新每一个观察者中的信息
             obs.update(this)
         }

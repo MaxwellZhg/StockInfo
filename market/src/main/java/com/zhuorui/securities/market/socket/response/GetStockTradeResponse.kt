@@ -9,5 +9,5 @@ import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
  *    desc   : 查询逐笔成交数据
  */
 class GetStockTradeResponse : SocketResponse() {
-    var data: List<StockTradeDetailData>? = null
+    var data: MutableList<StockTradeDetailData>? = null
 }

@@ -8,21 +8,12 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.commonwidget.model.Observer
+import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
-import com.zhuorui.securities.market.model.StockTopic
-import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
-import com.zhuorui.securities.market.socket.SocketApi
-import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.socket.push.StocksTopicTradeResponse
-import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
-import com.zhuorui.securities.market.socket.response.GetStockTradeResponse
-import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
-import kotlin.random.Random
+import com.zhuorui.securities.market.manager.StockTradeDetailDataManager
 
 /**
  * author : PengXianglin
@@ -32,12 +23,10 @@ import kotlin.random.Random
  */
 @SuppressLint("ViewConstructor")
 class TradeDetailView(context: Context, val ts: String, val code: String, val type: Int) :
-    LinearLayout(context) {
+    LinearLayout(context), Observer {
 
     private var recyclerView: RecyclerView? = null
     private var adapter: TradeDetailViewAdapter? = null
-    private var requestIds = java.util.ArrayList<String>()
-    private var stockTopic: StockTopic? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_stock_trade_detail, this, true)
@@ -48,7 +37,21 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
         adapter = TradeDetailViewAdapter()
-//        // TODO 测试数据
+        recyclerView?.adapter = adapter
+
+        val manager = StockTradeDetailDataManager.getInstance(ts, code, type)
+        // 从缓存中取数据
+        adapter?.items = manager.tradeDatas
+        if (adapter?.itemCount!! > 0) {
+            // 让列表滚动到底部
+            recyclerView?.scrollToPosition(adapter?.itemCount!! - 1)
+        }
+        // 添加监听
+        manager.registerObserver(this)
+    }
+
+    private fun testData(){
+        //        // TODO 测试数据
 //        val list = ArrayList<StockTradeDetailData>()
 //        for (index in 0..30) {
 //            var diffPreMark = 0
@@ -72,13 +75,6 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
 //                )
 //            )
 //        }
-//        adapter?.items = list
-        recyclerView?.adapter = adapter
-
-        // 拉取数据
-        val requestId =
-            SocketClient.getInstance().postRequest(GetStockTradeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
-        requestIds.add(requestId)
     }
 
     inner class LinearSpacingItemDecoration : RecyclerView.ItemDecoration() {
@@ -95,51 +91,23 @@ class TradeDetailView(context: Context, val ts: String, val code: String, val ty
         }
     }
 
-    /**
-     * 查询选股逐笔成交数据回调
-     */
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onGetStockTradeResponse(response: GetStockTradeResponse) {
-        if (requestIds.remove(response.respId)) {
-            adapter?.items = response.data
-
-            // 发起订阅
-            stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_TRADE, ts, code, type)
-            SocketClient.getInstance().bindTopic(stockTopic)
-        }
-    }
-
-    /**
-     * 订阅自选股逐笔成交数据推送回调
-     */
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStocksTopicTradeResponse(response: StocksTopicTradeResponse) {
-        if (response.body != null) {
+    override fun update(subject: Subject<*>?) {
+        if (subject is StockTradeDetailDataManager) {
             if (adapter?.items.isNullOrEmpty()) {
-                val items = ArrayList<StockTradeDetailData>()
-                adapter?.items = items
+                adapter?.items = subject.tradeDatas
             } else {
-                adapter?.addItem(response.body)
+                adapter?.notifyDataSetChanged()
             }
-        }
-    }
-
-    @RxSubscribe(observeOnThread = EventThread.NEW)
-    fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
-        // 恢复订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().bindTopic(stockTopic)
+            if (adapter?.itemCount!! > 0) {
+                // 让列表滚动到底部
+                recyclerView?.scrollToPosition(adapter?.itemCount!! - 1)
+            }
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        if (RxBus.getDefault().isRegistered(this)) {
-            RxBus.getDefault().unregister(this)
-        }
-        // 取消订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().unBindTopic(stockTopic)
-        }
+        // 删除监听
+        StockTradeDetailDataManager.getInstance(ts, code, type).removeObserver(this)
     }
 }
