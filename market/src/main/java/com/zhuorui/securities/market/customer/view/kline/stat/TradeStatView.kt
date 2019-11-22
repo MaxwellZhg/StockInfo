@@ -39,10 +39,6 @@ class TradeStatView(context: Context, val ts: String, val code: String, val type
         val manager = StockTradeStaDataManager.getInstance(ts, code, type)
         // 从缓存中取数据
         adapter?.items = manager.tradeDatas
-        if (adapter?.itemCount!! > 0) {
-            // 让列表滚动到底部
-            recyclerView?.scrollToPosition(adapter?.itemCount!! - 1)
-        }
         // 添加监听
         manager.registerObserver(this)
     }
@@ -68,10 +64,6 @@ class TradeStatView(context: Context, val ts: String, val code: String, val type
                 adapter?.items = subject.tradeDatas
             } else {
                 adapter?.notifyDataSetChanged()
-            }
-            if (adapter?.itemCount!! > 0) {
-                // 让列表滚动到底部
-                recyclerView?.scrollToPosition(adapter?.itemCount!! - 1)
             }
         }
     }

@@ -32,6 +32,8 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
     private val observerList = ArrayList<Observer>()
     // 成交统计数据
     var tradeDatas: MutableList<StockTradeStaData>? = null
+    // 最大缓存数量
+    private val maxDataSize = 20
     // 当前数据集合最大的百分比
     var maxPercent = BigDecimal.ZERO!!
 
@@ -59,7 +61,8 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
 
         // 加载成交统计
         val requestId =
-            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_STOCK_TRADESTA)
+            SocketClient.getInstance()
+                .postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_STOCK_TRADESTA)
         requestIds.add(requestId)
     }
 
@@ -82,6 +85,9 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
     fun onGetStockTradeStaResponse(response: GetStockTradeStaResponse) {
         if (requestIds.remove(response.respId)) {
             tradeDatas = response.data
+            if (tradeDatas?.size!! > maxDataSize) {
+                tradeDatas = tradeDatas?.subList(0, 20)
+            }
             maxPercent = calculateMaxPercent().toBigDecimal()
             LogInfra.Log.d(TAG, "maxPercent = $maxPercent")
             notifyAllObservers()
@@ -97,7 +103,10 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicTradeStaResponse(response: StocksTopicTradeStaResponse) {
         if (response.body != null && tradeDatas?.add(response.body!!)!!) {
-            maxPercent = max(response.body!!.todayQty!!, response.body!!.todayTotalQty!!).toBigDecimal()
+            if (tradeDatas?.size!! > maxDataSize) {
+                tradeDatas = tradeDatas?.subList(0, 20)
+            }
+            maxPercent = calculateMaxPercent().toBigDecimal()
             LogInfra.Log.d(TAG, "maxPercent = $maxPercent")
             notifyAllObservers()
         }

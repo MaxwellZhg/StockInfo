@@ -1,6 +1,5 @@
 package com.zhuorui.securities.market.customer.view.kline.stat
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.LinearLayout
@@ -14,14 +13,11 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.socket.vo.StockTradeStaData
-import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.market.util.MathUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class TradeStatViewAdapter : BaseListAdapter<StockTradeStaData>() {
-
-    private var showUpDownAnim: ObjectAnimator? = null
 
     private var settingsConfig: LocalSettingsConfig? = null
 
@@ -79,15 +75,6 @@ class TradeStatViewAdapter : BaseListAdapter<StockTradeStaData>() {
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockTradeStaData?, position: Int) {
             tvPrice.setText(item?.price?.let { MathUtil.rounded3(it).toString() }, item?.diffPreMark!!)
-            if (position == itemCount - 1) {
-                if (item.diffPreMark == 1) {
-                    // 闪涨
-                    showUpDownAnim = MarketUtil.showUpDownAnim(showUpDownAnim, diffMark, true)
-                } else if (item.diffPreMark == -1) {
-                    // 闪涨
-                    showUpDownAnim = MarketUtil.showUpDownAnim(showUpDownAnim, diffMark, false)
-                }
-            }
             tvVolume.text = item?.todayQty?.let { MathUtil.convertToUnitString(it) }
             // 百分比=该档价格成交总量/总成交量
             tvStat.text = MathUtil.multiply2(
