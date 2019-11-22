@@ -13,7 +13,6 @@ import com.zhuorui.securities.market.ui.presenter.MarketPointConsInfoPresenter
 import com.zhuorui.securities.market.ui.view.MarketPointConsInfoView
 import com.zhuorui.securities.market.ui.viewmodel.MarketPointConsInfoViewModel
 import kotlinx.android.synthetic.main.fragment_market_point_cons_info.*
-import kotlinx.android.synthetic.main.fragment_market_stock_cons.srl_layout
 
 /**
  * Created by Maxwell.

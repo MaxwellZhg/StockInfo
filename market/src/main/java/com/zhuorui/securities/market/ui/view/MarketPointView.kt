@@ -10,4 +10,8 @@ import com.zhuorui.securities.market.net.response.StockConsInfoResponse
  * Desc:
  */
 interface MarketPointView :AbsView{
+    fun loadMoreSuccess()
+    fun showAllCount(count:Int)
+    fun refreshSuccess()
+    fun showStateChangeEvent(state:Int)
 }

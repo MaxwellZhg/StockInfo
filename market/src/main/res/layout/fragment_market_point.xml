@@ -4,29 +4,31 @@
         <variable name="viewModel"
                   type="com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel"/>
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
                 android:orientation="vertical"
                   android:background="@color/color_191821"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
         <include
-                app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/top_bar"
                 layout="@layout/layout_market_point_topbar"/>
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                android:id="@+id/refrsh_layout"
-                app:layout_constraintTop_toBottomOf="@+id/top_bar"
+                android:id="@+id/refresh_layout"
+                android:layout_below="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 app:srlEnableOverScrollBounce="true"
                 app:srlEnableOverScrollDrag="true"
                 app:srlEnableRefresh="true"
-                app:srlEnableLoadMore="false"
+                app:srlEnableLoadMore="true"
                 app:srlReboundDuration="1000">
         <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_view"
-              android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                android:fillViewport="true"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+               android:layout_width="match_parent"
+              android:layout_height="wrap_content">
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="match_parent"
                           android:orientation="vertical">
@@ -61,8 +63,68 @@
                 android:id="@+id/top_magic_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_below="@+id/top_bar"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/top_bar"
                 android:background="@color/color_211F2A"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:visibility="gone"
+                      android:background="@color/color_211F2A"
+                      android:id="@+id/ll_selcet_info"
+                      android:layout_below="@+id/top_magic_indicator"
+                      android:orientation="vertical">
+        <View android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:id="@+id/view"
+              android:background="@color/color_211F2A"/>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_below="@+id/view"
+                        android:layout_height="35dp">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="0.5dp"
+                      android:layout_centerVertical="true"
+                      android:textColor="@color/color_FFFFFFFF"
+                      android:textSize="14sp"
+                      android:layout_marginStart="13.5dp"
+                      android:text="名称代码"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="0.5dp"
+                      android:layout_centerVertical="true"
+                      android:textColor="@color/color_FFFFFFFF"
+                      android:textSize="14sp"
+                      android:drawablePadding="5dp"
+                      android:drawableEnd="@mipmap/icon_up_rate"
+                      android:id="@+id/tv_up_down_count"
+                      android:layout_marginEnd="13.5dp"
+                      android:layout_alignParentRight="true"
+                      android:text="成交额"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="0.5dp"
+                      android:layout_centerVertical="true"
+                      android:textColor="@color/color_FFFFFFFF"
+                      android:textSize="14sp"
+                      android:drawableEnd="@mipmap/icon_up_price"
+                      android:id="@+id/tv_up_down_rate"
+                      android:layout_marginEnd="16.5dp"
+                      android:drawablePadding="5dp"
+                      android:layout_toLeftOf="@+id/tv_up_down_count"
+                      android:text="涨跌幅"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="0.5dp"
+                      android:id="@+id/tv_newly_price"
+                      android:layout_centerVertical="true"
+                      android:textColor="@color/color_FFFFFFFF"
+                      android:textSize="14sp"
+                      android:drawablePadding="5dp"
+                      android:layout_marginEnd="14.5dp"
+                      android:drawableEnd="@mipmap/icon_newly"
+                      android:layout_toLeftOf="@+id/tv_up_down_rate"
+                      android:text="最新价"/>
+        </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </layout>
