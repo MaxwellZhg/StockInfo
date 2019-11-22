@@ -61,7 +61,7 @@ public class MarketPieChatView extends FrameLayout {
 
 
     public void setColors(ArrayList<Integer> colors){
-        colors.clear();
+        this.colors.clear();
         this.colors.addAll(colors);
     }
 
@@ -384,7 +384,11 @@ public class MarketPieChatView extends FrameLayout {
             pieDataSet.setDrawValues(false);
         } else {
             pieDataSet = new PieDataSet(data, "");
-            pieDataSet.setColors(colors);
+            if (colors.isEmpty()){
+                pieDataSet.setColor(Color.parseColor("#B3BCD0"));
+            }else {
+                pieDataSet.setColors(colors);
+            }
             pieDataSet.setDrawValues(true);
         }
         pieDataSet.setValueTextColor(Color.WHITE);

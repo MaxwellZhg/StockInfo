@@ -1,9 +1,13 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.text.TextUtils
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.JsonUtil
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import com.zhuorui.securities.market.model.CapitalTrendModel
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketApi
@@ -36,12 +40,12 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     fun getData(ts: String, code: String) {
         mTs = ts
         mCode = code
-        getCapitalReqId = SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_CAPITAL)
+        getCapitalReqId =
+            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_CAPITAL)
         mBmp = MarketUtil.isBMP(mTs)
         if (stockTopic != null && mBmp) {
             SocketClient.getInstance().unBindTopic(stockTopic)
         }
-        view?.onTodayFundTransactionData(null)
     }
 
 
@@ -51,7 +55,9 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetCapital(response: GetCapitalResponse) {
         if (TextUtils.equals(getCapitalReqId, response.respId)) {
-            readCapitalResponse(response?.data)
+            val capitalData = JsonUtil.fromJson(response.data.toString(), CapitalData::class.java)
+            view?.onTodayFundTransactionData(capitalData)
+            readCapitalResponse(capitalData)
             if (!mBmp) {
                 stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs.toString(), mCode.toString(), 2)
                 SocketClient.getInstance().bindTopic(stockTopic)
@@ -60,8 +66,14 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     }
 
     private fun readCapitalResponse(data: CapitalData?) {
-        data?.totalLargeSingleOutflow ?: 0.0
-
+        val maps = data?.maps
+        val capitalTrends = mutableListOf<CapitalTrendModel>()
+        if (maps != null) {
+            for ((key, value) in maps) {
+                capitalTrends.add(CapitalTrendModel(TimeZoneUtil.parseTime(key, "yyyyMMddHHmm"), value))
+            }
+        }
+        viewModel?.mCapitalTrends?.value = capitalTrends
     }
 
     /**
@@ -69,7 +81,7 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicCapital(response: StocksTopicCapitalResponse) {
-
+        val capitalData = JsonUtil.fromJson(response.body.toString(), CapitalData::class.java)
     }
 
 
@@ -77,6 +89,16 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         super.destroy()
         if (stockTopic != null) {
             SocketClient.getInstance().unBindTopic(stockTopic)
+        }
+    }
+
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.mCapitalTrends?.observe(it,
+                androidx.lifecycle.Observer { t ->
+                    view?.onTodatCapitalFlowTrendData(t)
+                })
         }
     }
 

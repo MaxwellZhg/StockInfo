@@ -14,5 +14,5 @@ import com.zhuorui.securities.market.socket.vo.StockHandicapData
  */
 class StocksTopicCapitalResponse : SocketResponse() {
     var header: SocketHeader? = null
-    var body: CapitalData? = null
+    var body: String? = null
 }

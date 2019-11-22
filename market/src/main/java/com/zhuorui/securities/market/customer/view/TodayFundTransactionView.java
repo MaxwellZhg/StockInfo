@@ -37,6 +37,7 @@ import java.util.List;
 public class TodayFundTransactionView extends FrameLayout {
 
     private ComparisonMapView vComparisonMap;
+    private MarketPieChatView pie_cahart_view;
     private int mOut1Color;
     private int mOut2Color;
     private int mOut3Color;
@@ -47,7 +48,6 @@ public class TodayFundTransactionView extends FrameLayout {
     private int inValueColor;
     private int outValueColor;
 
-    private MarketPieChatView pie_cahart_view;
 
     public TodayFundTransactionView(Context context) {
         this(context, null);
@@ -80,25 +80,37 @@ public class TodayFundTransactionView extends FrameLayout {
         mIn1Color = Color.parseColor("#C4000A");
         mIn2Color = Color.parseColor("#D73239");
         mIn3Color = Color.parseColor("#CC6666");
-        ArrayList<Integer> colors = new ArrayList();
-        colors.add(mOut1Color);
-        colors.add(mOut2Color);
-        colors.add(mOut3Color);
-        colors.add(mIn3Color);
-        colors.add(mIn2Color);
-        colors.add(mIn1Color);
-        pie_cahart_view.setColors(colors);
     }
 
     private ArrayList<PieEntry> getPieEntrys(float largeSingleOut, float largeSingleIn, float mediumOut, float mediumIn, float smallOut, float smallIn) {
         ArrayList<PieEntry> pieEntryList = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList();
         //饼图实体 PieEntry
-        if (largeSingleOut > 0) pieEntryList.add(new PieEntry(largeSingleOut, "大单流出"));
-        if (mediumOut > 0) pieEntryList.add(new PieEntry(mediumOut, "中单流出"));
-        if (smallOut > 0) pieEntryList.add(new PieEntry(smallOut, "小单流出"));
-        if (smallIn > 0) pieEntryList.add(new PieEntry(smallIn, "小单流入"));
-        if (mediumIn > 0) pieEntryList.add(new PieEntry(mediumIn, "中单流入"));
-        if (largeSingleIn > 0) pieEntryList.add(new PieEntry(largeSingleIn, "大单流入"));
+        if (largeSingleOut > 0) {
+            pieEntryList.add(new PieEntry(largeSingleOut, "大单流出"));
+            colors.add(mOut1Color);
+        }
+        if (mediumOut > 0) {
+            pieEntryList.add(new PieEntry(mediumOut, "中单流出"));
+            colors.add(mOut2Color);
+        }
+        if (smallOut > 0) {
+            pieEntryList.add(new PieEntry(smallOut, "小单流出"));
+            colors.add(mOut3Color);
+        }
+        if (smallIn > 0) {
+            pieEntryList.add(new PieEntry(smallIn, "小单流入"));
+            colors.add(mIn3Color);
+        }
+        if (mediumIn > 0) {
+            pieEntryList.add(new PieEntry(mediumIn, "中单流入"));
+            colors.add(mIn2Color);
+        }
+        if (largeSingleIn > 0) {
+            pieEntryList.add(new PieEntry(largeSingleIn, "大单流入"));
+            colors.add(mIn1Color);
+        }
+        pie_cahart_view.setColors(colors);
         return pieEntryList;
     }
 
@@ -134,6 +146,14 @@ public class TodayFundTransactionView extends FrameLayout {
         float mediumIn = 0f;
         float smallOut = 0f;
         float smallIn = 0f;
+        if (data != null){
+            largeSingleOut = data.getTotalLargeSingleOutflow().floatValue();
+            largeSingleIn = data.getTotalLargeSingleInflow().floatValue();
+            mediumOut = data.getTotalMediumOutflow().floatValue();
+            mediumIn = data.getTotalMediumInflow().floatValue();
+            smallOut = data.getTotalSmallOutflow().floatValue();
+            smallIn = data.getTotalSmallInflow().floatValue();
+        }
         setComparisonMapData(largeSingleOut, largeSingleIn, mediumOut, mediumIn, smallOut, smallIn);
         pie_cahart_view.setData(getPieEntrys(largeSingleOut, largeSingleIn, mediumOut, mediumIn, smallOut, smallIn));
     }

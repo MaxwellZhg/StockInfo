@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -16,9 +18,12 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
+import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.model.CapitalTrendModel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +39,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
     private final int mTextColor = Color.parseColor("#7B889E");
     private boolean mEmpty;
     private LineChart vChart;
+    private MyXAxisRenderer xAxisRenderer;
 
     public TodayCapitalFlowTrendView(Context context) {
         this(context, null);
@@ -84,7 +90,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
         xl.setAvoidFirstLastClipping(true);
         vChart.getAxisRight().setEnabled(false);
-        MyXAxisRenderer xAxisRenderer = new MyXAxisRenderer(vChart.getViewPortHandler(), vChart.getXAxis(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
+        xAxisRenderer = new MyXAxisRenderer(vChart.getViewPortHandler(), vChart.getXAxis(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
         vChart.setXAxisRenderer(xAxisRenderer);
 
         // 图表左边的y坐标轴线
@@ -133,14 +139,9 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         return lineData;
     }
 
-    public void setData(String ts, List<Float> datas) {
+    public void setData(String ts, List<CapitalTrendModel> datas) {
         setStockTs(ts);
-        List<Entry> entrys = new ArrayList<>();
-        for (int i = 0, len = datas.size(); i < len; i += 4) {
-            Entry entry = new Entry(i, datas.get(i));
-            entrys.add(entry);
-        }
-        LineData lineData = getLineData(entrys);
+        LineData lineData = getLineData(getEntry(datas));
         YAxis leftAxis = vChart.getAxisLeft();
         if (lineData.getYMax() < 0) {
             leftAxis.setAxisMaximum(0f);
@@ -154,6 +155,39 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         }
         vChart.setData(lineData);
         vChart.invalidate();
+    }
+
+    private List<Entry> getEntry(List<CapitalTrendModel> datas) {
+        List<Entry> entrys = new ArrayList<>();
+        if (datas != null && !datas.isEmpty()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                datas.sort((o1, o2) -> o1.getTime() > o2.getTime() ? 1 : (o1.getTime() < o2.getTime() ? -1 : 0));
+            }
+            long dateM = TimeZoneUtil.parseTime(TimeZoneUtil.timeFormat(datas.get(0).getTime(), "yyyyMMdd"), "yyyyMMdd");
+            long openingMillisecond = xAxisRenderer.getOpeningMillisecond();
+            long breakMillisecond = xAxisRenderer.getBreakMillisecond();
+            long breakEndMillisecond = breakMillisecond + xAxisRenderer.getBreakDuration();
+            for (int i = 0, len = datas.size(); i < len; i += 4) {
+                CapitalTrendModel data = datas.get(i);
+                float x = getXByTime(dateM, data.getTime(), openingMillisecond, breakMillisecond, breakEndMillisecond);
+                Log.i("lw", "getEntry: " + x +" "+TimeZoneUtil.timeFormat(data.getTime(),"yyyy-MM-dd HH:mm:ss"));
+                if (x > -1) {
+                    entrys.add(new Entry(x, data.getValue().floatValue()));
+                }
+            }
+        }
+        return entrys;
+    }
+
+    private int getXByTime(long date, long time, long openingMillisecond, long breakMillisecond, long breakEndMillisecond) {
+        int x = -1;
+        long cur = time - date;
+        if (cur >= breakEndMillisecond) {
+            x = (int) (((breakMillisecond - openingMillisecond) + (cur - breakEndMillisecond)) / 60000);
+        } else if (cur <= breakMillisecond) {
+            x = (int) ((cur - openingMillisecond) / 60000);
+        }
+        return x;
     }
 
     public void setStockTs(String ts) {
@@ -211,6 +245,9 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         private String openingHours;//开市时间
         private String breakTime;//休盘时间
         private String closingHours;//收市时间
+        private long openingMillisecond;//开市时间毫秒
+        private long breakMillisecond;//休盘时间毫秒
+        private long breakDuration;//休盘时长
 
         public MyXAxisRenderer(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
             super(viewPortHandler, xAxis, trans);
@@ -231,25 +268,34 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             switch (ts) {
                 case "HK":
                     maxX = 330;//最大数据点1分钟占一点
-                    breakIndex = 149;//休盘点坐标
+                    breakIndex = 150;//休盘点坐标
                     openingHours = "09:30";//开市时间
                     breakTime = "12:00/13:00";//休盘时间
                     closingHours = "16:00";//收市时间
+                    openingMillisecond = 34200000;
+                    breakMillisecond = 43200000;
+                    breakDuration = 3600000;
                     break;
                 case "US":
                     maxX = 390;//最大数据点1分钟占一点
-                    breakIndex = 194;//中间线坐标
+                    breakIndex = 195;//中间线坐标
                     openingHours = "09:30";//开市时间
                     breakTime = "12:45";//中间线
                     closingHours = "16:00";//收市时间
+                    openingMillisecond = 34200000;
+                    breakMillisecond = 45900000;
+                    breakDuration = 0;
                     break;
                 case "SZ":
                 case "SH":
                     maxX = 240;//最大数据点1分钟占一点
-                    breakIndex = 119;//休盘点坐标
+                    breakIndex = 120;//休盘点坐标
                     openingHours = "09:30";//开市时间
                     breakTime = "11:30/13:00";//休盘时间
                     closingHours = "15:00";//收市时间
+                    openingMillisecond = 34200000;
+                    breakMillisecond = 41400000;
+                    breakDuration = 5400000;
                     break;
             }
             mXAxis.setAxisMaximum(maxX);
@@ -301,5 +347,16 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             drawLabel(c, breakTime, positions[index], pos, anchor, mXAxis.getLabelRotationAngle());
         }
 
+        public long getOpeningMillisecond() {
+            return openingMillisecond;
+        }
+
+        public long getBreakMillisecond() {
+            return breakMillisecond;
+        }
+
+        public long getBreakDuration() {
+            return breakDuration;
+        }
     }
 }

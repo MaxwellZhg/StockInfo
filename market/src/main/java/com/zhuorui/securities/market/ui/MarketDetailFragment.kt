@@ -92,15 +92,11 @@ class MarketDetailFragment :
     override val getView: MarketDetailView
         get() = this
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         mStock = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)!!
         tabTitle = ResUtil.getStringArray(R.array.stock_detail_tab)
         mBMP = MarketUtil.isBMP(mStock?.ts)
-    }
-
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
         initView()
         top_bar.setStockInfo(mStock.ts, mStock.name, mStock.code)
         presenter?.setStockInfo(mStock.ts!!, mStock.code!!, mStock.type!!)

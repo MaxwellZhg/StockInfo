@@ -6,6 +6,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.model.CapitalTrendModel
 import com.zhuorui.securities.market.socket.vo.CapitalData
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
@@ -60,13 +61,18 @@ class MarketDetailCapitalFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        todatCapitalFlowTrend.setData("HK", mutableListOf<Float>())
+        presenter?.setLifecycleOwner(this)
         getData()
     }
 
     override fun onTodayFundTransactionData(data: CapitalData?) {
         todayFundTransaction.setData(data)
     }
+
+    override fun onTodatCapitalFlowTrendData(data: List<CapitalTrendModel>) {
+        todatCapitalFlowTrend.setData(mTs, data)
+    }
+
 
     fun getData() {
         presenter?.getData(mTs, mCode)
