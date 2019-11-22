@@ -11,6 +11,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
@@ -115,7 +116,6 @@ class MarketPointFragment :
         }
         refresh_layout.setOnLoadMoreListener(this)
         refresh_layout.setOnRefreshListener(this)
-        presenter?.getStockConsInfo("HSI",20,3,1,false)
     }
 
     override fun onClick(v: View?) {
@@ -194,7 +194,7 @@ class MarketPointFragment :
                     }
                     tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
                     tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true,false)
                 }
                 tv_up_down_rate -> {
                     if(infoState) {
@@ -210,7 +210,7 @@ class MarketPointFragment :
                     }
                     tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
                     tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true,false)
                 }
                 else -> {
                     if(infoState) {
@@ -227,7 +227,7 @@ class MarketPointFragment :
                     }
                     tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
                     tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true,false)
                 }
             }
 
@@ -316,6 +316,8 @@ class MarketPointFragment :
         initTabFragment()
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
+        showHideFragment(mFragments[0], mFragments[1])
+        presenter?.getStockConsInfo("HSI",20,3,1,false,true)
     }
 
     private fun initTabFragment() {
@@ -341,15 +343,15 @@ class MarketPointFragment :
         consStockPage += 20
         if(allCount!=0&&consStockPage>allCount){
             consStockPage=allCount
-            presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false)
+            presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false,false)
         }else{
-            presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false)
+            presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false,false)
         }
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         consStockPage=20
-        presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+        presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true,false)
     }
 
     override fun loadMoreSuccess() {
@@ -400,7 +402,12 @@ class MarketPointFragment :
             }
 
         }
-        presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false)
+        presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false,false)
+    }
+
+    override fun setLoadMoreState() {
+        refresh_layout.setNoMoreData(false)
+        refresh_layout.setEnableLoadMore(true)
     }
 
 

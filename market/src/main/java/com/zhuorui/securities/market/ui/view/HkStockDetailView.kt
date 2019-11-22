@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
 
 /**
  * Created by Maxwell.
@@ -10,4 +11,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface HkStockDetailView :AbsView{
     fun addInfoToAdapter(list: List<Int>)
+    fun setHsiIndexData(list: List<IndexPonitHandicapData?>)
 }

@@ -2,12 +2,14 @@ package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import com.zhuorui.securities.market.event.MarketPointConsEvent
 import com.zhuorui.securities.market.event.StockConsEvent
 import com.zhuorui.securities.market.event.StockConsPointStateEvent
 import com.zhuorui.securities.market.net.IStockNet
@@ -26,6 +28,7 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
  */
 class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel>(){
     var isFresh :Boolean =false
+    var isInit:Boolean =false
     override fun init() {
         super.init()
     }
@@ -60,8 +63,9 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         )*/
     }
 
-    fun getStockConsInfo(code:String,pageSize:Int,sort:Int,sortTyep:Int,isFresh:Boolean){
+    fun getStockConsInfo(code:String,pageSize:Int,sort:Int,sortTyep:Int,isFresh:Boolean,isInit:Boolean){
         this.isFresh=isFresh
+        this.isInit = isInit
         val requset = StockConsInfoRequest(code, pageSize,sort,sortTyep,"HK" ,transactions.createTransaction())
         Cache[IStockNet::class.java]?.getStockConsInfo(requset)
             ?.enqueue(Network.IHCallBack<StockConsInfoResponse>(requset))
@@ -72,14 +76,23 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         if (!transactions.isMyTransaction(response)) return
         val datas = response.data
         if(datas.list.isNotEmpty()){
-            RxBus.getDefault().post(StockConsEvent(datas.list))
             if(isFresh){
                 view?.refreshSuccess()
             }else{
-                view?.loadMoreSuccess()
+                if(isInit){
+                    view?.setLoadMoreState()
+                }else {
+                    view?.loadMoreSuccess()
+                }
             }
+            RxBus.getDefault().post(StockConsEvent(datas.list))
             view?.showAllCount(datas.total.toInt())
         }
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        super.onErrorResponse(response)
+        RxBus.getDefault().post(MarketPointConsEvent())
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)

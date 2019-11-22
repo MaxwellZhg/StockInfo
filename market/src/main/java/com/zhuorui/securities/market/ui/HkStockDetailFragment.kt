@@ -10,6 +10,7 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.HkStockDetailPresenter
 import com.zhuorui.securities.market.ui.view.HkStockDetailView
@@ -180,6 +181,8 @@ class HkStockDetailFragment :
                 }
             }
         }
+
+        presenter?.getHSIPointInfo("HSI","HK")
     }
 
     /**
@@ -378,6 +381,9 @@ class HkStockDetailFragment :
         ToastUtil.instance.toastCenter("创业板")
 
     }
-
+    override fun setHsiIndexData(list: List<IndexPonitHandicapData?>) {
+         tv_one_ponit_num.text =list[0]?.last.toString()
+         tv_one_point_rate.text = list[0]?.diffPrice.toString()+"  "+list[0]?.diffRate.toString()+"%"
+    }
 
 }

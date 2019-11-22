@@ -20,8 +20,8 @@ class StockConsInfoResponse (val data:Data):BaseResponse(){
         val ts:String,
         val code:String,
         val name:String,
-        val lastPrice:BigDecimal,
-        val diffRate:BigDecimal,
-        val turnover:BigDecimal
+        var lastPrice:BigDecimal,
+        var diffRate:BigDecimal,
+        var turnover:BigDecimal
     )
 }

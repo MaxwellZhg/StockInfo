@@ -1,9 +1,20 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.content.Context
+import android.text.TextUtils
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.market.model.StockTopic
+import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
+import com.zhuorui.securities.market.socket.SocketApi
+import com.zhuorui.securities.market.socket.SocketClient
+import com.zhuorui.securities.market.socket.request.GetIndexPointInfoRequestBody
+import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
+import com.zhuorui.securities.market.socket.response.GetIndexPonitInfoResponse
+import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
 import com.zhuorui.securities.market.ui.adapter.AllHkStockContainerAdapter
 import com.zhuorui.securities.market.ui.adapter.AllHkStockNameAdapter
 import com.zhuorui.securities.market.ui.view.AllHkStockView

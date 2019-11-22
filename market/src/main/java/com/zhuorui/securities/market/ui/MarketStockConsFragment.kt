@@ -75,11 +75,13 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
     }
 
     override fun addInfoToAdapter(list: List<StockConsInfoResponse.ListInfo>) {
+        empty_view.visibility=View.INVISIBLE
         infoadapter?.clearItems()
         if (infoadapter?.items == null) {
             infoadapter?.items = ArrayList()
         }
         infoadapter?.addItems(list)
+        infoadapter?.notifyDataSetChanged()
     }
     override fun onCombineClick() {
         ToastUtil.instance.toastCenter("成分股")
@@ -238,6 +240,15 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
         }
 
     }
+
+    override fun showErrorState() {
+        empty_view.visibility=View.VISIBLE
+    }
+
+    override fun notifyItemChanged(index: Int) {
+        _mActivity?.runOnUiThread { infoadapter?.notifyItemChanged(index) }
+    }
+
 
 
 

@@ -8,4 +8,4 @@ import com.zhuorui.securities.market.net.response.StockConsInfoResponse
  * Date: 2019/11/21
  * Desc:
  */
-class StockConsEvent (var list: List<StockConsInfoResponse.ListInfo>)
+class StockConsEvent (var list: ArrayList<StockConsInfoResponse.ListInfo>)
