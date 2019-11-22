@@ -19,6 +19,7 @@ import com.zhuorui.securities.market.util.MathUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 用于存放股票成交统计数据
@@ -42,17 +43,39 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
     private var requestIds = ArrayList<String>()
 
     companion object {
-        private var instance: StockTradeStaDataManager? = null
+        private val TAG = StockTradeStaDataManager::class.java.simpleName
+
+        /**
+         * 为每支股票创建一个缓存管理类对象，缓存在map中，ConcurrentHashMap为线程安全集合
+         * key 为股票的tsCode
+         * value 为数据缓存类
+         */
+        private var instanceMap: ConcurrentHashMap<String, StockTradeStaDataManager>? = null
 
         fun getInstance(ts: String, code: String, type: Int): StockTradeStaDataManager {
-            if (instance == null) {
+            var instance: StockTradeStaDataManager? = null
+            if (instanceMap == null) {
                 synchronized(StockTradeStaDataManager::class.java) {
-                    if (instance == null) {
+                    if (instanceMap == null) {
+                        instanceMap = ConcurrentHashMap()
                         instance = StockTradeStaDataManager(ts, code, type)
+                        instanceMap!![getTsCode(ts, code)] = instance!!
+                        LogInfra.Log.d(TAG, "当前缓存:$instanceMap")
                     }
+                }
+            } else {
+                instance = instanceMap!![getTsCode(ts, code)]
+                if (instance == null) {
+                    instance = StockTradeStaDataManager(ts, code, type)
+                    instanceMap!![getTsCode(ts, code)] = instance!!
+                    LogInfra.Log.d(TAG, "当前缓存:$instanceMap")
                 }
             }
             return instance!!
+        }
+
+        private fun getTsCode(ts: String, code: String): String {
+            return "$code.$ts"
         }
     }
 
@@ -152,6 +175,12 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
         if (RxBus.getDefault().isRegistered(this)) {
             RxBus.getDefault().unregister(this)
         }
-        instance = null
+
+        instanceMap?.remove(getTsCode(ts, code))
+        if (instanceMap?.isEmpty()!!) {
+            instanceMap = null
+        }
+
+        LogInfra.Log.d(TAG, "当前缓存:${instanceMap}")
     }
 }
