@@ -37,74 +37,74 @@ public class TimeDataManage {
     private double preClose;//昨收价
 
     public void parseTimeData(List<MinuteKlineData> klineData, String assetId, double preClosePrice, boolean refresh) {
-        this.assetId = assetId;
-        if (klineData != null && !klineData.isEmpty()) {
-            if (refresh) {
-                realTimeDatas.clear();
-                fiveDayXLabels.clear();
-                getFiveDayXLabelKey(assetId);
-            } else {
-                if (!realTimeDatas.isEmpty()) {
-                    // 需要加入的第一条数据的时间
-                    long firstDateTime = klineData.get(0).getDateTime();
-                    // 当前数集合最后一条数据的时间
-                    long lastDateTime = realTimeDatas.get(realTimeDatas.size() - 1).getTimeMills();
-                    if (firstDateTime == lastDateTime || firstDateTime < lastDateTime) {
-                        LogInfra.Log.e("TimeDataManage", "新增数据时间不合法");
-                        return;
-                    }
-                }
-            }
-
-            String preDate = null;
-            int index = 0;
-//            preClose = Double.isNaN(object.optDouble("preClose")) ? 0 : object.optDouble("preClose");
-//            JSONArray data = object.optJSONArray("data");
-            int size = klineData.size();
-            for (int i = 0; i < size; i++) {
-                MinuteKlineData minuteKlineData = klineData.get(i);
-
-                TimeDataModel timeDatamodel = new TimeDataModel();
-                timeDatamodel.setTimeMills(minuteKlineData.getDateTime());
-                timeDatamodel.setNowPrice(Objects.requireNonNull(minuteKlineData.getPrice()));
-                timeDatamodel.setAveragePrice(Objects.requireNonNull(minuteKlineData.getAvgPrice()));
-                timeDatamodel.setVolume(Objects.requireNonNull(minuteKlineData.getVol()).intValue());
-                timeDatamodel.setOpen(Objects.requireNonNull(minuteKlineData.getOpenPrice()));
-                timeDatamodel.setPreClose(preClose == 0 ? (preClosePrice == 0 ? timeDatamodel.getOpen() : preClosePrice) : preClose);
-
-                if (i == 0 && refresh) {
-                    preClose = timeDatamodel.getPreClose();
-                    mAllVolume = timeDatamodel.getVolume();
-                    max = Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice());
-                    min = Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice());
-                    volMaxTimeLine = 0;
-                    if (baseValue == 0) {
-                        baseValue = timeDatamodel.getPreClose();
-                    }
-                    if (fiveDayXLabelKey.size() > index) {
-                        fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
-                        index++;
-                    }
-                } else {
-                    mAllVolume += timeDatamodel.getVolume();
-                    if (fiveDayXLabelKey.size() > index && !secToDateForFiveDay(timeDatamodel.getTimeMills()).equals(preDate)) {
-                        fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
-                        index++;
-                    }
-                }
-                preDate = secToDateForFiveDay(timeDatamodel.getTimeMills());
-                timeDatamodel.setCha(timeDatamodel.getNowPrice() - preClose);
-                timeDatamodel.setPer(timeDatamodel.getCha() / preClose);
-
-                max = Math.max(Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice()), max);
-                min = Math.min(Math.min(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice()), min);
-
-                perVolMaxTimeLine = volMaxTimeLine;
-                volMaxTimeLine = Math.max(timeDatamodel.getVolume(), volMaxTimeLine);
-                realTimeDatas.add(timeDatamodel);
-            }
-            permaxmin = (max - min) / 2;
-        }
+//        this.assetId = assetId;
+//        if (klineData != null && !klineData.isEmpty()) {
+//            if (refresh) {
+//                realTimeDatas.clear();
+//                fiveDayXLabels.clear();
+//                getFiveDayXLabelKey(assetId);
+//            } else {
+//                if (!realTimeDatas.isEmpty()) {
+//                    // 需要加入的第一条数据的时间
+//                    long firstDateTime = klineData.get(0).getDateTime();
+//                    // 当前数集合最后一条数据的时间
+//                    long lastDateTime = realTimeDatas.get(realTimeDatas.size() - 1).getTimeMills();
+//                    if (firstDateTime == lastDateTime || firstDateTime < lastDateTime) {
+//                        LogInfra.Log.e("TimeDataManage", "新增数据时间不合法");
+//                        return;
+//                    }
+//                }
+//            }
+//
+//            String preDate = null;
+//            int index = 0;
+////            preClose = Double.isNaN(object.optDouble("preClose")) ? 0 : object.optDouble("preClose");
+////            JSONArray data = object.optJSONArray("data");
+//            int size = klineData.size();
+//            for (int i = 0; i < size; i++) {
+//                MinuteKlineData minuteKlineData = klineData.get(i);
+//
+//                TimeDataModel timeDatamodel = new TimeDataModel();
+//                timeDatamodel.setTimeMills(minuteKlineData.getDateTime());
+//                timeDatamodel.setNowPrice(Objects.requireNonNull(minuteKlineData.getPrice()));
+//                timeDatamodel.setAveragePrice(Objects.requireNonNull(minuteKlineData.getAvgPrice()));
+//                timeDatamodel.setVolume(Objects.requireNonNull(minuteKlineData.getVol()).intValue());
+//                timeDatamodel.setOpen(Objects.requireNonNull(minuteKlineData.getOpenPrice()));
+//                timeDatamodel.setPreClose(preClose == 0 ? (preClosePrice == 0 ? timeDatamodel.getOpen() : preClosePrice) : preClose);
+//
+//                if (i == 0 && refresh) {
+//                    preClose = timeDatamodel.getPreClose();
+//                    mAllVolume = timeDatamodel.getVolume();
+//                    max = Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice());
+//                    min = Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice());
+//                    volMaxTimeLine = 0;
+//                    if (baseValue == 0) {
+//                        baseValue = timeDatamodel.getPreClose();
+//                    }
+//                    if (fiveDayXLabelKey.size() > index) {
+//                        fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
+//                        index++;
+//                    }
+//                } else {
+//                    mAllVolume += timeDatamodel.getVolume();
+//                    if (fiveDayXLabelKey.size() > index && !secToDateForFiveDay(timeDatamodel.getTimeMills()).equals(preDate)) {
+//                        fiveDayXLabels.put(fiveDayXLabelKey.get(index), secToDateForFiveDay(timeDatamodel.getTimeMills()));
+//                        index++;
+//                    }
+//                }
+//                preDate = secToDateForFiveDay(timeDatamodel.getTimeMills());
+//                timeDatamodel.setCha(timeDatamodel.getNowPrice() - preClose);
+//                timeDatamodel.setPer(timeDatamodel.getCha() / preClose);
+//
+//                max = Math.max(Math.max(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice()), max);
+//                min = Math.min(Math.min(timeDatamodel.getNowPrice(), timeDatamodel.getAveragePrice()), min);
+//
+//                perVolMaxTimeLine = volMaxTimeLine;
+//                volMaxTimeLine = Math.max(timeDatamodel.getVolume(), volMaxTimeLine);
+//                realTimeDatas.add(timeDatamodel);
+//            }
+//            permaxmin = (max - min) / 2;
+//        }
     }
 
 
