@@ -1,10 +1,7 @@
 package com.zhuorui.securities.market.manager
 
-import com.zhuorui.commonwidget.model.Observer
-import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.StockTopic
@@ -18,19 +15,14 @@ import com.zhuorui.securities.market.socket.vo.StockTradeStaData
 import com.zhuorui.securities.market.util.MathUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 用于存放股票成交统计数据
  */
 class StockTradeStaDataManager private constructor(val ts: String, val code: String, val type: Int) :
-    Subject<Observer> {
+    BaseDataManager() {
 
-    private val TAG = "StockTradeStaDataManager"
-
-    // 存储订阅者
-    private val observerList = ArrayList<Observer>()
     // 成交统计数据
     var tradeDatas: MutableList<StockTradeStaData>? = null
     // 最大缓存数量
@@ -40,11 +32,7 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
 
     private var stockTopic: StockTopic? = null
 
-    private var requestIds = ArrayList<String>()
-
     companion object {
-        private val TAG = StockTradeStaDataManager::class.java.simpleName
-
         /**
          * 为每支股票创建一个缓存管理类对象，缓存在map中，ConcurrentHashMap为线程安全集合
          * key 为股票的tsCode
@@ -60,7 +48,7 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
                         instanceMap = ConcurrentHashMap()
                         instance = StockTradeStaDataManager(ts, code, type)
                         instanceMap!![getTsCode(ts, code)] = instance!!
-                        LogInfra.Log.d(TAG, "当前缓存:$instanceMap")
+                        LogInfra.Log.d(instance!!.TAG, "当前缓存:$instanceMap")
                     }
                 }
             } else {
@@ -68,7 +56,7 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
                 if (instance == null) {
                     instance = StockTradeStaDataManager(ts, code, type)
                     instanceMap!![getTsCode(ts, code)] = instance!!
-                    LogInfra.Log.d(TAG, "当前缓存:$instanceMap")
+                    LogInfra.Log.d(instance!!.TAG, "当前缓存:$instanceMap")
                 }
             }
             return instance!!
@@ -79,26 +67,12 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
         }
     }
 
-    init {
-        RxBus.getDefault().register(this)
-
+    override fun init() {
         // 加载成交统计
         val requestId =
             SocketClient.getInstance()
                 .postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_STOCK_TRADESTA)
         requestIds.add(requestId)
-    }
-
-    override fun registerObserver(obs: Observer) {
-        observerList.add(obs)
-    }
-
-    override fun removeObserver(obs: Observer) {
-        observerList.remove(obs)
-        // 当没有观察者了，清除当前实例
-        if (observerList.isNullOrEmpty()) {
-            destroy()
-        }
     }
 
     /**
@@ -159,22 +133,8 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
         }
     }
 
-    override fun notifyAllObservers() {
-        for (obs in observerList) {
-            // 更新每一个观察者中的信息
-            obs.update(this)
-        }
-    }
-
-    private fun destroy() {
-        // 取消订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().unBindTopic(stockTopic)
-        }
-
-        if (RxBus.getDefault().isRegistered(this)) {
-            RxBus.getDefault().unregister(this)
-        }
+    override fun destroy() {
+        super.destroy()
 
         instanceMap?.remove(getTsCode(ts, code))
         if (instanceMap?.isEmpty()!!) {
