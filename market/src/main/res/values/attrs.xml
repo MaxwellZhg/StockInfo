@@ -23,7 +23,7 @@
     </declare-styleable>
 
     <declare-styleable name="MarketPieChatView">
-        <attr name="piechat_type" format="integer"/>
+        <attr name="zr_title" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="BuyingSellingFilesView">

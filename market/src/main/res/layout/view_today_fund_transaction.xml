@@ -29,13 +29,12 @@
             app:layout_constraintLeft_toRightOf="@+id/tv_title"
     />
 
-
     <com.zhuorui.securities.market.customer.view.MarketPieChatView
             android:id="@+id/pie_cahart_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            app:piechat_type="1"
+            app:zr_title="@string/today_fund"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

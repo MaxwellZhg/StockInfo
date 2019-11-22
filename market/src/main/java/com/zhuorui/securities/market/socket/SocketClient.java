@@ -146,6 +146,9 @@ public class SocketClient {
                                 case SocketApi.PUSH_INDEX_HANDICAP:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
                                     break;
+                                case SocketApi.PUSH_STOCK_CAPITAL:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicCapitalResponse.class));
+                                    break;
                             }
                         } else {
                             SocketResponse response = JsonUtil.fromJson(message, SocketResponse.class);
@@ -192,6 +195,8 @@ public class SocketClient {
                                     case SocketApi.GET_STOCK_HANDICAP:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetStockHandicapResponse.class));
                                         break;
+                                    case SocketApi.GET_CAPITAL:
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetCapitalResponse.class));
                                     case SocketApi.GET_INDEX_HANDICAP:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexHandicapResponse.class));
                                         break;

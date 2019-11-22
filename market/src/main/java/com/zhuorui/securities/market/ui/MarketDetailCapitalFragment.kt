@@ -6,6 +6,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.socket.vo.CapitalData
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
@@ -20,6 +21,9 @@ import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
 class MarketDetailCapitalFragment :
     AbsFragment<FragmentMarketDetailBinding, MarketDetailCapitalViewModel, MarketDetailCapitalView, MarketDetailCapitalPresenter>(),
     MarketDetailCapitalView {
+
+    private var mTs: String = ""
+    private var mCode: String = ""
 
     override val layout: Int
         get() = R.layout.fragment_market_detail_capital
@@ -37,23 +41,34 @@ class MarketDetailCapitalFragment :
         get() = this
 
     companion object {
-        fun newInstance(): MarketDetailCapitalFragment {
-            return MarketDetailCapitalFragment()
+        fun newInstance(ts: String, code: String): MarketDetailCapitalFragment {
+            val b = Bundle()
+            b.putString("ts", ts)
+            b.putString("code", code)
+            val fragment = MarketDetailCapitalFragment()
+            fragment.arguments = b
+            return fragment
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mTs = arguments?.getString("ts") ?: mTs
+        mCode = arguments?.getString("code") ?: mCode
+
     }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        val outData = mutableListOf<Float>()
-        outData.add(0f)
-        outData.add(0f)
-        outData.add(0f)
-        val inData = mutableListOf<Float>()
-        inData.add(0f)
-        inData.add(0f)
-        inData.add(0f)
-        todayFundTransaction.setData(outData, inData)
         todatCapitalFlowTrend.setData("HK", mutableListOf<Float>())
+        getData()
+    }
 
+    override fun onTodayFundTransactionData(data: CapitalData?) {
+        todayFundTransaction.setData(data)
+    }
+
+    fun getData() {
+        presenter?.getData(mTs, mCode)
     }
 }

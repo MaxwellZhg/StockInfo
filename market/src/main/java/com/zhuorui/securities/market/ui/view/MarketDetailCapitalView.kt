@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.socket.vo.CapitalData
 
 /**
  *    author : liuwei
@@ -9,4 +10,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  *    desc   :
  */
 interface MarketDetailCapitalView : AbsView {
+
+    fun onTodayFundTransactionData(data: CapitalData?)
 }
