@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.socket;
 
 import android.annotation.SuppressLint;
+import android.util.TypedValue;
 import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
 import com.zhuorui.securities.base2app.util.DeviceUtil;
@@ -198,6 +199,7 @@ public class SocketClient {
                                     case SocketApi.GET_CAPITAL:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetCapitalResponse.class));
                                     case SocketApi.GET_INDEX_HANDICAP:
+                                        
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexHandicapResponse.class));
                                         break;
                                 }

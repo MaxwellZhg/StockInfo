@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.model.PushStockPriceData
 import com.zhuorui.securities.market.socket.vo.OrderData
 import com.zhuorui.securities.market.socket.vo.StockHandicapData
@@ -16,4 +17,6 @@ class MarketDetailViewModel : ViewModel() {
     var mStockHandicapData: MutableLiveData<StockHandicapData?> = MutableLiveData()
     var mPushStockHandicapData: MutableLiveData<StockHandicapData?> = MutableLiveData()
     var mOrderData: MutableLiveData<OrderData?> = MutableLiveData()
+    var mBuyOrderBrokerData: MutableLiveData<List<OrderBrokerModel>> = MutableLiveData()
+    var mSellOrderBrokerData: MutableLiveData<List<OrderBrokerModel>> = MutableLiveData()
 }

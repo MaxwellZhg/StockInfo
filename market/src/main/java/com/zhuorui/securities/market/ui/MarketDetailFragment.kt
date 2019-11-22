@@ -305,7 +305,7 @@ class MarketDetailFragment :
     /**
      * 更新买卖经纪数据
      */
-    override fun upOrderBrokerData(buyData: MutableList<OrderBrokerModel>, sellData: MutableList<OrderBrokerModel>) {
+    override fun upOrderBrokerData(buyData: List<OrderBrokerModel>?, sellData: List<OrderBrokerModel>?) {
         orderBroker.setData(buyData, sellData)
     }
 

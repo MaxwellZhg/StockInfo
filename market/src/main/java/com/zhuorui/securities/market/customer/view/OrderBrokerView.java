@@ -185,8 +185,8 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
         public void setData(List<OrderBrokerModel> buyings, List<OrderBrokerModel> sellings) {
             mBuyingDatas.clear();
             mSellingDatas.clear();
-            mBuyingDatas.addAll(buyings);
-            mSellingDatas.addAll(sellings);
+            if (buyings != null) mBuyingDatas.addAll(buyings);
+            if (sellings != null) mSellingDatas.addAll(sellings);
             initData();
         }
 

@@ -8,8 +8,8 @@ import com.zhuorui.securities.market.socket.vo.OrderBrokerData
  * date   : 2019/7/23 15:49
  * desc   : 查询最新买卖经纪数据
  */
-class GetStocksOrderBrokerResponse : SocketResponse() {
+class GetStocksOrderBrokerResponse(val data: Data?) : SocketResponse() {
 
-    var data: OrderBrokerData? = null
+    data class Data(val buy: OrderBrokerData?, val sell: OrderBrokerData?)
 
 }
