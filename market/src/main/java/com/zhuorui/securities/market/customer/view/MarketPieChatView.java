@@ -36,19 +36,10 @@ import java.util.List;
  */
 public class MarketPieChatView extends FrameLayout {
 
-    private int type;
-    private int mOut1Color;
-    private int mOut2Color;
-    private int mOut3Color;
-    private int mOut4Color;
-    private int mIn1Color;
-    private int mIn2Color;
-    private int mIn3Color;
     private int defColor;
-    private int inValueColor;
-    private int outValueColor;
-    ArrayList<Integer> colors = new ArrayList<Integer>();
+    private ArrayList<Integer> colors = new ArrayList<>();
     private PieChart vPieChart;
+    private String mTitle;
 
     public MarketPieChatView(Context context) {
         this(context,null);
@@ -61,42 +52,17 @@ public class MarketPieChatView extends FrameLayout {
     public MarketPieChatView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MarketPieChatView);//获得属性值
-        type = a.getInt(R.styleable.MarketPieChatView_piechat_type,-1);
-        initColor();
+        mTitle = a.getString(R.styleable.MarketPieChatView_zr_title);
+        defColor = Color.parseColor("#C3CDE3");
         inflate(context,R.layout.layout_market_pie_chat_view,this);
         initPieChart();
     }
 
 
-    private void initColor() {
-        if(type==1) {
-            defColor = Color.parseColor("#C3CDE3");
-            inValueColor = Color.parseColor("#D9001B");
-            outValueColor = Color.parseColor("#00CC00");
-            mOut1Color = Color.parseColor("#00AB3B");
-            mOut2Color = Color.parseColor("#336666");
-            mOut3Color = Color.parseColor("#339966");
-            mIn1Color = Color.parseColor("#C4000A");
-            mIn2Color = Color.parseColor("#D73239");
-            mIn3Color = Color.parseColor("#CC6666");
-            colors = new ArrayList();
-            colors.add(mOut1Color);
-            colors.add(mOut2Color);
-            colors.add(mOut3Color);
-            colors.add(mIn3Color);
-            colors.add(mIn2Color);
-            colors.add(mIn1Color);
-        }else{
-            mOut1Color = Color.parseColor("#EEA74D");
-            mOut2Color = Color.parseColor("#5DA6F2");
-            mOut3Color = Color.parseColor("#3A79C8");
-            mOut4Color = Color.parseColor("#6F6F6F");
-            colors = new ArrayList();
-            colors.add(mOut1Color);
-            colors.add(mOut2Color);
-            colors.add(mOut3Color);
-            colors.add(mOut4Color);
-        }
+
+    public void setColors(ArrayList<Integer> colors){
+        colors.clear();
+        this.colors.addAll(colors);
     }
 
     private void initPieChart() {
@@ -120,56 +86,17 @@ public class MarketPieChatView extends FrameLayout {
         vPieChart.setHoleRadius(60);
         vPieChart.setHoleColor(Color.parseColor("#211F2A"));             //设置PieChart内部圆的颜色
         vPieChart.setDrawCenterText(true);               //是否绘制PieChart内部中心文本（true：下面属性才有意义）
-        if(type==1) {
-            vPieChart.setCenterText(ResUtil.INSTANCE.getString(R.string.today_fund));                 //设置PieChart内部圆文字的内容
-        }else{
-            vPieChart.setCenterText(ResUtil.INSTANCE.getString(R.string.mian_buisness));                 //设置PieChart内部圆文字的内容
-        }
+        vPieChart.setCenterText(mTitle);                 //设置PieChart内部圆文字的内容
         vPieChart.setCenterTextSize(14f);                //设置PieChart内部圆文字的大小
         vPieChart.setCenterTextColor(Color.WHITE);         //设置PieChart内部圆文字的颜色
         vPieChart.setTransparentCircleRadius(0f);       //设置PieChart内部透明圆的半径(这里设置31.0f)
 
     }
 
-
-    public void setData(List<Float> outData, List<Float> inData) {
-        if(type==1) {
-            vPieChart.setData(getPieData(getPieEntrys(outData, inData)));
-        }else{
-            vPieChart.setData(getPieData(getOutPieEntrys(outData)));
-        }
+    public void setData(ArrayList<PieEntry> data){
+        vPieChart.setData(getPieData(data));
         vPieChart.invalidate();
     }
-
-
-    private ArrayList<PieEntry> getPieEntrys(List<Float> out, List<Float> in) {
-        ArrayList<PieEntry> pieEntryList = new ArrayList<PieEntry>();
-        //饼图实体 PieEntry
-        if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "大单流出"));
-        if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "中单流出"));
-        if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "小单流出"));
-        if (in.get(2) > 0) pieEntryList.add(new PieEntry(in.get(2), "小单流入"));
-        if (in.get(1) > 0) pieEntryList.add(new PieEntry(in.get(1), "中单流入"));
-        if (in.get(0) > 0) pieEntryList.add(new PieEntry(in.get(0), "大单流入"));
-        return pieEntryList;
-    }
-
-    private ArrayList<PieEntry> getOutPieEntrys(List<Float> out) {
-        ArrayList<PieEntry> pieEntryList = new ArrayList<PieEntry>();
-        //饼图实体 PieEntry
-        if(out.size()>0 &&out.size()==4) {
-            if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "寿险及健康险"));
-            if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "财产保险"));
-            if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "银行"));
-            if (out.get(3) > 0) pieEntryList.add(new PieEntry(out.get(3), "其他收入"));
-        }else if(out.size()>0 &&out.size()==3){
-            if (out.get(0) > 0) pieEntryList.add(new PieEntry(out.get(0), "寿险及健康险"));
-            if (out.get(1) > 0) pieEntryList.add(new PieEntry(out.get(1), "财产保险"));
-            if (out.get(2) > 0) pieEntryList.add(new PieEntry(out.get(2), "银行"));
-        }
-        return pieEntryList;
-    }
-
 
     /**
      * 解决两端线条对齐问题(解决文法：在源码上基础上修改第二条线结束位置，固定最左使用270度的值，最右使用270度的值)

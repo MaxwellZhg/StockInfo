@@ -6,6 +6,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.socket.vo.CapitalData
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
@@ -63,8 +64,8 @@ class MarketDetailCapitalFragment :
         getData()
     }
 
-    override fun onTodayFundTransactionData(outData: List<Float>, inData: List<Float>) {
-        todayFundTransaction.setData(outData, inData)
+    override fun onTodayFundTransactionData(data: CapitalData?) {
+        todayFundTransaction.setData(data)
     }
 
     fun getData() {

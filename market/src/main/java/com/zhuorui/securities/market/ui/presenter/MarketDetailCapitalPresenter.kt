@@ -14,6 +14,7 @@ import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
 import com.zhuorui.securities.market.socket.request.GetStockRequestBody
 import com.zhuorui.securities.market.socket.response.GetCapitalResponse
 import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
+import com.zhuorui.securities.market.socket.vo.CapitalData
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
 import com.zhuorui.securities.market.util.MarketUtil
@@ -43,15 +44,7 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         if (stockTopic != null && mBmp) {
             SocketClient.getInstance().unBindTopic(stockTopic)
         }
-        val outData = mutableListOf<Float>()
-        outData.add(0f)
-        outData.add(0f)
-        outData.add(0f)
-        val inData = mutableListOf<Float>()
-        inData.add(0f)
-        inData.add(0f)
-        inData.add(0f)
-        view?.onTodayFundTransactionData(outData,inData)
+        view?.onTodayFundTransactionData(null)
     }
 
 
@@ -61,11 +54,17 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetCapital(response: GetCapitalResponse) {
         if (TextUtils.equals(getCapitalReqId, response.respId)) {
+            readCapitalResponse(response?.data)
             if (!mBmp) {
                 stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs.toString(), mCode.toString(), 2)
                 SocketClient.getInstance().bindTopic(stockTopic)
             }
         }
+    }
+
+    private fun readCapitalResponse(data: CapitalData?) {
+        data?.totalLargeSingleOutflow ?: 0.0
+
     }
 
     /**
@@ -75,8 +74,6 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     fun onStocksTopicCapital(response: StocksTopicCapitalResponse) {
 
     }
-
-
 
 
     override fun destroy() {
