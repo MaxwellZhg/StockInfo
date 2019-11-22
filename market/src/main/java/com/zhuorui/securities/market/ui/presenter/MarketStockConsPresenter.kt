@@ -126,7 +126,7 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
         val datas = viewModel?.infos?.value
         if (datas.isNullOrEmpty()) return
         val stockPriceDatas = response.body
-        for (index in datas.indices) {
+   /*     for (index in datas.indices) {
             val item = datas[index]
                 if (item.ts == stockPriceDatas?.ts && item.code == stockPriceDatas?.code) {
                     // 更新数据
@@ -137,7 +137,7 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
                     view?.notifyItemChanged(index)
                     break
             }
-        }
+        }*/
     }
 
 

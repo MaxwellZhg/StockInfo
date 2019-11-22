@@ -34,12 +34,11 @@ import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicOrderBrokerResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicOrderResponse
 import com.zhuorui.securities.market.socket.request.GetStockDataByTsCodeRequestBody
-import com.zhuorui.securities.market.socket.request.GetStockTradeRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderBrokerResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderResponse
-import com.zhuorui.securities.market.socket.vo.OrderBrokerData
 import com.zhuorui.securities.market.socket.vo.OrderData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil

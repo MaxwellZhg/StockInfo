@@ -144,10 +144,7 @@ public class SocketClient {
                                 case SocketApi.PUSH_STOCK_HANDICAP:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
                                     break;
-                                    //推送指数盘口
-                                case SocketApi.PUSH_STOCK_INDEXHANDICAP:
-                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StockTopicIndexHandicapResponse.class));
-                                    break;
+                                //推送指数盘口
                                 case SocketApi.PUSH_INDEX_HANDICAP:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
                                     break;
@@ -200,16 +197,10 @@ public class SocketClient {
                                     case SocketApi.GET_STOCK_HANDICAP:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetStockHandicapResponse.class));
                                         break;
-                                        //获取指数盘口
                                     case SocketApi.GET_INDEX_HANDICAP:
-                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexPonitInfoResponse.class));
-                                        break;
-                                    case SocketApi.GET_CAPITAL:
-                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetCapitalResponse.class));
-                                    case SocketApi.GET_INDEX_HANDICAP:
-
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexHandicapResponse.class));
                                         break;
+
                                 }
 
                             }
