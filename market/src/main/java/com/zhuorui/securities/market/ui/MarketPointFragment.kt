@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
+import com.zhuorui.securities.market.event.StockConsStateEvent
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
@@ -34,13 +39,21 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
  * */
 class MarketPointFragment :
     AbsSwipeBackNetFragment<FragmentMarketPointBinding, MarketPointViewModel, MarketPointView, MarketPointPresenter>(),
-    MarketPointView, View.OnClickListener {
+    MarketPointView, View.OnClickListener, OnRefreshLoadMoreListener {
     private var type: Int? = null
     private var infoadapter: MarketPointConsInfoAdapter? = null
     private var pointInfoAdapter: MarketPointInfoAdapter? = null
     private var tabTitle: ArrayList<String> = ArrayList()
     private val mFragments = arrayOfNulls<SupportFragment>(2)
     private var mIndex = 0
+    private var consStockPage =20
+    private var allCount =0
+    private var consInfoPage =0
+    private var priceSelect = false
+    private var rateSelect = false
+    private var countSelect = false
+    private var sort = 3
+    private var sortType =1
     override val layout: Int
         get() = R.layout.fragment_market_point
     override val viewModelId: Int
@@ -86,12 +99,23 @@ class MarketPointFragment :
         tabTitle.add("资讯")
         iv_back.setOnClickListener(this)
         iv_search.setOnClickListener(this)
+        tv_newly_price.setOnClickListener(this)
+        tv_up_down_rate.setOnClickListener(this)
+        tv_up_down_count.setOnClickListener(this)
        // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
                 top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                if(mIndex==0) {
+                    ll_selcet_info.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+                }else{
+                    ll_selcet_info.visibility = View.GONE
+                }
             }
         }
+        refresh_layout.setOnLoadMoreListener(this)
+        refresh_layout.setOnRefreshListener(this)
+        presenter?.getStockConsInfo("HSI",20,3,1,false)
     }
 
     override fun onClick(v: View?) {
@@ -102,9 +126,113 @@ class MarketPointFragment :
             iv_search -> {
                 start(SearchInfoFragment.newInstance())
             }
+            tv_newly_price->{
+                consStockPage=20
+                refresh_layout.finishLoadMore(true)
+                refresh_layout.setEnableLoadMore(true)
+                refresh_layout.setNoMoreData(false)
+                detailShowTypeInfo(priceSelect,1,tv_newly_price)
+                 priceSelect =!priceSelect
+            }
+            tv_up_down_rate->{
+                consStockPage=20
+                refresh_layout.finishLoadMore(true)
+                refresh_layout.setEnableLoadMore(true)
+                refresh_layout.setNoMoreData(false)
+                detailShowTypeInfo(rateSelect,2,tv_up_down_rate)
+                rateSelect =!rateSelect
+            }
+            tv_up_down_count->{
+                consStockPage=20
+                refresh_layout.finishLoadMore(true)
+                refresh_layout.setEnableLoadMore(true)
+                refresh_layout.setNoMoreData(false)
+                detailShowTypeInfo(countSelect,3,tv_up_down_count)
+                countSelect =!countSelect
+            }
         }
 
     }
+
+    private fun detailShowTypeInfo(selectInfo:Boolean, type:Int, view:View){
+        when(type){
+            1->{
+                rateSelect=false
+                countSelect=false
+                showViewInfo(selectInfo,view)
+            }
+            2->{
+                priceSelect=false
+                countSelect=false
+                showViewInfo(selectInfo,view)
+            }
+            3->{
+                priceSelect=false
+                rateSelect=false
+                showViewInfo(selectInfo,view)
+            }
+        }
+    }
+
+    private fun showViewInfo(selectInfo :Boolean, view:View){
+        detailViewInfo(view,selectInfo)
+    }
+
+    private fun detailViewInfo(view:View, infoState:Boolean){
+           when (view) {
+                tv_newly_price -> {
+                    if(infoState) {
+                        sort=1
+                        sortType=1
+                        tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
+                        RxBus.getDefault().post(StockConsStateEvent(1))
+                    }else {
+                        sort=1
+                        sortType=2
+                        tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
+                        RxBus.getDefault().post(StockConsStateEvent(2))
+                    }
+                    tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
+                    tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
+                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+                }
+                tv_up_down_rate -> {
+                    if(infoState) {
+                        sort=3
+                        sortType=1
+                        tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
+                        RxBus.getDefault().post(StockConsStateEvent(3))
+                    }else {
+                        sort=3
+                        sortType=2
+                        tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
+                        RxBus.getDefault().post(StockConsStateEvent(4))
+                    }
+                    tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
+                    tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
+                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+                }
+                else -> {
+                    if(infoState) {
+                        sort=2
+                        sortType=1
+                        tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
+                        RxBus.getDefault().post(StockConsStateEvent(5))
+
+                    }else {
+                        sort=2
+                        sortType=2
+                        tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
+                        RxBus.getDefault().post(StockConsStateEvent(6))
+                    }
+                    tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
+                    tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
+                    presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+                }
+            }
+
+        }
+
 
     /**
      * 获取指示器适配器
@@ -150,6 +278,11 @@ class MarketPointFragment :
     }
 
     private fun onSelect(index: Int) {
+        if(index==0){
+            ll_selcet_info.visibility =View.GONE
+        }else{
+            ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+        }
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
     }
@@ -203,5 +336,73 @@ class MarketPointFragment :
             mFragments[1] = findChildFragment(MarketPointConsInfoFragment::class.java)
         }
     }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        consStockPage += 20
+        if(allCount!=0&&consStockPage>allCount){
+            consStockPage=allCount
+            presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false)
+        }else{
+            presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false)
+        }
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        consStockPage=20
+        presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,true)
+    }
+
+    override fun loadMoreSuccess() {
+        if(consStockPage==allCount){
+            refresh_layout.setNoMoreData(true)
+        }else {
+            refresh_layout.finishLoadMore(true)
+        }
+    }
+    override fun showAllCount(count: Int) {
+       allCount=count
+    }
+
+    override fun refreshSuccess() {
+        refresh_layout.finishRefresh(true)
+        refresh_layout.setEnableLoadMore(true)
+        refresh_layout.setNoMoreData(false)
+    }
+
+    override fun showStateChangeEvent(state: Int) {
+        refresh_layout.setEnableLoadMore(true)
+        refresh_layout.setNoMoreData(false)
+        consStockPage=20
+        when(state){
+            1->{
+                sort=1
+                sortType=1
+            }
+            2->{
+                sort=1
+                sortType=2
+            }
+            3->{
+                sort=3
+                sortType=1
+            }
+            4->{
+                sort=3
+                sortType=2
+            }
+            5->{
+                sort=2
+                sortType=1
+            }
+            6->{
+                sort=2
+                sortType=2
+            }
+
+        }
+        presenter?.getStockConsInfo("HSI",consStockPage,sort,sortType,false)
+    }
+
+
 
 }

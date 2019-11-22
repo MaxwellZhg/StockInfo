@@ -7,6 +7,8 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import com.zhuorui.securities.market.event.StockConsEvent
+import com.zhuorui.securities.market.event.StockConsStateEvent
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.StockConsInfoRequest
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
@@ -55,18 +57,16 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
          )*/
     }
 
-    fun getStockConsInfo(){
-        val requset = StockConsInfoRequest("HSI", 20,1,1,"HK" ,transactions.createTransaction())
-        Cache[IStockNet::class.java]?.getStockConsInfo(requset)
-            ?.enqueue(Network.IHCallBack<StockConsInfoResponse>(requset))
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStockConsEventResponse(event: StockConsEvent) {
+        if(event.list.isNotEmpty()) {
+            viewModel?.infos?.value= event.list as MutableList<StockConsInfoResponse.ListInfo>
+        }
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStockConsInfoResponse(response: StockConsInfoResponse) {
-        if (!transactions.isMyTransaction(response)) return
-        val datas = response.data
-        if(datas.list.isNotEmpty()){
-            viewModel?.infos?.value=datas.list
-        }
+    fun onStockConsStateEventResponse(event: StockConsStateEvent) {
+            view?.showStateInfo(event.state)
     }
+
 }

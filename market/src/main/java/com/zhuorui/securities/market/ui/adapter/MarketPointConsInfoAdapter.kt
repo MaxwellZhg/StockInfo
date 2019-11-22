@@ -55,25 +55,25 @@ class MarketPointConsInfoAdapter : BaseListAdapter<StockConsInfoResponse.ListInf
                 val diffPriceVal = MathUtil.rounded(it).toInt()
                 when {
                     diffPriceVal == 0 -> {
-                        tv_consprice_rate.text="--"
+                        tv_consprice_rate.text=item.diffRate.toString()+"%"
                         tv_consprice_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
-                        tv_newly_price.text="--"
+                        tv_newly_price.text=item.lastPrice.toString()
                         tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
-                        tv_trade_nums.text="--"
+                        tv_trade_nums.text=MathUtil.convertToUnitString(item?.turnover,1)
                     }
                     diffPriceVal > 0 -> {
                         tv_consprice_rate.text=item.diffRate.toString()+"%"
                         tv_consprice_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
                         tv_newly_price.text=item.lastPrice.toString()
                         tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
-                        tv_trade_nums.text="--"
+                        tv_trade_nums.text=MathUtil.convertToUnitString(item?.turnover,1)
                     }
                     else -> {
-                        tv_newly_price.text=item.diffRate.toString()+"%"
-                        tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                        tv_consprice_rate.text=item.diffRate.toString()+"%"
+                        tv_consprice_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
                         tv_newly_price.text=item.lastPrice.toString()
                         tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
-                        tv_trade_nums.text="--"
+                        tv_trade_nums.text=MathUtil.convertToUnitString(item?.turnover,1)
                     }
                 }
             }
