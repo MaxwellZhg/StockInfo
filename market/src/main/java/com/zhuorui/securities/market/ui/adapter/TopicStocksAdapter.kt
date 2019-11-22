@@ -17,6 +17,7 @@ import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockSuspension
 import com.zhuorui.securities.market.model.StockTsEnum
+import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.market.util.MathUtil
 
 /**
@@ -84,9 +85,24 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         lateinit var stock_up_down: ZRStockStatusButton
         @BindView(R2.id.tv_price)
         lateinit var tv_price: ZRStockTextView
+        @BindView(R2.id.diff_mark)
+        lateinit var diff_mark: View
 
         @SuppressLint("SetTextI18n")
         override fun bind(item: StockMarketInfo?, position: Int) {
+            if (item?.pctTag != null) {
+                when (item.pctTag) {
+                    1 -> {
+                        // 闪涨
+                        MarketUtil.showUpDownAnim(null, diff_mark, true)
+                    }
+                    -1 -> {
+                        // 闪跌
+                        MarketUtil.showUpDownAnim(null, diff_mark, false)
+                    }
+                }
+            }
+
             if (item?.longClick != null && item.longClick) {
                 itemView.setBackgroundResource(R.color.color_312E40_85)
             } else {

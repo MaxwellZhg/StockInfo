@@ -105,13 +105,13 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             if (orderData == null) arguments?.getParcelable<SearchStockInfo>(SearchStockInfo::class.java.simpleName) else null
         if (orderData != null) {
             // 设置股票信息
-            val stockInfo = SearchStockInfo()
-            stockInfo.ts = orderData.ts
-            stockInfo.code = orderData.code
-            stockInfo.tsCode = orderData.code + "." + orderData.ts
-            stockInfo.name = orderData.stockName
-            stockInfo.type = 2
-            setStock(stockInfo)
+            val searchStockInfo = SearchStockInfo()
+            searchStockInfo.ts = orderData.ts
+            searchStockInfo.code = orderData.code
+            searchStockInfo.tsCode = orderData.code + "." + orderData.ts
+            searchStockInfo.name = orderData.stockName
+            searchStockInfo.type = 2
+            setStock(searchStockInfo)
 
             // 已持仓
             if (tradType == SimulationTradingStocksFragment.TRAD_TYPE_DEFAULT) {
@@ -399,7 +399,7 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
     fun onGetStockPriceResponse(response: GetStockPriceResponse) {
         val stockInfo = viewModel?.stockInfo?.value ?: return
         val stockPriceDatas = response.data ?: return
-        updatePrice(stockInfo, stockPriceDatas)
+        updatePrice(stockInfo, stockPriceDatas[0])
         // 订阅价格
         stockTopicPrice = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
         SocketClient.getInstance().bindTopic(stockTopicPrice)
@@ -415,34 +415,33 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         updatePrice(stockInfo, stockPriceDatas)
     }
 
-    private fun updatePrice(
-        stockInfo: SearchStockInfo,
-        stockPriceDatas: List<PushStockPriceData>
-    ) {
-        if (stockPriceDatas.isNullOrEmpty()) {
+    private fun updatePrice(stockInfo: SearchStockInfo, pushPriceDatas: PushStockPriceData?) {
+        if (pushPriceDatas == null) {
             return
         }
-        for (sub in stockPriceDatas) {
-            if (stockInfo.ts == sub.ts && stockInfo.code == sub.code) {
-                // 在主线程更新数据
-                val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                    emitter.onNext(true)
-                    emitter.onComplete()
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        viewModel?.price?.value = MathUtil.rounded3(sub.last!!)
-                        // 计算跌涨价格
-                        val diffPrice = MathUtil.rounded3(sub.last!!.subtract(sub.open!!))
-                        viewModel?.diffPrice?.value = diffPrice
-                        // 计算跌涨幅百分比
-                        viewModel?.diffRate?.value =
-                            MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), sub.open!!)
-                        // 更新界面
-                        view?.updateStockPrice(sub.last, diffPrice, viewModel?.diffRate?.value, sub.pctTag)
-                    }
-                disposables.add(disposable)
-                break
-            }
+        if (stockInfo.ts == pushPriceDatas.ts && stockInfo.code == pushPriceDatas.code) {
+            // 在主线程更新数据
+            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                emitter.onNext(true)
+                emitter.onComplete()
+            }).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    viewModel?.price?.value = MathUtil.rounded3(pushPriceDatas.last!!)
+                    // 计算跌涨价格
+                    val diffPrice = MathUtil.rounded3(pushPriceDatas.last!!.subtract(pushPriceDatas.open!!))
+                    viewModel?.diffPrice?.value = diffPrice
+                    // 计算跌涨幅百分比
+                    viewModel?.diffRate?.value =
+                        MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), pushPriceDatas.open!!)
+                    // 更新界面
+                    view?.updateStockPrice(
+                        pushPriceDatas.last,
+                        diffPrice,
+                        viewModel?.diffRate?.value,
+                        pushPriceDatas.pctTag
+                    )
+                }
+            disposables.add(disposable)
         }
     }
 

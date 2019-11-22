@@ -32,7 +32,7 @@ object SocketApi {
     const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
 
     const val GET_STOCK_PRICE = "stock.price.getStockPrice"// 查询股票价格数据
-    const val PUSH_STOCK_PRICE = "push.stock.last" // 推送股票价格
+    const val PUSH_STOCK_PRICE = "push.stock.price" // 推送股票价格
 
     const val GET_STOCK_TRADE = "trade.getToday"// 查询逐笔成交数据
     const val PUSH_STOCK_TRADE = "push.stock.trade" // 推送逐笔成交数据
