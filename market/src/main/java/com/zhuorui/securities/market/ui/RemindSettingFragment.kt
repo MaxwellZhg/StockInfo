@@ -77,10 +77,10 @@ class RemindSettingFragment :
         super.onLazyInitView(savedInstanceState)
         stockInfo = arguments?.getParcelable(StockMarketInfo::class.java.simpleName)
         presenter?.checkSetting().let {
-            if(it!!){
-                rl_notice.visibility=View.GONE
-            }else{
-                rl_notice.visibility=View.VISIBLE
+            if (it!!) {
+                rl_notice.visibility = View.GONE
+            } else {
+                rl_notice.visibility = View.VISIBLE
             }
         }
 
@@ -100,25 +100,35 @@ class RemindSettingFragment :
         }
 
         textView2.text = stockInfo?.code
-        // 跌涨幅是否大于0或者等于0
-        val diffPriceVal = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()
-        if (diffPriceVal == 0 || diffPriceVal > 0) {
-            tv_price.setText(if (stockInfo?.last == null) "0.00" else stockInfo?.last.toString(), diffPriceVal)
-            tv_diff_price_count.setText(
-                if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),
-                diffPriceVal
-            )
-            tv_diff_rate_count.setText(
-                if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate.toString(),
-                diffPriceVal
-            )
-        } else {
-            tv_price.setText(if (stockInfo?.last == null) "0.00" else stockInfo?.last.toString(), 2)
-            tv_diff_price_count.setText(
-                if (stockInfo?.diffPrice == null) "0.00" else stockInfo?.diffPrice.toString(),
-                2
-            )
-            tv_diff_rate_count.setText(if (stockInfo?.diffRate == null) "0.00" else stockInfo?.diffRate.toString(), 2)
+        val diffRate = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()
+        when {
+            diffRate == 0 -> {
+                tv_price.setText(if (stockInfo?.last == null) "--" else stockInfo?.last.toString(), 0)
+                tv_diff_price_count.setText(
+                    if (stockInfo?.diffPrice == null) "--" else stockInfo?.diffPrice.toString(),
+                    0
+                )
+                tv_diff_rate_count.setText(if (stockInfo?.diffRate == null) "--" else stockInfo?.diffRate.toString(), 0)
+            }
+            diffRate > 0 -> {
+                tv_price.setText(if (stockInfo?.last == null) "--" else stockInfo?.last.toString(), 1)
+                tv_diff_price_count.setText(
+                    if (stockInfo?.diffPrice == null) "--" else stockInfo?.diffPrice.toString(),
+                    1
+                )
+                tv_diff_rate_count.setText(if (stockInfo?.diffRate == null) "--" else stockInfo?.diffRate.toString(), 1)
+            }
+            else -> {
+                tv_price.setText(if (stockInfo?.last == null) "--" else stockInfo?.last.toString(), -1)
+                tv_diff_price_count.setText(
+                    if (stockInfo?.diffPrice == null) "--" else stockInfo?.diffPrice.toString(),
+                    -1
+                )
+                tv_diff_rate_count.setText(
+                    if (stockInfo?.diffRate == null) "--" else stockInfo?.diffRate.toString(),
+                    -1
+                )
+            }
         }
         et_up_price.addTextChangedListener(this)
         et_down_price.addTextChangedListener(this)
@@ -183,10 +193,11 @@ class RemindSettingFragment :
                         et_down_price,
                         iv_down_price,
                         et_down_price.text.toString(),
-                        tv_down_nomatch_tips)
+                        tv_down_nomatch_tips
+                    )
                 }
                 et_up_rate.isFocused -> {
-                    showCancleDrawable(et_up_rate, iv_up_rate,  et_up_rate.text.toString(), tv_uprate_nomatch_tips)
+                    showCancleDrawable(et_up_rate, iv_up_rate, et_up_rate.text.toString(), tv_uprate_nomatch_tips)
                 }
                 else -> {
                     showCancleDrawable(
@@ -275,7 +286,7 @@ class RemindSettingFragment :
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_price.setTextColor(it) }
-                    tv.text=ResUtil.getString(R.string.up_setting_tips)
+                    tv.text = ResUtil.getString(R.string.up_setting_tips)
                 } else {
                     tv.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
@@ -300,7 +311,7 @@ class RemindSettingFragment :
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_price.setTextColor(it) }
-                    tv.text=ResUtil.getString(R.string.down_setting_tips)
+                    tv.text = ResUtil.getString(R.string.down_setting_tips)
                 } else {
                     tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
@@ -325,14 +336,14 @@ class RemindSettingFragment :
                 //用正则式匹配文本获取匹配器
                 val matcher = Pattern.compile(pattern).matcher(str)
                 if (!matcher.find()) {
-                   tv.visibility = View.VISIBLE
+                    tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_up_rate.setTextColor(it) }
-                    tv.text=ResUtil.getString(R.string.up_rate_tips)
+                    tv.text = ResUtil.getString(R.string.up_rate_tips)
                 } else {
-                   tv.visibility = View.VISIBLE
+                    tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
@@ -353,7 +364,7 @@ class RemindSettingFragment :
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     ResUtil.getColor(R.color.color_FF0000)?.let { et_down_rate.setTextColor(it) }
-                    tv.text=ResUtil.getString(R.string.down_rate_tips)
+                    tv.text = ResUtil.getString(R.string.down_rate_tips)
 
                 } else {
                     tv.visibility = View.VISIBLE
@@ -374,7 +385,7 @@ class RemindSettingFragment :
         iv.setImageResource(R.mipmap.ic_switch_close)
         edittext.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         tv.visibility = View.INVISIBLE
-       // tips.visibility = View.INVISIBLE
+        // tips.visibility = View.INVISIBLE
         when (edittext) {
             et_up_price -> {
                 upPrice = false

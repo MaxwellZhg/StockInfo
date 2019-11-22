@@ -13,7 +13,7 @@ class StockTradeDetailData(
     val name: String,// 股票名称
     val diffPreMark: Int,// 0-等于昨收   1-高出昨收  -1-低于昨收
     val tradeMode: Int,// 0-中性盘  1-主动买入  2-主动卖出
-    val time: String,// 成交时间 格式为：yyyyMMddHHmmssSSS
+    val time: Long,// 成交时间
     val price: BigDecimal,// 成交价格
     val qty: BigDecimal,// 成交量
     val cancelflag: String, // N-未撤单  Y-已撤单

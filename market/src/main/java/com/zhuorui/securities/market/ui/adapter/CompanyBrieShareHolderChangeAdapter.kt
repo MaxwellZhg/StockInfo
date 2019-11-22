@@ -57,9 +57,9 @@ class CompanyBrieShareHolderChangeAdapter : BaseListAdapter<F10ShareHolderModel>
                 }
             } else {
                 if (item?.changeNumber == null) {
-                    changeNumberText.setText(ResUtil.getString(R.string.hareholder_change_sub), 2)
+                    changeNumberText.setText(ResUtil.getString(R.string.hareholder_change_sub), -1)
                 } else {
-                    changeNumberText.setText("-" + MathUtil.convertToUnitString(item.changeNumber, 1), 2)
+                    changeNumberText.setText("-" + MathUtil.convertToUnitString(item.changeNumber, 1), -1)
                 }
             }
             item?.holdStockNumber?.let {

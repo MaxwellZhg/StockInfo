@@ -6,9 +6,9 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.kline.BaseChart
-import com.zhuorui.securities.market.customer.view.kline.markerView.KLineDayHighlightView
 import com.zhuorui.securities.market.customer.view.kline.dataManage.KLineDataManage
 import com.zhuorui.securities.market.customer.view.kline.dataManage.TimeDataManage
+import com.zhuorui.securities.market.customer.view.kline.markerView.KLineDayHighlightView
 import com.zhuorui.securities.market.customer.view.kline.model.TimeDataModel
 import com.zhuorui.securities.market.databinding.FragmentOneDayBinding
 import com.zhuorui.securities.market.socket.vo.kline.MinuteKlineData
@@ -16,8 +16,6 @@ import com.zhuorui.securities.market.ui.kline.presenter.ChartOneDayPresenter
 import com.zhuorui.securities.market.ui.kline.view.OneDayKlineView
 import com.zhuorui.securities.market.ui.kline.viewmodel.OneDayKlineViewModel
 import kotlinx.android.synthetic.main.fragment_one_day.*
-import org.json.JSONException
-import org.json.JSONObject
 
 /**
  * 分时K线
@@ -74,16 +72,15 @@ open class ChartOneDayFragment :
         chart!!.initChart(model)
         chart.setHighlightValueSelectedListener(this)
         presenter?.init(ts, code, tsCode, type)
-
-        //测试数据
-        try {
-            //上证指数代码000001.IDX.SH
-            val kTimeData = TimeDataManage()
-            kTimeData.parseTimeData(JSONObject(ChartData.TIMEDATA), "000001.IDX.SH", 0.0)
-            chart.setDataToChart(kTimeData)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+//        //测试数据
+//        try {
+//            //上证指数代码000001.IDX.SH
+//            val kTimeData = TimeDataManage()
+//            kTimeData.parseTimeData(JSONObject(ChartData.TIMEDATA), "000001.IDX.SH", 0.0)
+//            chart.setDataToChart(kTimeData)
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
     }
 
     override fun setDataToChart(timeDataManage: TimeDataManage?) {
@@ -91,23 +88,23 @@ open class ChartOneDayFragment :
     }
 
     override fun dynamicsUpdateOne(data: MinuteKlineData) {
-        val timeData = TimeDataModel()
-        timeData.nowPrice = data.price
-        timeData.averagePrice = data.avgPrice
-        timeData.volume = data.vol.toInt()
-        timeData.timeMills = data.dateTime
-        timeData.open = data.openPrice
-        chart.dynamicsUpdateOne(timeData)
+//        val timeData = TimeDataModel()
+//        timeData.nowPrice = data.price
+//        timeData.averagePrice = data.avgPrice
+//        timeData.volume = data.vol.toInt()
+//        timeData.timeMills = data.dateTime
+//        timeData.open = data.openPrice
+//        chart.dynamicsUpdateOne(timeData)
     }
 
     override fun dynamicsAddOne(data: MinuteKlineData) {
-        val timeData = TimeDataModel()
-        timeData.nowPrice = data.price
-        timeData.averagePrice = data.avgPrice
-        timeData.volume = data.vol.toInt()
-        timeData.timeMills = data.dateTime
-        timeData.open = data.openPrice
-        chart.dynamicsAddOne(timeData)
+//        val timeData = TimeDataModel()
+//        timeData.nowPrice = data.price
+//        timeData.averagePrice = data.avgPrice
+//        timeData.volume = data.vol.toInt()
+//        timeData.timeMills = data.dateTime
+//        timeData.open = data.openPrice
+//        chart.dynamicsAddOne(timeData)
     }
 
     override fun onDayHighlightValueListener(mData: TimeDataManage?, index: Int, isSelect: Boolean) {

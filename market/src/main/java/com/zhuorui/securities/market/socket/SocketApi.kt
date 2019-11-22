@@ -24,15 +24,15 @@ object SocketApi {
     const val PUSH_STOCK_INFO = "push.stock.info" //  推送股票行情
     const val PUSH_STOCK_KLINE = "push.stock.kline" // 推送股票K线
 
-    const val GET_KLINE_FIVE_DAY = "kline.getFiveDay" // 获取五日K
-    const val GET_KLINE_GET_DAILY = "kline.getDaily" // 获取日K
-    const val GET_KLINE_MINUTE = "kline.getMinute" // 获取分时
+    const val GET_KLINE_FIVE_DAY = "stock.kline.getFiveDay" // 获取五日K
+    const val GET_KLINE_GET_DAILY = "stock.kline.getDay" // 获取日K
+    const val GET_KLINE_MINUTE = "stock.kline.getMinute" // 获取分时
 
     const val PUSH_STOCK_KLINE_COMPENSATION_DATA = "push.stock.compensationData.kline" // 推送股票K线补偿数据
     const val PUSH_STOCK_TRANS = "push.stock.trans" // 推送股票盘口
 
     const val GET_STOCK_PRICE = "stock.price.getStockPrice"// 查询股票价格数据
-    const val PUSH_STOCK_PRICE = "push.stock.last" // 推送股票价格
+    const val PUSH_STOCK_PRICE = "push.stock.price" // 推送股票价格
 
     const val GET_STOCK_TRADE = "trade.getToday"// 查询逐笔成交数据
     const val PUSH_STOCK_TRADE = "push.stock.trade" // 推送逐笔成交数据
@@ -51,4 +51,9 @@ object SocketApi {
 
     const val GET_INDEX_HANDICAP  ="handicap.getIndexHandicap"//查询指数盘口数据
     const val PUSH_STOCK_INDEXHANDICAP ="push.stock.indexhandicap" //推送指数盘口数据
+    const val GET_CAPITAL = "capital.getCapital" //查询资金统计数据
+    const val PUSH_STOCK_CAPITAL = "push.stock.capital" //服务器推送资金统计数据
+
+    const val GET_INDEX_HANDICAP = "handicap.getIndexHandicap" // 查询指数盘口数据
+    const val PUSH_INDEX_HANDICAP = "push.stock.indexhandicap" // 推送指数盘口数据
 }

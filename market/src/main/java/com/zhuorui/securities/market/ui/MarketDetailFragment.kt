@@ -92,21 +92,16 @@ class MarketDetailFragment :
     override val getView: MarketDetailView
         get() = this
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         mStock = arguments?.getParcelable(SearchStockInfo::class.java.simpleName)!!
         tabTitle = ResUtil.getStringArray(R.array.stock_detail_tab)
         mBMP = MarketUtil.isBMP(mStock?.ts)
-    }
-
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
         initView()
         top_bar.setStockInfo(mStock.ts, mStock.name, mStock.code)
         presenter?.setStockInfo(mStock.ts!!, mStock.code!!, mStock.type!!)
         presenter?.getTopBarStockStatusInfo()
         presenter?.setLifecycleOwner(this)
-
         toggleScreenOrientation(true)
         lazyInit = true
     }
@@ -228,6 +223,11 @@ class MarketDetailFragment :
     private fun getData() {
         //加载数据
         presenter?.getData(mBMP)
+        //资金加载数据
+        val fragment = mFragments[0]
+        if (fragment != null) {
+            (fragment as MarketDetailCapitalFragment).getData()
+        }
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
@@ -291,14 +291,17 @@ class MarketDetailFragment :
     /**
      * 更新买卖盘档数据
      */
-    override fun upBuyingSellingFilesData(asklist: List<OrderData.AskBidModel>?, bidlist: List<OrderData.AskBidModel>?) {
+    override fun upBuyingSellingFilesData(
+        asklist: List<OrderData.AskBidModel>?,
+        bidlist: List<OrderData.AskBidModel>?
+    ) {
         buyingSellingFiles.setData(asklist, bidlist)
     }
 
     /**
      * 更新买卖经纪数据
      */
-    override fun upOrderBrokerData(buyData: MutableList<OrderBrokerModel>, sellData: MutableList<OrderBrokerModel>) {
+    override fun upOrderBrokerData(buyData: List<OrderBrokerModel>?, sellData: List<OrderBrokerModel>?) {
         orderBroker.setData(buyData, sellData)
     }
 
@@ -318,7 +321,7 @@ class MarketDetailFragment :
     private fun initTabFragment() {
         val firstFragment = findChildFragment(MarketDetailCapitalFragment::class.java)
         if (firstFragment == null) {
-            mFragments[0] = MarketDetailCapitalFragment.newInstance()
+            mFragments[0] = MarketDetailCapitalFragment.newInstance(mStock.ts.toString(),mStock.code.toString())
             mFragments[1] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[2] = mStock?.code?.let { MarketDetailInformationFragment.newInstance(it) }
             mFragments[3] = mStock?.code?.let { MarketDetailNoticeFragment.newInstance(it) }

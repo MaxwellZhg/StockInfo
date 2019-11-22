@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.socket;
 
 import android.annotation.SuppressLint;
+import android.util.TypedValue;
 import com.zhuorui.securities.base2app.infra.LogInfra;
 import com.zhuorui.securities.base2app.rxbus.RxBus;
 import com.zhuorui.securities.base2app.util.DeviceUtil;
@@ -123,11 +124,9 @@ public class SocketClient {
                                     }
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
-                                    // TODO 盘口
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTransResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_PRICE:
-                                    // TODO 股价
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicPriceResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_TRADE:
@@ -148,6 +147,12 @@ public class SocketClient {
                                     //推送指数盘口
                                 case SocketApi.PUSH_STOCK_INDEXHANDICAP:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StockTopicIndexHandicapResponse.class));
+                                    break;
+                                case SocketApi.PUSH_INDEX_HANDICAP:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
+                                    break;
+                                case SocketApi.PUSH_STOCK_CAPITAL:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicCapitalResponse.class));
                                     break;
                             }
                         } else {
@@ -198,6 +203,12 @@ public class SocketClient {
                                         //获取指数盘口
                                     case SocketApi.GET_INDEX_HANDICAP:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexPonitInfoResponse.class));
+                                        break;
+                                    case SocketApi.GET_CAPITAL:
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetCapitalResponse.class));
+                                    case SocketApi.GET_INDEX_HANDICAP:
+
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexHandicapResponse.class));
                                         break;
                                 }
 

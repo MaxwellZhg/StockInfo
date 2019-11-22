@@ -293,14 +293,12 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
         if (stocksInfo.isNullOrEmpty()) return
-        val prices: List<PushStockPriceData> = response.body
+        val pushStockPriceData = response.body
         var change = false
-        for (price in prices) {
-            val tsCode = price.code + "." + price.ts
-            if (stocksInfo.containsKey(tsCode)) {
-                stocksInfo[tsCode] = price
-                change = true
-            }
+        val tsCode = pushStockPriceData.code + "." + pushStockPriceData.ts
+        if (stocksInfo.containsKey(tsCode)) {
+            stocksInfo[tsCode] = pushStockPriceData
+            change = true
         }
         if (change) {
             calculation()
@@ -317,7 +315,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
             for (data in positionDatas!!) {
                 val stockInfo = stocksInfo[data.getTsCode()]
                 val presentPrice = stockInfo?.last ?: data.currentPrice ?: BigDecimal(0)
-                val holdStockCount = data.holdStockCount?:BigDecimal(0)
+                val holdStockCount = data.holdStockCount ?: BigDecimal(0)
                 val holeCost = data.holdCost ?: BigDecimal(0)
                 data.currentPrice = presentPrice
                 //持仓市值=现价*持仓数
@@ -327,7 +325,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
                 val profitAndLoss = MathUtil.subtract3(MathUtil.multiply3(presentPrice, holdStockCount), holeCost)
                 data.profitAndLoss = profitAndLoss
                 //持仓盈亏比例=盈亏金额/成本
-                data.profitAndLossPercentage = MathUtil.divide(profitAndLoss, holeCost,4)
+                data.profitAndLossPercentage = MathUtil.divide(profitAndLoss, holeCost, 4)
                 totalMarketValue = MathUtil.add3(marketValue, totalMarketValue)
                 //总盈亏 -- 累计持仓盈亏金额
                 totalProfitAndLoss = MathUtil.add3(profitAndLoss, totalProfitAndLoss)
@@ -343,7 +341,7 @@ class SimulationTradingMainPresenter : AbsNetPresenter<SimulationTradingMainView
         todayProfitAndLoss = MathUtil.subtract3(todayProfitAndLoss, todayProfitAndLossData.todayBuyAmount)
         //当日盈亏百分比=盈亏金额/(当日盈亏金额绝对值+账户总资产）
         val d = MathUtil.add3(todayProfitAndLoss.abs(), totalAssets)
-        val todayProfitAndLossPercentage = MathUtil.divide(todayProfitAndLoss,d,6)
+        val todayProfitAndLossPercentage = MathUtil.divide(todayProfitAndLoss, d, 6)
         val fundAccount = STFundAccountData(accountId, availableFunds)
         fundAccount.marketValue = totalMarketValue
         fundAccount.totalAssets = totalAssets

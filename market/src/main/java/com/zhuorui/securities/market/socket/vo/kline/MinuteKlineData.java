@@ -1,145 +1,70 @@
 package com.zhuorui.securities.market.socket.vo.kline;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Generated;
-
 /**
  * 分时数据基础对象
  */
-@Entity
 public class MinuteKlineData {
-
-    @Id(autoincrement = true)
-    private Long id;
 
     /**
      * 交易量
      */
-    private double vol;
+    public double sharestraded;
 
     /**
-     * 交易金额
+     * 成交额
      */
-    private double amount;
-
-    /**
-     * 开盘价格
-     */
-    private double openPrice;
+    public double turnover;
 
     /**
      * 均价
      */
-    private double avgPrice;
+    public double vwap;
 
     /**
-     * 当前价格
+     * 行情时间
      */
-    private double price;
+    public long time;
 
     /**
-     * 今日最高价
+     * 不复权
      */
-    private double high;
+    public Adj adj;
 
     /**
-     * 今日最低价
+     * 前复权
      */
-    private double low;
+    public Adj beforeAdj;
 
     /**
-     * 日期时间
+     * 后复权
      */
-    private long dateTime;
+    public Adj afterAdj;
 
-    @Generated(hash = 1878482173)
-    public MinuteKlineData(Long id, double vol, double amount, double openPrice,
-            double avgPrice, double price, double high, double low, long dateTime) {
-        this.id = id;
-        this.vol = vol;
-        this.amount = amount;
-        this.openPrice = openPrice;
-        this.avgPrice = avgPrice;
-        this.price = price;
-        this.high = high;
-        this.low = low;
-        this.dateTime = dateTime;
-    }
+    public class Adj {
 
-    @Generated(hash = 1842260906)
-    public MinuteKlineData() {
-    }
+        /**
+         * 开盘价
+         */
+        public double open;
 
-    public Long getId() {
-        return id;
-    }
+        /**
+         * 收盘价
+         */
+        public double close;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+        /**
+         * 最高价
+         */
+        public double high;
 
-    public double getVol() {
-        return vol;
-    }
+        /**
+         * 最低价
+         */
+        public double low;
 
-    public void setVol(double vol) {
-        this.vol = vol;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public double getOpenPrice() {
-        return openPrice;
-    }
-
-    public void setOpenPrice(double openPrice) {
-        this.openPrice = openPrice;
-    }
-
-    public double getAvgPrice() {
-        return avgPrice;
-    }
-
-    public void setAvgPrice(double avgPrice) {
-        this.avgPrice = avgPrice;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getHigh() {
-        return high;
-    }
-
-    public void setHigh(double high) {
-        this.high = high;
-    }
-
-    public double getLow() {
-        return low;
-    }
-
-    public void setLow(double low) {
-        this.low = low;
-    }
-
-    public long getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(long dateTime) {
-        this.dateTime = dateTime;
+        /**
+         * 上根K线收盘价
+         */
+        public double preClose;
     }
 }

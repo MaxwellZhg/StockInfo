@@ -46,7 +46,7 @@ interface MarketDetailView : AbsView {
     /**
      * 更新买卖经纪数据
      */
-    fun upOrderBrokerData(buyData: MutableList<OrderBrokerModel>, sellData: MutableList<OrderBrokerModel>)
+    fun upOrderBrokerData(buyData: List<OrderBrokerModel>?, sellData: List<OrderBrokerModel>?)
 
     /**
      * 更新关注状态

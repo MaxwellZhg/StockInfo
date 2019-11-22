@@ -5,8 +5,8 @@ package com.zhuorui.securities.market.socket.response
  *    author : liuwei
  *    e-mail :
  *    date   :
- *    desc   : 查询股票盘口数据
+ *    desc   : 查询资金统计数据
  */
-class GetStockHandicapResponse : SocketResponse() {
+class GetCapitalResponse : SocketResponse() {
     var data: String? = null
 }
