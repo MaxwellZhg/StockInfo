@@ -123,11 +123,9 @@ public class SocketClient {
                                     }
                                     break;
                                 case SocketApi.PUSH_STOCK_TRANS:
-                                    // TODO 盘口
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTransResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_PRICE:
-                                    // TODO 股价
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicPriceResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_TRADE:
@@ -143,6 +141,9 @@ public class SocketClient {
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicOrderBrokerResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_HANDICAP:
+                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
+                                    break;
+                                case SocketApi.PUSH_INDEX_HANDICAP:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
                                     break;
                                 case SocketApi.PUSH_STOCK_CAPITAL:
@@ -196,6 +197,8 @@ public class SocketClient {
                                         break;
                                     case SocketApi.GET_CAPITAL:
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, GetCapitalResponse.class));
+                                    case SocketApi.GET_INDEX_HANDICAP:
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, GetIndexHandicapResponse.class));
                                         break;
                                 }
 

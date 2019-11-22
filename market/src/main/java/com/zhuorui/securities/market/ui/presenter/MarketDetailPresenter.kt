@@ -31,7 +31,7 @@ import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicOrderBrokerResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicOrderResponse
-import com.zhuorui.securities.market.socket.request.GetStockRequestBody
+import com.zhuorui.securities.market.socket.request.GetStockDataByTsCodeRequestBody
 import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderBrokerResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderResponse
@@ -100,7 +100,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     private fun getStockData() {
         getStockHandicapReqId =
-            SocketClient.getInstance().postRequest(GetStockRequestBody(mTs, mCode), SocketApi.GET_STOCK_HANDICAP)
+            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_HANDICAP)
         android.os.Handler().postDelayed({ viewModel?.mStockHandicapData?.value = null }, 2000)
 
     }
@@ -110,7 +110,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     private fun getOrderBrokerData() {
         getStockOrderBrokerReqId = SocketClient.getInstance()
-            .postRequest(GetStockRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER_BROKER)
+            .postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER_BROKER)
         val datas2 = mutableListOf<OrderBrokerModel>()
         for (i: Int in 1..30) {
             datas2.add(OrderBrokerModel(i.toString(), "item$i"))
@@ -124,7 +124,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     private fun getBuyingSellingFilesData() {
         getStockOrderReqId =
-            SocketClient.getInstance().postRequest(GetStockRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER)
+            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER)
         val datas = mutableListOf<OrderData.AskBidModel>()
         for (i: Int in 1..10) {
             datas.add(OrderData.AskBidModel(i.toString(), i.toString(), i.toString()))

@@ -4,16 +4,13 @@ import android.text.TextUtils
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.market.model.OrderBrokerModel
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicCapitalResponse
-import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
-import com.zhuorui.securities.market.socket.request.GetStockRequestBody
+import com.zhuorui.securities.market.socket.request.GetStockDataByTsCodeRequestBody
 import com.zhuorui.securities.market.socket.response.GetCapitalResponse
-import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
 import com.zhuorui.securities.market.socket.vo.CapitalData
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
@@ -39,7 +36,7 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     fun getData(ts: String, code: String) {
         mTs = ts
         mCode = code
-        getCapitalReqId = SocketClient.getInstance().postRequest(GetStockRequestBody(ts, code), SocketApi.GET_CAPITAL)
+        getCapitalReqId = SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_CAPITAL)
         mBmp = MarketUtil.isBMP(mTs)
         if (stockTopic != null && mBmp) {
             SocketClient.getInstance().unBindTopic(stockTopic)

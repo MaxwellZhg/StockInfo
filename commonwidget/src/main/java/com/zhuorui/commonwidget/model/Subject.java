@@ -1,16 +1,11 @@
 package com.zhuorui.commonwidget.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 观察者模式：目标对象模板
  *
  * @author PengXianglin
  */
 public interface Subject<T> {
-    // 存储订阅者
-    List<Observer> list = new ArrayList<>();
 
     // 注册订阅者
     void registerObserver(T obs);

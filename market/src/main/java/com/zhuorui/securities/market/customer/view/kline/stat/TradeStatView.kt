@@ -8,19 +8,11 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.zhuorui.securities.base2app.rxbus.EventThread
-import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.rxbus.RxSubscribe
+import com.zhuorui.commonwidget.model.Observer
+import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
-import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
-import com.zhuorui.securities.market.model.StockTopic
-import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.socket.push.StocksTopicTradeStaResponse
-import com.zhuorui.securities.market.socket.vo.StockTradeStaData
-import com.zhuorui.securities.market.util.MathUtil
-import java.math.RoundingMode
-import kotlin.random.Random
+import com.zhuorui.securities.market.manager.StockTradeStaDataManager
 
 /**
  * author : PengXianglin
@@ -30,60 +22,25 @@ import kotlin.random.Random
  */
 @SuppressLint("ViewConstructor")
 class TradeStatView(context: Context, val ts: String, val code: String, val type: Int) :
-    LinearLayout(context) {
+    LinearLayout(context), Observer {
+
 
     private var recyclerView: RecyclerView? = null
-    private var stockTopic: StockTopic? = null
+    private var adapter: TradeStatViewAdapter? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_stock_trade_detail, this, true)
-
-        RxBus.getDefault().register(this)
-
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.addItemDecoration(LinearSpacingItemDecoration())
-        val adapter = TradeStatViewAdapter()
-        // TODO 测试数据
-        val list = ArrayList<StockTradeStaData>()
-        // 最大百分比
-        var maxPercent = 0.00
-        for (index in 0..19) {
-            var diffPreMark = 0
-            if (index != 0) {
-                diffPreMark = if (index > 10) {
-                    1
-                } else {
-                    -1
-                }
-            }
-            val item = StockTradeStaData()
-            item.diffPreMark = diffPreMark
-            item.price = Random.nextDouble(1.000, 100.000).toBigDecimal()
-
-            item.todayBuyQty = Random.nextInt(100, 100000).toBigDecimal()
-            item.todaySellQty = Random.nextInt(100, 100000 - item.todayBuyQty!!.toInt()).toBigDecimal()
-            item.todayUnchangeQty =
-                Random.nextInt(100, 100000 - item.todayBuyQty!!.toInt() - item.todaySellQty!!.toInt()).toBigDecimal()
-
-            item.todayQty = Random.nextInt(100, 100000).toBigDecimal()
-            item.todayTotalQty = 1000000.toBigDecimal()
-
-            // 该价总成交百分比=该价当天成交量/该股票当天总成交量
-            maxPercent = MathUtil.multiply2(
-                item.todayQty?.divide(item.todayTotalQty, 4, RoundingMode.DOWN)!!,
-                100.toBigDecimal()
-            ).toDouble().coerceAtLeast(maxPercent)
-
-            list.add(item)
-        }
-        adapter.maxPercent = maxPercent.toBigDecimal()
-        adapter.items = list
+        adapter = TradeStatViewAdapter()
         recyclerView?.adapter = adapter
 
-        //  // 发起订阅
-//          stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_TRADE_STA, ts, code, type)
-        //  SocketClient.getInstance().bindTopic(stockTopic)
+        val manager = StockTradeStaDataManager.getInstance(ts, code, type)
+        // 从缓存中取数据
+        adapter?.items = manager.tradeDatas
+        // 添加监听
+        manager.registerObserver(this)
     }
 
     inner class LinearSpacingItemDecoration : RecyclerView.ItemDecoration() {
@@ -100,38 +57,58 @@ class TradeStatView(context: Context, val ts: String, val code: String, val type
         }
     }
 
-    /**
-     * 订阅自选股逐笔成交数据推送回调
-     */
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onStocksTopicTradeStaResponse(response: StocksTopicTradeStaResponse) {
-        if (response.body != null && recyclerView?.adapter != null) {
-            val adapter = (recyclerView?.adapter as TradeStatViewAdapter)
-            if (adapter.items.isNullOrEmpty()) {
-                val items = ArrayList<StockTradeStaData>()
-                adapter.items = items
+    override fun update(subject: Subject<*>?) {
+        if (subject is StockTradeStaDataManager) {
+            adapter?.maxPercent = subject.maxPercent
+            if (adapter?.items.isNullOrEmpty()) {
+                adapter?.items = subject.tradeDatas
             } else {
-                adapter.addItem(response.body)
+                adapter?.notifyDataSetChanged()
             }
-        }
-    }
-
-    @RxSubscribe(observeOnThread = EventThread.NEW)
-    fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
-        // 恢复订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().bindTopic(stockTopic)
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        if (RxBus.getDefault().isRegistered(this)) {
-            RxBus.getDefault().unregister(this)
-        }
-        // 取消订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().unBindTopic(stockTopic)
-        }
+        // 删除监听
+        StockTradeStaDataManager.getInstance(ts, code, type).removeObserver(this)
     }
+
+//    private fun testData(){
+//        // TODO 测试数据
+//        val list = ArrayList<StockTradeStaData>()
+//        // 最大百分比
+//        var maxPercent = 0.00
+//        for (index in 0..19) {
+//            var diffPreMark = 0
+//            if (index != 0) {
+//                diffPreMark = if (index > 10) {
+//                    1
+//                } else {
+//                    -1
+//                }
+//            }
+//            val item = StockTradeStaData()
+//            item.diffPreMark = diffPreMark
+//            item.price = Random.nextDouble(1.000, 100.000).toBigDecimal()
+//
+//            item.todayBuyQty = Random.nextInt(100, 100000).toBigDecimal()
+//            item.todaySellQty = Random.nextInt(100, 100000 - item.todayBuyQty!!.toInt()).toBigDecimal()
+//            item.todayUnchangeQty =
+//                Random.nextInt(100, 100000 - item.todayBuyQty!!.toInt() - item.todaySellQty!!.toInt()).toBigDecimal()
+//
+//            item.todayQty = Random.nextInt(100, 100000).toBigDecimal()
+//            item.todayTotalQty = 1000000.toBigDecimal()
+//
+//            // 该价总成交百分比=该价当天成交量/该股票当天总成交量
+//            maxPercent = MathUtil.multiply2(
+//                item.todayQty?.divide(item.todayTotalQty, 4, RoundingMode.DOWN)!!,
+//                100.toBigDecimal()
+//            ).toDouble().coerceAtLeast(maxPercent)
+//
+//            list.add(item)
+//        }
+//        adapter.maxPercent = maxPercent.toBigDecimal()
+//        adapter.items = list
+//    }
 }

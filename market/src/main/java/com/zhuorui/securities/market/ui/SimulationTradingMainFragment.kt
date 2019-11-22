@@ -120,9 +120,6 @@ class SimulationTradingMainFragment :
                 return false
             }
         }
-        //解决数据加载不完的问题
-        recycler_view.isNestedScrollingEnabled = false
-        recycler_view.setHasFixedSize(true)
         //解决数据加载完成后, 没有停留在顶部的问题
         recycler_view.isFocusable = false
         tabTitle = getTabTitleData()

@@ -11,4 +11,5 @@ import com.zhuorui.securities.market.net.response.StockConsInfoResponse
  */
 interface MarketStockConsView :AbsView{
     fun addInfoToAdapter(list: List<StockConsInfoResponse.ListInfo>)
+    fun showStateInfo(state:Int)
 }

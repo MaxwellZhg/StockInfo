@@ -1,6 +1,6 @@
 package com.zhuorui.securities.market.socket.response
 
-import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
+import com.zhuorui.securities.market.socket.vo.StockTradeStaData
 
 /**
  *    author : PengXianglin
@@ -9,5 +9,5 @@ import com.zhuorui.securities.market.socket.vo.StockTradeDetailData
  *    desc   : 查询逐笔成交统计数据
  */
 class GetStockTradeStaResponse : SocketResponse() {
-    var data: List<StockTradeDetailData>? = null
+    var data: MutableList<StockTradeStaData>? = null
 }

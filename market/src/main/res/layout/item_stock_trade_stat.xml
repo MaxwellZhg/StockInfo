@@ -4,6 +4,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="12dp">
 
+    <View android:id="@+id/diff_mark"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
     <com.zhuorui.commonwidget.ZRStockTextView
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"

@@ -178,22 +178,21 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
     fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
         val datas = viewModel?.datas?.value
         if (datas.isNullOrEmpty()) return
-        val stockPriceDatas = response.body
+        val pushPriceDatas = response.body
         for (index in datas.indices) {
             val item = datas[index]
-            for (sub in stockPriceDatas) {
-                if (item.ts == sub.ts && item.code == sub.code) {
-                    // 更新数据
-                    val item = datas[index]
-                    item.last = sub.last!!
-                    item.diffPrice = sub.last!!.subtract(sub.open)
-                    item.diffRate = MathUtil.divide2(
-                        item.diffPrice!!.multiply(BigDecimal.valueOf(100)),
-                        sub.open!!
-                    )
-                    view?.notifyItemChanged(index)
-                    break
-                }
+            if (item.ts == pushPriceDatas.ts && item.code == pushPriceDatas.code) {
+                // 更新数据
+                val item = datas[index]
+                item.last = pushPriceDatas.last!!
+                item.diffPrice = pushPriceDatas.last!!.subtract(pushPriceDatas.open)
+                item.diffRate = MathUtil.divide2(
+                    item.diffPrice!!.multiply(BigDecimal.valueOf(100)),
+                    pushPriceDatas.open!!
+                )
+                item.pctTag = pushPriceDatas.pctTag
+                view?.notifyItemChanged(index)
+                break
             }
         }
         // 保存本地数据

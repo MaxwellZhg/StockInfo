@@ -1,9 +1,11 @@
 package com.zhuorui.securities.market.ui
 
 import android.animation.ValueAnimator
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -16,6 +18,9 @@ import com.zhuorui.securities.market.ui.viewmodel.AllHkStockViewModel
 import kotlinx.android.synthetic.main.fragment_all_hk_stock.*
 import kotlinx.android.synthetic.main.layout_filters_hk_stock_info.*
 import com.zhuorui.securities.market.databinding.FragmentAllHkStockBinding
+import com.zhuorui.securities.market.ui.kline.KlineLandFragment
+import com.zhuorui.securities.market.util.MarketUtil
+
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
@@ -24,7 +29,7 @@ import com.zhuorui.securities.market.databinding.FragmentAllHkStockBinding
  * */
 class AllHkStockFragment :
     AbsSwipeBackNetFragment<FragmentAllHkStockBinding, AllHkStockViewModel, AllHkStockView, AllHkStockPresenter>(),
-    AllHkStockView, View.OnClickListener {
+    AllHkStockView, View.OnClickListener,AbsActivity.OnOrientationChangedListener {
     private var type: Int? = null
     private var nameAdapter: AllHkStockNameAdapter? = null
     private var conAdapter: AllHkStockContainerAdapter? = null
@@ -39,7 +44,7 @@ class AllHkStockFragment :
         get() = ViewModelProviders.of(this).get(AllHkStockViewModel::class.java)
     override val getView: AllHkStockView
         get() = this
-
+    private var lazyInit = false
     companion object {
         fun newInstance(type :Int): AllHkStockFragment {
             val fragment = AllHkStockFragment()
@@ -82,6 +87,8 @@ class AllHkStockFragment :
         title_horsv.setScrollView(content_horsv)
         content_horsv.setScrollView(title_horsv)
         tv_filters.setOnClickListener(this)
+        toggleScreenOrientation(true)
+        lazyInit = true
     }
 
     override fun addIntoAllHkStockName(list: List<Int>) {
@@ -125,6 +132,50 @@ class AllHkStockFragment :
             }
         }
     }
+
+    /**
+     * 切换是否允许横屏
+     */
+    private fun toggleScreenOrientation(allowLandscape: Boolean) {
+        if (allowLandscape) {
+            // 添加setRequestedOrientation方法实现屏幕允许旋转
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            (activity as AbsActivity).addOrientationChangedListener(this)
+        } else {
+            // 添加setRequestedOrientation方法实现屏幕不允许旋转
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            (activity as AbsActivity).removeOrientationChangedListener(this)
+        }
+    }
+    override fun onChange(landscape: Boolean) {
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        toggleScreenOrientation(false)
+    }
+
+
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+
+        if (lazyInit) {
+            // 当前界面每次重新可见时，需设置activity允许旋屏
+            toggleScreenOrientation(true)
+        }
+
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+
+        // 当前界面不可见时，获取栈顶的fragment若不是当前界面也不是横屏K线界面时，说明已跳到其他界面，需设置activity不允许旋屏
+        if (topFragment != this) {
+            toggleScreenOrientation(false)
+        }
+    }
+
 
 
 }

@@ -28,5 +28,14 @@ enum class StockTopicDataTypeEnum(var value: String, var description: String) {
     STOCK_ORDER("5", "买卖盘，委托挂单"),
     STOCK_ORDER_BROKER("6", "买卖经纪席位"),
     STOCK_TRADE("7", "逐笔成交"),
-    STOCK_TRADE_STA("8", "成交统计");
+    STOCK_TRADE_STA("8", "成交统计"),
+    TRADING_IN("9-1","交易中"),
+    NOT_OPEN("9-2","未开盘"),
+    PRE_BIDDING("9-3","盘前竞价"),
+    WAITING_OPEN("9-4","等待开盘"),
+    HAD_CLOSED("9-5","已收盘"),
+    CLOSED_NOON("9-6","午间休市"),
+    CLOSE_BIDDING("9-7","收盘竞价"),
+    CAPITAL("10","资金统计"),
+    STATISTICS_DATA("12","市场涨跌统计");
 }

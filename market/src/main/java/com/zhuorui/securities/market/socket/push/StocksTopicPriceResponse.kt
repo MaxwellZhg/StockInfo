@@ -11,5 +11,5 @@ import com.zhuorui.securities.market.socket.request.SocketHeader
  */
 class StocksTopicPriceResponse(
     val header: SocketHeader,
-    val body: List<PushStockPriceData>
+    val body: PushStockPriceData
 )
