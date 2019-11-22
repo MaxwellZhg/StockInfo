@@ -1,17 +1,21 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
+import com.google.gson.reflect.TypeToken
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StockTopicIndexHandicapResponse
+import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
 import com.zhuorui.securities.market.socket.request.GetIndexPointInfoRequestBody
-import com.zhuorui.securities.market.socket.response.GetIndexPonitInfoResponse
+import com.zhuorui.securities.market.socket.response.GetIndexHandicapResponse
 import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
 import com.zhuorui.securities.market.ui.view.HkStockDetailView
 import com.zhuorui.securities.market.ui.viewmodel.HkStockDetailViewModel
@@ -90,10 +94,14 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
      * 获取指数盘口数据回调
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onGetIndexPointHandicap(response: GetIndexPonitInfoResponse) {
-        viewModel?.mIndexHandicapData?.value = response.data as MutableList<IndexPonitHandicapData?>
-        indexPointOneTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP,"HK","HSI",1)
-        SocketClient.getInstance().bindTopic(indexPointOneTopic)
+    fun onGetIndexPointHandicap(response: GetIndexHandicapResponse) {
+         if(requestIds.remove(response.respId)) {
+             val listType = object : TypeToken<List<IndexPonitHandicapData>>() {}.type
+              val datalist: List<IndexPonitHandicapData> = JsonUtil.fromJson(response.data.toString(), listType)
+              view?.setHsiIndexData(datalist)
+             indexPointOneTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP, "HK", "HSI", 1)
+             SocketClient.getInstance().bindTopic(indexPointOneTopic)
+         }
     }
 
 

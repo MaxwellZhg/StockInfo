@@ -1,9 +1,7 @@
 package com.zhuorui.securities.market.socket.push
 
-import com.zhuorui.securities.market.model.PushStockMarketData
 import com.zhuorui.securities.market.socket.request.SocketHeader
 import com.zhuorui.securities.market.socket.response.SocketResponse
-import com.zhuorui.securities.market.socket.vo.StockHandicapData
 
 /**
  * Created by Maxwell.
@@ -13,5 +11,5 @@ import com.zhuorui.securities.market.socket.vo.StockHandicapData
  */
 class StockTopicIndexHandicapResponse :SocketResponse(){
     var header: SocketHeader? = null
-    var body: StockHandicapData? = null
+    var body: String? = null
 }

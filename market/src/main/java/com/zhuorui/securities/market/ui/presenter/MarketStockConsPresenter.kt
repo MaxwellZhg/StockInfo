@@ -2,11 +2,13 @@ package com.zhuorui.securities.market.ui.presenter
 
 import android.text.TextUtils
 import androidx.lifecycle.LifecycleOwner
+import com.google.gson.reflect.TypeToken
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.event.MarketPointConsEvent
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
@@ -20,6 +22,8 @@ import com.zhuorui.securities.market.net.request.StockConsInfoRequest
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 import com.zhuorui.securities.market.socket.SocketClient
 import com.zhuorui.securities.market.socket.push.StocksTopicHandicapResponse
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.view.MarketStockConsView
@@ -125,19 +129,21 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
     fun onStocksListTopicHandicap(response: StocksTopicHandicapResponse) {
         val datas = viewModel?.infos?.value
         if (datas.isNullOrEmpty()) return
-        val stockPriceDatas = response.body
-   /*     for (index in datas.indices) {
+        val listType = object : TypeToken<List<StockHandicapData>>() {}.type
+        val datalist: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)
+        val stockPriceDatas =   datalist[0]
+       for (index in datas.indices) {
             val item = datas[index]
                 if (item.ts == stockPriceDatas?.ts && item.code == stockPriceDatas?.code) {
                     // 更新数据
                     val item = datas[index]
                     item.lastPrice = stockPriceDatas?.last!!.toBigDecimal()
                     item.diffRate = stockPriceDatas.diffRate!!.toBigDecimal()
-                    item.turnover = stockPriceDatas.turnover!!.toBigDecimal()
+                    item.turnover = stockPriceDatas.turnover!!
                     view?.notifyItemChanged(index)
                     break
             }
-        }*/
+        }
     }
 
 
