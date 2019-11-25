@@ -1,13 +1,10 @@
 package com.zhuorui.securities.market.customer.view;
 
 import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -28,10 +25,10 @@ import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.customer.CapitalFlowNumPopWindow;
+import com.zhuorui.securities.market.model.CapitalTrendModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * author : liuwei
@@ -47,6 +44,7 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     private CombinedChart vChart;
     private TextView vNum;
     private TextView vTotal;
+    private OnSelectDayListener mListener;
 
     public HistoricalCapitalFlowView(Context context) {
         this(context, null);
@@ -64,7 +62,7 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         vNum.setOnClickListener(this);
         initAnimator();
         initBarChart();
-        getTestData();
+        upDateNumText();
     }
 
     private void initAnimator() {
@@ -114,14 +112,12 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         });
     }
 
-    private void getTestData() {
+    public void setData(List<CapitalTrendModel> data) {
         if (mDateNum > 5) {
             List<Entry> entryList = new ArrayList<>();
-            int[] d = {-1, 1};
-            Random random = new Random();
             float total = 0;
             for (int i = 0; i < mDateNum; i++) {
-                int v = (i + 1) * random.nextInt(1000) * d[random.nextInt(d.length)];
+                float v = data.get(i).getValue().floatValue();
                 Entry entry = new Entry(i, v);
                 entryList.add(entry);
                 total += v;
@@ -130,10 +126,8 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         } else {
             List<Integer> color = new ArrayList<>();
             List<BarEntry> entryList = new ArrayList<>();
-            int[] d = {-1, 1};
-            Random random = new Random();
             for (int i = 0; i < mDateNum; i++) {
-                int v = (i + 1) * random.nextInt(1000) * d[random.nextInt(d.length)];
+                float v = data.get(i).getValue().floatValue();
                 BarEntry barEntry = new BarEntry(i, v);
                 entryList.add(barEntry);
                 color.add(v < 0 ? downColor : upColor);
@@ -142,9 +136,40 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         }
     }
 
+    public void setOnSelectDayListener(OnSelectDayListener l) {
+        mListener = l;
+
+    }
+//    private void getTestData() {
+//        if (mDateNum > 5) {
+//            List<Entry> entryList = new ArrayList<>();
+//            int[] d = {-1, 1};
+//            Random random = new Random();
+//            float total = 0;
+//            for (int i = 0; i < mDateNum; i++) {
+//                int v = (i + 1) * random.nextInt(1000) * d[random.nextInt(d.length)];
+//                Entry entry = new Entry(i, v);
+//                entryList.add(entry);
+//                total += v;
+//            }
+//            setLineData(entryList, total);
+//        } else {
+//            List<Integer> color = new ArrayList<>();
+//            List<BarEntry> entryList = new ArrayList<>();
+//            int[] d = {-1, 1};
+//            Random random = new Random();
+//            for (int i = 0; i < mDateNum; i++) {
+//                int v = (i + 1) * random.nextInt(1000) * d[random.nextInt(d.length)];
+//                BarEntry barEntry = new BarEntry(i, v);
+//                entryList.add(barEntry);
+//                color.add(v < 0 ? downColor : upColor);
+//            }
+//            setBarData(entryList, color);
+//        }
+//    }
+
     private void setBarData(List<BarEntry> entryList, List<Integer> color) {
         BarDataSet barDataSet = new BarDataSet(entryList, "");
-        vTotal.setVisibility(GONE);
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) vChart.getLayoutParams();
         lp.leftMargin = (int) (getResources().getDisplayMetrics().density * 15);
         lp.rightMargin = lp.leftMargin;
@@ -200,7 +225,6 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     }
 
     private void setLineData(List<Entry> entryList, float total) {
-        vTotal.setVisibility(VISIBLE);
         vTotal.setText(String.format("%1s天总净流入%+.2f", mDateNum, total));
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) vChart.getLayoutParams();
         lp.leftMargin = 0;
@@ -231,12 +255,17 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
 
     private void upDateNumText() {
         vNum.setText(mDateNum + "天");
+        if (mDateNum > 5){
+            vTotal.setVisibility(VISIBLE);
+        }else {
+            vTotal.setVisibility(GONE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         if (v == vNum) {
-            CapitalFlowNumPopWindow.Companion.create(getContext(),mDateNum,this).showAsDropDown(vNum);
+            CapitalFlowNumPopWindow.Companion.create(getContext(), mDateNum, this).showAsDropDown(vNum);
         }
     }
 
@@ -244,7 +273,11 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     public void onSelected(int num) {
         mDateNum = num;
         upDateNumText();
-        getTestData();
+        if (mListener != null) mListener.onSelected(num);
+    }
+
+    public interface OnSelectDayListener {
+        void onSelected(int day);
     }
 
     class HCFVRenderer extends BarChartRenderer {

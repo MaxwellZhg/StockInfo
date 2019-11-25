@@ -18,7 +18,7 @@ class CapitalData(
     var totalMediumOutflow:BigDecimal?,//中单流出总额
     var totalSmallInflow:BigDecimal?,//小单流入总额
     var totalSmallOutflow:BigDecimal?,//小单流出总额
-    var maps:Map<String,BigDecimal>//最新总趋势金额（近一分钟）
+    var maps:Map<String,BigDecimal>?//最新总趋势金额（近一分钟）
 
 ): BaseStockMarket(){
 

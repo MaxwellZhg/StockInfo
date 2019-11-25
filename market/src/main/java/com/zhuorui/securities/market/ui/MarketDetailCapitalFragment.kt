@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.HistoricalCapitalFlowView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
 import com.zhuorui.securities.market.model.CapitalTrendModel
 import com.zhuorui.securities.market.socket.vo.CapitalData
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
  */
 class MarketDetailCapitalFragment :
     AbsFragment<FragmentMarketDetailBinding, MarketDetailCapitalViewModel, MarketDetailCapitalView, MarketDetailCapitalPresenter>(),
-    MarketDetailCapitalView {
+    MarketDetailCapitalView, HistoricalCapitalFlowView.OnSelectDayListener {
 
     private var mTs: String = ""
     private var mCode: String = ""
@@ -61,6 +62,7 @@ class MarketDetailCapitalFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        historicalCapitalFlow?.setOnSelectDayListener(this)
         presenter?.setLifecycleOwner(this)
         getData()
     }
@@ -73,6 +75,9 @@ class MarketDetailCapitalFragment :
         todatCapitalFlowTrend.setData(mTs, data)
     }
 
+    override fun onSelected(day: Int) {
+        presenter?.getCapitalFlowTime(day)
+    }
 
     fun getData() {
         presenter?.getData(mTs, mCode)

@@ -106,7 +106,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setEdgeYOffset(5f);
         leftAxis.setSpaceBottom(0f);
         leftAxis.setSpaceTop(0f);
-        leftAxis.setLabelCount(2, true);
+        leftAxis.setLabelCount(5, true);
         leftAxis.setValueLineInside(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setValueFormatter(new ValueFormatter() {
@@ -115,8 +115,8 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
                 return value == 0 || mEmpty ? "0" : String.format("%.2f", value);
             }
         });
-        MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(vChart.getViewPortHandler(), vChart.getAxisLeft(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
-        vChart.setRendererLeftYAxis(yAxisRenderer);
+//        MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(vChart.getViewPortHandler(), vChart.getAxisLeft(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
+//        vChart.setRendererLeftYAxis(yAxisRenderer);
     }
 
     private LineData getLineData(List<Entry> entrys) {

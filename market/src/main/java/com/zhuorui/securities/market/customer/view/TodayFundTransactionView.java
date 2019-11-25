@@ -21,8 +21,10 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.socket.vo.CapitalData;
+import com.zhuorui.securities.personal.config.LocalAccountConfig;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -72,8 +74,8 @@ public class TodayFundTransactionView extends FrameLayout {
 
     private void initColor() {
         defColor = Color.parseColor("#C3CDE3");
-        inValueColor = Color.parseColor("#D9001B");
-        outValueColor = Color.parseColor("#00CC00");
+        inValueColor = LocalSettingsConfig.Companion.getInstance().getUpColor();
+        outValueColor = LocalSettingsConfig.Companion.getInstance().getDownColor();
         mOut1Color = Color.parseColor("#00AB3B");
         mOut2Color = Color.parseColor("#336666");
         mOut3Color = Color.parseColor("#339966");
