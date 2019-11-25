@@ -5,7 +5,7 @@ import com.zhuorui.commonwidget.model.Observer
 import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.infra.AbsConfig
 import com.zhuorui.securities.base2app.infra.StorageInfra
-import java.util.ArrayList
+import java.util.*
 
 /**
  *    author : PengXianglin
@@ -13,17 +13,11 @@ import java.util.ArrayList
  *    date   : 2019/9/11 14:52
  *    desc   : 保存本地设置信息
  */
-class LocalSettingsConfig private constructor(): AbsConfig(), Subject<Observer> {
+class LocalSettingsConfig private constructor() : AbsConfig(), Subject<Observer> {
 
     // 存储订阅者
+    @Transient
     private val observerList = ArrayList<Observer>()
-
-    private val sorckColorRed = Color.parseColor("#FFD9001B")
-    private val sorckColorGreen = Color.parseColor("#FF00CC00")
-    private val sorckColor = Color.parseColor("#FF7B889E")
-    private val stockbtnRedColor = Color.parseColor("#FFAC3E19")
-    private val stockbtnGreenColor = Color.parseColor("#FF37672E")
-
 
     // 默认为红涨绿跌
     var stocksThemeColor: StocksThemeColor = StocksThemeColor.redUpGreenDown
@@ -142,6 +136,11 @@ class LocalSettingsConfig private constructor(): AbsConfig(), Subject<Observer> 
 
     companion object {
 
+        private val sorckColorRed = Color.parseColor("#FFD9001B")
+        private val sorckColorGreen = Color.parseColor("#FF00CC00")
+        private val sorckColor = Color.parseColor("#FF7B889E")
+        private val stockbtnRedColor = Color.parseColor("#FFAC3E19")
+        private val stockbtnGreenColor = Color.parseColor("#FF37672E")
 
         private var instance: LocalSettingsConfig? = null
 
