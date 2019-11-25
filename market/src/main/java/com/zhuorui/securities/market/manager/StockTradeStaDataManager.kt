@@ -67,7 +67,11 @@ class StockTradeStaDataManager private constructor(val ts: String, val code: Str
         }
     }
 
-    override fun init() {
+    init {
+        queryTrade()
+    }
+
+    private fun queryTrade() {
         // 加载成交统计
         val requestId =
             SocketClient.getInstance()

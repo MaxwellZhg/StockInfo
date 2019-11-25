@@ -60,7 +60,12 @@ class StockTradeDetailDataManager private constructor(val ts: String, val code: 
         }
     }
 
-    override fun init() {
+
+    init {
+        queryTrade()
+    }
+
+    private fun queryTrade() {
         // 加载成交明细
         val requestId =
             SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_STOCK_TRADE)
