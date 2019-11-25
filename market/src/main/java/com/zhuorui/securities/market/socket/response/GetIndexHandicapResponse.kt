@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.socket.response
 
-import com.zhuorui.securities.market.socket.vo.IndexHandicapData
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
+
 
 /**
  *    author : PengXianglin
@@ -10,5 +11,5 @@ import com.zhuorui.securities.market.socket.vo.IndexHandicapData
  */
 class GetIndexHandicapResponse : SocketResponse() {
 
-    var data: IndexHandicapData? = null
+    var data: List<IndexPonitHandicapData>? = null
 }

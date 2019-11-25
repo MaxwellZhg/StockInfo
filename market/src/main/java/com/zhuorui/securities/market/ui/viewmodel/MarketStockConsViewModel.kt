@@ -11,5 +11,5 @@ import com.zhuorui.securities.market.net.response.StockConsInfoResponse
  * Desc:
  */
 class MarketStockConsViewModel :ViewModel(){
-    var infos: MutableLiveData<MutableList<StockConsInfoResponse.ListInfo>> = MutableLiveData()
+    var infos: MutableLiveData<ArrayList<StockConsInfoResponse.ListInfo>> = MutableLiveData()
 }

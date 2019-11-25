@@ -20,7 +20,7 @@
                 app:srlEnableOverScrollBounce="true"
                 app:srlEnableOverScrollDrag="true"
                 app:srlEnableRefresh="true"
-                app:srlEnableLoadMore="true"
+                app:srlEnableLoadMore="false"
                 app:srlReboundDuration="1000">
         <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_view"

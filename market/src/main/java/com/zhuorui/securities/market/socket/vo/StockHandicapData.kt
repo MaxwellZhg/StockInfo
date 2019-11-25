@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.socket.vo
 
 import com.zhuorui.securities.market.model.BaseStockMarket
+import java.math.BigDecimal
 
 /**
  *    author : liuwei
@@ -30,10 +31,10 @@ class StockHandicapData(
     var preClose:Float?,//昨收价
     var sharestraded:Long?,//成交量
     var time:Long?,
-    var totalCapitalStock:Double?,//总股本
-    var totalMarkValue:Double?,//总市值
+    var totalCapitalStock:BigDecimal?,//总股本
+    var totalMarkValue:BigDecimal?,//总市值
     var totalMarkValueHK:Double?,//港股总市值
-    var turnover:Double?,//成交额
+    var turnover:BigDecimal?,//成交额
     var turnoverRate:String?,//换手率
     var volumeRatio:String?//量比
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -17,6 +18,7 @@ import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketStockConsPresenter
 import com.zhuorui.securities.market.ui.view.MarketStockConsView
 import com.zhuorui.securities.market.ui.viewmodel.MarketStockConsViewModel
+import kotlinx.android.synthetic.main.fragment_all_choose_stock.*
 import kotlinx.android.synthetic.main.fragment_market_point.*
 import kotlinx.android.synthetic.main.fragment_market_stock_cons.*
 import kotlinx.android.synthetic.main.layout_market_point_view_tips.*
@@ -62,7 +64,7 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
                 return false
             }
         }
-
+        (rv_point_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_point_stock.adapter = infoadapter
         //解决数据加载不完的问题
         rv_point_stock.isNestedScrollingEnabled=false
@@ -75,11 +77,13 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
     }
 
     override fun addInfoToAdapter(list: List<StockConsInfoResponse.ListInfo>) {
+        empty_view.visibility=View.INVISIBLE
         infoadapter?.clearItems()
         if (infoadapter?.items == null) {
             infoadapter?.items = ArrayList()
         }
         infoadapter?.addItems(list)
+        infoadapter?.notifyDataSetChanged()
     }
     override fun onCombineClick() {
         ToastUtil.instance.toastCenter("成分股")
@@ -238,6 +242,17 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
         }
 
     }
+
+    override fun showErrorState() {
+        if(infoadapter?.itemCount!! ==0) {
+            empty_view.visibility = View.VISIBLE
+        }
+    }
+
+    override fun notifyItemChanged(index: Int) {
+        _mActivity?.runOnUiThread { infoadapter?.notifyItemChanged(index) }
+    }
+
 
 
 

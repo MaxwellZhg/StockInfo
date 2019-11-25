@@ -42,6 +42,7 @@
         />
 
         <com.zhuorui.securities.market.customer.view.HistoricalCapitalFlowView
+                android:id="@+id/historicalCapitalFlow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="13dp"

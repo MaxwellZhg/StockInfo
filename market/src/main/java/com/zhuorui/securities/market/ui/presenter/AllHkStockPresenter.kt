@@ -1,7 +1,5 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import android.content.Context
-import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.market.ui.adapter.AllHkStockContainerAdapter

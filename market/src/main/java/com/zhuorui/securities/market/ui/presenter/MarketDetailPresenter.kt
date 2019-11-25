@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui.presenter
 import android.graphics.Color
 import android.text.TextUtils
 import androidx.lifecycle.LifecycleOwner
+import com.google.gson.reflect.TypeToken
 import com.zhuorui.commonwidget.ScreenCentralStateToast
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.Cache
@@ -12,6 +13,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.R
@@ -35,8 +37,8 @@ import com.zhuorui.securities.market.socket.request.GetStockDataByTsCodeRequestB
 import com.zhuorui.securities.market.socket.response.GetStockHandicapResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderBrokerResponse
 import com.zhuorui.securities.market.socket.response.GetStocksOrderResponse
-import com.zhuorui.securities.market.socket.vo.OrderBrokerData
 import com.zhuorui.securities.market.socket.vo.OrderData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
@@ -95,43 +97,6 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         }
     }
 
-    /**
-     * 获取股票盘口数据
-     */
-    private fun getStockData() {
-        getStockHandicapReqId =
-            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_HANDICAP)
-        android.os.Handler().postDelayed({ viewModel?.mStockHandicapData?.value = null }, 2000)
-
-    }
-
-    /**
-     * 获取买卖经纪数据
-     */
-    private fun getOrderBrokerData() {
-        getStockOrderBrokerReqId = SocketClient.getInstance()
-            .postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER_BROKER)
-        val datas2 = mutableListOf<OrderBrokerModel>()
-        for (i: Int in 1..30) {
-            datas2.add(OrderBrokerModel(i.toString(), "item$i"))
-        }
-        view?.upOrderBrokerData(datas2, datas2)
-
-    }
-
-    /**
-     * 获取买卖十档数据
-     */
-    private fun getBuyingSellingFilesData() {
-        getStockOrderReqId =
-            SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER)
-        val datas = mutableListOf<OrderData.AskBidModel>()
-        for (i: Int in 1..10) {
-            datas.add(OrderData.AskBidModel(i.toString(), i.toString(), i.toString()))
-        }
-        view?.upBuyingSellingFilesData(datas, datas)
-
-    }
 
     /**
      * 获取topbar 显示股票价格信息
@@ -219,12 +184,39 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     }
 
     /**
+     * 获取股票盘口数据
+     */
+    private fun getStockData() {
+        getStockHandicapReqId =
+            SocketClient.getInstance()
+                .postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_HANDICAP)
+    }
+
+    /**
+     * 获取买卖经纪数据
+     */
+    private fun getOrderBrokerData() {
+        getStockOrderBrokerReqId = SocketClient.getInstance()
+            .postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER_BROKER)
+    }
+
+    /**
+     * 获取买卖十档数据
+     */
+    private fun getBuyingSellingFilesData() {
+        getStockOrderReqId =
+            SocketClient.getInstance()
+                .postRequest(GetStockDataByTsCodeRequestBody(mTs, mCode), SocketApi.GET_STOCK_ORDER)
+    }
+
+    /**
      * 获取股票盘口数据回调
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetStockHandicap(response: GetStockHandicapResponse) {
         if (TextUtils.equals(getStockHandicapReqId, response.respId)) {
-            viewModel?.mStockHandicapData?.value = response.data
+            val datas: List<StockHandicapData>? = response.data
+                viewModel?.mStockHandicapData?.value = datas?.get(0)
             if (!mBmp) {
                 stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs, mCode, mType)
                 SocketClient.getInstance().bindTopic(stockTopic)
@@ -237,7 +229,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicHandicap(response: StocksTopicHandicapResponse) {
-        viewModel?.mPushStockHandicapData?.value = response.body
+        val datas: List<StockHandicapData>? = response.body
+        viewModel?.mPushStockHandicapData?.value = datas?.get(0)
     }
 
     /**
@@ -246,7 +239,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetStocksOrderBroker(response: GetStocksOrderBrokerResponse) {
         if (TextUtils.equals(getStockOrderBrokerReqId, response.respId)) {
-            val data: OrderBrokerData? = response.data
+            viewModel?.mBuyOrderBrokerData?.value = readOrderBroker(response.data?.buy?.content)
+            viewModel?.mSellOrderBrokerData?.value = readOrderBroker(response.data?.sell?.content)
             orderBrokerTopic = StockTopic(StockTopicDataTypeEnum.STOCK_ORDER_BROKER, mTs, mCode, mType)
             SocketClient.getInstance().bindTopic(orderBrokerTopic)
         }
@@ -258,6 +252,28 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicOrderBroker(response: StocksTopicOrderBrokerResponse) {
         val data = response.body
+        val datas: MutableList<OrderBrokerModel> = readOrderBroker(data?.content)
+        if (data != null) {
+            when (data.tradeMark) {
+                1 -> {//买
+                    viewModel?.mBuyOrderBrokerData?.value = datas
+                }
+                2 -> {//卖
+                    viewModel?.mSellOrderBrokerData?.value = datas
+                }
+            }
+        }
+    }
+
+    private fun readOrderBroker(content: List<String>?): MutableList<OrderBrokerModel> {
+        val list = mutableListOf<OrderBrokerModel>()
+        if (content != null) {
+            for (item in content) {
+                val split = item.split(",")
+                list.add(OrderBrokerModel(split[0], if (split.size > 1) split[1] else null))
+            }
+        }
+        return list
     }
 
     /**
@@ -331,6 +347,20 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             viewModel?.mOrderData?.observe(it,
                 androidx.lifecycle.Observer { t ->
                     view?.upBuyingSellingFilesData(t?.asklist, t?.bidlist)
+                })
+            viewModel?.mBuyOrderBrokerData?.observe(it,
+                androidx.lifecycle.Observer { t ->
+                    view?.upOrderBrokerData(
+                        viewModel?.mBuyOrderBrokerData?.value,
+                        viewModel?.mSellOrderBrokerData?.value
+                    )
+                })
+            viewModel?.mSellOrderBrokerData?.observe(it,
+                androidx.lifecycle.Observer { t ->
+                    view?.upOrderBrokerData(
+                        viewModel?.mBuyOrderBrokerData?.value,
+                        viewModel?.mSellOrderBrokerData?.value
+                    )
                 })
         }
     }

@@ -5,15 +5,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.model.PushIndexHandicapData
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 import com.zhuorui.securities.market.ui.adapter.MarketPartInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.HkStockDetailPresenter
 import com.zhuorui.securities.market.ui.view.HkStockDetailView
 import com.zhuorui.securities.market.ui.viewmodel.HkStockDetailViewModel
+import com.zhuorui.securities.market.util.MathUtil
 import kotlinx.android.synthetic.main.fragment_hk_stock_detail.*
 import kotlinx.android.synthetic.main.item_stock_detail_header.*
 import kotlinx.android.synthetic.main.layout_hk_top_tips_filters.*
@@ -25,6 +30,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
+import java.math.BigDecimal
 
 /**
  * Created by Maxwell.
@@ -43,6 +49,7 @@ class HkStockDetailFragment :
     private var topType:Int = 0
     private var allHkStockIndex: Int = 0
     private var allHkMainStockIndex: Int = 0
+    private var tsType:String =""
     private var preTemplete :Int = -1
     private var templete :Int = 0
     override val layout: Int
@@ -77,11 +84,13 @@ class HkStockDetailFragment :
                 tv_point_one.text = "恒生指数"
                 tv_point_two.text = "国企指数"
                 tv_point_three.text = "红筹指数"
+                tsType = "HK"
             }
             2 -> {
                 tv_point_one.text = "上证指数"
                 tv_point_two.text = "深证成指"
                 tv_point_three.text = "创业板指"
+                tsType = "SZ"
             }
         }
         tabTitle.add("涨幅榜")
@@ -180,6 +189,10 @@ class HkStockDetailFragment :
                 }
             }
         }
+
+        presenter?.getHSIPointInfo("HSI",tsType)
+        presenter?.getHSIPointInfo("HSCEI",tsType)
+        presenter?.getHSIPointInfo("HSCCI",tsType)
     }
 
     /**
@@ -377,6 +390,160 @@ class HkStockDetailFragment :
     override fun onCreatePartInfoClick() {
         ToastUtil.instance.toastCenter("创业板")
 
+    }
+    override fun setHsiIndexData(list: List<IndexPonitHandicapData?>) {
+        if(list[0]!=null) {
+           when(list[0]?.code){
+                "HSI"-> {
+                    when {
+                        list[0]?.open?.let { list[0]?.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! > BigDecimal.ZERO -> {
+                            tv_one_ponit_num.setText(list[0]?.last.toString(), 1)
+                            tv_one_point_rate.text = "+"+list[0]?.diffPrice.toString() + "  +" + list[0]?.diffRate.toString() + "%"
+                            tv_one_point_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
+                        }
+                        list[0]?.open?.let { list[0]?.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! <BigDecimal.ZERO -> {
+                            tv_one_ponit_num.setText(list[0]?.last.toString(), -1)
+                            tv_one_point_rate.text = "-"+list[0]?.diffPrice.toString() + "  -" + list[0]?.diffRate.toString() + "%"
+                            tv_one_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                        }
+                        else -> {
+                            tv_one_ponit_num.setText(list[0]?.last.toString(), 0)
+                            tv_one_point_rate.text = list[0]?.diffPrice.toString() + "  " + list[0]?.diffRate.toString() + "%"
+                            tv_one_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
+                        }
+                    }
+                    zr_line.setType(1)
+                    zr_line.setValues(list[0]?.rise!!, list[0]?.flatPlate!!, list[0]?.fall!!)
+                    zr_line_text.setType(0)
+                    zr_line_text.setValues(list[0]?.rise!!, list[0]?.flatPlate!!, list[0]?.fall!!)
+                }
+               "HSCEI"-> {
+                   when {
+                       list[0]?.open?.let { list[0]?.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! > BigDecimal.ZERO -> {
+                           tv_two_ponit_num.setText(list[0]?.last.toString(), 1)
+                           tv_two_point_rate.text = "+"+list[0]?.diffPrice.toString() + "  +" + list[0]?.diffRate.toString() + "%"
+                           tv_two_point_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
+                       }
+                       list[0]?.open?.let { list[0]?.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! <BigDecimal.ZERO -> {
+                           tv_two_ponit_num.setText(list[0]?.last.toString(), -1)
+                           tv_two_point_rate.text = "-"+list[0]?.diffPrice.toString() + "  -" + list[0]?.diffRate.toString() + "%"
+                           tv_two_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                       }
+                       else -> {
+                           tv_two_ponit_num.setText(list[0]?.last.toString(), 0)
+                           tv_two_point_rate.text = list[0]?.diffPrice.toString() + "  " + list[0]?.diffRate.toString() + "%"
+                           tv_two_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
+                       }
+                   }
+                   zr_line1.setType(1)
+                   zr_line1.setValues(list[0]?.rise!!, list[0]?.flatPlate!!, list[0]?.fall!!)
+                   zr_line_text1.setType(0)
+                   zr_line_text1.setValues(list[0]?.rise!!, list[0]?.flatPlate!!, list[0]?.fall!!)
+               }
+
+               "HSCCI"-> {
+                   when {
+                       list[0]?.open?.let { list[0]?.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! > BigDecimal.ZERO -> {
+                           tv_three_ponit_num.setText(list[0]?.last.toString(), 1)
+                           tv_three_ponit_rate.text = "+"+list[0]?.diffPrice.toString() + "  +" + list[0]?.diffRate.toString() + "%"
+                           tv_three_ponit_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
+                       }
+                       list[0]?.open?.let { list[0]?.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! <BigDecimal.ZERO -> {
+                           tv_three_ponit_num.setText(list[0]?.last.toString(), -1)
+                           tv_three_ponit_rate.text = "-"+list[0]?.diffPrice.toString() + "  -" + list[0]?.diffRate.toString() + "%"
+                           tv_three_ponit_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                       }
+                       else -> {
+                           tv_three_ponit_num.setText(list[0]?.last.toString(), 0)
+                           tv_three_ponit_rate.text = list[0]?.diffPrice.toString() + "  " + list[0]?.diffRate.toString() + "%"
+                           tv_three_ponit_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
+                       }
+                   }
+                   zr_line2.setType(1)
+                   zr_line2.setValues(list[0]?.rise!!, list[0]?.flatPlate!!, list[0]?.fall!!)
+                   zr_line_text2.setType(0)
+                   zr_line_text2.setValues(list[0]?.rise!!, list[0]?.flatPlate!!, list[0]?.fall!!)
+               }
+            }
+        }
+
+    }
+
+    override fun detailPushData(data: PushIndexHandicapData) {
+        if(data.type==1&&data.code!=null){
+            when(data.code){
+                "HSI"-> {
+                    when {
+                        data.open?.let { data.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! > BigDecimal.ZERO -> {
+                            tv_one_ponit_num.setText(data.last.toString(), 1)
+                            tv_one_point_rate.text = "+"+data.diffPrice.toString() + "  +" + data.diffRate.toString() + "%"
+                            tv_one_point_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
+                        }
+                        data.open?.let { data.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! <BigDecimal.ZERO -> {
+                            tv_one_ponit_num.setText(data.last.toString(), -1)
+                            tv_one_point_rate.text = "-"+data.diffPrice.toString() + "  -" + data.diffRate.toString() + "%"
+                            tv_one_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                        }
+                        else -> {
+                            tv_one_ponit_num.setText(data.last.toString(), 0)
+                            tv_one_point_rate.text = data.diffPrice.toString() + "  " + data.diffRate.toString() + "%"
+                            tv_one_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
+                        }
+                    }
+                    zr_line.setType(1)
+                    zr_line.setValues(data.rise!!, data.flatPlate!!, data.fall!!)
+                    zr_line_text.setType(0)
+                    zr_line_text.setValues(data.rise!!, data.flatPlate!!, data.fall!!)
+                }
+                "HSCEI"-> {
+                    when {
+                        data.open?.let { data.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! > BigDecimal.ZERO -> {
+                            tv_two_ponit_num.setText(data.last.toString(), 1)
+                            tv_two_point_rate.text = "+"+data.diffPrice.toString() + "  +" + data.diffRate.toString() + "%"
+                            tv_two_point_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
+                        }
+                        data.open?.let { data.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! <BigDecimal.ZERO -> {
+                            tv_two_ponit_num.setText(data.last.toString(), -1)
+                            tv_two_point_rate.text = "-"+data.diffPrice.toString() + "  -" + data.diffRate.toString() + "%"
+                            tv_two_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                        }
+                        else -> {
+                            tv_two_ponit_num.setText(data.last.toString(), 0)
+                            tv_two_point_rate.text = data.diffPrice.toString() + "  " + data.diffRate.toString() + "%"
+                            tv_two_point_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
+                        }
+                    }
+                    zr_line1.setType(1)
+                    zr_line1.setValues(data.rise!!, data.flatPlate!!, data.fall!!)
+                    zr_line_text1.setType(0)
+                    zr_line_text1.setValues(data.rise!!, data.flatPlate!!, data.fall!!)
+                }
+
+                "HSCCI"-> {
+                    when {
+                        data.open?.let { data.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! > BigDecimal.ZERO -> {
+                            tv_three_ponit_num.setText(data.last.toString(), 1)
+                            tv_three_ponit_rate.text = "+"+data.diffPrice.toString() + "  +" + data.diffRate.toString() + "%"
+                            tv_three_ponit_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
+                        }
+                        data.open?.let { data.last?.let { it1 -> MathUtil.subtract2(it1, it) } }!! <BigDecimal.ZERO -> {
+                            tv_three_ponit_num.setText(data.last.toString(), -1)
+                            tv_three_ponit_rate.text = "-"+data.diffPrice.toString() + "  -" + data.diffRate.toString() + "%"
+                            tv_three_ponit_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
+                        }
+                        else -> {
+                            tv_three_ponit_num.setText(data.last.toString(), 0)
+                            tv_three_ponit_rate.text = data.diffPrice.toString() + "  " + data.diffRate.toString() + "%"
+                            tv_three_ponit_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
+                        }
+                    }
+                    zr_line2.setType(1)
+                    zr_line2.setValues(data.rise!!, data.flatPlate!!, data.fall!!)
+                    zr_line_text2.setType(0)
+                    zr_line_text2.setValues(data.rise!!, data.flatPlate!!, data.fall!!)
+                }
+            }
+        }
     }
 
 

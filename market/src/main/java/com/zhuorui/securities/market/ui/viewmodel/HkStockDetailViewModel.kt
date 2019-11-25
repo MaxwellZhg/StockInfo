@@ -2,6 +2,8 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
 
 /**
  * Created by Maxwell.
@@ -11,4 +13,5 @@ import androidx.lifecycle.ViewModel
  */
 class HkStockDetailViewModel :ViewModel(){
     var infos: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var mIndexHandicapData: MutableLiveData<MutableList<IndexPonitHandicapData?>> = MutableLiveData()
 }

@@ -217,7 +217,7 @@
     <string name="business">业务</string>
     <string name="mian_income">主营业务</string>
     <string name="income_cout_all">收入总计</string>
-    <string name="outcome_cout_all">除税后溢价</string>
+    <string name="outcome_cout_all">除税后溢利</string>
     <string name="only_profit_count_rate">净利润率</string>
     <string name="all_total_count">总资产</string>
     <string name="all_total_to_pay">总负债</string>
@@ -233,4 +233,6 @@
     <string name="no_ponit_content">暂无内容，等待开盘</string>
     <string name="suspension">停牌</string>
     <string name="retry_load">点击屏幕，重新加载</string>
+    <string name="str_buy_order_broker">买盘经纪</string>
+    <string name="str_sell_order_broker">卖盘经纪</string>
 </resources>

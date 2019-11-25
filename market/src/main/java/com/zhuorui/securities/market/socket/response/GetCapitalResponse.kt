@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.socket.response
 
 import com.zhuorui.securities.market.socket.vo.CapitalData
 
+
 /**
  *    author : liuwei
  *    e-mail :

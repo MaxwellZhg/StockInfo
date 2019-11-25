@@ -22,14 +22,13 @@ import org.jetbrains.annotations.Nullable;
 public class MarketUtil {
 
     public static int getStockTSIcon(String ts) {
-        int ic;
-        switch (ts) {
-            case "HK":
-                ic = R.mipmap.ic_ts_hk;
-                break;
-            default:
-                ic = 0;
-                break;
+        int ic = 0;
+        if (!TextUtils.isEmpty(ts)) {
+            switch (ts) {
+                case "HK":
+                    ic = R.mipmap.ic_ts_hk;
+                    break;
+            }
         }
         return ic;
     }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.commonwidget.ZRDividerItemDecoration;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.model.PushIndexHandicapData;
 import com.zhuorui.securities.market.util.MarketUtil;
 
 /**
@@ -189,20 +190,20 @@ public class MarketPointDetailView extends FrameLayout {
         Float getLowPrice();
     }
 
-    public void setData(IStockDatailData data) {
+    public void setData(PushIndexHandicapData data) {
         setPrice(data);
         readData(data, mPreClosePrice);
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setPrice(IStockDatailData data) {
+    private void setPrice(PushIndexHandicapData data) {
         if (upColor == 0) {
             LocalSettingsConfig config = LocalSettingsConfig.Companion.getInstance();
             upColor = config.getUpColor();
             downColor = config.getDownColor();
         }
-        final Float price = data.getPrice() != null ? data.getPrice() : mPrice;
-        final Float preClosePrice = data.getPreClosePrice() != null ? data.getPreClosePrice() : mPreClosePrice;
+        final Float price = data.getLast()!= null ? data.getLast().floatValue() : mPrice;
+        final Float preClosePrice = data.getPreClose() != null ? data.getPreClose().floatValue() : mPreClosePrice;
         if (price == null || preClosePrice == null) return;
         int priceColor;
         int updownIc;
@@ -231,19 +232,19 @@ public class MarketPointDetailView extends FrameLayout {
         mPrice = price;
     }
 
-    private void readData(IStockDatailData data, Float preClosePrice) {
+    private void readData(PushIndexHandicapData data, Float preClosePrice) {
         mItemColor.clear();
         //最高
-        Float highPrice = data.getHighPrice() != null ? data.getHighPrice() : mHighPricel;
+        Float highPrice = data.getHigh() != null ? data.getHigh().floatValue() : mHighPricel;
         if (highPrice != null) {
             mHighPricel = highPrice;
-            mItemDatas[ITEMPOS_HIGH_PRICE] = String.format("%.3f", data.getHighPrice());
+            mItemDatas[ITEMPOS_HIGH_PRICE] = String.format("%.3f", data.getHigh().floatValue());
         }
         if (highPrice != null && preClosePrice != null) {
             mItemColor.put(ITEMPOS_HIGH_PRICE, getUpDownColor(highPrice, preClosePrice, Color.WHITE));
         }
         //今开
-        Float openPrice = data.getOpenPrice() != null ? data.getOpenPrice() : mOpenPrice;
+        Float openPrice = data.getOpen() != null ? data.getHigh().floatValue() : mOpenPrice;
         if (openPrice != null) {
             mOpenPrice = openPrice;
             mItemDatas[ITEMPOS_OPEN_PRICE] = String.format("%.3f", openPrice);
@@ -254,7 +255,7 @@ public class MarketPointDetailView extends FrameLayout {
         //成交额
         mItemDatas[ITEMPOS_SHARESTRADED] = "--";
         //最低
-        Float lowPrice = data.getLowPrice() != null ? data.getLowPrice() : mLowPricel;
+        Float lowPrice = data.getLow() != null ? data.getLow().floatValue(): mLowPricel;
         if (lowPrice != null) {
             mLowPricel = lowPrice;
             mItemDatas[ITEMPOS_LOW_PRICE] = String.format("%.3f", lowPrice);

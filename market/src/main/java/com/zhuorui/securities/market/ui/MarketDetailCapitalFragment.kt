@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.customer.view.HistoricalCapitalFlowView
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
+import com.zhuorui.securities.market.model.CapitalTrendModel
 import com.zhuorui.securities.market.socket.vo.CapitalData
 import com.zhuorui.securities.market.ui.presenter.MarketDetailCapitalPresenter
 import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_market_detail_capital.*
  */
 class MarketDetailCapitalFragment :
     AbsFragment<FragmentMarketDetailBinding, MarketDetailCapitalViewModel, MarketDetailCapitalView, MarketDetailCapitalPresenter>(),
-    MarketDetailCapitalView {
+    MarketDetailCapitalView, HistoricalCapitalFlowView.OnSelectDayListener {
 
     private var mTs: String = ""
     private var mCode: String = ""
@@ -60,12 +62,21 @@ class MarketDetailCapitalFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        todatCapitalFlowTrend.setData("HK", mutableListOf<Float>())
+        historicalCapitalFlow?.setOnSelectDayListener(this)
+        presenter?.setLifecycleOwner(this)
         getData()
     }
 
     override fun onTodayFundTransactionData(data: CapitalData?) {
         todayFundTransaction.setData(data)
+    }
+
+    override fun onTodatCapitalFlowTrendData(data: List<CapitalTrendModel>) {
+        todatCapitalFlowTrend.setData(mTs, data)
+    }
+
+    override fun onSelected(day: Int) {
+        presenter?.getCapitalFlowTime(day)
     }
 
     fun getData() {

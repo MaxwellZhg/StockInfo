@@ -88,5 +88,11 @@ interface StockApi {
          * 成分股信息
          */
         const val STOCK_CONS_INFO = "as_market/api/hk_stock_index_cons/v1/get_info"
+
+        /**
+         * 按时间查询资金统计数据
+         */
+        const val GET_CAPITAL_FLOW_TIME = "as_market/api/stock/view/v1/getCapitalFlowTime"
+
     }
 }
