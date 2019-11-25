@@ -108,6 +108,7 @@ public class SocketClient {
                         if (jsonObject != null && jsonObject.has("header")) {
                             JSONObject header = jsonObject.getJSONObject("header");
                             String path = header.getString("path");
+                            JSONObject body = jsonObject.getJSONObject("body");
                             switch (path) {
                                 case SocketApi.PUSH_STOCK_INFO:
                                     // 行情
@@ -115,7 +116,6 @@ public class SocketClient {
                                     break;
                                 case SocketApi.PUSH_STOCK_KLINE:
                                     // K线
-                                    JSONObject body = jsonObject.getJSONObject("body");
                                     String klineType = body.getString("klineType");
 
                                     // TODO 暂时只判断2-1
@@ -123,9 +123,9 @@ public class SocketClient {
                                         RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicMinuteKlineResponse.class));
                                     }
                                     break;
-                                case SocketApi.PUSH_STOCK_TRANS:
+                        /*        case SocketApi.PUSH_STOCK_TRANS:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicTransResponse.class));
-                                    break;
+                                    break;*/
                                 case SocketApi.PUSH_STOCK_PRICE:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicPriceResponse.class));
                                     break;
@@ -141,12 +141,14 @@ public class SocketClient {
                                 case SocketApi.PUSH_STOCK_ORDERBROKER:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicOrderBrokerResponse.class));
                                     break;
+                                    //推送指数股票盘口
                                 case SocketApi.PUSH_STOCK_HANDICAP:
-                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
-                                    break;
-                                //推送指数盘口
-                                case SocketApi.PUSH_INDEX_HANDICAP:
-                                    RxBus.getDefault().post(JsonUtil.fromJson(message, StockTopicIndexHandicapResponse.class));
+                                    int type= body.getInt("type");
+                                    if(type==2) {
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicHandicapResponse.class));
+                                    }else{
+                                        RxBus.getDefault().post(JsonUtil.fromJson(message, StockTopicIndexHandicapResponse.class));
+                                    }
                                     break;
                                 case SocketApi.PUSH_STOCK_CAPITAL:
                                     RxBus.getDefault().post(JsonUtil.fromJson(message, StocksTopicCapitalResponse.class));

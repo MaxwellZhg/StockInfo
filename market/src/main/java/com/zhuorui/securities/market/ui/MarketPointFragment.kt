@@ -280,8 +280,11 @@ class MarketPointFragment :
     private fun onSelect(index: Int) {
         if(index==0){
             ll_selcet_info.visibility =View.GONE
+           // refresh_layout.setNoMoreData(false)
+            refresh_layout.setEnableLoadMore(true)
         }else{
             ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE
+            refresh_layout.setEnableLoadMore(false)
         }
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
@@ -410,6 +413,9 @@ class MarketPointFragment :
         refresh_layout.setEnableLoadMore(true)
     }
 
+    override fun loadConsStockFail() {
+        refresh_layout.finishLoadMore(false)
+    }
 
 
 }

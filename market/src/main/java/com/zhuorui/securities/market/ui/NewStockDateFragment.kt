@@ -60,7 +60,6 @@ class NewStockDateFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        tabTitle.add("已递表")
         tabTitle.add("可认购")
         tabTitle.add("待上市")
         tabTitle.add("已上市")
@@ -78,13 +77,11 @@ class NewStockDateFragment :
             mFragments[0] = NewStockInfoFragment.newInstance()
             mFragments[1] = NewStockInfoFragment.newInstance()
             mFragments[2] = NewStockInfoFragment.newInstance()
-            mFragments[3] = NewStockInfoFragment.newInstance()
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
                 mFragments[0],
                 mFragments[1],
-                mFragments[2],
-                mFragments[3]
+                mFragments[2]
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
@@ -92,7 +89,6 @@ class NewStockDateFragment :
             mFragments[0] = firstFragment
             mFragments[1] = findChildFragment(NewStockInfoFragment::class.java)
             mFragments[2] = findChildFragment(NewStockInfoFragment::class.java)
-            mFragments[3] = findChildFragment(NewStockInfoFragment::class.java)
         }
     }
 

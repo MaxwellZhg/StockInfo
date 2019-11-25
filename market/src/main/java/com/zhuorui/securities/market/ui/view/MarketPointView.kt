@@ -15,4 +15,5 @@ interface MarketPointView :AbsView{
     fun refreshSuccess()
     fun showStateChangeEvent(state:Int)
     fun setLoadMoreState()
+    fun loadConsStockFail()
 }
