@@ -13,7 +13,9 @@ import com.zhuorui.securities.market.event.MarketPointConsEvent
 import com.zhuorui.securities.market.event.StockConsEvent
 import com.zhuorui.securities.market.event.StockConsPointStateEvent
 import com.zhuorui.securities.market.net.IStockNet
+import com.zhuorui.securities.market.net.request.MarketNewsListRequest
 import com.zhuorui.securities.market.net.request.StockConsInfoRequest
+import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
@@ -93,12 +95,32 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
         RxBus.getDefault().post(MarketPointConsEvent())
+        view?.loadConsStockFail()
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStockConsPointStateEventResponse(event: StockConsPointStateEvent) {
         view?.showStateChangeEvent(event.state)
     }
+
+    fun getNewsListData(code:String,currentPage:Int){
+        val requset =  MarketNewsListRequest(code, currentPage, 15,transactions.createTransaction())
+        requset?.let {
+            Cache[IStockNet::class.java]?.getMarketNewsList(it)
+                ?.enqueue(Network.IHCallBack<MarketNewsListResponse>(requset))
+        }
+    }
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onMarketNewsListResponse(response: MarketNewsListResponse){
+        if (!transactions.isMyTransaction(response)) return
+        val datas = response.data
+        if(datas.list.isNullOrEmpty()){
+            //view?.noMoreData()
+        }else {
+           // viewModel?.infoList?.value = datas.list
+        }
+    }
+
 
 
 }

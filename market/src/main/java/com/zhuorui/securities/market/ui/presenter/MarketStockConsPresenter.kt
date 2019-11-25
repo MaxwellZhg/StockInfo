@@ -129,9 +129,9 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
     fun onStocksListTopicHandicap(response: StocksTopicHandicapResponse) {
         val datas = viewModel?.infos?.value
         if (datas.isNullOrEmpty()) return
-        val listType = object : TypeToken<List<StockHandicapData>>() {}.type
-        val datalist: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)
-        val stockPriceDatas =   datalist[0]
+    /*    val listType = object : TypeToken<List<StockHandicapData>>() {}.type
+        val datalist: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)*/
+        val stockPriceDatas = response.body
        for (index in datas.indices) {
             val item = datas[index]
                 if (item.ts == stockPriceDatas?.ts && item.code == stockPriceDatas?.code) {

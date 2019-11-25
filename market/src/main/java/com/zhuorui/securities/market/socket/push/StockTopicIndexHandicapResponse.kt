@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.socket.push
 
+import com.zhuorui.securities.market.model.PushIndexHandicapData
 import com.zhuorui.securities.market.socket.request.SocketHeader
 import com.zhuorui.securities.market.socket.response.SocketResponse
 
@@ -11,5 +12,5 @@ import com.zhuorui.securities.market.socket.response.SocketResponse
  */
 class StockTopicIndexHandicapResponse :SocketResponse(){
     var header: SocketHeader? = null
-    var body: String? = null
+    var body: PushIndexHandicapData? = null
 }

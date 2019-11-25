@@ -15,7 +15,8 @@ object SocketApi {
     const val SOCKET_AUTH_SIGNATURE = "069de7990c0c4b8d87f516b7478e9f4a" // 链接认证签名
 
     const val AUTH = "auth.auth" // 链接认证
-    const val TOPIC_BIND = "topic.reBind" // 订阅
+    const val TOPIC_REBIND = "topic.reBind" // 重新订阅
+    const val TOPIC_BIND = "topic.bind" // 订阅
     const val TOPIC_UNBIND = "topic.unBind" // 取消订阅
     const val TOPIC_UNBIND_ALL = "topic.unBindAll" // 取消所有订阅
 
@@ -47,11 +48,11 @@ object SocketApi {
     const val PUSH_STOCK_ORDERBROKER = "push.stock.orderbroker" // 推送买卖经纪席位数据(买卖盘席位)
 
     const val GET_STOCK_HANDICAP = "handicap.getStockHandicap" // 查询股票盘口数据
-    const val PUSH_STOCK_HANDICAP = "push.stock.stockhandicap" // 推送股票盘口数据
+    const val PUSH_STOCK_HANDICAP = "push.stock.trans" // 推送股票盘口数据
 
     const val GET_CAPITAL = "capital.getCapital" //查询资金统计数据
     const val PUSH_STOCK_CAPITAL = "push.stock.capital" //服务器推送资金统计数据
 
     const val GET_INDEX_HANDICAP = "handicap.getIndexHandicap" // 查询指数盘口数据
-    const val PUSH_INDEX_HANDICAP = "push.stock.indexhandicap" // 推送指数盘口数据
+    const val PUSH_INDEX_HANDICAP = "push.stock.trans" // 推送指数盘口数据
 }

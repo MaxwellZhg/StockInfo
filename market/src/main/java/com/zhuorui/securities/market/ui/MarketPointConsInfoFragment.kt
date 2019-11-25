@@ -13,6 +13,7 @@ import com.zhuorui.securities.market.ui.presenter.MarketPointConsInfoPresenter
 import com.zhuorui.securities.market.ui.view.MarketPointConsInfoView
 import com.zhuorui.securities.market.ui.viewmodel.MarketPointConsInfoViewModel
 import kotlinx.android.synthetic.main.fragment_market_point_cons_info.*
+import kotlinx.android.synthetic.main.fragment_market_stock_cons.*
 
 /**
  * Created by Maxwell.
@@ -39,11 +40,11 @@ class MarketPointConsInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPointCo
         presenter?.setLifecycleOwner(this)
         consInfoadapter = presenter?.getMarketPointInfoAdapter()
         presenter?.getInfoData()
-        srl_layout.setEnableLoadMore(true)
-        srl_layout.setOnRefreshLoadMoreListener(this)
         rv_cons_stock_info.adapter = consInfoadapter
         //解决数据加载不完的问题
         rv_cons_stock_info.isFocusable = false
+        rv_cons_stock_info.isNestedScrollingEnabled=false
+        rv_cons_stock_info.setHasFixedSize(true)
         consInfoadapter?.notifyDataSetChanged()
     }
 
@@ -58,7 +59,6 @@ class MarketPointConsInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPointCo
             consInfoadapter?.items = ArrayList()
         }
         consInfoadapter?.addItems(list)
-        srl_layout.finishLoadMore(true)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {

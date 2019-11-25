@@ -23,10 +23,12 @@
                 android:textColor="#ffffffff"
                 android:textSize="15sp"/>
 
-        <TextView
+        <com.zhuorui.commonwidget.ZRStockTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="27498.770"
+                app:zr_showPrecentSymbol="false"
+                app:zr_showPrecentUpDown="false"
                 android:id="@+id/tv_one_ponit_num"
                 android:textColor="@color/color_D9001B"
                 android:textSize="16sp"/>
@@ -74,10 +76,12 @@
                 android:textColor="#ffffffff"
                 android:textSize="15sp"/>
 
-        <TextView
+        <com.zhuorui.commonwidget.ZRStockTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="9903.409"
+                app:zr_showPrecentSymbol="false"
+                app:zr_showPrecentUpDown="false"
                 android:id="@+id/tv_two_ponit_num"
                 android:textColor="@color/color_D9001B"
                 android:textSize="16sp"/>
@@ -124,10 +128,12 @@
                 android:textColor="#ffffffff"
                 android:textSize="15sp"/>
 
-        <TextView
+        <com.zhuorui.commonwidget.ZRStockTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4024.340"
+                app:zr_showPrecentSymbol="false"
+                app:zr_showPrecentUpDown="false"
                 android:id="@+id/tv_three_ponit_num"
                 android:textColor="@color/color_00cc00"
                 android:textSize="16sp"/>
