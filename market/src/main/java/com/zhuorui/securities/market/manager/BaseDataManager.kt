@@ -23,8 +23,6 @@ abstract class BaseDataManager : Subject<Observer> {
         RxBus.getDefault().register(this)
     }
 
-    abstract fun init()
-
     override fun registerObserver(obs: Observer) {
         observerList.add(obs)
     }
