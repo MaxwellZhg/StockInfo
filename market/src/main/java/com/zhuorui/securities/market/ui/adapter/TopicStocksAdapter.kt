@@ -1,5 +1,6 @@
 package com.zhuorui.securities.market.ui.adapter
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
@@ -90,22 +91,25 @@ class TopicStocksAdapter : BaseListAdapter<TopicStockModel>() {
         @BindView(R2.id.diff_mark)
         lateinit var diff_mark: View
 
+        var upDownAnim: ObjectAnimator? = null
+
         @SuppressLint("SetTextI18n")
         override fun bind(item: TopicStockModel?, position: Int) {
+            item?.position = position
             val stockInfo = item?.stockInfo
             if (stockInfo?.pctTag != null) {
                 LogInfra.Log.d(
                     TAG,
-                    "bind item " + item.stockInfo!!.code + " position " + position + " pctTag " + stockInfo.pctTag
+                    TopicStocksAdapter@ this.toString() + " bind item " + item.stockInfo!!.code + " position " + position + " pctTag " + stockInfo.pctTag
                 )
                 when (stockInfo.pctTag) {
                     1 -> {
                         // 闪涨
-                        MarketUtil.showUpDownAnim(null, diff_mark, true)
+                        upDownAnim = MarketUtil.showUpDownAnim(upDownAnim, diff_mark, true)
                     }
                     -1 -> {
                         // 闪跌
-                        MarketUtil.showUpDownAnim(null, diff_mark, false)
+                        upDownAnim = MarketUtil.showUpDownAnim(upDownAnim, diff_mark, false)
                     }
                 }
                 stockInfo.pctTag = 0
