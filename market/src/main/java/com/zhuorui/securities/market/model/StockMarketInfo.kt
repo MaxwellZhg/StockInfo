@@ -34,7 +34,7 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
     var createTime: Long = 0
     // 股市状态
     @IgnoredOnParcel
-    var suspension: StockSuspension = StockSuspension.empty
+    var suspension: StockSuspension? = StockSuspension.empty
     // 涨跌标识(1:涨，0:平，-1:跌)
     @IgnoredOnParcel
     var pctTag: Int? = null
