@@ -55,6 +55,8 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
             target.diffPrice = origin.diffPrice
             target.diffRate = origin.diffRate
             target.createTime = origin.createTime
+            target.suspension = origin.suspension
+            target.pctTag = origin.pctTag
         }
     }
 }

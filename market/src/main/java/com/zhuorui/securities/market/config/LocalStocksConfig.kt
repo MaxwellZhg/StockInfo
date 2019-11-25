@@ -90,6 +90,36 @@ class LocalStocksConfig : AbsConfig() {
     }
 
     /**
+     * 更新自选股，当不存在时会新增
+     */
+    @Synchronized
+    fun update(stock: StockMarketInfo): Boolean {
+        if (stocks.isEmpty()) {
+            stocks.add(stock)
+        } else {
+            var isExist = false
+            // 拷贝数据
+            for (item in stocks) {
+                if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
+                    // 更新数据
+                    StockMarketInfo.copyProperties(item, stock)
+                    LogInfra.Log.d(TAG, "update " + item.name + " succeeded. Current cache zise " + stocks.size)
+                    isExist = true
+                    break
+                }
+            }
+            if (!isExist) {
+                // 插入数据
+                stocks.add(stock)
+                LogInfra.Log.d(TAG, "update to add " + stock.name + " succeeded. Current cache zise " + stocks.size)
+            }
+        }
+
+        write()
+        return true
+    }
+
+    /**
      * 添加自选股
      */
     @Synchronized

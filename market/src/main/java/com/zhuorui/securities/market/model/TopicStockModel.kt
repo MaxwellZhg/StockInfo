@@ -71,13 +71,13 @@ class TopicStockModel : Observer {
             stockInfo!!.pctTag = priceData.pctTag
 
             if (position != null) {
-                onChangeDataCallBack?.onPriceChange(position!!)
+                onChangeDataCallBack?.onPriceChange(stockInfo!!, position!!)
             }
         }
     }
 
     interface OnChangeDataCallBack {
 
-        fun onPriceChange(position: Int)
+        fun onPriceChange(stockInfo: StockMarketInfo, position: Int)
     }
 }
