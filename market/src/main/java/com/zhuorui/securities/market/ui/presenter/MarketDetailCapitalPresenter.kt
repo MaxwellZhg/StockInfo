@@ -55,9 +55,8 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetCapital(response: GetCapitalResponse) {
         if (TextUtils.equals(getCapitalReqId, response.respId)) {
-            val capitalData = JsonUtil.fromJson(response.data.toString(), CapitalData::class.java)
-            view?.onTodayFundTransactionData(capitalData)
-            readCapitalResponse(capitalData)
+            view?.onTodayFundTransactionData(response.data)
+            readCapitalResponse(response.data)
             if (!mBmp) {
                 stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs.toString(), mCode.toString(), 2)
                 SocketClient.getInstance().bindTopic(stockTopic)
@@ -81,7 +80,6 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicCapital(response: StocksTopicCapitalResponse) {
-        val capitalData = JsonUtil.fromJson(response.body.toString(), CapitalData::class.java)
     }
 
 

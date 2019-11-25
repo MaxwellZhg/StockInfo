@@ -1,5 +1,7 @@
 package com.zhuorui.securities.market.socket.response
 
+import com.zhuorui.securities.market.socket.vo.CapitalData
+
 
 /**
  *    author : liuwei
@@ -8,5 +10,5 @@ package com.zhuorui.securities.market.socket.response
  *    desc   : 查询资金统计数据
  */
 class GetCapitalResponse : SocketResponse() {
-    var data: String? = null
+    var data: CapitalData? = null
 }

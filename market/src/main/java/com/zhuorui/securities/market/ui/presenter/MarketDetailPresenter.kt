@@ -215,9 +215,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetStockHandicap(response: GetStockHandicapResponse) {
         if (TextUtils.equals(getStockHandicapReqId, response.respId)) {
-            val listType = object : TypeToken<List<StockHandicapData>>() {}.type
-            val datas: List<StockHandicapData> = JsonUtil.fromJson(response.data.toString(), listType)
-            viewModel?.mStockHandicapData?.value = datas[0]
+            val datas: List<StockHandicapData>? = response.data
+                viewModel?.mStockHandicapData?.value = datas?.get(0)
             if (!mBmp) {
                 stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs, mCode, mType)
                 SocketClient.getInstance().bindTopic(stockTopic)
@@ -230,9 +229,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicHandicap(response: StocksTopicHandicapResponse) {
-        val listType = object : TypeToken<List<StockHandicapData>>() {}.type
-        val datas: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)
-        viewModel?.mPushStockHandicapData?.value = datas[0]
+        val datas: List<StockHandicapData>? = response.body
+        viewModel?.mPushStockHandicapData?.value = datas?.get(0)
     }
 
     /**

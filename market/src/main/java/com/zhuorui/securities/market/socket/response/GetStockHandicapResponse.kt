@@ -1,5 +1,7 @@
 package com.zhuorui.securities.market.socket.response
 
+import com.zhuorui.securities.market.socket.vo.StockHandicapData
+
 
 /**
  *    author : liuwei
@@ -8,5 +10,5 @@ package com.zhuorui.securities.market.socket.response
  *    desc   : 查询股票盘口数据
  */
 class GetStockHandicapResponse : SocketResponse() {
-    var data: String? = null
+    var data: List<StockHandicapData>? = null
 }
