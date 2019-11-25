@@ -1,7 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
-import com.zhuorui.securities.market.model.StockMarketInfo
+import com.zhuorui.securities.market.model.TopicStockModel
 
 /**
  *    author : PengXianglin
@@ -13,7 +13,7 @@ interface TopicStockListView : AbsView {
 
     fun init()
 
-    fun notifyDataSetChanged(list: List<StockMarketInfo>?)
+    fun notifyDataSetChanged(list: List<TopicStockModel>?)
 
     fun notifyItemChanged(index: Int)
 

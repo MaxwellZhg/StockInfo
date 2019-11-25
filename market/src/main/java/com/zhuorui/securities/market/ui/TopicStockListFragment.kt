@@ -15,8 +15,8 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.StockPopupWindow
 import com.zhuorui.securities.market.databinding.FragmentAllChooseStockBinding
 import com.zhuorui.securities.market.model.SearchStockInfo
-import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockTsEnum
+import com.zhuorui.securities.market.model.TopicStockModel
 import com.zhuorui.securities.market.ui.adapter.TopicStocksAdapter
 import com.zhuorui.securities.market.ui.presenter.TopicStockListPresenter
 import com.zhuorui.securities.market.ui.view.TopicStockListView
@@ -36,8 +36,8 @@ import kotlinx.android.synthetic.main.layout_topic_stock_list_empty.*
  */
 class TopicStockListFragment :
     AbsFragment<FragmentAllChooseStockBinding, TopicStockListViewModel, TopicStockListView, TopicStockListPresenter>(),
-    BaseListAdapter.OnClickItemCallback<StockMarketInfo>, View.OnClickListener,
-    TopicStockListView, BaseListAdapter.onLongClickItemCallback<StockMarketInfo> {
+    BaseListAdapter.OnClickItemCallback<TopicStockModel>, View.OnClickListener,
+    TopicStockListView, BaseListAdapter.onLongClickItemCallback<TopicStockModel> {
 
     private var mAdapter: TopicStocksAdapter? = null
 
@@ -90,14 +90,14 @@ class TopicStockListFragment :
         rv_stock.setEmptyView(list_empty_view)
     }
 
-    override fun onClickItem(pos: Int, item: StockMarketInfo?, v: View?) {
+    override fun onClickItem(pos: Int, item: TopicStockModel?, v: View?) {
         if (item != null) {
             // 跳转到详情页
             val stock = SearchStockInfo()
-            stock.code = item.code
-            stock.ts = item.ts
-            stock.tsCode = item.code + "." + item.ts
-            stock.name = item.name
+            stock.code = item.stockInfo?.code
+            stock.ts = item.stockInfo?.ts
+            stock.tsCode = item.stockInfo?.code + "." + item.stockInfo?.ts
+            stock.name = item.stockInfo?.name
             stock.type = 2
 //          startActivity(Intent(context, KlineLandActivity::class.java))
             (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(
@@ -108,10 +108,26 @@ class TopicStockListFragment :
         } else {
             // 跳转到搜索
             (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
+
+//            testPostData("00009")
+//            testPostData("00059")
+//            testPostData("00015")
         }
     }
 
-    override fun onLongClickItem(pos: Int, item: StockMarketInfo?, view: View?) {
+//    private fun testPostData(code:String){
+//        val header = SocketHeader()
+//        val body = PushStockPriceData()
+//        body.last = 336.6.toBigDecimal()
+//        body.open = 300.toBigDecimal()
+//        body.ts = "HK"
+//        body.code = code
+//        body.pctTag = 1
+//        val response = StocksTopicPriceResponse(header, body)
+//        RxBus.getDefault().post(response)
+//    }
+
+    override fun onLongClickItem(pos: Int, item: TopicStockModel?, view: View?) {
         item?.longClick = true
         mAdapter?.notifyItemChanged(pos)
 
@@ -126,7 +142,7 @@ class TopicStockListFragment :
                 }
 
                 override fun onRemind() {
-                    (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance(item))
+                    (parentFragment as AbsFragment<*, *, *, *>).start(RemindSettingFragment.newInstance(item?.stockInfo))
                 }
 
                 override fun onDelete() {
@@ -157,7 +173,7 @@ class TopicStockListFragment :
         }
     }
 
-    override fun notifyDataSetChanged(list: List<StockMarketInfo>?) {
+    override fun notifyDataSetChanged(list: List<TopicStockModel>?) {
         _mActivity?.runOnUiThread {
             if (mAdapter?.items == null) {
                 mAdapter?.items = list
