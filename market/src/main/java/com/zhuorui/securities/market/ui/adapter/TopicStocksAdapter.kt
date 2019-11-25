@@ -11,12 +11,14 @@ import butterknife.BindView
 import com.zhuorui.commonwidget.ZRStockStatusButton
 import com.zhuorui.commonwidget.ZRStockTextView
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.model.StockSuspension
 import com.zhuorui.securities.market.model.StockTsEnum
+import com.zhuorui.securities.market.model.TopicStockModel
 import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.market.util.MathUtil
 
@@ -26,7 +28,7 @@ import com.zhuorui.securities.market.util.MathUtil
  * Date: 2019/8/7
  * Desc: 自选股列表适配器
  */
-class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
+class TopicStocksAdapter : BaseListAdapter<TopicStockModel>() {
 
     private val default = 0x00
     private val bottom = 0x01
@@ -38,7 +40,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         return items.size + 1
     }
 
-    override fun getItem(position: Int): StockMarketInfo? {
+    override fun getItem(position: Int): TopicStockModel? {
         if (items.isNullOrEmpty() || position > items.size || position == items.size) return null
         return super.getItem(position)
     }
@@ -73,7 +75,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
     }
 
     inner class ViewHolderdefalt(v: View?, needClick: Boolean, needLongClick: Boolean) :
-        ListItemViewHolder<StockMarketInfo>(v, needClick, needLongClick) {
+        ListItemViewHolder<TopicStockModel>(v, needClick, needLongClick) {
 
         @BindView(R2.id.tv_stock_tile)
         lateinit var tv_stock_tile: TextView
@@ -89,9 +91,14 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
         lateinit var diff_mark: View
 
         @SuppressLint("SetTextI18n")
-        override fun bind(item: StockMarketInfo?, position: Int) {
-            if (item?.pctTag != null) {
-                when (item.pctTag) {
+        override fun bind(item: TopicStockModel?, position: Int) {
+            val stockInfo = item?.stockInfo
+            if (stockInfo?.pctTag != null) {
+                LogInfra.Log.d(
+                    TAG,
+                    "bind item " + item.stockInfo!!.code + " position " + position + " pctTag " + stockInfo.pctTag
+                )
+                when (stockInfo.pctTag) {
                     1 -> {
                         // 闪涨
                         MarketUtil.showUpDownAnim(null, diff_mark, true)
@@ -101,6 +108,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                         MarketUtil.showUpDownAnim(null, diff_mark, false)
                     }
                 }
+                stockInfo.pctTag = 0
             }
 
             if (item?.longClick != null && item.longClick) {
@@ -109,10 +117,10 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 itemView.setBackgroundColor(Color.TRANSPARENT)
             }
 
-            tv_stock_tile.text = item?.name
+            tv_stock_tile.text = stockInfo?.name
             tv_stock_tile.invalidate()
-            stock_code.text = item?.code
-            when (item?.ts) {
+            stock_code.text = stockInfo?.code
+            when (stockInfo?.ts) {
                 StockTsEnum.HK.name -> {
                     iv_stock_ts.setImageResource(R.mipmap.ic_ts_hk)
                 }
@@ -125,7 +133,7 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
             }
 
 
-            when (item?.suspension) {
+            when (stockInfo?.suspension) {
                 StockSuspension.empty -> {
                     // 无状态
                     tv_price.setText("--", 0)
@@ -141,23 +149,23 @@ class TopicStocksAdapter : BaseListAdapter<StockMarketInfo>() {
                 else -> {
                     // 正常状态
                     // 跌涨幅是否大于0或者等于0
-                    item?.diffRate?.let {
+                    stockInfo?.diffRate?.let {
                         val diffPriceVal = MathUtil.rounded(it).toInt()
                         when {
                             diffPriceVal == 0 -> {
-                                tv_price.setText(item.last.toString(), 0)
+                                tv_price.setText(stockInfo.last.toString(), 0)
                                 stock_up_down.setUpDown(0)
-                                stock_up_down.text = item.diffRate.toString() + "%"
+                                stock_up_down.text = stockInfo.diffRate.toString() + "%"
                             }
                             diffPriceVal > 0 -> {
-                                tv_price.setText(item.last.toString(), 1)
+                                tv_price.setText(stockInfo.last.toString(), 1)
                                 stock_up_down.setUpDown(1)
-                                stock_up_down.text = "+" + item.diffRate + "%"
+                                stock_up_down.text = "+" + stockInfo.diffRate + "%"
                             }
                             else -> {
-                                tv_price.setText(item.last.toString(), -1)
+                                tv_price.setText(stockInfo.last.toString(), -1)
                                 stock_up_down.setUpDown(-1)
-                                stock_up_down.text = item.diffRate.toString() + "%"
+                                stock_up_down.text = stockInfo.diffRate.toString() + "%"
                             }
                         }
                     }
