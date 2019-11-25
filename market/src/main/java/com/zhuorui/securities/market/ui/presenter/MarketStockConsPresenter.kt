@@ -131,7 +131,7 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
         if (datas.isNullOrEmpty()) return
     /*    val listType = object : TypeToken<List<StockHandicapData>>() {}.type
         val datalist: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)*/
-        val stockPriceDatas = response.body
+        val stockPriceDatas = response.body?.get(0)
        for (index in datas.indices) {
             val item = datas[index]
                 if (item.ts == stockPriceDatas?.ts && item.code == stockPriceDatas?.code) {
