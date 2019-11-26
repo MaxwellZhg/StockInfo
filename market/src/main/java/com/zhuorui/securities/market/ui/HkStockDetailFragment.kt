@@ -82,19 +82,6 @@ class HkStockDetailFragment :
         tabTitle.add("涨幅榜")
         tabTitle.add("跌幅榜")
         tabTitle.add("成交额")
- /*       zr_line.setType(1)
-        zr_line.setValues(40, 10, 50)
-        zr_line_text.setType(0)
-        zr_line_text.setValues(40, 10, 50)
-        zr_line1.setType(1)
-        zr_line1.setValues(50, 40, 30)
-        zr_line_text1.setType(0)
-        zr_line_text1.setValues(50, 40, 30)
-        zr_line2.setType(1)
-        zr_line2.setValues(20, 40, 50)
-        zr_line_text2.setType(0)
-        zr_line_text2.setValues(20, 40, 50)*/
-
         magic_indicator1.navigator = getNavigator(1)
         magic_indicator2.navigator = getNavigator(2)
         magic_indicator3.navigator = getNavigator(3)
@@ -130,6 +117,9 @@ class HkStockDetailFragment :
         tv_main_part.setOnClickListener(this)
         tv_create_newly_part.setOnClickListener(this)
         tv_top_tips.setOnClickListener(this)
+        view_line1.setOnClickListener(this)
+        view_line2.setOnClickListener(this)
+        view_line3.setOnClickListener(this)
         scroll_hk_detail_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
             if (tv_all_hk_stock != null) {
                 if (scrollY < tv_all_hk_stock.top) {
@@ -158,10 +148,8 @@ class HkStockDetailFragment :
                 }
             }
         }
-   //   view_line1.setInitData()
-    /*    presenter?.getHSIPointInfo("HSI",tsType)
-        presenter?.getHSIPointInfo("HSCEI",tsType)
-        presenter?.getHSIPointInfo("HSCCI",tsType)*/
+
+
     }
 
     /**
@@ -249,8 +237,14 @@ class HkStockDetailFragment :
         var pre = parentFragment as AbsFragment<*, *, *, *>
         var parent = pre.getParentFragment() as AbsFragment<*, *, *, *>
         when (p0?.id) {
-            R.id.ll_hs_point -> {
-                parent.start(MarketPointFragment.newInstance(1))
+            R.id.view_line1->{
+               parent.start(MarketPointFragment.newInstance(1))
+            }
+            R.id.view_line2->{
+                parent.start(MarketPointFragment.newInstance(2))
+            }
+            R.id.view_line3->{
+                parent.start(MarketPointFragment.newInstance(3))
             }
             R.id.rl_new_stock_date -> {
                 parent.start(NewStockDateFragment.newInstance())

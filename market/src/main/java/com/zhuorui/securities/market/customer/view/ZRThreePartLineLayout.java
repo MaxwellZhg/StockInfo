@@ -42,7 +42,6 @@ public class ZRThreePartLineLayout extends LinearLayout {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZRThreePartLineLayout);
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
           mWidth = wm.getDefaultDisplay().getWidth()/3;
-       // mWidth = a.getDimensionPixelOffset(R.styleable.ZRThreePartLineLayout_zr_line_width, 0);
         setOrientation(HORIZONTAL);
         a.recycle();
     }
