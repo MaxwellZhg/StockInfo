@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.common.MyWebViewFragment
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
@@ -70,6 +71,7 @@ class MyTabFragment :
         open_account.setOnClickListener(this)
         simulation_trading_stocks.setOnClickListener(this)
         ll_about_us.setOnClickListener(this)
+        my_manager_tab.setOnClickListener(this)
         ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
         ll_setting_language.setRightTips(presenter?.setConfigValue(2))
         if(!LocalAccountConfig.getInstance().isLogin()){
@@ -112,8 +114,9 @@ class MyTabFragment :
             }
             R.id.ll_about_us->{
                 (parentFragment as AbsFragment<*, *, *, *>).start(IntroProFragment.newInstance())
-
-
+            }
+            R.id.my_manager_tab->{
+                (parentFragment as AbsFragment<*, *, *, *>).start(MyWebViewFragment.newInstance(1))
             }
         }
     }

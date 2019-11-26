@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/color_211F2A"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <LinearLayout android:layout_width="match_parent"
+                  android:paddingBottom="10dp"
+                  android:id="@+id/ll_hs_point"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="center_horizontal">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_point_one"
+                android:text="恒生指数"
+                android:layout_marginTop="4dp"
+                android:textColor="#ffffffff"
+                android:textSize="15sp"/>
+
+        <com.zhuorui.commonwidget.ZRStockTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="27498.770"
+                app:zr_showPrecentSymbol="false"
+                app:zr_showPrecentUpDown="false"
+                android:id="@+id/tv_one_ponit_num"
+                android:textColor="@color/color_FFFFFFFF"
+                android:textSize="16sp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_one_point_rate"
+                android:text="+0.00  +0.00%"
+                android:textColor="@color/color_FFFFFFFF"
+                android:layout_marginBottom="4.5dp"
+                android:textSize="12sp"/>
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
+                android:id="@+id/zr_line"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="13dp"
+                android:layout_height="3dp"/>
+
+        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
+                android:id="@+id/zr_line_text"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

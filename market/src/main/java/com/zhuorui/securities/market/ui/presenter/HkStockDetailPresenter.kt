@@ -40,10 +40,10 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
                 androidx.lifecycle.Observer<List<Int>> { t ->
                     view?.addInfoToAdapter(t)
                 })
-            viewModel?.mIndexHandicapData?.observe(it,
+         /*   viewModel?.mIndexHandicapData?.observe(it,
                 androidx.lifecycle.Observer<List<IndexPonitHandicapData?>> { t ->
                     view?.setHsiIndexData(t)
-                })
+                })*/
         }
 
 
@@ -62,24 +62,24 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
           return MarketPartInfoAdapter(1)
     }
 
-    fun getHSIPointInfo(code:String,ts:String){
+    /*fun getHSIPointInfo(code:String,ts:String){
         // 拉取指数数据
         val requestId =
             SocketClient.getInstance().postRequest(GetIndexPointInfoRequestBody(code, ts), SocketApi.GET_INDEX_HANDICAP)
         requestIds.add(requestId)
     }
 
-    /**
+    *//**
      * 推送指数盘口数据回调
-     */
+     *//*
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onPushIndexPointHandicap(response: StockTopicIndexHandicapResponse) {
         response.body?.let { view?.detailPushData(it) }
     }
 
-    /**
+    *//**
      * 长链接连接状态发生改变
-     */
+     *//*
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
         // 恢复订阅
@@ -88,14 +88,14 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
         }
     }
 
-    /**
+    *//**
      * 获取指数盘口数据回调
-     */
+     *//*
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetIndexPointHandicap(response: GetIndexHandicapResponse) {
          if(requestIds.remove(response.respId)) {
-            /* val listType = object : TypeToken<List<IndexPonitHandicapData>>() {}.type
-              val datalist: List<IndexPonitHandicapData> = JsonUtil.fromJson(response.data.toString(), listType)*/
+            *//* val listType = object : TypeToken<List<IndexPonitHandicapData>>() {}.type
+              val datalist: List<IndexPonitHandicapData> = JsonUtil.fromJson(response.data.toString(), listType)*//*
              response.data?.let { view?.setHsiIndexData(it) }
              if(response.data?.get(0)?.code =="HSI") {
                  indexPointOneTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP, "HK", "HSI", 1)
@@ -119,5 +119,5 @@ class HkStockDetailPresenter :AbsNetPresenter<HkStockDetailView,HkStockDetailVie
             SocketClient.getInstance().unBindTopic(indexPointOneTopic)
         if (indexPointThreeTopic != null)
             SocketClient.getInstance().unBindTopic(indexPointOneTopic)
-    }
+    }*/
 }
