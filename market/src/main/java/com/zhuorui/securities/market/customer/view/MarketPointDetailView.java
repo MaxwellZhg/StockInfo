@@ -21,6 +21,7 @@ import com.zhuorui.commonwidget.ZRDividerItemDecoration;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.model.PushIndexHandicapData;
+import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData;
 import com.zhuorui.securities.market.socket.vo.StockHandicapData;
 import com.zhuorui.securities.market.util.MarketUtil;
 
@@ -155,55 +156,59 @@ public class MarketPointDetailView extends FrameLayout {
     }
 
 
-    public void setData(PushIndexHandicapData data) {
+    public void setData(IndexPonitHandicapData data) {
         setPrice(data);
         readData(data, mPreClosePrice,false);
         mAdapter.notifyDataSetChanged();
     }
 
-    public void upData(PushIndexHandicapData    data) {
+    public void upData(IndexPonitHandicapData    data) {
         setPrice(data);
         readData(data, mPreClosePrice, true);
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setPrice(PushIndexHandicapData data) {
+    private void setPrice(IndexPonitHandicapData data) {
         if (upColor == 0) {
             LocalSettingsConfig config = LocalSettingsConfig.Companion.getInstance();
             upColor = config.getUpColor();
             downColor = config.getDownColor();
         }
         final Float price = data.getLast()!= null ? data.getLast().floatValue() : mPrice;
-        final Float preClosePrice = data.getPreClose() != null ? data.getPreClose().floatValue() : mPreClosePrice;
-        if (price == null || preClosePrice == null) return;
-        int priceColor;
-        int updownIc;
-        if (price > preClosePrice) {
-            priceColor = upColor;
-            updownIc = MarketUtil.getUpIcon();
-        } else if (price < preClosePrice) {
-            priceColor = downColor;
-            updownIc = MarketUtil.getDownIcon();
+        final Float preClosePrice = data.getLast() != null ? data.getOpen().floatValue() : mPreClosePrice;
+        int priceColor = Color.WHITE;
+        int updownIc = 0;
+        if (price == null || preClosePrice == null) {
+            vPrice.setText("_____");
+            vDiffPrice.setText("___");
+            vDiffRate.setText("___");
+            vCurrencyCode.setText("");
         } else {
-            priceColor = Color.WHITE;
-            updownIc = 0;
+            if (price > preClosePrice) {
+                priceColor = upColor;
+                updownIc = MarketUtil.getUpIcon();
+            } else if (price < preClosePrice) {
+                priceColor = downColor;
+                updownIc = MarketUtil.getDownIcon();
+            }
+            vPrice.setText(String.format("%.3f", price));
+            float diffPrice = price - preClosePrice;
+            vDiffPrice.setText(String.format("%+.3f", diffPrice));
+            vDiffRate.setText(String.format("%+.2f%%", diffPrice * 100 / preClosePrice));
+            if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
+                priceAnimator = MarketUtil.showUpDownAnim(priceAnimator, vAnimator, price.floatValue() > mPrice.floatValue());
+            }
+            vCurrencyCode.setText(MarketUtil.getCurrencyCodeByTs("HK"));
+            mPreClosePrice = preClosePrice;
+            mPrice = price;
         }
         vPrice.setTextColor(priceColor);
         vDiffPrice.setTextColor(priceColor);
         vDiffRate.setTextColor(priceColor);
         vDiffLogo.setImageResource(updownIc);
-        vPrice.setText(String.format("%.3f", price));
-        float diffPrice = price - preClosePrice;
-        vDiffPrice.setText(String.format("%+.3f", diffPrice));
-        vDiffRate.setText(String.format("%+.2f%%", diffPrice * 100 / preClosePrice));
-        if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
-            priceAnimator(price.floatValue() > mPrice.floatValue());
-        }
-        mPreClosePrice = preClosePrice;
-        mPrice = price;
     }
 
-    private void readData(PushIndexHandicapData data, Float preClosePrice,boolean isUpdata) {
+    private void readData(IndexPonitHandicapData data, Float preClosePrice,boolean isUpdata) {
         mItemColor.clear();
         //最高
         Float highPrice = data.getHigh() != null ? data.getHigh().floatValue() : mHighPricel;
@@ -238,14 +243,14 @@ public class MarketPointDetailView extends FrameLayout {
         if (preClosePrice != null) {
             mItemDatas[ITEMPOS_PRE_CLOSE_PRICE] = String.format("%5.3f", preClosePrice);
         }
-        //振幅
+     /*   //振幅
         mItemDatas[ITEMPOS_TURNOVER] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getAmplitude();
         //涨家
         mItemDatas[ITEMPOS_TURNOVER_RATE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER_RATE) : data.getAmplitude();
         //平家
         mItemDatas[ITEMPOS_PE_RATIO_STATIC] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_PE_RATIO_STATIC) : data.getAmplitude();
         //跌家
-        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE) : data.getAmplitude();
+        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE) : data.getAmplitude();*/
 
     }
 

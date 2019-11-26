@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
  * Date: 2019/11/26
  * Desc:
  */
-class MyWebViewPresenter :AbsNetPresenter<MyWebView,MyWebViewModel>(){
+class ZRMyWebViewPresenter :AbsNetPresenter<ZRMyWebView,ZRMyWebViewModel>(){
     override fun init() {
         super.init()
     }
