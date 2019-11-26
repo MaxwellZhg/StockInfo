@@ -12,8 +12,10 @@ import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.infra.SharedPreManager
 import com.zhuorui.securities.base2app.infra.StorageInfra
 import com.zhuorui.securities.base2app.network.Network
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.AppActivityLifecycleImp
 import com.zhuorui.securities.base2app.util.AppUtil
+import io.reactivex.android.schedulers.AndroidSchedulers
 import me.jessyan.autosize.AutoSizeConfig
 import me.yokeyword.fragmentation.Fragmentation
 import okhttp3.Interceptor
@@ -61,7 +63,9 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
     override fun onCreate() {
         super.onCreate()
         context = this
+        beforeInit()
         AppUtil.init(this)
+        initRxBus()
         initAutoSize()
         initArouter()
 //        ThreadPoolUtil.getThreadPool().run {
@@ -69,12 +73,16 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
             initInfra()
             initNetwork()
             initFragmentation()
-
-            beforeInit()
+            afterInit()
 //        }
         /*注册ActivityLifeCycle*/
         appActivityLifecycleImp = AppActivityLifecycleImp(this)
         registerActivityLifecycleCallbacks(appActivityLifecycleImp)
+    }
+
+    private fun initRxBus() {
+        // 初始化RxBus
+        RxBus.setMainScheduler(AndroidSchedulers.mainThread())
     }
 
     private fun initAutoSize() {
@@ -90,11 +98,6 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
             ARouter.openDebug()   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
         ARouter.init(this)// 尽可能早，推荐在Application中初始化
-    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-//        MultiDex.install(this)
     }
 
     private fun initFragmentation() {
@@ -115,6 +118,8 @@ abstract class BaseApplication : MultiDexApplication(), AppActivityLifecycleImp.
     }
 
     protected abstract fun beforeInit()
+
+    protected abstract fun afterInit()
 
     /**
      * 初始化日志和SP存储配置
