@@ -27,12 +27,30 @@ android {
             abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
+
+    // 配置打包的签名
+    signingConfigs {
+        config {
+            keyAlias 'zr'
+            keyPassword 'zr@666'
+            storeFile file('../config/zr_sign.jks')
+            storePassword 'zr@666'
+        }
+    }
     buildTypes {
+        debug {
+            // 混淆代码
+            minifyEnabled false
+            // 混淆代码规则文件
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
         release {
             // 混淆代码
             minifyEnabled false
             // 混淆代码规则文件
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 
@@ -52,15 +70,6 @@ android {
         enabled = true
     }
 
-    // 配置打包的签名
-    signingConfigs {
-        config {
-            keyAlias 'zr'
-            keyPassword 'zr@666'
-            storeFile file('../config/zr_sign.jks')
-            storePassword 'zr@666'
-        }
-    }
     // 配置打包的apk命名规则
     android.applicationVariants.all {
         variant ->
