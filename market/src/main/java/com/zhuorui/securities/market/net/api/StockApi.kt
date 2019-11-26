@@ -94,5 +94,11 @@ interface StockApi {
          */
         const val GET_CAPITAL_FLOW_TIME = "as_market/api/stock/view/v1/getCapitalFlowTime"
 
+
+        /**
+         * 市场涨跌概况
+         */
+        const val GET_STATISTICS = "as_market/api/hk_stock_statistics/v1/get_statistics"
+
     }
 }

@@ -3,11 +3,8 @@ package com.zhuorui.securities.personal.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.commonwidget.common.MyWebViewFragment
-import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.rxbus.EventThread
+import com.zhuorui.commonwidget.common.ZRMyWebViewFragment
 import com.zhuorui.securities.base2app.rxbus.RxBus
-import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -17,15 +14,10 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 import com.zhuorui.securities.personal.event.JumpToSimulationTradingStocksEvent
-import com.zhuorui.securities.personal.event.LoginStateChangeEvent
-import com.zhuorui.securities.personal.event.MyTabInfoEvent
-import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.ui.presenter.MyTabPresenter
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
 import kotlinx.android.synthetic.main.fragment_my_tab.*
-import me.jessyan.autosize.utils.LogUtils
-import me.yokeyword.fragmentation.ISupportFragment
 
 /**
  *    author : PengXianglin
@@ -116,7 +108,7 @@ class MyTabFragment :
                 (parentFragment as AbsFragment<*, *, *, *>).start(IntroProFragment.newInstance())
             }
             R.id.my_manager_tab->{
-                (parentFragment as AbsFragment<*, *, *, *>).start(MyWebViewFragment.newInstance(1))
+                (parentFragment as AbsFragment<*, *, *, *>).start(ZRMyWebViewFragment.newInstance(1))
             }
         }
     }

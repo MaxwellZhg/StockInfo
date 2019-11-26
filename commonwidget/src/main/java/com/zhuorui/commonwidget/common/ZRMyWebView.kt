@@ -1,6 +1,6 @@
 package com.zhuorui.commonwidget.common
 
-import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.base2app.ui.fragment.AbsView
 
 /**
  * Created by Maxwell.
@@ -8,6 +8,6 @@ import androidx.lifecycle.ViewModel
  * Date: 2019/11/26
  * Desc:
  */
-class MyWebViewModel :ViewModel(){
+interface ZRMyWebView :AbsView{
 
 }

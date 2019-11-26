@@ -33,8 +33,9 @@
                           android:layout_height="match_parent"
                           android:orientation="vertical">
                 <com.zhuorui.securities.market.customer.view.MarketPointDetailView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                        android:id="@+id/market_point_view"
+                       android:layout_width="match_parent"
+                      android:layout_height="wrap_content"/>
                 <View android:layout_width="match_parent"
                       android:background="@color/color_C0CCE0"
                       android:layout_height="0.5dp"/>

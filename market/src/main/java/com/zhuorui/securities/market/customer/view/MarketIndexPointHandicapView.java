@@ -68,7 +68,7 @@ public class MarketIndexPointHandicapView extends FrameLayout implements Observe
             zr_line_text.setValues(indexPonitHandicapData.getRise(),indexPonitHandicapData.getFlatPlate(),indexPonitHandicapData.getFall());
         }else if(Float.valueOf(MathUtil.INSTANCE.subtract2(indexPonitHandicapData.getLast(), indexPonitHandicapData.getOpen()).toString())< 0f){
             tv_one_ponit_num.setText(indexPonitHandicapData.getLast().toString(),-1);
-            tv_one_point_rate.setText("-"+indexPonitHandicapData.getDiffPrice().toString()+"   -"+indexPonitHandicapData.getDiffRate()+"%");
+            tv_one_point_rate.setText(indexPonitHandicapData.getDiffPrice().toString()+"   "+indexPonitHandicapData.getDiffRate()+"%");
             zr_line.setType(1);
             zr_line.setValues(indexPonitHandicapData.getRise(),indexPonitHandicapData.getFlatPlate(),indexPonitHandicapData.getFall());
             zr_line_text.setType(2);
@@ -114,7 +114,7 @@ public class MarketIndexPointHandicapView extends FrameLayout implements Observe
             zr_line_text.setValues(pushIndexData.getRise(),pushIndexData.getFlatPlate(),pushIndexData.getFall());
         }else if(Float.valueOf(MathUtil.INSTANCE.subtract2(pushIndexData.getLast(),pushIndexData.getOpen()).toString())< 0f){
             tv_one_ponit_num.setText(pushIndexData.getLast().toString(),-1);
-            tv_one_point_rate.setText("-"+pushIndexData.getDiffPrice().toString()+"   -"+pushIndexData.getDiffRate()+"%");
+            tv_one_point_rate.setText(pushIndexData.getDiffPrice().toString()+"   "+pushIndexData.getDiffRate()+"%");
             tv_one_point_rate.setTextColor(LocalSettingsConfig.Companion.getInstance().getDownColor());
             zr_line.setType(1);
             zr_line.setValues(pushIndexData.getRise(),pushIndexData.getFlatPlate(),pushIndexData.getFall());
