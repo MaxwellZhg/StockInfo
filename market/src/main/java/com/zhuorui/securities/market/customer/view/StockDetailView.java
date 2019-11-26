@@ -20,6 +20,7 @@ import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.socket.vo.StockHandicapData;
 import com.zhuorui.securities.market.util.MarketUtil;
+import com.zhuorui.securities.market.util.MathUtil;
 
 /**
  * author : liuwei
@@ -212,7 +213,9 @@ public class StockDetailView extends FrameLayout {
             mItemColor.put(ITEMPOS_OPEN_PRICE, getUpDownColor(openPrice, preClosePrice, Color.WHITE));
         }
         //成交量
-        mItemDatas[ITEMPOS_SHARESTRADED] = data == null || data.getSharestraded() == null ? getDefText(isUpdata, ITEMPOS_SHARESTRADED) : data.getSharestraded().toString();
+        mItemDatas[ITEMPOS_SHARESTRADED] = data == null || data.getSharestraded() == null
+                ? getDefText(isUpdata, ITEMPOS_SHARESTRADED)
+                : MathUtil.INSTANCE.convertToUnitString(data.getSharestraded(),2);
         //最低
         Float lowPrice = data != null && data.getLow() != null ? data.getLow() : mLowPricel;
         if (lowPrice != null) {
@@ -231,37 +234,65 @@ public class StockDetailView extends FrameLayout {
             mItemDatas[ITEMPOS_PRE_CLOSE_PRICE] = getDefText(isUpdata, ITEMPOS_PRE_CLOSE_PRICE);
         }
         //成交额
-        mItemDatas[ITEMPOS_TURNOVER] = data == null || data.getTurnover() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getTurnover().toString();
+        mItemDatas[ITEMPOS_TURNOVER] = data == null || data.getTurnover() == null
+                ? getDefText(isUpdata, ITEMPOS_TURNOVER)
+                : MathUtil.INSTANCE.convertToUnitString(data.getTurnover(),1);
         //换手率
-        mItemDatas[ITEMPOS_TURNOVER_RATE] = data == null || data.getTurnoverRate() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER_RATE) : data.getTurnoverRate();
+        mItemDatas[ITEMPOS_TURNOVER_RATE] = data == null || data.getTurnoverRate() == null
+                        ? getDefText(isUpdata, ITEMPOS_TURNOVER_RATE)
+                        : data.getTurnoverRate()+"%";
         //市盈率(静)
-        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = data == null || data.getPeRatioStatic() == null ? getDefText(isUpdata, ITEMPOS_PE_RATIO_STATIC) : data.getPeRatioStatic().toString();
+        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = data == null || data.getPeRatioStatic() == null
+                ? getDefText(isUpdata, ITEMPOS_PE_RATIO_STATIC)
+                : data.getPeRatioStatic().toString();
         //总市值
-        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getTotalMarkValue() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE) : data.getTotalMarkValue().toString();
+        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getTotalMarkValue() == null
+                ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE)
+                : MathUtil.INSTANCE.convertToUnitString(data.getTotalMarkValue(),1);
         //振幅
-        mItemDatas[ITEMPOS_AMPLITUDE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_AMPLITUDE) : data.getAmplitude();
+        mItemDatas[ITEMPOS_AMPLITUDE] = data == null || data.getAmplitude() == null
+                ? getDefText(isUpdata, ITEMPOS_AMPLITUDE)
+                : data.getAmplitude()+"%";
         //市盈率(TTM)
-        mItemDatas[ITEMPOS_PERATIO_TTM] = data == null || data.getPeRatioTTM() == null ? getDefText(isUpdata, ITEMPOS_PERATIO_TTM) : data.getPeRatioTTM().toString();
+        mItemDatas[ITEMPOS_PERATIO_TTM] = data == null || data.getPeRatioTTM() == null
+                ? getDefText(isUpdata, ITEMPOS_PERATIO_TTM)
+                : data.getPeRatioTTM().toString();
         //总股本
-        mItemDatas[ITEMPOS_TOTAL_CAPITAL_STOCK] = data == null || data.getTotalCapitalStock() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_CAPITAL_STOCK) : data.getTotalCapitalStock().toString();
+        mItemDatas[ITEMPOS_TOTAL_CAPITAL_STOCK] = data == null || data.getTotalCapitalStock() == null
+                ? getDefText(isUpdata, ITEMPOS_TOTAL_CAPITAL_STOCK)
+                : MathUtil.INSTANCE.convertToUnitString(data.getTotalCapitalStock(),1);
         //52周最高
-        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_HIGH] = data == null || data.getFiftyTwoWeeksHigh() == null ? getDefText(isUpdata, ITEMPOS_FIFTY_TWO_WEEKS_HIGH) : data.getFiftyTwoWeeksHigh().toString();
+        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_HIGH] = data == null || data.getFiftyTwoWeeksHigh() == null
+                ? getDefText(isUpdata, ITEMPOS_FIFTY_TWO_WEEKS_HIGH)
+                : data.getFiftyTwoWeeksHigh().toString();
         //市净率
-        mItemDatas[ITEMPOS_MARKET_RATE] = data == null || data.getMarketRate() == null ? getDefText(isUpdata, ITEMPOS_MARKET_RATE) : data.getMarketRate().toString();
+        mItemDatas[ITEMPOS_MARKET_RATE] = data == null || data.getMarketRate() == null
+                ? getDefText(isUpdata, ITEMPOS_MARKET_RATE)
+                : data.getMarketRate().toString();
         //流通值
         mItemDatas[ITEMPOS_CIRCULATION_VALUE] = getDefText(isUpdata, ITEMPOS_CIRCULATION_VALUE);
         //52周最低
-        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_LOW] = data == null || data.getFiftyTwoWeeksLow() == null ? getDefText(isUpdata, ITEMPOS_FIFTY_TWO_WEEKS_LOW) : data.getFiftyTwoWeeksLow().toString();
+        mItemDatas[ITEMPOS_FIFTY_TWO_WEEKS_LOW] = data == null || data.getFiftyTwoWeeksLow() == null
+                ? getDefText(isUpdata, ITEMPOS_FIFTY_TWO_WEEKS_LOW)
+                : data.getFiftyTwoWeeksLow().toString();
         //委比
-        mItemDatas[ITEMPOS_COMPARISON] = data == null || data.getComparison() == null ? getDefText(isUpdata, ITEMPOS_COMPARISON) : data.getComparison();
+        mItemDatas[ITEMPOS_COMPARISON] = data == null || data.getComparison() == null
+                ? getDefText(isUpdata, ITEMPOS_COMPARISON)
+                : data.getComparison()+"%";
         //流通股
         mItemDatas[ITEMPOS_CIRCULATING_SHARES] = getDefText(isUpdata, ITEMPOS_CIRCULATING_SHARES);
         //每手
-        mItemDatas[ITEMPOS_HANDS] = data == null || data.getHands() == null ? getDefText(isUpdata, ITEMPOS_HANDS) : data.getHands().toString();
+        mItemDatas[ITEMPOS_HANDS] = data == null || data.getHands() == null
+                ? getDefText(isUpdata, ITEMPOS_HANDS)
+                : data.getHands().toString();
         //量比
-        mItemDatas[ITEMPOS_VOLUME_RATIO] = data == null || data.getVolumeRatio() == null ? getDefText(isUpdata, ITEMPOS_VOLUME_RATIO) : data.getVolumeRatio();
+        mItemDatas[ITEMPOS_VOLUME_RATIO] = data == null || data.getVolumeRatio() == null
+                ? getDefText(isUpdata, ITEMPOS_VOLUME_RATIO)
+                : data.getVolumeRatio();
         //股息率
-        mItemDatas[ITEMPOS_DIVIDEND_RATE] = data == null || data.getDividendRateFLY() == null ? getDefText(isUpdata, ITEMPOS_DIVIDEND_RATE) : data.getDividendRateFLY();
+        mItemDatas[ITEMPOS_DIVIDEND_RATE] = data == null || data.getDividendRateFLY() == null
+                ? getDefText(isUpdata, ITEMPOS_DIVIDEND_RATE)
+                : data.getDividendRateFLY()+"%";
 
     }
 

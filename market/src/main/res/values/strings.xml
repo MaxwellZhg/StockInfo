@@ -205,6 +205,7 @@
     <string name="repo_price">均价(元)</string>
     <string name="unit_w">万</string>
     <string name="unit_y">亿</string>
+    <string name="unit_wy">万亿</string>
     <string name="unit_stock_w">万股</string>
     <string name="unit_stock_y">亿股</string>
     <string name="hareholder_change_add">增持</string>
