@@ -124,6 +124,20 @@
         <com.zhuorui.commonwidget.ZRCellBar
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                app:zr_cellbarTitle="@string/my_manager"
+                android:id="@+id/my_manager_tab"
+                app:zr_cellbar_left_icon_width="18dp"
+                app:zr_cellbar_left_icon_height="17dp"
+                app:zr_cellbar_left_icon_margin="13dp"
+                app:zr_cellbar_righttips_icon_width="9dp"
+                app:zr_cellbar_righttips_icon_height="14dp"
+                app:zr_cellbar_righttips_icon_margin="13dp"
+                app:zr_cellbar_title_margin="40dp"
+                app:zr_cellbar_left_icon="@mipmap/icon_picture">
+        </com.zhuorui.commonwidget.ZRCellBar>
+        <com.zhuorui.commonwidget.ZRCellBar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/help_center"
                 android:id="@+id/help_center_bar"
                 android:layout_marginTop="10dp"

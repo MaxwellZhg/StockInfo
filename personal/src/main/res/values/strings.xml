@@ -59,6 +59,7 @@
     <string name="change_color" tools:ignore="MissingTranslation">涨跌颜色</string>
     <string name="setting_language" tools:ignore="MissingTranslation">设置语言</string>
     <string name="account_safe" tools:ignore="MissingTranslation">账户安全</string>
+    <string name="my_manager" tools:ignore="MissingTranslation">我的专属顾问</string>
     <string name="help_center" tools:ignore="MissingTranslation">帮助中心</string>
     <string name="about_zr" tools:ignore="MissingTranslation">关于卓锐</string>
     <string name="login_out" tools:ignore="MissingTranslation">退出登录</string>
