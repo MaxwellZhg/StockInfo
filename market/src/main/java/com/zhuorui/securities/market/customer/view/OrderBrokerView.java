@@ -192,14 +192,14 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
 
         private void initData() {
             mDatas.clear();
-            int relSize = Math.max(mBuyingDatas.size(), mSellingDatas.size());
             int spanCount;//一行单边数据条数
             if (mNum == -1) {
                 spanCount = 4;
+                int relSize = Math.max(mBuyingDatas.size(), mSellingDatas.size());
                 lineSize = (relSize / spanCount) + (relSize % spanCount == 0 ? 0 : 1);
             } else {
                 spanCount = 1;
-                lineSize = Math.min(relSize, mNum);
+                lineSize = mNum;
             }
             itemCount = lineSize * spanCount * 2;
             for (int i = 0; i < lineSize; i++) {
@@ -239,8 +239,8 @@ public class OrderBrokerView extends FrameLayout implements View.OnClickListener
                 vCode.setText(data.getCode());
                 if (vName != null) vName.setText(data.getName());
             } else {
-                vCode.setText("");
-                if (vName != null) vName.setText("");
+                vCode.setText("--");
+                if (vName != null) vName.setText("--");
             }
             itemView.setBackgroundColor(colors[position % colors.length]);
         }

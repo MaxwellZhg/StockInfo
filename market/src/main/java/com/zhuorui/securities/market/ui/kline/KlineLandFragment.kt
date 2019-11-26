@@ -174,6 +174,7 @@ class KlineLandFragment : KlineFragment(), CustomAdapt,
                     )
                     val lp:LinearLayout.LayoutParams = stat_indicator.layoutParams as LinearLayout.LayoutParams
                     view.setPadding(lp.marginStart,lp.marginEnd)
+                    view.setTextSizeSp(10f)
                     view
                 }
             }

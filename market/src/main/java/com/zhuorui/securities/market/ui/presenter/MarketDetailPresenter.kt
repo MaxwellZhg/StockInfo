@@ -144,9 +144,8 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                 Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             } else {
                 //添加收藏
-                val request =
-                    DeleteStockRequest(transactions.createTransaction(), stockInfo, stockInfo.ts!!, stockInfo.code!!)
-                Cache[IStockNet::class.java]?.delelte(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
+                val request =  CollectionStockRequest(stockInfo, stockInfo.type!!, stockInfo.ts!!, stockInfo.code!!, 0, transactions.createTransaction())
+                Cache[IStockNet::class.java]?.collection(request)?.enqueue(Network.IHCallBack<BaseResponse>(request))
             }
         } else {
             // 未登录
@@ -167,19 +166,23 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
 
     override fun onBaseResponse(response: BaseResponse) {
         super.onBaseResponse(response)
-        if (response.request is CollectionStockRequest) {
+        when (response.request) {
             // 传递添加自选股事件
-            RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
-            ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
-            isCollected = true
-            view?.upFollow(true)
-        } else if (response.request is DeleteStockRequest) {
-            val request = response.request as DeleteStockRequest
+            is CollectionStockRequest -> {
+                RxBus.getDefault().post(AddTopicStockEvent((response.request as CollectionStockRequest).stockInfo))
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.add_topic_successful))
+                isCollected = true
+                view?.upFollow(true)
+            }
             // 传递删除自选股事件
-            RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.codes[0]!!))
-            ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
-            isCollected = false
-            view?.upFollow(false)
+            is DeleteStockRequest -> {
+                val request = response.request as DeleteStockRequest
+                RxBus.getDefault().post(DeleteTopicStockEvent(request.ts!!, request.codes[0]!!))
+                ScreenCentralStateToast.show(ResUtil.getString(R.string.delete_successful))
+                isCollected = false
+                view?.upFollow(false)
+            }
+
         }
     }
 
@@ -216,7 +219,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
     fun onGetStockHandicap(response: GetStockHandicapResponse) {
         if (TextUtils.equals(getStockHandicapReqId, response.respId)) {
             val datas: List<StockHandicapData>? = response.data
-                viewModel?.mStockHandicapData?.value = datas?.get(0)
+            viewModel?.mStockHandicapData?.value = datas?.get(0)
             if (!mBmp) {
                 stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, mTs, mCode, mType)
                 SocketClient.getInstance().bindTopic(stockTopic)
@@ -306,7 +309,7 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
         val localStocks = LocalStocksConfig.getInstance().getStocks()
         if (localStocks.isNotEmpty()) {
             for (stock in localStocks) {
-                if (stock.ts.equals(mTs) && stock.code.equals(mCode)) {
+                if (TextUtils.equals(stock.code + "." + stock.ts, "$mCode.$mTs")) {
                     isCollected = true
                     break
                 }
@@ -349,14 +352,14 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
                     view?.upBuyingSellingFilesData(t?.asklist, t?.bidlist)
                 })
             viewModel?.mBuyOrderBrokerData?.observe(it,
-                androidx.lifecycle.Observer { t ->
+                androidx.lifecycle.Observer {
                     view?.upOrderBrokerData(
                         viewModel?.mBuyOrderBrokerData?.value,
                         viewModel?.mSellOrderBrokerData?.value
                     )
                 })
             viewModel?.mSellOrderBrokerData?.observe(it,
-                androidx.lifecycle.Observer { t ->
+                androidx.lifecycle.Observer {
                     view?.upOrderBrokerData(
                         viewModel?.mBuyOrderBrokerData?.value,
                         viewModel?.mSellOrderBrokerData?.value

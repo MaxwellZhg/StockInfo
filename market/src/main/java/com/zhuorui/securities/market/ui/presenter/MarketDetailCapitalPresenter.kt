@@ -80,7 +80,7 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         val data = response.body
         readCapitalData(data)
         if (data?.latestTrends != null){
-            addCapitalTrend(System.currentTimeMillis(),data.latestTrends!!)
+            addCapitalTrend(data.cacheDay.toString(),data.latestTrends!!)
         }
     }
 
@@ -133,12 +133,12 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     /**
      * 追加资金趋势数据
      */
-    private fun addCapitalTrend(time: Long, value: BigDecimal) {
+    private fun addCapitalTrend(time: String, value: BigDecimal) {
         var capitalTrends = viewModel?.mCapitalTrends?.value
         if (capitalTrends == null) {
             capitalTrends = mutableListOf<CapitalTrendModel>()
         }
-        capitalTrends.add(CapitalTrendModel(time, value))
+        capitalTrends.add(CapitalTrendModel(TimeZoneUtil.parseTime(time, "yyyyMMddHHmm"), value))
         viewModel?.mCapitalTrends?.value = capitalTrends
     }
 
