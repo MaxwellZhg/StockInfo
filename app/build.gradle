@@ -51,6 +51,38 @@ android {
     dataBinding {
         enabled = true
     }
+
+    // 配置打包的签名
+    signingConfigs {
+        config {
+            keyAlias 'zr'
+            keyPassword 'zr@666'
+            storeFile file('../config/zr_sign.jks')
+            storePassword 'zr@666'
+        }
+    }
+    // 配置打包的apk命名规则
+    android.applicationVariants.all {
+        variant ->
+            def run_model = "ok"
+            // 读取网络环境配置文件信息
+            def readConfigRunModel = {
+                File configFile = file("src/main/assets/config.properties")
+                FileReader reader = new FileReader(configFile)
+                String run_mode = reader.readLine()
+                int index = run_mode.indexOf("=")
+                run_model = run_mode.substring(index + 1)
+            }
+            readConfigRunModel.run()
+            def appName = "Zr"
+            def versionName = "v" + variant.getVersionName()
+            def buildTypeName = variant.buildType.name
+            def time = new Date().format("MMddHH")
+            def outApkName = appName + "_" + buildTypeName + "_" + time + "_" + versionName + "_" + run_model + ".apk"
+            variant.outputs.all {
+                outputFileName = outApkName
+            }
+    }
 }
 
 dependencies {
