@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +40,9 @@ public class ZRThreePartLineLayout extends LinearLayout {
     public ZRThreePartLineLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZRThreePartLineLayout);
-        mWidth = a.getDimensionPixelOffset(R.styleable.ZRThreePartLineLayout_zr_line_width, 0);
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+          mWidth = wm.getDefaultDisplay().getWidth()/3;
+       // mWidth = a.getDimensionPixelOffset(R.styleable.ZRThreePartLineLayout_zr_line_width, 0);
         setOrientation(HORIZONTAL);
         a.recycle();
     }
@@ -105,7 +108,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
     }
 
     private View getUpTextView(int up) {
-        int wh = mWidth * up / allCount;
+        int wh = mWidth* up / allCount;
         TextView tv = new TextView(getContext());
         tv.setTextColor(Color.parseColor("#FF0000"));
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);

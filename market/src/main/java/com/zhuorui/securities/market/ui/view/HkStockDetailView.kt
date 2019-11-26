@@ -13,6 +13,4 @@ import com.zhuorui.securities.market.socket.vo.StockHandicapData
  */
 interface HkStockDetailView :AbsView{
     fun addInfoToAdapter(list: List<Int>)
-    fun setHsiIndexData(list: List<IndexPonitHandicapData?>)
-    fun detailPushData(data: PushIndexHandicapData)
 }

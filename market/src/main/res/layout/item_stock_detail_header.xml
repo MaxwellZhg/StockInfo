@@ -1,164 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
               android:orientation="horizontal"
               android:layout_height="wrap_content"
               android:background="@color/color_211F2A"
               android:paddingTop="15dp">
-
-    <LinearLayout android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:paddingBottom="10dp"
-                  android:id="@+id/ll_hs_point"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  android:layout_marginStart="15dp">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_point_one"
-                android:text="恒生指数"
-                android:layout_marginTop="4dp"
-                android:textColor="#ffffffff"
-                android:textSize="15sp"/>
-
-        <com.zhuorui.commonwidget.ZRStockTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="27498.770"
-                app:zr_showPrecentSymbol="false"
-                app:zr_showPrecentUpDown="false"
-                android:id="@+id/tv_one_ponit_num"
-                android:textColor="@color/color_D9001B"
-                android:textSize="16sp"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_one_point_rate"
-                android:text="+271.610  +1.45%"
-                android:textColor="@color/color_D9001B"
-                android:layout_marginBottom="4.5dp"
-                android:textSize="12sp"/>
-        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
-                android:id="@+id/zr_line"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="13dp"
-                app:zr_line_width="101dp"
-                android:layout_height="3dp"/>
-
-        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
-                android:id="@+id/zr_line_text"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                app:zr_line_width="101dp"
-                android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <LinearLayout android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:paddingBottom="10dp"
-                  android:id="@+id/ll_country_point"
-                  android:layout_centerHorizontal="true"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  android:layout_marginStart="10dp">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_point_two"
-                android:text="国企指数"
-                android:layout_marginTop="4dp"
-                android:textColor="#ffffffff"
-                android:textSize="15sp"/>
-
-        <com.zhuorui.commonwidget.ZRStockTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9903.409"
-                app:zr_showPrecentSymbol="false"
-                app:zr_showPrecentUpDown="false"
-                android:id="@+id/tv_two_ponit_num"
-                android:textColor="@color/color_D9001B"
-                android:textSize="16sp"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+37.299   +1.45%"
-                android:id="@+id/tv_two_point_rate"
-                android:textColor="@color/color_D9001B"
-                android:layout_marginBottom="4.5dp"
-                android:textSize="12sp"/>
-        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
-                android:id="@+id/zr_line1"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="13dp"
-                app:zr_line_width="101dp"
-                android:layout_height="3dp"/>
-        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
-                android:id="@+id/zr_line_text1"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                app:zr_line_width="101dp"
-                android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <LinearLayout android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:id="@+id/ll_red_point"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:paddingBottom="10dp"
-                  android:layout_marginStart="10dp"
-                  android:gravity="center_horizontal"
-                  android:layout_marginEnd="15dp">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_point_three"
-                android:text="红筹指数"
-                android:layout_marginTop="4dp"
-                android:textColor="#ffffffff"
-                android:textSize="15sp"/>
-
-        <com.zhuorui.commonwidget.ZRStockTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4024.340"
-                app:zr_showPrecentSymbol="false"
-                app:zr_showPrecentUpDown="false"
-                android:id="@+id/tv_three_ponit_num"
-                android:textColor="@color/color_00cc00"
-                android:textSize="16sp"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-37.160 -0.93%"
-                android:id="@+id/tv_three_ponit_rate"
-                android:textColor="@color/color_00cc00"
-                android:layout_marginBottom="4.5dp"
-                android:textSize="12sp"/>
-        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
-                android:id="@+id/zr_line2"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="13dp"
-                app:zr_line_width="101dp"
-                android:layout_height="3dp"/>
-        <com.zhuorui.securities.market.customer.view.ZRThreePartLineLayout
-                android:id="@+id/zr_line_text2"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                app:zr_line_width="101dp"
-                android:layout_height="wrap_content"/>
-    </LinearLayout>
+    <com.zhuorui.securities.market.customer.view.MarketIndexPointHandicapView
+            android:layout_width="match_parent"
+            android:id="@+id/view_line1"
+            app:zr_index_handicap_name="恒生指数"
+            android:paddingStart="12.5dp"
+            android:paddingEnd="10dp"
+            app:zr_index_handicap_code="HSI"
+            app:zr_index_handicap_type="1"
+            app:zr_index_handicap_ts="HK"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+    <com.zhuorui.securities.market.customer.view.MarketIndexPointHandicapView
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:zr_index_handicap_name="国企指数"
+            app:zr_index_handicap_code="HSCEI"
+            app:zr_index_handicap_type="1"
+            app:zr_index_handicap_ts="HK"
+            android:layout_height="wrap_content"/>
+    <com.zhuorui.securities.market.customer.view.MarketIndexPointHandicapView
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            app:zr_index_handicap_name="红筹指数"
+            app:zr_index_handicap_code="HSCCI"
+            android:paddingStart="10dp"
+            android:paddingEnd="12.5dp"
+            app:zr_index_handicap_type="1"
+            app:zr_index_handicap_ts="HK"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

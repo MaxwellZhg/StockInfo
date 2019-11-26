@@ -34,4 +34,11 @@
         <attr name="zr_paddingLeft" format="dimension|reference"/>
         <attr name="zr_paddingRight" format="dimension|reference"/>
     </declare-styleable>
+
+    <declare-styleable name="MarketIndexPointHandicapView">
+        <attr name="zr_index_handicap_name" format="string"/>
+        <attr name="zr_index_handicap_code" format="string"/>
+        <attr name="zr_index_handicap_ts" format="string"/>
+        <attr name="zr_index_handicap_type" format="integer"/>
+    </declare-styleable>
 </resources>

@@ -21,6 +21,7 @@ import com.zhuorui.commonwidget.ZRDividerItemDecoration;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.model.PushIndexHandicapData;
+import com.zhuorui.securities.market.socket.vo.StockHandicapData;
 import com.zhuorui.securities.market.util.MarketUtil;
 
 /**
@@ -153,46 +154,16 @@ public class MarketPointDetailView extends FrameLayout {
         }
     }
 
-    public interface IStockDatailData {
-        /**
-         * 当前价
-         *
-         * @return
-         */
-        Float getPrice();
-
-        /**
-         * 开盘价
-         *
-         * @return
-         */
-        Float getOpenPrice();
-
-        /**
-         * 昨收价
-         *
-         * @return
-         */
-        Float getPreClosePrice();
-
-        /**
-         * 最高价
-         *
-         * @return
-         */
-        Float getHighPrice();
-
-        /**
-         * 最低价
-         *
-         * @return
-         */
-        Float getLowPrice();
-    }
 
     public void setData(PushIndexHandicapData data) {
         setPrice(data);
-        readData(data, mPreClosePrice);
+        readData(data, mPreClosePrice,false);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void upData(PushIndexHandicapData    data) {
+        setPrice(data);
+        readData(data, mPreClosePrice, true);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -232,7 +203,7 @@ public class MarketPointDetailView extends FrameLayout {
         mPrice = price;
     }
 
-    private void readData(PushIndexHandicapData data, Float preClosePrice) {
+    private void readData(PushIndexHandicapData data, Float preClosePrice,boolean isUpdata) {
         mItemColor.clear();
         //最高
         Float highPrice = data.getHigh() != null ? data.getHigh().floatValue() : mHighPricel;
@@ -253,7 +224,7 @@ public class MarketPointDetailView extends FrameLayout {
             mItemColor.put(ITEMPOS_OPEN_PRICE, getUpDownColor(openPrice, preClosePrice, Color.WHITE));
         }
         //成交额
-        mItemDatas[ITEMPOS_SHARESTRADED] = "--";
+        mItemDatas[ITEMPOS_SHARESTRADED] = data == null || data.getSharestraded()== null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getSharestraded().toString();
         //最低
         Float lowPrice = data.getLow() != null ? data.getLow().floatValue(): mLowPricel;
         if (lowPrice != null) {
@@ -268,13 +239,13 @@ public class MarketPointDetailView extends FrameLayout {
             mItemDatas[ITEMPOS_PRE_CLOSE_PRICE] = String.format("%5.3f", preClosePrice);
         }
         //振幅
-        mItemDatas[ITEMPOS_TURNOVER] = "--";
+        mItemDatas[ITEMPOS_TURNOVER] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getAmplitude();
         //涨家
-        mItemDatas[ITEMPOS_TURNOVER_RATE] = "--";
+        mItemDatas[ITEMPOS_TURNOVER_RATE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER_RATE) : data.getAmplitude();
         //平家
-        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = "--";
+        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_PE_RATIO_STATIC) : data.getAmplitude();
         //跌家
-        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = "--";
+        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE) : data.getAmplitude();
 
     }
 
@@ -331,5 +302,10 @@ public class MarketPointDetailView extends FrameLayout {
         priceAnimator.start();
 
     }
+
+    private String getDefText(boolean isUpdata, int position) {
+        return isUpdata ? mItemDatas[position] : "--";
+    }
+
 
 }

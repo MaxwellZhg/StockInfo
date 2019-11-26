@@ -79,20 +79,6 @@ class HkStockDetailFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         type = arguments?.getSerializable("type") as Int?
-        when (type) {
-            1 -> {
-                tv_point_one.text = "恒生指数"
-                tv_point_two.text = "国企指数"
-                tv_point_three.text = "红筹指数"
-                tsType = "HK"
-            }
-            2 -> {
-                tv_point_one.text = "上证指数"
-                tv_point_two.text = "深证成指"
-                tv_point_three.text = "创业板指"
-                tsType = "SZ"
-            }
-        }
         tabTitle.add("涨幅榜")
         tabTitle.add("跌幅榜")
         tabTitle.add("成交额")
@@ -108,21 +94,7 @@ class HkStockDetailFragment :
         zr_line2.setValues(20, 40, 50)
         zr_line_text2.setType(0)
         zr_line_text2.setValues(20, 40, 50)*/
-        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_one_ponit_num.setTextColor(it) }
-        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_two_ponit_num.setTextColor(it) }
-        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_three_ponit_num.setTextColor(it) }
-        tv_one_point_rate.text=ResUtil.getString(R.string.no_net_point)
-        tv_two_point_rate.text=ResUtil.getString(R.string.no_net_point)
-        tv_three_ponit_rate.text=ResUtil.getString(R.string.no_net_point)
-        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_one_point_rate.setTextColor(it) }
-        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_two_point_rate.setTextColor(it) }
-        ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_three_ponit_rate.setTextColor(it) }
-        zr_line.setType(1)
-        zr_line.setValues(0, 1, 0)
-        zr_line1.setType(1)
-        zr_line1.setValues(0, 1, 0)
-        zr_line2.setType(1)
-        zr_line2.setValues(0, 1, 0)
+
         magic_indicator1.navigator = getNavigator(1)
         magic_indicator2.navigator = getNavigator(2)
         magic_indicator3.navigator = getNavigator(3)
@@ -151,9 +123,6 @@ class HkStockDetailFragment :
         rv_hk_stock1.adapter = allHkPartAdapter
         rv_hk_stock2.adapter = allMainPartAdapter
         rv_hk_stock3.adapter = allCreatePartAdapter
-        ll_hs_point.setOnClickListener(this)
-        ll_country_point.setOnClickListener(this)
-        ll_red_point.setOnClickListener(this)
         rl_new_stock_date.setOnClickListener(this)
         ll_part_one.setOnClickListener(this)
         ll_part_two.setOnClickListener(this)
@@ -189,10 +158,10 @@ class HkStockDetailFragment :
                 }
             }
         }
-
-        presenter?.getHSIPointInfo("HSI",tsType)
+   //   view_line1.setInitData()
+    /*    presenter?.getHSIPointInfo("HSI",tsType)
         presenter?.getHSIPointInfo("HSCEI",tsType)
-        presenter?.getHSIPointInfo("HSCCI",tsType)
+        presenter?.getHSIPointInfo("HSCCI",tsType)*/
     }
 
     /**
@@ -282,12 +251,6 @@ class HkStockDetailFragment :
         when (p0?.id) {
             R.id.ll_hs_point -> {
                 parent.start(MarketPointFragment.newInstance(1))
-            }
-            R.id.ll_country_point -> {
-                parent.start(MarketPointFragment.newInstance(2))
-            }
-            R.id.ll_red_point -> {
-                parent.start(MarketPointFragment.newInstance(3))
             }
             R.id.rl_new_stock_date -> {
                 parent.start(NewStockDateFragment.newInstance())
@@ -391,7 +354,7 @@ class HkStockDetailFragment :
         ToastUtil.instance.toastCenter("创业板")
 
     }
-    override fun setHsiIndexData(list: List<IndexPonitHandicapData?>) {
+/*    override fun setHsiIndexData(list: List<IndexPonitHandicapData?>) {
         if(list[0]!=null) {
            when(list[0]?.code){
                 "HSI"-> {
@@ -544,7 +507,7 @@ class HkStockDetailFragment :
                 }
             }
         }
-    }
+    }*/
 
 
 }

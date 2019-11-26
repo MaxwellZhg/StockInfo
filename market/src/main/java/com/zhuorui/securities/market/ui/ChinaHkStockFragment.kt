@@ -53,7 +53,7 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        tv_point_one.text="沪港通"
+    /*    tv_point_one.text="沪港通"
         tv_point_two.text="沪港通100"
         tv_point_three.text="沪港通300"
         ResUtil.getColor(R.color.color_FFFFFFFF)?.let { tv_one_ponit_num.setTextColor(it) }
@@ -70,7 +70,7 @@ class ChinaHkStockFragment :AbsSwipeBackNetFragment<FragmentChinaHkStockTabBindi
         zr_line1.setType(1)
         zr_line1.setValues(0, 1, 0)
         zr_line2.setType(1)
-        zr_line2.setValues(0, 1, 0)
+        zr_line2.setValues(0, 1, 0)*/
 /*        zr_line.setType(1)
         zr_line.setValues(40,10,50)
         zr_line_text.setType(0)
