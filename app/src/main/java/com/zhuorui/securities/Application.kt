@@ -1,5 +1,6 @@
 package com.zhuorui.securities
 
+import com.igexin.sdk.PushManager
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.tencent.bugly.crashreport.CrashReport
 import com.zhuorui.securities.base2app.BaseApplication
@@ -8,6 +9,8 @@ import com.zhuorui.securities.custom.view.ClassicsHeader
 import com.zhuorui.securities.net.HeaderInterceptor
 import com.zhuorui.securities.net.TokenInterceptor
 import com.zhuorui.securities.personal.util.MultiLanguageUtil
+import com.zhuorui.securities.service.ZRIntentService
+import com.zhuorui.securities.service.ZRPushService
 import okhttp3.Interceptor
 
 /**
@@ -31,13 +34,17 @@ class Application : BaseApplication() {
         get() = TokenInterceptor()
 
     override fun beforeInit() {
-        // TODO 在App需要初始化的东西写在这里
-
         // 必须在主线程中初始化bugly，在测试阶段设置成true，发布时设置为false
         CrashReport.initCrashReport(this, "e77c9add36", BuildConfig.DEBUG)
     }
 
     override fun afterInit() {
+        // 初始化推送服务
+        PushManager.getInstance().initialize(this, ZRPushService::class.java)
+        // 注册推送服务事件接收类
+        PushManager.getInstance().registerPushIntentService(this, ZRIntentService::class.java)
+
+        // 初始化多语言
         MultiLanguageUtil.init(this)
 
         //设置全局的Header构建器

@@ -19,20 +19,47 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         multiDexEnabled true
 
+        // 个推配置
+        manifestPlaceholders = [
+                GETUI_APP_ID : "FKqRETBmlAAIz2UdzwXqu5",// APP_ID
+                GETUI_APP_KEY : "P7Z20iOwFG9wYssWFRpn26",// APP_KEY
+                GETUI_APP_SECRET : "HeiR4aUfh38GZqYgKyYNdA"// APP_SECRET
+        ]
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+    }
+
+    // 配置打包的签名
+    signingConfigs {
+        config {
+            keyAlias 'zr'
+            keyPassword 'zr@666'
+            storeFile file('../config/zr_sign.jks')
+            storePassword 'zr@666'
         }
     }
     buildTypes {
-        release {
+        debug {
+            // 精简资源
+            shrinkResources false
             // 混淆代码
             minifyEnabled false
             // 混淆代码规则文件
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        release {
+            // 精简资源
+            shrinkResources false
+            // 混淆代码
+            minifyEnabled false
+            // 混淆代码规则文件
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 
@@ -51,6 +78,29 @@ android {
     dataBinding {
         enabled = true
     }
+
+    // 配置打包的apk命名规则
+    android.applicationVariants.all {
+        variant ->
+            def run_model = "ok"
+            // 读取网络环境配置文件信息
+            def readConfigRunModel = {
+                File configFile = file("src/main/assets/config.properties")
+                FileReader reader = new FileReader(configFile)
+                String run_mode = reader.readLine()
+                int index = run_mode.indexOf("=")
+                run_model = run_mode.substring(index + 1)
+            }
+            readConfigRunModel.run()
+            def appName = "Zr"
+            def versionName = "v" + variant.getVersionName()
+            def buildTypeName = variant.buildType.name
+            def time = new Date().format("MMddHH")
+            def outApkName = appName + "_" + buildTypeName + "_" + time + "_" + versionName + "_" + run_model + ".apk"
+            variant.outputs.all {
+                outputFileName = outApkName
+            }
+    }
 }
 
 dependencies {
@@ -65,10 +115,13 @@ dependencies {
     // 个人中心
     implementation project(':personal')
 
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+    // 其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.tencent.bugly:crashreport:latest.release'
-    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+    // 其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+
+    // 个推
+    implementation 'com.getui:sdk:2.13.3.0'
 
     // databinding
     kapt "com.android.databinding:compiler:$databinding_version"
