@@ -5,13 +5,14 @@
 
     <!--bugly所需权限-->
     <!--注：如果您的App需要上传到google play store，您需要将READ_PHONE_STATE权限屏蔽掉或者移除，否则可能会被下架。-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions"/>
     <!--bugly所需权限-->
 
+    <!--在Android 9.0以上默认不支持http通信，为保证SDK正常使用，maven库中已添加如下属性（注：如遇工程报错找不到该属性，将app/build.gradle中的compileSdkVersion改为23以上即可）-->
     <application
             android:name=".Application"
             android:allowBackup="true"
@@ -44,6 +45,18 @@
                 android:name=".ui.MainActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:screenOrientation="portrait"/>
+
+        <!--个推服务-->
+        <service
+                android:name=".service.ZRPushService"
+                android:exported="true"
+                android:label="PushService"
+                android:process=":pushservice"/>
+
+        <!-- 用于接收推送的服务 permission属性在2.13.1.0版本后必须配置 -->
+        <service
+                android:name=".service.ZRIntentService"
+                android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>
