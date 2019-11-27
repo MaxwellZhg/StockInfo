@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.forget_psw_fragment.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/10
- * Desc:
- */
+ * Desc:修改手机号
+ * */
 class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding,ChangePhoneNumViewModel,ChangePhoneNumView,ChangePhoneNumPresenter>(),ChangePhoneNumView,View.OnClickListener,TextWatcher {
 
     override val layout: Int

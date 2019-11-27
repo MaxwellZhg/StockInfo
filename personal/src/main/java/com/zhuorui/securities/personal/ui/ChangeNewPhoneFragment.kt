@@ -25,8 +25,8 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/10
- * Desc:
- */
+ * Desc:修改新手机号
+ * */
 class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumBinding,ChangeNewPhoneViewModel,ChangeNewPhoneView,ChangeNewPhonePresenter>(),ChangeNewPhoneView,TextWatcher,View.OnClickListener{
 
     private lateinit var strnewphone: String

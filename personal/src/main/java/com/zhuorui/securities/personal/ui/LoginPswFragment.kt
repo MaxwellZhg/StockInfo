@@ -33,8 +33,8 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/19
- * Desc:
- * */
+ * Desc:密码登录
+  * * */
 
 
 class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPswViewModel,LoginPswView, LoginPswPresenter>(),LoginPswView,View.OnClickListener,TextWatcher{

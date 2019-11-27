@@ -31,8 +31,8 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/21
- * Desc:
- */
+ * Desc:忘记密码
+ * */
 class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,ForgetPswViewModel, ForgetPswView, ForgetPswPresenter>(),ForgetPswView,View.OnClickListener,TextWatcher{
 
     private lateinit var strphone: String

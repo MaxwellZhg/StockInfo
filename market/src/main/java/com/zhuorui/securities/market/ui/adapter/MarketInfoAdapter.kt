@@ -15,7 +15,7 @@ import com.zhuorui.securities.market.net.response.MarketNewsListResponse
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/31
- * Desc:
+ * Desc:搜索消息adapter
  */
 class MarketInfoAdapter :BaseListAdapter<MarketNewsListResponse.DataList>(){
     var onMarketInfoClickListener:OnMarketInfoClickListener?=null

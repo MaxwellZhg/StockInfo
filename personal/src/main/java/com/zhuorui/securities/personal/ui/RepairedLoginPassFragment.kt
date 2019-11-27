@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.fragment_repaired_login_psw.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/11
- * Desc:
- */
+ * Desc:修改登录密码
+ * */
 class RepairedLoginPassFragment :AbsSwipeBackNetFragment<FragmentRepairedLoginPswBinding,RepairedLoginPassViewModel,RepairedLoginPassView,RepairedLoginPassPresenter>(),RepairedLoginPassView,View.OnClickListener,TextWatcher{
 
     private lateinit var stroldpsw: String

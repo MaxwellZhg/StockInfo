@@ -20,8 +20,8 @@ import com.zhuorui.securities.market.model.TestSeachDefaultData
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/19
- * Desc:
- */
+ * Desc:搜索消息股票adapter
+ * */
 class SearchInfoAdapter(context:Context?) :BaseListAdapter<TestSeachDefaultData>(){
     private val itemHeader=0x01
     private val itemBottom=0x02

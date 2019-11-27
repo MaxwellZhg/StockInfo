@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.item_error_dialog_info.tv_attention
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/22
- * Desc:
- */
+ * Desc:错误次数多的 弹框
+ * */
 class ErrorTimesDialog (context: Context,type:Int,str:String?):Dialog(context, R.style.dialog){
     init {
         when(type){

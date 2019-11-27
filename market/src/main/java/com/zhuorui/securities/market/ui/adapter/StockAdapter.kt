@@ -16,8 +16,8 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/23
- * Desc:
- */
+ * Desc:搜索股票adapter
+ * */
 class StockAdapter : BaseListAdapter<SearchStockInfo>() {
     private val default = 0x00
     private val bottom = 0x01

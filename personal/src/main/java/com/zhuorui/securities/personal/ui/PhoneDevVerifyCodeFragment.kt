@@ -30,8 +30,7 @@ import kotlinx.android.synthetic.main.fragment_phone_dev_verify_code.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/12
- * Desc:
- */
+ * Desc:手机号设备验证码 */
 class PhoneDevVerifyCodeFragment :
     AbsSwipeBackNetFragment<FragmentPhoneDevVerifyCodeBinding, PhoneDevVerifyCodeViewModel, PhoneDevVerifyCodeView, PhoneDevVerifyCodePresenter>(),
     PhoneDevVerifyCodeView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener,

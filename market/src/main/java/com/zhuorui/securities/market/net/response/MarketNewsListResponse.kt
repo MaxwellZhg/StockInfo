@@ -13,9 +13,9 @@ class MarketNewsListResponse(val data :Data) :BaseResponse(){
      val list:ArrayList<DataList>
      )
     data class DataList(
-        val newsId: Int,
-        val createTime: Long,
-        val newsTitle: String,
-        val newsType: String
+        val newsId: Int,//新闻id
+        val createTime: Long,//发布时间
+        val newsTitle: String,//新闻标题
+        val newsType: String//新闻类型
     )
 }

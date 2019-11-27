@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/20
- * Desc:
- */
+ * Desc:热搜股分割recycleview
+ * */
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     private int left;
     private int right;

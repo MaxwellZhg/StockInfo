@@ -6,8 +6,8 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/15
- * Desc:
- */
+ * Desc:发送验证码请求response
+ * */
 class SendLoginCodeResponse(val data :String) :BaseResponse(){
 
 }

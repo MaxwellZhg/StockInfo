@@ -20,8 +20,8 @@ import com.zhuorui.securities.personal.databinding.SettingPswFragmentBinding
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/16
- * Desc:
- */
+ * Desc:设置密码
+ * */
 
 class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, SettingPswViewModel, SettingPswView, SettingPswPresenter>(),SettingPswView,View.OnClickListener{
     private var phone: String? = null

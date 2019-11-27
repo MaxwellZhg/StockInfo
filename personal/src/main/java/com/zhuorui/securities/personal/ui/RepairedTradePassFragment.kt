@@ -22,8 +22,8 @@ import kotlinx.android.synthetic.main.fragment_repaired_trade_pass.tv_btn_comple
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/11
- * Desc:
- */
+ * Desc:修改交易密码
+ * */
 class RepairedTradePassFragment :AbsSwipeBackNetFragment<FragmentRepairedTradePassBinding,RepairedTradePassViewModel,RepairedTradePassView,RepairedTradePassPresenter>(),RepairedTradePassView,View.OnClickListener,TextWatcher{
 
     override val layout: Int

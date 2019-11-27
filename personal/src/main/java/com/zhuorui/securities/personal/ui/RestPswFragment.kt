@@ -23,8 +23,8 @@ import kotlinx.android.synthetic.main.rest_psw_fragment.iv_back
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/21
- * Desc:
- */
+ * Desc:重置密码
+ * */
 
 class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswViewModel, RestPswView, RestPswPresenter>(),RestPswView,View.OnClickListener,TextWatcher{
     private var phone: String? = null

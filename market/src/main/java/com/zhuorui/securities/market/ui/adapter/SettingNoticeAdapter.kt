@@ -23,8 +23,8 @@ import java.math.BigDecimal
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/25
- * Desc:
- */
+ * Desc:设置股票提示adapter
+ * */
 class SettingNoticeAdapter : BaseListAdapter<SettingNoticeData>() {
 
     override fun getLayout(viewType: Int): Int {

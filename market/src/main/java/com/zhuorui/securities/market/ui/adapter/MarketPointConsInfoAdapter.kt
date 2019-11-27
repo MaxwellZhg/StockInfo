@@ -20,8 +20,8 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/20
- * Desc:
- */
+ * Desc:市场成分股adapter
+ * */
 class MarketPointConsInfoAdapter : BaseListAdapter<StockConsInfoResponse.ListInfo>() {
     var onCombineInfoClickListener: OnCombineInfoClickListener? = null
     override fun getLayout(viewType: Int): Int {
