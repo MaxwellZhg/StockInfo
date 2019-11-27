@@ -10,7 +10,7 @@ import com.zhuorui.securities.market.net.response.FinancialReportResponse
  * Desc:
  */
 interface MarketDetailF10FinancialView :AbsView{
-  fun updataBuisnessData(data: FinancialReportResponse.Business)
+  fun updataBuisnessData(data: HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>>)
   fun updataProfitListData(profitList: List<FinancialReportResponse.CashFlowReport>)
   fun updataProfitChatData(profitList: List<FinancialReportResponse.ProfitReport>)
   fun updataOutProfitChatData(profitList: List<FinancialReportResponse.LiabilistyReport>)

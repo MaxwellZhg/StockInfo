@@ -40,8 +40,8 @@ import java.util.List;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/7
- * Desc:
- */
+ * Desc:财报利润表格
+ * */
 public class MarketFinancinalProfitView extends FrameLayout {
     private List<FinancialReportResponse.ProfitReport> profitReport;
     private List<FinancialReportResponse.LiabilistyReport> liabilistyReport;

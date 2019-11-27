@@ -32,8 +32,8 @@ import java.util.List;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/11
- * Desc:
- */
+ * Desc:F10财报现金流表格
+ * */
 public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     private int mOut1Color;
     private int mOut2Color;

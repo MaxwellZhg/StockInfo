@@ -20,7 +20,7 @@ import com.zhuorui.securities.market.util.MathUtil;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/26
- * Desc:
+ * Desc:市场行情指数模块组件
  */
 public class MarketIndexPointHandicapView extends FrameLayout implements Observer {
     private int type;

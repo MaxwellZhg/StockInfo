@@ -14,13 +14,14 @@ import com.zhuorui.securities.market.net.response.FinancialReportResponse;
 import com.zhuorui.securities.market.util.MathUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/6
- * Desc:
+ * Desc:f10财报主营表格
  */
 public class MarketF10FinancinalMainTradeView extends FrameLayout implements View.OnClickListener, MainTradeYearsInfoPopWindow.OnYearInfoCallBack {
     ArrayList<FinancialReportResponse.BusinessReport> listinfo1;
@@ -30,7 +31,7 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
     private TextView tv_years;
     private int mDateNum = 1;
     private MarketPieChatView pie_cahart_view;
-    private FinancialReportResponse.Business business;
+   private HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>> business;
     private TextView tv_frist_income;
     private TextView tv_frist_income_count;
     private TextView tv_sec_income;
@@ -96,11 +97,11 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
         return pieEntryList;
     }
 
-    public void setPieCharBean(FinancialReportResponse.Business business) {
+    public void setPieCharBean(HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>> business) {
         this.business = business;
         if (this.business != null) {
-            listinfo1 = business.get20190630();
-            listinfo2 = business.get20181231();
+            listinfo1 = business.get("20190630");
+            listinfo2 = business.get("20181231");
             if (listinfo1 != null && listinfo2 != null) {
                 detailData(listinfo1);
                 showDate.add("2019" + ResUtil.INSTANCE.getString(R.string.middele_years_report));
@@ -159,9 +160,9 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
                 tv_years.setText(showDate.get(0));
                 if (business != null) {
                     if (showDate.get(0).contains("2019")) {
-                        listinfo1 = business.get20190630();
+                        listinfo1 = business.get("20190630");
                     } else {
-                        listinfo1 = business.get20181231();
+                        listinfo1 = business.get("20181231");
                     }
                 }
                 if (listinfo1 != null) {
@@ -175,9 +176,9 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
                 tv_years.setText(showDate.get(1));
                 if (business != null) {
                     if (showDate.get(0).contains("2019")) {
-                        listinfo1 = business.get20181231();
+                        listinfo1 = business.get("20181231");
                     } else {
-                        listinfo1 = business.get20180630();
+                        listinfo1 = business.get("20180630");
                     }
                 }
                 if (listinfo1 != null) {
@@ -191,9 +192,9 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
                 tv_years.setText(showDate.get(2));
                 if (business != null) {
                     if (showDate.get(0).contains("2019")) {
-                        listinfo1 = business.get20190630();
+                        listinfo1 = business.get("20180630");
                     } else {
-                        listinfo1 = business.get20171231();
+                        listinfo1 = business.get("20171231");
                     }
                 }
                 if (listinfo1 != null) {
@@ -207,9 +208,9 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
                 tv_years.setText(showDate.get(3));
                 if (business != null) {
                     if (showDate.get(0).contains("2019")) {
-                        listinfo1 = business.get20171231();
+                        listinfo1 = business.get("20171231");
                     } else {
-                        listinfo1 = business.get20170630();
+                        listinfo1 = business.get("20170630");
                     }
                 }
                 if (listinfo1 != null) {
@@ -223,9 +224,9 @@ public class MarketF10FinancinalMainTradeView extends FrameLayout implements Vie
                 tv_years.setText(showDate.get(4));
                 if (business != null) {
                     if (showDate.get(0).contains("2019")) {
-                        listinfo1 = business.get20170630();
+                        listinfo1 = business.get("20170630");
                     } else {
-                        listinfo1 = business.get20161231();
+                        listinfo1 = business.get("20171231");
                     }
                 }
                 if (listinfo1 != null) {

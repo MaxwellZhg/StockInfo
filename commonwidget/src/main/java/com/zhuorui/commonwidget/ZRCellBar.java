@@ -18,8 +18,8 @@ import android.widget.TextView;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/6
- * Desc:
- */
+ * Desc:我的的某块通用组件
+ * */
 public class ZRCellBar extends FrameLayout {
     private View mLeftView;
     private View mTitleView;

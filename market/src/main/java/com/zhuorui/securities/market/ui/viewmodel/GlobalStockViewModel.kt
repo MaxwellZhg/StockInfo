@@ -2,7 +2,6 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zhuorui.securities.market.model.GlobalStockInfo
 
 /**
  * Created by Maxwell.

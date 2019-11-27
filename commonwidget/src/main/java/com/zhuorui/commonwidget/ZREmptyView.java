@@ -17,8 +17,8 @@ import android.widget.TextView;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/19
- * Desc:
- */
+ * Desc:空白组件
+ * */
 public class ZREmptyView extends FrameLayout {
     private View emptyView;
     private View emptyTipsView;

@@ -66,7 +66,7 @@ class MarketDetailF10FinancialFragment :
         outData.add(345.53f)*/
     }
 
-    override fun updataBuisnessData(data: FinancialReportResponse.Business) {
+    override fun updataBuisnessData(data: HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>>) {
         financial_view.setPieCharBean(data)
     }
 

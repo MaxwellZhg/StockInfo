@@ -11,7 +11,7 @@ import com.zhuorui.securities.market.net.response.FinancialReportResponse
  * Desc:
  */
 class MarketDetailF10FinancialViewModel :ViewModel(){
-  var pieChartData : MutableLiveData<FinancialReportResponse.Business> =MutableLiveData()
+  var pieChartData : MutableLiveData<HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>>> =MutableLiveData()
   var crashLineData : MutableLiveData<MutableList<FinancialReportResponse.CashFlowReport>> =MutableLiveData()
   var profitData : MutableLiveData<MutableList<FinancialReportResponse.ProfitReport>> =MutableLiveData()
   var outProfitData : MutableLiveData<MutableList<FinancialReportResponse.LiabilistyReport>> =MutableLiveData()

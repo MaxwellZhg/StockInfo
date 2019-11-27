@@ -13,8 +13,8 @@ import com.zhuorui.securities.market.R
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/6
- * Desc:
- */
+ * Desc:F10市场主营业务
+ * */
 class MainTradeYearsInfoPopWindow(contentView: View, num: Int, strList:ArrayList<String>,width: Int, height: Int) :
     PopupWindow(contentView, width, height),
     View.OnClickListener {

@@ -7,25 +7,17 @@ import java.math.BigDecimal
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/12
- * Desc:
+ * Desc:财报返回response
  */
 class FinancialReportResponse (val data:Data):BaseResponse(){
     data class Data(
-        val mainBusinessReport:Business,
+        val mainBusinessReport:HashMap<String,ArrayList<BusinessReport>>,
         val profitReport:ArrayList<ProfitReport>,
         val liabilistyReport:ArrayList<LiabilistyReport>,
         val cashFlowReport:ArrayList<CashFlowReport>
     )
-    data class Business(
-        val `20161231`: ArrayList<BusinessReport>,
-        val `20170630`: ArrayList<BusinessReport>,
-        val `20171231`: ArrayList<BusinessReport>,
-        val `20180630`: ArrayList<BusinessReport>,
-        val `20181231`: ArrayList<BusinessReport>,
-        val `20190630`: ArrayList<BusinessReport>
-    )
     data class BusinessReport(
-       val  yearEndDate:String,
+       val yearEndDate:String,
        val businessCate:String,
        val currentYearTurnover:BigDecimal,
        val currentYearTurnoverRate:BigDecimal

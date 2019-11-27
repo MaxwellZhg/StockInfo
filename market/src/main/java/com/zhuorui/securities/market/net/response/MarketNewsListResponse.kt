@@ -6,8 +6,8 @@ import com.zhuorui.securities.base2app.network.BaseResponse
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/4
- * Desc:
- */
+ * Desc:资讯列表返回response
+ * */
 class MarketNewsListResponse(val data :Data) :BaseResponse(){
     data class Data(
      val list:ArrayList<DataList>

@@ -31,8 +31,8 @@ import java.util.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/30
- * Desc:
- */
+ * Desc:公共国家码界面
+ * */
 class CommonCountryCodeFragment :
     AbsSwipeBackNetFragment<CommonCountryCodeFragmentBinding, CommonCountryViewModel, CommonCountryCodeView, CommonCountryCodePresenter>(),
     CommonCountryCodeView, TextWatcher, View.OnClickListener,SortAdapter.OnItmeCodeClick {

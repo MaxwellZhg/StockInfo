@@ -10,8 +10,8 @@ import com.zhuorui.securities.market.R;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/28
- * Desc:
- */
+ * Desc:市场南向北向趋势图表
+ * */
 public class NorthTrendView extends FrameLayout {
 
     private TextView tv_trend;

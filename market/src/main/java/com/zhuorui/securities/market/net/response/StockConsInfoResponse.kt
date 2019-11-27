@@ -7,8 +7,9 @@ import java.math.BigDecimal
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/20
- * Desc:
- */
+ * Desc:自选股返回response
+ * 
+ * */
 class StockConsInfoResponse (val data:Data):BaseResponse(){
     data class Data(
         val list: ArrayList<ListInfo>,

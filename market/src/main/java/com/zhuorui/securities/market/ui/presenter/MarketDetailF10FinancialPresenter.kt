@@ -32,7 +32,7 @@ class MarketDetailF10FinancialPresenter :AbsNetPresenter<MarketDetailF10Financia
         // 监听datas的变化
         lifecycleOwner.let {
             viewModel?.pieChartData?.observe(it,
-                androidx.lifecycle.Observer<FinancialReportResponse.Business> { t ->
+                androidx.lifecycle.Observer<HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>>> { t ->
                     view?.updataBuisnessData(t)
                 })
             viewModel?.crashLineData?.observe(it,

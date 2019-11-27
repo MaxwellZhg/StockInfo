@@ -18,8 +18,8 @@ import java.math.BigDecimal;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/26
- * Desc:
- */
+ * Desc:颜色可变股票涨跌textview
+ * */
 public class ZRStockTextView extends AppCompatTextView implements Observer {
     // 0无涨跌 1涨 2跌
     private int diffState = 0;
