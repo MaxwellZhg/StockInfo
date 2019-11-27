@@ -11,7 +11,7 @@ import java.math.BigDecimal
  */
 class FinancialReportResponse (val data:Data):BaseResponse(){
     data class Data(
-        val mainBusinessReport:HashMap<String,ArrayList<BusinessReport>>,//主营业务年度营业报表数据
+        val mainBusinessReport:LinkedHashMap<Long,ArrayList<BusinessReport>>?,//主营业务年度营业报表数据
         val profitReport:ArrayList<ProfitReport>,//利润报表数据
         val liabilistyReport:ArrayList<LiabilistyReport>,//资产负债报表数据
         val cashFlowReport:ArrayList<CashFlowReport>//现金流量报表数据

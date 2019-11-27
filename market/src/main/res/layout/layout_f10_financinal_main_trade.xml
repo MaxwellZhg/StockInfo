@@ -27,7 +27,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="13dp"
             android:textColor="@color/color_A4B2CB"
-            android:text="单位：人民币"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             app:layout_constraintLeft_toLeftOf="parent"
     />

@@ -2,11 +2,14 @@ package com.zhuorui.securities.market.ui.presenter
 
 import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.securities.base2app.Cache
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import com.zhuorui.securities.market.model.F10FinacialPieChartData
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.FinancialReportRequest
 import com.zhuorui.securities.market.net.request.GetAllAttachmentRequest
@@ -31,8 +34,8 @@ class MarketDetailF10FinancialPresenter :AbsNetPresenter<MarketDetailF10Financia
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
         // 监听datas的变化
         lifecycleOwner.let {
-            viewModel?.pieChartData?.observe(it,
-                androidx.lifecycle.Observer<HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>>> { t ->
+            viewModel?.modifyPieChatData?.observe(it,
+                androidx.lifecycle.Observer<F10FinacialPieChartData> { t ->
                     view?.updataBuisnessData(t)
                 })
             viewModel?.crashLineData?.observe(it,
@@ -58,13 +61,34 @@ class MarketDetailF10FinancialPresenter :AbsNetPresenter<MarketDetailF10Financia
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onFinancialData(response: FinancialReportResponse){
+    fun onFinancialData(response: FinancialReportResponse) {
         if (!transactions.isMyTransaction(response)) return
-        val datas = response.data
-        viewModel?.pieChartData?.value =datas.mainBusinessReport
-        viewModel?.crashLineData?.value=datas.cashFlowReport
-        viewModel?.profitData?.value=datas.profitReport
-        viewModel?.outProfitData?.value=datas.liabilistyReport
+        val datas = response.data ?: return
+        var listDate: ArrayList<String> = ArrayList()
+        var pieData: F10FinacialPieChartData? = null
+        var bussinessReport: ArrayList<ArrayList<FinancialReportResponse.BusinessReport>> = ArrayList()
+        datas.mainBusinessReport?.forEach { (key, value) ->
+            try {
+                if(TimeZoneUtil.timeFormat(key, "yyyy-MM-dd").contains("12")){
+                    listDate.add(TimeZoneUtil.timeFormat(key, "yyyy")+"年报")
+                }else if(TimeZoneUtil.timeFormat(key, "yyyy-MM-dd").contains("06")){
+                    listDate.add(TimeZoneUtil.timeFormat(key, "yyyy")+"中报")
+                }
+                bussinessReport.add(value)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        if(datas.profitReport.size>0) {
+            pieData = F10FinacialPieChartData(listDate, bussinessReport,datas.profitReport[0].currency)
+        }else{
+            pieData = F10FinacialPieChartData(listDate, bussinessReport,"--")
+        }
+        viewModel?.modifyPieChatData?.value = pieData
+        viewModel?.pieChartData?.value = datas.mainBusinessReport
+        viewModel?.crashLineData?.value = datas.cashFlowReport
+        viewModel?.profitData?.value = datas.profitReport
+        viewModel?.outProfitData?.value = datas.liabilistyReport
     }
 
     override fun onErrorResponse(response: ErrorResponse) {

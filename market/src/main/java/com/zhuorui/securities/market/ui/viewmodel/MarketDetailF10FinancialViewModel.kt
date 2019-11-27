@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.model.F10FinacialPieChartData
 import com.zhuorui.securities.market.net.response.FinancialReportResponse
 
 /**
@@ -11,8 +12,9 @@ import com.zhuorui.securities.market.net.response.FinancialReportResponse
  * Desc:
  */
 class MarketDetailF10FinancialViewModel :ViewModel(){
-  var pieChartData : MutableLiveData<HashMap<String,ArrayList<FinancialReportResponse.BusinessReport>>> =MutableLiveData()
+  var pieChartData : MutableLiveData<LinkedHashMap<Long,ArrayList<FinancialReportResponse.BusinessReport>>> =MutableLiveData()
   var crashLineData : MutableLiveData<MutableList<FinancialReportResponse.CashFlowReport>> =MutableLiveData()
   var profitData : MutableLiveData<MutableList<FinancialReportResponse.ProfitReport>> =MutableLiveData()
   var outProfitData : MutableLiveData<MutableList<FinancialReportResponse.LiabilistyReport>> =MutableLiveData()
+  var modifyPieChatData:MutableLiveData<F10FinacialPieChartData> =MutableLiveData()
 }

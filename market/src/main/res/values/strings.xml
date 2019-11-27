@@ -238,4 +238,5 @@
     <string name="str_sell_order_broker">卖盘经纪</string>
     <string name="str_buy_10">买盘十档</string>
     <string name="str_sell_10">卖盘十档</string>
+    <string name="price_cent">单位:</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.zhuorui.securities.personal.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -9,6 +10,7 @@ import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -23,6 +25,7 @@ import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
 import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
+import java.util.*
 
 /**
  * Created by Maxwell.
@@ -34,6 +37,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
     private lateinit var strphone: String
     private lateinit var phonecode: String
+    private var locale: Locale?=null
     private var type:Int = 0
     override val layout: Int
         get() = R.layout.login_and_register_fragment
@@ -46,6 +50,11 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override val getView: LoginRegisterView
         get() = this
     override fun init() {
+        locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            resources.configuration.locales.get(0)
+        } else {
+            resources.configuration.locale
+        }
         tv_send_code.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
