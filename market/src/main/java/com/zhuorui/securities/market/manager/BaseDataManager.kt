@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.manager
 
 import com.zhuorui.commonwidget.model.Observer
 import com.zhuorui.commonwidget.model.Subject
+import com.zhuorui.securities.base2app.infra.StorageInfra.destroy
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import java.util.ArrayList
 
@@ -24,21 +25,29 @@ abstract class BaseDataManager : Subject<Observer> {
     }
 
     override fun registerObserver(obs: Observer) {
-        observerList.add(obs)
+        synchronized(observerList){
+            observerList.add(obs)
+        }
+
     }
 
     override fun removeObserver(obs: Observer) {
-        observerList.remove(obs)
-        // 当没有观察者了，清除当前实例
-        if (observerList.isNullOrEmpty()) {
-            destroy()
+        synchronized(observerList){
+            observerList.remove(obs)
+            // 当没有观察者了，清除当前实例
+            if (observerList.isNullOrEmpty()) {
+                destroy()
+            }
         }
+
     }
 
     override fun notifyAllObservers() {
-        for (obs in observerList) {
-            // 更新每一个观察者中的信息
-            obs.update(this)
+        synchronized(observerList){
+            for (obs in observerList) {
+                // 更新每一个观察者中的信息
+                obs.update(this)
+            }
         }
     }
 
