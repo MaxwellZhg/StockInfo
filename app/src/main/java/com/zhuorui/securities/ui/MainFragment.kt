@@ -50,13 +50,9 @@ class MainFragment :
     override val createViewModel: MainFragmentViewModel?
         get() = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
 
-    override fun isDestroy(): Boolean {
-        return isDestroyView
-    }
-
-    override fun init() {
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         // mBottomBar = view?.findViewById<View>(R.id.bottomBar) as BottomBar
-
         bottomBar!!
             .addItem(
                 BottomBarTab(
