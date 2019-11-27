@@ -2,7 +2,6 @@ package com.zhuorui.securities.market.manager
 
 import com.zhuorui.commonwidget.model.Observer
 import com.zhuorui.commonwidget.model.Subject
-import com.zhuorui.securities.base2app.infra.StorageInfra.destroy
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import java.util.ArrayList
 
