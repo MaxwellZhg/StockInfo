@@ -126,6 +126,7 @@
                 android:layout_height="50dp"
                 app:zr_cellbarTitle="@string/my_manager"
                 android:id="@+id/my_manager_tab"
+                android:layout_marginTop="1dp"
                 app:zr_cellbar_left_icon_width="18dp"
                 app:zr_cellbar_left_icon_height="17dp"
                 app:zr_cellbar_left_icon_margin="13dp"

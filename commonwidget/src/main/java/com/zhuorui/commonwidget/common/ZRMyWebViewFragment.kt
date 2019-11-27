@@ -1,7 +1,5 @@
 package com.zhuorui.commonwidget.common
 
-import android.graphics.Bitmap
-import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.webkit.*
@@ -17,16 +15,16 @@ import kotlinx.android.synthetic.main.fragment_my_web_view.*
  * Date: 2019/11/26
  * Desc:
  */
-class MyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.databinding.FragmentMyWebViewBinding,MyWebViewModel,MyWebView,MyWebViewPresenter>(),MyWebView{
+class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.databinding.FragmentMyWebViewBinding,ZRMyWebViewModel,ZRMyWebView,ZRMyWebViewPresenter>(),ZRMyWebView{
     override val layout: Int
         get() = R.layout.fragment_my_web_view
     override val viewModelId: Int
         get() = BR.viewModel
-    override val createPresenter: MyWebViewPresenter
-        get() = MyWebViewPresenter()
-    override val createViewModel: MyWebViewModel?
-        get() = ViewModelProviders.of(this).get(MyWebViewModel::class.java)
-    override val getView: MyWebView
+   override val createPresenter: ZRMyWebViewPresenter
+       get() = ZRMyWebViewPresenter()
+    override val createViewModel: ZRMyWebViewModel?
+        get() =  ViewModelProviders.of(this).get(ZRMyWebViewModel::class.java)
+    override val getView: ZRMyWebView
         get() = this
 
 
@@ -60,8 +58,8 @@ class MyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.databi
     }
 
     companion object{
-        fun newInstance(type: Int?): MyWebViewFragment {
-            val fragment = MyWebViewFragment()
+        fun newInstance(type: Int?): ZRMyWebViewFragment {
+            val fragment = ZRMyWebViewFragment()
             if (type != null) {
                 val bundle = Bundle()
                 bundle.putSerializable("type", type)
