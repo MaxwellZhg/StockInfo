@@ -29,7 +29,7 @@ class StockHandicapData(
     var peRatioStatic:Float?,//市盈率静
     var peRatioTTM:Float?,//市盈率ttm
     var preClose:Float?,//昨收价
-    var sharestraded:Long?,//成交量
+    var sharestraded:BigDecimal?,//成交量
     var time:Long?,
     var totalCapitalStock:BigDecimal?,//总股本
     var totalMarkValue:BigDecimal?,//总市值

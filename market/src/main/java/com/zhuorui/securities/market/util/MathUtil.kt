@@ -169,6 +169,7 @@ object MathUtil {
      */
     private val W = BigDecimal.valueOf(100000)
     private val Y = BigDecimal.valueOf(100000000)
+    private val WY = BigDecimal.valueOf(1000000000000)
     /**
      * 格式化数字加单位
      * @param formatType 1金额 2持股
@@ -177,6 +178,8 @@ object MathUtil {
     fun convertToUnitString(number: BigDecimal, formatType: Int): String? {
         if (formatType == 1) {
             return when {
+                // 是否大于万亿
+                number.compareTo(WY) == 1 -> divide2(number, WY).toString() + ResUtil.getString(R.string.unit_wy)
                 // 是否大于亿
                 number.compareTo(Y) == 1 -> divide2(number, Y).toString() + ResUtil.getString(R.string.unit_y)
                 // 是否大于万

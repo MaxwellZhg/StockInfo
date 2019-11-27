@@ -170,7 +170,6 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             for (int i = 0, len = datas.size(); i < len; i += 4) {
                 CapitalTrendModel data = datas.get(i);
                 float x = getXByTime(dateM, data.getTime(), openingMillisecond, breakMillisecond, breakEndMillisecond);
-                Log.i("lw", "getEntry: " + x +" "+TimeZoneUtil.timeFormat(data.getTime(),"yyyy-MM-dd HH:mm:ss"));
                 if (x > -1) {
                     entrys.add(new Entry(x, data.getValue().floatValue()));
                 }

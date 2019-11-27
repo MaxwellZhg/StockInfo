@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.commonwidget.config.StocksThemeColor;
 import com.zhuorui.securities.base2app.util.TimeZoneUtil;
@@ -147,10 +148,9 @@ public class MarketUtil {
             animator.cancel();
         }
         view.setBackgroundColor(isUp ? 0x33D9001B : 0x3300CC00);
-        float start = view.getHeight() * (isUp ? 1 : -1);
-        animator = new ObjectAnimator().ofFloat(view, "translationY", start, 0, -start);
-        animator.setInterpolator(new AccelerateInterpolator());
-        animator.setDuration(500);
+        animator = new ObjectAnimator().ofFloat(view, "alpha", 0, 1, 0);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(400);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -160,6 +160,7 @@ public class MarketUtil {
             @Override
             public void onAnimationEnd(Animator animation) {
                 view.setBackground(null);
+                view.setVisibility(View.GONE);
             }
 
             @Override
@@ -173,6 +174,7 @@ public class MarketUtil {
             }
         });
         animator.start();
+        view.setVisibility(View.VISIBLE);
         return animator;
     }
 }
