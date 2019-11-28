@@ -21,7 +21,7 @@
                             android:id="@+id/rl_search"
                             android:layout_toLeftOf="@+id/tv_detele"
                             android:layout_marginRight="16dp"
-                            android:background="@drawable/search_bg"
+                            android:background="@drawable/common_search_bg"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="15dp"
                             android:layout_height="31dp">

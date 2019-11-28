@@ -10,8 +10,8 @@ import com.zhuorui.commonwidget.model.Subject;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/29
- * Desc:
- */
+ * Desc:颜色可变设置状态BUTTON
+ * */
 public class ZRStockStatusButton extends StateButton implements Observer {
     // -1跌 0无涨跌 1涨
     private int diffState = 0;

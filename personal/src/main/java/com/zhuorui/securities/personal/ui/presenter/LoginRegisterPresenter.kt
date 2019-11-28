@@ -76,7 +76,6 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
             dialogshow(0)
             setGetCodeClickState(1)
             startTimeCountDown()
-            view?.showSendCode(response.data)
         }
     }
 

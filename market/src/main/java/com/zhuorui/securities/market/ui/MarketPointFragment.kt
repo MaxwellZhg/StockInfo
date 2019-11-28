@@ -48,15 +48,15 @@ class MarketPointFragment :
     private var tabTitle: ArrayList<String> = ArrayList()
     private val mFragments = arrayOfNulls<SupportFragment>(2)
     private var mIndex = 0
-    private var consStockPage =20
-    private var allCount =0
-    private var consInfoPage =0
+    private var consStockPage = 20
+    private var allCount = 0
+    private var consInfoPage = 0
     private var priceSelect = false
     private var rateSelect = false
     private var countSelect = false
     private var sort = 3
-    private var sortType =1
-    private var code:String =""
+    private var sortType = 1
+    private var code: String = ""
     override val layout: Int
         get() = R.layout.fragment_market_point
     override val viewModelId: Int
@@ -89,15 +89,15 @@ class MarketPointFragment :
         type = arguments?.getSerializable("type") as Int?
         when (type) {
             1 -> {
-                code="HSI"
+                code = "HSI"
                 tv_title.text = "恒生指数（HSI）"
             }
             2 -> {
-                code="HSCEI"
+                code = "HSCEI"
                 tv_title.text = "国企指数（HSCEI）"
             }
             3 -> {
-                code="HSCCI"
+                code = "HSCCI"
                 tv_title.text = "红筹指数（HSCCI）"
             }
         }
@@ -108,20 +108,22 @@ class MarketPointFragment :
         tv_newly_price.setOnClickListener(this)
         tv_up_down_rate.setOnClickListener(this)
         tv_up_down_count.setOnClickListener(this)
-       // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
+        // loadRootFragment(R.id.kline_view, MarketPointKlineFragment.newInstance("","","",false))
         scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (magic_indicator != null) {
                 top_magic_indicator?.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
-                if(mIndex==0) {
+                if (mIndex == 0) {
                     ll_selcet_info.visibility = if (scrollY < magic_indicator.top) View.GONE else View.VISIBLE
-                }else{
+                } else {
                     ll_selcet_info.visibility = View.GONE
                 }
             }
         }
         refresh_layout.setOnLoadMoreListener(this)
         refresh_layout.setOnRefreshListener(this)
-        market_point_view.setData(StockIndexHandicapDataManager.getInstance(code,"HK",1).indexData)
+        if (StockIndexHandicapDataManager.getInstance(code, "HK", 1).indexData!=null) {
+            market_point_view.setData(StockIndexHandicapDataManager.getInstance(code, "HK", 1).indexData)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -132,112 +134,112 @@ class MarketPointFragment :
             iv_search -> {
                 start(SearchInfoFragment.newInstance())
             }
-            tv_newly_price->{
-                consStockPage=20
+            tv_newly_price -> {
+                consStockPage = 20
                 refresh_layout.finishLoadMore(true)
                 refresh_layout.setEnableLoadMore(true)
                 refresh_layout.setNoMoreData(false)
-                detailShowTypeInfo(priceSelect,1,tv_newly_price)
-                 priceSelect =!priceSelect
+                detailShowTypeInfo(priceSelect, 1, tv_newly_price)
+                priceSelect = !priceSelect
             }
-            tv_up_down_rate->{
-                consStockPage=20
+            tv_up_down_rate -> {
+                consStockPage = 20
                 refresh_layout.finishLoadMore(true)
                 refresh_layout.setEnableLoadMore(true)
                 refresh_layout.setNoMoreData(false)
-                detailShowTypeInfo(rateSelect,2,tv_up_down_rate)
-                rateSelect =!rateSelect
+                detailShowTypeInfo(rateSelect, 2, tv_up_down_rate)
+                rateSelect = !rateSelect
             }
-            tv_up_down_count->{
-                consStockPage=20
+            tv_up_down_count -> {
+                consStockPage = 20
                 refresh_layout.finishLoadMore(true)
                 refresh_layout.setEnableLoadMore(true)
                 refresh_layout.setNoMoreData(false)
-                detailShowTypeInfo(countSelect,3,tv_up_down_count)
-                countSelect =!countSelect
+                detailShowTypeInfo(countSelect, 3, tv_up_down_count)
+                countSelect = !countSelect
             }
         }
 
     }
 
-    private fun detailShowTypeInfo(selectInfo:Boolean, type:Int, view:View){
-        when(type){
-            1->{
-                rateSelect=false
-                countSelect=false
-                showViewInfo(selectInfo,view)
+    private fun detailShowTypeInfo(selectInfo: Boolean, type: Int, view: View) {
+        when (type) {
+            1 -> {
+                rateSelect = false
+                countSelect = false
+                showViewInfo(selectInfo, view)
             }
-            2->{
-                priceSelect=false
-                countSelect=false
-                showViewInfo(selectInfo,view)
+            2 -> {
+                priceSelect = false
+                countSelect = false
+                showViewInfo(selectInfo, view)
             }
-            3->{
-                priceSelect=false
-                rateSelect=false
-                showViewInfo(selectInfo,view)
+            3 -> {
+                priceSelect = false
+                rateSelect = false
+                showViewInfo(selectInfo, view)
             }
         }
     }
 
-    private fun showViewInfo(selectInfo :Boolean, view:View){
-        detailViewInfo(view,selectInfo)
+    private fun showViewInfo(selectInfo: Boolean, view: View) {
+        detailViewInfo(view, selectInfo)
     }
 
-    private fun detailViewInfo(view:View, infoState:Boolean){
-           when (view) {
-                tv_newly_price -> {
-                    if(infoState) {
-                        sort=1
-                        sortType=1
-                        tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
-                        RxBus.getDefault().post(StockConsStateEvent(1))
-                    }else {
-                        sort=1
-                        sortType=2
-                        tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
-                        RxBus.getDefault().post(StockConsStateEvent(2))
-                    }
-                    tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    presenter?.getStockConsInfo(code,consStockPage,sort,sortType,true,false)
+    private fun detailViewInfo(view: View, infoState: Boolean) {
+        when (view) {
+            tv_newly_price -> {
+                if (infoState) {
+                    sort = 1
+                    sortType = 1
+                    tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
+                    RxBus.getDefault().post(StockConsStateEvent(1))
+                } else {
+                    sort = 1
+                    sortType = 2
+                    tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
+                    RxBus.getDefault().post(StockConsStateEvent(2))
                 }
-                tv_up_down_rate -> {
-                    if(infoState) {
-                        sort=3
-                        sortType=1
-                        tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
-                        RxBus.getDefault().post(StockConsStateEvent(3))
-                    }else {
-                        sort=3
-                        sortType=2
-                        tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
-                        RxBus.getDefault().post(StockConsStateEvent(4))
-                    }
-                    tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    presenter?.getStockConsInfo(code,consStockPage,sort,sortType,true,false)
-                }
-                else -> {
-                    if(infoState) {
-                        sort=2
-                        sortType=1
-                        tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
-                        RxBus.getDefault().post(StockConsStateEvent(5))
-
-                    }else {
-                        sort=2
-                        sortType=2
-                        tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
-                        RxBus.getDefault().post(StockConsStateEvent(6))
-                    }
-                    tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.icon_up_rate,0)
-                    presenter?.getStockConsInfo(code,consStockPage,sort,sortType,true,false)
-                }
+                tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
+                tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
+                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
             }
+            tv_up_down_rate -> {
+                if (infoState) {
+                    sort = 3
+                    sortType = 1
+                    tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
+                    RxBus.getDefault().post(StockConsStateEvent(3))
+                } else {
+                    sort = 3
+                    sortType = 2
+                    tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
+                    RxBus.getDefault().post(StockConsStateEvent(4))
+                }
+                tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
+                tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
+                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
+            }
+            else -> {
+                if (infoState) {
+                    sort = 2
+                    sortType = 1
+                    tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_price, 0)
+                    RxBus.getDefault().post(StockConsStateEvent(5))
 
+                } else {
+                    sort = 2
+                    sortType = 2
+                    tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_down_price, 0)
+                    RxBus.getDefault().post(StockConsStateEvent(6))
+                }
+                tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
+                tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
+                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
+            }
         }
+
+    }
 
 
     /**
@@ -284,18 +286,17 @@ class MarketPointFragment :
     }
 
     private fun onSelect(index: Int) {
-        if(index==0){
-            ll_selcet_info.visibility =View.GONE
-           // refresh_layout.setNoMoreData(false)
+        if (index == 0) {
+            ll_selcet_info.visibility = View.GONE
+            // refresh_layout.setNoMoreData(false)
             refresh_layout.setEnableLoadMore(true)
-        }else{
+        } else {
             ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             refresh_layout.setEnableLoadMore(false)
         }
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
     }
-
 
 
     override fun onEnterAnimationEnd(savedInstanceState: Bundle?) {
@@ -308,25 +309,25 @@ class MarketPointFragment :
      */
     private fun loadFragment() {
         //加载K线Fragment
-   /*     loadRootFragment(
-            R.id.kline_view,
-            KlineFragment.newInstance(
-                mStock.ts ?: "",
-                mStock.code ?: "",
-                mStock.tsCode ?: mStock.code + "." + mStock.ts,
-                mStock.type ?: 2,
-                false
-            )
-        )
-        //加载指数Fragment
-        if (!mBMP) {
-            loadIndexFragment()
-        }*/
+        /*     loadRootFragment(
+                 R.id.kline_view,
+                 KlineFragment.newInstance(
+                     mStock.ts ?: "",
+                     mStock.code ?: "",
+                     mStock.tsCode ?: mStock.code + "." + mStock.ts,
+                     mStock.type ?: 2,
+                     false
+                 )
+             )
+             //加载指数Fragment
+             if (!mBMP) {
+                 loadIndexFragment()
+             }*/
         initTabFragment()
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         showHideFragment(mFragments[0], mFragments[1])
-        presenter?.getStockConsInfo(code,20,3,1,false,true)
+        presenter?.getStockConsInfo(code, 20, 3, 1, false, true)
     }
 
     private fun initTabFragment() {
@@ -350,28 +351,29 @@ class MarketPointFragment :
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         consStockPage += 20
-        if(allCount!=0&&consStockPage>allCount){
-            consStockPage=allCount
-            presenter?.getStockConsInfo(code,consStockPage,sort,sortType,false,false)
-        }else{
-            presenter?.getStockConsInfo(code,consStockPage,sort,sortType,false,false)
+        if (allCount != 0 && consStockPage > allCount) {
+            consStockPage = allCount
+            presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false)
+        } else {
+            presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false)
         }
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        consStockPage=20
-        presenter?.getStockConsInfo(code,consStockPage,sort,sortType,true,false)
+        consStockPage = 20
+        presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
     }
 
     override fun loadMoreSuccess() {
-        if(consStockPage==allCount){
+        if (consStockPage == allCount) {
             refresh_layout.setNoMoreData(true)
-        }else {
+        } else {
             refresh_layout.finishLoadMore(true)
         }
     }
+
     override fun showAllCount(count: Int) {
-       allCount=count
+        allCount = count
     }
 
     override fun refreshSuccess() {
@@ -383,35 +385,35 @@ class MarketPointFragment :
     override fun showStateChangeEvent(state: Int) {
         refresh_layout.setEnableLoadMore(true)
         refresh_layout.setNoMoreData(false)
-        consStockPage=20
-        when(state){
-            1->{
-                sort=1
-                sortType=1
+        consStockPage = 20
+        when (state) {
+            1 -> {
+                sort = 1
+                sortType = 1
             }
-            2->{
-                sort=1
-                sortType=2
+            2 -> {
+                sort = 1
+                sortType = 2
             }
-            3->{
-                sort=3
-                sortType=1
+            3 -> {
+                sort = 3
+                sortType = 1
             }
-            4->{
-                sort=3
-                sortType=2
+            4 -> {
+                sort = 3
+                sortType = 2
             }
-            5->{
-                sort=2
-                sortType=1
+            5 -> {
+                sort = 2
+                sortType = 1
             }
-            6->{
-                sort=2
-                sortType=2
+            6 -> {
+                sort = 2
+                sortType = 2
             }
 
         }
-        presenter?.getStockConsInfo(code,consStockPage,sort,sortType,false,false)
+        presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false)
     }
 
     override fun setLoadMoreState() {

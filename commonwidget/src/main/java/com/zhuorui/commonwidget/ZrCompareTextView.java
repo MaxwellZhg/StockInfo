@@ -18,8 +18,8 @@ import java.util.regex.Pattern;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/10
- * Desc:
- */
+ * Desc:对比颜色改变Text
+ * */
 public class ZrCompareTextView extends AppCompatTextView {
 
     private int color;

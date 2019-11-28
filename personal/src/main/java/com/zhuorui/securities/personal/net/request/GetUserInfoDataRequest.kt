@@ -6,8 +6,8 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/15
- * Desc:
- */
+ * Desc:获取用户消息
+ * */
 class GetUserInfoDataRequest(transaction: String) :BaseRequest(transaction){
     init {
         generateSign()

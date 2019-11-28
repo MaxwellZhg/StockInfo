@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.fragment_my_web_view.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/26
- * Desc:
- */
+ * Desc:公共web界面
+ * */
 class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.databinding.FragmentMyWebViewBinding,ZRMyWebViewModel,ZRMyWebView,ZRMyWebViewPresenter>(),ZRMyWebView{
     override val layout: Int
         get() = R.layout.fragment_my_web_view

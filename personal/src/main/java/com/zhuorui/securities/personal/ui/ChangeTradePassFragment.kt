@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.fragment_change_trade_pass.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/11
- * Desc:
- */
+ * Desc:修改交易密码
+ * */
 class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBinding,ChangeTradePassViewModel,ChangeTradePassView,ChangeTradePassPresenter>(),ChangeTradePassView,TextWatcher,View.OnClickListener{
     private lateinit var strnewcapsw: String
     private lateinit var strencapsw: String

@@ -9,7 +9,7 @@ import com.zhuorui.securities.market.R
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/23
- * Desc:
+ * Desc:市场指数详情咨询adapter
  */
 class MarketPointInfoAdapter :BaseListAdapter<Int>(){
     override fun getLayout(viewType: Int): Int {

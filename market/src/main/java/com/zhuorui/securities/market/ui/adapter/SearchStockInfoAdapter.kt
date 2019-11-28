@@ -22,8 +22,8 @@ import me.jessyan.autosize.utils.LogUtils
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/23
- * Desc:
- */
+ * Desc:搜索股票信息adapter
+ * */
 class SearchStockInfoAdapter(str:String) : BaseListAdapter<SearchStockInfo>(){
     private val default = 0x00
     private val bottom = 0x01

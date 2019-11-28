@@ -14,8 +14,8 @@ import java.util.LinkedList;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/19
- * Desc:
- */
+ * Desc:国家码排序适配器
+ * */
 public class SortAdapter extends BaseAdapter {
     private Context context;
     private CommonEnum commonEnum;

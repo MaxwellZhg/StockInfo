@@ -239,4 +239,5 @@
     <string name="str_buy_10" tools:ignore="ExtraTranslation">买盘十档</string>
     <string name="str_sell_10" tools:ignore="ExtraTranslation">卖盘十档</string>
     <string name="ntioc_str" tools:ignore="ExtraTranslation">通知</string>
+    <string name="price_cent">单位:</string>
 </resources>

@@ -11,8 +11,8 @@ import com.zhuorui.securities.market.R;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/22
- * Desc:
- */
+ * Desc:板块消息组件
+ * */
 public class MarketPartInfoView extends FrameLayout {
 
     private TextView tv_part_info;

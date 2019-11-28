@@ -13,6 +13,4 @@ interface LoginRegisterView :AbsView{
    //逻辑扩展接口
     fun gotopsw()
     fun gotomain()
-
-    fun showSendCode(str:String)
 }

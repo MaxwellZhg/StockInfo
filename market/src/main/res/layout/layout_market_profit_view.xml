@@ -26,7 +26,7 @@
               android:id="@+id/tv_price"
               android:layout_marginStart="13dp"
               android:textColor="@color/color_A4B2CB"
-              android:text="单位：人民币"/>
+            />
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"

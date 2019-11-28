@@ -1,6 +1,7 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
@@ -38,7 +39,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
     }
     fun requestSendOldRepaiedCode(str: String) {
         dialogshow(1)
-        val request = SendLoginCodeRequest(str, "86", transactions.createTransaction())
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendOldPhoneRepaireCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -57,7 +58,7 @@ class ChangePhoneNumPresenter(context: Context) :AbsNetPresenter<ChangePhoneNumV
 
     fun requestModifyOldPhone(str: kotlin.String?,verificationCode:String) {
         dialogshow(1)
-        val request = ModifyOldPhoneRequest(str, verificationCode,"86", transactions.createTransaction())
+        val request = ModifyOldPhoneRequest(str, verificationCode,CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendModifyOldPhone(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }

@@ -118,7 +118,8 @@
                   android:layout_alignParentLeft="true"
                   android:textColor="@color/color_232323"
                   android:text="@string/password"/>
-        <EditText android:layout_width="wrap_content"
+        <com.zhuorui.securities.personal.widget.CanNotPasteEditView
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:background="@null"
                   android:layout_marginLeft="66dp"

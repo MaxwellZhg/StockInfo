@@ -7,8 +7,8 @@ import java.math.BigDecimal
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/22
- * Desc:
- */
+ * Desc:指数盘口查询bean
+ * */
 class IndexPonitHandicapData(
     var diffPrice: BigDecimal?,//涨跌价格
     var diffRate: BigDecimal?,//涨跌率

@@ -1,6 +1,9 @@
 package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -15,15 +18,18 @@ import com.zhuorui.securities.personal.ui.view.SettingPswView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
 import kotlinx.android.synthetic.main.setting_psw_fragment.*
 import com.zhuorui.securities.personal.databinding.SettingPswFragmentBinding
+import com.zhuorui.securities.personal.util.PatternUtils
+import kotlinx.android.synthetic.main.login_psw_fragment.*
 
 /**
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/16
- * Desc:
- */
+ * Desc:设置密码
+ * */
 
-class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, SettingPswViewModel, SettingPswView, SettingPswPresenter>(),SettingPswView,View.OnClickListener{
+class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, SettingPswViewModel, SettingPswView, SettingPswPresenter>()
+    ,SettingPswView,View.OnClickListener,TextWatcher{
     private var phone: String? = null
     private var code :String?=null
     override val layout: Int
@@ -43,7 +49,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         phone = arguments?.getSerializable("phone") as String?
         code = arguments?.getSerializable("code") as String?
         iv_back.setOnClickListener(this)
-        tv_btn_finish.setOnClickListener(this)
+        tv_btn_settin_finish.setOnClickListener(this)
         cb_login_psw.setOnCheckedChangeListener{ _, isChecked->
             run {
                 if (isChecked) {
@@ -62,6 +68,8 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
                 }
             }
         }
+        et_login_psw.addTextChangedListener(PhoneEtChange())
+        et_ensure_psw.addTextChangedListener(this)
     }
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -86,7 +94,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
             R.id.iv_back->{
                 pop()
             }
-            R.id.tv_btn_finish->{
+            R.id.tv_btn_settin_finish->{
                 if (strloginpsw == "") {
                     ToastUtil.instance.toast(R.string.input_psw_tips)
                     return
@@ -122,6 +130,41 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
 
     override fun showDialog() {
        presenter?.showDailog()
+    }
+
+    inner class PhoneEtChange : TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {
+            if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_ensure_psw.text.toString())){
+                tv_btn_settin_finish.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+            }else{
+                tv_btn_settin_finish.isEnabled =false
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+        if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_login_psw.text.toString())){
+            tv_btn_settin_finish.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+        }else{
+            tv_btn_settin_finish.isEnabled=false
+        }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
     }
 
 }

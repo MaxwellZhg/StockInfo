@@ -2,12 +2,14 @@ package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
@@ -19,7 +21,10 @@ import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
+import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
+import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
+import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle
@@ -28,13 +33,14 @@ import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_contry
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
+import java.util.regex.Pattern
 
 /*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/19
- * Desc:
- * */
+ * Desc:密码登录
+  * * */
 
 
 class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPswViewModel,LoginPswView, LoginPswPresenter>(),LoginPswView,View.OnClickListener,TextWatcher{
@@ -58,6 +64,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         ll_country_disct.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
+        et_phone.addTextChangedListener(PhoneEtChange())
         et_password.addTextChangedListener(this)
         tv_forget_psw.setOnClickListener(this)
     }
@@ -94,8 +101,10 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
             p0?.toString()?.trim()?.let {
                 if(TextUtils.isEmpty(et_password.text.toString())){
                     ToastUtil.instance.toast(R.string.input_psw_tips)
-                }else {
-                    tv_btn_login.isEnabled=true
+                }else if(!TextUtils.isEmpty(et_password.text.toString())&&TextUtils.isEmpty(et_phone.text.toString())){
+                    tv_btn_login.isEnabled=false
+                }else if(!TextUtils.isEmpty(et_password.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
+                    tv_btn_login.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
                 }
             }
         } else {
@@ -141,5 +150,33 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
        start(PhoneDevVerifyFragment.newInstance(strphone))
     }
 
+
+    inner class PhoneEtChange : TextWatcher{
+        override fun afterTextChanged(p0: Editable?) {
+            if(tv_areaphone_tips.text == "+86"){
+                et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
+            }else{
+                et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
+            }
+            if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_password.text.toString())){
+                if(tv_areaphone_tips.text == "+86"){
+                    tv_btn_login.isEnabled = PatternUtils.patternZhPhone(p0.toString())
+                }else{
+                    tv_btn_login.isEnabled = PatternUtils.patternOtherPhone(p0.toString())
+                }
+            }else{
+                tv_btn_login.isEnabled=false
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+    }
 
 }

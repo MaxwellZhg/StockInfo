@@ -1,7 +1,7 @@
 package com.zhuorui.commonwidget.common;
 
 import java.util.Comparator;
-
+//国家码拼音对比
 public class PinyinComparator implements Comparator<JsonBean> {
 
     public int compare(JsonBean o1, JsonBean o2) {

@@ -29,8 +29,8 @@ import com.zhuorui.securities.market.util.MarketUtil;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/23
- * Desc:
- */
+ * Desc:指数行情的订阅组件
+ * */
 public class MarketPointDetailView extends FrameLayout {
     /*数据对应位置*/
     private final int ITEMPOS_HIGH_PRICE = 0;//最高价

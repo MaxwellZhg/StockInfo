@@ -12,8 +12,8 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/23
- * Desc:
- */
+ * Desc:国家码拼音工具
+ * */
 public class PinyinUtils {
     /**
      * 获得汉语拼音首字母

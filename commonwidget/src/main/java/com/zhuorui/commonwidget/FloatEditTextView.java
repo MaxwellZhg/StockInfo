@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/15
- * Desc:
- */
+ * Desc:提醒设置Edittext
+ * */
 public class FloatEditTextView extends AppCompatEditText implements TextWatcher {
     private String lastNumber;
     private Context context;

@@ -14,8 +14,8 @@ import com.zhuorui.securities.market.R2
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/23
- * Desc:
- */
+ * Desc:搜索咨讯adapter
+ * */
 class SearchInfomationAdapter(type:Int,keywords:String) :BaseListAdapter<Int>(){
     private var type=type
     private val default = 0x00
