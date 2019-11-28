@@ -3,6 +3,7 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.DevComfirmDailog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
@@ -18,8 +19,10 @@ import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.GetUserInfoDataRequest
+import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.UserLoginCodeRequest
 import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
+import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyCodeView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyCodeViewModel
@@ -70,7 +73,8 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
                         timer!!.cancel()
                         task = null
                         timer = null
-                        viewModel?.str?.set("0s")
+                        viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
+                        viewModel?.getCodeClickState?.set(0)
                     }
                 }
             }
@@ -163,4 +167,24 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
         RxBus.getDefault().post(LoginStateChangeEvent(true))
     }
 
+    fun requestSendLoginCode(str: kotlin.String) {
+        dialogshow(1)
+        val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
+        Cache[IPersonalNet::class.java]?.sendLoginCode(request)
+            ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
+        if (!transactions.isMyTransaction(response)) return
+        if (response.request is SendLoginCodeRequest) {
+            dialogshow(0)
+            setGetCodeClickState(1)
+            startTimeCountDown()
+        }
+    }
+
+    fun setGetCodeClickState(state:Int){
+        viewModel?.getCodeClickState?.set(state)
+    }
 }

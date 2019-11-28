@@ -16,8 +16,11 @@ import com.zhuorui.securities.personal.ui.view.RestPswView
 import com.zhuorui.securities.personal.ui.viewmodel.RestPswViewModel
 import com.zhuorui.securities.personal.databinding.RestPswFragmentBinding
 import com.zhuorui.securities.personal.ui.presenter.RestPswPresenter
+import com.zhuorui.securities.personal.util.PatternUtils
+import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.rest_psw_fragment.*
 import kotlinx.android.synthetic.main.rest_psw_fragment.iv_back
+import kotlinx.android.synthetic.main.setting_psw_fragment.*
 
 /**
  * Created by Maxwell.
@@ -67,6 +70,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
             }
         }
         tv_btn_rest.setOnClickListener(this)
+        et_new_psw.addTextChangedListener(PhoneEtChange())
         et_rest_ensure_psw.addTextChangedListener(this)
         tv_phone_code_login.setOnClickListener(this)
     }
@@ -111,10 +115,10 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
-                if(TextUtils.isEmpty(et_rest_ensure_psw.text.toString())){
-                    ToastUtil.instance.toast(R.string.input_psw_tips)
-                }else {
-                    tv_btn_rest.isEnabled=true
+                if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_new_psw.text.toString())){
+                    tv_btn_rest.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+                }else{
+                    tv_btn_rest.isEnabled=false
                 }
             }
         } else {
@@ -131,6 +135,25 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
     }
     override fun gotopswlogin() {
        pop()
+    }
+
+    inner class PhoneEtChange : TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {
+            if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_rest_ensure_psw.text.toString())){
+                tv_btn_login.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+            }else{
+                tv_btn_rest.isEnabled=false
+            }
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
     }
 
 

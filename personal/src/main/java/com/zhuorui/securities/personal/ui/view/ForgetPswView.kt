@@ -11,5 +11,4 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
 interface ForgetPswView :AbsView{
     fun init()
     fun restpsw()
-    fun showForgetCode(str:String)
 }

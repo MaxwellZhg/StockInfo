@@ -2,6 +2,7 @@ package com.zhuorui.securities.personal.ui
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
@@ -17,6 +18,7 @@ import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
 import com.zhuorui.securities.personal.databinding.ForgetPswFragmentBinding
 import com.zhuorui.securities.personal.ui.viewmodel.CountryDisctViewModel
+import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
@@ -102,8 +104,10 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
             p0?.toString()?.trim()?.let {
                 if(TextUtils.isEmpty(et_phone_code.text.toString())){
                     ToastUtil.instance.toast(R.string.phone_code_tips)
-                }else {
-                    tv_btn_commit.isEnabled=true
+                }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&TextUtils.isEmpty(et_phone.text.toString())){
+                    tv_btn_commit.isEnabled=false
+                }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
+                    tv_btn_commit.isEnabled = PatternUtils.patternPhoneCode(et_phone_code.text.toString())
                 }
             }
         } else {
@@ -139,10 +143,57 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
 
     inner class PhoneEtChange : TextWatcher{
         override fun afterTextChanged(p0: Editable?) {
-            if(!TextUtils.isEmpty(p0.toString())){
-                presenter?.getGetCodeColor(1)
+            if(tv_areaphone_tips.text == "+86"){
+                et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
             }else{
+                et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
+            }
+            if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
+                if(tv_areaphone_tips.text == "+86"){
+                    val matcher = PatternUtils.patternZhPhone(p0.toString())
+                    if(matcher) {
+                        presenter?.getGetCodeColor(1)
+                        tv_btn_commit.isEnabled = true
+                    }else{
+                        presenter?.getGetCodeColor(0)
+                        tv_btn_commit.isEnabled = false
+                    }
+                }else{
+                    val matcher = PatternUtils.patternOtherPhone(p0.toString())
+                    if(matcher) {
+                        presenter?.getGetCodeColor(1)
+                        tv_btn_commit.isEnabled = true
+                    }else{
+                        presenter?.getGetCodeColor(0)
+                        tv_btn_commit.isEnabled = false
+                    }
+                }
+            }else if(!TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
+                if(tv_areaphone_tips.text == "+86"){
+                    val matcher = PatternUtils.patternZhPhone(p0.toString())
+                    if(matcher) {
+                        presenter?.getGetCodeColor(1)
+                        tv_btn_commit.isEnabled = false
+                    }else{
+                        presenter?.getGetCodeColor(0)
+                        tv_btn_commit.isEnabled = false
+                    }
+                }else{
+                    val matcher = PatternUtils.patternOtherPhone(p0.toString())
+                    if(matcher) {
+                        presenter?.getGetCodeColor(1)
+                        tv_btn_commit.isEnabled = false
+                    }else{
+                        presenter?.getGetCodeColor(0)
+                        tv_btn_commit.isEnabled = false
+                    }
+                }
+            }else if(TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
                 presenter?.getGetCodeColor(0)
+                tv_btn_commit.isEnabled=false
+            }else if(TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
+                presenter?.getGetCodeColor(0)
+                tv_btn_commit.isEnabled=false
             }
         }
 
@@ -154,9 +205,6 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
 
         }
 
-    }
-    override fun showForgetCode(str: String) {
-       et_phone_code.setText(str)
     }
 
 }

@@ -47,13 +47,15 @@
                               android:layout_toRightOf="@+id/tv_new_psw">
                     <RelativeLayout android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
-                        <EditText android:layout_width="match_parent"
+                        <com.zhuorui.securities.personal.widget.CanNotPasteEditView
+                                  android:layout_width="match_parent"
                                   android:layout_height="wrap_content"
                                   android:textSize="16sp"
                                   android:textStyle="bold"
                                   android:id="@+id/et_new_psw"
                                   android:inputType="textPassword"
                                   android:textColor="@color/color_282828"
+                                  android:maxLength="20"
                                   android:hint="@string/psw_conbine"
                                   android:textCursorDrawable="@drawable/bg_edittext"
                                   android:textColorHint="@color/color_A1A1A1"
@@ -96,7 +98,8 @@
                               android:layout_toRightOf="@+id/tv_ensure_psw">
                     <RelativeLayout android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
-                        <EditText android:layout_width="match_parent"
+                        <com.zhuorui.securities.personal.widget.CanNotPasteEditView
+                                  android:layout_width="match_parent"
                                   android:layout_height="wrap_content"
                                   android:textSize="16sp"
                                   android:textStyle="bold"
@@ -105,6 +108,7 @@
                                   android:textCursorDrawable="@drawable/bg_edittext"
                                   android:textColor="@color/color_282828"
                                   android:hint="@string/ensure_psw_again"
+                                  android:maxLength="20"
                                   android:textColorHint="@color/color_A1A1A1"
                                   android:background="@null"/>
                         <CheckBox android:layout_width="17dp"

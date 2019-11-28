@@ -121,6 +121,7 @@
                           android:textCursorDrawable="@drawable/bg_edittext"
                           android:id="@+id/et_phone_code"
                           android:hint="@string/input_verification_code"
+                          android:maxLength="6"
                           android:textStyle="bold"
                           android:inputType="number"
                           android:textSize="16sp"

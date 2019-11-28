@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_phone_dev_verify.*
  * */
 class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBinding,PhoneDevVerifyViewModel,PhoneDevVerifyView,PhoneDevVerifyPresenter>(),PhoneDevVerifyView,View.OnClickListener,
     CheckRequestPermissionsListener {
-
     var permissions = arrayOf(Manifest.permission.CALL_PHONE)
 
     private var phone: String? = null
@@ -75,10 +74,6 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
            }
        }
     }
-    override fun gotoVerifyCode(str:String) {
-        start(PhoneDevVerifyCodeFragment.newInstance(phone, CountryCodeConfig.read().defaultCode,str))
-    }
-
     override fun gotoPhone() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             SoulPermission.getInstance().checkAndRequestPermissions(
@@ -97,4 +92,8 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
     override fun onPermissionDenied(refusedPermissions: Array<out Permission>?) {
 
     }
+    override fun goNext() {
+        start(PhoneDevVerifyCodeFragment.newInstance(phone, CountryCodeConfig.read().defaultCode))
+    }
+
 }

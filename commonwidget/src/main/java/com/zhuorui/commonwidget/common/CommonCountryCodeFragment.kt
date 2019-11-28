@@ -301,8 +301,13 @@ class CommonCountryCodeFragment :
                         b.putString("str", adapter?.info)
                         setFragmentResult(ISupportFragment.RESULT_OK, b)
                     } else {
-                        b.putString("str", jsonBean[0].cn)
-                        b.putString("code", jsonBean[0].number)
+                        if(result.size>0) {
+                            b.putString("str", result[0].cn)
+                            b.putString("code", result[0].number)
+                        }else{
+                            b.putString("str", jsonBean[0].cn)
+                            b.putString("code", jsonBean[0].number)
+                        }
                         setFragmentResult(ISupportFragment.RESULT_OK, b)
 
                     }
@@ -314,8 +319,13 @@ class CommonCountryCodeFragment :
     override fun ItemCodeClick(position: Int) {
         var b = Bundle()
         if(type==CommonEnum.Code) {
-            b.putString("str", jsonBean[position].cn)
-            b.putString("code", jsonBean[position].number)
+            if(result.size>0) {
+                b.putString("str", result[position].cn)
+                b.putString("code", result[position].number)
+            }else{
+                b.putString("str", jsonBean[position].cn)
+                b.putString("code", jsonBean[position].number)
+            }
             setFragmentResult(ISupportFragment.RESULT_OK, b)
             pop()
         }
