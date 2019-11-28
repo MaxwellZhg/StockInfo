@@ -48,14 +48,14 @@
 
         <!--个推服务-->
         <service
-                android:name=".service.ZRPushService"
+                android:name=".push.ZRPushService"
                 android:exported="true"
                 android:label="PushService"
                 android:process=":pushservice"/>
 
         <!-- 用于接收推送的服务 permission属性在2.13.1.0版本后必须配置 -->
         <service
-                android:name=".service.ZRIntentService"
+                android:name=".push.ZRIntentService"
                 android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
