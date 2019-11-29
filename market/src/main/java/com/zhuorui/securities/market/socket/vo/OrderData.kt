@@ -15,8 +15,8 @@ class OrderData {
     var bidlist: List<AskBidModel>? = null
 
     data class AskBidModel(
-        val num: String,
-        val price: String,
-        val qty: String
+        var num: String,
+        var price: String,
+        var qty: String
     )
 }
