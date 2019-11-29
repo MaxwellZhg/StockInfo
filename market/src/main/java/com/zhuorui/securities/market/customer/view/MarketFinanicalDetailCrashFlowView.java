@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -32,8 +33,8 @@ import java.util.List;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/11
- * Desc:
- */
+ * Desc:F10财报现金流表格
+ * */
 public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     private int mOut1Color;
     private int mOut2Color;
@@ -49,6 +50,7 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
     List<Entry> entries3 =new ArrayList<>();
     List<String> xAisxDate =new ArrayList<>();
     private ZREmptyView empty_view;
+    private TextView tv_price;
 
     public MarketFinanicalDetailCrashFlowView(Context context) {
        this(context,null);
@@ -68,6 +70,7 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
 
     private void initView() {
         empty_view = findViewById(R.id.empty_view);
+        tv_price = findViewById(R.id.tv_price);
     }
 
     private void initChart() {
@@ -211,9 +214,12 @@ public class MarketFinanicalDetailCrashFlowView extends FrameLayout {
         this.profitList =profitList;
         if(profitList!=null) {
             empty_view.setVisibility(INVISIBLE);
+            tv_price.setText(ResUtil.INSTANCE.getString(R.string.price_cent)+profitList.get(0).getCurrency());
             detailListData(profitList);
         }else{
             empty_view.setVisibility(  VISIBLE);
+            tv_price.setText(ResUtil.INSTANCE.getString(R.string.price_cent)+"--");
+
         }
     }
 

@@ -19,7 +19,7 @@ import me.jessyan.autosize.utils.LogUtils
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/23
- * Desc:
+ * Desc:全部搜索的adapter
  */
 class SeachAllofInfoAdapter(context: Context?) : BaseListAdapter<SearchDeafaultData>(){
     private val context=context

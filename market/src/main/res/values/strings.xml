@@ -205,7 +205,7 @@
     <string name="repo_price">均价(元)</string>
     <string name="unit_w">万</string>
     <string name="unit_y">亿</string>
-    <string name="unit_wy">万亿</string>
+    <string name="unit_wy" tools:ignore="ExtraTranslation">万亿</string>
     <string name="unit_stock_w">万股</string>
     <string name="unit_stock_y">亿股</string>
     <string name="hareholder_change_add">增持</string>
@@ -234,10 +234,12 @@
     <string name="no_ponit_content">暂无内容，等待开盘</string>
     <string name="suspension">停牌</string>
     <string name="retry_load">点击屏幕，重新加载</string>
-    <string name="str_buy_order_broker">买盘经纪</string>
-    <string name="str_sell_order_broker">卖盘经纪</string>
-    <string name="str_buy_10">买盘十档</string>
-    <string name="str_sell_10">卖盘十档</string>
     <string name="unit_yuan">单位:%1s元</string>
     <string name="str_today_capital_flow_trend">今日资金流向趋势</string>
+    <string name="str_buy_order_broker" tools:ignore="ExtraTranslation">买盘经纪</string>
+    <string name="str_sell_order_broker" tools:ignore="ExtraTranslation">卖盘经纪</string>
+    <string name="str_buy_10" tools:ignore="ExtraTranslation">买盘十档</string>
+    <string name="str_sell_10" tools:ignore="ExtraTranslation">卖盘十档</string>
+    <string name="ntioc_str" tools:ignore="ExtraTranslation">通知</string>
+    <string name="price_cent">单位:</string>
 </resources>

@@ -27,8 +27,8 @@ import java.util.List;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/21
- * Desc:
- */
+ * Desc:市场涨跌概况表格
+ * */
 public class MarketUpDownInfoView extends FrameLayout {
     private final int upColor = Color.parseColor("#D9001B");
     private final int downColor = Color.parseColor("#00AB3B");

@@ -14,8 +14,8 @@ import android.view.View;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/19
- * Desc:
- */
+ * Desc:查询国家码查询条
+ * */
 public class QuickIndexBar extends View {
 
     private String[] indexArr = {"A", "B", "C", "D", "E", "F", "G", "H",

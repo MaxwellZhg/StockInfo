@@ -97,7 +97,6 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
             dialogshow(0)
             setGetCodeClickState(1)
             startTimeCountDown()
-            view?.showForgetCode(response.data)
         }else if(response.request is VerifForgetCodeRequest){
             dialogshow(0)
             view?.restpsw()

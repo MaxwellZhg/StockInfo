@@ -6,8 +6,7 @@ import com.zhuorui.securities.base2app.network.BaseRequest
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/20
- * Desc:
- */
+ * Desc:用户登录密码请求 */
 class UserLoginPwdRequest (val phone:String,val password: String,val phoneArea:String,transaction: String):
     BaseRequest(transaction){
     init {

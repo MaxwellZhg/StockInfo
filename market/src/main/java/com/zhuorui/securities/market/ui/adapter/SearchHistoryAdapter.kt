@@ -18,8 +18,8 @@ import com.zhuorui.securities.market.model.SearchStockInfo
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/20
- * Desc:
- */
+ * Desc:搜索历史adapter
+ * */
 class SearchHistoryAdapter :BaseListAdapter<String>(){
     var onClickCollectStockHistoryListener:OnClickCollectStockHistoryListener?=null
     override fun getLayout(viewType: Int): Int {

@@ -1,5 +1,6 @@
 package com.zhuorui.securities.personal.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -9,11 +10,11 @@ import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
-import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.LoginAndRegisterFragmentBinding
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
@@ -23,6 +24,12 @@ import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
 import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
+import java.util.*
+import java.util.regex.Pattern
+import android.text.InputFilter
+import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.util.PatternUtils
+
 
 /**
  * Created by Maxwell.
@@ -34,6 +41,10 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
     private lateinit var strphone: String
     private lateinit var phonecode: String
+    var filterLength = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
+    //用正则式匹配文本获取匹配器
+   // val matcher = Pattern.compile(pattern).matcher(oldStr)
+    private var locale: Locale?=null
     private var type:Int = 0
     override val layout: Int
         get() = R.layout.login_and_register_fragment
@@ -46,6 +57,11 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override val getView: LoginRegisterView
         get() = this
     override fun init() {
+        locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            resources.configuration.locales.get(0)
+        } else {
+            resources.configuration.locale
+        }
         tv_send_code.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
@@ -98,8 +114,10 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
             p0?.toString()?.trim()?.let {
                 if(TextUtils.isEmpty(et_phone_code.text.toString())){
                     ToastUtil.instance.toast(R.string.phone_code_tips)
-                }else {
-                    tv_btn_login.isEnabled=true
+                }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&TextUtils.isEmpty(et_phone.text.toString())){
+                    tv_btn_login.isEnabled=false
+                }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
+                    tv_btn_login.isEnabled = PatternUtils.patternPhoneCode(et_phone_code.text.toString())
                 }
              }
         } else {
@@ -161,10 +179,57 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
     inner class PhoneEtChange : TextWatcher{
         override fun afterTextChanged(p0: Editable?) {
-          if(!TextUtils.isEmpty(p0.toString())){
-              presenter?.getGetCodeColor(1)
-          }else{
+            if(tv_areaphone_tips.text == "+86"){
+                et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
+            }else{
+                et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
+            }
+          if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
+              if(tv_areaphone_tips.text == "+86"){
+                    val matcher = PatternUtils.patternZhPhone(p0.toString())
+                      if(matcher) {
+                          presenter?.getGetCodeColor(1)
+                          tv_btn_login.isEnabled = true
+                      }else{
+                          presenter?.getGetCodeColor(0)
+                          tv_btn_login.isEnabled = false
+                      }
+              }else{
+                  val matcher = PatternUtils.patternOtherPhone(p0.toString())
+                  if(matcher) {
+                      presenter?.getGetCodeColor(1)
+                      tv_btn_login.isEnabled = true
+                  }else{
+                      presenter?.getGetCodeColor(0)
+                      tv_btn_login.isEnabled = false
+                  }
+              }
+          }else if(!TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
+              if(tv_areaphone_tips.text == "+86"){
+                  val matcher = PatternUtils.patternZhPhone(p0.toString())
+                  if(matcher) {
+                      presenter?.getGetCodeColor(1)
+                      tv_btn_login.isEnabled = false
+                  }else{
+                      presenter?.getGetCodeColor(0)
+                      tv_btn_login.isEnabled = false
+                  }
+              }else{
+                  val matcher = PatternUtils.patternOtherPhone(p0.toString())
+                  if(matcher) {
+                      presenter?.getGetCodeColor(1)
+                      tv_btn_login.isEnabled = false
+                  }else{
+                      presenter?.getGetCodeColor(0)
+                      tv_btn_login.isEnabled = false
+                  }
+              }
+          }else if(TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
               presenter?.getGetCodeColor(0)
+              tv_btn_login.isEnabled=false
+          }else if(TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
+              presenter?.getGetCodeColor(0)
+              tv_btn_login.isEnabled=false
           }
         }
 
@@ -176,9 +241,6 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
         }
 
-    }
-    override fun showSendCode(str:String) {
-        et_phone_code.setText(str)
     }
 }
 

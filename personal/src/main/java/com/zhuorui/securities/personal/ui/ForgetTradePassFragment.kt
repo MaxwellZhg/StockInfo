@@ -25,8 +25,8 @@ import kotlinx.android.synthetic.main.fragment_forget_trade_psw.tv_btn_complete
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/11
- * Desc:
- */
+ * Desc:忘记交易密码
+ * */
 class ForgetTradePassFragment :AbsSwipeBackNetFragment<com.zhuorui.securities.personal.databinding.FragmentForgetTradePswBinding,ForgetTradePassViewModel,ForgetTradePassView,ForgetTradePassPresenter>(),ForgetTradePassView,TextWatcher,View.OnClickListener{
     override val layout: Int
         get() = R.layout.fragment_forget_trade_psw

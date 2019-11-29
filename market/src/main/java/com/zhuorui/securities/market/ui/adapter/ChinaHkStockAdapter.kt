@@ -13,8 +13,8 @@ import com.zhuorui.securities.market.R2
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/29
- * Desc:
- */
+ * Desc:港股通adapter
+ * */
 class ChinaHkStockAdapter :BaseListAdapter<Int>(){
     private val default = 0x00
     private val bottom = 0x01

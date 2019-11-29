@@ -29,7 +29,7 @@ import java.util.Random;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/28
- * Desc:
+ * Desc：港股通资金流向组件
  */
 public class ChinaHKFundTransactionView extends FrameLayout {
     private final int mGridColor = Color.parseColor("#337B889E");

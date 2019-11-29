@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.fragment_security.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/9
- * Desc:
- */
+ * Desc:账户安全设置
+ * */
 class SecurityFragment :
     AbsSwipeBackFragment<FragmentSecurityBinding, SecurityViewModel, SecurityView, SecurityPresenter>(), SecurityView,View.OnClickListener {
     override val layout: Int

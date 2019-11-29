@@ -13,7 +13,9 @@ import com.zhuorui.securities.personal.R
  */
 class PhoneDevVerifyCodeViewModel :ViewModel(){
     var str= ObservableField<String>()
+    var getCodeClickState=ObservableField<Int>()
     init {
         str.set("60s")
+        getCodeClickState.set(1)
     }
 }

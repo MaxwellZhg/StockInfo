@@ -22,8 +22,8 @@ import com.zhuorui.securities.market.R;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/18
- * Desc:
- */
+ * Desc:涨跌平三段显示控件
+ * */
 public class ZRThreePartLineLayout extends LinearLayout {
     private int allCount = 0;
     private int mWidth;

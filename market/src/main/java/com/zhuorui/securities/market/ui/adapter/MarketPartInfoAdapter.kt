@@ -14,8 +14,8 @@ import com.zhuorui.securities.market.net.response.StockConsInfoResponse
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/22
- * Desc:
- */
+ * Desc:市场板块adapter
+ * */
 class MarketPartInfoAdapter(state:Int) :BaseListAdapter<Int>(){
     var state :Int = state
     var onMainPartInfoClickListener:OnMainPartInfoClickListener?=null

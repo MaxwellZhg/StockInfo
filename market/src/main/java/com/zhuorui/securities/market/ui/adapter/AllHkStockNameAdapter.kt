@@ -9,8 +9,8 @@ import com.zhuorui.securities.market.R
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/25
- * Desc:
- */
+ * Desc:全部港股板块名称adapter
+ * */
 class AllHkStockNameAdapter :BaseListAdapter<Int>(){
     override fun getLayout(viewType: Int): Int {
         return R.layout.table_left_title

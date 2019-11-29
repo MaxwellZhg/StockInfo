@@ -6,6 +6,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailF10FinancialBinding
+import com.zhuorui.securities.market.model.F10FinacialPieChartData
 import com.zhuorui.securities.market.model.SearchStockInfo
 import com.zhuorui.securities.market.net.response.FinancialReportResponse
 import com.zhuorui.securities.market.ui.presenter.MarketDetailF10FinancialPresenter
@@ -66,7 +67,7 @@ class MarketDetailF10FinancialFragment :
         outData.add(345.53f)*/
     }
 
-    override fun updataBuisnessData(data: FinancialReportResponse.Business) {
+    override fun updataBuisnessData(data: F10FinacialPieChartData) {
         financial_view.setPieCharBean(data)
     }
 

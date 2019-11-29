@@ -11,8 +11,8 @@ import com.zhuorui.securities.market.R;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/10/29
- * Desc:
- */
+ * Desc:全球指数title
+ * */
 public class GlobalStockTipsView extends FrameLayout {
 
     private int type;

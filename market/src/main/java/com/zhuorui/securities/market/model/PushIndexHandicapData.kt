@@ -6,8 +6,8 @@ import java.math.BigDecimal
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/25
- * Desc:
- */
+ * Desc:指数盘口涨跌推送数据
+ * */
 class PushIndexHandicapData(
     var last: BigDecimal?,//最新股价
     var diffPrice: BigDecimal?,//涨跌价格

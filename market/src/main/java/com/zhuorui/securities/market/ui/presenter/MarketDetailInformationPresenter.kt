@@ -7,17 +7,11 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.market.event.ChageSearchTabEvent
-import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.MarketNewsListRequest
-import com.zhuorui.securities.market.net.request.StockSearchRequest
 import com.zhuorui.securities.market.net.response.MarketNewsListResponse
-import com.zhuorui.securities.market.net.response.StockSearchResponse
 import com.zhuorui.securities.market.ui.adapter.MarketInfoAdapter
-import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.view.MarketDetailInformationView
-import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailInformationViewModel
 
 /**

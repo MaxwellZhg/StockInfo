@@ -9,8 +9,8 @@ import com.zhuorui.securities.market.R
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/23
- * Desc:
- */
+ * Desc:股票信息适配器
+ * */
 class StockInfoAdapter() :BaseListAdapter<Int>(){
     private lateinit var keywords:String
     override fun getLayout(viewType: Int): Int {

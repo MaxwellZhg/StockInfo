@@ -4,8 +4,8 @@ package com.zhuorui.securities.personal.ui.model;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/8/19
- * Desc:
- */
+ * Desc:解析本地国家码bean
+ * */
 public class JsonBean {
 
     /**

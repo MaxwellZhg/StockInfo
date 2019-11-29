@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.fragment_intro_pro.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/12
- * Desc:
- */
+ * Desc:产品介绍
+ * */
 class IntroProFragment :AbsSwipeBackNetFragment<FragmentIntroProBinding,IntroProViewModel,IntroProView,IntroProPresenter>(),IntroProView,View.OnClickListener{
 
     override val layout: Int

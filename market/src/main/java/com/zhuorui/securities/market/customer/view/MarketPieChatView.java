@@ -32,8 +32,8 @@ import java.util.List;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/12
- * Desc:
- */
+ * Desc:市场行情的饼图
+ * */
 public class MarketPieChatView extends FrameLayout {
 
     private int defColor;

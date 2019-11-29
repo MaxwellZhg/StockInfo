@@ -40,8 +40,8 @@ import java.util.List;
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/11/7
- * Desc:
- */
+ * Desc:财报利润表格
+ * */
 public class MarketFinancinalProfitView extends FrameLayout {
     private List<FinancialReportResponse.ProfitReport> profitReport;
     private List<FinancialReportResponse.LiabilistyReport> liabilistyReport;
@@ -69,6 +69,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
     private YAxis leftAxis;
     private YAxis rightAxis;
     private ZREmptyView empty_view;
+    private TextView tv_price;
 
     public MarketFinancinalProfitView(Context context) {
         this(context, null);
@@ -90,6 +91,7 @@ public class MarketFinancinalProfitView extends FrameLayout {
 
     private void initView() {
         empty_view = findViewById(R.id.empty_view);
+        tv_price = findViewById(R.id.tv_price);
         tv_title = findViewById(R.id.tv_title);
         tv_tips_one = findViewById(R.id.tv_tips_one);
         tv_tips_two = findViewById(R.id.tv_tips_two);
@@ -208,9 +210,11 @@ public class MarketFinancinalProfitView extends FrameLayout {
         this.profitReport = profitReport;
         if (profitReport != null) {
             empty_view.setVisibility(INVISIBLE);
+            tv_price.setText(ResUtil.INSTANCE.getString(R.string.price_cent)+profitReport.get(0).getCurrency());
             detailProfitData(profitReport);
         }else{
             empty_view.setVisibility(VISIBLE);
+            tv_price.setText(ResUtil.INSTANCE.getString(R.string.price_cent)+"--");
         }
     }
 
@@ -218,9 +222,11 @@ public class MarketFinancinalProfitView extends FrameLayout {
         this.liabilistyReport = liabilistyReport;
         if (liabilistyReport != null) {
             empty_view.setVisibility(INVISIBLE);
+            tv_price.setText(ResUtil.INSTANCE.getString(R.string.price_cent)+liabilistyReport.get(0).getCurrency());
             detailLibProfitData(liabilistyReport);
         }else{
             empty_view.setVisibility(VISIBLE);
+            tv_price.setText(ResUtil.INSTANCE.getString(R.string.price_cent)+"--");
         }
     }
 

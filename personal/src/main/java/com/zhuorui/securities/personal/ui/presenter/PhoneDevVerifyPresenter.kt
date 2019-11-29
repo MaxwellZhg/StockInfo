@@ -65,7 +65,7 @@ class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyVi
         if (!transactions.isMyTransaction(response)) return
         if(response.request is SendLoginCodeRequest){
             dialogshow(0)
-            view?.gotoVerifyCode(response.data)
+            view?.goNext()
         }
     }
     fun dialogshow(type:Int){

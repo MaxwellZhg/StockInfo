@@ -22,6 +22,7 @@ import com.zhuorui.securities.personal.ui.presenter.PhoneDevVerifyCodePresenter
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyCodeView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyCodeViewModel
 import com.zhuorui.securities.personal.databinding.FragmentPhoneDevVerifyCodeBinding
+import com.zhuorui.securities.personal.util.PatternUtils
 import com.zhuorui.securities.personal.util.PhoneHideUtils
 
 import kotlinx.android.synthetic.main.fragment_phone_dev_verify_code.*
@@ -30,8 +31,7 @@ import kotlinx.android.synthetic.main.fragment_phone_dev_verify_code.*
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/12
- * Desc:
- */
+ * Desc:手机号设备验证码 */
 class PhoneDevVerifyCodeFragment :
     AbsSwipeBackNetFragment<FragmentPhoneDevVerifyCodeBinding, PhoneDevVerifyCodeViewModel, PhoneDevVerifyCodeView, PhoneDevVerifyCodePresenter>(),
     PhoneDevVerifyCodeView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener,
@@ -57,13 +57,12 @@ class PhoneDevVerifyCodeFragment :
         get() = this
 
     companion object {
-        fun newInstance(phone: String?, phoneArea: String, code: String): PhoneDevVerifyCodeFragment {
+        fun newInstance(phone: String?, phoneArea: String): PhoneDevVerifyCodeFragment {
             val fragment = PhoneDevVerifyCodeFragment()
             if (phone != null && phoneArea != null) {
                 val bundle = Bundle()
                 bundle.putSerializable("phone", phone)
                 bundle.putSerializable("phoneArea", phoneArea)
-                bundle.putSerializable("code", code)
                 fragment.arguments = bundle
             }
             return fragment
@@ -74,31 +73,21 @@ class PhoneDevVerifyCodeFragment :
         super.onLazyInitView(savedInstanceState)
         phone = arguments?.getSerializable("phone") as String?
         phoneArea = arguments?.getSerializable("phoneArea") as String?
-        code = arguments?.getSerializable("code") as String?
         et_phone_code.addTextChangedListener(this)
         tv_no_reciver_code.setOnClickListener(this)
+        tv_timer_tips.setOnClickListener(this)
         tv_phone_timer_tips.text =
             ResUtil.getString(R.string.phone_dev_timer_phonenum_tips) + PhoneHideUtils.hidePhoneNum(phone)
-        et_phone_code.setText(code)
         presenter?.startTimeCountDown()
     }
 
-    /*    override fun passwordChange(changeText: String?) {
-
-        }
-
-        override fun passwordComplete() {
-        }
-
-        override fun keyEnterPress(password: String?, isComplete: Boolean) {
-           if(isComplete){
-               presenter?.requestUserLoginCode(phone,password,phoneArea)
-           }
-        }*/
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.tv_no_reciver_code -> {
                 presenter?.showTipsDailog()
+            }
+            R.id.tv_timer_tips->{
+                phone?.let { presenter?.requestSendLoginCode(it) }
             }
         }
     }
@@ -130,7 +119,9 @@ class PhoneDevVerifyCodeFragment :
 
     override fun afterTextChanged(p0: Editable?) {
         if (p0?.length == 6) {
-            presenter?.requestUserLoginCode(phone, p0.toString(), phoneArea)
+            if(PatternUtils.patternPhoneCode(p0.toString())) {
+                presenter?.requestUserLoginCode(phone, p0.toString(), phoneArea)
+            }
         }
     }
 

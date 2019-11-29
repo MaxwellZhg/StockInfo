@@ -1,4 +1,4 @@
-package com.zhuorui.securities.service
+package com.zhuorui.securities.push
 
 import com.igexin.sdk.PushService
 

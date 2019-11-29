@@ -10,7 +10,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface MainFragmentView : AbsView {
 
-    fun init()
-
     fun jumpToLogin()
 }

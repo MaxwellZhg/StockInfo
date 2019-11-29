@@ -6,8 +6,8 @@ import androidx.annotation.DrawableRes
  * Created by Maxwell.
  * E-mail: maxwell_smith@163.com
  * Date: 2019/9/24
- * Desc:
- */
+ * Desc:估计提醒设置数据
+ * */
 class SettingNoticeData (@DrawableRes res: Int, str: String?, content: String, isSelect: Boolean,showtips:Boolean,stockInfo: StockMarketInfo?):ISettingNotice {
 
     var res: Int? = res

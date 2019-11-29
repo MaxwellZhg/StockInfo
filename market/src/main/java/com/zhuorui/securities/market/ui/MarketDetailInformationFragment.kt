@@ -5,14 +5,11 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
-import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketDetailBinding
-import com.zhuorui.securities.market.event.MarketDetailInfoEvent
 import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.ui.adapter.MarketInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketDetailInformationPresenter

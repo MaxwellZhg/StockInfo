@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewmodel" type="com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel"/>
     </data>
@@ -42,7 +42,8 @@
                           android:layout_marginLeft="9dp">
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                    <EditText android:layout_width="match_parent"
+                    <com.zhuorui.securities.personal.widget.CanNotPasteEditView
+                             android:layout_width="match_parent"
                               android:layout_height="wrap_content"
                               android:id="@+id/et_login_psw"
                               android:layout_toLeftOf="@+id/cb_login_psw"
@@ -88,7 +89,8 @@
                           android:layout_marginLeft="9dp">
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                    <EditText android:layout_width="match_parent"
+                    <com.zhuorui.securities.personal.widget.CanNotPasteEditView
+                              android:layout_width="match_parent"
                               android:layout_height="wrap_content"
                               android:id="@+id/et_ensure_psw"
                               android:layout_toLeftOf="@+id/cb_ensure_psw"
@@ -114,18 +116,24 @@
                            android:background="@color/color_A1A1A1"/>
             </LinearLayout>
         </LinearLayout>
-        <Button android:layout_width="match_parent"
+        <com.zhuorui.commonwidget.StateButton
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="29dp"
                 android:layout_marginRight="29dp"
-                android:layout_marginTop="41dp"
+                android:layout_marginTop="65dp"
+                android:id="@+id/tv_btn_settin_finish"
                 android:layout_below="@+id/ll_ensure_login"
                 android:textSize="23sp"
-                android:textStyle="bold"
-                android:id="@+id/tv_btn_finish"
-                android:textColor="@color/color_FFFFFFFF"
+                android:padding="0dp"
+                android:minHeight="0dp"
+                android:gravity="center"
                 android:text="@string/complete"
-                android:background="@drawable/login_btn_unchecked"/>
+                android:enabled="false"
+                app:radius="3dp"
+                android:textColor="@color/color_FFFFFFFF"
+                app:normalBackgroundColor="@color/color_1A6ED2"
+                app:unableBackgroundColor="@color/color_8DB9E4"/>
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:gravity="center"
