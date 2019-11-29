@@ -53,17 +53,14 @@ class MarketDetailCapitalFragment :
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mTs = arguments?.getString("ts") ?: mTs
-        mCode = arguments?.getString("code") ?: mCode
-
-    }
-
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        mTs = arguments?.getString("ts") ?: mTs
+        mCode = arguments?.getString("code") ?: mCode
         historicalCapitalFlow?.setOnSelectDayListener(this)
         presenter?.setLifecycleOwner(this)
+        todayFundTransaction.setData(null)
+        todatCapitalFlowTrend.setData(mTs, null)
         getData()
     }
 
@@ -73,6 +70,15 @@ class MarketDetailCapitalFragment :
 
     override fun onTodatCapitalFlowTrendData(data: List<CapitalTrendModel>) {
         todatCapitalFlowTrend.setData(mTs, data)
+    }
+
+    override fun onHistoricalCapitalFlowData(data: List<CapitalTrendModel>) {
+
+
+    }
+
+    override fun onUpPrice(t: Float?) {
+        todatCapitalFlowTrend.setPrice(t ?: 0f)
     }
 
     override fun onSelected(day: Int) {

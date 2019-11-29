@@ -8,11 +8,15 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.commonwidget.config.StocksThemeColor;
+import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.personal.config.LocalAccountConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * author : liuwei
@@ -147,10 +151,10 @@ public class MarketUtil {
         if (animator != null && animator.isRunning()) {
             animator.cancel();
         }
-        view.setBackgroundColor(isUp ? 0x33D9001B : 0x3300CC00);
+        view.setBackgroundColor(getUpDownAnimColor(isUp));
         animator = new ObjectAnimator().ofFloat(view, "alpha", 0, 1, 0);
         animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(400);
+        animator.setDuration(200);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -176,5 +180,129 @@ public class MarketUtil {
         animator.start();
         view.setVisibility(View.VISIBLE);
         return animator;
+    }
+
+    /**
+     * 获取涨跌动画颜色
+     * @param isUp
+     * @return
+     */
+    public static int getUpDownAnimColor(boolean isUp) {
+        return isUp ? 0x33D9001B : 0x3300CC00;
+    }
+
+    /**
+     * 计算一组数据使用的单位基础数(分为1,万，亿三个等级)
+     *
+     * @param data
+     * @return
+     */
+    public static BigDecimal getUnitBigDecimal(List<BigDecimal> data) {
+        BigDecimal unit;
+        if (data.size() > 1) {
+            BigDecimal min = data.get(0).abs();
+            BigDecimal max = min;
+            BigDecimal zroe = new BigDecimal(0);
+            for (BigDecimal d : data.subList(1, data.size())) {
+                BigDecimal absD = d.abs();
+                if (absD.compareTo(zroe) == 1 && (min.compareTo(zroe) < 1 || absD.compareTo(min) == -1)) {
+                    min = absD;
+                }
+                if (absD.compareTo(max) == 1) {
+                    max = absD;
+                }
+            }
+            BigDecimal minUnit = getUnitBigDecimal(min);
+            BigDecimal maxUnit = getUnitBigDecimal(max);
+            BigDecimal divide = maxUnit.divide(minUnit, 0);
+            if (divide.compareTo(H) == 0) {
+                unit = minUnit;
+            }else  if (divide.compareTo(W) == 0){
+                unit = maxUnit;
+            }else {
+                unit = W;
+            }
+        } else {
+            unit = getUnitBigDecimal(data.get(0).abs());
+        }
+        return unit;
+    }
+
+    /**
+     * 计算一组数据使用的单位基础数(分为1,万，亿三个等级)
+     *
+     * @param data
+     * @return
+     */
+    public static BigDecimal getUnitBigDecimal(BigDecimal... data) {
+        BigDecimal unit;
+        if (data.length > 1) {
+            BigDecimal min = data[0].abs();
+            BigDecimal max = min;
+            BigDecimal zroe = new BigDecimal(0);
+            for (int i = 1; i < data.length; i++) {
+                BigDecimal d = data[i];
+                BigDecimal absD = d.abs();
+                if (absD.compareTo(zroe) == 1 && (min.compareTo(zroe) < 1 || absD.compareTo(min) == -1)) {
+                    min = d;
+                }
+                if (absD.compareTo(max) == 1) {
+                    max = d;
+                }
+            }
+            BigDecimal minUnit = getUnitBigDecimal(min);
+            BigDecimal maxUnit = getUnitBigDecimal(max);
+            BigDecimal divide = maxUnit.divide(minUnit, 0);
+            if (divide.compareTo(H) == 0) {
+                unit = minUnit;
+            }else  if (divide.compareTo(W) == 0){
+                unit = maxUnit;
+            }else {
+                unit = W;
+            }
+        } else {
+            unit = getUnitBigDecimal(data[0].abs());
+        }
+        return unit;
+    }
+
+    /**
+     * W代表万，Y代表亿
+     */
+    private static BigDecimal H = BigDecimal.valueOf(1);
+    private static BigDecimal W = BigDecimal.valueOf(10000);
+    private static BigDecimal Y = BigDecimal.valueOf(100000000);
+
+    /**
+     * 计算单位基础数，分为1,万，亿三个等级
+     *
+     * @param data
+     * @return
+     */
+    public static BigDecimal getUnitBigDecimal(BigDecimal data) {
+        if (data.abs().compareTo(Y) >= 0) {
+            return Y;
+        } else if (data.abs().compareTo(W) >= 0) {
+            return W;
+        } else {
+            return H;
+        }
+    }
+
+    /**
+     * 获取单位中文
+     *
+     * @param data
+     * @return
+     */
+    public static String getUnitName(BigDecimal data) {
+        if (data.compareTo(Y) >= 0) {
+            return ResUtil.INSTANCE.getString(R.string.unit_y);
+        } else if (data.compareTo(W) >= 0) {
+            return ResUtil.INSTANCE.getString(R.string.unit_w);
+        } else {
+            return "";
+        }
+
     }
 }

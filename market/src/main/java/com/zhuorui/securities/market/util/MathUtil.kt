@@ -148,6 +148,7 @@ object MathUtil {
     private val K = BigDecimal.valueOf(1000)
     private val M = BigDecimal.valueOf(1000000)
     private val B = BigDecimal.valueOf(1000000000)
+
     /**
      * 格式化数字加单位
      * @return 返回示例 10、10K、10M、10B
@@ -155,12 +156,28 @@ object MathUtil {
     fun convertToUnitString(number: BigDecimal): String {
         return when {
             // 是否大于十亿
-            number.compareTo(B) == 1 -> divide2(number, B).toString() + "B"
+            number.abs().compareTo(B) == 1 -> divide2(number, B).toString() + "B"
             // 是否大于百万
-            number.compareTo(M) == 1 -> divide2(number, M).toString() + "M"
+            number.abs().compareTo(M) == 1 -> divide2(number, M).toString() + "M"
             // 是否大于一千
-            number.compareTo(K) == 1 -> divide2(number, K).toString() + "K"
+            number.abs().compareTo(K) == 1 -> divide2(number, K).toString() + "K"
             else -> number.toString()
+        }
+    }
+
+    /**
+     * 格式化数字加单位
+     * @return 返回示例 10、10K、10M、10B
+     */
+    fun convertToUnitString(number: BigDecimal, fomart: String): String {
+        return when {
+            // 是否大于十亿
+            number.abs().compareTo(B) == 1 -> String.format(fomart+"B", divide(number, B, 6).toDouble())
+            // 是否大于百万
+            number.abs().compareTo(M) == 1 -> String.format(fomart+"M", divide(number, M, 6).toDouble())
+            // 是否大于一千
+            number.abs().compareTo(K) == 1 -> String.format(fomart+"K", divide(number, K, 6).toDouble())
+            else -> String.format(fomart, number.toDouble())
         }
     }
 
@@ -205,14 +222,14 @@ object MathUtil {
      * @return 返回示例 金额：10、10万、10亿 持股：10、10万股、10亿股
      */
     fun convertToUnitFloat(number: BigDecimal): Float? {
-        return if(number> BigDecimal.ZERO) {
+        return if (number > BigDecimal.ZERO) {
             when {
                 // 是否大于亿
                 number.compareTo(Y) == 1 -> divide2(number, Y).toFloat()
                 number.compareTo(Y) == -1 -> divide2(number, Y).toFloat()
                 else -> rounded(number).toFloat()
             }
-        }else{
+        } else {
             when {
                 // 是否大于亿
                 number.compareTo(Y) == -1 -> divide2(number, Y).toFloat()
@@ -224,12 +241,12 @@ object MathUtil {
 
     fun convertToUnitRateFloat(number: BigDecimal): Float? {
         return when {
-                //大于100
-                multiply2(number,H).compareTo(H) == 1 -> subtract2(H,multiply2(number,H)).toFloat()
-                // 是否小于100
-                multiply2(number,H).compareTo(W) == -1 -> multiply2(number,H).toFloat()
-                else -> rounded(number).toFloat()
-            }
+            //大于100
+            multiply2(number, H).compareTo(H) == 1 -> subtract2(H, multiply2(number, H)).toFloat()
+            // 是否小于100
+            multiply2(number, H).compareTo(W) == -1 -> multiply2(number, H).toFloat()
+            else -> rounded(number).toFloat()
+        }
         return null
     }
 }

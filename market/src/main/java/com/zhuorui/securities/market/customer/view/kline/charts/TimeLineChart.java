@@ -76,13 +76,6 @@ public class TimeLineChart extends LineChart {
     }
 
     @Override
-    public void highlightValue(Highlight high, boolean callListener) {
-        super.highlightValue(high, callListener);
-        //解决在同一X上下滑动，Y不流畅问题
-        getOnTouchListener().setLastHighlighted(null);
-    }
-
-    @Override
     protected void drawMarkers(Canvas canvas) {
         // if there is no marker view or drawing marker is disabled
         if (!isDrawMarkersEnabled() || !valuesToHighlight()) {
@@ -267,12 +260,4 @@ public class TimeLineChart extends LineChart {
 //        drawDescription(canvas);
 //    }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        // 当触摸K线显示指标线时，请求父控件不拦截上下滑动
-        if (valuesToHighlight()) {
-            disableScroll();
-        }
-        return super.dispatchTouchEvent(ev);
-    }
 }

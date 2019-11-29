@@ -15,4 +15,5 @@ public interface Subject<T> {
 
     //通知所有的观察者更新状态
     void notifyAllObservers();
+
 }

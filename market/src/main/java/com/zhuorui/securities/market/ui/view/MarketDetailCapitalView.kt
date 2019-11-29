@@ -12,8 +12,24 @@ import com.zhuorui.securities.market.socket.vo.CapitalData
  */
 interface MarketDetailCapitalView : AbsView {
 
+    /**
+     * 今日资金分布数据
+     */
     fun onTodayFundTransactionData(data: CapitalData?)
 
-    fun onTodatCapitalFlowTrendData(data:List<CapitalTrendModel>)
+    /**
+     * 今天资金趋势数据
+     */
+    fun onTodatCapitalFlowTrendData(data: List<CapitalTrendModel>)
+
+    /**
+     * 历史资金流向数据
+     */
+    fun onHistoricalCapitalFlowData(data: List<CapitalTrendModel>)
+
+    /**
+     * 股票实时价格
+     */
+    fun onUpPrice(t: Float?)
 
 }
