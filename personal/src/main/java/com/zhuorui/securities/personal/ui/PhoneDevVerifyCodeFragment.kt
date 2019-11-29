@@ -37,8 +37,8 @@ class PhoneDevVerifyCodeFragment :
     PhoneDevVerifyCodeView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener,
     CheckRequestPermissionsListener {
 
-    private var phone: String? = null
-    private var phoneArea: String? = null
+    private var phone: String = ""
+    private var phoneArea: String = ""
     private var code: String? = null
 
     override val layout: Int
@@ -61,8 +61,8 @@ class PhoneDevVerifyCodeFragment :
             val fragment = PhoneDevVerifyCodeFragment()
             if (phone != null && phoneArea != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("phone", phone)
-                bundle.putSerializable("phoneArea", phoneArea)
+                bundle.putString("phone", phone)
+                bundle.putString("phoneArea", phoneArea)
                 fragment.arguments = bundle
             }
             return fragment
@@ -71,8 +71,8 @@ class PhoneDevVerifyCodeFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        phone = arguments?.getSerializable("phone") as String?
-        phoneArea = arguments?.getSerializable("phoneArea") as String?
+        phone = arguments?.getString("phone")?:phone
+        phoneArea = arguments?.getString("phoneArea") ?:phoneArea
         et_phone_code.addTextChangedListener(this)
         tv_no_reciver_code.setOnClickListener(this)
         tv_timer_tips.setOnClickListener(this)

@@ -18,6 +18,10 @@ interface MarketPointView :AbsView{
     fun showStateChangeEvent(state:Int)
     fun setLoadMoreState()
     fun loadConsStockFail()
+
+    fun loadConsFreshFail()
+
+    fun detailInfoState()
     //设置指数推送数据
     fun getpushData(data: PushIndexHandicapData)
 }

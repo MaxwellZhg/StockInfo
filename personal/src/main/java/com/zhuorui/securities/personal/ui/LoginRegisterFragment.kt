@@ -45,7 +45,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     //用正则式匹配文本获取匹配器
    // val matcher = Pattern.compile(pattern).matcher(oldStr)
     private var locale: Locale?=null
-    private var type:Int = 0
+    private var type:Int = -1
     override val layout: Int
         get() = R.layout.login_and_register_fragment
     override val viewModelId: Int
@@ -158,8 +158,8 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
         when(requestCode){
             ISupportFragment.RESULT_OK->{
                 if(data?.get("str")!=null&&data?.get("code")!=null) {
-                    var str = data?.get("str") as String
-                    var code = data?.get("code") as String
+                    var str = data?.getString("str")
+                    var code = data?.getString("code")
                     LogUtils.e(str)
                     tv_login_contry.text = str
                     tv_areaphone_tips.text = code
@@ -170,7 +170,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getInt("type")!!
+        type = arguments?.getInt("type")?:type
         if(type==2){
             presenter?.postChangeMytabInfo()
         }

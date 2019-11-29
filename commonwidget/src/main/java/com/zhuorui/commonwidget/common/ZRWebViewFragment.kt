@@ -20,7 +20,8 @@ import kotlinx.android.synthetic.main.fragment_web_view.*
 class ZRWebViewFragment :
     AbsSwipeBackNetFragment<FragmentWebViewBinding, ZRWebViewModel, ZRWebView, ZRWebViewPresenter>(),
     ZRWebView {
-
+    private var url:String=""
+    private var title:String=""
     override val layout: Int
         get() = R.layout.fragment_web_view
 
@@ -38,6 +39,8 @@ class ZRWebViewFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        url = arguments?.getString("url")?:url
+        title = arguments?.getString("url")?:title
         //重新加载 点击网页里面的链接还是在当前的webview里跳转。不跳到浏览器那边
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -77,15 +80,16 @@ class ZRWebViewFragment :
         webview.settings.useWideViewPort = false
         //设置是否出现缩放工具
         webview.settings.builtInZoomControls = false
-        webview.loadUrl("http://192.168.1.34/#/adviser")
+        webview.loadUrl(url)
     }
 
     companion object {
-        fun newInstance(type: Int?): ZRWebViewFragment {
+        fun newInstance(url: String?,title:String?): ZRWebViewFragment {
             val fragment = ZRWebViewFragment()
-            if (type != null) {
+            if (url != null&&title !=null) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putString("url", url)
+                bundle.putString("title", title)
                 fragment.arguments = bundle
             }
             return fragment

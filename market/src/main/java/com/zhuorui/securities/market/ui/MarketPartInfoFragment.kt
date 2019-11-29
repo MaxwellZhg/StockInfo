@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_market_part_info.*
  * Desc:港股板块
  * */
 class MarketPartInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPartInfoBinding,MarketPartInfoViewModel,MarketPartInfoView,MarketPartInfoPresenter>(),MarketPartInfoView{
-    private var type: Int? = null
+    private var type: Int = -1
     override val layout: Int
         get() = R.layout.fragment_market_part_info
     override val viewModelId: Int
@@ -34,7 +34,7 @@ class MarketPartInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPartInfoBind
           val fragment = MarketPartInfoFragment()
           if (type != null) {
               val bundle = Bundle()
-              bundle.putSerializable("type", type)
+              bundle.putInt("type", type)
               fragment.arguments = bundle
           }
           return fragment
@@ -43,7 +43,7 @@ class MarketPartInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPartInfoBind
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int?
+        type = arguments?.getInt("type") ?:type
        when(type){
            1->{
                top_bar.setTitle("行业板块")

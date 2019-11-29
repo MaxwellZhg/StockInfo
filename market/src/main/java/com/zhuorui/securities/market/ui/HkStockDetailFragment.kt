@@ -41,7 +41,7 @@ import java.math.BigDecimal
 class HkStockDetailFragment :
     AbsFragment<com.zhuorui.securities.market.databinding.FragmentHkStockDetailBinding, HkStockDetailViewModel, HkStockDetailView, HkStockDetailPresenter>(),
     HkStockDetailView, View.OnClickListener,MarketPartInfoAdapter.OnAllPartInfoClickListener,MarketPartInfoAdapter.OnMainPartInfoClickListener,MarketPartInfoAdapter.OnCreatePartInfoClickListener {
-    private var type: Int? = null
+    private var type: Int = -1
     private var allHkPartAdapter: MarketPartInfoAdapter? = null
     private var allMainPartAdapter: MarketPartInfoAdapter? = null
     private var allCreatePartAdapter: MarketPartInfoAdapter? = null
@@ -68,7 +68,7 @@ class HkStockDetailFragment :
             val fragment = HkStockDetailFragment()
             if (type != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putInt("type", type)
                 fragment.arguments = bundle
             }
             return fragment
@@ -78,7 +78,7 @@ class HkStockDetailFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int?
+        type = arguments?.getInt("type")?:type
         tabTitle.add("涨幅榜")
         tabTitle.add("跌幅榜")
         tabTitle.add("成交额")

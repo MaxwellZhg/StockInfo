@@ -37,13 +37,13 @@ class MarketDetailNoticeFragment :
         get() = ViewModelProviders.of(this).get(MarketDetailNoticeViewModel::class.java)
     override val getView: MarketDetailNoticeView
         get() = this
-    private var stockCode: String? = null
+    private var stockCode: String = ""
     companion object {
         fun newInstance(stockCode:String): MarketDetailNoticeFragment {
             val fragment = MarketDetailNoticeFragment()
             if (stockCode != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("code", stockCode)
+                bundle.putString("code", stockCode)
                 fragment.arguments = bundle
             }
             return fragment
@@ -52,7 +52,7 @@ class MarketDetailNoticeFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        stockCode = arguments?.getSerializable("code") as String?
+        stockCode = arguments?.getString("code")?:stockCode
         presenter?.setLifecycleOwner(this)
         noticeAdapter=presenter?.getNoticeAdapter()
         noticeAdapter?.onMarketNoticeClickListener=this
