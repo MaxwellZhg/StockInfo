@@ -89,8 +89,9 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
             if(isFresh){
                 if(isInfo){
                     view?.detailInfoState()
+                }else {
+                    view?.refreshSuccess()
                 }
-                view?.refreshSuccess()
             }else{
                 if(isInit){
                     view?.setLoadMoreState()

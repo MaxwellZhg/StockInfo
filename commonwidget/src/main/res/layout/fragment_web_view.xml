@@ -12,7 +12,6 @@
 
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 android:id="@+id/top_bar"
-                app:zr_topbarTitle="@string/my_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </com.zhuorui.commonwidget.ZhuoRuiTopBar>

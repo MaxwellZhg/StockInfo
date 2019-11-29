@@ -293,9 +293,11 @@ class MarketPointFragment :
         if (index == 0) {
             ll_selcet_info.visibility = View.GONE
             refresh_layout.setEnableLoadMore(true)
+            isInfo =false
         } else {
             ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             refresh_layout.setEnableLoadMore(false)
+            isInfo=true
         }
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index

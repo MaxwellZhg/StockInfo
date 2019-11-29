@@ -122,7 +122,7 @@ class MyTabFragment :
     }
 
     override fun gotomain() {
-        (_mActivity as AbsActivity).start(ZRWebViewFragment.newInstance(1))
+        (_mActivity as AbsActivity).start(LoginRegisterFragment.newInstance(2))
     }
 
 /*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
@@ -163,9 +163,8 @@ class MyTabFragment :
     }
 
     override fun gotoClientService() {
-        (_mActivity as AbsActivity).start(ZRWebViewFragment.newInstance(1))
         (_mActivity as AbsActivity).start(ResUtil.getString(R.string.my_manager)?.let {
-            ZRMyWebViewFragment.newInstance(CommonUrlConfig.clinetServece,
+             ZRWebViewFragment.newInstance(CommonUrlConfig.clinetServece,
                 it
             )
         })
