@@ -241,7 +241,8 @@ class SearchResultInfoFragment :
         stockInfo.ts = stock.ts
         stockInfo.tsCode = stock.code + "." + stock.ts
         stockInfo.name = stock.name
-        stockInfo.type = 2
+        stockInfo.type = stock.type
+        stockInfo.suspension = stock.suspension
         (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(
             MarketDetailFragment.newInstance(stockInfo),
             MarketDetailFragment::class.java,
