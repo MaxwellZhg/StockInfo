@@ -4,17 +4,25 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import androidx.annotation.IntDef;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.transition.TransitionManager;
+import androidx.viewpager.widget.ViewPager;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.commonwidget.config.StocksThemeColor;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.view.HighlightContentView;
 import com.zhuorui.securities.personal.config.LocalAccountConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.annotation.RetentionPolicy;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -184,6 +192,7 @@ public class MarketUtil {
 
     /**
      * 获取涨跌动画颜色
+     *
      * @param isUp
      * @return
      */
@@ -217,9 +226,9 @@ public class MarketUtil {
             BigDecimal divide = maxUnit.divide(minUnit, 0);
             if (divide.compareTo(H) == 0) {
                 unit = minUnit;
-            }else  if (divide.compareTo(W) == 0){
+            } else if (divide.compareTo(W) == 0) {
                 unit = maxUnit;
-            }else {
+            } else {
                 unit = W;
             }
         } else {
@@ -255,9 +264,9 @@ public class MarketUtil {
             BigDecimal divide = maxUnit.divide(minUnit, 0);
             if (divide.compareTo(H) == 0) {
                 unit = minUnit;
-            }else  if (divide.compareTo(W) == 0){
+            } else if (divide.compareTo(W) == 0) {
                 unit = maxUnit;
-            }else {
+            } else {
                 unit = W;
             }
         } else {
@@ -302,6 +311,38 @@ public class MarketUtil {
             return ResUtil.INSTANCE.getString(R.string.unit_w);
         } else {
             return "";
+        }
+
+    }
+
+    @IntDef({ConstraintSet.LEFT, ConstraintSet.RIGHT})
+    public @interface ChangeHighlightSide {
+    }
+
+    /**
+     * ConstraintLayout中，改变View显示在依赖View的位置
+     *
+     * @param startView 显示view
+     * @param endView   依赖view
+     * @param side      ConstraintSet.LEFT 显示在依赖的左边 ConstraintSet.RIGHT 显示在依赖的右边
+     */
+    public static void changeHighlightLayout(View startView, View endView, @ChangeHighlightSide int side) {
+        ViewParent parent = startView.getParent();
+        if (parent != null && parent instanceof ConstraintLayout) {
+            ConstraintLayout constraintLayout = (ConstraintLayout) parent;
+            ConstraintSet set = new ConstraintSet();
+            set.clone(constraintLayout);
+            if (side == ConstraintSet.LEFT) {
+                set.clear(startView.getId(), ConstraintSet.RIGHT);
+                set.connect(startView.getId(), ConstraintSet.TOP, endView.getId(), ConstraintSet.TOP);
+                set.connect(startView.getId(), ConstraintSet.LEFT, endView.getId(), ConstraintSet.LEFT);
+            } else if (side == ConstraintSet.RIGHT) {
+                set.clear(startView.getId(), ConstraintSet.LEFT);
+                set.connect(startView.getId(), ConstraintSet.TOP, endView.getId(), ConstraintSet.TOP);
+                set.connect(startView.getId(), ConstraintSet.RIGHT, endView.getId(), ConstraintSet.RIGHT);
+            }
+            TransitionManager.beginDelayedTransition(constraintLayout);
+            set.applyTo(constraintLayout);
         }
 
     }
