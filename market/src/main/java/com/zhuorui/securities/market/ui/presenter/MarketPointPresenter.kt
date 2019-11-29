@@ -12,11 +12,15 @@ import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.event.MarketPointConsEvent
 import com.zhuorui.securities.market.event.StockConsEvent
 import com.zhuorui.securities.market.event.StockConsPointStateEvent
+import com.zhuorui.securities.market.model.StockTopic
+import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.MarketNewsListRequest
 import com.zhuorui.securities.market.net.request.StockConsInfoRequest
 import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
+import com.zhuorui.securities.market.socket.SocketClient
+import com.zhuorui.securities.market.socket.push.StockTopicIndexHandicapResponse
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.view.MarketPointView
@@ -31,6 +35,8 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
 class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel>(){
     var isFresh :Boolean =false
     var isInit:Boolean =false
+    private var stockTopic: StockTopic? = null
+    private var code:String?=null
     override fun init() {
         super.init()
     }
@@ -121,6 +127,23 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         }
     }
 
+    fun bindMarketPointhandicap(ts:String,code:String){
+        // 订阅股价
+        this.code = code
+        stockTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP, ts, code, 1)
+        SocketClient.getInstance().bindTopic(stockTopic)
+    }
+
+
+    /**
+     * 订阅返回股价波动
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStocksTopicPriceResponse(response: StockTopicIndexHandicapResponse) {
+        if(response.body!=null&&response.body?.code==code) {
+            view?.getpushData(response.body!!)
+        }
+    }
 
 
 }

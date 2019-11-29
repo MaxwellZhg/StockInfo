@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.util.DisplayUtil;
 
 /**
  * Created by Maxwell.
@@ -40,8 +41,8 @@ public class ZRThreePartLineLayout extends LinearLayout {
     public ZRThreePartLineLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ZRThreePartLineLayout);
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-          mWidth = wm.getDefaultDisplay().getWidth()/3;
+          WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+          mWidth = wm.getDefaultDisplay().getWidth()/3- DisplayUtil.dip2px(context,22.5f);
         setOrientation(HORIZONTAL);
         a.recycle();
     }
@@ -109,7 +110,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
     private View getUpTextView(int up) {
         int wh = mWidth* up / allCount;
         TextView tv = new TextView(getContext());
-        tv.setTextColor(Color.parseColor("#FF0000"));
+        tv.setTextColor(LocalSettingsConfig.Companion.getInstance().getUpColor());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         tv.setLines(1);
         tv.setCompoundDrawablesWithIntrinsicBounds(ResUtil.INSTANCE.getDrawable(R.mipmap.icon_up), null, null, null);
@@ -127,7 +128,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
     private View getZeroTextView(int zero) {
         int wh = mWidth * zero / allCount;
         TextView tv = new TextView(getContext());
-        tv.setTextColor(Color.parseColor("#C0CCE0"));
+        tv.setTextColor(LocalSettingsConfig.Companion.getInstance().getDefaultColor());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         TextPaint tp = tv.getPaint();
         tp.setFakeBoldText(true);
@@ -142,7 +143,7 @@ public class ZRThreePartLineLayout extends LinearLayout {
     private View getDownTextView(int down) {
         int wh = mWidth * down / allCount;
         TextView tv = new TextView(getContext());
-        tv.setTextColor(Color.parseColor("#00CC00"));
+        tv.setTextColor(LocalSettingsConfig.Companion.getInstance().getDownColor());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
         tv.setCompoundDrawablesWithIntrinsicBounds(null, null, ResUtil.INSTANCE.getDrawable(R.mipmap.icon_down), null);
         tv.setCompoundDrawablePadding(ResUtil.INSTANCE.getDimensionDp2Px(5f));

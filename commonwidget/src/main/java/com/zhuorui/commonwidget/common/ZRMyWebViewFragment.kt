@@ -1,7 +1,9 @@
 package com.zhuorui.commonwidget.common
 
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.webkit.*
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.BR
@@ -37,6 +39,22 @@ class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.data
                  return true
             }
 
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                super.onReceivedError(view, request, error)
+                empty_info_view.visibility =View.VISIBLE
+            }
+
+        }
+        webview.webChromeClient = object :WebChromeClient(){
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                if(newProgress==100){
+                    progress.visibility = View.GONE//加载完网页进度条消失
+                }
+                else{
+                    progress.visibility = View.VISIBLE//开始加载网页时显示进度条
+                    progress.progress = newProgress//设置进度值
+                }
+            }
         }
         //支持js
         webview.settings.javaScriptEnabled = true
@@ -54,7 +72,7 @@ class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.data
         webview.settings.useWideViewPort = false
         //设置是否出现缩放工具
         webview.settings.builtInZoomControls = false
-        webview.loadUrl("https://www.baidu.com/?tn=18029102_2_dg")
+        webview.loadUrl("http://192.168.1.34/#/adviser")
     }
 
     companion object{

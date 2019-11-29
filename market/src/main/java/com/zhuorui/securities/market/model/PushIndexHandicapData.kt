@@ -21,9 +21,9 @@ class PushIndexHandicapData(
     var amplitude: String?,//成交量
     var volumeRatio: String?,//行情时间
     var averagePrice: BigDecimal?,//成交额
-    var rise: Int?,//成交额
-    var fall: Int?,//成交额
-    var flatPlate: Int?//成交额
+    var rise: Int?,//上涨
+    var fall: Int?,//下跌
+    var flatPlate: Int?//平盘
 ) :BaseStockMarket(){
 
 }

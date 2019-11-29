@@ -14,9 +14,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+        <ProgressBar android:layout_width="match_parent"
+                     android:id="@+id/progress"
+                     android:progressDrawable="@drawable/progress_bg"
+                     style="?android:attr/progressBarStyleHorizontal"
+                     android:visibility="gone"
+                     android:layout_height="5dp"/>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
         <WebView android:id="@+id/webview"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent">
         </WebView>
+            <com.zhuorui.commonwidget.ZREmptyView
+                    android:id="@+id/empty_info_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/tablayout_bg"
+                    app:empty_img_width="64dp"
+                    app:empty_img_height="64dp"
+                    app:empty_img_tips_margin="45dp"
+                    android:visibility="invisible"
+                    app:empty_img_src="@mipmap/empty_content"
+                    app:empty_img_tips="@string/temp_no_data"/>
+        </FrameLayout>
     </LinearLayout>
 </layout>

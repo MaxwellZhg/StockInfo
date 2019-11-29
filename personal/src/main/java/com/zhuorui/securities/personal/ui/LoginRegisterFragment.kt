@@ -138,7 +138,6 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     }
 
     override fun gotomain() {
-        RxBus.getDefault().post(LoginStateChangeEvent(true))
          pop()
     }
 
@@ -147,7 +146,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
             val fragment = LoginRegisterFragment()
             if (type!= null) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putInt("type", type)
                 fragment.arguments = bundle
             }
             return fragment
@@ -171,7 +170,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int
+        type = arguments?.getInt("type")!!
         if(type==2){
             presenter?.postChangeMytabInfo()
         }

@@ -162,9 +162,9 @@ public class MarketPointDetailView extends FrameLayout {
         mAdapter.notifyDataSetChanged();
     }
 
-    public void upData(IndexPonitHandicapData    data) {
-        setPrice(data);
-        readData(data, mPreClosePrice, true);
+    public void upPushData(PushIndexHandicapData    data) {
+        setPushPrice(data);
+        readPushData(data, mPreClosePrice, true);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -312,5 +312,90 @@ public class MarketPointDetailView extends FrameLayout {
         return isUpdata ? mItemDatas[position] : "--";
     }
 
+    private void setPushPrice(PushIndexHandicapData data) {
+        if (upColor == 0) {
+            LocalSettingsConfig config = LocalSettingsConfig.Companion.getInstance();
+            upColor = config.getUpColor();
+            downColor = config.getDownColor();
+        }
+        final Float price = data.getLast()!= null ? data.getLast().floatValue() : mPrice;
+        final Float preClosePrice = data.getLast() != null ? data.getOpen().floatValue() : mPreClosePrice;
+        int priceColor = Color.WHITE;
+        int updownIc = 0;
+        if (price == null || preClosePrice == null) {
+            vPrice.setText("_____");
+            vDiffPrice.setText("___");
+            vDiffRate.setText("___");
+            vCurrencyCode.setText("");
+        } else {
+            if (price > preClosePrice) {
+                priceColor = upColor;
+                updownIc = MarketUtil.getUpIcon();
+            } else if (price < preClosePrice) {
+                priceColor = downColor;
+                updownIc = MarketUtil.getDownIcon();
+            }
+            vPrice.setText(String.format("%.3f", price));
+            float diffPrice = price - preClosePrice;
+            vDiffPrice.setText(String.format("%+.3f", diffPrice));
+            vDiffRate.setText(String.format("%+.2f%%", diffPrice * 100 / preClosePrice));
+            if (mPrice != null && mPrice.floatValue() != price.floatValue()) {
+                priceAnimator = MarketUtil.showUpDownAnim(priceAnimator, vAnimator, price.floatValue() > mPrice.floatValue());
+            }
+            vCurrencyCode.setText(MarketUtil.getCurrencyCodeByTs("HK"));
+            mPreClosePrice = preClosePrice;
+            mPrice = price;
+        }
+        vPrice.setTextColor(priceColor);
+        vDiffPrice.setTextColor(priceColor);
+        vDiffRate.setTextColor(priceColor);
+        vDiffLogo.setImageResource(updownIc);
+    }
+
+    private void readPushData(PushIndexHandicapData data, Float preClosePrice,boolean isUpdata) {
+        mItemColor.clear();
+        //最高
+        Float highPrice = data.getHigh() != null ? data.getHigh().floatValue() : mHighPricel;
+        if (highPrice != null) {
+            mHighPricel = highPrice;
+            mItemDatas[ITEMPOS_HIGH_PRICE] = String.format("%.3f", data.getHigh().floatValue());
+        }
+        if (highPrice != null && preClosePrice != null) {
+            mItemColor.put(ITEMPOS_HIGH_PRICE, getUpDownColor(highPrice, preClosePrice, Color.WHITE));
+        }
+        //今开
+        Float openPrice = data.getOpen() != null ? data.getHigh().floatValue() : mOpenPrice;
+        if (openPrice != null) {
+            mOpenPrice = openPrice;
+            mItemDatas[ITEMPOS_OPEN_PRICE] = String.format("%.3f", openPrice);
+        }
+        if (openPrice != null && preClosePrice != null) {
+            mItemColor.put(ITEMPOS_OPEN_PRICE, getUpDownColor(openPrice, preClosePrice, Color.WHITE));
+        }
+        //成交额
+        mItemDatas[ITEMPOS_SHARESTRADED] = data == null || data.getSharestraded()== null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getSharestraded().toString();
+        //最低
+        Float lowPrice = data.getLow() != null ? data.getLow().floatValue(): mLowPricel;
+        if (lowPrice != null) {
+            mLowPricel = lowPrice;
+            mItemDatas[ITEMPOS_LOW_PRICE] = String.format("%.3f", lowPrice);
+        }
+        if (lowPrice != null && preClosePrice != null) {
+            mItemColor.put(ITEMPOS_LOW_PRICE, getUpDownColor(lowPrice, preClosePrice, Color.WHITE));
+        }
+        //昨收
+        if (preClosePrice != null) {
+            mItemDatas[ITEMPOS_PRE_CLOSE_PRICE] = String.format("%5.3f", preClosePrice);
+        }
+        //振幅
+        mItemDatas[ITEMPOS_TURNOVER] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER) : data.getAmplitude();
+        //涨家
+        mItemDatas[ITEMPOS_TURNOVER_RATE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TURNOVER_RATE) : data.getRise().toString();
+        //平家
+        mItemDatas[ITEMPOS_PE_RATIO_STATIC] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_PE_RATIO_STATIC) : data.getFlatPlate().toString();
+        //跌家
+        mItemDatas[ITEMPOS_TOTAL_MARK_VALUE] = data == null || data.getAmplitude() == null ? getDefText(isUpdata, ITEMPOS_TOTAL_MARK_VALUE) : data.getFall().toString();
+
+    }
 
 }
