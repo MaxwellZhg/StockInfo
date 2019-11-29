@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_change_trade_pass.*
 class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBinding,ChangeTradePassViewModel,ChangeTradePassView,ChangeTradePassPresenter>(),ChangeTradePassView,TextWatcher,View.OnClickListener{
     private lateinit var strnewcapsw: String
     private lateinit var strencapsw: String
-    private var oldcapsw:String?=null
+    private var oldcapsw:String=""
     override val layout: Int
         get() = R.layout.fragment_change_trade_pass
     override val viewModelId: Int
@@ -41,7 +41,7 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
             val fragment = ChangeTradePassFragment()
             if (oldcapsw != "") {
                 val bundle = Bundle()
-                bundle.putSerializable("oldcapsw", oldcapsw)
+                bundle.putString("oldcapsw", oldcapsw)
                 fragment.arguments = bundle
             }
             return fragment
@@ -50,7 +50,7 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        oldcapsw = arguments?.getSerializable("oldcapsw") as String?
+        oldcapsw = arguments?.getString("oldcapsw")?:oldcapsw
         et_ensure_new_capital_psw.addTextChangedListener(this)
         tv_btn_complete.setOnClickListener(this)
     }

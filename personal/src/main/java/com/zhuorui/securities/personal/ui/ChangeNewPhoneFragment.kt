@@ -29,10 +29,10 @@ import me.yokeyword.fragmentation.ISupportFragment
  * */
 class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumBinding,ChangeNewPhoneViewModel,ChangeNewPhoneView,ChangeNewPhonePresenter>(),ChangeNewPhoneView,TextWatcher,View.OnClickListener{
 
-    private lateinit var strnewphone: String
-    private lateinit var strnewphonecode: String
-    private var oldphone:String?= null
-    private var code : String? =null
+    private  var strnewphone: String=""
+    private  var strnewphonecode: String=""
+    private var oldphone:String=""
+    private var code : String? =""
     override val layout: Int
         get() = R.layout.fragment_change_new_phone_num
     override val viewModelId: Int
@@ -48,8 +48,8 @@ class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumB
             val fragment = ChangeNewPhoneFragment()
             if (oldphone != ""&&code!="") {
                 val bundle = Bundle()
-                bundle.putSerializable("oldphone", oldphone)
-                bundle.putSerializable("code",code)
+                bundle.putString("oldphone", oldphone)
+                bundle.putString("code",code)
                 fragment.arguments = bundle
             }
             return fragment
@@ -58,8 +58,8 @@ class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumB
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        oldphone = arguments?.getSerializable("oldphone") as String
-        code = arguments?.getSerializable("code") as String
+        oldphone = arguments?.getString("oldphone") ?:oldphone
+        code = arguments?.getString("code") ?:code
         et_verify_code.addTextChangedListener(this)
         tv_btn_complete.setOnClickListener(this)
         tv_get_code.setOnClickListener(this)
@@ -119,8 +119,8 @@ class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumB
         super.onFragmentResult(requestCode, resultCode, data)
         when(requestCode){
             ISupportFragment.RESULT_OK->{
-                var str=data?.get("str") as String
-                var code=data?.get("code") as String
+                var str=data?.getString("str")
+                var code=data?.getString("code")
                 LogUtils.e(str)
                 tv_choosearea.text=str
                 tv_choosearea_tips.text=code

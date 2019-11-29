@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_market_point_cons_info.srl_layout
 class MarketPointConsInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPointConsInfoBinding,MarketPointConsInfoViewModel, MarketPointConsInfoView,MarketPointConsInfoPresenter>(),
     MarketPointConsInfoView, OnRefreshLoadMoreListener {
     private var currentPage: Int = 1
-    private var stockCode: String? = null
+    private var stockCode: String = ""
     private var consInfoadapter: MarketPointInfoAdapter? = null
     override val layout: Int
         get() = R.layout.fragment_market_point_cons_info
@@ -41,7 +41,7 @@ class MarketPointConsInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPointCo
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        stockCode = arguments?.getString("code")
+        stockCode = arguments?.getString("code")?:stockCode
         presenter?.setLifecycleOwner(this)
         srl_layout.setEnableLoadMore(true)
         srl_layout.setOnRefreshLoadMoreListener(this)
@@ -104,6 +104,7 @@ class MarketPointConsInfoFragment :AbsSwipeBackNetFragment<FragmentMarketPointCo
 
     override fun loadFailData() {
         srl_layout.finishLoadMore(false)
+        empty_info_view.visibility=View.VISIBLE
     }
 
 

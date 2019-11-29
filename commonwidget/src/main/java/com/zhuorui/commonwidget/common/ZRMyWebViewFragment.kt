@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_my_web_view.*
  * Desc:公共web界面
  * */
 class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.databinding.FragmentMyWebViewBinding,ZRMyWebViewModel,ZRMyWebView,ZRMyWebViewPresenter>(),ZRMyWebView{
+    private var url:String=""
+    private var title:String=""
     override val layout: Int
         get() = R.layout.fragment_my_web_view
     override val viewModelId: Int
@@ -32,6 +34,9 @@ class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.data
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        url =arguments?.getString("url")?:url
+        title =arguments?.getString("title")?:title
+        top_bar.setTitle(title)
         //重新加载 点击网页里面的链接还是在当前的webview里跳转。不跳到浏览器那边
         webview.webViewClient =  object :WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -72,15 +77,16 @@ class ZRMyWebViewFragment :AbsSwipeBackNetFragment<com.zhuorui.commonwidget.data
         webview.settings.useWideViewPort = false
         //设置是否出现缩放工具
         webview.settings.builtInZoomControls = false
-        webview.loadUrl("http://192.168.1.34/#/adviser")
+        webview.loadUrl(url)
     }
 
     companion object{
-        fun newInstance(type: Int?): ZRMyWebViewFragment {
+        fun newInstance(url: String?,title:String?): ZRMyWebViewFragment {
             val fragment = ZRMyWebViewFragment()
-            if (type != null) {
+            if (url != null&&title!=null) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putString("url", url)
+                bundle.putString("title", title)
                 fragment.arguments = bundle
             }
             return fragment

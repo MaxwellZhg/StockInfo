@@ -24,7 +24,7 @@ class OAHelpCenterInfoFragment :
     AbsSwipeBackFragment<FragmentOaHelpcenterInfoBinding, OAHelpCenterInfoViewModel, OAHelpCenterInfoView, OAHelpCenterInfoPresenter>(),
     OAHelpCenterInfoView {
 
-    private var type: Int = 0
+    private var type: Int = -1
     private var adapter: HelpCenterInfoAdapter? = null
 
     override val layout: Int
@@ -47,7 +47,7 @@ class OAHelpCenterInfoFragment :
             val fragment = OAHelpCenterInfoFragment()
             if (type != 0) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putInt("type", type)
                 fragment.arguments = bundle
             }
             return fragment
@@ -56,7 +56,7 @@ class OAHelpCenterInfoFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int
+        type = arguments?.getInt("type")?:type
         adapter = presenter?.getAdapter(type)
         presenter?.getTipsInfo(type)
         top_bar.setCancleClickListener {

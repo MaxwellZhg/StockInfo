@@ -30,8 +30,8 @@ import kotlinx.android.synthetic.main.login_psw_fragment.*
 
 class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, SettingPswViewModel, SettingPswView, SettingPswPresenter>()
     ,SettingPswView,View.OnClickListener,TextWatcher{
-    private var phone: String? = null
-    private var code :String?=null
+    private var phone: String = ""
+    private var code :String=""
     override val layout: Int
         get() = R.layout.setting_psw_fragment
     override val viewModelId: Int
@@ -46,8 +46,8 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
     private lateinit var strensurepsw: String
 
     override fun init() {
-        phone = arguments?.getSerializable("phone") as String?
-        code = arguments?.getSerializable("code") as String?
+        phone = arguments?.getString("phone")?:phone
+        code = arguments?.getString("code")?:code
         iv_back.setOnClickListener(this)
         tv_btn_settin_finish.setOnClickListener(this)
         cb_login_psw.setOnCheckedChangeListener{ _, isChecked->
@@ -79,8 +79,8 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
             val fragment = SettingPswFragment()
             if (phone != null && code != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("phone", phone)
-                bundle.putSerializable("code", code)
+                bundle.putString("phone", phone)
+                bundle.putString("code", code)
                 fragment.arguments = bundle
             }
             return fragment

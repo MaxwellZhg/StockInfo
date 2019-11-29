@@ -30,7 +30,7 @@ import com.zhuorui.securities.market.util.MarketUtil
 class AllHkStockFragment :
     AbsSwipeBackNetFragment<FragmentAllHkStockBinding, AllHkStockViewModel, AllHkStockView, AllHkStockPresenter>(),
     AllHkStockView, View.OnClickListener,AbsActivity.OnOrientationChangedListener {
-    private var type: Int? = null
+    private var type: Int= -1
     private var nameAdapter: AllHkStockNameAdapter? = null
     private var conAdapter: AllHkStockContainerAdapter? = null
     private var showFilters = false
@@ -50,7 +50,7 @@ class AllHkStockFragment :
             val fragment = AllHkStockFragment()
             if (type != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putInt("type", type)
                 fragment.arguments = bundle
             }
             return fragment
@@ -59,7 +59,7 @@ class AllHkStockFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int?
+        type = arguments?.getInt("type")?:type
         when(type){
             1->{
                 top_bar.setTitle("全部港股")

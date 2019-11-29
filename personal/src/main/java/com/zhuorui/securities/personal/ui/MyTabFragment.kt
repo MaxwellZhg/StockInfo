@@ -11,6 +11,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.common.CommonUrlConfig
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.databinding.FragmentMyTabBinding
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
@@ -121,7 +122,7 @@ class MyTabFragment :
     }
 
     override fun gotomain() {
-        (_mActivity as AbsActivity).start(ZRMyWebViewFragment.newInstance(1))
+        (activity as AbsActivity).start(LoginRegisterFragment.newInstance(2))
     }
 
 /*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
@@ -162,7 +163,11 @@ class MyTabFragment :
     }
 
     override fun gotoClientService() {
-        (_mActivity as AbsActivity).start(ZRMyWebViewFragment.newInstance(1))
+        (_mActivity as AbsActivity).start(ResUtil.getString(R.string.my_manager)?.let {
+            ZRMyWebViewFragment.newInstance(CommonUrlConfig.clinetServece,
+                it
+            )
+        })
     }
 
 
