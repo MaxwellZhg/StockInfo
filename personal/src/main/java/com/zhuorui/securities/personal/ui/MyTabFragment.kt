@@ -3,7 +3,7 @@ package com.zhuorui.securities.personal.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.zhuorui.commonwidget.common.ZRMyWebViewFragment
+import com.zhuorui.commonwidget.common.ZRWebViewFragment
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
@@ -121,7 +121,7 @@ class MyTabFragment :
     }
 
     override fun gotomain() {
-        (_mActivity as AbsActivity).start(ZRMyWebViewFragment.newInstance(1))
+        (_mActivity as AbsActivity).start(ZRWebViewFragment.newInstance(1))
     }
 
 /*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
@@ -162,7 +162,7 @@ class MyTabFragment :
     }
 
     override fun gotoClientService() {
-        (_mActivity as AbsActivity).start(ZRMyWebViewFragment.newInstance(1))
+        (_mActivity as AbsActivity).start(ZRWebViewFragment.newInstance(1))
     }
 
 
