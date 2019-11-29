@@ -46,8 +46,6 @@
             android:id="@+id/highlight_content"
             style="@style/HighlightContentViewStyle"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@id/line_cahart"
-            app:layout_constraintRight_toRightOf="@id/line_cahart"
     />
 
 

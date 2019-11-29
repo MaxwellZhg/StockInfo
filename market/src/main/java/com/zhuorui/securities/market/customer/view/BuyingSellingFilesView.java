@@ -115,12 +115,6 @@ public class BuyingSellingFilesView extends FrameLayout {
             vBuyingValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             vSellingValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         }
-        vSellingTitle.setOnClickListener(v -> {
-            for (int i = 0, l = mAdapter.getItemCount(); i < l; i++) {
-                mAdapter.notifyItemChanged(i);
-            }
-
-        });
     }
 
     public void setPadding(int left, int right) {
@@ -290,10 +284,6 @@ public class BuyingSellingFilesView extends FrameLayout {
         public BuySellFileAdapter(Context context) {
             this.context = context;
             mDatas = new ArrayList<>();
-            upDownAnim.put(getAnimItemKeyByPosition(0), true);
-            upDownAnim.put(getAnimItemKeyByPosition(3), true);
-            upDownAnim.put(getAnimItemKeyByPosition(6), false);
-            upDownAnim.put(getAnimItemKeyByPosition(4), true);
         }
 
         public abstract void setData(List<OrderData.AskBidModel> buyingData, List<OrderData.AskBidModel> sellingData);
@@ -375,7 +365,6 @@ public class BuyingSellingFilesView extends FrameLayout {
         private TextView vPirce;
         private TextView vNum;
         private View vAnim;
-        private ObjectAnimator animator;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -403,7 +392,7 @@ public class BuyingSellingFilesView extends FrameLayout {
                 float price = Float.valueOf(data.getPrice());
                 vPirce.setTextColor(config.getUpDownColor(price, preClosePrice, defColor));
                 vPirce.setText(String.format("%.3f", price));
-                vNum.setText(String.format("%s(%s)", MathUtil.INSTANCE.convertToUnitString(new BigDecimal(data.getQty())), data.getNum()));
+                vNum.setText(String.format("%s(%s)", MathUtil.INSTANCE.convertToUnitString(new BigDecimal(data.getQty()),"%.1f"), data.getNum()));
             }
         }
 

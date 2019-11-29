@@ -13,6 +13,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.transition.TransitionManager;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -58,6 +61,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
     private float mPrice;
     private long mHighlightTime;
     private float mHighlightValue;
+    private ConstraintLayout rootView;
 
     public TodayCapitalFlowTrendView(Context context) {
         this(context, null);
@@ -70,6 +74,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
     public TodayCapitalFlowTrendView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_today_capital_flow_trend, this);
+        rootView = findViewById(R.id.root_view);
         vUnit = findViewById(R.id.tv_precen);
         vHighlightContent = findViewById(R.id.highlight_content);
         initLineChart();
@@ -79,8 +84,6 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
         vChart = findViewById(R.id.line_cahart);
         vChart.setNoDataText("暂无数据");
         vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
-        //是否有触摸事件
-        vChart.setTouchEnabled(true);
         //是否展示网格线
         vChart.setDrawGridBackground(false);
         //是否显示边界
@@ -146,11 +149,13 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
         mEmpty = entrys.isEmpty();
         LineDataSet lineDataSet;
         if (mEmpty) {
+            vChart.setTouchEnabled(false);
             entrys.add(new Entry(0, 1));
             entrys.add(new Entry(0, -1));
             lineDataSet = new LineDataSet(entrys, "");
             lineDataSet.setColor(Color.TRANSPARENT);
         } else {
+            vChart.setTouchEnabled(true);
             lineDataSet = new LineDataSet(entrys, "");
             lineDataSet.setColor(mLineColor);
         }
@@ -173,9 +178,9 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
         LineData lineData = getLineData(getEntry(datas));
         vChart.getAxisLeft().resetAxisMaximum();
         vChart.getAxisLeft().resetAxisMinimum();
-        if (lineData.getYMin() == lineData.getYMax() && lineData.getYMin() > 0){
+        if (lineData.getYMin() == lineData.getYMax() && lineData.getYMin() > 0) {
             vChart.getAxisLeft().setAxisMinimum(0f);
-        }else if (lineData.getYMin() == lineData.getYMax() && lineData.getYMax() < 0){
+        } else if (lineData.getYMin() == lineData.getYMax() && lineData.getYMax() < 0) {
             vChart.getAxisLeft().setAxisMaximum(0f);
         }
         vChart.setData(lineData);
@@ -227,6 +232,11 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
         return x;
     }
 
+    /**
+     * 设置股票市场
+     *
+     * @param ts
+     */
     public void setStockTs(String ts) {
         ((MyXAxisRenderer) vChart.getRendererXAxis()).setStockTs(ts);
         vChart.invalidate();
@@ -234,19 +244,51 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-        vHighlightContent.setVisibility(VISIBLE);
-        mHighlightTime = (Long) e.getData();
-        mHighlightValue = e.getY();
-        setHighlightData(mHighlightTime, mHighlightValue, mPrice);
+        Object obj = e.getData();
+        if (obj != null) {
+            vHighlightContent.setVisibility(VISIBLE);
+            changeHighlightLayout(e.getX());
+            mHighlightTime = (long) obj;
+            mHighlightValue = e.getY();
+            setHighlightData(mHighlightTime, mHighlightValue, mPrice);
+        }
+
     }
 
+
+    private int mHighlightSide = -1;
+
+    /**
+     * 改变Highlight位置
+     *
+     * @param x
+     */
+    private void changeHighlightLayout(float x) {
+        final float max = vChart.getXAxis().getAxisMaximum();
+        final float min = vChart.getXAxis().getAxisMinimum();
+        double range = Math.abs(max - min);
+        float contentX = (float) (max - (range / 2f));
+        int side = x > contentX ? ConstraintSet.LEFT : ConstraintSet.RIGHT;
+        if (mHighlightSide != side) {
+            MarketUtil.changeHighlightLayout(vHighlightContent, vChart, side);
+            mHighlightSide = side;
+        }
+    }
+
+    /**
+     * 设置Highlight数据
+     *
+     * @param time
+     * @param value
+     * @param price
+     */
     private void setHighlightData(long time, float value, float price) {
         LinkedHashMap<CharSequence, CharSequence> data = new LinkedHashMap<>();
         data.put("时间", TimeZoneUtil.timeFormat(time, "HH:mm"));
         data.put("最新价", String.format("%.3f", price));
-        int color = LocalSettingsConfig.Companion.getInstance().getUpDownColor(value,0f,Color.WHITE);
-        SpannableString ss = new SpannableString(String.format("%+.2f",MathUtil.INSTANCE.divide2(BigDecimal.valueOf(value), mUnit).doubleValue()));
-        ss.setSpan(new ForegroundColorSpan(color),0,ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        int color = LocalSettingsConfig.Companion.getInstance().getUpDownColor(value, 0f, Color.WHITE);
+        SpannableString ss = new SpannableString(String.format("%+.2f", MathUtil.INSTANCE.divide2(BigDecimal.valueOf(value), mUnit).doubleValue()));
+        ss.setSpan(new ForegroundColorSpan(color), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         data.put("净流入", ss);
         vHighlightContent.setData(data);
     }
