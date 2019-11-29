@@ -57,7 +57,6 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
     private final int defColor = Color.parseColor("#7B889E");
     private final int mLineColor = Color.parseColor("#FF8E1B");
     private int mDateNum = 5;
-    private ConstraintLayout constraintLayout;
     private HighlightContentView vHighlightContent;
     private CombinedChart vChart;
     private TextView vNum;
@@ -82,7 +81,6 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
         super(context, attrs, defStyleAttr);
         mHighlightContentTitle = context.getResources().getStringArray(R.array.TodayCapitalFlowTrendHighlightTitle);
         inflate(context, R.layout.view_historical_capital_flow, this);
-        constraintLayout = findViewById(R.id.root_view);
         vHighlightContent = findViewById(R.id.highlight_content);
         vTotal = findViewById(R.id.tv_total);
         vUnit = findViewById(R.id.tv_unit);
