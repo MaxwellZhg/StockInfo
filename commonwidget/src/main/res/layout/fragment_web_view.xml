@@ -4,28 +4,34 @@
         <variable name="viewModel"
                   type="com.zhuorui.commonwidget.common.ZRWebViewModel"/>
     </data>
+
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         <com.zhuorui.commonwidget.ZhuoRuiTopBar
                 android:id="@+id/top_bar"
                 app:zr_topbarTitle="@string/my_manager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </com.zhuorui.commonwidget.ZhuoRuiTopBar>
+
         <ProgressBar android:layout_width="match_parent"
                      android:id="@+id/progress"
                      android:progressDrawable="@drawable/progress_bg"
                      style="?android:attr/progressBarStyleHorizontal"
                      android:visibility="gone"
                      android:layout_height="5dp"/>
+
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="match_parent">
-        <WebView android:id="@+id/webview"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent">
-        </WebView>
+
+            <WebView android:id="@+id/webview"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+            </WebView>
+
             <com.zhuorui.commonwidget.ZREmptyView
                     android:id="@+id/empty_info_view"
                     android:layout_width="match_parent"
