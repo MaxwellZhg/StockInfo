@@ -16,25 +16,25 @@ import java.math.BigDecimal
 class F10BrieResponse(val data: Data) : BaseResponse() {
 
     data class Data(
-        val company: Company,
-        val manager: ArrayList<F10ManagerModel>,
-        val shareHolderChange: List<F10ShareHolderModel>,
-        val dividend: List<F10DividendModel>,
-        val repo: List<F10RepoModel>
+        var company: Company?,
+        var manager: ArrayList<F10ManagerModel>?,
+        var shareHolderChange: List<F10ShareHolderModel>?,
+        var dividend: List<F10DividendModel>?,
+        var repo: List<F10RepoModel>?
     )
 
     /**
      * 公司简介
      */
     data class Company(
-        val name: String,// 公司名称/证券名称
-        val industry: String,// 所属行业
-        val chairman: String,// 主席
-        val totalCapitalStock: BigDecimal,// 总股本
-        val listingDate: String,// 上市日期
-        val issuePrice: BigDecimal, // 发行价格
-        val issueNumber: BigDecimal,// 发行数量
-        val equityHK: BigDecimal,// 港股股本
-        val business: String// 公司业务
+        var name: String?,// 公司名称/证券名称
+        var industry: String?,// 所属行业
+        var chairman: String?,// 主席
+        var totalCapitalStock: BigDecimal?,// 总股本
+        var listingDate: String?,// 上市日期
+        var issuePrice: BigDecimal?, // 发行价格
+        var issueNumber: BigDecimal?,// 发行数量
+        var equityHK: BigDecimal?,// 港股股本
+        var business: String?// 公司业务
     )
 }

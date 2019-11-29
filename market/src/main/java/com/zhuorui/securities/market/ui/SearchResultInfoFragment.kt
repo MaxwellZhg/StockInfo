@@ -3,10 +3,8 @@ package com.zhuorui.securities.market.ui
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
@@ -21,7 +19,6 @@ import com.zhuorui.securities.market.ui.presenter.SearchResultInfoPresenter
 import com.zhuorui.securities.market.ui.view.SearchResultInfoView
 import com.zhuorui.securities.market.ui.viewmodel.SearchResultInfoViewModel
 import kotlinx.android.synthetic.main.fragment_search_result_info.*
-import kotlinx.android.synthetic.main.fragment_simulation_trading_orders.*
 
 /**
  * Created by Maxwell.
@@ -31,13 +28,13 @@ import kotlinx.android.synthetic.main.fragment_simulation_trading_orders.*
  */
 class SearchResultInfoFragment :
     AbsFragment<FragmentSearchResultInfoBinding, SearchResultInfoViewModel, SearchResultInfoView, SearchResultInfoPresenter>(),
-    SearchResultInfoView, SeachAllofInfoAdapter.OnTopicStockInfoListenner,StockAdapter.OnStockColollectListenner,
+    SearchResultInfoView, SeachAllofInfoAdapter.OnTopicStockInfoListenner, StockAdapter.OnStockColollectListenner,
     OnRefreshLoadMoreListener, StockAdapter.OnClickStockIntoStockDetailListener,
     SeachAllofInfoAdapter.OnClickStockAllIntoStockDetailListener {
-    var currentPage :Int = 0
-    var totalPage:Int =0
-    var countNum:Int =0
-    private var strInfo:String?=null
+    var currentPage: Int = 0
+    var totalPage: Int = 0
+    var countNum: Int = 0
+    private var strInfo: String? = null
     private var adapter: SeachAllofInfoAdapter? = null
     private var stockadapter: StockAdapter? = null
     private var infoadapter: StockInfoAdapter? = null
@@ -52,6 +49,7 @@ class SearchResultInfoFragment :
         get() = ViewModelProviders.of(this).get(SearchResultInfoViewModel::class.java)
     override val getView: SearchResultInfoView
         get() = this
+
     companion object {
         fun newInstance(type: SearchStokcInfoEnum?): SearchResultInfoFragment {
             val fragment = SearchResultInfoFragment()
@@ -76,10 +74,10 @@ class SearchResultInfoFragment :
     }
 
     override fun detailInfo(str: String) {
-        strInfo=str
-        currentPage=0
-        totalPage=0
-        countNum=0
+        strInfo = str
+        currentPage = 0
+        totalPage = 0
+        countNum = 0
         rv_serach_all.adapter = adapter
         adapter?.setkeywords(str)
         presenter?.getData(type, str)
@@ -87,22 +85,22 @@ class SearchResultInfoFragment :
     }
 
     override fun detailStock(str: String) {
-        strInfo=str
-        currentPage=0
+        strInfo = str
+        currentPage = 0
         //totalPage=0
-        countNum=0
+        countNum = 0
         sm_refrsh.setNoMoreData(false)
-        presenter?.getStockData(str,currentPage)
+        presenter?.getStockData(str, currentPage)
         stockadapter?.setkeywords(str)
         rv_serach_all.adapter = stockadapter
         stockadapter?.notifyDataSetChanged()
     }
 
     override fun detailStockInfo(str: String) {
-        strInfo=str
-        currentPage=0
-        countNum=0
-       // totalPage=0
+        strInfo = str
+        currentPage = 0
+        countNum = 0
+        // totalPage=0
         sm_refrsh.setNoMoreData(false)
         presenter?.getStockInfoData()
         infoadapter?.setkeywords(str)
@@ -115,14 +113,14 @@ class SearchResultInfoFragment :
             SearchStokcInfoEnum.All -> {
                 adapter = presenter?.getAdapter()
                 adapter?.onTopicStockInfoListenner = this
-                adapter?.onClickStockAllIntoStockDetailListener=this
+                adapter?.onClickStockAllIntoStockDetailListener = this
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(false)
             }
             SearchStokcInfoEnum.Stock -> {
                 stockadapter = presenter?.getStockAdapter()
-                stockadapter?.onStockColollectListenner=this
-                stockadapter?.onClickStockIntoStockDetailListener=this
+                stockadapter?.onStockColollectListenner = this
+                stockadapter?.onClickStockIntoStockDetailListener = this
                 sm_refrsh.setEnableRefresh(false)
                 sm_refrsh.setEnableLoadMore(false)
             }
@@ -140,7 +138,7 @@ class SearchResultInfoFragment :
         init()
     }
 
-    override fun addInfoToAdapter(list: List<Int>?,totalPage: Int) {
+    override fun addInfoToAdapter(list: List<Int>?, totalPage: Int) {
         if (presenter?.ts == SearchStokcInfoEnum.Info) {
             infoadapter?.clearItems()
             if (infoadapter?.items == null) {
@@ -150,16 +148,16 @@ class SearchResultInfoFragment :
         }
     }
 
-    override fun addStockToAdapter(list: List<SearchStockInfo>?,totalPage: Int) {
+    override fun addStockToAdapter(list: List<SearchStockInfo>?, totalPage: Int) {
         if (presenter?.ts == SearchStokcInfoEnum.Stock) {
-            this.totalPage=totalPage
-            if(currentPage==0) {
-                 stockadapter?.clearItems()
+            this.totalPage = totalPage
+            if (currentPage == 0) {
+                stockadapter?.clearItems()
             }
-           if (stockadapter?.items == null) {
+            if (stockadapter?.items == null) {
                 stockadapter?.items = ArrayList()
             }
-            if(!list?.let { stockadapter?.items?.containsAll(it) }!!) {
+            if (!list?.let { stockadapter?.items?.containsAll(it) }!!) {
                 sm_refrsh.finishLoadMore(true)
                 stockadapter?.addItems(list)
             }
@@ -180,24 +178,27 @@ class SearchResultInfoFragment :
     override fun onClickCollectionStock(stockInfo: SearchStockInfo) {
         presenter?.collectionStock(stockInfo, stockInfo.collect)
     }
+
     override fun onStockCollectionStock(stockInfo: SearchStockInfo) {
         presenter?.collectionStock(stockInfo, stockInfo.collect)
     }
+
     override fun notifyAdapter() {
-        when(presenter?.ts){
+        when (presenter?.ts) {
             SearchStokcInfoEnum.All -> {
-               adapter?.notifyDataSetChanged()
+                adapter?.notifyDataSetChanged()
             }
             SearchStokcInfoEnum.Stock -> {
                 stockadapter?.notifyDataSetChanged()
             }
         }
     }
+
     override fun onLoadMore(refreshLayout: RefreshLayout) {
-        when(presenter?.ts){
-            SearchStokcInfoEnum.Stock->{
+        when (presenter?.ts) {
+            SearchStokcInfoEnum.Stock -> {
                 currentPage++
-                strInfo?.let { presenter?.getStockData(it,currentPage) }
+                strInfo?.let { presenter?.getStockData(it, currentPage) }
             }
         }
 
@@ -208,36 +209,45 @@ class SearchResultInfoFragment :
     }
 
     override fun showEmpty() {
-        empty_view.visibility=View.VISIBLE
+        empty_view.visibility = View.VISIBLE
     }
+
     override fun hideEmpty() {
-        empty_view.visibility=View.INVISIBLE
+        empty_view.visibility = View.INVISIBLE
     }
+
     override fun showloadMoreFail() {
         sm_refrsh.finishLoadMore(true)//结束加载（加载失败）
         sm_refrsh.finishLoadMoreWithNoMoreData()
         sm_refrsh.setNoMoreData(true)
     }
+
     override fun showError() {
-         sm_refrsh.finishLoadMore(false)
+        sm_refrsh.finishLoadMore(false)
     }
-    override fun onClickStockIntoDetail(stock:SearchStockInfo) {
-       gotoDetail(stock)
-    }
-    override fun onClickStockAllIntoDeatil(stock:SearchStockInfo) {
+
+    override fun onClickStockIntoDetail(stock: SearchStockInfo) {
         gotoDetail(stock)
     }
-    fun gotoDetail(stock:SearchStockInfo){
+
+    override fun onClickStockAllIntoDeatil(stock: SearchStockInfo) {
+        gotoDetail(stock)
+    }
+
+    fun gotoDetail(stock: SearchStockInfo) {
         // 跳转到详情页
         val stockInfo = SearchStockInfo()
         stockInfo.code = stock.code
         stockInfo.ts = stock.ts
-        stockInfo.tsCode = stock.code+"."+stock.ts
+        stockInfo.tsCode = stock.code + "." + stock.ts
         stockInfo.name = stock.name
-        stockInfo.type = 2
-        (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(MarketDetailFragment.newInstance(stockInfo),
+        stockInfo.type = stock.type
+        stockInfo.suspension = stock.suspension
+        (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(
+            MarketDetailFragment.newInstance(stockInfo),
             MarketDetailFragment::class.java,
-            true)
+            true
+        )
     }
 
 }

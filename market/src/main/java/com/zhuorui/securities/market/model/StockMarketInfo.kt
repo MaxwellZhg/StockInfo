@@ -20,21 +20,12 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
     // 排序
     @IgnoredOnParcel
     var sort: Int = 0
-    // 当前价格：如13.75
-    @IgnoredOnParcel
-    var last: BigDecimal? = null
-    // 跌涨价格：如1.33
-    @IgnoredOnParcel
-    var diffPrice: BigDecimal? = null
-    // 涨跌幅：如-0.0018（-0.18%）
-    @IgnoredOnParcel
-    var diffRate: BigDecimal? = null
     // 创建时间
     @IgnoredOnParcel
     var createTime: Long = 0
-    // 股市状态
+    // 跌涨价格：如1.33
     @IgnoredOnParcel
-    var suspension: StockSuspension? = StockSuspension.empty
+    var diffPrice: BigDecimal? = null
     // 涨跌标识(1:涨，0:平，-1:跌)
     @IgnoredOnParcel
     var pctTag: Int? = null
@@ -56,7 +47,6 @@ class StockMarketInfo : SearchStockInfo(), Parcelable {
             target.diffRate = origin.diffRate
             target.createTime = origin.createTime
             target.suspension = origin.suspension
-            target.pctTag = origin.pctTag
         }
     }
 }

@@ -82,7 +82,6 @@ public class SocketClient {
                     LogInfra.Log.d(TAG, "握手成功");
                     RxBus.getDefault().post(new SocketConnectEvent(true));
                     sendAuth();
-                    isConnected = true;
                 }
 
                 @Override
@@ -160,6 +159,7 @@ public class SocketClient {
                                 switch (Objects.requireNonNull(response.getPath())) {
                                     case SocketApi.AUTH:
                                         // 认证成功
+                                        isConnected = true;
                                         RxBus.getDefault().post(new SocketAuthCompleteEvent());
                                         break;
                                     case SocketApi.TOPIC_UNBIND:

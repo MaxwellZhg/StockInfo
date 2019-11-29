@@ -38,11 +38,16 @@ class StockPriceDataManager private constructor(val ts: String, val code: String
         fun getInstance(ts: String, code: String, type: Int): StockPriceDataManager {
             var instance = instanceMap[getTsCode(ts, code)]
             if (instance == null) {
-                instance = StockPriceDataManager(ts, code, type)
-                instanceMap[getTsCode(ts, code)] = instance
-                LogInfra.Log.d(instance.TAG, "当前缓存:$instanceMap")
+                synchronized(instanceMap) {
+                    instance = instanceMap[getTsCode(ts, code)]
+                    if (instance == null) {
+                        instance = StockPriceDataManager(ts, code, type)
+                        instanceMap[getTsCode(ts, code)] = instance!!
+                        LogInfra.Log.d(instance!!.TAG, "当前缓存:$instanceMap")
+                    }
+                }
             }
-            return instance
+            return instance!!
         }
 
         private fun getTsCode(ts: String, code: String): String {

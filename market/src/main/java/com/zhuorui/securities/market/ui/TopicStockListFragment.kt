@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.adapter.BaseListAdapter
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -98,16 +99,16 @@ class TopicStockListFragment :
             stock.ts = item.stockInfo?.ts
             stock.tsCode = item.stockInfo?.code + "." + item.stockInfo?.ts
             stock.name = item.stockInfo?.name
-            stock.type = 2
-//          startActivity(Intent(context, KlineLandActivity::class.java))
-            (parentFragment as AbsFragment<*, *, *, *>).startWithPopTo(
+            stock.type = item.stockInfo?.type
+            stock.suspension = item.stockInfo?.suspension
+            (_mActivity as AbsActivity).startWithPopTo(
                 MarketDetailFragment.newInstance(stock),
                 MarketDetailFragment::class.java,
                 true
             )
         } else {
             // 跳转到搜索
-            (parentFragment as AbsFragment<*, *, *, *>).start(SearchInfoFragment.newInstance())
+            (_mActivity as AbsActivity).start(SearchInfoFragment.newInstance())
 
 //            testPostData("00009")
 //            testPostData("00059")
