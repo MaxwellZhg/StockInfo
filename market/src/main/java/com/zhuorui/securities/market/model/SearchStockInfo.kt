@@ -33,7 +33,7 @@ open class SearchStockInfo : BaseStockMarket(), Parcelable {
     // 涨跌幅：如-0.0018（-0.18%）
     @IgnoredOnParcel
     var diffRate: BigDecimal? = null
-    // 股市状态
+    // 股市状态 1-正常 2-暂停交易或者停牌 3-复牌
     @IgnoredOnParcel
-    var suspension: StockSuspension? = StockSuspension.empty
+    var suspension: Int? = null
 }

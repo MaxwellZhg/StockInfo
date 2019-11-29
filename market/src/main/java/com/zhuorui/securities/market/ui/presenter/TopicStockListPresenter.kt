@@ -342,11 +342,11 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         // 未登录
         else {
             // 取消所有订阅
+            viewModel?.datas?.value?.forEach { it.setOnChangeDataCallBack(null) }
             if (ts == null) {
-                viewModel?.datas?.value?.forEach { it.setOnChangeDataCallBack(null) }
+                // 清空所有的缓存
+                LocalStocksConfig.getInstance().clear()
             }
-            // 清空所有的缓存
-            LocalStocksConfig.getInstance().clear()
             viewModel?.datas?.value?.clear()
             view?.notifyDataSetChanged(viewModel?.datas?.value)
         }

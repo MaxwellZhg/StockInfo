@@ -17,7 +17,6 @@ import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.R2
 import com.zhuorui.securities.market.model.StockMarketInfo
-import com.zhuorui.securities.market.model.StockSuspension
 import com.zhuorui.securities.market.model.StockTsEnum
 import com.zhuorui.securities.market.model.TopicStockModel
 import com.zhuorui.securities.market.util.MarketUtil
@@ -138,13 +137,13 @@ class TopicStocksAdapter : BaseListAdapter<TopicStockModel>() {
 
 
             when (stockInfo?.suspension) {
-                StockSuspension.empty -> {
+                null -> {
                     // 无状态
                     tv_price.setText("--", 0)
                     stock_up_down.setUpDown(0)
                     stock_up_down.text = "--"
                 }
-                StockSuspension.suspension -> {
+                2 -> {
                     // 停牌状态
                     tv_price.setText("--", 0)
                     stock_up_down.setUpDown(0)
