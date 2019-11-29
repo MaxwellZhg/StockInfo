@@ -7,6 +7,7 @@ import com.zhuorui.commonwidget.model.Observer
 import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
+import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
@@ -105,6 +106,7 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
      */
     fun getCapitalFlowTime(day: Int) {
         mDay = day
+        viewModel?.mHistoricalCapital?.value?.clear()
         val requset = GetCapitalFlowTimeRequest(mTs.toString(), mCode.toString(), day, transactions.createTransaction())
         Cache[IStockNet::class.java]?.getCapitalFlowTime(requset)
             ?.enqueue(Network.IHCallBack<GetCapitalFlowTimeResponse>(requset))
@@ -116,6 +118,12 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetCapitalFlowTime(response: GetCapitalFlowTimeResponse) {
         viewModel?.mHistoricalCapital?.value = getTestHistoricalData()
+    }
+
+    override fun onErrorResponse(response: ErrorResponse) {
+        if (response.request is GetCapitalFlowTimeRequest){
+            view?.onGetCapitalFlowTimeError(response.msg)
+        }
     }
 
     private fun getTestHistoricalData(): MutableList<CapitalTrendModel>? {

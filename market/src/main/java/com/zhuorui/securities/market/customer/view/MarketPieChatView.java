@@ -65,6 +65,7 @@ public class MarketPieChatView extends FrameLayout {
 
     public void setNoDataText(String text){
         vPieChart.setNoDataText(text);
+        vPieChart.invalidate();
     }
 
     private void initPieChart() {

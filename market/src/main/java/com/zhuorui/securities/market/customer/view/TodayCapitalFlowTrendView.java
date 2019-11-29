@@ -196,6 +196,7 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
 
     public void setNotText(String text){
         vChart.setNoDataText(text);
+        vChart.invalidate();
     }
 
     private List<Entry> getEntry(List<CapitalTrendModel> datas) {

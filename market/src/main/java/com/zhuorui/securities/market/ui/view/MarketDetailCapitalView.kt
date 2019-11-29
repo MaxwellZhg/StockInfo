@@ -28,8 +28,14 @@ interface MarketDetailCapitalView : AbsView {
     fun onHistoricalCapitalFlowData(data: List<CapitalTrendModel>)
 
     /**
+     * 历史资金流向数据获取失败
+     */
+    fun onGetCapitalFlowTimeError(msg: String?)
+
+    /**
      * 股票实时价格
      */
     fun onUpPrice(t: Float?)
+
 
 }

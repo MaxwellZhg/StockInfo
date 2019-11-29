@@ -97,6 +97,10 @@ class MarketDetailCapitalFragment :
         historicalCapitalFlow?.setData(data)
     }
 
+    override fun onGetCapitalFlowTimeError(msg: String?) {
+        historicalCapitalFlow?.setNotText(msg)
+    }
+
 
     override fun onSelected(day: Int) {
         presenter?.getCapitalFlowTime(day)

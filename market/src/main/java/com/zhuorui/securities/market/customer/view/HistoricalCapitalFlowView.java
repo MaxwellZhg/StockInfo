@@ -220,6 +220,7 @@ public class HistoricalCapitalFlowView extends FrameLayout implements View.OnCli
 
     public void setNotText(String text) {
         vChart.setNoDataText(text);
+        vChart.invalidate();
     }
 
     public void setOnSelectDayListener(OnSelectDayListener l) {
