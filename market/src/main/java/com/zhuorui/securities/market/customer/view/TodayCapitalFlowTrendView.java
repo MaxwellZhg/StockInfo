@@ -51,17 +51,17 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
 
     private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
+    private final int mLineColor = Color.parseColor("#FF8E1B");
     private boolean mEmpty;
     private LineChart vChart;
     private MyXAxisRenderer xAxisRenderer;
     private TextView vUnit;
     private BigDecimal mUnit;
     private HighlightContentView vHighlightContent;
-    private final int mLineColor = Color.parseColor("#FF8E1B");
     private float mPrice;
     private long mHighlightTime;
     private float mHighlightValue;
-    private ConstraintLayout rootView;
+    private String[] mHighlightContentTitle;
 
     public TodayCapitalFlowTrendView(Context context) {
         this(context, null);
@@ -73,8 +73,8 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
 
     public TodayCapitalFlowTrendView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mHighlightContentTitle = context.getResources().getStringArray(R.array.TodayCapitalFlowTrendHighlightTitle);
         inflate(context, R.layout.view_today_capital_flow_trend, this);
-        rootView = findViewById(R.id.root_view);
         vUnit = findViewById(R.id.tv_precen);
         vHighlightContent = findViewById(R.id.highlight_content);
         initLineChart();
@@ -82,8 +82,8 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
 
     private void initLineChart() {
         vChart = findViewById(R.id.line_cahart);
-        vChart.setNoDataText("暂无数据");
-        vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
+        vChart.setNoDataText(getResources().getString(R.string.str_no_data));
+        vChart.setNoDataTextColor(getResources().getColor(R.color.color_no_data_text));
         //是否展示网格线
         vChart.setDrawGridBackground(false);
         //是否显示边界
@@ -194,6 +194,10 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
         }
     }
 
+    public void setNotText(String text){
+        vChart.setNoDataText(text);
+    }
+
     private List<Entry> getEntry(List<CapitalTrendModel> datas) {
         List<Entry> entrys = new ArrayList<>();
         if (datas != null && !datas.isEmpty()) {
@@ -284,12 +288,12 @@ public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartVal
      */
     private void setHighlightData(long time, float value, float price) {
         LinkedHashMap<CharSequence, CharSequence> data = new LinkedHashMap<>();
-        data.put("时间", TimeZoneUtil.timeFormat(time, "HH:mm"));
-        data.put("最新价", String.format("%.3f", price));
+        data.put(mHighlightContentTitle[0], TimeZoneUtil.timeFormat(time, "HH:mm"));
+        data.put(mHighlightContentTitle[1], String.format("%.3f", price));
         int color = LocalSettingsConfig.Companion.getInstance().getUpDownColor(value, 0f, Color.WHITE);
         SpannableString ss = new SpannableString(String.format("%+.2f", MathUtil.INSTANCE.divide2(BigDecimal.valueOf(value), mUnit).doubleValue()));
         ss.setSpan(new ForegroundColorSpan(color), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        data.put("净流入", ss);
+        data.put(mHighlightContentTitle[2], ss);
         vHighlightContent.setData(data);
     }
 

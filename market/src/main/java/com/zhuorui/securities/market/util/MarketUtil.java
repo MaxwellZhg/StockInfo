@@ -231,8 +231,10 @@ public class MarketUtil {
             } else {
                 unit = W;
             }
-        } else {
+        } else if (data.size() > 0) {
             unit = getUnitBigDecimal(data.get(0).abs());
+        } else {
+            unit = H;
         }
         return unit;
     }
@@ -269,13 +271,16 @@ public class MarketUtil {
             } else {
                 unit = W;
             }
-        } else {
+        } else if (data.length > 0) {
             unit = getUnitBigDecimal(data[0].abs());
+        } else {
+            unit = H;
         }
         return unit;
     }
 
     /**
+     * 计算基础单位数值
      * W代表万，Y代表亿
      */
     private static BigDecimal H = BigDecimal.valueOf(1);

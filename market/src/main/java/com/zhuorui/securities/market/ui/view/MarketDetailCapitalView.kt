@@ -20,7 +20,7 @@ interface MarketDetailCapitalView : AbsView {
     /**
      * 今天资金趋势数据
      */
-    fun onTodatCapitalFlowTrendData(data: List<CapitalTrendModel>)
+    fun onTodayCapitalFlowTrendData(data: List<CapitalTrendModel>)
 
     /**
      * 历史资金流向数据

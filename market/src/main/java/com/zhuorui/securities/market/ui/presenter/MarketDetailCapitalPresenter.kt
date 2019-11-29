@@ -19,6 +19,7 @@ import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.GetCapitalFlowTimeRequest
+import com.zhuorui.securities.market.net.response.GetCapitalFlowTimeResponse
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
@@ -30,6 +31,7 @@ import com.zhuorui.securities.market.ui.view.MarketDetailCapitalView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailCapitalViewModel
 import com.zhuorui.securities.market.util.MarketUtil
 import java.math.BigDecimal
+import java.util.*
 
 /**
  *    author : liuwei
@@ -105,7 +107,29 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         mDay = day
         val requset = GetCapitalFlowTimeRequest(mTs.toString(), mCode.toString(), day, transactions.createTransaction())
         Cache[IStockNet::class.java]?.getCapitalFlowTime(requset)
-            ?.enqueue(Network.IHCallBack<BaseResponse>(requset))
+            ?.enqueue(Network.IHCallBack<GetCapitalFlowTimeResponse>(requset))
+    }
+
+    /**
+     * 查询资金流向数据回调
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onGetCapitalFlowTime(response: GetCapitalFlowTimeResponse) {
+        viewModel?.mHistoricalCapital?.value = getTestHistoricalData()
+    }
+
+    private fun getTestHistoricalData(): MutableList<CapitalTrendModel>? {
+        val list = mutableListOf<CapitalTrendModel>()
+        val calendar = Calendar.getInstance()
+        val d = intArrayOf(-1, 1)
+        val random = Random()
+        list.add(CapitalTrendModel(calendar.timeInMillis, BigDecimal((1000  * d[random.nextInt(d.size)]))))
+        for (i in 1 until mDay) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
+            list.add(CapitalTrendModel(calendar.timeInMillis, BigDecimal(random.nextInt(10000) * i * d[random.nextInt(d.size)])))
+        }
+        list.sortBy { it.time }
+        return list
     }
 
     /**
@@ -129,7 +153,6 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
             smallOut,
             null
         )
-
     }
 
     /**
@@ -157,6 +180,9 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         viewModel?.mCapitalTrends?.value = capitalTrends
     }
 
+    /**
+     * 股价更新
+     */
     override fun update(subject: Subject<*>?) {
         if (subject is StockPriceDataManager) {
             handler.post { viewModel?.mPrice?.value = subject?.priceData?.last?.toFloat() ?: 0f }
@@ -181,11 +207,15 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
                 })
             viewModel?.mCapitalTrends?.observe(it,
                 androidx.lifecycle.Observer { t ->
-                    view?.onTodatCapitalFlowTrendData(t)
+                    view?.onTodayCapitalFlowTrendData(t)
                 })
             viewModel?.mPrice?.observe(it,
                 androidx.lifecycle.Observer { t ->
                     view?.onUpPrice(t)
+                })
+            viewModel?.mHistoricalCapital?.observe(it,
+                androidx.lifecycle.Observer { t ->
+                    view?.onHistoricalCapitalFlowData(t)
                 })
         }
     }
