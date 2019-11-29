@@ -8,7 +8,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
  * Date: 2019/11/26
  * Desc:公共web p层
  * */
-class ZRMyWebViewPresenter :AbsNetPresenter<ZRMyWebView,ZRMyWebViewModel>(){
+class ZRWebViewPresenter :AbsNetPresenter<ZRWebView,ZRWebViewModel>(){
     override fun init() {
         super.init()
     }

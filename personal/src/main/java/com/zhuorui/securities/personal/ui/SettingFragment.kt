@@ -31,8 +31,8 @@ import me.yokeyword.fragmentation.ISupportFragment
  */
 class SettingFragment : AbsSwipeBackNetFragment<FragmentSettingBinding, SettingViewModel, SettingView, SettingPresenter>(),
     SettingView{
-    private var type: Int = 0
-    private var tips : String? =null
+    private var type: Int = -1
+    private var tips : String =""
     private var adapter: SettingDataAdapter? = null
     override val layout: Int
         get() = R.layout.fragment_setting
@@ -47,8 +47,8 @@ class SettingFragment : AbsSwipeBackNetFragment<FragmentSettingBinding, SettingV
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int
-        tips = arguments?.getSerializable("tips") as String
+        type = arguments?.getInt("type")?:type
+        tips = arguments?.getString("tips") ?:tips
         when (type) {
             1 -> {
                 title_bar.setTitle(ResUtil.getString(R.string.change_color))
@@ -63,12 +63,12 @@ class SettingFragment : AbsSwipeBackNetFragment<FragmentSettingBinding, SettingV
         title_bar.setRightTextViewClickListener{
             //todo 国际化语言和颜色涨跌post设置
             presenter?.detailSaveState(type,adapter?.getTips())
-            RxBus.getDefault().post(SettingChooseEvent(type,adapter?.getTips()))
             pop()
+            adapter?.getTips()?.let { it1 -> presenter?.detailSettingEvent(type, it1) }
         }
         title_bar.setBackClickListener{
-            RxBus.getDefault().post(SettingChooseEvent(type,adapter?.getTips()))
             pop()
+            adapter?.getTips()?.let { it1 -> presenter?.detailSettingEvent(type, it1) }
         }
     }
 
@@ -77,8 +77,8 @@ class SettingFragment : AbsSwipeBackNetFragment<FragmentSettingBinding, SettingV
             val fragment = SettingFragment()
             if (type != 0) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
-                bundle.putSerializable("tips",tips)
+                bundle.putInt("type", type)
+                bundle.putString("tips",tips)
                 fragment.arguments = bundle
             }
             return fragment

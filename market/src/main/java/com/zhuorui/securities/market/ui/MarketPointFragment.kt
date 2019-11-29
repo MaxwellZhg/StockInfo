@@ -5,20 +5,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProviders
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
 import com.zhuorui.securities.market.event.StockConsStateEvent
 import com.zhuorui.securities.market.manager.StockIndexHandicapDataManager
+import com.zhuorui.securities.market.model.PushIndexHandicapData
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
+import com.zhuorui.securities.market.ui.kline.KlineFragment
 import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
 import com.zhuorui.securities.market.ui.view.MarketPointView
 import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
@@ -42,7 +42,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 class MarketPointFragment :
     AbsSwipeBackNetFragment<FragmentMarketPointBinding, MarketPointViewModel, MarketPointView, MarketPointPresenter>(),
     MarketPointView, View.OnClickListener, OnRefreshLoadMoreListener {
-    private var type: Int? = null
+    private var type: Int = -1
     private var infoadapter: MarketPointConsInfoAdapter? = null
     private var pointInfoAdapter: MarketPointInfoAdapter? = null
     private var tabTitle: ArrayList<String> = ArrayList()
@@ -54,6 +54,7 @@ class MarketPointFragment :
     private var priceSelect = false
     private var rateSelect = false
     private var countSelect = false
+    private var isInfo = false
     private var sort = 3
     private var sortType = 1
     private var code: String = ""
@@ -73,7 +74,7 @@ class MarketPointFragment :
             val fragment = MarketPointFragment()
             if (type != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("type", type)
+                bundle.putInt("type", type)
                 fragment.arguments = bundle
             }
             return fragment
@@ -86,7 +87,7 @@ class MarketPointFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getSerializable("type") as Int?
+        type = arguments?.getInt("type") ?:type
         when (type) {
             1 -> {
                 code = "HSI"
@@ -119,10 +120,13 @@ class MarketPointFragment :
                 }
             }
         }
+        refresh_layout.setEnableLoadMore(true)
+        refresh_layout.setEnableRefresh(true)
         refresh_layout.setOnLoadMoreListener(this)
         refresh_layout.setOnRefreshListener(this)
         if (StockIndexHandicapDataManager.getInstance(code, "HK", 1).indexData!=null) {
             market_point_view.setData(StockIndexHandicapDataManager.getInstance(code, "HK", 1).indexData)
+            presenter?.bindMarketPointhandicap("HK",code)
         }
     }
 
@@ -202,7 +206,7 @@ class MarketPointFragment :
                 }
                 tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
                 tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
-                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
+                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false,isInfo)
             }
             tv_up_down_rate -> {
                 if (infoState) {
@@ -218,7 +222,7 @@ class MarketPointFragment :
                 }
                 tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
                 tv_up_down_count.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
-                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
+                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false,isInfo)
             }
             else -> {
                 if (infoState) {
@@ -235,7 +239,7 @@ class MarketPointFragment :
                 }
                 tv_newly_price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
                 tv_up_down_rate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_up_rate, 0)
-                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
+                presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false,isInfo)
             }
         }
 
@@ -288,11 +292,12 @@ class MarketPointFragment :
     private fun onSelect(index: Int) {
         if (index == 0) {
             ll_selcet_info.visibility = View.GONE
-            // refresh_layout.setNoMoreData(false)
             refresh_layout.setEnableLoadMore(true)
+            isInfo =false
         } else {
             ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE
             refresh_layout.setEnableLoadMore(false)
+            isInfo=true
         }
         showHideFragment(mFragments[index], mFragments[mIndex])
         mIndex = index
@@ -309,32 +314,29 @@ class MarketPointFragment :
      */
     private fun loadFragment() {
         //加载K线Fragment
-        /*     loadRootFragment(
-                 R.id.kline_view,
-                 KlineFragment.newInstance(
-                     mStock.ts ?: "",
-                     mStock.code ?: "",
-                     mStock.tsCode ?: mStock.code + "." + mStock.ts,
-                     mStock.type ?: 2,
-                     false
-                 )
-             )
-             //加载指数Fragment
-             if (!mBMP) {
-                 loadIndexFragment()
-             }*/
         initTabFragment()
+        loadRootFragment(
+            R.id.kline_view,
+            KlineFragment.newInstance(
+                "HK",
+                code,
+                "$code.HK",
+                1,
+                false
+            )
+        )
+
         magic_indicator.navigator = getNavigator()
         top_magic_indicator.navigator = getNavigator()
         showHideFragment(mFragments[0], mFragments[1])
-        presenter?.getStockConsInfo(code, 20, 3, 1, false, true)
+        presenter?.getStockConsInfo(code, 20, 3, 1, false, true,isInfo)
     }
 
     private fun initTabFragment() {
         val firstFragment = findChildFragment(MarketStockConsFragment::class.java)
         if (firstFragment == null) {
             mFragments[0] = MarketStockConsFragment.newInstance()
-            mFragments[1] = MarketPointConsInfoFragment.newInstance()
+            mFragments[1] = MarketPointConsInfoFragment.newInstance(code)
 
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
@@ -353,15 +355,15 @@ class MarketPointFragment :
         consStockPage += 20
         if (allCount != 0 && consStockPage > allCount) {
             consStockPage = allCount
-            presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false)
+            presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false,isInfo)
         } else {
-            presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false)
+            presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false,isInfo)
         }
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         consStockPage = 20
-        presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false)
+        presenter?.getStockConsInfo(code, consStockPage, sort, sortType, true, false,isInfo)
     }
 
     override fun loadMoreSuccess() {
@@ -413,7 +415,7 @@ class MarketPointFragment :
             }
 
         }
-        presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false)
+        presenter?.getStockConsInfo(code, consStockPage, sort, sortType, false, false,isInfo)
     }
 
     override fun setLoadMoreState() {
@@ -425,5 +427,17 @@ class MarketPointFragment :
         refresh_layout.finishLoadMore(false)
     }
 
+
+    override fun getpushData(data: PushIndexHandicapData) {
+        market_point_view.upPushData(data)
+    }
+    override fun loadConsFreshFail() {
+        refresh_layout.finishRefresh(false)
+    }
+
+    override fun detailInfoState() {
+        refresh_layout.finishRefresh(true)
+        refresh_layout.setEnableLoadMore(false)
+    }
 
 }

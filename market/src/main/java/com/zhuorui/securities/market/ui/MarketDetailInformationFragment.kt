@@ -47,14 +47,14 @@ class MarketDetailInformationFragment :
     override val getView: MarketDetailInformationView
         get() = this
 
-    private var stockCode: String? = null
+    private var stockCode: String =""
 
     companion object {
         fun newInstance(stockCode: String): MarketDetailInformationFragment {
             val fragment = MarketDetailInformationFragment()
             if (stockCode != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("code", stockCode)
+                bundle.putString("code", stockCode)
                 fragment.arguments = bundle
             }
             return fragment
@@ -63,7 +63,7 @@ class MarketDetailInformationFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        stockCode = arguments?.getSerializable("code") as String?
+        stockCode = arguments?.getString("code")?:stockCode
         srl_layout.setEnableLoadMore(true)
         srl_layout.setOnRefreshLoadMoreListener(this)
         presenter?.setLifecycleOwner(this)

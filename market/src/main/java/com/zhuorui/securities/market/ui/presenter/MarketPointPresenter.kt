@@ -12,11 +12,15 @@ import com.zhuorui.securities.base2app.util.TimeZoneUtil
 import com.zhuorui.securities.market.event.MarketPointConsEvent
 import com.zhuorui.securities.market.event.StockConsEvent
 import com.zhuorui.securities.market.event.StockConsPointStateEvent
+import com.zhuorui.securities.market.model.StockTopic
+import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.MarketNewsListRequest
 import com.zhuorui.securities.market.net.request.StockConsInfoRequest
 import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
+import com.zhuorui.securities.market.socket.SocketClient
+import com.zhuorui.securities.market.socket.push.StockTopicIndexHandicapResponse
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.view.MarketPointView
@@ -31,6 +35,9 @@ import com.zhuorui.securities.market.ui.viewmodel.MarketPointViewModel
 class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel>(){
     var isFresh :Boolean =false
     var isInit:Boolean =false
+    var isInfo:Boolean =false
+    private var stockTopic: StockTopic? = null
+    private var code:String?=null
     override fun init() {
         super.init()
     }
@@ -65,9 +72,10 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         )*/
     }
 
-    fun getStockConsInfo(code:String,pageSize:Int,sort:Int,sortTyep:Int,isFresh:Boolean,isInit:Boolean){
+    fun getStockConsInfo(code:String,pageSize:Int,sort:Int,sortTyep:Int,isFresh:Boolean,isInit:Boolean,isInfo:Boolean){
         this.isFresh=isFresh
         this.isInit = isInit
+        this.isInfo = isInfo
         val requset = StockConsInfoRequest(code, pageSize,sort,sortTyep,"HK" ,transactions.createTransaction())
         Cache[IStockNet::class.java]?.getStockConsInfo(requset)
             ?.enqueue(Network.IHCallBack<StockConsInfoResponse>(requset))
@@ -79,7 +87,11 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         val datas = response.data
         if(datas.list.isNotEmpty()){
             if(isFresh){
-                view?.refreshSuccess()
+                if(isInfo){
+                    view?.detailInfoState()
+                }else {
+                    view?.refreshSuccess()
+                }
             }else{
                 if(isInit){
                     view?.setLoadMoreState()
@@ -95,7 +107,11 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
         RxBus.getDefault().post(MarketPointConsEvent())
-        view?.loadConsStockFail()
+        if(isFresh){
+            view?.loadConsFreshFail()
+        }else{
+            view?.loadConsStockFail()
+        }
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
@@ -103,24 +119,23 @@ class MarketPointPresenter :AbsNetPresenter<MarketPointView,MarketPointViewModel
         view?.showStateChangeEvent(event.state)
     }
 
-    fun getNewsListData(code:String,currentPage:Int){
-        val requset =  MarketNewsListRequest(code, currentPage, 15,transactions.createTransaction())
-        requset?.let {
-            Cache[IStockNet::class.java]?.getMarketNewsList(it)
-                ?.enqueue(Network.IHCallBack<MarketNewsListResponse>(requset))
-        }
-    }
-    @RxSubscribe(observeOnThread = EventThread.MAIN)
-    fun onMarketNewsListResponse(response: MarketNewsListResponse){
-        if (!transactions.isMyTransaction(response)) return
-        val datas = response.data
-        if(datas.list.isNullOrEmpty()){
-            //view?.noMoreData()
-        }else {
-           // viewModel?.infoList?.value = datas.list
-        }
+    fun bindMarketPointhandicap(ts:String,code:String){
+        // 订阅股价
+        this.code = code
+        stockTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP, ts, code, 1)
+        SocketClient.getInstance().bindTopic(stockTopic)
     }
 
+
+    /**
+     * 订阅返回股价波动
+     */
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onStocksTopicPriceResponse(response: StockTopicIndexHandicapResponse) {
+        if(response.body!=null&&response.body?.code==code) {
+            view?.getpushData(response.body!!)
+        }
+    }
 
 
 }

@@ -30,8 +30,8 @@ import kotlinx.android.synthetic.main.setting_psw_fragment.*
  * */
 
 class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswViewModel, RestPswView, RestPswPresenter>(),RestPswView,View.OnClickListener,TextWatcher{
-    private var phone: String? = null
-    private var code :String?=null
+    private var phone: String = ""
+    private var code :String=""
     private lateinit var strnewpsw: String
     private lateinit var strensurepsw: String
     override val layout: Int
@@ -48,8 +48,8 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
         return true
     }
     override fun init() {
-        phone = arguments?.getSerializable("phone") as String?
-        code = arguments?.getSerializable("code") as String?
+        phone = arguments?.getString("phone")?:phone
+        code = arguments?.getString("code") ?:code
         iv_back.setOnClickListener(this)
         cb_new_psw.setOnCheckedChangeListener{buttonView, isChecked->
             run {
@@ -79,8 +79,8 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
             val fragment = RestPswFragment()
             if (phone != null && code != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("phone", phone)
-                bundle.putSerializable("code", code)
+                bundle.putString("phone", phone)
+                bundle.putString("code", code)
                 fragment.arguments = bundle
             }
             return fragment

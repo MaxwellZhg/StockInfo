@@ -30,7 +30,7 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
     CheckRequestPermissionsListener {
     var permissions = arrayOf(Manifest.permission.CALL_PHONE)
 
-    private var phone: String? = null
+    private var phone: String  = ""
     override val layout: Int
         get() = R.layout.fragment_phone_dev_verify
     override val viewModelId: Int
@@ -42,11 +42,11 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
     override val getView: PhoneDevVerifyView
         get() = this
     companion object {
-        fun newInstance(str:String): PhoneDevVerifyFragment {
+        fun newInstance(str:String?): PhoneDevVerifyFragment {
             val fragment = PhoneDevVerifyFragment()
             if (str != null) {
                 val bundle = Bundle()
-                bundle.putSerializable("phone", str)
+                bundle.putString("phone", str)
                 fragment.arguments = bundle
             }
             return fragment
@@ -55,7 +55,7 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        phone = arguments?.getSerializable("phone") as String?
+        phone = arguments?.getString("phone")?:phone
         tv_phone_num.text=PhoneHideUtils.hidePhoneNum(phone)
         tv_btn_complete.setOnClickListener(this)
         unable_verify_phone.setOnClickListener(this)

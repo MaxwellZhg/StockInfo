@@ -1,7 +1,9 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.model.PushIndexHandicapData
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
+import com.zhuorui.securities.market.socket.push.StockTopicIndexHandicapResponse
 
 /**
  * Created by Maxwell.
@@ -16,4 +18,10 @@ interface MarketPointView :AbsView{
     fun showStateChangeEvent(state:Int)
     fun setLoadMoreState()
     fun loadConsStockFail()
+
+    fun loadConsFreshFail()
+
+    fun detailInfoState()
+    //设置指数推送数据
+    fun getpushData(data: PushIndexHandicapData)
 }

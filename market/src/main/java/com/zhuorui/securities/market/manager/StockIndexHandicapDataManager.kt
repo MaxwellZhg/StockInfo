@@ -41,11 +41,16 @@ class StockIndexHandicapDataManager  private constructor(val code: String,val ts
         fun getInstance( code: String,ts: String, type: Int): StockIndexHandicapDataManager {
             var instance = instanceMap[getTsCode(code, ts)]
             if (instance == null) {
-                instance = StockIndexHandicapDataManager(code, ts, type)
-                instanceMap[getTsCode(code, ts)] = instance
-                LogInfra.Log.d(instance.TAG, "当前缓存:$instanceMap")
+                synchronized(instanceMap){
+                    instance = instanceMap[getTsCode(code, ts)]
+                    if(instance==null) {
+                        instance = StockIndexHandicapDataManager(code, ts, type)
+                        instanceMap[getTsCode(code, ts)] = instance!!
+                        LogInfra.Log.d(instance!!.TAG, "当前缓存:$instanceMap")
+                    }
+                }
             }
-            return instance
+            return instance!!
         }
 
         private fun getTsCode(code: String, ts: String): String {
@@ -58,14 +63,14 @@ class StockIndexHandicapDataManager  private constructor(val code: String,val ts
     }
 
     private fun queryPrice() {
-        // 查询价格
+        // 查询指数数据
         val requestBody = GetIndexPointInfoRequestBody(code,ts)
         val requestId = SocketClient.getInstance().postRequest(requestBody, SocketApi.GET_INDEX_HANDICAP)
         requestIds.add(requestId)
     }
 
     /**
-     * 返回查询股价信息
+     * 返回查询指数信息
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetIndexHandicapResponse(response: GetIndexHandicapResponse) {
@@ -82,7 +87,7 @@ class StockIndexHandicapDataManager  private constructor(val code: String,val ts
     }
 
     /**
-     * 订阅返回股价波动
+     * 订阅返回指数推送
      */
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksTopicPriceResponse(response: StockTopicIndexHandicapResponse) {
@@ -124,7 +129,7 @@ class StockIndexHandicapDataManager  private constructor(val code: String,val ts
             SocketClient.getInstance().unBindTopic(stockTopic)
         }
 
-        instanceMap.remove(getTsCode(ts, code))
+        instanceMap.remove(getTsCode(code, ts))
         LogInfra.Log.d(TAG, "当前缓存:${instanceMap}")
     }
 

@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 
 /**
  * Created by Maxwell.
@@ -10,5 +11,5 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class MarketPointConsInfoViewModel :ViewModel(){
-    var pointInfos: MutableLiveData<MutableList<Int>> = MutableLiveData()
+    var infoList : MutableLiveData<MutableList<MarketNewsListResponse.DataList>> =  MutableLiveData()
 }

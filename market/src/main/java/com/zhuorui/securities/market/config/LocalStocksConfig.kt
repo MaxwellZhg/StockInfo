@@ -79,7 +79,9 @@ class LocalStocksConfig : AbsConfig() {
                 }
                 if (!isExist) {
                     // 插入数据
-                    stocks.add(item)
+                    val tempStock = StockMarketInfo()
+                    StockMarketInfo.copyProperties(item, tempStock)
+                    stocks.add(tempStock)
                     LogInfra.Log.d(TAG, "update to add " + item.name + " succeeded. Current cache zise " + stocks.size)
                 }
             }
@@ -95,14 +97,17 @@ class LocalStocksConfig : AbsConfig() {
     @Synchronized
     fun update(stock: StockMarketInfo): Boolean {
         if (stocks.isEmpty()) {
-            stocks.add(stock)
+            // 插入数据
+            val tempStock = StockMarketInfo()
+            StockMarketInfo.copyProperties(stock, tempStock)
+            stocks.add(tempStock)
         } else {
             var isExist = false
             // 拷贝数据
             for (item in stocks) {
                 if (stock.ts.equals(item.ts) && stock.code.equals(item.code)) {
                     // 更新数据
-                    StockMarketInfo.copyProperties(item, stock)
+                    StockMarketInfo.copyProperties(stock, item)
                     LogInfra.Log.d(TAG, "update " + item.name + " succeeded. Current cache zise " + stocks.size)
                     isExist = true
                     break
@@ -110,7 +115,9 @@ class LocalStocksConfig : AbsConfig() {
             }
             if (!isExist) {
                 // 插入数据
-                stocks.add(stock)
+                val tempStock = StockMarketInfo()
+                StockMarketInfo.copyProperties(stock, tempStock)
+                stocks.add(tempStock)
                 LogInfra.Log.d(TAG, "update to add " + stock.name + " succeeded. Current cache zise " + stocks.size)
             }
         }
@@ -123,13 +130,15 @@ class LocalStocksConfig : AbsConfig() {
      * 添加自选股
      */
     @Synchronized
-    fun add(stockInfo: StockMarketInfo): Boolean {
-        if (isExist(stockInfo.ts!!, stockInfo.code!!)) {
-            LogInfra.Log.d(TAG, "add " + stockInfo.name + " failed. Current cache zise " + stocks.size)
+    fun add(stock: StockMarketInfo): Boolean {
+        if (isExist(stock.ts!!, stock.code!!)) {
+            LogInfra.Log.d(TAG, "add " + stock.name + " failed. Current cache zise " + stocks.size)
             return false
         }
-        stocks.add(stockInfo)
-        LogInfra.Log.d(TAG, "add " + stockInfo.name + " succeeded. Current cache zise " + stocks.size)
+        val tempStock = StockMarketInfo()
+        StockMarketInfo.copyProperties(stock, tempStock)
+        stocks.add(tempStock)
+        LogInfra.Log.d(TAG, "add " + stock.name + " succeeded. Current cache zise " + stocks.size)
         write()
         return true
     }

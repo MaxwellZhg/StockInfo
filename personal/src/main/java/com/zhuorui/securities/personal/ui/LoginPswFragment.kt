@@ -93,8 +93,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
        }
     }
     override fun gotomain() {
-        RxBus.getDefault().post(LoginStateChangeEvent(true))
-         pop()
+          pop()
     }
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {

@@ -33,8 +33,7 @@ import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
  *    desc   :
  */
 class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
-
-
+    var needSercvice =false
     fun requestUserLoginOut() {
         val request = UserLoginOutRequest(transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginOut(request)
@@ -62,6 +61,10 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onLoginState(evnt: LoginStateChangeEvent) {
         view?.loginStateChange()
+        if(needSercvice) {
+            view?.gotoClientService()
+            needSercvice=false
+        }
     }
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
@@ -108,5 +111,6 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
     fun onSettingChangeEvent(event: SettingChooseEvent) {
         view?.changeSetChooseSet(event.type, event.str)
     }
+
 
 }
