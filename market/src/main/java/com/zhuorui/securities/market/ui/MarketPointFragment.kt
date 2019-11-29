@@ -293,6 +293,7 @@ class MarketPointFragment :
         if (index == 0) {
             ll_selcet_info.visibility = View.GONE
             refresh_layout.setEnableLoadMore(true)
+            refresh_layout.setNoMoreData(false)
             isInfo =false
         } else {
             ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE

@@ -10,6 +10,7 @@ import com.zhuorui.commonwidget.R
 import com.zhuorui.commonwidget.databinding.FragmentWebViewBinding
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import kotlinx.android.synthetic.main.fragment_web_view.*
+import me.jessyan.autosize.utils.LogUtils
 
 /**
  * Created by Maxwell.
@@ -40,8 +41,9 @@ class ZRWebViewFragment :
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
         url = arguments?.getString("url")?:url
-        title = arguments?.getString("url")?:title
+        title = arguments?.getString("title")?:title
         //重新加载 点击网页里面的链接还是在当前的webview里跳转。不跳到浏览器那边
+        top_bar.setTitle(title)
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 view?.loadUrl(url)
@@ -80,6 +82,7 @@ class ZRWebViewFragment :
         webview.settings.useWideViewPort = false
         //设置是否出现缩放工具
         webview.settings.builtInZoomControls = false
+        LogUtils.e(url)
         webview.loadUrl(url)
     }
 
