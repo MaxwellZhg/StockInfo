@@ -240,6 +240,8 @@ class MarketDetailFragment :
      */
     override fun updateNetworkState(connected: Boolean) {
         network_unavailable_tips.visibility = if (connected) View.GONE else View.VISIBLE
+        mBMP = MarketUtil.isBMP(mStock?.ts)
+        getData()
     }
 
     override fun onScrollChange(v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
