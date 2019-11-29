@@ -5,9 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.os.Build;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -15,17 +20,23 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.*;
+import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.TimeZoneUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.view.kline.charts.CoupleChartGestureListener;
+import com.zhuorui.securities.market.customer.view.kline.charts.DelayedChartGestureListener;
+import com.zhuorui.securities.market.customer.view.kline.charts.HighlightLineChart;
 import com.zhuorui.securities.market.model.CapitalTrendModel;
+import com.zhuorui.securities.market.util.MarketUtil;
+import com.zhuorui.securities.market.util.MathUtil;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * author : liuwei
@@ -33,13 +44,20 @@ import java.util.Random;
  * date   : 2019-10-16 09:53
  * desc   : 今日资金流向趋势
  */
-public class TodayCapitalFlowTrendView extends FrameLayout {
+public class TodayCapitalFlowTrendView extends FrameLayout implements OnChartValueSelectedListener {
 
     private final int mGridColor = Color.parseColor("#337B889E");
     private final int mTextColor = Color.parseColor("#7B889E");
     private boolean mEmpty;
     private LineChart vChart;
     private MyXAxisRenderer xAxisRenderer;
+    private TextView vUnit;
+    private BigDecimal mUnit;
+    private HighlightContentView vHighlightContent;
+    private final int mLineColor = Color.parseColor("#FF8E1B");
+    private float mPrice;
+    private long mHighlightTime;
+    private float mHighlightValue;
 
     public TodayCapitalFlowTrendView(Context context) {
         this(context, null);
@@ -52,6 +70,8 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
     public TodayCapitalFlowTrendView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_today_capital_flow_trend, this);
+        vUnit = findViewById(R.id.tv_precen);
+        vHighlightContent = findViewById(R.id.highlight_content);
         initLineChart();
     }
 
@@ -60,13 +80,13 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         vChart.setNoDataText("暂无数据");
         vChart.setNoDataTextColor(Color.parseColor("#C3CDE3"));
         //是否有触摸事件
-        vChart.setTouchEnabled(false);
+        vChart.setTouchEnabled(true);
         //是否展示网格线
         vChart.setDrawGridBackground(false);
         //是否显示边界
         vChart.setDrawBorders(false);
         //是否可以拖动
-        vChart.setDragEnabled(false);
+        vChart.setDragEnabled(true);
         // 可缩放
         vChart.setScaleEnabled(false);
 //        vChart.setPinchZoom(true);
@@ -112,11 +132,14 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return value == 0 || mEmpty ? "0" : String.format("%.2f", value);
+                return value == 0 || mEmpty ? "0" : MathUtil.INSTANCE.convertToUnitString(BigDecimal.valueOf(value), "%.2f");
             }
         });
 //        MyYAxisRenderer yAxisRenderer = new MyYAxisRenderer(vChart.getViewPortHandler(), vChart.getAxisLeft(), vChart.getTransformer(YAxis.AxisDependency.LEFT));
 //        vChart.setRendererLeftYAxis(yAxisRenderer);
+
+        vChart.setOnChartGestureListener(new DelayedChartGestureListener(vChart));
+        vChart.setOnChartValueSelectedListener(this);
     }
 
     private LineData getLineData(List<Entry> entrys) {
@@ -126,14 +149,20 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             entrys.add(new Entry(0, 1));
             entrys.add(new Entry(0, -1));
             lineDataSet = new LineDataSet(entrys, "");
-            lineDataSet.setColor(Color.parseColor("#00FF8E1B"));
+            lineDataSet.setColor(Color.TRANSPARENT);
         } else {
             lineDataSet = new LineDataSet(entrys, "");
-            lineDataSet.setColor(Color.parseColor("#FF8E1B"));
+            lineDataSet.setColor(mLineColor);
         }
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawValues(false);
         lineDataSet.setLineWidth(0.5f);
+        lineDataSet.setHighlightEnabled(true);
+        lineDataSet.setHighLightColor(getResources().getColor(R.color.high_light_color));
+        lineDataSet.setHighlightLineWidth(HighlightLineChart.HIGHLIGHT_LINE_WIDTH);
+        lineDataSet.setCircleColor(mLineColor);
+        lineDataSet.setCircleRadius(HighlightLineChart.HIGHLIGHT_CIRCLE_RADIUS);
+        lineDataSet.setDrawCircleHole(false);
         LineData lineData = new LineData(lineDataSet);
         lineData.setValueTextColor(Color.WHITE);
         return lineData;
@@ -142,19 +171,22 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
     public void setData(String ts, List<CapitalTrendModel> datas) {
         setStockTs(ts);
         LineData lineData = getLineData(getEntry(datas));
-        YAxis leftAxis = vChart.getAxisLeft();
-        if (lineData.getYMax() < 0) {
-            leftAxis.setAxisMaximum(0f);
-            leftAxis.resetAxisMinimum();
-        } else if (lineData.getYMin() > 0) {
-            leftAxis.resetAxisMaximum();
-            leftAxis.setAxisMinimum(0);
-        } else {
-            leftAxis.resetAxisMaximum();
-            leftAxis.resetAxisMinimum();
+        vChart.getAxisLeft().resetAxisMaximum();
+        vChart.getAxisLeft().resetAxisMinimum();
+        if (lineData.getYMin() == lineData.getYMax() && lineData.getYMin() > 0){
+            vChart.getAxisLeft().setAxisMinimum(0f);
+        }else if (lineData.getYMin() == lineData.getYMax() && lineData.getYMax() < 0){
+            vChart.getAxisLeft().setAxisMaximum(0f);
         }
         vChart.setData(lineData);
         vChart.invalidate();
+    }
+
+    public void setPrice(float price) {
+        mPrice = price;
+        if (vHighlightContent.getVisibility() == VISIBLE) {
+            setHighlightData(mHighlightTime, mHighlightValue, mPrice);
+        }
     }
 
     private List<Entry> getEntry(List<CapitalTrendModel> datas) {
@@ -167,13 +199,19 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             long openingMillisecond = xAxisRenderer.getOpeningMillisecond();
             long breakMillisecond = xAxisRenderer.getBreakMillisecond();
             long breakEndMillisecond = breakMillisecond + xAxisRenderer.getBreakDuration();
-            for (int i = 0, len = datas.size(); i < len; i += 4) {
+            List<BigDecimal> values = new ArrayList<>();
+            for (int i = 0, len = datas.size(); i < len; i++) {
                 CapitalTrendModel data = datas.get(i);
                 float x = getXByTime(dateM, data.getTime(), openingMillisecond, breakMillisecond, breakEndMillisecond);
                 if (x > -1) {
-                    entrys.add(new Entry(x, data.getValue().floatValue()));
+                    values.add(data.getValue());
+                    entrys.add(new Entry(x, data.getValue().floatValue(), data.getTime()));
                 }
             }
+            mUnit = MarketUtil.getUnitBigDecimal(values);
+            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan), MarketUtil.getUnitName(mUnit)));
+        } else {
+            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan), ""));
         }
         return entrys;
     }
@@ -194,47 +232,28 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
         vChart.invalidate();
     }
 
-    class MyYAxisRenderer extends YAxisRenderer {
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        vHighlightContent.setVisibility(VISIBLE);
+        mHighlightTime = (Long) e.getData();
+        mHighlightValue = e.getY();
+        setHighlightData(mHighlightTime, mHighlightValue, mPrice);
+    }
 
-        private float dividerY;
-        private float dividerValue;
+    private void setHighlightData(long time, float value, float price) {
+        LinkedHashMap<CharSequence, CharSequence> data = new LinkedHashMap<>();
+        data.put("时间", TimeZoneUtil.timeFormat(time, "HH:mm"));
+        data.put("最新价", String.format("%.3f", price));
+        int color = LocalSettingsConfig.Companion.getInstance().getUpDownColor(value,0f,Color.WHITE);
+        SpannableString ss = new SpannableString(String.format("%+.2f",MathUtil.INSTANCE.divide2(BigDecimal.valueOf(value), mUnit).doubleValue()));
+        ss.setSpan(new ForegroundColorSpan(color),0,ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        data.put("净流入", ss);
+        vHighlightContent.setData(data);
+    }
 
-        public MyYAxisRenderer(ViewPortHandler viewPortHandler, YAxis yAxis, Transformer trans) {
-            super(viewPortHandler, yAxis, trans);
-        }
-
-        @Override
-        public void computeAxis(float min, float max, boolean inverted) {
-            super.computeAxis(min, max, inverted);
-            if (max > 0 && min < 0) {
-                dividerValue = 0;
-            } else {
-                double range = Math.abs(max - min);
-                dividerValue = (float) (max - (range / 2));
-            }
-            MPPointD pos = mTrans.getPixelForValues(0f, dividerValue);
-            dividerY = (float) pos.y;
-        }
-
-        @Override
-        protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
-            super.drawYLabels(c, fixedPosition, positions, offset);
-            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
-        }
-
-        @Override
-        public void renderGridLines(Canvas c) {
-            super.renderGridLines(c);
-            int clipRestoreCount = c.save();
-            c.clipRect(getGridClippingRect());
-            Path gridLinePath = mRenderGridLinesPath;
-            gridLinePath.reset();
-            gridLinePath.moveTo(mViewPortHandler.offsetLeft(), dividerY);
-            gridLinePath.lineTo(mViewPortHandler.contentRight(), dividerY);
-            c.drawPath(gridLinePath, mGridPaint);
-            gridLinePath.reset();
-            c.restoreToCount(clipRestoreCount);
-        }
+    @Override
+    public void onNothingSelected() {
+        vHighlightContent.setVisibility(GONE);
     }
 
     class MyXAxisRenderer extends XAxisRenderer {
@@ -358,4 +377,47 @@ public class TodayCapitalFlowTrendView extends FrameLayout {
             return breakDuration;
         }
     }
+
+    //    class MyYAxisRenderer extends YAxisRenderer {
+//
+//        private float dividerY;
+//        private float dividerValue;
+//
+//        public MyYAxisRenderer(ViewPortHandler viewPortHandler, YAxis yAxis, Transformer trans) {
+//            super(viewPortHandler, yAxis, trans);
+//        }
+//
+//        @Override
+//        public void computeAxis(float min, float max, boolean inverted) {
+//            super.computeAxis(min, max, inverted);
+//            if (max > 0 && min < 0) {
+//                dividerValue = 0;
+//            } else {
+//                double range = Math.abs(max - min);
+//                dividerValue = (float) (max - (range / 2));
+//            }
+//            MPPointD pos = mTrans.getPixelForValues(0f, dividerValue);
+//            dividerY = (float) pos.y;
+//        }
+//
+//        @Override
+//        protected void drawYLabels(Canvas c, float fixedPosition, float[] positions, float offset) {
+//            super.drawYLabels(c, fixedPosition, positions, offset);
+//            c.drawText(mYAxis.getValueFormatter().getFormattedValue(dividerValue), fixedPosition, dividerY + Utils.convertDpToPixel(0.7f) + offset, mAxisLabelPaint);
+//        }
+//
+//        @Override
+//        public void renderGridLines(Canvas c) {
+//            super.renderGridLines(c);
+//            int clipRestoreCount = c.save();
+//            c.clipRect(getGridClippingRect());
+//            Path gridLinePath = mRenderGridLinesPath;
+//            gridLinePath.reset();
+//            gridLinePath.moveTo(mViewPortHandler.offsetLeft(), dividerY);
+//            gridLinePath.lineTo(mViewPortHandler.contentRight(), dividerY);
+//            c.drawPath(gridLinePath, mGridPaint);
+//            gridLinePath.reset();
+//            c.restoreToCount(clipRestoreCount);
+//        }
+//    }
 }

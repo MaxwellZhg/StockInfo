@@ -1,7 +1,10 @@
 package com.zhuorui.securities.market.ui.presenter
 
+import android.os.Handler
 import android.text.TextUtils
 import androidx.lifecycle.LifecycleOwner
+import com.zhuorui.commonwidget.model.Observer
+import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -10,6 +13,7 @@ import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.JsonUtil
 import com.zhuorui.securities.base2app.util.TimeZoneUtil
+import com.zhuorui.securities.market.manager.StockPriceDataManager
 import com.zhuorui.securities.market.model.CapitalTrendModel
 import com.zhuorui.securities.market.model.StockTopic
 import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
@@ -33,14 +37,16 @@ import java.math.BigDecimal
  *    date   : 2019-10-12 15:56
  *    desc   :
  */
-class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, MarketDetailCapitalViewModel>() {
+class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, MarketDetailCapitalViewModel>(),
+    Observer {
 
     private var getCapitalReqId: String? = null
     private var mTs: String? = null
     private var mCode: String? = null
     private var stockTopic: StockTopic? = null
     private var mBmp: Boolean = false
-    private var mDay: Int = 5;
+    private var mDay: Int = 5
+    private val handler = Handler()
 
     /**
      * 获取买卖经纪数据
@@ -51,9 +57,17 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         getCapitalReqId =
             SocketClient.getInstance().postRequest(GetStockDataByTsCodeRequestBody(ts, code), SocketApi.GET_CAPITAL)
         mBmp = MarketUtil.isBMP(mTs)
-        if (stockTopic != null && mBmp) {
-            SocketClient.getInstance().unBindTopic(stockTopic)
+        if (mBmp) {
+            if (stockTopic != null) {
+                SocketClient.getInstance().unBindTopic(stockTopic)
+            }
+            val manager = StockPriceDataManager.getInstance(ts, code, 2)
+            manager.removeObserver(this)
+        } else {
+            val manager = StockPriceDataManager.getInstance(ts, code, 2)
+            manager.registerObserver(this)
         }
+
     }
 
     /**
@@ -79,8 +93,8 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     fun onStocksTopicCapital(response: StocksTopicCapitalResponse) {
         val data = response.body
         readCapitalData(data)
-        if (data?.latestTrends != null){
-            addCapitalTrend(data.cacheDay.toString(),data.latestTrends!!)
+        if (data?.latestTrends != null) {
+            addCapitalTrend(data.cacheDay.toString(), data.latestTrends!!)
         }
     }
 
@@ -97,7 +111,7 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
     /**
      * 处理成交分成数据
      */
-    private fun readCapitalData(data:CapitalData?){
+    private fun readCapitalData(data: CapitalData?) {
         val largeIn = data?.totalLargeSingleInflow ?: BigDecimal(0)
         val largeOut = data?.totalLargeSingleOutflow ?: BigDecimal(0)
         val mediumIn = data?.totalMediumInflow ?: BigDecimal(0)
@@ -113,7 +127,8 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
             mediumOut,
             smallIn,
             smallOut,
-            null)
+            null
+        )
 
     }
 
@@ -142,11 +157,19 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
         viewModel?.mCapitalTrends?.value = capitalTrends
     }
 
+    override fun update(subject: Subject<*>?) {
+        if (subject is StockPriceDataManager) {
+            handler.post { viewModel?.mPrice?.value = subject?.priceData?.last?.toFloat() ?: 0f }
+        }
+    }
+
     override fun destroy() {
         super.destroy()
         if (stockTopic != null) {
             SocketClient.getInstance().unBindTopic(stockTopic)
         }
+        val manager = StockPriceDataManager.getInstance(mTs.toString(), mCode.toString(), 2)
+        manager.removeObserver(this)
     }
 
     fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
@@ -159,6 +182,10 @@ class MarketDetailCapitalPresenter : AbsNetPresenter<MarketDetailCapitalView, Ma
             viewModel?.mCapitalTrends?.observe(it,
                 androidx.lifecycle.Observer { t ->
                     view?.onTodatCapitalFlowTrendData(t)
+                })
+            viewModel?.mPrice?.observe(it,
+                androidx.lifecycle.Observer { t ->
+                    view?.onUpPrice(t)
                 })
         }
     }

@@ -14,5 +14,6 @@ import com.zhuorui.securities.market.socket.vo.CapitalData
 class MarketDetailCapitalViewModel : ViewModel() {
     var mCapitalTrends: MutableLiveData<MutableList<CapitalTrendModel>> = MutableLiveData()
     var mCapitalData: MutableLiveData<CapitalData> = MutableLiveData()
+    var mPrice: MutableLiveData<Float> = MutableLiveData()
 
 }

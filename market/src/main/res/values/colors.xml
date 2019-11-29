@@ -50,4 +50,5 @@
     <color name="color_FEFEFF" tools:ignore="MissingDefaultResource">#FEFEFF</color>
     <color name="color_FF8E1B" tools:ignore="MissingDefaultResource">#FF8E1B</color>
     <color name="color_FFE1E4F0" tools:ignore="MissingDefaultResource">#FFE1E4F0</color>
+    <color name="high_light_color">#C1C1C1</color>
 </resources>
