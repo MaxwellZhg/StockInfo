@@ -90,4 +90,10 @@
         <item name="right2_icon_height">19dp</item>
         <item name="right2_icon_margin">51dp</item>
     </style>
+
+    <style name="dialogWindowAnim" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
+    </style>
+
 </resources>

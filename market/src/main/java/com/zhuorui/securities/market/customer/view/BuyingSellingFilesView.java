@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +14,17 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.base2app.util.ResUtil;
 import com.zhuorui.securities.market.R;
+import com.zhuorui.securities.market.customer.BaseItemAnimator;
+import com.zhuorui.securities.market.customer.MarketUpDownItemAnimator;
 import com.zhuorui.securities.market.socket.vo.OrderData;
 import com.zhuorui.securities.market.util.MarketUtil;
 import com.zhuorui.securities.market.util.MathUtil;
@@ -105,10 +108,10 @@ public class BuyingSellingFilesView extends FrameLayout {
         vRv.setNestedScrollingEnabled(false);
         vRv.setHasFixedSize(true);
         vRv.setFocusable(false);
-        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
-        itemAnimator.setSupportsChangeAnimations(false);
+        MarketUpDownItemAnimator itemAnimator = new MarketUpDownItemAnimator();
+        itemAnimator.setChangeDuration(300);
         vRv.setItemAnimator(itemAnimator);
-        if (mTextSize > 0 ){
+        if (mTextSize > 0) {
             vBuyingValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             vSellingValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         }
@@ -168,8 +171,8 @@ public class BuyingSellingFilesView extends FrameLayout {
             mTitles = context.getResources().getStringArray(R.array.buy_sell_file_grid);
             bay1color = Color.parseColor("#17355E");
             sell1color = Color.parseColor("#5D3A1C");
-            bayColor = Color.parseColor("#0D1A6ED2");
-            sellColor = Color.parseColor("#0DFF8E1B");
+            bayColor = Color.parseColor("#212332");
+            sellColor = Color.parseColor("#2b2529");
         }
 
         @NonNull
@@ -192,14 +195,8 @@ public class BuyingSellingFilesView extends FrameLayout {
                 backgroundColor = sellColor;
             }
             holder.bindData(position, mTitles[position], getData(position), backgroundColor);
-            switch (getUpDownAnimType(position)) {
-                case 1:
-                    holder.showUpDownAnim(true);
-                    break;
-                case -1:
-                    holder.showUpDownAnim(false);
-                    break;
-            }
+            holder.vAnim.setBackgroundColor(getUpDownAnimColor(position));
+            holder.itemView.setOnClickListener(v -> Log.i("lw", "onBindViewHolder: "));
         }
 
         @Override
@@ -255,14 +252,7 @@ public class BuyingSellingFilesView extends FrameLayout {
             }
             holder.itemView.setLayoutParams(lp);
             holder.bindData(position, mTitles[position], getData(position), 0);
-            switch (getUpDownAnimType(position)) {
-                case 1:
-                    holder.showUpDownAnim(true);
-                    break;
-                case -1:
-                    holder.showUpDownAnim(false);
-                    break;
-            }
+            holder.vAnim.setBackgroundColor(getUpDownAnimColor(position));
         }
 
         @Override
@@ -285,10 +275,11 @@ public class BuyingSellingFilesView extends FrameLayout {
         }
     }
 
+
     private abstract class BuySellFileAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private final List<OrderData.AskBidModel> mDatas;
         protected Context context;
-        private Map<Integer, Boolean> upDownAnim = new HashMap<>();
+        private Map<String, Boolean> upDownAnim = new HashMap<>();
 
         public BuySellFileAdapter(Context context) {
             this.context = context;
@@ -298,25 +289,32 @@ public class BuyingSellingFilesView extends FrameLayout {
         public abstract void setData(List<OrderData.AskBidModel> buyingData, List<OrderData.AskBidModel> sellingData);
 
         protected void setData(List<OrderData.AskBidModel> datas) {
-            upDownAnim.clear();
             if (mDatas.size() != datas.size()) {
                 mDatas.clear();
                 mDatas.addAll(datas);
                 notifyDataSetChanged();
             } else {
                 for (int i = 0; i < datas.size(); i++) {
-                    replaceData(mDatas.get(i), datas.get(i), i);
+                    animChange(mDatas.get(i), datas.get(i), i);
+                    if (replaceData(datas.get(i), i)) {
+                        notifyItemChanged(i);
+                    }
                 }
             }
         }
 
-        protected int getUpDownAnimType(int position) {
-            if (upDownAnim.containsKey(position)) {
-                int type = upDownAnim.get(position) ? 1 : -1;
-                upDownAnim.remove(position);
-                return type;
+        protected String getAnimItemKeyByPosition(int postion) {
+            return String.valueOf(postion);
+        }
+
+        protected int getUpDownAnimColor(int position) {
+            int color = 0;
+            Object key = getAnimItemKeyByPosition(position);
+            if (upDownAnim.containsKey(key)) {
+                color = MarketUtil.getUpDownAnimColor(upDownAnim.get(key));
+                upDownAnim.remove(key);
             }
-            return 0;
+            return color;
         }
 
         protected OrderData.AskBidModel getData(int position) {
@@ -327,38 +325,46 @@ public class BuyingSellingFilesView extends FrameLayout {
             return 0;
         }
 
-        protected final void replaceData(OrderData.AskBidModel oldData, OrderData.AskBidModel newData, int position) {
-            if (oldData != null && newData != null) {
-                if (TextUtils.equals(oldData.getPrice(), newData.getPrice()) && !TextUtils.equals(oldData.getQty(), newData.getQty())) {
-                    upDownAnim.put(position, Double.valueOf(newData.getQty()) > Double.valueOf(oldData.getQty()));
-                    mDatas.remove(position);
-                    mDatas.add(position, newData);
-                    notifyItemChanged(position);
-                } else if (!TextUtils.equals(oldData.getPrice(), newData.getPrice())) {
-                    mDatas.remove(position);
-                    mDatas.add(position, newData);
-                    notifyItemChanged(position);
-                } else if (!TextUtils.equals(oldData.getNum(), newData.getNum())) {
-                    mDatas.remove(position);
-                    mDatas.add(position, newData);
-                    notifyItemChanged(position);
-                }
-            } else if (newData != null) {
-                mDatas.remove(position);
-                mDatas.add(position, newData);
-                notifyItemChanged(position);
+        /**
+         * item 是否有变化动画
+         *
+         * @param oldData
+         * @param newData
+         * @param position
+         */
+        protected final void animChange(@NonNull OrderData.AskBidModel oldData, @NonNull OrderData.AskBidModel newData, int position) {
+            if (TextUtils.equals(oldData.getPrice(), newData.getPrice()) && !TextUtils.equals(oldData.getQty(), newData.getQty())) {
+                upDownAnim.put(getAnimItemKeyByPosition(position), Double.valueOf(newData.getQty()) > Double.valueOf(oldData.getQty()));
             }
         }
 
+        /**
+         * 替换item数据
+         *
+         * @param newData
+         * @param position
+         * @return 数据是否有变化
+         */
+        private boolean replaceData(OrderData.AskBidModel newData, int position) {
+            OrderData.AskBidModel oldData = mDatas.get(position);
+            boolean t = !TextUtils.equals(oldData.getPrice(), newData.getPrice())
+                    || !TextUtils.equals(oldData.getQty(), newData.getQty())
+                    || !TextUtils.equals(oldData.getNum(), newData.getNum());
+            if (t) {
+                mDatas.get(position).setNum(newData.getNum());
+                mDatas.get(position).setPrice(newData.getPrice());
+                mDatas.get(position).setQty(newData.getQty());
+            }
+            return t;
+        }
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder implements BaseItemAnimator.IItemChildHolder {
 
         private TextView vTitle;
         private TextView vPirce;
         private TextView vNum;
         private View vAnim;
-        private ObjectAnimator animator;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -386,14 +392,14 @@ public class BuyingSellingFilesView extends FrameLayout {
                 float price = Float.valueOf(data.getPrice());
                 vPirce.setTextColor(config.getUpDownColor(price, preClosePrice, defColor));
                 vPirce.setText(String.format("%.3f", price));
-                vNum.setText(String.format("%s(%s)", MathUtil.INSTANCE.convertToUnitString(new BigDecimal(data.getQty())), data.getNum()));
+                vNum.setText(String.format("%s(%s)", MathUtil.INSTANCE.convertToUnitString(new BigDecimal(data.getQty()),"%.1f"), data.getNum()));
             }
         }
 
-        public void showUpDownAnim(boolean isUp) {
-            animator = MarketUtil.showUpDownAnim(animator, vAnim, isUp);
+        @Override
+        public View getChildChangeAnimView() {
+            return vAnim;
         }
-
     }
 
 }

@@ -6,11 +6,13 @@ import com.tencent.bugly.crashreport.CrashReport
 import com.zhuorui.securities.base2app.BaseApplication
 import com.zhuorui.securities.custom.view.ClassicsFooter
 import com.zhuorui.securities.custom.view.ClassicsHeader
+import com.zhuorui.securities.market.MkPushManager
 import com.zhuorui.securities.net.HeaderInterceptor
 import com.zhuorui.securities.net.TokenInterceptor
 import com.zhuorui.securities.personal.util.MultiLanguageUtil
-import com.zhuorui.securities.service.ZRIntentService
-import com.zhuorui.securities.service.ZRPushService
+import com.zhuorui.securities.push.ZRIntentService
+import com.zhuorui.securities.push.ZRPushManager
+import com.zhuorui.securities.push.ZRPushService
 import okhttp3.Interceptor
 
 /**
@@ -43,6 +45,8 @@ class Application : BaseApplication() {
         PushManager.getInstance().initialize(this, ZRPushService::class.java)
         // 注册推送服务事件接收类
         PushManager.getInstance().registerPushIntentService(this, ZRIntentService::class.java)
+        // 加入App各个模块的推送管理
+        ZRPushManager.getInstance().addPushManager(MkPushManager())
 
         // 初始化多语言
         MultiLanguageUtil.init(this)

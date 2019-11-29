@@ -5,14 +5,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import androidx.annotation.NonNull;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zhuorui.commonwidget.ZRTitleEditText;
+import com.zhuorui.securities.base2app.adapter.BaseListAdapter;
 import com.zhuorui.securities.openaccount.R;
 
 import java.util.ArrayList;
@@ -47,11 +46,11 @@ public class EmailTipsView extends FrameLayout implements TextWatcher, View.OnFo
 
     public EmailTipsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        itemHeight = (int) (getResources().getDisplayMetrics().density *40);
+        itemHeight = (int) (getResources().getDisplayMetrics().density * 40);
         maxHeight = itemHeight * showMaxItem;
         listView = new RecyclerView(context);
         listView.setLayoutManager(new LinearLayoutManager(context));
-        listView.setAdapter(adapter = new ListAdapter(context));
+        listView.setAdapter(adapter = new ListAdapter());
         listView.setBackgroundResource(R.color.color_1A6ED2);
         addView(listView);
         setListH();
@@ -81,7 +80,7 @@ public class EmailTipsView extends FrameLayout implements TextWatcher, View.OnFo
             for (String e : emails) {
                 datas.add(editable + e);
             }
-            adapter.setDatas(datas);
+            adapter.setItems(datas);
             setListH();
             setVisibility(VISIBLE);
         } else {
@@ -107,18 +106,18 @@ public class EmailTipsView extends FrameLayout implements TextWatcher, View.OnFo
         adapter.notifyDataSetChanged();
     }
 
-    public class ListAdapter extends RecyclerView.Adapter<Holder> {
-        List<String> datas = new ArrayList<>();
-        Context context;
+    class ListAdapter extends BaseListAdapter<String> {
 
-        public ListAdapter(Context context) {
-            this.context = context;
+        public ListAdapter() {
         }
 
-        @NonNull
         @Override
-        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(context).inflate(R.layout.item_email_tips, parent, false);
+        protected int getLayout(int viewType) {
+            return R.layout.item_email_tips;
+        }
+
+        @Override
+        protected RecyclerView.ViewHolder createViewHolder(View v, int viewType) {
             Holder holder = new Holder(v);
             holder.text.setOnClickListener(new OnClickListener() {
                 @Override
@@ -127,13 +126,7 @@ public class EmailTipsView extends FrameLayout implements TextWatcher, View.OnFo
                     anchor.setText(txt);
                 }
             });
-            return new Holder(v);
-        }
-
-        public void onBindViewHolder(@NonNull Holder holder, int position) {
-            String title = datas.get(position).toString();
-            holder.text.setTag(title);
-            holder.text.setText(title);
+            return holder;
         }
 
         @Override
@@ -141,32 +134,20 @@ public class EmailTipsView extends FrameLayout implements TextWatcher, View.OnFo
             return position;
         }
 
-        /**
-         * Returns the total number of items in the data set held by the adapter.
-         *
-         * @return The total number of items in this adapter.
-         */
-        @Override
-        public int getItemCount() {
-            return datas.size();
-        }
+        class Holder extends ListItemViewHolder<String> {
+            TextView text;
 
+            public Holder(View v) {
+                super(v, false, false);
+                text = v.findViewById(R.id.text);
+            }
 
-        public void setDatas(List<String> datas) {
-            this.datas = datas;
-            notifyDataSetChanged();
-        }
-
-
-    }
-
-
-    class Holder extends RecyclerView.ViewHolder {
-        TextView text;
-
-        public Holder(View v) {
-            super(v);
-            text = v.findViewById(R.id.text);
+            @Override
+            protected void bind(String item, int position) {
+                String title = getItems().get(position);
+                text.setTag(title);
+                text.setText(title);
+            }
         }
 
     }

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -24,8 +25,11 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.socket.vo.CapitalData;
+import com.zhuorui.securities.market.util.MarketUtil;
+import com.zhuorui.securities.market.util.MathUtil;
 import com.zhuorui.securities.personal.config.LocalAccountConfig;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ public class TodayFundTransactionView extends FrameLayout {
 
     private ComparisonMapView vComparisonMap;
     private MarketPieChatView pie_cahart_view;
+    private TextView vUnit;
     private int mOut1Color;
     private int mOut2Color;
     private int mOut3Color;
@@ -69,6 +74,7 @@ public class TodayFundTransactionView extends FrameLayout {
     private void initView() {
         pie_cahart_view = findViewById(R.id.pie_cahart_view);
         vComparisonMap = findViewById(R.id.comparison_map);
+        vUnit = findViewById(R.id.tv_unit);
         vComparisonMap.setTitle("流入", "流出", "净流入");
     }
 
@@ -148,13 +154,22 @@ public class TodayFundTransactionView extends FrameLayout {
         float mediumIn = 0f;
         float smallOut = 0f;
         float smallIn = 0f;
-        if (data != null){
-            largeSingleOut = data.getTotalLargeSingleOutflow().floatValue();
-            largeSingleIn = data.getTotalLargeSingleInflow().floatValue();
-            mediumOut = data.getTotalMediumOutflow().floatValue();
-            mediumIn = data.getTotalMediumInflow().floatValue();
-            smallOut = data.getTotalSmallOutflow().floatValue();
-            smallIn = data.getTotalSmallInflow().floatValue();
+        if (data != null) {
+            BigDecimal largeOutBig = data.getTotalLargeSingleOutflow() == null ? BigDecimal.valueOf(0) : data.getTotalLargeSingleOutflow();
+            BigDecimal largeInBig = data.getTotalLargeSingleInflow() == null ? BigDecimal.valueOf(0) : data.getTotalLargeSingleInflow();
+            BigDecimal mediumOutBig = data.getTotalMediumOutflow() == null ? BigDecimal.valueOf(0) : data.getTotalMediumOutflow();
+            BigDecimal mediumInBig = data.getTotalMediumInflow() == null ? BigDecimal.valueOf(0) : data.getTotalMediumInflow();
+            BigDecimal smallOutBig = data.getTotalSmallOutflow() == null ? BigDecimal.valueOf(0) : data.getTotalSmallOutflow();
+            BigDecimal smallInBig = data.getTotalSmallInflow() == null ? BigDecimal.valueOf(0) : data.getTotalSmallInflow();
+            BigDecimal unit = MarketUtil.getUnitBigDecimal(largeOutBig, largeInBig, mediumOutBig, mediumInBig, smallOutBig, smallInBig);
+            largeSingleOut = MathUtil.INSTANCE.divide(largeOutBig, unit, 6).floatValue();
+            largeSingleIn = MathUtil.INSTANCE.divide(largeInBig, unit, 6).floatValue();
+            mediumOut = MathUtil.INSTANCE.divide(mediumOutBig, unit, 6).floatValue();
+            smallOut = MathUtil.INSTANCE.divide(smallOutBig, unit, 6).floatValue();
+            smallIn = MathUtil.INSTANCE.divide(smallInBig, unit, 6).floatValue();
+            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan),MarketUtil.getUnitName(unit)));
+        }else {
+            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan),""));
         }
         setComparisonMapData(largeSingleOut, largeSingleIn, mediumOut, mediumIn, smallOut, smallIn);
         pie_cahart_view.setData(getPieEntrys(largeSingleOut, largeSingleIn, mediumOut, mediumIn, smallOut, smallIn));

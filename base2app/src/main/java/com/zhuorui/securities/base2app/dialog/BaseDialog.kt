@@ -4,11 +4,11 @@ import android.annotation.TargetApi
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.WindowManager
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import butterknife.ButterKnife
 import com.zhuorui.securities.base2app.R
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -17,7 +17,6 @@ import com.zhuorui.securities.base2app.util.ToastUtil
  * Created by xieyingwu on 2017/4/19.
  * dialog创建
  */
-
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDismissListener,
     DialogInterface.OnCancelListener {
@@ -32,9 +31,6 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         get() = R.style.DialogTransparent30
 
     protected abstract val layout: Int
-
-    protected val bgColor: Int
-        get() = android.R.color.transparent
 
     val isShowing: Boolean
         get() = dialog != null && dialog!!.isShowing
@@ -67,6 +63,12 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
         initView(context, 0)
     }
 
+    protected constructor(context: Context, w: Int, h: Int, theme: Int) {
+        this.width = w
+        this.height = h
+        initView(context, theme)
+    }
+
     fun setLifeCycle(lifeCycle: DialogLifeCycle): BaseDialog {
         this.lifeCycle = lifeCycle
         return this
@@ -89,30 +91,8 @@ abstract class BaseDialog : DialogInterface.OnShowListener, DialogInterface.OnDi
 
     protected open fun init() {}
 
-    fun show() {
+    open fun show() {
         dialog!!.show()
-        //        setDialogBg();
-    }
-
-    protected fun reSeizeToWidth() {
-        val window = dialog!!.window
-        // 把 DecorView 的默认 padding 取消，同时 DecorView 的默认大小也会取消
-        window?.decorView?.setPadding(0, 0, 0, 0)
-        val layoutParams = window?.attributes
-        // 设置宽度
-        if (layoutParams != null) {
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        }
-        window?.attributes = layoutParams
-    }
-
-    private fun setDialogBg() {
-        val window = dialog!!.window ?: return
-        /*设置全屏展示*/
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        val color = context?.let { ContextCompat.getColor(it, bgColor) }
-        val drawable = color?.let { ColorDrawable(it) }
-        window.setBackgroundDrawable(drawable)
     }
 
     open fun hide() {

@@ -13,11 +13,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
  */
 class MainFramgentPresenter : AbsEventPresenter<MainFragmentView, MainFragmentViewModel>() {
 
-    override fun init() {
-        super.init()
-        view?.init()
-    }
-
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onTokenOverdueEvent(event: TokenOverdueEvent) {
         view?.jumpToLogin()

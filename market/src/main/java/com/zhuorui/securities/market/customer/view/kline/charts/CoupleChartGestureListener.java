@@ -13,18 +13,12 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 /**
  * http://stackoverflow.com/questions/28521004/mpandroidchart-have-one-graph-mirror-the-zoom-swipes-on-a-sister-graph
  */
-public class CoupleChartGestureListener implements OnChartGestureListener {
+public class CoupleChartGestureListener extends DelayedChartGestureListener {
     private static final String TAG = CoupleChartGestureListener.class.getSimpleName();
-    private Chart srcChart;
+
     private Chart[] dstCharts;
     private CoupleClick coupleClick;
-    private Handler handler;
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            srcChart.highlightValue(null, true);
-        }
-    };
+
 
     public void setCoupleClick(CoupleClick coupleClick) {
         this.coupleClick = coupleClick;
@@ -35,9 +29,8 @@ public class CoupleChartGestureListener implements OnChartGestureListener {
     }
 
     public CoupleChartGestureListener(Chart srcChart, Chart[] dstCharts) {
-        this.srcChart = srcChart;
+        super(srcChart);
         this.dstCharts = dstCharts;
-        handler = new Handler();
 
     }
 
@@ -48,19 +41,16 @@ public class CoupleChartGestureListener implements OnChartGestureListener {
 
     @Override
     public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        super.onChartGestureEnd(me,lastPerformedGesture);
         if (dstCharts == null) {
             return;
         }
         syncCharts();
-        if (lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP) {
-            handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
-        }
     }
 
     @Override
     public void onChartLongPressed(MotionEvent me) {
-        handler.removeCallbacks(runnable);
+        super.onChartLongPressed(me);
         syncCharts();
     }
 
