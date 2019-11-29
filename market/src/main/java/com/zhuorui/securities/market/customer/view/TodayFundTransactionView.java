@@ -1,36 +1,18 @@
 package com.zhuorui.securities.market.customer.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
-import com.github.mikephil.charting.renderer.PieChartRenderer;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.zhuorui.commonwidget.config.LocalSettingsConfig;
 import com.zhuorui.securities.market.R;
 import com.zhuorui.securities.market.socket.vo.CapitalData;
 import com.zhuorui.securities.market.util.MarketUtil;
 import com.zhuorui.securities.market.util.MathUtil;
-import com.zhuorui.securities.personal.config.LocalAccountConfig;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +27,12 @@ public class TodayFundTransactionView extends FrameLayout {
     private ComparisonMapView vComparisonMap;
     private MarketPieChatView pie_cahart_view;
     private TextView vUnit;
-    private int mOut1Color;
-    private int mOut2Color;
-    private int mOut3Color;
-    private int mIn1Color;
-    private int mIn2Color;
-    private int mIn3Color;
+    private int mLargeSingleOutColor;
+    private int mMediumOutColor;
+    private int smallOutColor;
+    private int mLargeSingleInColor;
+    private int mMediumInColor;
+    private int smallInColor;
     private int defColor;
     private int inValueColor;
     private int outValueColor;
@@ -75,48 +57,54 @@ public class TodayFundTransactionView extends FrameLayout {
         pie_cahart_view = findViewById(R.id.pie_cahart_view);
         vComparisonMap = findViewById(R.id.comparison_map);
         vUnit = findViewById(R.id.tv_unit);
-        vComparisonMap.setTitle("流入", "流出", "净流入");
+        vComparisonMap.setTitle(getResources().getString(R.string.str_fund_in), getResources().getString(R.string.str_fund_out), getResources().getString(R.string.ste_net_inflow));
     }
 
     private void initColor() {
         defColor = Color.parseColor("#C3CDE3");
         inValueColor = LocalSettingsConfig.Companion.getInstance().getUpColor();
         outValueColor = LocalSettingsConfig.Companion.getInstance().getDownColor();
-        mOut1Color = Color.parseColor("#00AB3B");
-        mOut2Color = Color.parseColor("#336666");
-        mOut3Color = Color.parseColor("#339966");
-        mIn1Color = Color.parseColor("#C4000A");
-        mIn2Color = Color.parseColor("#D73239");
-        mIn3Color = Color.parseColor("#CC6666");
+        mLargeSingleOutColor = Color.parseColor("#00AB3B");
+        mMediumOutColor = Color.parseColor("#336666");
+        smallOutColor = Color.parseColor("#339966");
+        mLargeSingleInColor = Color.parseColor("#C4000A");
+        mMediumInColor = Color.parseColor("#D73239");
+        smallInColor = Color.parseColor("#CC6666");
     }
 
     private ArrayList<PieEntry> getPieEntrys(float largeSingleOut, float largeSingleIn, float mediumOut, float mediumIn, float smallOut, float smallIn) {
         ArrayList<PieEntry> pieEntryList = new ArrayList<>();
         ArrayList<Integer> colors = new ArrayList();
         //饼图实体 PieEntry
+        //大单流出
         if (largeSingleOut > 0) {
-            pieEntryList.add(new PieEntry(largeSingleOut, "大单流出"));
-            colors.add(mOut1Color);
+            pieEntryList.add(new PieEntry(largeSingleOut, ""));
+            colors.add(mLargeSingleOutColor);
         }
+        //中单流出
         if (mediumOut > 0) {
-            pieEntryList.add(new PieEntry(mediumOut, "中单流出"));
-            colors.add(mOut2Color);
+            pieEntryList.add(new PieEntry(mediumOut, ""));
+            colors.add(mMediumOutColor);
         }
+        //小单流出
         if (smallOut > 0) {
-            pieEntryList.add(new PieEntry(smallOut, "小单流出"));
-            colors.add(mOut3Color);
+            pieEntryList.add(new PieEntry(smallOut, ""));
+            colors.add(smallOutColor);
         }
+        //小单流入
         if (smallIn > 0) {
-            pieEntryList.add(new PieEntry(smallIn, "小单流入"));
-            colors.add(mIn3Color);
+            pieEntryList.add(new PieEntry(smallIn, ""));
+            colors.add(smallInColor);
         }
+        //中单流入
         if (mediumIn > 0) {
-            pieEntryList.add(new PieEntry(mediumIn, "中单流入"));
-            colors.add(mIn2Color);
+            pieEntryList.add(new PieEntry(mediumIn, ""));
+            colors.add(mMediumInColor);
         }
+        //大单流入
         if (largeSingleIn > 0) {
-            pieEntryList.add(new PieEntry(largeSingleIn, "大单流入"));
-            colors.add(mIn1Color);
+            pieEntryList.add(new PieEntry(largeSingleIn, ""));
+            colors.add(mLargeSingleInColor);
         }
         pie_cahart_view.setColors(colors);
         return pieEntryList;
@@ -141,9 +129,9 @@ public class TodayFundTransactionView extends FrameLayout {
             vComparisonMap.setValueTextColor(inValueColor, outValueColor);
         }
         List<ComparisonMapView.IComparisonMapData> datas = new ArrayList<>();
-        datas.add(new ComparisonMapData("大单", largeSingleIn, mIn1Color, largeSingleOut, mOut1Color, max));
-        datas.add(new ComparisonMapData("中单", mediumIn, mIn2Color, mediumOut, mOut2Color, max));
-        datas.add(new ComparisonMapData("小单", smallIn, mIn3Color, smallOut, mOut3Color, max));
+        datas.add(new ComparisonMapData(getResources().getString(R.string.str_large_single_order), largeSingleIn, mLargeSingleInColor, largeSingleOut, mLargeSingleOutColor, max));
+        datas.add(new ComparisonMapData(getResources().getString(R.string.str_medium_order), mediumIn, mMediumInColor, mediumOut, mMediumOutColor, max));
+        datas.add(new ComparisonMapData(getResources().getString(R.string.str_small_order), smallIn, smallInColor, smallOut, smallOutColor, max));
         vComparisonMap.setData(datas);
     }
 
@@ -167,12 +155,16 @@ public class TodayFundTransactionView extends FrameLayout {
             mediumOut = MathUtil.INSTANCE.divide(mediumOutBig, unit, 6).floatValue();
             smallOut = MathUtil.INSTANCE.divide(smallOutBig, unit, 6).floatValue();
             smallIn = MathUtil.INSTANCE.divide(smallInBig, unit, 6).floatValue();
-            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan),MarketUtil.getUnitName(unit)));
-        }else {
-            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan),""));
+            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan), MarketUtil.getUnitName(unit)));
+        } else {
+            vUnit.setText(String.format(getResources().getString(R.string.unit_yuan), ""));
         }
         setComparisonMapData(largeSingleOut, largeSingleIn, mediumOut, mediumIn, smallOut, smallIn);
         pie_cahart_view.setData(getPieEntrys(largeSingleOut, largeSingleIn, mediumOut, mediumIn, smallOut, smallIn));
+    }
+
+    public void setNotText(String text){
+        pie_cahart_view.setNoDataText(text);
     }
 
 

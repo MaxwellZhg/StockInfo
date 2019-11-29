@@ -3,6 +3,7 @@ package com.zhuorui.securities.market.ui
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.customer.view.HistoricalCapitalFlowView
@@ -64,28 +65,52 @@ class MarketDetailCapitalFragment :
         getData()
     }
 
+    /**
+     * 今日资金分布数据
+     */
     override fun onTodayFundTransactionData(data: CapitalData?) {
-        todayFundTransaction.setData(data)
+        todayFundTransaction?.setNotText(ResUtil.getString(R.string.str_no_data))
+        todayFundTransaction?.setData(data)
     }
 
-    override fun onTodatCapitalFlowTrendData(data: List<CapitalTrendModel>) {
-        todatCapitalFlowTrend.setData(mTs, data)
+    /**
+     * 今天资金趋势数据
+     */
+    override fun onTodayCapitalFlowTrendData(data: List<CapitalTrendModel>) {
+        todatCapitalFlowTrend?.setNotText(ResUtil.getString(R.string.str_no_data))
+        todatCapitalFlowTrend?.setData(mTs, data)
     }
 
-    override fun onHistoricalCapitalFlowData(data: List<CapitalTrendModel>) {
-
-
-    }
-
+    /**
+     * 股票实时价格
+     */
     override fun onUpPrice(t: Float?) {
-        todatCapitalFlowTrend.setPrice(t ?: 0f)
+        todatCapitalFlowTrend?.setPrice(t ?: 0f)
+        historicalCapitalFlow?.setPrice(t ?: 0f)
     }
+
+    /**
+     * 历史资金流向数据
+     */
+    override fun onHistoricalCapitalFlowData(data: List<CapitalTrendModel>) {
+        historicalCapitalFlow?.setNotText(ResUtil.getString(R.string.str_no_data))
+        historicalCapitalFlow?.setData(data)
+    }
+
+    override fun onGetCapitalFlowTimeError(msg: String?) {
+        historicalCapitalFlow?.setNotText(msg)
+    }
+
 
     override fun onSelected(day: Int) {
         presenter?.getCapitalFlowTime(day)
+        historicalCapitalFlow?.setNotText(ResUtil.getString(R.string.loading_data))
     }
 
     fun getData() {
         presenter?.getData(mTs, mCode)
+        historicalCapitalFlow?.setNotText(ResUtil.getString(R.string.loading_data))
+        todatCapitalFlowTrend?.setNotText(ResUtil.getString(R.string.loading_data))
+        todayFundTransaction?.setNotText(ResUtil.getString(R.string.loading_data))
     }
 }
