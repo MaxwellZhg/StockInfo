@@ -1,6 +1,7 @@
 package com.zhuorui.securities.market.ui.view
 
 import com.zhuorui.securities.base2app.ui.fragment.AbsView
+import com.zhuorui.securities.market.net.response.MarketNewsListResponse
 
 /**
  * Created by Maxwell.
@@ -9,5 +10,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface MarketPointConsInfoView :AbsView{
-fun addPointInfoAdapter(list: List<Int>)
+    fun addIntoInfoData(list:List<MarketNewsListResponse.DataList>)
+    fun noMoreData()
+    fun loadFailData()
 }

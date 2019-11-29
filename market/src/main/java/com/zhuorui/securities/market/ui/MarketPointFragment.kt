@@ -17,6 +17,7 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketPointBinding
 import com.zhuorui.securities.market.event.StockConsStateEvent
 import com.zhuorui.securities.market.manager.StockIndexHandicapDataManager
+import com.zhuorui.securities.market.model.PushIndexHandicapData
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.adapter.MarketPointInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketPointPresenter
@@ -119,10 +120,13 @@ class MarketPointFragment :
                 }
             }
         }
+        refresh_layout.setEnableLoadMore(true)
+        refresh_layout.setEnableRefresh(true)
         refresh_layout.setOnLoadMoreListener(this)
         refresh_layout.setOnRefreshListener(this)
         if (StockIndexHandicapDataManager.getInstance(code, "HK", 1).indexData!=null) {
             market_point_view.setData(StockIndexHandicapDataManager.getInstance(code, "HK", 1).indexData)
+            presenter?.bindMarketPointhandicap("HK",code)
         }
     }
 
@@ -288,7 +292,6 @@ class MarketPointFragment :
     private fun onSelect(index: Int) {
         if (index == 0) {
             ll_selcet_info.visibility = View.GONE
-            // refresh_layout.setNoMoreData(false)
             refresh_layout.setEnableLoadMore(true)
         } else {
             ll_selcet_info.visibility = if (scroll_view.scrollY < magic_indicator.top) View.GONE else View.VISIBLE
@@ -334,7 +337,7 @@ class MarketPointFragment :
         val firstFragment = findChildFragment(MarketStockConsFragment::class.java)
         if (firstFragment == null) {
             mFragments[0] = MarketStockConsFragment.newInstance()
-            mFragments[1] = MarketPointConsInfoFragment.newInstance()
+            mFragments[1] = MarketPointConsInfoFragment.newInstance(code)
 
             loadMultipleRootFragment(
                 R.id.fl_tab_container, mIndex,
@@ -423,6 +426,11 @@ class MarketPointFragment :
 
     override fun loadConsStockFail() {
         refresh_layout.finishLoadMore(false)
+    }
+
+
+    override fun getpushData(data: PushIndexHandicapData) {
+        market_point_view.upPushData(data)
     }
 
 

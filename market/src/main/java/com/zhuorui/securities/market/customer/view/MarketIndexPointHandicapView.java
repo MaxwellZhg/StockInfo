@@ -15,6 +15,7 @@ import com.zhuorui.securities.market.manager.StockIndexHandicapDataManager;
 import com.zhuorui.securities.market.model.PushIndexHandicapData;
 import com.zhuorui.securities.market.socket.vo.IndexPonitHandicapData;
 import com.zhuorui.securities.market.util.MathUtil;
+import me.jessyan.autosize.utils.LogUtils;
 
 /**
  * Created by Maxwell.
@@ -52,7 +53,7 @@ public class MarketIndexPointHandicapView extends FrameLayout implements Observe
         inflate(context, R.layout.item_index_point_handicap,this);
         initView();
         manager = StockIndexHandicapDataManager.Companion.getInstance(code,ts,type);
-        // 添加股价订阅
+        // 添加指数变订阅
         manager.registerObserver(this);
     }
 
@@ -60,14 +61,14 @@ public class MarketIndexPointHandicapView extends FrameLayout implements Observe
    public void setInitData(IndexPonitHandicapData indexPonitHandicapData) {
         tv_point_one.setText(name);
         if(Float.valueOf(MathUtil.INSTANCE.subtract2(indexPonitHandicapData.getLast(), indexPonitHandicapData.getOpen()).toString())> 0f){
-           tv_one_ponit_num.setText(indexPonitHandicapData.getLast().toString(),1);
+           tv_one_ponit_num.setText(indexPonitHandicapData.getLast().toString(),0);
            tv_one_point_rate.setText("+"+indexPonitHandicapData.getDiffPrice().toString()+"   +"+indexPonitHandicapData.getDiffRate()+"%");
            zr_line.setType(1);
             zr_line.setValues(indexPonitHandicapData.getRise(),indexPonitHandicapData.getFlatPlate(),indexPonitHandicapData.getFall());
             zr_line_text.setType(2);
             zr_line_text.setValues(indexPonitHandicapData.getRise(),indexPonitHandicapData.getFlatPlate(),indexPonitHandicapData.getFall());
         }else if(Float.valueOf(MathUtil.INSTANCE.subtract2(indexPonitHandicapData.getLast(), indexPonitHandicapData.getOpen()).toString())< 0f){
-            tv_one_ponit_num.setText(indexPonitHandicapData.getLast().toString(),-1);
+            tv_one_ponit_num.setText(indexPonitHandicapData.getLast().toString(),0);
             tv_one_point_rate.setText(indexPonitHandicapData.getDiffPrice().toString()+"   "+indexPonitHandicapData.getDiffRate()+"%");
             zr_line.setType(1);
             zr_line.setValues(indexPonitHandicapData.getRise(),indexPonitHandicapData.getFlatPlate(),indexPonitHandicapData.getFall());
@@ -85,6 +86,7 @@ public class MarketIndexPointHandicapView extends FrameLayout implements Observe
 
     private void initView() {
         tv_point_one =(TextView) findViewById(R.id.tv_point_one);
+        tv_point_one.setText(name);
         tv_one_ponit_num = (ZRStockTextView) findViewById(R.id.tv_one_ponit_num);
         tv_one_point_rate = (TextView) findViewById(R.id.tv_one_point_rate);
         zr_line = (ZRThreePartLineLayout) findViewById(R.id.zr_line);
@@ -137,4 +139,5 @@ public class MarketIndexPointHandicapView extends FrameLayout implements Observe
         // 删除监听
         StockIndexHandicapDataManager.Companion.getInstance( code,ts, type).removeObserver(this);
     }
+
 }

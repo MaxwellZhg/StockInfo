@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.ZRMyWebViewFragment
 import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ResUtil
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_my_tab.*
 class MyTabFragment :
     AbsBackFinishFragment<FragmentMyTabBinding, MyTabVierwModel, MyTabVierw, MyTabPresenter>(),
     MyTabVierw, View.OnClickListener{
+
     companion object {
         fun newInstance(): MyTabFragment {
             return MyTabFragment()
@@ -108,13 +110,18 @@ class MyTabFragment :
                 (parentFragment as AbsFragment<*, *, *, *>).start(IntroProFragment.newInstance())
             }
             R.id.my_manager_tab->{
-                (parentFragment as AbsFragment<*, *, *, *>).start(ZRMyWebViewFragment.newInstance(1))
+                if(LocalAccountConfig.getInstance().isLogin()) {
+                    gotoClientService()
+                }else{
+                    presenter?.needSercvice =true
+                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
+                }
             }
         }
     }
 
     override fun gotomain() {
-        (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(2))
+        (_mActivity as AbsActivity).start(ZRMyWebViewFragment.newInstance(1))
     }
 
 /*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
@@ -152,6 +159,10 @@ class MyTabFragment :
                ll_setting_language.setRightTips(str)
            }
        }
+    }
+
+    override fun gotoClientService() {
+        (_mActivity as AbsActivity).start(ZRMyWebViewFragment.newInstance(1))
     }
 
 

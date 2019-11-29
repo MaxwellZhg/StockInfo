@@ -3,9 +3,11 @@ package com.zhuorui.securities.personal.ui.presenter
 import com.zhuorui.commonwidget.config.AppLanguage
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.commonwidget.config.StocksThemeColor
+import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.event.SettingChooseEvent
 import com.zhuorui.securities.personal.ui.adapter.SettingDataAdapter
 import com.zhuorui.securities.personal.ui.model.SettingData
 import com.zhuorui.securities.personal.ui.view.SettingView
@@ -84,6 +86,10 @@ class SettingPresenter : AbsNetPresenter<SettingView, SettingViewModel>() {
                }
             }
         }
+    }
+
+    fun detailSettingEvent(type:Int,str:String){
+        RxBus.getDefault().post(SettingChooseEvent(type,str))
     }
 
 }

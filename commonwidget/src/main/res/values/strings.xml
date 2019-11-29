@@ -10,4 +10,5 @@
     <string name="go_to_setting">去设置</string>
     <string name="str_write_external_storage">获取存储空间权限失败，将导致无法正常获取图片，请打开设置页面手动授权</string>
     <string name="my_manager" tools:ignore="MissingTranslation">我的专属顾问</string>
+    <string name="temp_no_data">暂无数据</string>
 </resources>

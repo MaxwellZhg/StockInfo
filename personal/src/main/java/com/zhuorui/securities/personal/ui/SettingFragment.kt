@@ -63,12 +63,12 @@ class SettingFragment : AbsSwipeBackNetFragment<FragmentSettingBinding, SettingV
         title_bar.setRightTextViewClickListener{
             //todo 国际化语言和颜色涨跌post设置
             presenter?.detailSaveState(type,adapter?.getTips())
-            RxBus.getDefault().post(SettingChooseEvent(type,adapter?.getTips()))
             pop()
+            adapter?.getTips()?.let { it1 -> presenter?.detailSettingEvent(type, it1) }
         }
         title_bar.setBackClickListener{
-            RxBus.getDefault().post(SettingChooseEvent(type,adapter?.getTips()))
             pop()
+            adapter?.getTips()?.let { it1 -> presenter?.detailSettingEvent(type, it1) }
         }
     }
 
