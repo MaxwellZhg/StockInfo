@@ -204,6 +204,10 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
             stockInfo.name = event.stock.name
             stockInfo.type = event.stock.type
             stockInfo.tsCode = event.stock.tsCode
+            stockInfo.last = event.stock.last
+            stockInfo.preClose = event.stock.preClose
+            stockInfo.diffRate = event.stock.diffRate
+            stockInfo.suspension = event.stock.suspension
             item.stockInfo = stockInfo
             item.setOnChangeDataCallBack(this)
             // 添加到顶部
@@ -339,7 +343,7 @@ class TopicStockListPresenter : AbsNetPresenter<TopicStockListView, TopicStockLi
         else {
             // 取消所有订阅
             if (ts == null) {
-                SocketClient.getInstance().unBindAllTopic()
+                viewModel?.datas?.value?.forEach { it.setOnChangeDataCallBack(null) }
             }
             // 清空所有的缓存
             LocalStocksConfig.getInstance().clear()
