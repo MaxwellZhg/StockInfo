@@ -51,7 +51,7 @@ class OADataTipsPresenter : AbsNetPresenter<OADataTipsView, OADataTipsViewModel>
         spannableString.setSpan(
             AgreementClickableSpan(),
             text!!.length,
-            spannableString?.length,
+            spannableString.length,
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
         var color = ResUtil.getColor(R.color.color_1A6ED2)

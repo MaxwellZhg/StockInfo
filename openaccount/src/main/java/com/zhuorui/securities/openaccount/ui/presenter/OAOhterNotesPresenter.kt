@@ -26,31 +26,31 @@ import com.zhuorui.securities.openaccount.ui.viewmodel.OAOhterNotesViewModel
  *    desc   :
  */
 class OAOhterNotesPresenter : AbsNetPresenter<OAOhterNotesView, OAOhterNotesViewModel>() {
-    override fun init() {
-        super.init()
-    }
 
     fun checkData(): Boolean {
-        val list = view?.getSwitchStatus()
-        return list?.get(0)!! && !list?.get(1) && !list?.get(2) && !list?.get(3)
+        if (view != null){
+            val list = view!!.getSwitchStatus()
+            return list[0] && !list[1] && !list[2] && !list[3]
+        }
+        return false
     }
 
     fun subBasicsInfo() {
         val request = SubBasicsInfoRequest(
-            OpenInfoManager.getInstance()?.info?.mailbox!!,
-            OpenInfoManager.getInstance()?.info?.occupation!!,
-            OpenInfoManager.getInstance()?.info?.taxType!!,
-            OpenInfoManager.getInstance()?.info?.taxState!!,
-            OpenInfoManager.getInstance()?.info?.taxNumber!!,
-            OpenInfoManager.getInstance()?.info?.income!!,
-            OpenInfoManager.getInstance()?.info?.rate!!,
-            OpenInfoManager.getInstance()?.info?.risk!!,
-            OpenInfoManager.getInstance()?.info?.capitalSource!!,
-            OpenInfoManager.getInstance()?.info?.investShares!!,
-            OpenInfoManager.getInstance()?.info?.investBond!!,
-            OpenInfoManager.getInstance()?.info?.investGoldForeign!!,
-            OpenInfoManager.getInstance()?.info?.investFund!!,
-            OpenInfoManager.getInstance()?.info?.id!!,
+            OpenInfoManager.getInstance().info?.mailbox!!,
+            OpenInfoManager.getInstance().info?.occupation!!,
+            OpenInfoManager.getInstance().info?.taxType!!,
+            OpenInfoManager.getInstance().info?.taxState!!,
+            OpenInfoManager.getInstance().info?.taxNumber!!,
+            OpenInfoManager.getInstance().info?.income!!,
+            OpenInfoManager.getInstance().info?.rate!!,
+            OpenInfoManager.getInstance().info?.risk!!,
+            OpenInfoManager.getInstance().info?.capitalSource!!,
+            OpenInfoManager.getInstance().info?.investShares!!,
+            OpenInfoManager.getInstance().info?.investBond!!,
+            OpenInfoManager.getInstance().info?.investGoldForeign!!,
+            OpenInfoManager.getInstance().info?.investFund!!,
+            OpenInfoManager.getInstance().info?.id!!,
             transactions.createTransaction()
         )
         Cache[IOpenAccountNet::class.java]?.subBasicsInfo(request)
@@ -60,7 +60,7 @@ class OAOhterNotesPresenter : AbsNetPresenter<OAOhterNotesView, OAOhterNotesView
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSubBasicsInfoResponse(response: SubBasicsInfoResponse) {
         // 记录开户信息
-        OpenInfoManager.getInstance()?.readSubBasicsInfoResponse(response.data)
+        OpenInfoManager.getInstance().readSubBasicsInfoResponse(response.data)
         view?.toNext()
     }
 
@@ -72,8 +72,8 @@ class OAOhterNotesPresenter : AbsNetPresenter<OAOhterNotesView, OAOhterNotesView
     }
 
     fun getDialogTextSpannable(): Spannable {
-        val txt = "非常抱歉，根据您所披露的所有信息和资料，卓锐证券暂时无法为你开通相关账户。如有疑问，请拨打客服电话%s咨询"
-        val tel = "+852 2541 1234"
+        val txt = ResUtil.getString(R.string.ohter_notes_tips)!!
+        val tel = ResUtil.getString(R.string.tel)!!
         val spannable = SpannableString(String.format(txt, tel))
         val start = spannable.indexOf(tel)
         spannable.setSpan(

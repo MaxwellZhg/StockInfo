@@ -70,7 +70,7 @@ class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OA
             emitter.onComplete()
         }).flatMap {
             val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
-            oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+            oss.getPutObjectObservable(oss.createUpImageName(".jpg"), it)
         }.flatMap { t -> getBankOcrObservable(t) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -83,7 +83,7 @@ class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OA
      * 银行卡OCR识别请求
      */
     fun getBankOcrObservable(bankCardPhotoUrl: String): Observable<BankOrcResponse> {
-        val id: String = OpenInfoManager.getInstance()?.info?.id.toString()
+        val id: String = OpenInfoManager.getInstance().info?.id.toString()
         val request = BankOrcRequest("2",bankCardPhotoUrl, id, transactions.createTransaction())
         return Cache[IOpenAccountNet::class.java]?.bankOcr(request)!!
     }
@@ -121,7 +121,7 @@ class OATakeBankCradPhotoPresenter : AbsNetPresenter<OATakeBankCradPhotoView, OA
         val request = BankCardVerificationRequest(
             bankCardNo.toString(),
             bankName.toString(),
-            OpenInfoManager.getInstance()?.info?.id.toString(),
+            OpenInfoManager.getInstance().info?.id.toString(),
             transactions.createTransaction()
         )
         view?.showUpLoading()

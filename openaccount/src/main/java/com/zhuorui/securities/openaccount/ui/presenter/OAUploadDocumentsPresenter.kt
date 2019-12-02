@@ -35,9 +35,9 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
     }
 
     fun setDefData() {
-        val data: OpenAccountInfo? = OpenInfoManager.getInstance()?.info
-        view?.setCardFrontUrl(data?.cardFrontPhoto)
-        view?.cardBackPhotoUrl(data?.cardBackPhoto)
+        val data: OpenAccountInfo? = OpenInfoManager.getInstance().info
+        view?.setCardFrontUrl(data?.cardFrontPhotoUrl)
+        view?.cardBackPhotoUrl(data?.cardBackPhotoUrl)
 
     }
 
@@ -59,7 +59,7 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
                     emitter.onComplete()
                 }).flatMap {
                     val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
-                    oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+                    oss.getPutObjectObservable(oss.createUpImageName(".jpg"), it)
                 }.flatMap { t ->
                     getIdCardOcrObservable(t)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -72,7 +72,7 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
                     emitter.onComplete()
                 }).flatMap {
                     val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
-                    oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+                    oss.getPutObjectObservable(oss.createUpImageName(".jpg"), it)
                 }.flatMap { t ->
                     getIdCardOcrObservable(t)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -80,7 +80,7 @@ class OAUploadDocumentsPresenter : AbsNetPresenter<OAUploadDocumentsView, OAUplo
             }
 
             fun getIdCardOcrObservable(url: String): Observable<IdCardOrcResponse> {
-                val id: String = OpenInfoManager.getInstance()?.info?.id.toString()
+                val id: String = OpenInfoManager.getInstance().info?.id.toString()
                 val request = IdCardOrcRequest(tp, "2", url, id, transactions.createTransaction())
                 return Cache[IOpenAccountNet::class.java]?.idCardOcr(request)!!
             }

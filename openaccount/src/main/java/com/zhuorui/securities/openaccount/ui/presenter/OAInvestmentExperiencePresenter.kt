@@ -73,10 +73,10 @@ class OAInvestmentExperiencePresenter : AbsPresenter<OAInvestmentExperienceView,
         var bond = experienceTimePickerData?.indexOf(mBond)?.let { experienceTimeCode?.get(it) }
         var goldForeign = experienceTimePickerData?.indexOf(mGoldForeign)?.let { experienceTimeCode?.get(it) }
         var fund = experienceTimePickerData?.indexOf(mFund)?.let { experienceTimeCode?.get(it) }
-        OpenInfoManager.getInstance()?.info?.investShares = shares
-        OpenInfoManager.getInstance()?.info?.investBond = bond
-        OpenInfoManager.getInstance()?.info?.investGoldForeign = goldForeign
-        OpenInfoManager.getInstance()?.info?.investFund = fund
+        OpenInfoManager.getInstance().info?.investShares = shares
+        OpenInfoManager.getInstance().info?.investBond = bond
+        OpenInfoManager.getInstance().info?.investGoldForeign = goldForeign
+        OpenInfoManager.getInstance().info?.investFund = fund
         view?.toNext()
     }
 

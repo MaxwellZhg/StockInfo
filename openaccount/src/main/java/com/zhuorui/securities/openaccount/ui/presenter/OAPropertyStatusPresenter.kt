@@ -82,10 +82,10 @@ class OAPropertyStatusPresenter : AbsPresenter<OAPropertyStatusView, OAPropertyS
         val income = incomePickerData?.indexOf(mIncome)?.let { incomeCode?.get(it) }
         val rate = ratePickerData?.indexOf(mRate)?.let { rateCode?.get(it) }
         val risk = riskPickerData?.indexOf(mRisk)?.let { riskCode?.get(it) }
-        OpenInfoManager.getInstance()?.info?.income = income
-        OpenInfoManager.getInstance()?.info?.rate = rate
-        OpenInfoManager.getInstance()?.info?.risk = risk
-        OpenInfoManager.getInstance()?.info?.capitalSource = getCapitalSource()
+        OpenInfoManager.getInstance().info?.income = income
+        OpenInfoManager.getInstance().info?.rate = rate
+        OpenInfoManager.getInstance().info?.risk = risk
+        OpenInfoManager.getInstance().info?.capitalSource = getCapitalSource()
         view?.toNext()
     }
 

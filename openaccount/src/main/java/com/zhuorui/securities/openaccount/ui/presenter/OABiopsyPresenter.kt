@@ -29,7 +29,7 @@ class OABiopsyPresenter : AbsNetPresenter<OABiopsyView, OABiopsyViewModel>() {
      * 请求活体检查数字码
      */
     fun requestVedioVerifyCode() {
-        OpenInfoManager.getInstance()?.info?.id?.let {
+        OpenInfoManager.getInstance().info?.id?.let {
             val request = LiveCodeRequest(it, transactions.createTransaction())
             Cache[IOpenAccountNet::class.java]?.getLiveCode(request)
                 ?.enqueue(Network.IHCallBack<LiveCodeResponse>(request))
@@ -39,9 +39,9 @@ class OABiopsyPresenter : AbsNetPresenter<OABiopsyView, OABiopsyViewModel>() {
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onVerifyLiveCode(response: LiveCodeResponse) {
         if (response.request is LiveCodeRequest) {
-            OpenInfoManager.getInstance()?.info?.validateCode = response.data.validateCode
+            OpenInfoManager.getInstance().info?.validateCode = response.data.validateCode
             viewModel?.verifyCode?.value = response.data.validateCode
-            OpenInfoManager.getInstance()?.info?.validateCode = response.data.validateCode
+            OpenInfoManager.getInstance().info?.validateCode = response.data.validateCode
         }
     }
 

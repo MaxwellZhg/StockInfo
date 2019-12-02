@@ -37,16 +37,16 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
     }
 
     fun setVerifyCode() {
-        viewModel?.verifyCode?.value = OpenInfoManager.getInstance()?.info?.validateCode
+        viewModel?.verifyCode?.value = OpenInfoManager.getInstance().info?.validateCode
     }
 
     fun uploadVedio(vedioBytes: ByteArray) {
         view?.showUploading()
         view?.setProgressText(ResUtil.getString(R.string.str_encrypting_video))
         val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
-        val disposable = oss?.getPutObjectObservable(oss.createUpImageName(".mp4"), vedioBytes)
-            ?.subscribeOn(Schedulers.io())
-            ?.subscribe {
+        val disposable = oss.getPutObjectObservable(oss.createUpImageName(".mp4"), vedioBytes)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
                 intervalTime()
                 val request = LiveRecognRequest(
                     "2",
@@ -65,9 +65,9 @@ class OAVedioRecordPresenter : AbsNetPresenter<OAVedioRecordView, OAVedioRecordV
     fun onLiveRecognResponse(response: LiveRecognResponse) {
         exitTntervalTime()
         // 设置数据
-        val info = OpenInfoManager.getInstance()?.info
+        val info = OpenInfoManager.getInstance().info
         info?.openStatus = response.data.openStatus
-        info?.video = response.data.video
+        info?.videoUrl = response.data.video
         info?.validateCode = response.data.validateCode
         view?.hideUploading()
         view?.uploadComplete(true)

@@ -59,7 +59,7 @@ class OARiskDisclosurePresenter : AbsNetPresenter<OARiskDisclosureView, OARiskDi
 
     fun subRiskDisclosure() {
         val request = SubRiskDisclosureRequest(
-            OpenInfoManager.getInstance()?.info?.id.toString(),
+            OpenInfoManager.getInstance().info?.id.toString(),
             transactions.createTransaction()
         )
         Cache[IOpenAccountNet::class.java]?.subRiskDisclosure(request)
@@ -69,7 +69,7 @@ class OARiskDisclosurePresenter : AbsNetPresenter<OARiskDisclosureView, OARiskDi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSubRiskDisclosureResponse(response: SubRiskDisclosureResponse) {
         // 记录开户信息
-        OpenInfoManager.getInstance()?.readSubRiskDisclosureResponse(response.data)
+        OpenInfoManager.getInstance().readSubRiskDisclosureResponse(response.data)
         view?.toNext()
     }
 

@@ -102,11 +102,11 @@ class OAPersonalInformationPresenter : AbsPresenter<OAPersonalInformationView, O
     fun sub() {
         val occupation = occupationPickerData?.indexOf(mOccupation)?.let { occupationCode?.get(it) }
         val taxType = taxTypePickerData?.indexOf(mTaxType)?.let { taxTypeCode?.get(it) }
-        OpenInfoManager.getInstance()?.info?.occupation = occupation
-        OpenInfoManager.getInstance()?.info?.taxType = taxType
-        OpenInfoManager.getInstance()?.info?.taxState = "86"//中国内地
-        OpenInfoManager.getInstance()?.info?.mailbox = view?.getEmail()
-        OpenInfoManager.getInstance()?.info?.taxNumber = view?.getTaxNo()
+        OpenInfoManager.getInstance().info?.occupation = occupation
+        OpenInfoManager.getInstance().info?.taxType = taxType
+        OpenInfoManager.getInstance().info?.taxState = "86"//中国内地
+        OpenInfoManager.getInstance().info?.mailbox = view?.getEmail()
+        OpenInfoManager.getInstance().info?.taxNumber = view?.getTaxNo()
         view?.toNext()
     }
 
