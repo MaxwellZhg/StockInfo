@@ -51,8 +51,10 @@ class ZRWebViewFragment :
             }
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                if(empty_infos_view!=null) {
+                    empty_infos_view.visibility = View.VISIBLE
+                }
                 super.onReceivedError(view, request, error)
-                empty_info_view.visibility = View.VISIBLE
             }
 
         }
@@ -98,5 +100,12 @@ class ZRWebViewFragment :
             return fragment
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        webview.destroy()
+    }
+
+
 
 }
