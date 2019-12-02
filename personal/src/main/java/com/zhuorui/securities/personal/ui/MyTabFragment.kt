@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_my_tab.*
  */
 class MyTabFragment :
     AbsBackFinishFragment<FragmentMyTabBinding, MyTabVierwModel, MyTabVierw, MyTabPresenter>(),
-    MyTabVierw, View.OnClickListener{
+    MyTabVierw, View.OnClickListener {
 
     companion object {
         fun newInstance(): MyTabFragment {
@@ -69,14 +69,15 @@ class MyTabFragment :
         my_manager_tab.setOnClickListener(this)
         ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
         ll_setting_language.setRightTips(presenter?.setConfigValue(2))
-        if(!LocalAccountConfig.getInstance().isLogin()){
-            ll_login_out.visibility=View.INVISIBLE
-            tv_login_tips.text=ResUtil.getString(R.string.login_register)
-        }else{
-            ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
+        if (!LocalAccountConfig.getInstance().isLogin()) {
+            ll_login_out.visibility = View.INVISIBLE
+            tv_login_tips.text = ResUtil.getString(R.string.login_register)
+        } else {
+            ll_login_out.visibility = View.VISIBLE
+            tv_login_tips.text = LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         }
     }
+
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.open_account -> {
@@ -94,27 +95,37 @@ class MyTabFragment :
                 presenter?.requestUserLoginOut()
             }
             R.id.ll_login -> {
-                if(LocalAccountConfig.getInstance().getAccountInfo().token==""||LocalAccountConfig.getInstance().getAccountInfo().token==null) {
+                if (LocalAccountConfig.getInstance().getAccountInfo().token == "" || LocalAccountConfig.getInstance().getAccountInfo().token == null) {
                     (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
                 }
             }
             R.id.ll_cell_change_color -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(SettingFragment.newInstance(1,ll_cell_change_color.tipsValue))
+                (parentFragment as AbsFragment<*, *, *, *>).start(
+                    SettingFragment.newInstance(
+                        1,
+                        ll_cell_change_color.tipsValue
+                    )
+                )
             }
             R.id.ll_setting_language -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(SettingFragment.newInstance(2,ll_setting_language.tipsValue))
+                (parentFragment as AbsFragment<*, *, *, *>).start(
+                    SettingFragment.newInstance(
+                        2,
+                        ll_setting_language.tipsValue
+                    )
+                )
             }
-            R.id.ll_account_safety->{
+            R.id.ll_account_safety -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(SecurityFragment.newInstance())
             }
-            R.id.ll_about_us->{
+            R.id.ll_about_us -> {
                 (parentFragment as AbsFragment<*, *, *, *>).start(IntroProFragment.newInstance())
             }
-            R.id.my_manager_tab->{
-                if(LocalAccountConfig.getInstance().isLogin()) {
+            R.id.my_manager_tab -> {
+                if (LocalAccountConfig.getInstance().isLogin()) {
                     gotoClientService()
-                }else{
-                    presenter?.needSercvice =true
+                } else {
+                    presenter?.needSercvice = true
                     (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
                 }
             }
@@ -125,41 +136,44 @@ class MyTabFragment :
         (_mActivity as AbsActivity).start(LoginRegisterFragment.newInstance(2))
     }
 
-/*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
-        super.onFragmentResult(requestCode, resultCode, data)
-        if (resultCode == ISupportFragment.RESULT_OK && requestCode == 100) {
-            ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
-        } else {
-            ll_setting_language.setRightTips(presenter?.setConfigValue(2))
-        }
-    }*/
+    /*    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
+            super.onFragmentResult(requestCode, resultCode, data)
+            if (resultCode == ISupportFragment.RESULT_OK && requestCode == 100) {
+                ll_cell_change_color.setRightTips(presenter?.setConfigValue(1))
+            } else {
+                ll_setting_language.setRightTips(presenter?.setConfigValue(2))
+            }
+        }*/
+
     override fun loginStateChange() {
-        if(!LocalAccountConfig.getInstance().isLogin()){
-            ll_login_out.visibility=View.INVISIBLE
-            tv_login_tips.text=ResUtil.getString(R.string.login_register)
-        }else{
-            ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
+        if (!LocalAccountConfig.getInstance().isLogin()) {
+            ll_login_out.visibility = View.INVISIBLE
+            tv_login_tips.text = ResUtil.getString(R.string.login_register)
+        } else {
+            ll_login_out.visibility = View.VISIBLE
+            tv_login_tips.text = LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         }
     }
+
     override fun changeMyTabInfoView() {
-        if(!LocalAccountConfig.getInstance().isLogin()){
-            ll_login_out.visibility=View.INVISIBLE
-            tv_login_tips.text=ResUtil.getString(R.string.login_register)
-        }else{
-            ll_login_out.visibility=View.VISIBLE
-            tv_login_tips.text=LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
+        if (!LocalAccountConfig.getInstance().isLogin()) {
+            ll_login_out.visibility = View.INVISIBLE
+            tv_login_tips.text = ResUtil.getString(R.string.login_register)
+        } else {
+            ll_login_out.visibility = View.VISIBLE
+            tv_login_tips.text = LocalAccountConfig.getInstance().getAccountInfo().zrNo.toString()
         }
     }
+
     override fun changeSetChooseSet(type: Int, str: String?) {
-       when(type){
-           1->{
-               ll_cell_change_color.setRightTips(str)
-           }
-           2->{
-               ll_setting_language.setRightTips(str)
-           }
-       }
+        when (type) {
+            1 -> {
+                ll_cell_change_color.setRightTips(str)
+            }
+            2 -> {
+                ll_setting_language.setRightTips(str)
+            }
+        }
     }
 
     override fun gotoClientService() {
@@ -169,8 +183,4 @@ class MyTabFragment :
             )
         })
     }
-
-
-
-
 }

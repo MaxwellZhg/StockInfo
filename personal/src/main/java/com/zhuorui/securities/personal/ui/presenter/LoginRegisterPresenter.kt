@@ -124,7 +124,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                         task = null
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
-                        viewModel?.getcodeState?.set(0)
+                        viewModel?.getcodeState?.set(1)
                         viewModel?.getCodeClickState?.set(0)
                     }
                 }

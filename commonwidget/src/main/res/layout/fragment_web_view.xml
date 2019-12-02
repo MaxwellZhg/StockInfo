@@ -32,7 +32,7 @@
             </WebView>
 
             <com.zhuorui.commonwidget.ZREmptyView
-                    android:id="@+id/empty_info_view"
+                    android:id="@+id/empty_infos_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/tablayout_bg"
