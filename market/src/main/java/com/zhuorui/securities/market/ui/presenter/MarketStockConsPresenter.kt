@@ -14,9 +14,7 @@ import com.zhuorui.securities.market.event.MarketPointConsEvent
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.event.StockConsEvent
 import com.zhuorui.securities.market.event.StockConsStateEvent
-import com.zhuorui.securities.market.model.StockMarketInfo
-import com.zhuorui.securities.market.model.StockTopic
-import com.zhuorui.securities.market.model.StockTopicDataTypeEnum
+import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.IStockNet
 import com.zhuorui.securities.market.net.request.StockConsInfoRequest
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
@@ -42,7 +40,7 @@ import java.util.*
  * Date: 2019/11/20
  * Desc:
  */
-class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockConsViewModel>(){
+class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockConsViewModel>(),StockConsInfoModel.OnChangeDataCallBack{
     private val disposables = LinkedList<Disposable>()
     override fun init() {
         super.init()
@@ -52,7 +50,7 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
         // 监听datas的变化
         lifecycleOwner.let {
             viewModel?.infos?.observe(it,
-                androidx.lifecycle.Observer<List<StockConsInfoResponse.ListInfo>> { t ->
+                androidx.lifecycle.Observer<List<StockConsInfoModel>> { t ->
                     view?.addInfoToAdapter(t)
                 })
         }
@@ -81,8 +79,21 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
     fun onStockConsEventResponse(event: StockConsEvent) {
         if(event.list.isNotEmpty()) {
             // 刷新数据时要清掉老数据
+            viewModel?.infos?.value?.forEach { item ->
+                // 取消订阅股价
+                item.setOnChangeDataCallBack(null)
+            }
+            // 刷新数据时要清掉老数据
             viewModel?.infos?.value?.clear()
-            viewModel?.infos?.value = event.list
+            val tempList = ArrayList<StockConsInfoModel>()
+            event.list.forEach { item ->
+                val model = StockConsInfoModel()
+                model.stockInfo = item
+                // 订阅股价
+                model.setOnChangeDataCallBack(this)
+                tempList.add(model)
+            }
+            viewModel?.infos?.value?.addAll(tempList)
             // 订阅价格
             var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 emitter.onNext(topicPrice(event.list as MutableList<StockConsInfoResponse.ListInfo>))
@@ -94,9 +105,15 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
     }
 
     private fun topicPrice(list: MutableList<StockConsInfoResponse.ListInfo>): Boolean {
+        val tempList = ArrayList<StockConsInfoModel>()
         for (item in list) {
-            val stockTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP, item.ts!!, item.code!!,2)
-            SocketClient.getInstance().bindTopic(stockTopic)
+          /*  val stockTopic = StockTopic(StockTopicDataTypeEnum.HANDICAP, item.ts!!, item.code!!,2)
+            SocketClient.getInstance().bindTopic(stockTopic)*/
+            val model = StockConsInfoModel()
+            model.stockInfo = item
+            // 订阅股价
+            model.setOnChangeDataCallBack(this)
+            tempList.add(model)
         }
         return true
     }
@@ -111,9 +128,9 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
         view?.showErrorState()
     }
 
-    /**
+/*    *//**
      * 长链接连接状态发生改变
-     */
+     *//*
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
         viewModel?.infos?.value?.let {
@@ -122,15 +139,15 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
         }
     }
 
-    /**
+    *//**
      * 推送股票盘口数据回调
-     */
+     *//*
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onStocksListTopicHandicap(response: StocksTopicHandicapResponse) {
         val datas = viewModel?.infos?.value
         if (datas.isNullOrEmpty()) return
-    /*    val listType = object : TypeToken<List<StockHandicapData>>() {}.type
-        val datalist: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)*/
+    *//*    val listType = object : TypeToken<List<StockHandicapData>>() {}.type
+        val datalist: List<StockHandicapData> = JsonUtil.fromJson(response.body.toString(), listType)*//*
         val stockPriceDatas = response.body?.get(0)
        for (index in datas.indices) {
             val item = datas[index]
@@ -144,7 +161,13 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
                     break
             }
         }
+    }*/
+
+    override fun onStockIndexConsChange(stockInfo: StockConsInfoResponse.ListInfo, position: Int) {
+        // 更新界面
+        view?.notifyItemChanged(position)
     }
+
 
 
     override fun destroy() {

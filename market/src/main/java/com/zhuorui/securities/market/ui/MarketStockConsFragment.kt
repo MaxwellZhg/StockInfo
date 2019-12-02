@@ -16,6 +16,7 @@ import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentMarketStockConsBinding
 import com.zhuorui.securities.market.event.StockConsPointStateEvent
 import com.zhuorui.securities.market.event.StockConsStateEvent
+import com.zhuorui.securities.market.model.StockConsInfoModel
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 import com.zhuorui.securities.market.ui.adapter.MarketPointConsInfoAdapter
 import com.zhuorui.securities.market.ui.presenter.MarketStockConsPresenter
@@ -79,7 +80,7 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
 
     }
 
-    override fun addInfoToAdapter(list: List<StockConsInfoResponse.ListInfo>) {
+    override fun addInfoToAdapter(list: List<StockConsInfoModel>) {
         empty_view.visibility=View.INVISIBLE
         infoadapter?.clearItems()
         if (infoadapter?.items == null) {

@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.model.StockConsInfoModel
 import com.zhuorui.securities.market.net.response.StockConsInfoResponse
 
 /**
@@ -11,5 +12,5 @@ import com.zhuorui.securities.market.net.response.StockConsInfoResponse
  * Desc:
  */
 class MarketStockConsViewModel :ViewModel(){
-    var infos: MutableLiveData<ArrayList<StockConsInfoResponse.ListInfo>> = MutableLiveData()
+    var infos: MutableLiveData<ArrayList<StockConsInfoModel>> = MutableLiveData()
 }

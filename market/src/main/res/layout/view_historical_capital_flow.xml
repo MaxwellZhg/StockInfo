@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root_view"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/root_view"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -13,18 +13,17 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="@android:color/white"
-            android:text="历史资金流向"
+            android:text="@string/historical_capital_flow"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
     />
 
     <TextView
-
+            android:id="@+id/tv_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="#C3CDE3"
-            android:text="单位：万元"
             android:layout_marginLeft="10dp"
             app:layout_constraintTop_toTopOf="@+id/tv_title"
             app:layout_constraintBottom_toBottomOf="@+id/tv_title"
@@ -37,7 +36,7 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="#C3CDE3"
-            android:text="总净流入+1234567"
+            android:text="-天总净流入--"
             android:layout_marginTop="6dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             app:layout_constraintLeft_toLeftOf="@+id/tv_title"
@@ -60,7 +59,7 @@
     />
 
 
-    <com.github.mikephil.charting.charts.CombinedChart
+    <com.zhuorui.securities.market.customer.view.kline.charts.HighlightCombinedChart
             android:id="@+id/bar_cahart"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -71,6 +70,15 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintDimensionRatio="320:181"
+    />
+
+    <com.zhuorui.securities.market.customer.view.HighlightContentView
+            android:id="@+id/highlight_content"
+            style="@style/HighlightContentViewStyle"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/bar_cahart"
+            app:layout_constraintLeft_toLeftOf="@id/bar_cahart"
+            app:layout_constraintRight_toRightOf="@id/bar_cahart"
     />
 
 

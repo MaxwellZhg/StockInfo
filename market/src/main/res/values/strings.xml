@@ -242,4 +242,13 @@
     <string name="str_sell_10" tools:ignore="ExtraTranslation">卖盘十档</string>
     <string name="ntioc_str" tools:ignore="ExtraTranslation">通知</string>
     <string name="price_cent">单位:</string>
+    <string name="str_large_single_order">大单</string>
+    <string name="str_medium_order">中单</string>
+    <string name="str_small_order">小单</string>
+    <string name="str_fund_in">流入</string>
+    <string name="str_fund_out">流出</string>
+    <string name="ste_net_inflow">净流入</string>
+    <string name="historical_capital_flow">历史资金流向</string>
+    <string name="historical_net_inflow">%1s总净流入%2s</string>
+    <string name="x_day">%s天</string>
 </resources>

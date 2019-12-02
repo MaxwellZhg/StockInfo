@@ -56,7 +56,7 @@ interface IStockNet {
     fun getStockConsInfo(@Body request: StockConsInfoRequest): Call<StockConsInfoResponse>
 
     @POST(StockApi.GET_CAPITAL_FLOW_TIME)
-    fun getCapitalFlowTime(@Body request: GetCapitalFlowTimeRequest):Call<BaseResponse>
+    fun getCapitalFlowTime(@Body request: GetCapitalFlowTimeRequest):Call<GetCapitalFlowTimeResponse>
 
     @POST(StockApi.GET_STATISTICS)
     fun getMarketStatistics(@Body request: MarketStatisticsRequest):Call<MarketStatisticsResponse>

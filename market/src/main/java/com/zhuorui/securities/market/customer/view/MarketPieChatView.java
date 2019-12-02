@@ -58,17 +58,20 @@ public class MarketPieChatView extends FrameLayout {
         initPieChart();
     }
 
-
-
     public void setColors(ArrayList<Integer> colors){
         this.colors.clear();
         this.colors.addAll(colors);
     }
 
+    public void setNoDataText(String text){
+        vPieChart.setNoDataText(text);
+        vPieChart.invalidate();
+    }
+
     private void initPieChart() {
         vPieChart = findViewById(R.id.pie_cahart);
         vPieChart.setRenderer(new MyPieChartRenderer(vPieChart, vPieChart.getAnimator(), vPieChart.getViewPortHandler()));
-        vPieChart.setNoDataText("暂无数据");
+        vPieChart.setNoDataText(getResources().getString(R.string.str_no_data));
         vPieChart.setNoDataTextColor(defColor);
         vPieChart.setUsePercentValues(true);//使用百分比显示
         vPieChart.getDescription().setEnabled(false);//是否启用描述
