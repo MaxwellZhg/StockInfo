@@ -73,7 +73,7 @@ class MarketStockConsFragment :AbsSwipeBackNetFragment<FragmentMarketStockConsBi
         (rv_point_stock.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_point_stock.adapter = infoadapter
         //解决数据加载不完的问题
-        infoadapter?.notifyDataSetChanged()
+        //infoadapter?.notifyDataSetChanged()
         tv_up_down_price.setOnClickListener(this)
         tv_up_down_rate.setOnClickListener(this)
         tv_up_down_count.setOnClickListener(this)

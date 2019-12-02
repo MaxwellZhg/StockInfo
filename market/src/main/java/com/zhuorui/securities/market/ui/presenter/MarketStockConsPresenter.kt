@@ -93,7 +93,7 @@ class MarketStockConsPresenter :AbsNetPresenter<MarketStockConsView,MarketStockC
                 model.setOnChangeDataCallBack(this)
                 tempList.add(model)
             }
-            viewModel?.infos?.value?.addAll(tempList)
+            viewModel?.infos?.value =tempList
             // 订阅价格
             var disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
                 emitter.onNext(topicPrice(event.list as MutableList<StockConsInfoResponse.ListInfo>))
