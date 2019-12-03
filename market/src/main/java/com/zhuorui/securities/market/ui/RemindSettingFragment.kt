@@ -34,7 +34,7 @@ import java.util.regex.Pattern
  *    author : PengXianglin
  *    e-mail : peng_xianglin@163.com
  *    date   : 2019/8/22 14:22
- *    desc   :
+ *    desc   : 股票设置提醒界面
  */
 class RemindSettingFragment :
     AbsSwipeBackEventFragment<FragmentRemindSettingBinding, RemindSettingViewModel, RemindSettingView, RemindSettingPresenter>(),
