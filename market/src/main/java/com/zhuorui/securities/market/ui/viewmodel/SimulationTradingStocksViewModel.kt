@@ -21,7 +21,7 @@ class SimulationTradingStocksViewModel : ViewModel() {
     // 股票交易收费规则
     val stockFeeRules = MutableLiveData<Map<Int, GetFeeTemplateResponse.Data>>()
     // 当前价格：如13.75
-    val price = MutableLiveData<BigDecimal>()
+    val last = MutableLiveData<BigDecimal>()
     // 跌涨价格：如-1.26、+1.68
     val diffPrice = MutableLiveData<BigDecimal>()
     // 涨跌幅：如-0.0018（-0.18%）
