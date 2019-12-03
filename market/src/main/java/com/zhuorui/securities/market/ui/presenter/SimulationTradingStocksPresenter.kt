@@ -388,7 +388,6 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      */
     override fun update(subject: Subject<*>?) {
         if (subject is StockPriceDataManager) {
-            val stockInfo = viewModel?.stockInfo?.value ?: return
             updatePrice(subject.priceData)
         }
     }
