@@ -1,5 +1,7 @@
 package com.zhuorui.securities.market.ui
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -10,8 +12,10 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.DevComfirmDailog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.BR
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.databinding.FragmentRemindSettingBinding
@@ -35,12 +39,14 @@ import java.util.regex.Pattern
 class RemindSettingFragment :
     AbsSwipeBackEventFragment<FragmentRemindSettingBinding, RemindSettingViewModel, RemindSettingView, RemindSettingPresenter>(),
     RemindSettingView, View.OnClickListener, TextWatcher, View.OnTouchListener, View.OnFocusChangeListener {
-    private var stockInfo: StockMarketInfo? = null
+
     private var upPrice: Boolean = false
     private var downPrice: Boolean = false
     private var upRate: Boolean = false
     private var downRate: Boolean = false
-    val pattern = "^([1-9]\\d*(\\.\\d*[1-9])?)|(0\\.\\d*[1-9])\$"
+    private val pattern = "^([1-9]\\d*(\\.\\d*[1-9])?)|(0\\.\\d*[1-9])\$"
+    /* 加载对话框 */
+    private lateinit var phoneDevDailog: DevComfirmDailog
 
     companion object {
         fun newInstance(stockInfo: StockMarketInfo?): RemindSettingFragment {
@@ -61,7 +67,7 @@ class RemindSettingFragment :
         get() = BR.viewModel
 
     override val createPresenter: RemindSettingPresenter
-        get() = RemindSettingPresenter(requireContext())
+        get() = RemindSettingPresenter()
 
     override val createViewModel: RemindSettingViewModel?
         get() = ViewModelProviders.of(this).get(RemindSettingViewModel::class.java)
@@ -75,7 +81,8 @@ class RemindSettingFragment :
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        stockInfo = arguments?.getParcelable(StockMarketInfo::class.java.simpleName)
+        val stockInfo = arguments?.getParcelable<StockMarketInfo>(StockMarketInfo::class.java.simpleName)
+        presenter?.setStockInfo(stockInfo)
         presenter?.checkSetting().let {
             if (it!!) {
                 rl_notice.visibility = View.GONE
@@ -84,52 +91,21 @@ class RemindSettingFragment :
             }
         }
 
-
         iv_back.setOnClickListener(this)
-        textView.text = stockInfo?.name
+        tv_stock_name.text = stockInfo?.name
         when (stockInfo?.ts) {
             StockTsEnum.HK.name -> {
-                imageView.setImageResource(R.mipmap.ic_ts_hk)
+                iv_ts.setImageResource(R.mipmap.ic_ts_hk)
             }
             StockTsEnum.SH.name -> {
-                imageView.setImageResource(R.mipmap.ic_ts_sh)
+                iv_ts.setImageResource(R.mipmap.ic_ts_sh)
             }
             StockTsEnum.SZ.name -> {
-                imageView.setImageResource(R.mipmap.ic_ts_sz)
+                iv_ts.setImageResource(R.mipmap.ic_ts_sz)
             }
         }
+        tv_stock_code.text = stockInfo?.code
 
-        textView2.text = stockInfo?.code
-        val diffRate = if (stockInfo?.diffRate == null) 0 else MathUtil.rounded(stockInfo?.diffRate!!).toInt()
-        when {
-            diffRate == 0 -> {
-                tv_price.setText(if (stockInfo?.last == null) "--" else stockInfo?.last.toString(), 0)
-                tv_diff_price_count.setText(
-                    if (stockInfo?.diffPrice == null) "--" else stockInfo?.diffPrice.toString(),
-                    0
-                )
-                tv_diff_rate_count.setText(if (stockInfo?.diffRate == null) "--" else stockInfo?.diffRate.toString(), 0)
-            }
-            diffRate > 0 -> {
-                tv_price.setText(if (stockInfo?.last == null) "--" else stockInfo?.last.toString(), 1)
-                tv_diff_price_count.setText(
-                    if (stockInfo?.diffPrice == null) "--" else stockInfo?.diffPrice.toString(),
-                    1
-                )
-                tv_diff_rate_count.setText(if (stockInfo?.diffRate == null) "--" else stockInfo?.diffRate.toString(), 1)
-            }
-            else -> {
-                tv_price.setText(if (stockInfo?.last == null) "--" else stockInfo?.last.toString(), -1)
-                tv_diff_price_count.setText(
-                    if (stockInfo?.diffPrice == null) "--" else stockInfo?.diffPrice.toString(),
-                    -1
-                )
-                tv_diff_rate_count.setText(
-                    if (stockInfo?.diffRate == null) "--" else stockInfo?.diffRate.toString(),
-                    -1
-                )
-            }
-        }
         et_up_price.addTextChangedListener(this)
         et_down_price.addTextChangedListener(this)
         et_up_rate.addTextChangedListener(this)
@@ -168,18 +144,62 @@ class RemindSettingFragment :
                 deatilSwithBtn(iv_down_rate, downRate)
             }
             R.id.tv_save -> {
-                presenter?.deatilSave(
+                deatilSave(
                     et_up_price.text.toString(),
                     et_down_price.text.toString(),
                     et_up_rate.text.toString(),
                     et_down_rate.text.toString(),
-                    stockInfo
+                    presenter?.getStockInfo()
                 )
             }
             R.id.tv_open_setting -> {
                 GotoSettingUtil.gotoSetting(requireContext())
             }
         }
+    }
+
+    private fun deatilSave(
+        upprice: String,
+        downprice: String,
+        uprate: String,
+        downrate: String,
+        stockinfo: StockMarketInfo?
+    ) {
+        if (!TextUtils.isEmpty(upprice) && upprice.toBigDecimal() < stockinfo?.last) {
+            context?.let { ResUtil.getString(R.string.up_setting_tips)?.let { it1 -> setDailog(it, it1) } }
+            phoneDevDailog.show()
+        } else if (!TextUtils.isEmpty(downprice) && downprice.toBigDecimal() > stockinfo?.last) {
+            context?.let { ResUtil.getString(R.string.down_setting_tips)?.let { it1 -> setDailog(it, it1) } }
+            phoneDevDailog.show()
+        } else if (!TextUtils.isEmpty(uprate) && !Pattern.compile(pattern).matcher(uprate).find()) {
+            context?.let { ResUtil.getString(R.string.up_rate_tips)?.let { it1 -> setDailog(it, it1) } }
+            phoneDevDailog.show()
+        } else if (!TextUtils.isEmpty(downrate) && !Pattern.compile(pattern).matcher(downrate).find()) {
+            context?.let { ResUtil.getString(R.string.down_rate_tips)?.let { it1 -> setDailog(it, it1) } }
+            phoneDevDailog.show()
+        } else if (TextUtils.isEmpty(upprice) && TextUtils.isEmpty(downprice) && TextUtils.isEmpty(uprate) && TextUtils.isEmpty(
+                downrate
+            )
+        ) {
+            ResUtil.getString(R.string.plaease_input_num)?.let { ToastUtil.instance.toastCenter(it) }
+        }
+    }
+
+    private fun setDailog(context: Context, str: String) {
+        phoneDevDailog = DevComfirmDailog.createWidth255Dialog(context, true, true)
+            .setNoticeText(R.string.tips)
+            .setMsgText(str)
+            .setCancelText(R.string.cancle)
+            .setConfirmText(R.string.ensure)
+            .setCallBack(object : DevComfirmDailog.CallBack {
+                override fun onCancel() {
+
+                }
+
+                override fun onConfirm() {
+
+                }
+            })
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -269,6 +289,7 @@ class RemindSettingFragment :
         return false
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showCancleDrawable(edittext: EditText, iv: ImageButton, str: String, tv: TextView) {
         iv.setImageResource(R.mipmap.ic_switch_open)
         edittext.setCompoundDrawablesWithIntrinsicBounds(
@@ -280,7 +301,7 @@ class RemindSettingFragment :
         when (edittext) {
             et_up_price -> {
                 upPrice = true
-                if (str.toBigDecimal() < stockInfo?.last) {
+                if (str.toBigDecimal() < presenter?.getStockInfo()?.last) {
                     tv.visibility = View.VISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
@@ -292,11 +313,12 @@ class RemindSettingFragment :
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
-                    var count: BigDecimal? = stockInfo?.last?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
-                        MathUtil.multiply2(
-                            it, 100.toBigDecimal()
-                        ) - 100.toBigDecimal()
-                    }
+                    val count: BigDecimal? =
+                        presenter?.getStockInfo()?.last?.let { MathUtil.divide2(str.toBigDecimal(), it) }?.let {
+                            MathUtil.multiply2(
+                                it, 100.toBigDecimal()
+                            ) - 100.toBigDecimal()
+                        }
                     tv.text = ResUtil.getString(R.string.compare_price_up) + count.toString() + "%"
                     tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_up_price.setTextColor(it) }
@@ -305,7 +327,7 @@ class RemindSettingFragment :
             }
             et_down_price -> {
                 downPrice = true
-                if (str.toBigDecimal() > stockInfo?.last) {
+                if (str.toBigDecimal() > presenter?.getStockInfo()?.last) {
                     tv.visibility = View.VISIBLE
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
@@ -317,15 +339,16 @@ class RemindSettingFragment :
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
-                    var count: BigDecimal? = stockInfo?.last?.let {
-                        stockInfo?.last?.let { MathUtil.subtract2(it, str.toBigDecimal()) }?.let { it1 ->
-                            MathUtil.divide2(
-                                it1,
-                                it
-                            )
-                        }
+                    val count: BigDecimal? = presenter?.getStockInfo()?.last?.let {
+                        presenter?.getStockInfo()?.last?.let { MathUtil.subtract2(it, str.toBigDecimal()) }
+                            ?.let { it1 ->
+                                MathUtil.divide2(
+                                    it1,
+                                    it
+                                )
+                            }
                     }
-                    var downprecent: BigDecimal? = count?.let { MathUtil.multiply2(it, 100.toBigDecimal()) }
+                    val downprecent: BigDecimal? = count?.let { MathUtil.multiply2(it, 100.toBigDecimal()) }
                     tv.text = ResUtil.getString(R.string.compare_price_down) + downprecent.toString() + "%"
                     tv.visibility = View.VISIBLE
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_price.setTextColor(it) }
@@ -347,9 +370,9 @@ class RemindSettingFragment :
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_downrate_nomatch_tips.visibility = View.INVISIBLE
-                    var count: BigDecimal =
+                    val count: BigDecimal =
                         MathUtil.add2(MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()), 1.toBigDecimal())
-                    var upprice: BigDecimal? = stockInfo?.last?.let { MathUtil.multiply2(it, count) }
+                    val upprice: BigDecimal? = presenter?.getStockInfo()?.last?.let { MathUtil.multiply2(it, count) }
                     tv.text = ResUtil.getString(R.string.compare_price_to) + upprice
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
@@ -371,9 +394,9 @@ class RemindSettingFragment :
                     tv_up_nomatch_tips.visibility = View.INVISIBLE
                     tv_down_nomatch_tips.visibility = View.INVISIBLE
                     tv_uprate_nomatch_tips.visibility = View.INVISIBLE
-                    var count: BigDecimal =
+                    val count: BigDecimal =
                         MathUtil.subtract2(1.toBigDecimal(), MathUtil.divide2(str.toBigDecimal(), 100.toBigDecimal()))
-                    var downprice: BigDecimal? = stockInfo?.last?.let { MathUtil.multiply2(it, count) }
+                    val downprice: BigDecimal? = presenter?.getStockInfo()?.last?.let { MathUtil.multiply2(it, count) }
                     tv.text = ResUtil.getString(R.string.compare_price_to) + downprice
                     ResUtil.getColor(R.color.color_FFFFFFFF)?.let { et_down_rate.setTextColor(it) }
                 }
@@ -481,5 +504,11 @@ class RemindSettingFragment :
     override fun onDetach() {
         super.onDetach()
         hideSoftInput()
+    }
+
+    override fun updateStockPrice(price: BigDecimal?, diffPrice: BigDecimal?, diffRate: BigDecimal?, diffState: Int) {
+        tv_stock_price.setText(price?.toString() ?: "--", diffState)
+        tv_diff_pirce.setText(diffPrice?.toString() ?: "--", diffState)
+        tv_diff_rate.setText(diffRate?.toString() ?: "--", diffState)
     }
 }
