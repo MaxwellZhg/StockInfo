@@ -108,4 +108,10 @@
     <string name="str_reasons_fail_tips">很抱歉，开户审核未通过，未通过原因：\n</string>
     <string name="btn_edit_open_data">修改开户资料</string>
     <string name="str_audit_failed">审核不通过</string>
+    <string name="risk_assessment_tip1">本人是否为该证券帐户唯一的最终实益所有人</string>
+    <string name="risk_assessment_tip2">本人是否为任何交易所或交易市场的上市公司 董事、高级管理人员</string>
+    <string name="risk_assessment_tip3">本人是否为卓锐证券于香港证监会的持牌机构的职员（包括董事）或亲属</string>
+    <string name="risk_assessment_tip4">本人并未担任任何重要公职、例如重要政治人物、政府高级官员、司法或军队高级官员、国有企业高级行政人员等</string>
+    <string name="ohter_notes_tips">非常抱歉，根据您所披露的所有信息和资料，卓锐证券暂时无法为你开通相关账户。如有疑问，请拨打客服电话%s咨询</string>
+    <string name="tel">+852 2541 1234</string>
 </resources>

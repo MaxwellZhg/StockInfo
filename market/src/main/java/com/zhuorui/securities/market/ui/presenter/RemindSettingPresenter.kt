@@ -1,17 +1,21 @@
 package com.zhuorui.securities.market.ui.presenter
 
-import android.content.Context
-import android.text.TextUtils
 import androidx.core.app.NotificationManagerCompat
-import com.zhuorui.commonwidget.dialog.DevComfirmDailog
+import com.zhuorui.commonwidget.model.Observer
+import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
-import com.zhuorui.securities.base2app.util.ResUtil
-import com.zhuorui.securities.base2app.util.ToastUtil
-import com.zhuorui.securities.market.R
+import com.zhuorui.securities.market.manager.StockPriceDataManager
+import com.zhuorui.securities.market.model.PushStockPriceData
 import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.view.RemindSettingView
 import com.zhuorui.securities.market.ui.viewmodel.RemindSettingViewModel
-import java.util.regex.Pattern
+import com.zhuorui.securities.market.util.MathUtil
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import java.math.BigDecimal
+import java.util.*
 
 /**
  *    author : PengXianglin
@@ -19,52 +23,94 @@ import java.util.regex.Pattern
  *    date   : 2019/8/22 14:28
  *    desc   :
  */
-class RemindSettingPresenter(context: Context) : AbsEventPresenter<RemindSettingView, RemindSettingViewModel>(),
-    DevComfirmDailog.CallBack {
-    val pattern = "^([1-9]\\d*(\\.\\d*[1-9])?)|(0\\.\\d*[1-9])\$"
-    /* 加载对话框 */
-    private lateinit var phoneDevDailog:DevComfirmDailog
+class RemindSettingPresenter : AbsEventPresenter<RemindSettingView, RemindSettingViewModel>(), Observer {
 
-    override fun init() {
-        super.init()
-    }
+    private var priceDataManager: StockPriceDataManager? = null
+    private val disposables = LinkedList<Disposable>()
 
-    fun deatilSave(upprice: String, downprice: String, uprate: String, downrate: String, stockinfo: StockMarketInfo?) {
-        if (!TextUtils.isEmpty(upprice) && upprice.toBigDecimal() < stockinfo?.last) {
-            context?.let { ResUtil.getString(R.string.up_setting_tips)?.let { it1 -> setDailog(it, it1) } }
-            phoneDevDailog.show()
-        } else if (!TextUtils.isEmpty(downprice) && downprice.toBigDecimal() > stockinfo?.last) {
-            context?.let { ResUtil.getString(R.string.down_setting_tips)?.let { it1 -> setDailog(it, it1) } }
-            phoneDevDailog.show()
-        } else if (!TextUtils.isEmpty(uprate) && !Pattern.compile(pattern).matcher(uprate).find()) {
-            context?.let { ResUtil.getString(R.string.up_rate_tips)?.let { it1 -> setDailog(it, it1) } }
-            phoneDevDailog.show()
-        } else if (!TextUtils.isEmpty(downrate) && !Pattern.compile(pattern).matcher(downrate).find()) {
-            context?.let { ResUtil.getString(R.string.down_rate_tips)?.let { it1 -> setDailog(it, it1) } }
-            phoneDevDailog.show()
-        }else if(TextUtils.isEmpty(upprice)&&TextUtils.isEmpty(downprice)&&TextUtils.isEmpty(uprate)&&TextUtils.isEmpty(downrate)){
-            ResUtil.getString(R.string.plaease_input_num)?.let { ToastUtil.instance.toastCenter(it) }
+    fun setStockInfo(stockInfo: StockMarketInfo?) {
+        viewModel?.stockInfo?.value = stockInfo
+        // 取消股价订阅
+        if (stockInfo != null) {
+            priceDataManager = StockPriceDataManager.getInstance(stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+            // 尝试从缓存中获取股价
+            val priceData = priceDataManager?.priceData
+            if (priceData != null) {
+                updatePrice(priceData)
+            } else {
+                // 添加查询价格监听
+                priceDataManager?.registerObserver(this)
+            }
         }
     }
 
-    override fun onCancel() {
-
+    fun getStockInfo(): StockMarketInfo? {
+        return viewModel?.stockInfo?.value
     }
 
-    override fun onConfirm() {
-    }
-    fun setDailog(context :Context,str:String){
-       phoneDevDailog= DevComfirmDailog.
-            createWidth255Dialog(context,true,true)
-            .setNoticeText(R.string.tips)
-            .setMsgText(str)
-            .setCancelText(R.string.cancle)
-            .setConfirmText(R.string.ensure)
-            .setCallBack(this)
+    /**
+     * 查询股价
+     */
+    override fun update(subject: Subject<*>?) {
+        if (subject is StockPriceDataManager) {
+            updatePrice(subject.priceData)
+            // 拿到股价后，删掉回调
+            priceDataManager?.removeObserver(this)
+            priceDataManager = null
+        }
     }
 
-    fun checkSetting():Boolean?{
+    private fun updatePrice(priceData: PushStockPriceData?) {
+        if (priceData == null) {
+            return
+        }
+        // 在主线程更新数据
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            emitter.onNext(true)
+            emitter.onComplete()
+        }).subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                // 获取当前最新股价
+                val last = MathUtil.rounded3(priceData.last!!)
+                viewModel?.stockInfo?.value?.last = last
+                // 计算跌涨价格
+                val diffPrice = MathUtil.rounded3(priceData.last!!.subtract(priceData.open))
+                viewModel?.stockInfo?.value?.diffPrice = diffPrice
+                // 计算跌涨幅百分比
+                val diffRate = MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), priceData.open!!)
+                viewModel?.stockInfo?.value?.diffRate = diffRate
+
+                // 更新界面
+                var diffState = MathUtil.rounded(diffRate).toInt()
+                if (diffState > 1) {
+                    diffState = 1
+                } else if (diffState < -1) {
+                    diffState = -1
+                }
+                view?.updateStockPrice(last, diffPrice, diffRate, diffState)
+            }
+        disposables.add(disposable)
+    }
+
+    fun checkSetting(): Boolean? {
         val notificationManager: NotificationManagerCompat? = context?.let { NotificationManagerCompat.from(it) }
         return notificationManager?.areNotificationsEnabled()
+    }
+
+    override fun destroy() {
+        super.destroy()
+
+        // 取消股价回调
+        val stockInfo = viewModel?.stockInfo?.value
+        if (stockInfo != null && priceDataManager != null) {
+            priceDataManager?.removeObserver(this)
+        }
+
+        // 释放disposable
+        if (disposables.isNullOrEmpty()) return
+        for (disposable in disposables) {
+            disposable.dispose()
+        }
+        disposables.clear()
     }
 }

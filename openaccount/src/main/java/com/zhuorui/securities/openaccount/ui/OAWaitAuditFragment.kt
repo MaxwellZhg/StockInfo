@@ -83,7 +83,7 @@ class OAWaitAuditFragment :
             if (TextUtils.isEmpty(errMsg)) {
                 back()
             } else {
-                val fragment = OpenInfoManager.getInstance()?.getFailStartFragment()
+                val fragment = OpenInfoManager.getInstance().getFailStartFragment()
                 if (fragment != null)
                     startWithPop(fragment)
             }

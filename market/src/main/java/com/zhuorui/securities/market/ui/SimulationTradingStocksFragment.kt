@@ -194,7 +194,7 @@ class SimulationTradingStocksFragment :
     }
 
     @SuppressLint("SetTextI18n")
-    override fun updateStockPrice(price: BigDecimal?, diffPrice: BigDecimal?, diffRate: BigDecimal?, diffState: Int?) {
+    override fun updateStockPrice(price: BigDecimal?, diffPrice: BigDecimal?, diffRate: BigDecimal?, diffState: Int) {
         if (upArrowResId == 0 || downArrowResId == 0) {
             val stocksThemeColor = LocalSettingsConfig.getInstance().stocksThemeColor
             if (stocksThemeColor == StocksThemeColor.redUpGreenDown) {
@@ -205,35 +205,21 @@ class SimulationTradingStocksFragment :
                 downArrowResId = R.mipmap.ic_stock_down_arrow_red
             }
         }
-        var pctTag = diffState
-        if (pctTag == null) {
-            val diffValue = MathUtil.rounded(diffRate ?: BigDecimal.ZERO).toInt()
-            pctTag = when {
-                diffValue == 0 -> {
-                    0
-                }
-                diffValue > 0 -> {
-                    1
-                }
-                else -> {
-                    -1
-                }
-            }
-        }
+
         when {
-            pctTag == 0 -> {
+            (diffState == 0) -> {
                 tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
             }
-            pctTag > 0 -> {
+            diffState > 0 -> {
                 tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, upArrowResId, 0)
             }
             else -> {
                 tv_stock_price.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, downArrowResId, 0)
             }
         }
-        tv_stock_price.setText(price?.toString() ?: "--", pctTag)
-        tv_diff_pirce.setText(diffPrice?.toString() ?: "--", pctTag)
-        tv_diff_rate.setText(diffRate?.toString() ?: "--", pctTag)
+        tv_stock_price.setText(price?.toString() ?: "--", diffState)
+        tv_diff_pirce.setText(diffPrice?.toString() ?: "--", diffState)
+        tv_diff_rate.setText(diffRate?.toString() ?: "--", diffState)
     }
 
     override fun updateStockTrans(transData: PushStockTransData, buyRate: Double, sellRate: Double) {

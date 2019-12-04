@@ -136,7 +136,7 @@ open class OpenInfoManager {
             }
             //已做身份证ocr
             10 -> {
-                if (TextUtils.isEmpty(info?.cardFrontPhoto) || TextUtils.isEmpty(info?.cardBackPhoto))
+                if (TextUtils.isEmpty(info?.cardFrontPhotoUrl) || TextUtils.isEmpty(info?.cardBackPhotoUrl))
                     OAUploadDocumentsFragment.newInstance()
                 else
                     OAConfirmDocumentsFragment.newInstance()

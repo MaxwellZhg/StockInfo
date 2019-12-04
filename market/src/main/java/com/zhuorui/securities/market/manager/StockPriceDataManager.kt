@@ -77,8 +77,11 @@ class StockPriceDataManager private constructor(val ts: String, val code: String
             if (priceData != null) {
                 notifyAllObservers()
             }
-            // 订阅股价
-            stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, ts, code, type)
+            // 当不为空时代表恢复订阅
+            if (stockTopic == null) {
+                // 订阅股价
+                stockTopic = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, ts, code, type)
+            }
             SocketClient.getInstance().bindTopic(stockTopic)
         }
     }
@@ -101,17 +104,13 @@ class StockPriceDataManager private constructor(val ts: String, val code: String
         }
     }
 
+    /**
+     * 重新连接tcp
+     */
     @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
     fun onSocketAuthCompleteEvent(event: SocketAuthCompleteEvent) {
-
-        if (priceData == null) {
-            queryPrice()
-        }
-
-        // 恢复订阅
-        if (stockTopic != null) {
-            SocketClient.getInstance().bindTopic(stockTopic)
-        }
+        // 重新查询一次价格
+        queryPrice()
     }
 
     override fun toString(): String {

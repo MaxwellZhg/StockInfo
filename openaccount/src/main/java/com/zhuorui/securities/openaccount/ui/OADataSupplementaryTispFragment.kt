@@ -65,7 +65,7 @@ class OADataSupplementaryTispFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_next -> {
-                val f = OpenInfoManager.getInstance()?.getNextFragment()
+                val f = OpenInfoManager.getInstance().getNextFragment()
                 if (f != null) {
                     startWithPop(f)
                 }

@@ -67,13 +67,13 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onOpenInfoResponse(response: OpenInfoResponse) {
         // 记录开户信息
-        OpenInfoManager.getInstance()?.info = response.data
+        OpenInfoManager.getInstance().info = response.data
         setIdCardData()
     }
 
     fun setIdCardData() {
-        if (OpenInfoManager.getInstance()?.info == null) return
-        val data: OpenAccountInfo = OpenInfoManager.getInstance()?.info!!
+        if (OpenInfoManager.getInstance().info == null) return
+        val data: OpenAccountInfo = OpenInfoManager.getInstance().info!!
         //名字
         view?.setName(data.cardName)
         //性别
@@ -82,21 +82,21 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
         val gender = if (genderPos == null) "" else genderPickerData?.get(genderPos)
         view?.setGender(gender)
         //生日
-        mCardBirth = timeFormat(data?.cardBirth, SERVICE_DATE_FORMAT, BIRTHDAY_DATE_FORMAT)
+        mCardBirth = timeFormat(data.cardBirth, SERVICE_DATE_FORMAT, BIRTHDAY_DATE_FORMAT)
         view?.setBirthday(mCardBirth)
         //身份证号
         view?.setCardNo(data?.cardNo)
         //开始日期
-        mCardValidStartDate = timeFormat(data?.cardValidStartDate, SERVICE_DATE_FORMAT, BIRTHDAY_DATE_FORMAT)
+        mCardValidStartDate = timeFormat(data.cardValidStartDate, SERVICE_DATE_FORMAT, BIRTHDAY_DATE_FORMAT)
         view?.setCardValidStartDate(mCardValidStartDate)
         //结束日期
         initCardValidEndData(mCardValidStartDate)
-        mCardValidYear = if (data?.cardValidYear != null) data?.cardValidYear!! else 0
+        mCardValidYear = data.cardValidYear ?: 0
         val pos = idCardValidNumDate?.indexOf(mCardValidYear)
         mCardValidEndDate = if (pos != null && pos != -1) endValidPickerData?.get(pos) else ""
         view?.setCardValidEndDate(mCardValidEndDate)
         //地址
-        view?.setCardAddress(data?.cardAddress)
+        view?.setCardAddress(data.cardAddress)
 
     }
 
@@ -105,10 +105,10 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
      *
      */
     fun initCardValidEndData(date: String?) {
-        if (idCardValidNumDate == null || date == null) return
+        if (idCardValidNumDate == null || TextUtils.isEmpty(date)) return
         val list: MutableList<Int> = idCardValidNumDate as MutableList<Int>
         val tms = Calendar.getInstance()
-        tms.timeInMillis = SimpleDateFormat(BIRTHDAY_DATE_FORMAT).parse(date).time
+        tms.timeInMillis = SimpleDateFormat(BIRTHDAY_DATE_FORMAT).parse(date!!).time
         val y: Int = tms.get(Calendar.YEAR)
         val m: Int = tms.get(Calendar.MONTH) + 1
         val d: Int = tms.get(Calendar.DAY_OF_MONTH)
@@ -193,15 +193,15 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
         val request = SubIdentityRequest(
             idCardNo.toString(),
             cardName.toString(),
-            mCardSex,
-            OpenInfoManager.getInstance()?.info?.cardNation.toString(),
+//            mCardSex,
+            OpenInfoManager.getInstance().info?.cardNation.toString(),
             cardAddress.toString(),
-            OpenInfoManager.getInstance()?.info?.cardAuthority.toString(),
-            cardValidStartDate,
-            cardValidEndDate,
-            mCardValidYear.toString(),
-            cardBirth,
-            OpenInfoManager.getInstance()?.info?.id.toString(),
+            OpenInfoManager.getInstance().info?.cardAuthority.toString(),
+//            cardValidStartDate,
+//            cardValidEndDate,
+//            mCardValidYear.toString(),
+//            cardBirth,
+            OpenInfoManager.getInstance().info?.id.toString(),
             transactions.createTransaction()
         )
         Cache[IOpenAccountNet::class.java]?.subIdentity(request)
@@ -211,7 +211,7 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSubIdentityResponse(response: SubIdentityResponse) {
         // 记录开户信息
-        OpenInfoManager.getInstance()?.readSubIdentityResponse(response.data)
+        OpenInfoManager.getInstance().readSubIdentityResponse(response.data)
         view?.toNext()
     }
 
@@ -233,22 +233,26 @@ class OAConfirmDocumentsPresenter : AbsNetPresenter<OAConfirmDocumentsView, OACo
         var t = ""
         if (TextUtils.isEmpty(cardName)) {
             t = ResUtil.getString(R.string.str_chinese_name) + ResUtil.getString(R.string.str_not_empty)
-        } else if (mCardSex == -1) {
-            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_gender)
-        } else if (TextUtils.isEmpty(cardBirth)) {
-            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_date_of_birth)
-        } else if (TextUtils.isEmpty(idCardNo)) {
-            t = ResUtil.getString(R.string.str_id_card_no) + ResUtil.getString(R.string.str_not_empty)
-        } else if (TextUtils.isEmpty(cardValidStartDate)) {
-            t =
-                ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_beginning)
-        } else if (TextUtils.isEmpty(cardValidEndDate)) {
-            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_end)
-        } else if (TextUtils.isEmpty(cardAddress)) {
-            t = ResUtil.getString(R.string.str_document_address) + ResUtil.getString(R.string.str_not_empty)
-        } else if (mCardValidYear != -1 && dateCompareToday(cardValidEndDate, SERVICE_DATE_FORMAT) < 1) {
-            t = ResUtil.getString(R.string.str_documents_have_expired).toString()
         }
+//        else if (mCardSex == -1) {
+//            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_gender)
+//        } else if (TextUtils.isEmpty(cardBirth)) {
+//            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_date_of_birth)
+//        }
+        else if (TextUtils.isEmpty(idCardNo)) {
+            t = ResUtil.getString(R.string.str_id_card_no) + ResUtil.getString(R.string.str_not_empty)
+        }
+//        else if (TextUtils.isEmpty(cardValidStartDate)) {
+//            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_beginning)
+//        } else if (TextUtils.isEmpty(cardValidEndDate)) {
+//            t = ResUtil.getString(R.string.str_please_select) + ResUtil.getString(R.string.str_validity_period_end)
+//        }
+        else if (TextUtils.isEmpty(cardAddress)) {
+            t = ResUtil.getString(R.string.str_document_address) + ResUtil.getString(R.string.str_not_empty)
+        }
+//        else if (mCardValidYear != -1 && dateCompareToday(cardValidEndDate, SERVICE_DATE_FORMAT) < 1) {
+//            t = ResUtil.getString(R.string.str_documents_have_expired).toString()
+//        }
 //        else if (!isAdulthood(cardBirth,SERVICE_DATE_FORMAT)){
 //        }
         return if (TextUtils.isEmpty(t)) {

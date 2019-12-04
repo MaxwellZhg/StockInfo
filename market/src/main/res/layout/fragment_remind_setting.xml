@@ -76,10 +76,11 @@
                 android:background="@color/color_35373E"
                 android:layout_marginTop="5dp"
                 android:layout_height="51dp">
+
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="中国平安"
+                    android:text="--"
                     android:textColor="@color/color_FFFFFFFF"
                     android:textSize="17sp"
                     android:layout_marginStart="15dp"
@@ -87,7 +88,7 @@
                     android:includeFontPadding="false"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:id="@+id/textView"/>
+                    android:id="@+id/tv_stock_name"/>
 
             <ImageView android:layout_width="12dp"
                        android:layout_height="10dp"
@@ -96,21 +97,21 @@
                        app:layout_constraintStart_toStartOf="parent"
                        app:layout_constraintBottom_toBottomOf="parent"
                        android:src="@mipmap/ic_ts_sz"
-                       android:id="@+id/imageView"/>
+                       android:id="@+id/iv_ts"/>
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="601318"
+                    android:text="--"
                     android:textColor="@color/color_ff8b93a8"
                     android:textSize="10sp"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toEndOf="@+id/iv_ts"
                     android:includeFontPadding="false"
-                    app:layout_constraintTop_toTopOf="@+id/imageView"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="@+id/iv_ts"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_ts"
                     android:layout_marginStart="3dp"
                     tools:ignore="SmallSp"
-                    android:id="@+id/textView2"/>
+                    android:id="@+id/tv_stock_code"/>
 
             <TextView
                     android:id="@+id/tv_now_price"
@@ -134,12 +135,13 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:includeFontPadding="false"
                     tools:ignore="MissingConstraints"
-                    android:id="@+id/tv_price"
+                    android:id="@+id/tv_stock_price"
+                    android:text="--"
                     app:layout_constraintEnd_toEndOf="@+id/tv_now_price"
                     app:layout_constraintStart_toStartOf="@+id/tv_now_price"/>
 
             <TextView
-                    android:id="@+id/tv_diff_pirce"
+                    android:id="@+id/tv_diff_pirce_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/diff_price"
@@ -158,14 +160,15 @@
                     android:includeFontPadding="false"
                     android:layout_marginBottom="7dp"
                     app:zr_showPrecentUpDown="true"
-                    android:id="@+id/tv_diff_price_count"
+                    android:id="@+id/tv_diff_pirce"
+                    android:text="--"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:ignore="MissingConstraints"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_diff_pirce"
-                    app:layout_constraintStart_toStartOf="@+id/tv_diff_pirce"/>
+                    app:layout_constraintEnd_toEndOf="@+id/tv_diff_pirce_label"
+                    app:layout_constraintStart_toStartOf="@+id/tv_diff_pirce_label"/>
 
             <TextView
-                    android:id="@+id/tv_diff_rate"
+                    android:id="@+id/tv_diff_rate_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/updown"
@@ -176,18 +179,20 @@
                     android:textSize="13sp"
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"/>
+
             <com.zhuorui.commonwidget.ZRStockTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:zr_showPrecentSymbol="true"
                     android:textSize="14sp"
-                    android:id="@+id/tv_diff_rate_count"
+                    android:id="@+id/tv_diff_rate"
+                    android:text="--"
                     android:layout_marginBottom="7dp"
                     android:includeFontPadding="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:ignore="MissingConstraints"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_diff_rate"
-                    app:layout_constraintStart_toStartOf="@+id/tv_diff_rate"/>
+                    app:layout_constraintEnd_toEndOf="@+id/tv_diff_rate_label"
+                    app:layout_constraintStart_toStartOf="@+id/tv_diff_rate_label"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
@@ -358,15 +363,15 @@
                     android:textColor="@color/color_FFFFFFFF"
                     android:layout_toEndOf="@+id/tv_price_threshold"
                     android:layout_height="23dp"/>
-              <TextView android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:textSize="17sp"
-                     android:id="@+id/tv_mark"
-                     android:layout_toEndOf="@+id/et_up_rate"
-                     android:layout_centerVertical="true"
-                     android:layout_marginLeft="6dp"
-                     android:textColor="@color/color_FFFFFFFF"
-                     android:text="%"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textSize="17sp"
+                      android:id="@+id/tv_mark"
+                      android:layout_toEndOf="@+id/et_up_rate"
+                      android:layout_centerVertical="true"
+                      android:layout_marginLeft="6dp"
+                      android:textColor="@color/color_FFFFFFFF"
+                      android:text="%"/>
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="9sp"

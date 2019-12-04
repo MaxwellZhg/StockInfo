@@ -152,15 +152,15 @@ class TopicStocksAdapter : BaseListAdapter<TopicStockModel>() {
                 else -> {
                     // 正常状态
                     // 跌涨幅是否大于0或者等于0
-                    stockInfo?.diffRate?.let {
-                        val diffPriceVal = MathUtil.rounded(it).toInt()
+                    stockInfo.diffRate?.let {
+                        val diffRate = MathUtil.rounded(it).toInt()
                         when {
-                            diffPriceVal == 0 -> {
+                            diffRate == 0 -> {
                                 tv_price.setText(stockInfo.last.toString(), 0)
                                 stock_up_down.setUpDown(0)
                                 stock_up_down.text = stockInfo.diffRate.toString() + "%"
                             }
-                            diffPriceVal > 0 -> {
+                            diffRate > 0 -> {
                                 tv_price.setText(stockInfo.last.toString(), 1)
                                 stock_up_down.setUpDown(1)
                                 stock_up_down.text = "+" + stockInfo.diffRate + "%"

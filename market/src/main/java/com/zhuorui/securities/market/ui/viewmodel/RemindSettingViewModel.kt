@@ -2,6 +2,7 @@ package com.zhuorui.securities.market.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zhuorui.securities.market.model.StockMarketInfo
 import com.zhuorui.securities.market.ui.adapter.SettingNoticeAdapter
 
 /**
@@ -11,5 +12,9 @@ import com.zhuorui.securities.market.ui.adapter.SettingNoticeAdapter
  *    desc   :
  */
 class RemindSettingViewModel :ViewModel() {
+
+    // 股票基础信息
+    val stockInfo = MutableLiveData<StockMarketInfo>()
+
     var adapter: MutableLiveData<SettingNoticeAdapter> = MutableLiveData()
 }

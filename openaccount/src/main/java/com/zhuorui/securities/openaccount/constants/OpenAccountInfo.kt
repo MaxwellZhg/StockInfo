@@ -22,13 +22,13 @@ class OpenAccountInfo {
     var cardValidStartDate: String? = null //证件有效期起始日 (yyyy-mm-dd),小于等于当前时间
     var cardValidEndDate: String? = null //1、证件有效期结始日( yyyy-mm-dd),大于当前时间2、或者传入-1 表示长期
     var cardValidYear: Int? = null //证件有效期年数 5:五年有效期 ;10:十年有效期; 20:二十年有效期; -1:长期
-    var cardFrontPhoto: String? = null //证件正面照url（有效期为一个小时）
-    var cardBackPhoto: String? = null //证件背面照url（有效期为一个小时）
-    var video: String? = null //活体视频url（有效期为一个小时）
+    var cardFrontPhotoUrl: String? = null //证件正面照url（有效期为一个小时）
+    var cardBackPhotoUrl: String? = null //证件背面照url（有效期为一个小时）
+    var videoUrl: String? = null //活体视频url（有效期为一个小时）
     var validateCode: String? = null //活体视频数字
     var bankCardNo: String? = null //验证的银行卡号
     var bankCardName: String? = null //验证银行卡的银行
-    var signaturePhoto: String? = null //电子签名url（有效期为一个小时）
+    var signaturePhotoUrl: String? = null //电子签名url（有效期为一个小时）
     var mailbox: String? = null //邮箱
     var occupation: Int? = null //就业状态 1:受雇; 2:自雇 ;3:退休 ;4:学生 ;5:其他
     var taxType: Int? = null //税务类型: 1:单一国家 ;2:多个国家

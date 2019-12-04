@@ -54,7 +54,7 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
             emitter.onComplete()
         }).flatMap {
             val oss = OpenInfoManager.getInstance().getOssService(view?.getContext()!!)
-            oss?.getPutObjectObservable(oss!!.createUpImageName(".jpg"), it)
+            oss.getPutObjectObservable(oss.createUpImageName(".jpg"), it)
         }.subscribeOn(Schedulers.io())
             .subscribe {
                 val request = SubSignatureRequest(
@@ -72,7 +72,7 @@ class OASignaturePresenter : AbsNetPresenter<OASignatureView, OASignatureViewMod
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSubSignatureResponse(response: SubSignatureResponse) {
         // 记录开户信息
-        OpenInfoManager.getInstance()?.info?.openStatus = response.data.openStatus
+        OpenInfoManager.getInstance().info?.openStatus = response.data.openStatus
         view?.hideLoading()
         // 跳转到下一步
         view?.jumpToNext()

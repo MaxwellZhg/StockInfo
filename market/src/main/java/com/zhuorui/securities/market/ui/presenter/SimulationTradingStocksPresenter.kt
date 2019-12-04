@@ -1,6 +1,8 @@
 package com.zhuorui.securities.market.ui.presenter
 
 import android.text.TextUtils
+import com.zhuorui.commonwidget.model.Observer
+import com.zhuorui.commonwidget.model.Subject
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -11,6 +13,7 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.market.R
 import com.zhuorui.securities.market.event.SocketAuthCompleteEvent
 import com.zhuorui.securities.market.manager.STInfoManager
+import com.zhuorui.securities.market.manager.StockPriceDataManager
 import com.zhuorui.securities.market.model.*
 import com.zhuorui.securities.market.net.ISimulationTradeNet
 import com.zhuorui.securities.market.net.request.FeeComputeRequest
@@ -20,12 +23,8 @@ import com.zhuorui.securities.market.net.request.StockTradRequest
 import com.zhuorui.securities.market.net.response.FeeComputeResponse
 import com.zhuorui.securities.market.net.response.GetFeeTemplateResponse
 import com.zhuorui.securities.market.net.response.GetStockInfoResponse
-import com.zhuorui.securities.market.socket.SocketApi
 import com.zhuorui.securities.market.socket.SocketClient
-import com.zhuorui.securities.market.socket.push.StocksTopicPriceResponse
 import com.zhuorui.securities.market.socket.push.StocksTopicTransResponse
-import com.zhuorui.securities.market.socket.request.GetStockPriceRequestBody
-import com.zhuorui.securities.market.socket.response.GetStockPriceResponse
 import com.zhuorui.securities.market.ui.SimulationTradingStocksFragment
 import com.zhuorui.securities.market.ui.view.SimulationTradingStocksView
 import com.zhuorui.securities.market.ui.viewmodel.SimulationTradingStocksViewModel
@@ -44,9 +43,8 @@ import java.util.*
  *    desc   :
  */
 class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFragment) :
-    AbsNetPresenter<SimulationTradingStocksView, SimulationTradingStocksViewModel>() {
+    AbsNetPresenter<SimulationTradingStocksView, SimulationTradingStocksViewModel>(), Observer {
 
-    private var stockTopicPrice: StockTopic? = null
     private var stockTopicTrans: StockTopic? = null
     private val disposables = LinkedList<Disposable>()
 
@@ -337,6 +335,13 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
      * 设置选择的自选股
      */
     fun setStock(stockInfo: SearchStockInfo) {
+        // 先取消上一次的订阅
+        val oldStockInfo = viewModel?.stockInfo?.value
+        if (oldStockInfo != null) {
+            StockPriceDataManager.getInstance(oldStockInfo.ts!!, oldStockInfo.code!!, oldStockInfo.type!!)
+                .removeObserver(this)
+        }
+        // 重置新数据
         viewModel?.stockInfo?.value = stockInfo
         viewModel?.stockInfoData?.value = null
         viewModel?.buyPrice?.value = null
@@ -354,16 +359,16 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         )
         // 清除上一次的价格信息
         view?.updateStockPrice(null, null, null, 0)
-        // 取消上一次的订阅
-        if (stockTopicPrice != null) {
-            SocketClient.getInstance().unBindTopic(stockTopicPrice)
-        }
-        // 查询价格
-        getStockPrice()
+        val stockPriceDataManager =
+            StockPriceDataManager.getInstance(stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
+        // 先从缓存中尝试获取股价
+        updatePrice(stockPriceDataManager.priceData)
+        // 再查询股价、订阅股价
+        stockPriceDataManager.registerObserver(this)
+        // 重新订阅当前的自选股买卖档
         if (stockTopicTrans != null) {
             SocketClient.getInstance().unBindTopic(stockTopicTrans)
         }
-        // 重新订阅当前的自选股
         stockTopicTrans =
             StockTopic(StockTopicDataTypeEnum.STOCK_ORDER, stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!)
         SocketClient.getInstance().bindTopic(stockTopicTrans)
@@ -378,71 +383,45 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
             ?.enqueue(Network.IHCallBack<GetFeeTemplateResponse>(getFeeTemplateRequest))
     }
 
-    private fun getStockPrice() {
-        val stockInfo = viewModel?.stockInfo?.value ?: return
-        // 查询价格
-        SocketClient.getInstance().postRequest(
-            GetStockPriceRequestBody(
-                GetStockPriceRequestBody.StockVo(
-                    stockInfo.ts!!,
-                    stockInfo.code!!,
-                    stockInfo.type!!
-                )
-            ), SocketApi.GET_STOCK_PRICE
-        )
-    }
-
     /**
-     * 查询价格
+     * 查询股价、推送股价回调
      */
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
-    fun onGetStockPriceResponse(response: GetStockPriceResponse) {
-        val stockInfo = viewModel?.stockInfo?.value ?: return
-        val stockPriceDatas = response.data ?: return
-        updatePrice(stockInfo, stockPriceDatas[0])
-        // 订阅价格
-        stockTopicPrice = StockTopic(StockTopicDataTypeEnum.STOCK_PRICE, stockInfo.ts!!, stockInfo.code!!, 2)
-        SocketClient.getInstance().bindTopic(stockTopicPrice)
+    override fun update(subject: Subject<*>?) {
+        if (subject is StockPriceDataManager) {
+            updatePrice(subject.priceData)
+        }
     }
 
-    /**
-     * 订阅返回股票价格波动
-     */
-    @RxSubscribe(observeOnThread = EventThread.COMPUTATION)
-    fun onStocksTopicPriceResponse(response: StocksTopicPriceResponse) {
-        val stockInfo = viewModel?.stockInfo?.value ?: return
-        val stockPriceDatas = response.body
-        updatePrice(stockInfo, stockPriceDatas)
-    }
-
-    private fun updatePrice(stockInfo: SearchStockInfo, pushPriceDatas: PushStockPriceData?) {
-        if (pushPriceDatas == null) {
+    private fun updatePrice(priceData: PushStockPriceData?) {
+        if (priceData == null) {
             return
         }
-        if (stockInfo.ts == pushPriceDatas.ts && stockInfo.code == pushPriceDatas.code) {
-            // 在主线程更新数据
-            val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
-                emitter.onNext(true)
-                emitter.onComplete()
-            }).subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    viewModel?.price?.value = MathUtil.rounded3(pushPriceDatas.last!!)
-                    // 计算跌涨价格
-                    val diffPrice = MathUtil.rounded3(pushPriceDatas.last!!.subtract(pushPriceDatas.open!!))
-                    viewModel?.diffPrice?.value = diffPrice
-                    // 计算跌涨幅百分比
-                    viewModel?.diffRate?.value =
-                        MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), pushPriceDatas.open!!)
-                    // 更新界面
-                    view?.updateStockPrice(
-                        pushPriceDatas.last,
-                        diffPrice,
-                        viewModel?.diffRate?.value,
-                        pushPriceDatas.pctTag
-                    )
+        // 在主线程更新数据
+        val disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            emitter.onNext(true)
+            emitter.onComplete()
+        }).subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                // 获取当前最新股价
+                val last = MathUtil.rounded3(priceData.last!!)
+                viewModel?.last?.value = last
+                // 计算跌涨价格
+                val diffPrice = MathUtil.rounded3(priceData.last!!.subtract(priceData.open))
+                viewModel?.diffPrice?.value = diffPrice
+                // 计算跌涨幅百分比
+                val diffRate = MathUtil.divide2(diffPrice.multiply(BigDecimal.valueOf(100)), priceData.open!!)
+                viewModel?.diffRate?.value = diffRate
+
+                // 更新界面
+                var diffState = MathUtil.rounded(diffRate).toInt()
+                if (diffState > 1) {
+                    diffState = 1
+                } else if (diffState < -1) {
+                    diffState = -1
                 }
-            disposables.add(disposable)
-        }
+                view?.updateStockPrice(last, diffPrice, diffRate, diffState)
+            }
+        disposables.add(disposable)
     }
 
     /**
@@ -612,15 +591,14 @@ class SimulationTradingStocksPresenter(val fragment: SimulationTradingStocksFrag
         if (stockTopicTrans != null) {
             SocketClient.getInstance().bindTopic(stockTopicTrans)
         }
-        // 查询价格
-        getStockPrice()
     }
 
     override fun destroy() {
         super.destroy()
         // 取消订阅
-        if (stockTopicPrice != null) {
-            SocketClient.getInstance().unBindTopic(stockTopicPrice)
+        val stockInfo = viewModel?.stockInfo?.value
+        if (stockInfo != null) {
+            StockPriceDataManager.getInstance(stockInfo.ts!!, stockInfo.code!!, stockInfo.type!!).removeObserver(this)
         }
         if (stockTopicTrans != null) {
             SocketClient.getInstance().unBindTopic(stockTopicTrans)

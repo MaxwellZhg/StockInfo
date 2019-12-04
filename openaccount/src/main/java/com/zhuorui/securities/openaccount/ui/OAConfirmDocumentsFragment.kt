@@ -10,6 +10,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.openaccount.BR
 import com.zhuorui.securities.openaccount.R
+import com.zhuorui.securities.openaccount.R2.id.*
 import com.zhuorui.securities.openaccount.databinding.FragmentOaConfirmDocumentsBinding
 import com.zhuorui.securities.openaccount.ui.presenter.OAConfirmDocumentsPresenter
 import com.zhuorui.securities.openaccount.ui.view.OAConfirmDocumentsView
@@ -53,31 +54,31 @@ class OAConfirmDocumentsFragment :
         get() = this
 
     override fun setBirthday(date: String?) {
-        et_birthday.text = date
+//        et_birthday.text = date
     }
 
     override fun setName(name: String?) {
-        et_cn_name.setText(name)
+        et_cn_name.text = name
     }
 
     override fun setGender(gender: String?) {
-        et_gender.text = gender
+        //et_gender.text = gender
     }
 
     override fun setCardNo(cardNo: String?) {
-        et_idcard_no.setText(cardNo)
+        et_idcard_no.text = cardNo
     }
 
     override fun setCardValidStartDate(date: String?) {
-        et_s_expiry.text = date
+//        et_s_expiry.text = date
     }
 
     override fun setCardValidEndDate(date: String?) {
-        et_e_expiry.text = date
+//        et_e_expiry.text = date
     }
 
     override fun setCardAddress(address: String?) {
-        et_address.setText(address)
+        et_address.text = address
     }
 
     override fun getCardName(): String? {
@@ -100,10 +101,10 @@ class OAConfirmDocumentsFragment :
     override fun init() {
         btn_per.setOnClickListener(this)
         btn_next.setOnClickListener(this)
-        et_gender.setOnClickListener(this)
-        et_birthday.setOnClickListener(this)
-        et_s_expiry.setOnClickListener(this)
-        et_e_expiry.setOnClickListener(this)
+//        et_gender.setOnClickListener(this)
+//        et_birthday.setOnClickListener(this)
+//        et_s_expiry.setOnClickListener(this)
+//        et_e_expiry.setOnClickListener(this)
         mDatePicker = context?.let { DatePickerDialog(it) }
         mOptionsPicker = context?.let { OptionsPickerDialog(it) }
         mAndroidBug5497Workaround = AndroidBug5497Workaround(root_layout)
@@ -131,32 +132,32 @@ class OAConfirmDocumentsFragment :
             btn_next -> {
                 presenter?.subIdentity()
             }
-            et_birthday -> {
-                mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())
-                mDatePicker?.setCurrentData(et_birthday.text, presenter?.BIRTHDAY_DATE_FORMAT)
-                mDatePicker?.show()
-            }
-            et_gender -> {
-                mOptionsPicker?.setData(presenter?.genderPickerData)
-                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getGenderPickerListener())
-                mOptionsPicker?.setCurrentData(et_gender.text)
-                mOptionsPicker?.show()
-            }
-            et_s_expiry -> {
-                mDatePicker?.setOnDateSelectedListener(presenter?.getValidStartDatePickerListener())
-                mDatePicker?.setCurrentData(et_s_expiry.text, presenter?.BIRTHDAY_DATE_FORMAT)
-                mDatePicker?.show()
-            }
-            et_e_expiry -> {
-                if (presenter?.endValidPickerData == null) {
-                    ToastUtil.instance.toast(R.string.str_please_select_start_date)
-                    return
-                }
-                mOptionsPicker?.setData(presenter?.endValidPickerData)
-                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getValidEndDatePickerListener())
-                mOptionsPicker?.setCurrentData(et_e_expiry.text)
-                mOptionsPicker?.show()
-            }
+//            et_birthday -> {
+//                mDatePicker?.setOnDateSelectedListener(presenter?.getBirthdayPickerListener())
+//                mDatePicker?.setCurrentData(et_birthday.text, presenter?.BIRTHDAY_DATE_FORMAT)
+//                mDatePicker?.show()
+//            }
+//            et_gender -> {
+//                mOptionsPicker?.setData(presenter?.genderPickerData)
+//                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getGenderPickerListener())
+//                mOptionsPicker?.setCurrentData(et_gender.text)
+//                mOptionsPicker?.show()
+//            }
+//            et_s_expiry -> {
+//                mDatePicker?.setOnDateSelectedListener(presenter?.getValidStartDatePickerListener())
+//                mDatePicker?.setCurrentData(et_s_expiry.text, presenter?.BIRTHDAY_DATE_FORMAT)
+//                mDatePicker?.show()
+//            }
+//            et_e_expiry -> {
+//                if (presenter?.endValidPickerData == null) {
+//                    ToastUtil.instance.toast(R.string.str_please_select_start_date)
+//                    return
+//                }
+//                mOptionsPicker?.setData(presenter?.endValidPickerData)
+//                mOptionsPicker?.setOnOptionSelectedListener(presenter?.getValidEndDatePickerListener())
+//                mOptionsPicker?.setCurrentData(et_e_expiry.text)
+//                mOptionsPicker?.show()
+//            }
         }
     }
 

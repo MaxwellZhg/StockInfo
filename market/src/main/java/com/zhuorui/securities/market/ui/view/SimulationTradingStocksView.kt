@@ -20,7 +20,7 @@ interface SimulationTradingStocksView : AbsView {
     /**
      * 更新股价
      */
-    fun updateStockPrice(price: BigDecimal?, diffPrice: BigDecimal?, diffRate: BigDecimal?, diffState :Int?)
+    fun updateStockPrice(price: BigDecimal?, diffPrice: BigDecimal?, diffRate: BigDecimal?, diffState :Int)
 
     /**
      * 更新盘口

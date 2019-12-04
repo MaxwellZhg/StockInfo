@@ -22,13 +22,11 @@ class TopicStockModel : Observer {
             val manager = StockPriceDataManager.getInstance(value!!.ts!!, value.code!!, value.type!!)
             // 添加股价订阅
             manager.registerObserver(this)
-
-            // 当没有价格数据时，从缓存中取数据
-            if (value.last == null) {
-                val data = manager.priceData
-                updatePrice(data)
+            // 尝试从缓存中取价格数据进行更新
+            val priceData = manager.priceData
+            if (priceData != null) {
+                updatePrice(priceData)
             }
-
         }
 
     // 长按
@@ -62,8 +60,8 @@ class TopicStockModel : Observer {
      */
     private fun updatePrice(priceData: PushStockPriceData?) {
         if (stockInfo != null && priceData != null) {
-            stockInfo!!.last = priceData.last!!
-            stockInfo!!.diffPrice = priceData.last!!.subtract(priceData.open)
+            stockInfo!!.last = MathUtil.rounded3(priceData.last!!)
+            stockInfo!!.diffPrice = MathUtil.rounded3(priceData.last!!.subtract(priceData.open))
             stockInfo!!.diffRate = MathUtil.divide2(
                 stockInfo!!.diffPrice!!.multiply(BigDecimal.valueOf(100)),
                 priceData.open!!
