@@ -9,7 +9,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface LoginPswView :AbsView{
-    fun init()
     fun gotomain()
     fun showTipsInfo(type:Int)
     fun showVerify()

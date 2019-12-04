@@ -5,6 +5,8 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
@@ -32,6 +34,7 @@ import kotlinx.android.synthetic.main.login_psw_fragment.tv_areaphone_tips
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_contry
 import kotlinx.android.synthetic.main.login_psw_fragment.view.*
+import kotlinx.android.synthetic.main.rest_psw_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 import java.util.regex.Pattern
@@ -59,15 +62,6 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         get() = this
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
-    }
-    override fun init() {
-        tv_code_login_register.setOnClickListener(this)
-        ll_country_disct.setOnClickListener(this)
-        iv_cancle.setOnClickListener(this)
-        tv_btn_login.setOnClickListener(this)
-        et_phone.addTextChangedListener(PhoneEtChange())
-        et_password.addTextChangedListener(this)
-        tv_forget_psw.setOnClickListener(this)
     }
     override fun onClick(p0: View?) {
         strphone = et_phone.text.toString().trim()
@@ -178,6 +172,27 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
 
         }
 
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
+        cb_psw_login.setOnCheckedChangeListener{buttonView, isChecked->
+            run {
+                if (isChecked) {
+                    et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                }else{
+                    et_password.transformationMethod = PasswordTransformationMethod.getInstance()
+                }
+            }
+        }
+        et_password.inputType=129
+        tv_code_login_register.setOnClickListener(this)
+        ll_country_disct.setOnClickListener(this)
+        iv_cancle.setOnClickListener(this)
+        tv_btn_login.setOnClickListener(this)
+        et_phone.addTextChangedListener(PhoneEtChange())
+        et_password.addTextChangedListener(this)
+        tv_forget_psw.setOnClickListener(this)
     }
 
 }

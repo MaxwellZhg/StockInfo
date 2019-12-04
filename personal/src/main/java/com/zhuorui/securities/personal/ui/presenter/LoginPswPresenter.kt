@@ -48,7 +48,6 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
 
     override fun init() {
         super.init()
-        view?.init()
     }
     fun requestLoginPwd(phone: kotlin.String,password: kotlin.String,phoneArea:kotlin.String) {
         dialogshow(1)

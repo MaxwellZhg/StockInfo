@@ -126,12 +126,21 @@
                   android:id="@+id/et_password"
                   android:hint="@string/input_psw_tips"
                   android:textStyle="bold"
-                  android:inputType="text"
+                  android:inputType="textPassword"
                   android:textCursorDrawable="@drawable/bg_edittext"
                   android:textSize="16sp"
+                  android:maxLength="20"
                   android:textColorHint="@color/color_A1A1A1"
                   android:textColor="@color/color_282828"
                   android:layout_toRightOf="@+id/tv_verificationCode"/>
+        <CheckBox android:layout_width="17dp"
+                  android:layout_height="9dp"
+                  android:id="@+id/cb_psw_login"
+                  android:layout_centerVertical="true"
+                  android:checked="false"
+                  android:button="@null"
+                  android:layout_alignParentEnd="true"
+                  android:background="@drawable/psw_check"/>
       </RelativeLayout>
       <ImageView android:layout_width="match_parent"
                  android:layout_height="1dp"
