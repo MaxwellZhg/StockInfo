@@ -1,7 +1,11 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
+import android.text.InputFilter
+import android.text.TextUtils
 import android.view.View
+import android.widget.EditText
+import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
@@ -28,6 +32,8 @@ import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.view.LoginRegisterView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
+import com.zhuorui.securities.personal.util.PatternUtils
+import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import java.util.*
 
 /**
@@ -200,6 +206,71 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
     fun setGetCodeClickState(state:Int){
         viewModel?.getCodeClickState?.set(state)
+    }
+
+    fun detailChangeCodeState(code:String,et_phone:EditText,et_code:EditText,btn_login:StateButton){
+        if(code == "+86"){
+            et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
+        }else{
+            et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
+        }
+        if(!TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
+            if(code == "+86"){
+                val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
+                if(matcher) {
+                    getGetCodeColor(1)
+                    setGetCodeClickState(0)
+                    btn_login.isEnabled = true
+                }else{
+                    getGetCodeColor(0)
+                    setGetCodeClickState(1)
+                    btn_login.isEnabled = false
+                }
+            }else{
+                val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
+                if(matcher) {
+                    getGetCodeColor(1)
+                    setGetCodeClickState(0)
+                    btn_login.isEnabled = true
+                }else{
+                    getGetCodeColor(0)
+                    setGetCodeClickState(1)
+                    btn_login.isEnabled = false
+                }
+            }
+        }else if(!TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
+            if(code == "+86"){
+                val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
+                if(matcher) {
+                    getGetCodeColor(1)
+                    setGetCodeClickState(0)
+                    btn_login.isEnabled = false
+                }else{
+                    getGetCodeColor(0)
+                    setGetCodeClickState(1)
+                    btn_login.isEnabled = false
+                }
+            }else{
+                val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
+                if(matcher) {
+                    getGetCodeColor(1)
+                    setGetCodeClickState(0)
+                    btn_login.isEnabled = false
+                }else{
+                    getGetCodeColor(0)
+                    setGetCodeClickState(1)
+                    btn_login.isEnabled = false
+                }
+            }
+        }else if(TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
+            getGetCodeColor(0)
+            setGetCodeClickState(1)
+            btn_login.isEnabled=false
+        }else if(TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
+            getGetCodeColor(0)
+            setGetCodeClickState(1)
+            btn_login.isEnabled=false
+        }
     }
 
 }

@@ -19,7 +19,7 @@ class LoginRegisterViewModel : ViewModel() {
     var getcodeState=ObservableField<Int>()
     var getCodeClickState=ObservableField<Int>()
     init {
-        getCodeClickState.set(0)
+        getCodeClickState.set(1)
         getcodeState.set(0)
         state.set(1)
         str.set(ResUtil.getString(R.string.send_verification_code))

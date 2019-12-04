@@ -136,6 +136,7 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                     LogUtils.e(str)
                     tv_contry.text = str
                     tv_areaphone_tips.text = code
+                    presenter?.detailChangeCodeState(code,et_phone,et_phone_code,tv_btn_commit)
                 }
             }
         }

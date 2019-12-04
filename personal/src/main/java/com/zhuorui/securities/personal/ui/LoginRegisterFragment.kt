@@ -163,6 +163,7 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                     LogUtils.e(str)
                     tv_login_contry.text = str
                     tv_areaphone_tips.text = code
+                    code?.let { presenter?.detailChangeCodeState(it,et_phone,et_phone_code,tv_btn_login) }
                 }
             }
         }
@@ -188,18 +189,22 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                       if(matcher) {
                           presenter?.getGetCodeColor(1)
+                          presenter?.setGetCodeClickState(0)
                           tv_btn_login.isEnabled = true
                       }else{
                           presenter?.getGetCodeColor(0)
+                          presenter?.setGetCodeClickState(1)
                           tv_btn_login.isEnabled = false
                       }
               }else{
                   val matcher = PatternUtils.patternOtherPhone(p0.toString())
                   if(matcher) {
                       presenter?.getGetCodeColor(1)
+                      presenter?.setGetCodeClickState(0)
                       tv_btn_login.isEnabled = true
                   }else{
                       presenter?.getGetCodeColor(0)
+                      presenter?.setGetCodeClickState(1)
                       tv_btn_login.isEnabled = false
                   }
               }
@@ -208,26 +213,32 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                   val matcher = PatternUtils.patternZhPhone(p0.toString())
                   if(matcher) {
                       presenter?.getGetCodeColor(1)
+                      presenter?.setGetCodeClickState(0)
                       tv_btn_login.isEnabled = false
                   }else{
                       presenter?.getGetCodeColor(0)
+                      presenter?.setGetCodeClickState(1)
                       tv_btn_login.isEnabled = false
                   }
               }else{
                   val matcher = PatternUtils.patternOtherPhone(p0.toString())
                   if(matcher) {
                       presenter?.getGetCodeColor(1)
+                      presenter?.setGetCodeClickState(0)
                       tv_btn_login.isEnabled = false
                   }else{
                       presenter?.getGetCodeColor(0)
+                      presenter?.setGetCodeClickState(1)
                       tv_btn_login.isEnabled = false
                   }
               }
           }else if(TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
               presenter?.getGetCodeColor(0)
+              presenter?.setGetCodeClickState(1)
               tv_btn_login.isEnabled=false
           }else if(TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
               presenter?.getGetCodeColor(0)
+              presenter?.setGetCodeClickState(1)
               tv_btn_login.isEnabled=false
           }
         }

@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_areaphone_tips
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
 import kotlinx.android.synthetic.main.login_psw_fragment.tv_contry
+import kotlinx.android.synthetic.main.login_psw_fragment.view.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 import java.util.regex.Pattern
@@ -128,6 +129,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                 LogUtils.e(str)
                 tv_contry.text=str
                 tv_areaphone_tips.text=code
+                presenter?.detailChangeCodeState(code,et_phone,et_password,tv_btn_login)
             }
         }
     }
