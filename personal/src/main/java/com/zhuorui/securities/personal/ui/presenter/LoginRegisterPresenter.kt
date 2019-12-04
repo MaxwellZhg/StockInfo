@@ -46,6 +46,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
+    private var transaction :String ?=null
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
@@ -59,6 +60,9 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         view?.init()
     }
 
+    fun setTransaction(transaction: String?) {
+        this.transaction = transaction
+    }
 
     fun requestSendLoginCode(str: kotlin.String) {
         dialogshow(1)
@@ -190,21 +194,23 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     fun getGetCodeColor(state: Int) {
         viewModel?.getcodeState?.set(state)
     }
-    fun getUserInfoData(){
+
+    fun getUserInfoData() {
         val request = GetUserInfoDataRequest(transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.getUserInfoData(request)
             ?.enqueue(Network.IHCallBack<GetUserInfoResponse>(request))
     }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onGetUserInfoDataResponse(response: GetUserInfoResponse) {
         if (!transactions.isMyTransaction(response)) return
-          LocalAccountConfig.getInstance().setZrNo(response.data.zrNo)
-           view?.gotomain()
-          // 通知登录状态发生改变
-          RxBus.getDefault().post(LoginStateChangeEvent(true))
+        LocalAccountConfig.getInstance().setZrNo(response.data.zrNo)
+        view?.gotomain()
+        // 通知登录状态发生改变
+        RxBus.getDefault().post(LoginStateChangeEvent(true, transaction))
     }
 
-    fun setGetCodeClickState(state:Int){
+    fun setGetCodeClickState(state: Int) {
         viewModel?.getCodeClickState?.set(state)
     }
 

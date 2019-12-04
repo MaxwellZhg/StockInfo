@@ -37,31 +37,36 @@ import com.zhuorui.securities.personal.util.PatternUtils
  * Date: 2019/8/15
  * Desc:手机号登录与注册
  */
-class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(), View.OnClickListener, TextWatcher,LoginRegisterView {
+class LoginRegisterFragment :
+    AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(),
+    View.OnClickListener, TextWatcher, LoginRegisterView {
 
     private lateinit var strphone: String
     private lateinit var phonecode: String
     var filterLength = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
+    private var transaction:String?=null
     //用正则式匹配文本获取匹配器
-   // val matcher = Pattern.compile(pattern).matcher(oldStr)
-    private var locale: Locale?=null
-    private var type:Int = -1
+    // val matcher = Pattern.compile(pattern).matcher(oldStr)
+    private var locale: Locale? = null
+    private var type: Int = -1
     override val layout: Int
         get() = R.layout.login_and_register_fragment
     override val viewModelId: Int
-        get() =  BR.viewmodel
+        get() = BR.viewmodel
     override val createPresenter: LoginRegisterPresenter
         get() = LoginRegisterPresenter(requireContext())
     override val createViewModel: LoginRegisterViewModel?
         get() = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
     override val getView: LoginRegisterView
         get() = this
+
     override fun init() {
         locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             resources.configuration.locales.get(0)
         } else {
             resources.configuration.locale
         }
+
         tv_send_code.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
         tv_btn_login.setOnClickListener(this)
@@ -87,10 +92,10 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                 presenter?.requestSendLoginCode(strphone)
             }
             R.id.iv_cancle -> {
-               pop()
+                pop()
             }
-            R.id.tv_btn_login->{
-              if (strphone == "") {
+            R.id.tv_btn_login -> {
+                if (strphone == "") {
                     ToastUtil.instance.toast(R.string.phone_tips)
                     return
                 }
@@ -98,12 +103,12 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
                     ToastUtil.instance.toast(R.string.phone_code_tips)
                     return
                 }
-                presenter?.requestUserLoginCode(strphone,phonecode)
+                presenter?.requestUserLoginCode(strphone, phonecode)
             }
-            R.id.tv_phone_num_login->{
-                startWithPop(LoginPswFragment())
+            R.id.tv_phone_num_login -> {
+                startWithPop(LoginPswFragment.newInstance(transaction))
             }
-            R.id.rl_country_disct->{
+            R.id.rl_country_disct -> {
                 startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)
             }
         }
@@ -112,16 +117,16 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
-                if(TextUtils.isEmpty(et_phone_code.text.toString())){
+                if (TextUtils.isEmpty(et_phone_code.text.toString())) {
                     ToastUtil.instance.toast(R.string.phone_code_tips)
-                }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&TextUtils.isEmpty(et_phone.text.toString())){
-                    tv_btn_login.isEnabled=false
-                }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
+                } else if (!TextUtils.isEmpty(et_phone_code.text.toString()) && TextUtils.isEmpty(et_phone.text.toString())) {
+                    tv_btn_login.isEnabled = false
+                } else if (!TextUtils.isEmpty(et_phone_code.text.toString()) && !TextUtils.isEmpty(et_phone.text.toString())) {
                     tv_btn_login.isEnabled = PatternUtils.patternPhoneCode(et_phone_code.text.toString())
                 }
-             }
+            }
         } else {
-            tv_btn_login.isEnabled=false
+            tv_btn_login.isEnabled = false
         }
     }
 
@@ -134,30 +139,37 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
     }
 
     override fun gotopsw() {
-        startWithPop(SettingPswFragment.newInstance(strphone,phonecode))
+        startWithPop(SettingPswFragment.newInstance(strphone, phonecode))
     }
 
     override fun gotomain() {
-         pop()
+        pop()
     }
 
     companion object {
-        fun newInstance(type:Int): LoginRegisterFragment {
+        fun newInstance(type: Int): LoginRegisterFragment {
             val fragment = LoginRegisterFragment()
-            if (type!= null) {
-                val bundle = Bundle()
-                bundle.putInt("type", type)
-                fragment.arguments = bundle
-            }
+            val bundle = Bundle()
+            bundle.putInt("type", type)
+            fragment.arguments = bundle
+            return fragment
+        }
+
+        fun newInstance(type: Int, transaction: String?): LoginRegisterFragment {
+            val fragment = LoginRegisterFragment()
+            val bundle = Bundle()
+            bundle.putInt("type", type)
+            bundle.putString("transaction", transaction)
+            fragment.arguments = bundle
             return fragment
         }
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
-        when(requestCode){
-            ISupportFragment.RESULT_OK->{
-                if(data?.get("str")!=null&&data?.get("code")!=null) {
+        when (requestCode) {
+            ISupportFragment.RESULT_OK -> {
+                if (data?.get("str") != null && data?.get("code") != null) {
                     var str = data?.getString("str")
                     var code = data?.getString("code")
                     LogUtils.e(str)
@@ -171,76 +183,78 @@ class LoginRegisterFragment : AbsSwipeBackNetFragment<LoginAndRegisterFragmentBi
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        type = arguments?.getInt("type")?:type
-        if(type==2){
+        type = arguments?.getInt("type") ?: type
+        transaction = arguments?.getString("transaction")
+        presenter?.setTransaction(transaction)
+        if (type == 2) {
             presenter?.postChangeMytabInfo()
         }
     }
 
-    inner class PhoneEtChange : TextWatcher{
+    inner class PhoneEtChange : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
-            if(tv_areaphone_tips.text == "+86"){
+            if (tv_areaphone_tips.text == "+86") {
                 et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
-            }else{
+            } else {
                 et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
             }
-          if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
-              if(tv_areaphone_tips.text == "+86"){
+            if (!TextUtils.isEmpty(p0.toString()) && !TextUtils.isEmpty(et_phone_code.text.toString())) {
+                if (tv_areaphone_tips.text == "+86") {
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
-                      if(matcher) {
-                          presenter?.getGetCodeColor(1)
-                          presenter?.setGetCodeClickState(0)
-                          tv_btn_login.isEnabled = true
-                      }else{
-                          presenter?.getGetCodeColor(0)
-                          presenter?.setGetCodeClickState(1)
-                          tv_btn_login.isEnabled = false
-                      }
-              }else{
-                  val matcher = PatternUtils.patternOtherPhone(p0.toString())
-                  if(matcher) {
-                      presenter?.getGetCodeColor(1)
-                      presenter?.setGetCodeClickState(0)
-                      tv_btn_login.isEnabled = true
-                  }else{
-                      presenter?.getGetCodeColor(0)
-                      presenter?.setGetCodeClickState(1)
-                      tv_btn_login.isEnabled = false
-                  }
-              }
-          }else if(!TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
-              if(tv_areaphone_tips.text == "+86"){
-                  val matcher = PatternUtils.patternZhPhone(p0.toString())
-                  if(matcher) {
-                      presenter?.getGetCodeColor(1)
-                      presenter?.setGetCodeClickState(0)
-                      tv_btn_login.isEnabled = false
-                  }else{
-                      presenter?.getGetCodeColor(0)
-                      presenter?.setGetCodeClickState(1)
-                      tv_btn_login.isEnabled = false
-                  }
-              }else{
-                  val matcher = PatternUtils.patternOtherPhone(p0.toString())
-                  if(matcher) {
-                      presenter?.getGetCodeColor(1)
-                      presenter?.setGetCodeClickState(0)
-                      tv_btn_login.isEnabled = false
-                  }else{
-                      presenter?.getGetCodeColor(0)
-                      presenter?.setGetCodeClickState(1)
-                      tv_btn_login.isEnabled = false
-                  }
-              }
-          }else if(TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
-              presenter?.getGetCodeColor(0)
-              presenter?.setGetCodeClickState(1)
-              tv_btn_login.isEnabled=false
-          }else if(TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
-              presenter?.getGetCodeColor(0)
-              presenter?.setGetCodeClickState(1)
-              tv_btn_login.isEnabled=false
-          }
+                    if (matcher) {
+                        presenter?.getGetCodeColor(1)
+                        presenter?.setGetCodeClickState(0)
+                        tv_btn_login.isEnabled = true
+                    } else {
+                        presenter?.getGetCodeColor(0)
+                        presenter?.setGetCodeClickState(1)
+                        tv_btn_login.isEnabled = false
+                    }
+                } else {
+                    val matcher = PatternUtils.patternOtherPhone(p0.toString())
+                    if (matcher) {
+                        presenter?.getGetCodeColor(1)
+                        presenter?.setGetCodeClickState(0)
+                        tv_btn_login.isEnabled = true
+                    } else {
+                        presenter?.getGetCodeColor(0)
+                        presenter?.setGetCodeClickState(1)
+                        tv_btn_login.isEnabled = false
+                    }
+                }
+            } else if (!TextUtils.isEmpty(p0.toString()) && TextUtils.isEmpty(et_phone_code.text.toString())) {
+                if (tv_areaphone_tips.text == "+86") {
+                    val matcher = PatternUtils.patternZhPhone(p0.toString())
+                    if (matcher) {
+                        presenter?.getGetCodeColor(1)
+                        presenter?.setGetCodeClickState(0)
+                        tv_btn_login.isEnabled = false
+                    } else {
+                        presenter?.getGetCodeColor(0)
+                        presenter?.setGetCodeClickState(1)
+                        tv_btn_login.isEnabled = false
+                    }
+                } else {
+                    val matcher = PatternUtils.patternOtherPhone(p0.toString())
+                    if (matcher) {
+                        presenter?.getGetCodeColor(1)
+                        presenter?.setGetCodeClickState(0)
+                        tv_btn_login.isEnabled = false
+                    } else {
+                        presenter?.getGetCodeColor(0)
+                        presenter?.setGetCodeClickState(1)
+                        tv_btn_login.isEnabled = false
+                    }
+                }
+            } else if (TextUtils.isEmpty(p0.toString()) && !TextUtils.isEmpty(et_phone_code.text.toString())) {
+                presenter?.getGetCodeColor(0)
+                presenter?.setGetCodeClickState(1)
+                tv_btn_login.isEnabled = false
+            } else if (TextUtils.isEmpty(p0.toString()) && TextUtils.isEmpty(et_phone_code.text.toString())) {
+                presenter?.getGetCodeColor(0)
+                presenter?.setGetCodeClickState(1)
+                tv_btn_login.isEnabled = false
+            }
         }
 
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

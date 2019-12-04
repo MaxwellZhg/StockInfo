@@ -96,7 +96,7 @@ class MyTabFragment :
             }
             R.id.ll_login -> {
                 if (LocalAccountConfig.getInstance().getAccountInfo().token == "" || LocalAccountConfig.getInstance().getAccountInfo().token == null) {
-                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
+                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(2))
                 }
             }
             R.id.ll_cell_change_color -> {
@@ -125,8 +125,7 @@ class MyTabFragment :
                 if (LocalAccountConfig.getInstance().isLogin()) {
                     gotoClientService()
                 } else {
-                    presenter?.needSercvice = true
-                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(1))
+                    (parentFragment as AbsFragment<*, *, *, *>).start(LoginRegisterFragment.newInstance(2,presenter?.getTranscation()))
                 }
             }
         }

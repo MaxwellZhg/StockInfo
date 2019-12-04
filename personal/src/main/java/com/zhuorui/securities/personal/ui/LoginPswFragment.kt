@@ -11,33 +11,19 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
-import com.zhuorui.securities.base2app.infra.LogInfra
-import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
 import com.zhuorui.securities.personal.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
-import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
-import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.util.PatternUtils
-import kotlinx.android.synthetic.main.forget_psw_fragment.*
-import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
-import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
-import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle
-import kotlinx.android.synthetic.main.login_psw_fragment.tv_areaphone_tips
-import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
-import kotlinx.android.synthetic.main.login_psw_fragment.tv_contry
-import kotlinx.android.synthetic.main.login_psw_fragment.view.*
-import kotlinx.android.synthetic.main.rest_psw_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
-import java.util.regex.Pattern
 
 /*
  * Created by Maxwell.
@@ -63,32 +49,42 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
+
+    companion object{
+        fun newInstance( transaction: String?): LoginPswFragment {
+            val fragment = LoginPswFragment()
+            val bundle = Bundle()
+            bundle.putString("transaction", transaction)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
     override fun onClick(p0: View?) {
         strphone = et_phone.text.toString().trim()
         password = et_password.text.toString().trim()
-       when(p0?.id){
-           R.id.tv_code_login_register->{
-               startWithPop(LoginRegisterFragment.newInstance(1))
-           }
-           R.id.ll_country_disct->{
-               startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)
-           }
-           R.id.iv_cancle->{
-               pop()
-           }
-           R.id.tv_btn_login->{
-               //fe008700f25cb28940ca8ed91b23b354
-               if(presenter?.detailTips(strphone,password)!!) {
-                   presenter?.requestLoginPwd(strphone, Md5Util.getMd5Str(password), "0086")
-               }
-           }
-           R.id.tv_forget_psw->{
-               startWithPop(ForgetPswFragment())
-           }
-       }
+        when(p0?.id){
+            R.id.tv_code_login_register->{
+                startWithPop(LoginRegisterFragment.newInstance(1))
+            }
+            R.id.ll_country_disct->{
+                startForResult(CommonCountryCodeFragment.newInstance(CommonEnum.Code), ISupportFragment.RESULT_OK)
+            }
+            R.id.iv_cancle->{
+                pop()
+            }
+            R.id.tv_btn_login->{
+                //fe008700f25cb28940ca8ed91b23b354
+                if(presenter?.detailTips(strphone,password)!!) {
+                    presenter?.requestLoginPwd(strphone, Md5Util.getMd5Str(password), "0086")
+                }
+            }
+            R.id.tv_forget_psw->{
+                startWithPop(ForgetPswFragment())
+            }
+        }
     }
     override fun gotomain() {
-          pop()
+        pop()
     }
     override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
@@ -142,7 +138,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         }
     }
     override fun showVerify() {
-       start(PhoneDevVerifyFragment.newInstance(strphone))
+        start(PhoneDevVerifyFragment.newInstance(strphone))
     }
 
 
