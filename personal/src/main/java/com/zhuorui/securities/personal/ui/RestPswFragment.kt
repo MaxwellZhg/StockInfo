@@ -140,7 +140,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
     inner class PhoneEtChange : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
             if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_rest_ensure_psw.text.toString())){
-                tv_btn_login.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+                tv_btn_rest.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
             }else{
                 tv_btn_rest.isEnabled=false
             }
