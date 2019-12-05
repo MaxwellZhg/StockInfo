@@ -60,21 +60,6 @@ class LoginRegisterFragment :
         ProgressDialog(requireContext())
     }
     private var errorDialog :ErrorTimesDialog?=null
-    override fun init() {
-        locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            resources.configuration.locales.get(0)
-        } else {
-            resources.configuration.locale
-        }
-
-        tv_send_code.setOnClickListener(this)
-        iv_cancle.setOnClickListener(this)
-        tv_btn_login.setOnClickListener(this)
-        et_phone.addTextChangedListener(PhoneEtChange())
-        et_phone_code.addTextChangedListener(this)
-        tv_phone_num_login.setOnClickListener(this)
-        rl_country_disct.setOnClickListener(this)
-    }
 
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -189,6 +174,19 @@ class LoginRegisterFragment :
         if (type == 2) {
             presenter?.postChangeMytabInfo()
         }
+        locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            resources.configuration.locales.get(0)
+        } else {
+            resources.configuration.locale
+        }
+
+        tv_send_code.setOnClickListener(this)
+        iv_cancle.setOnClickListener(this)
+        tv_btn_login.setOnClickListener(this)
+        et_phone.addTextChangedListener(PhoneEtChange())
+        et_phone_code.addTextChangedListener(this)
+        tv_phone_num_login.setOnClickListener(this)
+        rl_country_disct.setOnClickListener(this)
     }
 
     inner class PhoneEtChange : TextWatcher {

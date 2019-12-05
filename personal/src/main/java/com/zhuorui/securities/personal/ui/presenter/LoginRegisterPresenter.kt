@@ -50,7 +50,6 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     private var transaction: String? = null
     override fun init() {
         super.init()
-        view?.init()
     }
 
     fun setTransaction(transaction: String?) {
