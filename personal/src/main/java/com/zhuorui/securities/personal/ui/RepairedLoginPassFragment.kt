@@ -8,7 +8,6 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.FragmentRepairedLoginPswBinding
@@ -17,9 +16,6 @@ import com.zhuorui.securities.personal.ui.view.RepairedLoginPassView
 import com.zhuorui.securities.personal.ui.viewmodel.RepairedLoginPassViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.fragment_repaired_login_psw.*
-import kotlinx.android.synthetic.main.fragment_repaired_login_psw.et_ensure_psw
-import kotlinx.android.synthetic.main.login_psw_fragment.*
-import kotlinx.android.synthetic.main.setting_psw_fragment.*
 
 /**
  * Created by Maxwell.

@@ -3,13 +3,10 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import android.text.InputFilter
 import android.text.TextUtils
-import android.view.View
 import android.widget.EditText
 import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.commonwidget.common.CountryCodeConfig
-import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -22,7 +19,6 @@ import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.VerifForgetCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
-import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils

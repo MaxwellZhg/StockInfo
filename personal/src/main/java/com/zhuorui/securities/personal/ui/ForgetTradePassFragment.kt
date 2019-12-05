@@ -12,12 +12,12 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.databinding.FragmentForgetTradePswBinding
 import com.zhuorui.securities.personal.ui.presenter.ForgetTradePassPresenter
 import com.zhuorui.securities.personal.ui.view.ForgetTradePassView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetTradePassViewModel
 import com.zhuorui.securities.personal.util.PhoneHideUtils
 import kotlinx.android.synthetic.main.fragment_forget_trade_psw.*
-import com.zhuorui.securities.personal.databinding.FragmentForgetTradePswBinding
 
 /**
  * Created by Maxwell.

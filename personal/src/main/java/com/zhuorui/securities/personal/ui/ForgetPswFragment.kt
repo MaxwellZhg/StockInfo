@@ -14,20 +14,13 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.databinding.ForgetPswFragmentBinding
+import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.presenter.ForgetPswPresenter
 import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
-import com.zhuorui.securities.personal.databinding.ForgetPswFragmentBinding
-import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
-import com.zhuorui.securities.personal.ui.viewmodel.CountryDisctViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
-import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone
-import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
-import kotlinx.android.synthetic.main.forget_psw_fragment.rl_country_disct
-import kotlinx.android.synthetic.main.forget_psw_fragment.tv_areaphone_tips
-import kotlinx.android.synthetic.main.forget_psw_fragment.tv_send_code
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 

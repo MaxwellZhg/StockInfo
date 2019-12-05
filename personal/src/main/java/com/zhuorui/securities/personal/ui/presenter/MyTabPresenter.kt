@@ -4,7 +4,6 @@ import com.zhuorui.commonwidget.config.AppLanguage
 import com.zhuorui.commonwidget.config.LocalSettingsConfig
 import com.zhuorui.commonwidget.config.StocksThemeColor
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseRequest
 import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -18,11 +17,7 @@ import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.event.MyTabInfoEvent
 import com.zhuorui.securities.personal.event.SettingChooseEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
-import com.zhuorui.securities.personal.net.request.GetUserInfoDataRequest
-import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.UserLoginOutRequest
-import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
-import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.MyTabVierw
 import com.zhuorui.securities.personal.ui.viewmodel.MyTabVierwModel
 

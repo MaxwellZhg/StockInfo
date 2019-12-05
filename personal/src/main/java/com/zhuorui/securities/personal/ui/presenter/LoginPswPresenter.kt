@@ -3,11 +3,9 @@ package com.zhuorui.securities.personal.ui.presenter
 import android.content.Context
 import android.text.InputFilter
 import android.text.TextUtils
-import android.view.View
 import android.widget.EditText
 import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.commonwidget.common.CountryCodeConfig
-import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -15,21 +13,16 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
-import com.zhuorui.securities.base2app.util.ToastUtil
-import com.zhuorui.securities.personal.event.LoginStateChangeEvent
-import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
-import com.zhuorui.securities.personal.event.DisctCodeSelectEvent
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.GetUserInfoDataRequest
 import com.zhuorui.securities.personal.net.request.UserLoginPwdRequest
 import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
-import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
-import kotlinx.android.synthetic.main.login_psw_fragment.*
 import java.util.regex.Pattern
 
 /**

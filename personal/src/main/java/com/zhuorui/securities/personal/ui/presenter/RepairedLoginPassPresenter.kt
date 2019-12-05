@@ -1,7 +1,6 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
-import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread

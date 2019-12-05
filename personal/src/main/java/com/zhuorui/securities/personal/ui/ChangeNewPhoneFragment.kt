@@ -18,7 +18,6 @@ import com.zhuorui.securities.personal.ui.presenter.ChangeNewPhonePresenter
 import com.zhuorui.securities.personal.ui.view.ChangeNewPhoneView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangeNewPhoneViewModel
 import kotlinx.android.synthetic.main.fragment_change_new_phone_num.*
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 

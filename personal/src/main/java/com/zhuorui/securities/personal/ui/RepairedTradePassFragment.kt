@@ -14,9 +14,7 @@ import com.zhuorui.securities.personal.databinding.FragmentRepairedTradePassBind
 import com.zhuorui.securities.personal.ui.presenter.RepairedTradePassPresenter
 import com.zhuorui.securities.personal.ui.view.RepairedTradePassView
 import com.zhuorui.securities.personal.ui.viewmodel.RepairedTradePassViewModel
-import kotlinx.android.synthetic.main.fragment_repaired_login_psw.*
 import kotlinx.android.synthetic.main.fragment_repaired_trade_pass.*
-import kotlinx.android.synthetic.main.fragment_repaired_trade_pass.tv_btn_complete
 
 /**
  * Created by Maxwell.

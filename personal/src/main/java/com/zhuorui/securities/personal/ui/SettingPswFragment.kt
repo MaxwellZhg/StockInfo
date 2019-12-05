@@ -15,13 +15,12 @@ import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.databinding.SettingPswFragmentBinding
 import com.zhuorui.securities.personal.ui.presenter.SettingPswPresenter
 import com.zhuorui.securities.personal.ui.view.SettingPswView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
-import kotlinx.android.synthetic.main.setting_psw_fragment.*
-import com.zhuorui.securities.personal.databinding.SettingPswFragmentBinding
 import com.zhuorui.securities.personal.util.PatternUtils
-import kotlinx.android.synthetic.main.login_psw_fragment.*
+import kotlinx.android.synthetic.main.setting_psw_fragment.*
 
 /**
  * Created by Maxwell.

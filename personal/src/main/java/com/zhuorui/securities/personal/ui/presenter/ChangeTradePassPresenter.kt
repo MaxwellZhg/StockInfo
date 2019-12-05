@@ -1,7 +1,6 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
-import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -13,7 +12,6 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyCapitalPswRequest
-import com.zhuorui.securities.personal.net.request.ModifyLoginPswRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangeTradePassView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangeTradePassViewModel

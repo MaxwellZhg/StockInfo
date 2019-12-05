@@ -10,18 +10,14 @@ import android.view.View
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
-import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.ui.view.RestPswView
-import com.zhuorui.securities.personal.ui.viewmodel.RestPswViewModel
 import com.zhuorui.securities.personal.databinding.RestPswFragmentBinding
 import com.zhuorui.securities.personal.ui.presenter.RestPswPresenter
+import com.zhuorui.securities.personal.ui.view.RestPswView
+import com.zhuorui.securities.personal.ui.viewmodel.RestPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
-import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.rest_psw_fragment.*
-import kotlinx.android.synthetic.main.rest_psw_fragment.iv_back
-import kotlinx.android.synthetic.main.setting_psw_fragment.*
 
 /**
  * Created by Maxwell.

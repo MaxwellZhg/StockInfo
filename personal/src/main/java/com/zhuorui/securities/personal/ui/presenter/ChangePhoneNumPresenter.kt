@@ -2,7 +2,6 @@ package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
 import com.zhuorui.commonwidget.common.CountryCodeConfig
-import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
@@ -14,7 +13,6 @@ import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.ModifyOldPhoneRequest
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
-import com.zhuorui.securities.personal.net.request.SendOldRepalceCodeRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.ChangePhoneNumView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangePhoneNumViewModel

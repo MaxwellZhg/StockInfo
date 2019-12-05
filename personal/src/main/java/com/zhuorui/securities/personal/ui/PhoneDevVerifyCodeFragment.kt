@@ -20,13 +20,12 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.databinding.FragmentPhoneDevVerifyCodeBinding
 import com.zhuorui.securities.personal.ui.presenter.PhoneDevVerifyCodePresenter
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyCodeView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyCodeViewModel
-import com.zhuorui.securities.personal.databinding.FragmentPhoneDevVerifyCodeBinding
 import com.zhuorui.securities.personal.util.PatternUtils
 import com.zhuorui.securities.personal.util.PhoneHideUtils
-
 import kotlinx.android.synthetic.main.fragment_phone_dev_verify_code.*
 
 /**

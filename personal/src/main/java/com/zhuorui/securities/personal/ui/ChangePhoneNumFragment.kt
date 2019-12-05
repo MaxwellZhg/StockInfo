@@ -13,13 +13,12 @@ import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.databinding.FragmentChangePhoneNumBinding
 import com.zhuorui.securities.personal.ui.presenter.ChangePhoneNumPresenter
 import com.zhuorui.securities.personal.ui.view.ChangePhoneNumView
 import com.zhuorui.securities.personal.ui.viewmodel.ChangePhoneNumViewModel
 import com.zhuorui.securities.personal.util.PhoneHideUtils
 import kotlinx.android.synthetic.main.fragment_change_phone_num.*
-import com.zhuorui.securities.personal.databinding.FragmentChangePhoneNumBinding
-import kotlinx.android.synthetic.main.forget_psw_fragment.*
 
 /**
  * Created by Maxwell.

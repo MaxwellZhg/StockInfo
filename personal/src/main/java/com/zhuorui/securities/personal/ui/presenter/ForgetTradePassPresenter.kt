@@ -1,7 +1,6 @@
 package com.zhuorui.securities.personal.ui.presenter
 
 import android.content.Context
-import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R

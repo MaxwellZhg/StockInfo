@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.databinding.FragmentSecurityBinding
 import com.zhuorui.securities.personal.ui.presenter.SecurityPresenter
 import com.zhuorui.securities.personal.ui.view.SecurityView
 import com.zhuorui.securities.personal.ui.viewmodel.SecurityViewModel
-import com.zhuorui.securities.personal.databinding.FragmentSecurityBinding
 import kotlinx.android.synthetic.main.fragment_security.*
 
 /**
