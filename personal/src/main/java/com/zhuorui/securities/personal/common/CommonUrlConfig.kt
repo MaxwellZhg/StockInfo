@@ -7,5 +7,5 @@ package com.zhuorui.securities.personal.common
  * Desc:
  */
 object CommonUrlConfig {
-    const val clinetServece ="http://192.168.1.34/#/adviser"
+    const val clinetServece ="http://192.168.1.215:8080/zhuorui_h5/#/adviser"
 }
