@@ -159,4 +159,6 @@
     <string name="dev_login_problem_tips" tools:ignore="MissingTranslation">请拨打卓锐证券客服电话\n解决登录问题 </string>
     <string name="phone_call" tools:ignore="MissingTranslation">电话</string>
     <string name="open_account_limit" tools:ignore="MissingTranslation">立即开户</string>
+    <string name="verify_get_code_error">验证码请求失败，请检查网络</string>
+    <string name="verify_code_error">验证码不正确，请重新输入</string>
 </resources>

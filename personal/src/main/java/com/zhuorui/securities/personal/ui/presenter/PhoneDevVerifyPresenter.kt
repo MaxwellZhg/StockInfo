@@ -12,6 +12,7 @@ import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
@@ -83,8 +84,13 @@ class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyVi
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
-        super.onErrorResponse(response)
         dialogshow(0)
+        //网络问题
+        if(response.isNetworkBroken){
+            ToastUtil.instance.toastCenter(R.string.verify_get_code_error)
+            return
+        }
+        super.onErrorResponse(response)
     }
 
     fun luanchCall(){

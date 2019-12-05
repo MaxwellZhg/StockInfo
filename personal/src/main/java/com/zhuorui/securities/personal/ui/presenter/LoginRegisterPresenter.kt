@@ -17,6 +17,7 @@ import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
@@ -46,7 +47,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
-    private var transaction :String ?=null
+    private var transaction: String? = null
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
@@ -106,17 +107,23 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
 
     override fun onErrorResponse(response: ErrorResponse) {
+        dialogshow(0)
         if (response.request is UserLoginCodeRequest) {
-            dialogshow(0)
             if (response.code == "010003") {
+                //设置密码
                 view?.gotopsw()
                 return
             } else if (response.code == "030002") {
+                 // 请求验证超次数
                 showErrorDailog()
                 return
             }
         } else if (response.request is SendLoginCodeRequest) {
-            dialogshow(0)
+            //网络问题
+            if (response.isNetworkBroken) {
+                ToastUtil.instance.toastCenter(R.string.verify_get_code_error)
+                return
+            }
         }
         super.onErrorResponse(response)
     }
@@ -214,68 +221,68 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         viewModel?.getCodeClickState?.set(state)
     }
 
-    fun detailChangeCodeState(code:String,et_phone:EditText,et_code:EditText,btn_login:StateButton){
-        if(code == "+86"){
+    fun detailChangeCodeState(code: String, et_phone: EditText, et_code: EditText, btn_login: StateButton) {
+        if (code == "+86") {
             et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
-        }else{
+        } else {
             et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
         }
-        if(!TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
-            if(code == "+86"){
+        if (!TextUtils.isEmpty(et_phone.text.toString()) && !TextUtils.isEmpty(et_code.text.toString())) {
+            if (code == "+86") {
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = true
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
-            }else{
+            } else {
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = true
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
             }
-        }else if(!TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
-            if(code == "+86"){
+        } else if (!TextUtils.isEmpty(et_phone.text.toString()) && TextUtils.isEmpty(et_code.text.toString())) {
+            if (code == "+86") {
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = false
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
-            }else{
+            } else {
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = false
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
             }
-        }else if(TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
+        } else if (TextUtils.isEmpty(et_phone.text.toString()) && !TextUtils.isEmpty(et_code.text.toString())) {
             getGetCodeColor(0)
             setGetCodeClickState(1)
-            btn_login.isEnabled=false
-        }else if(TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
+            btn_login.isEnabled = false
+        } else if (TextUtils.isEmpty(et_phone.text.toString()) && TextUtils.isEmpty(et_code.text.toString())) {
             getGetCodeColor(0)
             setGetCodeClickState(1)
-            btn_login.isEnabled=false
+            btn_login.isEnabled = false
         }
     }
 

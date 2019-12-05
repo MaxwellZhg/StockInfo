@@ -16,6 +16,7 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
@@ -109,17 +110,21 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
+        dialogshow(0)
         if (response.request is SendLoginCodeRequest) {
-            dialogshow(0)
             if(response.code == "030002"){
+               // 请求验证超次数
                 showErrorDailog()
                 return
+            }else if(response.isNetworkBroken){
+                //网络错误
+                ToastUtil.instance.toastCenter(R.string.verify_get_code_error)
+                return
             }
-            super.onErrorResponse(response)
         }else if(response.request is VerifForgetCodeRequest){
-            dialogshow(0)
-            super.onErrorResponse(response)
+             ToastUtil.instance.toastCenter(R.string.verify_code_error)
         }
+        super.onErrorResponse(response)
     }
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
