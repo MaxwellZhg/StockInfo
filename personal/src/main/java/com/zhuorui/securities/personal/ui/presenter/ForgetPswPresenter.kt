@@ -40,7 +40,6 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     internal var task: TimerTask? = null
     override fun init() {
         super.init()
-        view?.init()
     }
     @Throws(InterruptedException::class)
     fun startTask() {

@@ -60,8 +60,6 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
     }
-    override fun init() {
-    }
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)

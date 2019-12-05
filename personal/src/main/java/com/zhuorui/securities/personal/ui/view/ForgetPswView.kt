@@ -9,7 +9,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface ForgetPswView :AbsView{
-    fun init()
     fun restpsw()
     fun showProgressDailog(type:Int)
     fun showErrorTimes(str:String,type:Int)
