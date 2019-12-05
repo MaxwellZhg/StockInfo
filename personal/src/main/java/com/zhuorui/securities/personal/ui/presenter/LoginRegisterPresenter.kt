@@ -48,12 +48,25 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
     private var transaction: String? = null
+    private var errorDialog:ErrorTimesDialog?=null
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
-    private val errorDialog by lazy {
+    private val errorTimesDialog by lazy {
         ErrorTimesDialog(context, 1, "")
+    }
+
+    fun showErrorTimesDailog(str:String?) {
+        errorDialog= context?.let { ErrorTimesDialog(it,2,str) }
+        errorDialog?.show()
+        errorDialog?.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_psw->{
+                    errorDialog?.dismiss()
+                }
+            }
+        })
     }
 
     override fun init() {
@@ -117,6 +130,9 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                  // 请求验证超次数
                 showErrorDailog()
                 return
+            } else if(response.code == "0100013"){
+                //验证次数弹框
+                showErrorTimesDailog(response.msg)
             }
         } else if (response.request is SendLoginCodeRequest) {
             //网络问题
@@ -184,11 +200,11 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     }
 
     fun showErrorDailog() {
-        errorDialog.show()
-        errorDialog.setOnclickListener(View.OnClickListener {
+        errorTimesDialog.show()
+        errorTimesDialog.setOnclickListener(View.OnClickListener {
             when (it.id) {
                 R.id.rl_complete_verify -> {
-                    errorDialog.dismiss()
+                    errorTimesDialog.dismiss()
                 }
             }
         })
