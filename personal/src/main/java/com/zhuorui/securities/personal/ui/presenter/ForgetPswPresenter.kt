@@ -9,7 +9,6 @@ import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.Cache
-import com.zhuorui.securities.base2app.network.BaseResponse
 import com.zhuorui.securities.base2app.network.ErrorResponse
 import com.zhuorui.securities.base2app.network.Network
 import com.zhuorui.securities.base2app.rxbus.EventThread
@@ -34,21 +33,25 @@ import java.util.*
  * Date: 2019/8/21
  * Desc:
  */
-class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
+class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView, ForgetPswViewModel>() {
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
+
     private val errorDialog by lazy {
-        ErrorTimesDialog(context,1,"")
+        ErrorTimesDialog(context, 1, "")
     }
+
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
+
     override fun init() {
         super.init()
         view?.init()
     }
+
     @Throws(InterruptedException::class)
     fun startTask() {
         if (task == null) {
@@ -56,7 +59,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
             task = object : TimerTask() {
                 override fun run() {
                     recLen--
-                    viewModel?.str?.set(recLen.toString()+"s")
+                    viewModel?.str?.set(recLen.toString() + "s")
                     if (recLen < 0) {
                         timer!!.cancel()
                         task = null
@@ -99,11 +102,11 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
-        if(response.request is SendLoginCodeRequest){
+        if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
             setGetCodeClickState(1)
             startTimeCountDown()
-        }else if(response.request is VerifForgetCodeRequest){
+        } else if (response.request is VerifForgetCodeRequest) {
             dialogshow(0)
             view?.restpsw()
         }
@@ -112,24 +115,26 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     override fun onErrorResponse(response: ErrorResponse) {
         dialogshow(0)
         if (response.request is SendLoginCodeRequest) {
-            if(response.code == "030002"){
-               // 请求验证超次数
+            if (response.code == "030002") {
+                // 请求验证超次数
                 showErrorDailog()
                 return
-            }else if(response.isNetworkBroken){
+            } else if (response.isNetworkBroken) {
                 //网络错误
                 ToastUtil.instance.toastCenter(R.string.verify_get_code_error)
                 return
             }
-        }else if(response.request is VerifForgetCodeRequest){
-             ToastUtil.instance.toastCenter(R.string.verify_code_error)
+        } else if (response.request is VerifForgetCodeRequest) {
+            ToastUtil.instance.toastCenter(R.string.verify_code_error)
+            return
         }
         super.onErrorResponse(response)
     }
 
-    fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
+    fun requestVerifyForgetCode(str: String, code: String) {
         dialogshow(1)
-        val request = VerifForgetCodeRequest(str, code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
+        val request =
+            VerifForgetCodeRequest(str, code, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
@@ -137,23 +142,23 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
     fun showErrorDailog() {
         errorDialog.show()
-        errorDialog.setOnclickListener( View.OnClickListener {
-            when(it.id){
-                R.id.rl_complete_verify->{
+        errorDialog.setOnclickListener(View.OnClickListener {
+            when (it.id) {
+                R.id.rl_complete_verify -> {
                     errorDialog.dismiss()
                 }
             }
         })
     }
 
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
+    fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
                 progressDialog.setCancelable(false)
                 progressDialog.show()
             }
-            else->{
-                if(progressDialog!=null) {
+            else -> {
+                if (progressDialog != null) {
                     progressDialog.setCancelable(true)
                     progressDialog.dismiss()
                 }
@@ -164,72 +169,73 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     fun getGetCodeColor(state: Int) {
         viewModel?.getcodeState?.set(state)
     }
-    fun setGetCodeClickState(state:Int){
+
+    fun setGetCodeClickState(state: Int) {
         viewModel?.getCodeClickState?.set(state)
     }
 
-    fun detailChangeCodeState(code:String, et_phone: EditText, et_code: EditText, btn_login: StateButton){
-        if(code == "+86"){
+    fun detailChangeCodeState(code: String, et_phone: EditText, et_code: EditText, btn_login: StateButton) {
+        if (code == "+86") {
             et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
-        }else{
+        } else {
             et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
         }
-        if(!TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
-            if(code == "+86"){
+        if (!TextUtils.isEmpty(et_phone.text.toString()) && !TextUtils.isEmpty(et_code.text.toString())) {
+            if (code == "+86") {
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = true
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
-            }else{
+            } else {
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = true
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
             }
-        }else if(!TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
-            if(code == "+86"){
+        } else if (!TextUtils.isEmpty(et_phone.text.toString()) && TextUtils.isEmpty(et_code.text.toString())) {
+            if (code == "+86") {
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = false
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
-            }else{
+            } else {
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
-                if(matcher) {
+                if (matcher) {
                     getGetCodeColor(1)
                     setGetCodeClickState(0)
                     btn_login.isEnabled = false
-                }else{
+                } else {
                     getGetCodeColor(0)
                     setGetCodeClickState(1)
                     btn_login.isEnabled = false
                 }
             }
-        }else if(TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
+        } else if (TextUtils.isEmpty(et_phone.text.toString()) && !TextUtils.isEmpty(et_code.text.toString())) {
             getGetCodeColor(0)
             setGetCodeClickState(1)
-            btn_login.isEnabled=false
-        }else if(TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
+            btn_login.isEnabled = false
+        } else if (TextUtils.isEmpty(et_phone.text.toString()) && TextUtils.isEmpty(et_code.text.toString())) {
             getGetCodeColor(0)
             setGetCodeClickState(1)
-            btn_login.isEnabled=false
+            btn_login.isEnabled = false
         }
     }
 

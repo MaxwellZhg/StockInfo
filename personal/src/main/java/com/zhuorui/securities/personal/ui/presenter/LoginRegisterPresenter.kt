@@ -48,11 +48,14 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
     private var transaction: String? = null
+
     private var errorDialog:ErrorTimesDialog?=null
+
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
+
     private val errorTimesDialog by lazy {
         ErrorTimesDialog(context, 1, "")
     }
@@ -133,6 +136,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
             } else if(response.code == "0100013"){
                 //验证次数弹框
                 showErrorTimesDailog(response.msg)
+                return
             }
         } else if (response.request is SendLoginCodeRequest) {
             //网络问题

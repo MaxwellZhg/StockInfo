@@ -26,56 +26,59 @@ import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyViewModel
  * Date: 2019/9/12
  * Desc:
  */
-class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyView,PhoneDevVerifyViewModel>(),DevComfirmDailog.CallBack{
+class PhoneDevVerifyPresenter(context: Context) : AbsNetPresenter<PhoneDevVerifyView, PhoneDevVerifyViewModel>(),
+    DevComfirmDailog.CallBack {
+
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(context)
     }
-    override fun init() {
-        super.init()
-    }
+
     /* 加载对话框 */
     private val phoneDevDailog by lazy {
-       DevComfirmDailog.
-            createWidth255Dialog(context,true,true)
+        DevComfirmDailog.createWidth255Dialog(context, true, true)
             .setNoticeText(R.string.notice)
             .setMsgText(R.string.dev_login_problem_tips)
             .setCancelText(R.string.cancle)
             .setConfirmText(R.string.phone_call)
             .setCallBack(this)
     }
+
     override fun onCancel() {
 
     }
 
     override fun onConfirm() {
-      view?.gotoPhone()
+        view?.gotoPhone()
     }
 
-    fun showTipsDailog(){
+    fun showTipsDailog() {
         phoneDevDailog.show()
     }
+
     fun requestSendLoginCode(str: kotlin.String) {
         dialogshow(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
+
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
-        if(response.request is SendLoginCodeRequest){
+        if (response.request is SendLoginCodeRequest) {
             dialogshow(0)
             view?.goNext()
         }
     }
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
+
+    fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
                 progressDialog.setCancelable(false)
                 progressDialog.show()
             }
-            else->{
+            else -> {
                 progressDialog.setCancelable(true)
                 progressDialog.dismiss()
 
@@ -86,15 +89,15 @@ class PhoneDevVerifyPresenter(context: Context):AbsNetPresenter<PhoneDevVerifyVi
     override fun onErrorResponse(response: ErrorResponse) {
         dialogshow(0)
         //网络问题
-        if(response.isNetworkBroken){
+        if (response.isNetworkBroken) {
             ToastUtil.instance.toastCenter(R.string.verify_get_code_error)
             return
         }
         super.onErrorResponse(response)
     }
 
-    fun luanchCall(){
-        var intent: Intent =  Intent()
+    fun luanchCall() {
+        var intent: Intent = Intent()
         intent.action = Intent.ACTION_CALL
         intent.data = Uri.parse("tel:" + "400-788-190")
         context?.startActivity(intent)
