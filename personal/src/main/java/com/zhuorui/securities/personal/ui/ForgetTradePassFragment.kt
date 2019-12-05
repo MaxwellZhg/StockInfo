@@ -6,8 +6,8 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
-import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
@@ -16,10 +16,8 @@ import com.zhuorui.securities.personal.ui.presenter.ForgetTradePassPresenter
 import com.zhuorui.securities.personal.ui.view.ForgetTradePassView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetTradePassViewModel
 import com.zhuorui.securities.personal.util.PhoneHideUtils
-import kotlinx.android.synthetic.main.fragment_change_phone_num.*
-import kotlinx.android.synthetic.main.fragment_change_trade_pass.*
 import kotlinx.android.synthetic.main.fragment_forget_trade_psw.*
-import kotlinx.android.synthetic.main.fragment_forget_trade_psw.tv_btn_complete
+import com.zhuorui.securities.personal.databinding.FragmentForgetTradePswBinding
 
 /**
  * Created by Maxwell.
@@ -27,7 +25,11 @@ import kotlinx.android.synthetic.main.fragment_forget_trade_psw.tv_btn_complete
  * Date: 2019/9/11
  * Desc:忘记交易密码
  * */
-class ForgetTradePassFragment :AbsSwipeBackNetFragment<com.zhuorui.securities.personal.databinding.FragmentForgetTradePswBinding,ForgetTradePassViewModel,ForgetTradePassView,ForgetTradePassPresenter>(),ForgetTradePassView,TextWatcher,View.OnClickListener{
+class ForgetTradePassFragment :AbsSwipeBackNetFragment<FragmentForgetTradePswBinding,ForgetTradePassViewModel,ForgetTradePassView,ForgetTradePassPresenter>(),ForgetTradePassView,TextWatcher,View.OnClickListener{
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
     override val layout: Int
         get() = R.layout.fragment_forget_trade_psw
     override val viewModelId: Int
@@ -80,4 +82,22 @@ class ForgetTradePassFragment :AbsSwipeBackNetFragment<com.zhuorui.securities.pe
             }
         }
     }
+
+    private fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
+    }
+
 }

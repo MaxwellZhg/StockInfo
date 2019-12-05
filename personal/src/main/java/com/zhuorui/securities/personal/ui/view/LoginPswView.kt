@@ -12,4 +12,9 @@ interface LoginPswView :AbsView{
     fun gotomain()
     fun showTipsInfo(type:Int)
     fun showVerify()
+
+    fun showProgressDailog(type:Int)
+
+    fun showErrorTimesDailog(str:String)
+
 }

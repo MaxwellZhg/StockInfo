@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -34,6 +35,10 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
     private var code :String=""
     private lateinit var strnewpsw: String
     private lateinit var strensurepsw: String
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
     override val layout: Int
         get() = R.layout.rest_psw_fragment
     override val viewModelId: Int
@@ -155,6 +160,25 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
         }
 
     }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
+    }
+
 
 
 }

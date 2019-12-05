@@ -48,27 +48,6 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
     private var transaction: String? = null
-    private var errorDialog:ErrorTimesDialog?=null
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-    private val errorTimesDialog by lazy {
-        ErrorTimesDialog(context, 1, "")
-    }
-
-    fun showErrorTimesDailog(str:String?) {
-        errorDialog= context?.let { ErrorTimesDialog(it,2,str) }
-        errorDialog?.show()
-        errorDialog?.setOnclickListener( View.OnClickListener {
-            when(it.id){
-                R.id.rl_complete_psw->{
-                    errorDialog?.dismiss()
-                }
-            }
-        })
-    }
-
     override fun init() {
         super.init()
         view?.init()
@@ -79,14 +58,14 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     }
 
     fun requestSendLoginCode(str: kotlin.String) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
 
     fun requestUserLoginCode(str: kotlin.String, vfcode: kotlin.String) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request =
             UserLoginCodeRequest(str, vfcode, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginCode(request)
@@ -97,7 +76,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             setGetCodeClickState(1)
             startTimeCountDown()
         }
@@ -106,7 +85,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginCodeRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             if (LocalAccountConfig.getInstance().saveLogin(
                     response.data.userId,
                     response.data.phone,
@@ -120,19 +99,19 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
 
 
     override fun onErrorResponse(response: ErrorResponse) {
-        dialogshow(0)
+        view?.showProgressDailog(0)
         if (response.request is UserLoginCodeRequest) {
             if (response.code == "010003") {
                 //设置密码
                 view?.gotopsw()
                 return
             } else if (response.code == "030002") {
-                 // 请求验证超次数
-                showErrorDailog()
+                 // 请求验证超10次数
+                 view?.showErrorTimes("",1)
                 return
             } else if(response.code == "0100013"){
                 //验证次数弹框
-                showErrorTimesDailog(response.msg)
+                response.msg?.let { view?.showErrorTimes(it,2) }
             }
         } else if (response.request is SendLoginCodeRequest) {
             //网络问题
@@ -185,30 +164,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         }
     }
 
-    fun dialogshow(type: Int) {
-        when (type) {
-            1 -> {
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else -> {
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
 
-            }
-        }
-    }
-
-    fun showErrorDailog() {
-        errorTimesDialog.show()
-        errorTimesDialog.setOnclickListener(View.OnClickListener {
-            when (it.id) {
-                R.id.rl_complete_verify -> {
-                    errorTimesDialog.dismiss()
-                }
-            }
-        })
-    }
 
     fun postChangeMytabInfo() {
         RxBus.getDefault().post(MyTabInfoEvent())

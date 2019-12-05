@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
@@ -26,6 +27,11 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
     private lateinit var strnewcapsw: String
     private lateinit var strencapsw: String
     private var oldcapsw:String=""
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
+
     override val layout: Int
         get() = R.layout.fragment_change_trade_pass
     override val viewModelId: Int
@@ -96,5 +102,23 @@ class ChangeTradePassFragment :AbsSwipeBackNetFragment<FragmentChangeTradePassBi
                 }
             }
         }
+    }
+
+    private fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+
+    override fun showProgressDailog(type: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

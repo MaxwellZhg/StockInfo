@@ -13,4 +13,8 @@ interface LoginRegisterView :AbsView{
    //逻辑扩展接口
     fun gotopsw()
     fun gotomain()
+
+    fun showProgressDailog(type:Int)
+
+    fun showErrorTimes(str:String,type:Int)
 }

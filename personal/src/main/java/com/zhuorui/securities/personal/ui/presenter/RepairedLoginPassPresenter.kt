@@ -25,11 +25,6 @@ import java.util.regex.Pattern
  * Desc:
  */
 class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLoginPassView,RepairedLoginPassViewModel>(){
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-
     override fun init() {
         super.init()
     }
@@ -125,7 +120,7 @@ class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLogi
     }
 
     fun modifyNewLoginPsw(oldstr:String,newStr:String){
-        //dialogshow(1)
+      //  view?.showProgressDailog(1)
         val request = ModifyLoginPswRequest(Md5Util.getMd5Str(oldstr),Md5Util.getMd5Str(newStr),transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendModifyNewLoginPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -133,22 +128,8 @@ class RepairedLoginPassPresenter(context: Context) :AbsNetPresenter<RepairedLogi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onmodifyNewLoginPsw(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
-            //dialogshow(0)
+       // view?.showProgressDailog(0)
             view?.gotomain()
 
-    }
-
-    private fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
-
-            }
-        }
     }
 }

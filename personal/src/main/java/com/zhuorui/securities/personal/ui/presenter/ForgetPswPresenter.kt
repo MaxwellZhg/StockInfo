@@ -38,13 +38,6 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
-    private val errorDialog by lazy {
-        ErrorTimesDialog(context,1,"")
-    }
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
     override fun init() {
         super.init()
         view?.init()
@@ -90,7 +83,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     }
 
     fun requestSendForgetCode(str: kotlin.String) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendForgetPwdCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -100,21 +93,21 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
         if(response.request is SendLoginCodeRequest){
-            dialogshow(0)
+            view?.showProgressDailog(0)
             setGetCodeClickState(1)
             startTimeCountDown()
         }else if(response.request is VerifForgetCodeRequest){
-            dialogshow(0)
+            view?.showProgressDailog(0)
             view?.restpsw()
         }
     }
 
     override fun onErrorResponse(response: ErrorResponse) {
-        dialogshow(0)
+        view?.showProgressDailog(0)
         if (response.request is SendLoginCodeRequest) {
             if(response.code == "030002"){
                // 请求验证超次数
-                showErrorDailog()
+                view?.showErrorTimes("",1)
                 return
             }else if(response.isNetworkBroken){
                 //网络错误
@@ -123,43 +116,19 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
             }
         }else if(response.request is VerifForgetCodeRequest){
              ToastUtil.instance.toastCenter(R.string.verify_code_error)
+            return
         }
         super.onErrorResponse(response)
     }
 
     fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = VerifForgetCodeRequest(str, code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
     }
 
 
-    fun showErrorDailog() {
-        errorDialog.show()
-        errorDialog.setOnclickListener( View.OnClickListener {
-            when(it.id){
-                R.id.rl_complete_verify->{
-                    errorDialog.dismiss()
-                }
-            }
-        })
-    }
-
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                if(progressDialog!=null) {
-                    progressDialog.setCancelable(true)
-                    progressDialog.dismiss()
-                }
-            }
-        }
-    }
 
     fun getGetCodeColor(state: Int) {
         viewModel?.getcodeState?.set(state)

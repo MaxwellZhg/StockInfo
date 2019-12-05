@@ -34,31 +34,12 @@ import java.util.*
  * Date: 2019/9/12
  * Desc:
  */
-class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVerifyCodeView,PhoneDevVerifyCodeViewModel>(),
-    DevComfirmDailog.CallBack{
+class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVerifyCodeView,PhoneDevVerifyCodeViewModel>() {
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-    /* 加载对话框 */
-    private val phoneDevDailog by lazy {
-        DevComfirmDailog.
-            createWidth255Dialog(context,true,true)
-            .setNoticeText(R.string.notice)
-            .setMsgText(R.string.dev_login_problem_tips)
-            .setCancelText(R.string.cancle)
-            .setConfirmText(R.string.phone_call)
-            .setCallBack(this)
-    }
-
     override fun init() {
         super.init()
-    }
-    fun showTipsDailog(){
-        phoneDevDailog.show()
     }
 
     @Throws(InterruptedException::class)
@@ -100,13 +81,9 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
         }
     }
 
-    override fun onCancel() {
 
-    }
 
-    override fun onConfirm() {
-      view?.gotoPhone()
-    }
+
     fun luanchCall(){
         var intent: Intent =  Intent()
         intent.action = Intent.ACTION_CALL
@@ -115,7 +92,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
     }
 
     fun requestUserLoginCode(str:String?,vfcode:String?,phoneArea:String?) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = UserLoginCodeRequest(str, vfcode,phoneArea, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
@@ -123,7 +100,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginCodeResponse(response: UserLoginCodeResponse) {
         if (response.request is UserLoginCodeRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             if (LocalAccountConfig.getInstance().saveLogin(
                     response.data.userId,
                     response.data.phone,
@@ -135,23 +112,10 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
         }
     }
 
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
-
-            }
-        }
-    }
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
-        dialogshow(0)
+        view?.showProgressDailog(0)
     }
     fun getUserInfoData(){
         val request = GetUserInfoDataRequest(transactions.createTransaction())
@@ -168,7 +132,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
     }
 
     fun requestSendLoginCode(str: kotlin.String) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -178,7 +142,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             setGetCodeClickState(1)
             startTimeCountDown()
         }

@@ -20,10 +20,6 @@ class ForgetTradePassPresenter(context: Context) :AbsNetPresenter<ForgetTradePas
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
 
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
     override fun init() {
         super.init()
     }
@@ -69,18 +65,5 @@ class ForgetTradePassPresenter(context: Context) :AbsNetPresenter<ForgetTradePas
         }
     }
 
-    private fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
-
-            }
-        }
-    }
 
 }

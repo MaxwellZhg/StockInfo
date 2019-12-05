@@ -30,11 +30,6 @@ class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhone
     internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
     internal var task: TimerTask? = null
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-
     override fun init() {
         super.init()
     }
@@ -60,7 +55,7 @@ class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhone
     }
 
     fun requestSendNewRepaiedCode(str: String) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendNewRepairedCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -69,7 +64,7 @@ class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhone
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendNewRepaiedCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
-        dialogshow(0)
+        view?.showProgressDailog(0)
         if (response.request is SendLoginCodeRequest) {
             startTimeCountDown()
             view?.showgetCode(response.data)
@@ -84,7 +79,7 @@ class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhone
         newPhone: String,
         newVerificationCode: String
     ) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = ModifyNewPhoneCodeRequest(
             str,
             verificationCode,
@@ -120,7 +115,7 @@ class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhone
 
     override fun onErrorResponse(response: ErrorResponse) {
         super.onErrorResponse(response)
-        dialogshow(0)
+        view?.showProgressDailog(0)
     }
 
     private fun startTimeCountDown() {
@@ -141,17 +136,4 @@ class ChangeNewPhonePresenter(context: Context) : AbsNetPresenter<ChangeNewPhone
         }
     }
 
-    private fun dialogshow(type: Int) {
-        when (type) {
-            1 -> {
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else -> {
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
-
-            }
-        }
-    }
 }

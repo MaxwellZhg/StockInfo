@@ -10,4 +10,5 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface ChangeTradePassView :AbsView{
   fun gotomain()
+  fun showProgressDailog(type:Int)
 }

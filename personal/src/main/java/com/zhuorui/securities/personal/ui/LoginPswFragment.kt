@@ -11,12 +11,14 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
+import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
@@ -36,6 +38,11 @@ import me.yokeyword.fragmentation.ISupportFragment
 class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPswViewModel,LoginPswView, LoginPswPresenter>(),LoginPswView,View.OnClickListener,TextWatcher{
     private lateinit var strphone: String
     private lateinit var password: String
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
+    private var errorDialog: ErrorTimesDialog?=null
     override val layout: Int
         get() = R.layout.login_psw_fragment
     override val viewModelId: Int
@@ -190,5 +197,39 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         et_password.addTextChangedListener(this)
         tv_forget_psw.setOnClickListener(this)
     }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
+        }
+    }
+    fun showErrorDailog(str:String?) {
+        errorDialog=ErrorTimesDialog(requireContext(),2,str)
+        errorDialog?.show()
+        errorDialog?.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_psw->{
+                    errorDialog?.dismiss()
+                }
+            }
+        })
+    }
+
+    override fun showProgressDailog(type: Int) {
+       dialogshow(type)
+    }
+    override fun showErrorTimesDailog(str: String) {
+       showErrorDailog(str)
+    }
+
 
 }

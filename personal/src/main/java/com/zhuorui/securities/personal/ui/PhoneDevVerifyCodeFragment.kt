@@ -12,6 +12,8 @@ import com.qw.soul.permission.SoulPermission
 import com.qw.soul.permission.bean.Permission
 import com.qw.soul.permission.bean.Permissions
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener
+import com.zhuorui.commonwidget.dialog.DevComfirmDailog
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
@@ -35,7 +37,21 @@ import kotlinx.android.synthetic.main.fragment_phone_dev_verify_code.*
 class PhoneDevVerifyCodeFragment :
     AbsSwipeBackNetFragment<FragmentPhoneDevVerifyCodeBinding, PhoneDevVerifyCodeViewModel, PhoneDevVerifyCodeView, PhoneDevVerifyCodePresenter>(),
     PhoneDevVerifyCodeView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener,
-    CheckRequestPermissionsListener {
+    CheckRequestPermissionsListener,DevComfirmDailog.CallBack {
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
+    /* 加载对话框 */
+    private val phoneDevDailog by lazy {
+        DevComfirmDailog.
+            createWidth255Dialog(requireContext(),true,true)
+            .setNoticeText(R.string.notice)
+            .setMsgText(R.string.dev_login_problem_tips)
+            .setCancelText(R.string.cancle)
+            .setConfirmText(R.string.phone_call)
+            .setCallBack(this)
+    }
 
     private var phone: String = ""
     private var phoneArea: String = ""
@@ -84,7 +100,7 @@ class PhoneDevVerifyCodeFragment :
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.tv_no_reciver_code -> {
-                presenter?.showTipsDailog()
+               phoneDevDailog.show()
             }
             R.id.tv_timer_tips->{
                 phone?.let { presenter?.requestSendLoginCode(it) }
@@ -92,7 +108,7 @@ class PhoneDevVerifyCodeFragment :
         }
     }
 
-    override fun gotoPhone() {
+   fun gotoPhone() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             SoulPermission.getInstance().checkAndRequestPermissions(
                 Permissions.build(
@@ -143,5 +159,32 @@ class PhoneDevVerifyCodeFragment :
         super.onDetach()
         (activity as AbsActivity).removeDispatchTouchEventListener(this)
     }
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onConfirm() {
+        gotoPhone()
+    }
+
+
 
 }

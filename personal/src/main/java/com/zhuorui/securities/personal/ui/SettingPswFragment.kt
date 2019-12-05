@@ -8,6 +8,8 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -32,6 +34,17 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
     ,SettingPswView,View.OnClickListener,TextWatcher{
     private var phone: String = ""
     private var code :String=""
+    private val infodialog: ConfirmToCancelDialog by lazy {
+        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
+            .setMsgText(R.string.register_tips)
+            .setCancelText(R.string.go_to_main)
+            .setConfirmText(R.string.complete_info)
+    }
+
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
     override val layout: Int
         get() = R.layout.setting_psw_fragment
     override val viewModelId: Int
@@ -45,7 +58,8 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
     private lateinit var strloginpsw: String
     private lateinit var strensurepsw: String
 
-    override fun init() {
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         phone = arguments?.getString("phone")?:phone
         code = arguments?.getString("code")?:code
         iv_back.setOnClickListener(this)
@@ -120,16 +134,24 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
             }
         }
     }
-    override fun gotomain() {
+   fun gotomain() {
         pop()
     }
 
-    override fun openaccount() {
+   fun openaccount() {
         ToastUtil.instance.toast("去开户页面")
     }
 
-    override fun showDialog() {
-       presenter?.showDailog()
+    fun showDailog() {
+        infodialog.setCallBack(object : ConfirmToCancelDialog.CallBack {
+            override fun onCancel() {
+                gotomain()
+            }
+
+            override fun onConfirm() {
+                openaccount()
+            }
+        }).show()
     }
 
     inner class PhoneEtChange : TextWatcher {
@@ -165,6 +187,30 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+    }
+
+    fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else -> {
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+            }
+        }
+    }
+
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
+    }
+
+    override fun gotoMain() {
+        gotomain()
+    }
+    override fun showSwicthGotoDailog() {
+        showDailog()
     }
 
 }

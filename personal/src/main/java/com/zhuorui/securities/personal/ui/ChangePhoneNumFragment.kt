@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -27,7 +28,10 @@ import kotlinx.android.synthetic.main.forget_psw_fragment.*
  * Desc:修改手机号
  * */
 class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding,ChangePhoneNumViewModel,ChangePhoneNumView,ChangePhoneNumPresenter>(),ChangePhoneNumView,View.OnClickListener,TextWatcher {
-
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
     override val layout: Int
         get() = R.layout.fragment_change_phone_num
     override val viewModelId: Int
@@ -99,5 +103,23 @@ class ChangePhoneNumFragment :AbsSwipeBackFragment<FragmentChangePhoneNumBinding
     }
     override fun showGetCode(str: String) {
         et_verify_code.setText(str)
+    }
+
+    private fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
     }
 }

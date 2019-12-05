@@ -10,5 +10,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface ChangeNewPhoneView :AbsView{
   fun gotomain()
-  fun showgetCode(str:String);
+  fun showgetCode(str:String)
+  fun showProgressDailog(type:Int)
 }

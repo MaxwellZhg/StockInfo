@@ -11,4 +11,6 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
 interface RestPswView :AbsView{
     fun init()
     fun gotopswlogin()
+
+    fun showProgressDailog(type:Int)
 }

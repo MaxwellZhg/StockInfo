@@ -29,26 +29,12 @@ import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
  * Desc:
  */
 class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, SettingPswViewModel>() {
-
-    private val infodialog: ConfirmToCancelDialog by lazy {
-        ConfirmToCancelDialog.createWidth265Dialog(context, false, false)
-            .setMsgText(R.string.register_tips)
-            .setCancelText(R.string.go_to_main)
-            .setConfirmText(R.string.complete_info)
-    }
-
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-
     override fun init() {
         super.init()
-        view?.init()
     }
 
     fun requestUserLoginPwdCode(pwd: kotlin.String, code: kotlin.String, phone: kotlin.String) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = UserLoginRegisterRequest(pwd, code, phone, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userPwdCode(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
@@ -63,7 +49,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
                     response.data.token
                 )
             ) {
-                dialogshow(0)
+                view?.showProgressDailog(0)
                 getUserInfoData()
           /*      view?.showDialog()
                 // 通知登录状态发生改变
@@ -74,37 +60,13 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
 
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginRegisterRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             return
         }
         super.onErrorResponse(response)
     }
 
 
-    fun showDailog() {
-        infodialog.setCallBack(object : ConfirmToCancelDialog.CallBack {
-            override fun onCancel() {
-                view?.gotomain()
-            }
-
-            override fun onConfirm() {
-                view?.openaccount()
-            }
-        }).show()
-    }
-
-    fun dialogshow(type: Int) {
-        when (type) {
-            1 -> {
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else -> {
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
-            }
-        }
-    }
 
     fun getUserInfoData(){
         val request = GetUserInfoDataRequest(transactions.createTransaction())
@@ -115,7 +77,9 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
     fun onGetUserInfoDataResponse(response: GetUserInfoResponse) {
         if (!transactions.isMyTransaction(response)) return
         LocalAccountConfig.getInstance().setZrNo(response.data.zrNo)
-        view?.gotomain()
+        view?.gotoMain()
+       // 弹框选择暂时关闭
+       // view?.showSwicthGotoDailog()
         // 通知登录状态发生改变
         RxBus.getDefault().post(LoginStateChangeEvent(true))
     }

@@ -28,10 +28,6 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         super.init()
         view?.init()
     }
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
     fun setTips(strnew:String?,strensure:String?){
         viewModel?.strnew?.set(strnew)
         viewModel?.strensure?.set(strensure)
@@ -96,7 +92,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         }
     }
     fun requestRestLoginPsw(phone: String?,newpsw:String,code: String?) {
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = RestLoginPswRequest(phone, newpsw,code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.restLoginPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -106,7 +102,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
     fun onRestLoginPswResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
         if (response.request is RestLoginPswRequest) {
-             dialogshow(0)
+            view?.showProgressDailog(0)
               view?.gotopswlogin()
         }
     }
@@ -114,24 +110,10 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
 
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is RestLoginPswRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             return
         }
         super.onErrorResponse(response)
-    }
-
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
-
-            }
-        }
     }
 
 

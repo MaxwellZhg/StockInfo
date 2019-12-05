@@ -9,6 +9,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
@@ -17,6 +18,7 @@ import com.zhuorui.securities.personal.ui.presenter.ForgetPswPresenter
 import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
 import com.zhuorui.securities.personal.databinding.ForgetPswFragmentBinding
+import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.viewmodel.CountryDisctViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
@@ -36,9 +38,15 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Desc:忘记密码
  * */
 class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,ForgetPswViewModel, ForgetPswView, ForgetPswPresenter>(),ForgetPswView,View.OnClickListener,TextWatcher{
-
     private lateinit var strphone: String
     private lateinit var phonecode: String
+    private val errorDialog by lazy {
+        ErrorTimesDialog(requireContext(),1,"")
+    }
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
     override val layout: Int
         get() = R.layout.forget_psw_fragment
     override val viewModelId: Int
@@ -208,4 +216,35 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
 
     }
 
+    fun showErrorDailog() {
+        errorDialog.show()
+        errorDialog.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_verify->{
+                    errorDialog.dismiss()
+                }
+            }
+        })
+    }
+
+    fun dialogshow(type:Int){
+        when(type){
+            1->{
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else->{
+                if(progressDialog!=null) {
+                    progressDialog.setCancelable(true)
+                    progressDialog.dismiss()
+                }
+            }
+        }
+    }
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
+    }
+    override fun showErrorTimes(str: String, type: Int) {
+        showErrorDailog()
+    }
 }

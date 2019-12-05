@@ -3,32 +3,28 @@ package com.zhuorui.securities.personal.ui
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
-import com.zhuorui.securities.base2app.infra.LogInfra
-import com.zhuorui.securities.base2app.rxbus.RxBus
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
+import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.databinding.LoginAndRegisterFragmentBinding
-import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
-import com.zhuorui.securities.personal.event.LoginStateChangeEvent
+import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.presenter.LoginRegisterPresenter
 import com.zhuorui.securities.personal.ui.view.LoginRegisterView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
+import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 import java.util.*
-import java.util.regex.Pattern
-import android.text.InputFilter
-import com.zhuorui.securities.personal.R
-import com.zhuorui.securities.personal.util.PatternUtils
 
 
 /**
@@ -40,7 +36,6 @@ import com.zhuorui.securities.personal.util.PatternUtils
 class LoginRegisterFragment :
     AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(),
     View.OnClickListener, TextWatcher, LoginRegisterView {
-
     private lateinit var strphone: String
     private lateinit var phonecode: String
     var filterLength = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
@@ -60,6 +55,11 @@ class LoginRegisterFragment :
     override val getView: LoginRegisterView
         get() = this
 
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
+    private var errorDialog :ErrorTimesDialog?=null
     override fun init() {
         locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             resources.configuration.locales.get(0)
@@ -265,6 +265,41 @@ class LoginRegisterFragment :
 
         }
 
+    }
+
+    fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else -> {
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+
+
+    override fun showProgressDailog(type: Int) {
+          dialogshow(type)
+    }
+
+    override fun showErrorTimes(str: String, type: Int) {
+       showErrorTimesDailog(str,type)
+    }
+
+    fun showErrorTimesDailog(str:String?,type:Int) {
+        errorDialog= context?.let { ErrorTimesDialog(it,type,str) }
+        errorDialog?.show()
+        errorDialog?.setOnclickListener( View.OnClickListener {
+            when(it.id){
+                R.id.rl_complete_psw->{
+                    errorDialog?.dismiss()
+                }
+            }
+        })
     }
 }
 

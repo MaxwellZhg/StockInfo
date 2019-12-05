@@ -9,8 +9,8 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  * Desc:
  */
 interface SettingPswView :AbsView{
-    fun  init()
-    fun showDialog()
-    fun gotomain()
-    fun openaccount()
+    fun gotoMain()
+    fun showProgressDailog(type:Int)
+
+    fun showSwicthGotoDailog()
 }

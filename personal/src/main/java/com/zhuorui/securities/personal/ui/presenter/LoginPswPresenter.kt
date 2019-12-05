@@ -39,18 +39,12 @@ import java.util.regex.Pattern
  * Desc:
  */
 class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginPswViewModel>(){
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-   private var errorDialog:ErrorTimesDialog?=null
    private val con = context
-
     override fun init() {
         super.init()
     }
     fun requestLoginPwd(phone: kotlin.String,password: kotlin.String,phoneArea:kotlin.String) {
-        dialogshow(1)
+       view?.showProgressDailog(1)
         val request = UserLoginPwdRequest(phone, password,CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginByPwd(request)
             ?.enqueue(Network.IHCallBack<UserLoginCodeResponse>(request))
@@ -58,7 +52,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
 
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onUserLoginPwdResponse(response: UserLoginCodeResponse) {
-        dialogshow(0)
+        view?.showProgressDailog(0)
         if (response.request is UserLoginPwdRequest) {
             if (LocalAccountConfig.getInstance().saveLogin(
                     response.data.userId,
@@ -74,9 +68,10 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
 
     override fun onErrorResponse(response: ErrorResponse) {
         if (response.request is UserLoginPwdRequest) {
-            dialogshow(0)
+            view?.showProgressDailog(0)
             if(response.code=="010005"){
-                showErrorDailog(response.msg)
+                //错误次数
+                response.msg?.let { view?.showErrorTimesDailog(it) }
                 return
             }
             if(response.code=="010007"){
@@ -89,33 +84,6 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
 
     private fun showPswError() {
 
-    }
-
-
-    fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                if(progressDialog!=null) {
-                    progressDialog.setCancelable(true)
-                    progressDialog.dismiss()
-                }
-            }
-        }
-    }
-    fun showErrorDailog(str:String?) {
-        errorDialog=ErrorTimesDialog(con,2,str)
-        errorDialog?.show()
-        errorDialog?.setOnclickListener( View.OnClickListener {
-            when(it.id){
-                R.id.rl_complete_psw->{
-                    errorDialog?.dismiss()
-                }
-            }
-        })
     }
 
     fun detailTips(str:String,pass:String):Boolean{

@@ -8,6 +8,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
+import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
@@ -28,11 +29,15 @@ import me.yokeyword.fragmentation.ISupportFragment
  * Desc:修改新手机号
  * */
 class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumBinding,ChangeNewPhoneViewModel,ChangeNewPhoneView,ChangeNewPhonePresenter>(),ChangeNewPhoneView,TextWatcher,View.OnClickListener{
-
     private  var strnewphone: String=""
     private  var strnewphonecode: String=""
     private var oldphone:String=""
     private var code : String? =""
+    /* 加载进度条 */
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext())
+    }
+
     override val layout: Int
         get() = R.layout.fragment_change_new_phone_num
     override val viewModelId: Int
@@ -130,5 +135,24 @@ class ChangeNewPhoneFragment :AbsSwipeBackNetFragment<FragmentChangeNewPhoneNumB
     override fun showgetCode(str: String) {
         et_verify_code.setText(str)
     }
+
+    private fun dialogshow(type: Int) {
+        when (type) {
+            1 -> {
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+            }
+            else -> {
+                progressDialog.setCancelable(true)
+                progressDialog.dismiss()
+
+            }
+        }
+    }
+
+    override fun showProgressDailog(type: Int) {
+        dialogshow(type)
+    }
+
 
 }

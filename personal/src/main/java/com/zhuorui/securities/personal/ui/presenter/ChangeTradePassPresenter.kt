@@ -25,17 +25,12 @@ import com.zhuorui.securities.personal.ui.viewmodel.ChangeTradePassViewModel
  * Desc:
  */
 class ChangeTradePassPresenter(context: Context) :AbsNetPresenter<ChangeTradePassView,ChangeTradePassViewModel>(){
-    /* 加载进度条 */
-    private val progressDialog by lazy {
-        ProgressDialog(context)
-    }
-
     override fun init() {
         super.init()
     }
 
     fun modifyCapitalPsw(oldstr:String,newStr:String){
-        dialogshow(1)
+        view?.showProgressDailog(1)
         val request = ModifyCapitalPswRequest(Md5Util.getMd5Str(oldstr), Md5Util.getMd5Str(newStr),transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendModifyCapitalPsw(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -43,7 +38,7 @@ class ChangeTradePassPresenter(context: Context) :AbsNetPresenter<ChangeTradePas
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onmodifyCapitalPsw(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
-        dialogshow(0)
+        view?.showProgressDailog(0)
         view?.gotomain()
 
     }
@@ -64,18 +59,6 @@ class ChangeTradePassPresenter(context: Context) :AbsNetPresenter<ChangeTradePas
         return true
     }
 
-    private fun dialogshow(type:Int){
-        when(type){
-            1->{
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            }
-            else->{
-                progressDialog.setCancelable(true)
-                progressDialog.dismiss()
 
-            }
-        }
-    }
 
 }
