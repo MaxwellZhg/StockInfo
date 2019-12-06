@@ -94,7 +94,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     override fun gotomain() {
         pop()
     }
-    override fun afterTextChanged(p0: Editable?) {
+   override fun afterTextChanged(p0: Editable?) {
         if (p0.toString().isNotEmpty()) {
             p0?.toString()?.trim()?.let {
                 if(TextUtils.isEmpty(et_password.text.toString())){
@@ -159,9 +159,9 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
             }
             if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_password.text.toString())){
                 if(tv_areaphone_tips.text == "+86"){
-                    tv_btn_login.isEnabled = PatternUtils.patternZhPhone(p0.toString())
+                    tv_btn_login.isEnabled = PatternUtils.patternZhPhone(p0.toString())&&PatternUtils.patternLoginPassWord(et_password.text.toString())
                 }else{
-                    tv_btn_login.isEnabled = PatternUtils.patternOtherPhone(p0.toString())
+                    tv_btn_login.isEnabled = PatternUtils.patternOtherPhone(p0.toString())&&PatternUtils.patternLoginPassWord(et_password.text.toString())
                 }
             }else{
                 tv_btn_login.isEnabled=false

@@ -17,7 +17,7 @@ import java.util.regex.Pattern
  * Date: 2019/12/6
  * Desc:
  */
-class CommonEditListenner private constructor(editpass:EditText,editphone:EditText,tv_btn:StateButton,code:String,type:Int): TextWatcher{
+class CommonEditListenner  constructor(editpass:EditText,editphone:EditText,tv_btn:StateButton,code:String,type:Int): TextWatcher{
     private var pre:String =""
     private var current:String=""
     private var editpass =editpass
@@ -26,6 +26,11 @@ class CommonEditListenner private constructor(editpass:EditText,editphone:EditTe
     private var code = code
     private var type = type
     override fun afterTextChanged(s: Editable?) {
+        if(patternLoginChar(s.toString().split(pre)[0])){
+            editpass.setText(s.toString())
+        }else{
+            editpass.setText(pre)
+        }
         if (s.toString().isNotEmpty()) {
             s?.toString()?.trim()?.let {
                 if(type==1) {
@@ -39,7 +44,11 @@ class CommonEditListenner private constructor(editpass:EditText,editphone:EditTe
                         tv_btn.isEnabled = false
                     }
                 }else{
-
+                    if(!TextUtils.isEmpty(s.toString())&&!TextUtils.isEmpty(editphone.text.toString())){
+                        tv_btn.isEnabled = PatternUtils.patternLoginPassWord(editphone.text.toString())&&PatternUtils.patternLoginPassWord(editpass.text.toString())
+                    }else{
+                        tv_btn.isEnabled=false
+                    }
                 }
             }
         } else {
@@ -52,12 +61,6 @@ class CommonEditListenner private constructor(editpass:EditText,editphone:EditTe
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        current=s.toString()
-        if(patternLoginChar(current.split(pre)[0])){
-            editpass.setText(current)
-        }else{
-            editpass.setText(pre)
-        }
 
     }
 

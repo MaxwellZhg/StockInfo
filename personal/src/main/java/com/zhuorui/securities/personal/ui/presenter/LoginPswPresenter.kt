@@ -122,9 +122,9 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
         }
         if(!TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
             if(code == "+86"){
-                btn_login.isEnabled = PatternUtils.patternZhPhone(et_phone.text.toString())
+                btn_login.isEnabled = PatternUtils.patternZhPhone(et_phone.text.toString())&&PatternUtils.patternLoginPassWord(et_code.text.toString())
             }else{
-                btn_login.isEnabled = PatternUtils.patternOtherPhone(et_phone.text.toString())
+                btn_login.isEnabled =PatternUtils.patternZhPhone(et_phone.text.toString())&&PatternUtils.patternLoginPassWord(et_code.text.toString())
             }
         }else{
             btn_login.isEnabled=false
