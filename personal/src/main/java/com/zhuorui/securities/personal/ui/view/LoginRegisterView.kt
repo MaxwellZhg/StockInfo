@@ -16,4 +16,6 @@ interface LoginRegisterView :AbsView{
     fun showProgressDailog(type:Int)
 
     fun showErrorTimes(str:String,type:Int)
+
+    fun  changeLoginSendCodeState(type:Int)
 }

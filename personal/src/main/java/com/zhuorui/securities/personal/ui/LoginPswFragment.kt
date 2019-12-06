@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.commonwidget.dialog.ProgressDialog
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -110,11 +111,11 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+        LogInfra.Log.e("ttttttt",p0.toString())
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+        LogInfra.Log.e("eeeee",p0.toString())
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {

@@ -53,7 +53,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
                         task = null
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
-                        viewModel?.getCodeClickState?.set(0)
+                        view?.changeLoginSendCodeState(0)
                     }
                 }
             }
@@ -141,12 +141,10 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
             view?.showProgressDailog(0)
-            setGetCodeClickState(1)
+            view?.changeLoginSendCodeState(1)
             startTimeCountDown()
         }
     }
 
-    fun setGetCodeClickState(state:Int){
-        viewModel?.getCodeClickState?.set(state)
-    }
+
 }

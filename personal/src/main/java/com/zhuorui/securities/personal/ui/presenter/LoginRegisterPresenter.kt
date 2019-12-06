@@ -70,7 +70,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
             view?.showProgressDailog(0)
-            setGetCodeClickState(1)
+            view?.changeLoginSendCodeState(1)
             startTimeCountDown()
         }
     }
@@ -130,7 +130,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                         timer = null
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
                         viewModel?.getcodeState?.set(1)
-                        viewModel?.getCodeClickState?.set(0)
+                        view?.changeLoginSendCodeState(0)
                     }
                 }
             }
@@ -182,10 +182,6 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         RxBus.getDefault().post(LoginStateChangeEvent(true, transaction))
     }
 
-    fun setGetCodeClickState(state: Int) {
-        viewModel?.getCodeClickState?.set(state)
-    }
-
     fun detailChangeCodeState(code: String, et_phone: EditText, et_code: EditText, btn_login: StateButton) {
         if (code == "+86") {
             et_phone.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(11))
@@ -197,22 +193,22 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
                 if (matcher) {
                     getGetCodeColor(1)
-                    setGetCodeClickState(0)
+                    view?.changeLoginSendCodeState(0)
                     btn_login.isEnabled = true
                 } else {
                     getGetCodeColor(0)
-                    setGetCodeClickState(1)
+                    view?.changeLoginSendCodeState(1)
                     btn_login.isEnabled = false
                 }
             } else {
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
                 if (matcher) {
                     getGetCodeColor(1)
-                    setGetCodeClickState(0)
+                    view?.changeLoginSendCodeState(0)
                     btn_login.isEnabled = true
                 } else {
                     getGetCodeColor(0)
-                    setGetCodeClickState(1)
+                    view?.changeLoginSendCodeState(1)
                     btn_login.isEnabled = false
                 }
             }
@@ -221,32 +217,32 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
                 if (matcher) {
                     getGetCodeColor(1)
-                    setGetCodeClickState(0)
+                    view?.changeLoginSendCodeState(0)
                     btn_login.isEnabled = false
                 } else {
                     getGetCodeColor(0)
-                    setGetCodeClickState(1)
+                    view?.changeLoginSendCodeState(1)
                     btn_login.isEnabled = false
                 }
             } else {
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
                 if (matcher) {
                     getGetCodeColor(1)
-                    setGetCodeClickState(0)
+                    view?.changeLoginSendCodeState(0)
                     btn_login.isEnabled = false
                 } else {
                     getGetCodeColor(0)
-                    setGetCodeClickState(1)
+                    view?.changeLoginSendCodeState(1)
                     btn_login.isEnabled = false
                 }
             }
         } else if (TextUtils.isEmpty(et_phone.text.toString()) && !TextUtils.isEmpty(et_code.text.toString())) {
             getGetCodeColor(0)
-            setGetCodeClickState(1)
+            view?.changeLoginSendCodeState(1)
             btn_login.isEnabled = false
         } else if (TextUtils.isEmpty(et_phone.text.toString()) && TextUtils.isEmpty(et_code.text.toString())) {
             getGetCodeColor(0)
-            setGetCodeClickState(1)
+            view?.changeLoginSendCodeState(1)
             btn_login.isEnabled = false
         }
     }

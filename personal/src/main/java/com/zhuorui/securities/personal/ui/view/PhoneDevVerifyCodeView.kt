@@ -12,4 +12,6 @@ interface PhoneDevVerifyCodeView :AbsView{
     fun gotomain()
 
     fun showProgressDailog(type:Int)
+    fun changeLoginSendCodeState(type: Int)
+
 }

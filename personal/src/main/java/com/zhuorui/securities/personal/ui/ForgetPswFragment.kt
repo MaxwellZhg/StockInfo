@@ -21,6 +21,12 @@ import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.forget_psw_fragment.*
+import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone
+import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
+import kotlinx.android.synthetic.main.forget_psw_fragment.rl_country_disct
+import kotlinx.android.synthetic.main.forget_psw_fragment.tv_areaphone_tips
+import kotlinx.android.synthetic.main.forget_psw_fragment.tv_send_code
+import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 
@@ -106,7 +112,11 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                 }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&TextUtils.isEmpty(et_phone.text.toString())){
                     tv_btn_commit.isEnabled=false
                 }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
-                    tv_btn_commit.isEnabled = PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                    if(tv_areaphone_tips.text  == "+86"){
+                        tv_btn_login.isEnabled = PatternUtils.patternZhPhone(et_phone.text.toString())&&PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                    }else{
+                        tv_btn_login.isEnabled == PatternUtils.patternOtherPhone(et_phone.text.toString())&& PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                    }
                 }
             }
         } else {
@@ -153,18 +163,22 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                     if(matcher) {
                         presenter?.getGetCodeColor(1)
+                        changeLoginSendCodeState(0)
                         tv_btn_commit.isEnabled = true
                     }else{
                         presenter?.getGetCodeColor(0)
+                        changeLoginSendCodeState(1)
                         tv_btn_commit.isEnabled = false
                     }
                 }else{
                     val matcher = PatternUtils.patternOtherPhone(p0.toString())
                     if(matcher) {
                         presenter?.getGetCodeColor(1)
+                        changeLoginSendCodeState(0)
                         tv_btn_commit.isEnabled = true
                     }else{
                         presenter?.getGetCodeColor(0)
+                        changeLoginSendCodeState(1)
                         tv_btn_commit.isEnabled = false
                     }
                 }
@@ -173,26 +187,32 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                     if(matcher) {
                         presenter?.getGetCodeColor(1)
+                        changeLoginSendCodeState(0)
                         tv_btn_commit.isEnabled = false
                     }else{
                         presenter?.getGetCodeColor(0)
+                        changeLoginSendCodeState(1)
                         tv_btn_commit.isEnabled = false
                     }
                 }else{
                     val matcher = PatternUtils.patternOtherPhone(p0.toString())
                     if(matcher) {
                         presenter?.getGetCodeColor(1)
+                        changeLoginSendCodeState(0)
                         tv_btn_commit.isEnabled = false
                     }else{
                         presenter?.getGetCodeColor(0)
+                        changeLoginSendCodeState(1)
                         tv_btn_commit.isEnabled = false
                     }
                 }
             }else if(TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_phone_code.text.toString())){
                 presenter?.getGetCodeColor(0)
+                changeLoginSendCodeState(1)
                 tv_btn_commit.isEnabled=false
             }else if(TextUtils.isEmpty(p0.toString())&&TextUtils.isEmpty(et_phone_code.text.toString())){
                 presenter?.getGetCodeColor(0)
+                changeLoginSendCodeState(1)
                 tv_btn_commit.isEnabled=false
             }
         }
@@ -238,4 +258,8 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
     override fun showErrorTimes(str: String, type: Int) {
         showErrorDailog()
     }
+    override fun changeLoginSendCodeState(type: Int) {
+        tv_send_code.isClickable = type != 1
+    }
+
 }

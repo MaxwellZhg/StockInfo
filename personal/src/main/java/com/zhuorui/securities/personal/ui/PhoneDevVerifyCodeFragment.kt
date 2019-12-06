@@ -37,6 +37,7 @@ class PhoneDevVerifyCodeFragment :
     AbsSwipeBackNetFragment<FragmentPhoneDevVerifyCodeBinding, PhoneDevVerifyCodeViewModel, PhoneDevVerifyCodeView, PhoneDevVerifyCodePresenter>(),
     PhoneDevVerifyCodeView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener,
     CheckRequestPermissionsListener,DevComfirmDailog.CallBack {
+
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(requireContext())
@@ -183,6 +184,10 @@ class PhoneDevVerifyCodeFragment :
     override fun onConfirm() {
         gotoPhone()
     }
+    override fun changeLoginSendCodeState(type: Int) {
+        tv_timer_tips.isClickable = type != 1
+    }
+
 
 
 

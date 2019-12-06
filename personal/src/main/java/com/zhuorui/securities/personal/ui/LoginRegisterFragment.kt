@@ -107,7 +107,11 @@ class LoginRegisterFragment :
                 } else if (!TextUtils.isEmpty(et_phone_code.text.toString()) && TextUtils.isEmpty(et_phone.text.toString())) {
                     tv_btn_login.isEnabled = false
                 } else if (!TextUtils.isEmpty(et_phone_code.text.toString()) && !TextUtils.isEmpty(et_phone.text.toString())) {
-                    tv_btn_login.isEnabled = PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                    if(tv_areaphone_tips.text  == "+86"){
+                        tv_btn_login.isEnabled = PatternUtils.patternZhPhone(et_phone.text.toString())&&PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                    }else{
+                        tv_btn_login.isEnabled == PatternUtils.patternOtherPhone(et_phone.text.toString())&& PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                    }
                 }
             }
         } else {
@@ -200,23 +204,23 @@ class LoginRegisterFragment :
                 if (tv_areaphone_tips.text == "+86") {
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                     if (matcher) {
-                        presenter?.getGetCodeColor(1)
-                        presenter?.setGetCodeClickState(0)
+                         presenter?.getGetCodeColor(1)
+                         tv_send_code.isClickable =true
                         tv_btn_login.isEnabled = true
                     } else {
                         presenter?.getGetCodeColor(0)
-                        presenter?.setGetCodeClickState(1)
+                        tv_send_code.isClickable =false
                         tv_btn_login.isEnabled = false
                     }
                 } else {
                     val matcher = PatternUtils.patternOtherPhone(p0.toString())
                     if (matcher) {
                         presenter?.getGetCodeColor(1)
-                        presenter?.setGetCodeClickState(0)
+                        tv_send_code.isClickable =true
                         tv_btn_login.isEnabled = true
                     } else {
                         presenter?.getGetCodeColor(0)
-                        presenter?.setGetCodeClickState(1)
+                        tv_send_code.isClickable =false
                         tv_btn_login.isEnabled = false
                     }
                 }
@@ -225,32 +229,32 @@ class LoginRegisterFragment :
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                     if (matcher) {
                         presenter?.getGetCodeColor(1)
-                        presenter?.setGetCodeClickState(0)
+                        tv_send_code.isClickable =true
                         tv_btn_login.isEnabled = false
                     } else {
                         presenter?.getGetCodeColor(0)
-                        presenter?.setGetCodeClickState(1)
+                        tv_send_code.isClickable =false
                         tv_btn_login.isEnabled = false
                     }
                 } else {
                     val matcher = PatternUtils.patternOtherPhone(p0.toString())
                     if (matcher) {
                         presenter?.getGetCodeColor(1)
-                        presenter?.setGetCodeClickState(0)
+                        tv_send_code.isClickable =true
                         tv_btn_login.isEnabled = false
                     } else {
                         presenter?.getGetCodeColor(0)
-                        presenter?.setGetCodeClickState(1)
+                        tv_send_code.isClickable =false
                         tv_btn_login.isEnabled = false
                     }
                 }
             } else if (TextUtils.isEmpty(p0.toString()) && !TextUtils.isEmpty(et_phone_code.text.toString())) {
                 presenter?.getGetCodeColor(0)
-                presenter?.setGetCodeClickState(1)
+                tv_send_code.isClickable =false
                 tv_btn_login.isEnabled = false
             } else if (TextUtils.isEmpty(p0.toString()) && TextUtils.isEmpty(et_phone_code.text.toString())) {
                 presenter?.getGetCodeColor(0)
-                presenter?.setGetCodeClickState(1)
+                tv_send_code.isClickable =false
                 tv_btn_login.isEnabled = false
             }
         }
@@ -299,5 +303,9 @@ class LoginRegisterFragment :
             }
         })
     }
+    override fun changeLoginSendCodeState(type: Int) {
+        tv_send_code.isClickable = type != 1
+    }
+
 }
 
