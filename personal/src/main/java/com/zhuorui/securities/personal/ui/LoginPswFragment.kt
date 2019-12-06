@@ -24,7 +24,12 @@ import com.zhuorui.securities.personal.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
+import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
+import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
+import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle
+import kotlinx.android.synthetic.main.login_psw_fragment.tv_areaphone_tips
+import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 
@@ -102,7 +107,11 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                 }else if(!TextUtils.isEmpty(et_password.text.toString())&&TextUtils.isEmpty(et_phone.text.toString())){
                     tv_btn_login.isEnabled=false
                 }else if(!TextUtils.isEmpty(et_password.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
-                    tv_btn_login.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+                    if(tv_areaphone_tips.text  == "+86"){
+                        tv_btn_login.isEnabled = PatternUtils.patternLoginPassWord(et_password.text.toString())&&PatternUtils.patternZhPhone(et_phone.text.toString())
+                    }else{
+                        tv_btn_login.isEnabled == PatternUtils.patternLoginPassWord(et_password.text.toString())&&PatternUtils.patternOtherPhone(et_phone.text.toString())
+                    }
                 }
             }
         } else {
