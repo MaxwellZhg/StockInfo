@@ -1,8 +1,10 @@
 package com.zhuorui.securities.base2app.network
 
+import com.zhuorui.securities.base2app.R
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.util.JsonUtil
+import com.zhuorui.securities.base2app.util.ResUtil
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -114,13 +116,13 @@ object Network {
             val code = response.code()
             if (!response.isSuccessful) {
                 LogInfra.Log.e(TAG, " Response Failure $code")
-                RxBus.getDefault().post(ErrorResponse(request, code.toString(), "服务器开小差了，请稍后再试",null))
+                RxBus.getDefault().post(ErrorResponse(request, code.toString(), ResUtil.getString(R.string.network_anomaly),null))
                 return
             }
             val t = response.body()
             if (t == null) {
                 LogInfra.Log.e(TAG, "Response Failure Body is empty")
-                RxBus.getDefault().post(ErrorResponse(request, code.toString(), "服务器开小差了，请稍后再试",null))
+                RxBus.getDefault().post(ErrorResponse(request, code.toString(),  ResUtil.getString(R.string.network_anomaly),null))
                 return
             }
             t.request = request
