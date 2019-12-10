@@ -94,7 +94,7 @@ class PhoneDevVerifyCodeFragment :
         tv_timer_tips.setOnClickListener(this)
         tv_phone_timer_tips.text =
             ResUtil.getString(R.string.phone_dev_timer_phonenum_tips) + PhoneHideUtils.hidePhoneNum(phone)
-        presenter?.startTimeCountDown()
+        presenter?.startTask()
     }
 
     override fun onClick(p0: View?) {
@@ -185,7 +185,9 @@ class PhoneDevVerifyCodeFragment :
         gotoPhone()
     }
     override fun changeLoginSendCodeState(type: Int) {
-        tv_timer_tips.isClickable = type != 1
+        if(tv_timer_tips!=null) {
+            tv_timer_tips.isClickable = type != 1
+        }
     }
 
 

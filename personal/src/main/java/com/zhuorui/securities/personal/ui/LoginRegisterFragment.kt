@@ -304,7 +304,9 @@ class LoginRegisterFragment :
         })
     }
     override fun changeLoginSendCodeState(type: Int) {
-        tv_send_code.isClickable = type != 1
+        if(tv_send_code!=null) {
+            tv_send_code.isClickable = type != 1
+        }
     }
 
 }

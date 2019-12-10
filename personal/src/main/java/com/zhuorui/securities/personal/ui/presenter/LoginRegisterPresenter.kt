@@ -29,7 +29,12 @@ import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.LoginRegisterView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginRegisterViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Maxwell.
@@ -38,20 +43,15 @@ import java.util.*
  * Desc:
  */
 class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterView, LoginRegisterViewModel>() {
-    internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
-    internal var task: TimerTask? = null
+    private var disposable:Disposable?=null
     private var transaction: String? = null
-    override fun init() {
-        super.init()
-    }
 
     fun setTransaction(transaction: String?) {
         this.transaction = transaction
     }
 
     fun requestSendLoginCode(str: kotlin.String) {
-        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -69,9 +69,8 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
-            view?.showProgressDailog(0)
             view?.changeLoginSendCodeState(1)
-            startTimeCountDown()
+            startTask()
         }
     }
 
@@ -116,46 +115,23 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         super.onErrorResponse(response)
     }
 
-    @Throws(InterruptedException::class)
     fun startTask() {
-        if (task == null) {
-            timer = Timer()
-            task = object : TimerTask() {
-                override fun run() {
+            disposable = Observable.interval(0,1,  TimeUnit.SECONDS).take(61)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
                     recLen--
-                    viewModel?.str?.set(recLen.toString() + "s")
-                    if (recLen < 0) {
-                        timer!!.cancel()
-                        task = null
-                        timer = null
+                    viewModel?.str?.set(recLen.toString()+"s")
+                    if(recLen<0) {
                         viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
                         viewModel?.getcodeState?.set(1)
                         view?.changeLoginSendCodeState(0)
                     }
                 }
-            }
-            timer?.schedule(task, 1000, 1000)
         }
 
-    }
 
-    fun startTimeCountDown() {
-        if (recLen == 60) {
-            try {
-                startTask()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
 
-        } else if (recLen < 0) {
-            recLen = 60
-            try {
-                startTask()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }
-    }
 
 
 
@@ -245,6 +221,11 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
             view?.changeLoginSendCodeState(1)
             btn_login.isEnabled = false
         }
+    }
+
+    override fun destroy() {
+        super.destroy()
+        disposable?.dispose()
     }
 
 }

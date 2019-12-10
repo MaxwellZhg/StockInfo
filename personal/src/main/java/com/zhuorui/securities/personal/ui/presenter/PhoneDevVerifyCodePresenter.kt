@@ -24,7 +24,12 @@ import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.PhoneDevVerifyCodeView
 import com.zhuorui.securities.personal.ui.viewmodel.PhoneDevVerifyCodeViewModel
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Maxwell.
@@ -33,51 +38,26 @@ import java.util.*
  * Desc:
  */
 class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVerifyCodeView,PhoneDevVerifyCodeViewModel>() {
-    internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
-    internal var task: TimerTask? = null
-    override fun init() {
-        super.init()
-    }
+    private var disposable: Disposable?=null
 
-    @Throws(InterruptedException::class)
+
+
     fun startTask() {
-        if (task == null) {
-            timer = Timer()
-            task = object : TimerTask() {
-                override fun run() {
-                    recLen--
-                    viewModel?.str?.set(recLen.toString()+"s")
-                    if (recLen < 0) {
-                        timer!!.cancel()
-                        task = null
-                        timer = null
-                        viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
-                        view?.changeLoginSendCodeState(0)
-                    }
+        disposable = Observable.interval(0,1,  TimeUnit.SECONDS).take(61)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                recLen--
+                viewModel?.str?.set(recLen.toString()+"s")
+                if(recLen<0) {
+                    viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
+                    view?.changeLoginSendCodeState(0)
                 }
             }
-        }
-        timer!!.schedule(task, 1000, 1000)
     }
 
-    fun startTimeCountDown() {
-        if (recLen == 60) {
-            try {
-                startTask()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
 
-        } else if (recLen < 0) {
-            recLen = 60
-            try {
-                startTask()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }
-    }
 
 
 
@@ -130,7 +110,6 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
     }
 
     fun requestSendLoginCode(str: kotlin.String) {
-        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -140,10 +119,14 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
-            view?.showProgressDailog(0)
             view?.changeLoginSendCodeState(1)
-            startTimeCountDown()
+            startTask()
         }
+    }
+
+    override fun destroy() {
+        super.destroy()
+
     }
 
 
