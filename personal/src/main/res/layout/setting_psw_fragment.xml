@@ -60,9 +60,9 @@
                               android:layout_height="14dp"
                               android:padding="5dp"
                               android:id="@+id/cb_login_psw"
-                              android:button="@null"
+                              android:button="@drawable/psw_check"
                               android:layout_alignParentRight="true"
-                              android:background="@drawable/psw_check"/>
+                              android:background="@null"/>
                 </RelativeLayout>
                 <ImageView android:layout_width="match_parent"
                            android:layout_height="1dp"
@@ -72,7 +72,7 @@
         </LinearLayout>
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginTop="30dp"
+                      android:layout_marginTop="46.5dp"
                       android:layout_marginLeft="30dp"
                       android:layout_marginRight="30dp"
                       android:id="@+id/ll_ensure_login"
@@ -107,10 +107,9 @@
                     <CheckBox android:layout_width="22dp"
                               android:layout_height="14dp"
                               android:id="@+id/cb_ensure_psw"
-                              android:button="@null"
-                              android:padding="5dp"
+                              android:button="@drawable/psw_check"
                               android:layout_alignParentRight="true"
-                              android:background="@drawable/psw_check"/>
+                              android:background="@null"/>
                 </RelativeLayout>
                 <ImageView android:layout_width="match_parent"
                            android:layout_height="1dp"

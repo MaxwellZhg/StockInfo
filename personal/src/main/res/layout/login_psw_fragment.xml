@@ -124,7 +124,7 @@
         <com.zhuorui.securities.personal.widget.CanNotPasteEditView
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:layout_marginLeft="66dp"
+                  android:paddingStart="66dp"
                   android:id="@+id/et_password"
                   android:gravity="center_vertical"
                   android:hint="@string/input_psw_tips"
@@ -139,14 +139,15 @@
                   android:textColorHint="@color/color_A1A1A1"
                   android:layout_toRightOf="@+id/tv_verificationCode"/>
         <CheckBox android:layout_width="22dp"
-                  android:layout_height="14dp"
+                  android:layout_height="match_parent"
                   android:padding="5dp"
+                  android:gravity="center"
                   android:id="@+id/cb_psw_login"
                   android:layout_centerVertical="true"
                   android:checked="false"
-                  android:button="@null"
+                  android:button="@drawable/psw_check"
                   android:layout_alignParentEnd="true"
-                  android:background="@drawable/psw_check"/>
+                  android:background="@null"/>
       </RelativeLayout>
     </LinearLayout>
     <ImageView android:layout_width="match_parent"

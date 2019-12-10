@@ -37,6 +37,16 @@ class LocalAccountConfig private constructor() : AbsConfig() {
     }
 
     /**
+     * 退出登录
+     */
+    fun loginOut(): Boolean {
+        accountInfo.userId = null
+        accountInfo.token = null
+        write()
+        return true
+    }
+
+    /**
      * 更新用户信息
      */
     fun savaUserInfo() {

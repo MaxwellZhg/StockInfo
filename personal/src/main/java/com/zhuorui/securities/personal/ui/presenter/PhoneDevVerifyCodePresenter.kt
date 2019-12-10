@@ -127,7 +127,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
 
     override fun destroy() {
         super.destroy()
-
+        disposable?.dispose()
     }
 
 
