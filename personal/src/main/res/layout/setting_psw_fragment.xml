@@ -56,8 +56,9 @@
                               android:textStyle="bold"
                               android:textColor="@color/color_232323"
                               android:background="@null"/>
-                    <CheckBox android:layout_width="17dp"
-                              android:layout_height="9dp"
+                    <CheckBox android:layout_width="22dp"
+                              android:layout_height="14dp"
+                              android:padding="5dp"
                               android:id="@+id/cb_login_psw"
                               android:button="@null"
                               android:layout_alignParentRight="true"
@@ -103,10 +104,11 @@
                               android:inputType="textPassword"
                               android:textColor="@color/color_232323"
                               android:background="@null"/>
-                    <CheckBox android:layout_width="17dp"
-                              android:layout_height="9dp"
+                    <CheckBox android:layout_width="22dp"
+                              android:layout_height="14dp"
                               android:id="@+id/cb_ensure_psw"
                               android:button="@null"
+                              android:padding="5dp"
                               android:layout_alignParentRight="true"
                               android:background="@drawable/psw_check"/>
                 </RelativeLayout>

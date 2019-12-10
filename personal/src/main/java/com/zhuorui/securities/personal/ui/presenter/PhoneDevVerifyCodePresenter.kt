@@ -120,6 +120,7 @@ class PhoneDevVerifyCodePresenter(context:Context) :AbsNetPresenter<PhoneDevVeri
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
             view?.changeLoginSendCodeState(1)
+            recLen=60
             startTask()
         }
     }

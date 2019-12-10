@@ -66,6 +66,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
         if (!transactions.isMyTransaction(response)) return
         if(response.request is SendLoginCodeRequest){
             view?.changeLoginSendCodeState(1)
+            recLen=60
             startTask()
         }else if(response.request is VerifForgetCodeRequest){
             view?.showProgressDailog(0)

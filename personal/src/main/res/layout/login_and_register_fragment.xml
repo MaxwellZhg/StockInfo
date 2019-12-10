@@ -66,21 +66,21 @@
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="vertical"
-                      android:layout_marginTop="15dp"
                       android:layout_marginRight="30dp"
                       android:layout_marginLeft="30dp">
-            <RelativeLayout android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="45dp">
                 <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
+                          android:layout_height="match_parent"
                           android:textSize="16sp"
+                          android:paddingTop="15dp"
                           android:id="@+id/tv_areaphone_tips"
                           android:textStyle="bold"
                           android:layout_alignParentLeft="true"
                           android:textColor="@color/color_232323"
                           android:text="@{viewmodel.code}"/>
-                <EditText android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
+                <EditText android:layout_width="match_parent"
+                          android:layout_height="match_parent"
                           android:id="@+id/et_phone"
                           android:background="@null"
                           android:layout_marginLeft="68dp"
@@ -93,29 +93,30 @@
                           android:textColor="@color/color_282828"
                           android:layout_toRightOf="@+id/tv_areaphone_tips"/>
             </RelativeLayout>
-            <ImageView android:layout_width="match_parent"
-                       android:layout_height="1dp"
-                       android:layout_marginTop="15dp"
-                       android:background="@color/color_A1A1A1"/>
         </LinearLayout>
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="1dp"
+                   android:layout_marginStart="30dp"
+                   android:layout_marginEnd="30dp"
+                   android:background="@color/color_A1A1A1"/>
         <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
+                      android:layout_height="45dp"
                       android:orientation="vertical"
-                      android:layout_marginTop="15dp"
                       android:layout_marginRight="30dp"
                       android:layout_marginLeft="30dp">
             <RelativeLayout android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
                 <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
+                          android:layout_height="match_parent"
                           android:textSize="16sp"
+                          android:gravity="center_vertical"
                           android:id="@+id/tv_verificationCode"
                           android:textStyle="bold"
                           android:layout_alignParentLeft="true"
                           android:textColor="@color/color_232323"
                           android:text="@string/verification_code"/>
                 <EditText android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
+                          android:layout_height="match_parent"
                           android:background="@null"
                           android:layout_marginLeft="49dp"
                           android:textCursorDrawable="@drawable/bg_edittext"
@@ -139,11 +140,12 @@
                           android:text="@{viewmodel.str}"
                           android:textColor="@{viewmodel.getcodeState==0?@color/color_8DB9E4:@color/color_1A6ED2}"/>
             </RelativeLayout>
-            <ImageView android:layout_width="match_parent"
-                       android:layout_height="1dp"
-                       android:layout_marginTop="15dp"
-                       android:background="@color/color_A1A1A1"/>
         </LinearLayout>
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="1dp"
+                   android:layout_marginStart="30dp"
+                   android:layout_marginEnd="30dp"
+                   android:background="@color/color_A1A1A1"/>
         <com.zhuorui.commonwidget.StateButton
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -164,11 +166,11 @@
                 app:unableBackgroundColor="@color/color_8DB9E4"/>
 
         <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_height="45dp"
+                  android:paddingTop="15dp"
                   android:textSize="13sp"
                   android:id="@+id/tv_phone_num_login"
                   android:textColor="@color/color_1A6ED2"
-                  android:layout_marginTop="15dp"
                   android:layout_gravity="center_horizontal"
                   android:text="@string/phone_num_login"/>
     </LinearLayout>

@@ -70,6 +70,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
         if (!transactions.isMyTransaction(response)) return
         if (response.request is SendLoginCodeRequest) {
             view?.changeLoginSendCodeState(1)
+            recLen=60
             startTask()
         }
     }
