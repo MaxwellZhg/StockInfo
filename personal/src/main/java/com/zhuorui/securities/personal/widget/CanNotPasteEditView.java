@@ -6,6 +6,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import androidx.appcompat.widget.AppCompatEditText;
 
 
 /**
@@ -14,30 +15,7 @@ import android.widget.EditText;
  * Date: 2019/11/28
  * Desc:
  */
-public class CanNotPasteEditView extends EditText {
-    boolean canPaste() {
-        return false;
-    }
-
-    boolean canCut() {
-        return false;
-    }
-
-    boolean canCopy() {
-        return false;
-    }
-
-    boolean canSelectAllText() {
-        return false;
-    }
-
-    boolean canSelectText() {
-        return false;
-    }
-
-    boolean textCanBeSelected() {
-        return false;
-    }
+public class CanNotPasteEditView extends AppCompatEditText {
 
     public CanNotPasteEditView(Context context, AttributeSet attrs) {
         super(context, attrs);

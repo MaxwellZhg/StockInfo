@@ -198,7 +198,6 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                 }
             }
         }
-        et_password.inputType=129
         tv_code_login_register.setOnClickListener(this)
         ll_country_disct.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)

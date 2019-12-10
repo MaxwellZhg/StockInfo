@@ -113,9 +113,9 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
                     tv_btn_commit.isEnabled=false
                 }else if(!TextUtils.isEmpty(et_phone_code.text.toString())&&!TextUtils.isEmpty(et_phone.text.toString())){
                     if(tv_areaphone_tips.text  == "+86"){
-                        tv_btn_login.isEnabled = PatternUtils.patternZhPhone(et_phone.text.toString())&&PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                        tv_btn_commit.isEnabled = PatternUtils.patternZhPhone(et_phone.text.toString())&&PatternUtils.patternPhoneCode(et_phone_code.text.toString())
                     }else{
-                        tv_btn_login.isEnabled == PatternUtils.patternOtherPhone(et_phone.text.toString())&& PatternUtils.patternPhoneCode(et_phone_code.text.toString())
+                        tv_btn_commit.isEnabled == PatternUtils.patternOtherPhone(et_phone.text.toString())&& PatternUtils.patternPhoneCode(et_phone_code.text.toString())
                     }
                 }
             }
