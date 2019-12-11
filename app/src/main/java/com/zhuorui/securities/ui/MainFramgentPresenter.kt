@@ -23,9 +23,11 @@ class MainFramgentPresenter : AbsEventPresenter<MainFragmentView, MainFragmentVi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onLoginStateChangeEvent(event: LoginStateChangeEvent) {
         if (event.isLogin && event.register) {
-            LogInfra.Log.e("tttttt","info---da")
-            // 弹出引导开户提示框
-             view?.showOpenAccountDailog()
+            // 不处于主页开户tab
+            if (view?.openAccoutTab()!!) {
+                // 弹出引导开户提示框
+                view?.showOpenAccountDailog()
+            }
         }
     }
 }

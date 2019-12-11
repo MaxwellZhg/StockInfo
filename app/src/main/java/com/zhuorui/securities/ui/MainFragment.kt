@@ -36,12 +36,6 @@ class MainFragment :
     private val FOUR = 3
     private val FIVE = 4
     private val mFragments = arrayOfNulls<AbsFragment<*, *, *, *>>(5)
-    private val infodialog: ConfirmToCancelDialog by lazy {
-        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
-            .setMsgText(com.zhuorui.securities.personal.R.string.register_tips)
-            .setCancelText(com.zhuorui.securities.personal.R.string.cancle)
-            .setConfirmText(com.zhuorui.securities.personal.R.string.complete_info)
-    }
 
     override val layout: Int
         get() = R.layout.fragment_main
@@ -151,25 +145,22 @@ class MainFragment :
     }
 
     override fun showOpenAccountDailog() {
-        showDailog()
-    }
+        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
+            .setMsgText(com.zhuorui.securities.personal.R.string.register_tips)
+            .setCancelText(com.zhuorui.securities.personal.R.string.cancle)
+            .setConfirmText(com.zhuorui.securities.personal.R.string.complete_info)
+            .setCallBack(object : ConfirmToCancelDialog.CallBack {
+                override fun onCancel() {
 
+                }
 
-    fun showDailog() {
-        infodialog.setCallBack(object : ConfirmToCancelDialog.CallBack {
-            override fun onCancel() {
-
-            }
-
-            override fun onConfirm() {
-                // 返回首页
-                val homeFragment = (activity as AbsActivity).findFragment(MainFragment::class.java)
-                popTo(homeFragment::class.java, false)
-                if (!openAccoutTab()) {
+                override fun onConfirm() {
+                    // 返回首页
+                    val homeFragment = (activity as AbsActivity).findFragment(MainFragment::class.java)
+                    popTo(homeFragment::class.java, false)
                     bottomBar.setCurrentItem(FOUR)
                     currentPos = FOUR
                 }
-            }
-        }).show()
+            }).show()
     }
 }
