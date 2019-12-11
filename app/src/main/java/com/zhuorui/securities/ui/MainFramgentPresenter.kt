@@ -24,7 +24,7 @@ class MainFramgentPresenter : AbsEventPresenter<MainFragmentView, MainFragmentVi
     fun onLoginStateChangeEvent(event: LoginStateChangeEvent) {
         if (event.isLogin && event.register) {
             // 不处于主页开户tab
-            if (view?.inOpenAccoutTab()!!) {
+            if (!view?.inOpenAccoutTab()!!) {
                 // 弹出引导开户提示框
                 view?.showOpenAccountDailog()
             }
