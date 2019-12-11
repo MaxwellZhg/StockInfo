@@ -56,7 +56,7 @@ class StockConsInfoModel : Observer {
      */
     private fun updatePrice(priceData: StockHandicapData?) {
         if (stockInfo != null && priceData != null) {
-            stockInfo!!.lastPrice = priceData.last!!.toBigDecimal()
+            stockInfo!!.last= priceData.last!!.toBigDecimal()
             stockInfo!!.diffRate = priceData.diffRate!!.toBigDecimal()
             stockInfo!!.turnover = priceData.turnover!!
             if (position != null) {

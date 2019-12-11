@@ -11,6 +11,4 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
 interface SettingPswView :AbsView{
     fun gotoMain()
     fun showProgressDailog(type:Int)
-
-    fun showSwicthGotoDailog()
 }

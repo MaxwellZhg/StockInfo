@@ -17,6 +17,7 @@ import com.zhuorui.securities.openaccount.ui.view.OpenAccountTabView
 import com.zhuorui.securities.openaccount.ui.viewmodel.OpenAccountTabViewModel
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.JumpToOpenAccountEvent
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 
 /**
  * Created by Maxwell.
@@ -57,6 +58,7 @@ class OpenAccountTabPresenter : AbsNetPresenter<OpenAccountTabView, OpenAccountT
     fun onJumpToOpenAccountStepsEvent(event: JumpToOpenAccountEvent) {
         view?.onJumpToOpenAccountPage()
     }
+
 
     private fun requestOpenAccOssInfo() {
         val request = BaseRequest(transactions.createTransaction())

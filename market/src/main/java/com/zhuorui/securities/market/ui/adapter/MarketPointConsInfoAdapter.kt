@@ -59,21 +59,21 @@ class MarketPointConsInfoAdapter : BaseListAdapter<StockConsInfoModel>() {
                     diffPriceVal == 0 -> {
                         tv_consprice_rate.text=item?.stockInfo?.diffRate.toString()+"%"
                         tv_consprice_rate.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
-                        tv_newly_price.text=item?.stockInfo?.lastPrice.toString()
+                        tv_newly_price.text=item?.stockInfo?.last.toString()
                         tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getDefaultColor())
                         tv_trade_nums.text= item?.stockInfo?.turnover?.let { it1 -> MathUtil.convertToUnitString(it1,1) }
                     }
                     diffPriceVal > 0 -> {
                         tv_consprice_rate.text=item?.stockInfo?.diffRate.toString()+"%"
                         tv_consprice_rate.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
-                        tv_newly_price.text=item?.stockInfo?.lastPrice.toString()
+                        tv_newly_price.text=item?.stockInfo?.last.toString()
                         tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getUpColor())
                         tv_trade_nums.text= item?.stockInfo?.turnover?.let { it1 -> MathUtil.convertToUnitString(it1,1) }
                     }
                     else -> {
                         tv_consprice_rate.text=item?.stockInfo?.diffRate.toString()+"%"
                         tv_consprice_rate.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
-                        tv_newly_price.text=item?.stockInfo?.lastPrice.toString()
+                        tv_newly_price.text=item?.stockInfo?.last.toString()
                         tv_newly_price.setTextColor(LocalSettingsConfig.getInstance().getDownColor())
                         tv_trade_nums.text= item?.stockInfo?.turnover?.let { it1 -> MathUtil.convertToUnitString(it1,1) }
                     }

@@ -43,6 +43,7 @@ import com.zhuorui.securities.market.ui.view.MarketDetailView
 import com.zhuorui.securities.market.ui.viewmodel.MarketDetailViewModel
 import com.zhuorui.securities.market.util.MarketUtil
 import com.zhuorui.securities.personal.config.LocalAccountConfig
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 
 /**
  *    author : liuwei
@@ -375,5 +376,6 @@ class MarketDetailPresenter : AbsNetPresenter<MarketDetailView, MarketDetailView
             getTopBarStockStatusInfo()
         }
     }
+
 
 }

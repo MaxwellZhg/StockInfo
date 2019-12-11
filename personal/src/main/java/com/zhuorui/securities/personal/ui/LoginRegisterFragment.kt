@@ -191,6 +191,9 @@ class LoginRegisterFragment :
         et_phone_code.addTextChangedListener(this)
         tv_phone_num_login.setOnClickListener(this)
         rl_country_disct.setOnClickListener(this)
+        et_phone.isFocusable = true
+        et_phone.isFocusableInTouchMode = true
+        et_phone.requestFocus()
     }
 
     inner class PhoneEtChange : TextWatcher {

@@ -15,6 +15,7 @@ import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
+import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
@@ -44,6 +45,7 @@ import me.yokeyword.fragmentation.ISupportFragment
 class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPswViewModel,LoginPswView, LoginPswPresenter>(),LoginPswView,View.OnClickListener,TextWatcher{
     private lateinit var strphone: String
     private lateinit var password: String
+    private var isChecked:Boolean =true
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(requireContext())
@@ -93,6 +95,16 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
             }
             R.id.tv_forget_psw->{
                 startWithPop(ForgetPswFragment())
+            }
+            R.id.cb_psw_login->{
+                if (isChecked) {
+                    et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                    cb_psw_login.setImageResource(R.mipmap.show_psw)
+                }else{
+                    et_password.transformationMethod = PasswordTransformationMethod.getInstance()
+                    cb_psw_login.setImageResource(R.mipmap.hide_psw)
+                }
+                isChecked=!isChecked
             }
         }
     }
@@ -189,15 +201,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        cb_psw_login.setOnCheckedChangeListener{buttonView, isChecked->
-            run {
-                if (isChecked) {
-                    et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                }else{
-                    et_password.transformationMethod = PasswordTransformationMethod.getInstance()
-                }
-            }
-        }
+        cb_psw_login.setOnClickListener(this)
         tv_code_login_register.setOnClickListener(this)
         ll_country_disct.setOnClickListener(this)
         iv_cancle.setOnClickListener(this)
@@ -205,6 +209,9 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         et_phone.addTextChangedListener(PhoneEtChange())
         et_password.addTextChangedListener(this)
         tv_forget_psw.setOnClickListener(this)
+        et_phone.isFocusable = true
+        et_phone.isFocusableInTouchMode = true
+        et_phone.requestFocus()
     }
 
     fun dialogshow(type:Int){

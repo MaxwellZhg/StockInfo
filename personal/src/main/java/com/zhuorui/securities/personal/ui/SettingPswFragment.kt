@@ -20,6 +20,7 @@ import com.zhuorui.securities.personal.ui.presenter.SettingPswPresenter
 import com.zhuorui.securities.personal.ui.view.SettingPswView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
+import kotlinx.android.synthetic.main.login_psw_fragment.*
 import kotlinx.android.synthetic.main.setting_psw_fragment.*
 
 /**
@@ -33,12 +34,6 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
     ,SettingPswView,View.OnClickListener,TextWatcher{
     private var phone: String = ""
     private var code :String=""
-    private val infodialog: ConfirmToCancelDialog by lazy {
-        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
-            .setMsgText(R.string.register_tips)
-            .setCancelText(R.string.go_to_main)
-            .setConfirmText(R.string.complete_info)
-    }
 
     /* 加载进度条 */
     private val progressDialog by lazy {
@@ -83,6 +78,9 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         }
         et_login_psw.addTextChangedListener(PhoneEtChange())
         et_ensure_psw.addTextChangedListener(this)
+        et_login_psw.isFocusable = true
+        et_login_psw.isFocusableInTouchMode = true
+        et_login_psw.requestFocus()
     }
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -137,21 +135,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         pop()
     }
 
-   fun openaccount() {
-        ToastUtil.instance.toast("去开户页面")
-    }
 
-    fun showDailog() {
-        infodialog.setCallBack(object : ConfirmToCancelDialog.CallBack {
-            override fun onCancel() {
-                gotomain()
-            }
-
-            override fun onConfirm() {
-                openaccount()
-            }
-        }).show()
-    }
 
     inner class PhoneEtChange : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
@@ -207,9 +191,6 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
 
     override fun gotoMain() {
         gotomain()
-    }
-    override fun showSwicthGotoDailog() {
-        showDailog()
     }
 
 }

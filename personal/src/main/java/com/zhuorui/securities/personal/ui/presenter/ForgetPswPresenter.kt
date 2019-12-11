@@ -56,6 +56,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
 
 
     fun requestSendForgetCode(str: kotlin.String) {
+        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendForgetPwdCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -64,6 +65,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendForgetCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
+        view?.showProgressDailog(0)
         if(response.request is SendLoginCodeRequest){
             view?.changeLoginSendCodeState(1)
             recLen=60

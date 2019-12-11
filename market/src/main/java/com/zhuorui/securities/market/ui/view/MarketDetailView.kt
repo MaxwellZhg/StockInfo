@@ -56,4 +56,5 @@ interface MarketDetailView : AbsView {
      * 长连接状态更新
      */
     fun updateNetworkState(connected: Boolean)
+
 }

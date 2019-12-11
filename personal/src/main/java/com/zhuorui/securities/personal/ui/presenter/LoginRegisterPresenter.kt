@@ -52,6 +52,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     }
 
     fun requestSendLoginCode(str: kotlin.String) {
+        view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendLoginCode(request)
             ?.enqueue(Network.IHCallBack<SendLoginCodeResponse>(request))
@@ -68,6 +69,7 @@ class LoginRegisterPresenter(context: Context) : AbsNetPresenter<LoginRegisterVi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onSendLoginCodeResponse(response: SendLoginCodeResponse) {
         if (!transactions.isMyTransaction(response)) return
+         view?.showProgressDailog(0)
         if (response.request is SendLoginCodeRequest) {
             view?.changeLoginSendCodeState(1)
             recLen=60

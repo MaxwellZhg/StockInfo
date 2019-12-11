@@ -78,7 +78,7 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
        // 弹框选择暂时关闭
        // view?.showSwicthGotoDailog()
         // 通知登录状态发生改变
-        RxBus.getDefault().post(LoginStateChangeEvent(true))
+        RxBus.getDefault().post(LoginStateChangeEvent(true,true))
     }
 
 }

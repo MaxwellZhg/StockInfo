@@ -9,6 +9,7 @@ package com.zhuorui.securities.personal.event
 class LoginStateChangeEvent {
     var isLogin: Boolean = false
     var transaction: String? = null
+    var register: Boolean = false
 
     constructor(isLogin: Boolean) {
         this.isLogin = isLogin
@@ -17,5 +18,10 @@ class LoginStateChangeEvent {
     constructor(isLogin: Boolean, transaction: String?) {
         this.isLogin = isLogin
         this.transaction = transaction
+    }
+
+    constructor(isLogin: Boolean, register: Boolean) {
+        this.isLogin = isLogin
+        this.register = register
     }
 }

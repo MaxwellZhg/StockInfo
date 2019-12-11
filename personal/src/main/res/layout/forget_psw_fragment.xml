@@ -88,8 +88,8 @@
                       android:layout_height="match_parent"
                       android:id="@+id/et_phone"
                       android:background="@null"
-                      android:gravity="center_vertical"
-                      android:layout_marginLeft="68dp"
+                      android:paddingStart="97dp"
+                      android:gravity="left|center"
                       android:textCursorDrawable="@drawable/bg_edittext"
                       android:hint="@string/input_phone_num"
                       android:inputType="number"
@@ -97,7 +97,7 @@
                       android:textStyle="bold"
                       android:textSize="16sp"
                       android:textColor="@color/color_282828"
-                      android:layout_toRightOf="@+id/tv_areaphone_tips"/>
+                     />
         </RelativeLayout>
     </LinearLayout>
         <ImageView android:layout_width="match_parent"
@@ -121,10 +121,10 @@
                       android:layout_alignParentLeft="true"
                       android:textColor="@color/color_232323"
                       android:text="@string/verification_code"/>
-            <EditText android:layout_width="wrap_content"
+            <EditText android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:background="@null"
-                      android:layout_marginLeft="49dp"
+                      android:paddingStart="97dp"
                       android:textCursorDrawable="@drawable/bg_edittext"
                       android:id="@+id/et_phone_code"
                       android:hint="@string/input_verification_code"
@@ -135,7 +135,7 @@
                       android:textSize="16sp"
                       android:textColorHint="@color/color_A1A1A1"
                       android:textColor="@color/color_282828"
-                      android:layout_toRightOf="@+id/tv_verificationCode"/>
+                   />
             <TextView android:layout_width="wrap_content"
                       android:layout_height="match_parent"
                       android:textSize="13sp"

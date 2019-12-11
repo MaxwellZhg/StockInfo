@@ -1,9 +1,11 @@
 package com.zhuorui.securities.ui
 
 import com.zhuorui.securities.TokenOverdueEvent
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsEventPresenter
+import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 
 /**
  *    author : PengXianglin
@@ -16,5 +18,14 @@ class MainFramgentPresenter : AbsEventPresenter<MainFragmentView, MainFragmentVi
     @RxSubscribe(observeOnThread = EventThread.MAIN)
     fun onTokenOverdueEvent(event: TokenOverdueEvent) {
         view?.jumpToLogin()
+    }
+
+    @RxSubscribe(observeOnThread = EventThread.MAIN)
+    fun onLoginStateChangeEvent(event: LoginStateChangeEvent) {
+        if (event.isLogin && event.register) {
+            LogInfra.Log.e("tttttt","info---da")
+            // 弹出引导开户提示框
+             view?.showOpenAccountDailog()
+        }
     }
 }

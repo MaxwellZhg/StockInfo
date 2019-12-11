@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.ZRWebViewFragment
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsBackFinishFragment
@@ -30,7 +31,12 @@ import kotlinx.android.synthetic.main.fragment_my_tab.*
 class MyTabFragment :
     AbsBackFinishFragment<FragmentMyTabBinding, MyTabVierwModel, MyTabVierw, MyTabPresenter>(),
     MyTabVierw, View.OnClickListener {
-
+    private val infodialog: ConfirmToCancelDialog by lazy {
+        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
+            .setMsgText(R.string.register_tips)
+            .setCancelText(R.string.go_to_main)
+            .setConfirmText(R.string.complete_info)
+    }
     companion object {
         fun newInstance(): MyTabFragment {
             return MyTabFragment()

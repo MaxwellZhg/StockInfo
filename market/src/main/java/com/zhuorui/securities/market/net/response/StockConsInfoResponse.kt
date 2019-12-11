@@ -21,7 +21,7 @@ class StockConsInfoResponse (val data:Data):BaseResponse(){
         val ts:String,//属于的股票市场(SZ-深圳,SH-上海,HK-港股,US-美股)
         val code:String,//股票代码
         val name:String,//股票名称
-        var lastPrice:BigDecimal,//最新价
+        var last:BigDecimal,//最新价
         var diffRate:BigDecimal,//涨跌幅
         var turnover:BigDecimal//成交额
     )

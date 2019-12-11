@@ -25,8 +25,10 @@ import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone
 import kotlinx.android.synthetic.main.forget_psw_fragment.et_phone_code
 import kotlinx.android.synthetic.main.forget_psw_fragment.rl_country_disct
 import kotlinx.android.synthetic.main.forget_psw_fragment.tv_areaphone_tips
+import kotlinx.android.synthetic.main.forget_psw_fragment.tv_contry
 import kotlinx.android.synthetic.main.forget_psw_fragment.tv_send_code
 import kotlinx.android.synthetic.main.login_and_register_fragment.*
+import kotlinx.android.synthetic.main.login_psw_fragment.*
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 
@@ -69,6 +71,9 @@ class ForgetPswFragment :AbsSwipeBackNetFragment<ForgetPswFragmentBinding,Forget
         tv_phone_code_login.setOnClickListener(this)
         et_phone.addTextChangedListener(PhoneEtChange())
         et_phone_code.addTextChangedListener(this)
+        et_phone.isFocusable = true
+        et_phone.isFocusableInTouchMode = true
+        et_phone.requestFocus()
     }
     override fun onClick(p0: View?) {
         strphone = et_phone.text.toString().trim()

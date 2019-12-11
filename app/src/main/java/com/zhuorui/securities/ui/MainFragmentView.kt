@@ -10,5 +10,12 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsView
  */
 interface MainFragmentView : AbsView {
 
+    // 引导开户对话框
+    fun showOpenAccountDailog()
+
+    // 是否正处于开户tab
+    fun openAccoutTab(): Boolean
+
     fun jumpToLogin()
+
 }

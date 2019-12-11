@@ -12,8 +12,10 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
+import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.market.BR
@@ -56,7 +58,6 @@ class MarketDetailFragment :
     AbsSwipeBackNetFragment<FragmentMarketDetailBinding, MarketDetailViewModel, MarketDetailView, MarketDetailPresenter>(),
     MarketDetailView, View.OnClickListener, NestedScrollView.OnScrollChangeListener, OnRefreshListener,
     AbsActivity.OnOrientationChangedListener {
-
     private var mStock: SearchStockInfo = SearchStockInfo()
     private var tabTitle: Array<String>? = null
     private val mFragments = arrayOfNulls<SupportFragment>(6)
@@ -66,6 +67,14 @@ class MarketDetailFragment :
     private var inNum = 0
     private var mBMP = false
     private var lazyInit = false
+    //开户弹框
+    private val infodialog: ConfirmToCancelDialog by lazy {
+        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
+            .setMsgText(com.zhuorui.securities.personal.R.string.register_tips)
+            .setCancelText(com.zhuorui.securities.personal.R.string.go_to_main)
+            .setConfirmText(com.zhuorui.securities.personal.R.string.complete_info)
+    }
+
 
     companion object {
         fun newInstance(stock: SearchStockInfo): MarketDetailFragment {
@@ -460,4 +469,7 @@ class MarketDetailFragment :
         super.onDestroyView()
         toggleScreenOrientation(false)
     }
+
+
+
 }
