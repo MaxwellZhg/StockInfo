@@ -33,7 +33,10 @@ abstract class AbsPresenter<V : AbsView, VM : ViewModel> {
     /**
      * 销毁
      */
-    open fun destroy() {}
+    open fun destroy() {
+        this.view = null
+        this.viewModel = null
+    }
 
     fun bindContext(context: Context) {
         this.context = context
