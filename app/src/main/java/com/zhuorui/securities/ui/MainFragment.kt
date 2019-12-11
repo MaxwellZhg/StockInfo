@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.securities.BR
 import com.zhuorui.securities.R
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -141,7 +142,8 @@ class MainFragment :
     }
 
     override fun inOpenAccoutTab(): Boolean {
-        return topFragment == this && currentPos == FOUR
+        LogInfra.Log.e(TAG,currentPos.toString())
+        return currentPos == FOUR
     }
 
     override fun showOpenAccountDailog() {
