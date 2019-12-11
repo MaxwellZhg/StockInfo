@@ -140,7 +140,7 @@ class MainFragment :
         start(LoginRegisterFragment.newInstance(1))
     }
 
-    override fun openAccoutTab(): Boolean {
+    override fun inOpenAccoutTab(): Boolean {
         return topFragment == this && currentPos == FOUR
     }
 

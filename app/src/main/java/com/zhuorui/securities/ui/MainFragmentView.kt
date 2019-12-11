@@ -14,7 +14,7 @@ interface MainFragmentView : AbsView {
     fun showOpenAccountDailog()
 
     // 是否正处于开户tab
-    fun openAccoutTab(): Boolean
+    fun inOpenAccoutTab(): Boolean
 
     fun jumpToLogin()
 
