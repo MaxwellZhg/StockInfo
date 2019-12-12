@@ -158,7 +158,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
 
     }
     override fun gotopswlogin() {
-       pop()
+        startWithPop(LoginRegisterFragment.newInstance(1))
     }
 
     inner class PhoneEtChange : TextWatcher {
