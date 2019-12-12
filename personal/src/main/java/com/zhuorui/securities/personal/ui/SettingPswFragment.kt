@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
 import com.zhuorui.securities.base2app.infra.LogInfra
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -33,7 +34,7 @@ import kotlinx.android.synthetic.main.setting_psw_fragment.*
  * */
 
 class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, SettingPswViewModel, SettingPswView, SettingPswPresenter>()
-    ,SettingPswView,View.OnClickListener,TextWatcher,View.OnTouchListener{
+    ,SettingPswView,View.OnClickListener,TextWatcher, AbsActivity.OnDispatchTouchEventListener {
 
     private var phone: String = ""
     private var code :String=""
@@ -86,7 +87,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         et_login_psw.isFocusable = true
         et_login_psw.isFocusableInTouchMode = true
         et_login_psw.requestFocus()
-        rl_content.setOnTouchListener(this)
+        (_mActivity as AbsActivity).addDispatchTouchEventListener(this)
     }
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -235,12 +236,19 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         }
 
     }
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+
+    override fun onTouch(ev: MotionEvent?) {
         rl_content.isFocusable = true
         rl_content.isFocusableInTouchMode = true
         rl_content.requestFocus()
         hideSoftInput()
-        return false
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (_mActivity as AbsActivity).removeDispatchTouchEventListener(this)
+    }
+
 
 }

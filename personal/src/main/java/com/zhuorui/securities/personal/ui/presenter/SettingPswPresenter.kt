@@ -28,12 +28,10 @@ import com.zhuorui.securities.personal.util.PatternUtils
  * Date: 2019/8/20
  * Desc:
  */
-class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, SettingPswViewModel>() {
-    override fun init() {
-        super.init()
-    }
+class SettingPswPresenter : AbsNetPresenter<SettingPswView, SettingPswViewModel>() {
 
-    fun requestUserLoginPwdCode(pwd: kotlin.String, code: kotlin.String, phone: kotlin.String) {
+
+    fun requestUserLoginPwdCode(pwd: String, code: String, phone: String) {
         view?.showProgressDailog(1)
         val request = UserLoginRegisterRequest(pwd, code, phone, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userPwdCode(request)

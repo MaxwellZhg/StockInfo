@@ -9,6 +9,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.MotionEvent
 import android.view.View
 import com.zhuorui.commonwidget.dialog.ProgressDialog
+import com.zhuorui.securities.base2app.ui.activity.AbsActivity
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -20,6 +21,8 @@ import com.zhuorui.securities.personal.ui.view.RestPswView
 import com.zhuorui.securities.personal.ui.viewmodel.RestPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
 import kotlinx.android.synthetic.main.rest_psw_fragment.*
+import kotlinx.android.synthetic.main.rest_psw_fragment.iv_back
+import kotlinx.android.synthetic.main.setting_psw_fragment.*
 
 /**
  * Created by Maxwell.
@@ -29,7 +32,7 @@ import kotlinx.android.synthetic.main.rest_psw_fragment.*
  * */
 
 class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswViewModel, RestPswView, RestPswPresenter>(),
-    RestPswView,View.OnClickListener,TextWatcher,View.OnTouchListener{
+    RestPswView,View.OnClickListener,TextWatcher, AbsActivity.OnDispatchTouchEventListener{
     private var phone: String = ""
     private var code :String=""
     private lateinit var strnewpsw: String
@@ -82,7 +85,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
         et_new_psw.requestFocus()
         et_new_psw.onFocusChangeListener = EtNewPswWordChange()
         et_rest_ensure_psw.onFocusChangeListener=EtEnsureWordChange()
-        rl_rest_content.setOnTouchListener(this)
+        (_mActivity as AbsActivity).addDispatchTouchEventListener(this)
     }
     companion object {
         fun newInstance(phone: String?, code: String?): RestPswFragment {
@@ -158,7 +161,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
 
     }
     override fun gotopswlogin() {
-        startWithPop(LoginRegisterFragment.newInstance(1))
+        startWithPop(LoginPswFragment.newInstance(""))
     }
 
     inner class PhoneEtChange : TextWatcher {
@@ -231,12 +234,17 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
 
     }
 
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+    override fun onTouch(ev: MotionEvent?) {
         rl_rest_content.isFocusable = true
         rl_rest_content.isFocusableInTouchMode = true
         rl_rest_content.requestFocus()
         hideSoftInput()
-        return false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (_mActivity as AbsActivity).removeDispatchTouchEventListener(this)
     }
 
 

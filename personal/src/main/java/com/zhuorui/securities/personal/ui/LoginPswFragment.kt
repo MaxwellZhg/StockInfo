@@ -40,6 +40,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     private lateinit var strphone: String
     private lateinit var password: String
     private var isChecked:Boolean =true
+    private var transaction:String?=null
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(requireContext())
@@ -50,7 +51,7 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: LoginPswPresenter
-        get() = LoginPswPresenter(requireContext())
+        get() = LoginPswPresenter()
     override val createViewModel: LoginPswViewModel?
         get() = ViewModelProviders.of(this).get(LoginPswViewModel::class.java)
     override val getView: LoginPswView
@@ -195,6 +196,8 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
+        transaction = arguments?.getString("transaction")
+        presenter?.setTransaction(transaction)
         cb_psw_login.setOnClickListener(this)
         tv_code_login_register.setOnClickListener(this)
         ll_country_disct.setOnClickListener(this)

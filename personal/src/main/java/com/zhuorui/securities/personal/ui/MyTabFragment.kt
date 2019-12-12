@@ -89,7 +89,7 @@ class MyTabFragment :
                 RxBus.getDefault().post(JumpToSimulationTradingStocksEvent())
             }
             R.id.help_center_bar -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(OAHelpCenterFragment.newInstance())
+                (parentFragment as AbsFragment<*, *, *, *>).start(SettingPswFragment.newInstance("",""))
             }
             R.id.ll_login_out -> {
                 presenter?.requestUserLoginOut()

@@ -31,12 +31,10 @@ import java.util.regex.Pattern
  * Date: 2019/8/20
  * Desc:
  */
-class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginPswViewModel>(){
-   private val con = context
-    override fun init() {
-        super.init()
-    }
-    fun requestLoginPwd(phone: kotlin.String,password: kotlin.String,phoneArea:kotlin.String) {
+class LoginPswPresenter() : AbsNetPresenter<LoginPswView, LoginPswViewModel>(){
+    private var transaction: String? = null
+
+    fun requestLoginPwd(phone:String,password:String,phoneArea:String) {
        view?.showProgressDailog(1)
         val request = UserLoginPwdRequest(phone, password,CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.userLoginByPwd(request)
@@ -111,7 +109,7 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
         LocalAccountConfig.getInstance().setZrNo(response.data.zrNo)
         view?.gotomain()
         // 通知登录状态发生改变
-        RxBus.getDefault().post(LoginStateChangeEvent(true))
+        RxBus.getDefault().post(LoginStateChangeEvent(true, transaction))
     }
 
     fun detailChangeCodeState(code:String, et_phone: EditText, et_code: EditText, btn_login: StateButton){
@@ -129,6 +127,12 @@ class LoginPswPresenter(context: Context) : AbsNetPresenter<LoginPswView, LoginP
         }else{
             btn_login.isEnabled=false
         }
+    }
+
+
+
+    fun setTransaction(transaction: String?) {
+        this.transaction = transaction
     }
 
 
