@@ -26,6 +26,7 @@
         </RelativeLayout>
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="match_parent"
+                      android:id="@+id/rl_rest_content"
                       android:background="@color/color_f0f0f0"
                       android:orientation="vertical">
             <RelativeLayout android:layout_width="match_parent"
@@ -73,7 +74,7 @@
                                android:background="@color/color_A1A1A1"/>
                     <TextView android:layout_width="wrap_content"
                               android:textColor="@color/color_FF0000"
-                              android:text="@{viewmodel.strnew}"
+                              android:text="@{viewmodel.strnews}"
                               android:layout_marginTop="4dp"
                               android:textSize="13sp"
                               android:layout_height="wrap_content"/>

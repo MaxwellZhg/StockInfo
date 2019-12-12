@@ -5,6 +5,7 @@
     </data>
     <RelativeLayout android:background="@color/color_f0f0f0"
                     android:layout_width="match_parent"
+                    android:id="@+id/rl_content"
                     android:layout_height="match_parent">
         <ImageView android:layout_width="12dp"
                    android:layout_height="21dp"
@@ -43,19 +44,19 @@
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                     <com.zhuorui.securities.personal.widget.CanNotPasteEditView
-                             android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/et_login_psw"
-                              android:layout_toLeftOf="@+id/cb_login_psw"
-                              android:textSize="15sp"
-                              android:textColorHint="@color/color_A1A1A1"
-                              android:textCursorDrawable="@drawable/bg_edittext"
-                              android:hint="@string/psw_conbine"
-                              android:maxLength="20"
-                              android:inputType="textPassword"
-                              android:textStyle="bold"
-                              android:textColor="@color/color_232323"
-                              android:background="@null"/>
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/et_login_psw"
+                            android:layout_toLeftOf="@+id/cb_login_psw"
+                            android:textSize="15sp"
+                            android:textColorHint="@color/color_A1A1A1"
+                            android:textCursorDrawable="@drawable/bg_edittext"
+                            android:hint="@string/psw_conbine"
+                            android:maxLength="20"
+                            android:inputType="textPassword"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_232323"
+                            android:background="@null"/>
                     <CheckBox android:layout_width="22dp"
                               android:layout_height="14dp"
                               android:padding="5dp"
@@ -68,11 +69,17 @@
                            android:layout_height="1dp"
                            android:layout_alignParentBottom="true"
                            android:background="@color/color_A1A1A1"/>
+                <TextView android:layout_width="wrap_content"
+                          android:textColor="@color/color_FF0000"
+                          android:text="@{viewmodel.strnews}"
+                          android:layout_marginTop="4dp"
+                          android:textSize="13sp"
+                          android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginTop="46.5dp"
+                      android:layout_marginTop="25.5dp"
                       android:layout_marginLeft="30dp"
                       android:layout_marginRight="30dp"
                       android:id="@+id/ll_ensure_login"
@@ -91,19 +98,19 @@
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                     <com.zhuorui.securities.personal.widget.CanNotPasteEditView
-                              android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/et_ensure_psw"
-                              android:layout_toLeftOf="@+id/cb_ensure_psw"
-                              android:textCursorDrawable="@drawable/bg_edittext"
-                              android:textSize="15sp"
-                              android:textStyle="bold"
-                              android:textColorHint="@color/color_A1A1A1"
-                              android:hint="@string/ensure_psw_again"
-                              android:maxLength="20"
-                              android:inputType="textPassword"
-                              android:textColor="@color/color_232323"
-                              android:background="@null"/>
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/et_ensure_psw"
+                            android:layout_toLeftOf="@+id/cb_ensure_psw"
+                            android:textCursorDrawable="@drawable/bg_edittext"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColorHint="@color/color_A1A1A1"
+                            android:hint="@string/ensure_psw_again"
+                            android:maxLength="20"
+                            android:inputType="textPassword"
+                            android:textColor="@color/color_232323"
+                            android:background="@null"/>
                     <CheckBox android:layout_width="22dp"
                               android:layout_height="14dp"
                               android:id="@+id/cb_ensure_psw"
@@ -115,6 +122,12 @@
                            android:layout_height="1dp"
                            android:layout_alignParentBottom="true"
                            android:background="@color/color_A1A1A1"/>
+                <TextView android:layout_width="wrap_content"
+                          android:textColor="@color/color_FF0000"
+                          android:text="@{viewmodel.strensure}"
+                          android:layout_marginTop="4dp"
+                          android:textSize="13sp"
+                          android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
         <com.zhuorui.commonwidget.StateButton
@@ -122,7 +135,7 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="29dp"
                 android:layout_marginRight="29dp"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="47.5dp"
                 android:id="@+id/tv_btn_settin_finish"
                 android:layout_below="@+id/ll_ensure_login"
                 android:textSize="23sp"

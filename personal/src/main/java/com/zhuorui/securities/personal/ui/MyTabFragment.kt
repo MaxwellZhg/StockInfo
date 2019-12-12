@@ -31,12 +31,6 @@ import kotlinx.android.synthetic.main.fragment_my_tab.*
 class MyTabFragment :
     AbsBackFinishFragment<FragmentMyTabBinding, MyTabVierwModel, MyTabVierw, MyTabPresenter>(),
     MyTabVierw, View.OnClickListener {
-    private val infodialog: ConfirmToCancelDialog by lazy {
-        ConfirmToCancelDialog.createWidth265Dialog(requireContext(), false, false)
-            .setMsgText(R.string.register_tips)
-            .setCancelText(R.string.go_to_main)
-            .setConfirmText(R.string.complete_info)
-    }
     companion object {
         fun newInstance(): MyTabFragment {
             return MyTabFragment()
@@ -95,7 +89,7 @@ class MyTabFragment :
                 RxBus.getDefault().post(JumpToSimulationTradingStocksEvent())
             }
             R.id.help_center_bar -> {
-                (parentFragment as AbsFragment<*, *, *, *>).start(OAHelpCenterFragment.newInstance())
+                (parentFragment as AbsFragment<*, *, *, *>).start(RestPswFragment.newInstance("",""))
             }
             R.id.ll_login_out -> {
                 presenter?.requestUserLoginOut()

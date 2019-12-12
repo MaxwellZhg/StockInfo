@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class RestPswViewModel :ViewModel(){
-    var strnew=ObservableField<String>()
+    var strnews=ObservableField<String>()
     var strensure=ObservableField<String>()
     init {
 

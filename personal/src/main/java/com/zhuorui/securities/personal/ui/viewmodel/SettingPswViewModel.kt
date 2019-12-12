@@ -1,5 +1,6 @@
 package com.zhuorui.securities.personal.ui.viewmodel
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,5 +10,10 @@ import androidx.lifecycle.ViewModel
  * Desc:
  */
 class SettingPswViewModel :ViewModel(){
-
+    var strnews=ObservableField<String>()
+    var strensure=ObservableField<String>()
+    init {
+        strnews.set("")
+        strensure.set("")
+    }
 }

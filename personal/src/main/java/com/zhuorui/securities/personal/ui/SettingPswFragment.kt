@@ -6,10 +6,12 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.dialog.ConfirmToCancelDialog
 import com.zhuorui.commonwidget.dialog.ProgressDialog
+import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackEventFragment
 import com.zhuorui.securities.base2app.util.Md5Util
 import com.zhuorui.securities.base2app.util.ToastUtil
@@ -31,7 +33,8 @@ import kotlinx.android.synthetic.main.setting_psw_fragment.*
  * */
 
 class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, SettingPswViewModel, SettingPswView, SettingPswPresenter>()
-    ,SettingPswView,View.OnClickListener,TextWatcher{
+    ,SettingPswView,View.OnClickListener,TextWatcher,View.OnTouchListener{
+
     private var phone: String = ""
     private var code :String=""
 
@@ -78,9 +81,12 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
         }
         et_login_psw.addTextChangedListener(PhoneEtChange())
         et_ensure_psw.addTextChangedListener(this)
+        et_login_psw.onFocusChangeListener =EtNewPswWordChange()
+        et_ensure_psw.onFocusChangeListener =EtEnsureWordChange()
         et_login_psw.isFocusable = true
         et_login_psw.isFocusableInTouchMode = true
         et_login_psw.requestFocus()
+        rl_content.setOnTouchListener(this)
     }
     override fun rootViewFitsSystemWindowsPadding(): Boolean {
         return true
@@ -139,8 +145,16 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
 
     inner class PhoneEtChange : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
+            if(et_login_psw.text.toString()==""){
+                presenter?.detailPhonePswTips(et_login_psw.text.toString())
+            }
+            if(et_ensure_psw.text.toString()!=""){
+                presenter?.detailCompareWithPswTips(p0.toString(),et_ensure_psw.text.toString())
+            }
             if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_ensure_psw.text.toString())){
                 tv_btn_settin_finish.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+                        &&PatternUtils.patternLoginPassWord(et_ensure_psw.text.toString())
+                        &&p0.toString()==et_ensure_psw.text.toString()
             }else{
                 tv_btn_settin_finish.isEnabled =false
             }
@@ -154,14 +168,18 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
 
         }
 
+
     }
 
     override fun afterTextChanged(p0: Editable?) {
         if(!TextUtils.isEmpty(p0.toString())&&!TextUtils.isEmpty(et_login_psw.text.toString())){
             tv_btn_settin_finish.isEnabled = PatternUtils.patternLoginPassWord(p0.toString())
+                    &&PatternUtils.patternLoginPassWord(et_login_psw.text.toString())
+                    &&p0.toString()==et_login_psw.text.toString()
         }else{
             tv_btn_settin_finish.isEnabled=false
         }
+
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -191,6 +209,38 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
 
     override fun gotoMain() {
         gotomain()
+    }
+
+    inner class EtNewPswWordChange: View.OnFocusChangeListener{
+        override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            if(!hasFocus){
+                presenter?.detailPhonePswTips(et_login_psw.text.toString())
+            }else{
+                presenter?.detailPhonePswTips("")
+            }
+        }
+
+    }
+
+    inner class EtEnsureWordChange: View.OnFocusChangeListener{
+        override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            if(!hasFocus) {
+                presenter?.detailCompareWithPswTips(et_login_psw.text.toString(),et_ensure_psw.text.toString())
+                if(et_login_psw.text.toString()!=""){
+                    presenter?.detailPhonePswTips(et_login_psw.text.toString())
+                }
+            }else{
+                presenter?.detailCompareWithPswTips(et_login_psw.text.toString(),"")
+            }
+        }
+
+    }
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        rl_content.isFocusable = true
+        rl_content.isFocusableInTouchMode = true
+        rl_content.requestFocus()
+        hideSoftInput()
+        return false
     }
 
 }

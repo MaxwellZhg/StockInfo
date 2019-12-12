@@ -55,7 +55,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
     }
 
 
-    fun requestSendForgetCode(str: kotlin.String) {
+    fun requestSendForgetCode(str: String) {
         view?.showProgressDailog(1)
         val request = SendLoginCodeRequest(str, CountryCodeConfig.read().defaultCode, transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.sendForgetPwdCode(request)
@@ -95,7 +95,7 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
         super.onErrorResponse(response)
     }
 
-    fun requestVerifyForgetCode(str: kotlin.String,code:kotlin.String){
+    fun requestVerifyForgetCode(str: String,code:String){
         view?.showProgressDailog(1)
         val request = VerifForgetCodeRequest(str, code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
         Cache[IPersonalNet::class.java]?.verifyForgetCode(request)

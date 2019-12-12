@@ -15,6 +15,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.databinding.LoginAndRegisterFragmentBinding
 import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.presenter.LoginRegisterPresenter
@@ -191,9 +192,14 @@ class LoginRegisterFragment :
         et_phone_code.addTextChangedListener(this)
         tv_phone_num_login.setOnClickListener(this)
         rl_country_disct.setOnClickListener(this)
+
         et_phone.isFocusable = true
         et_phone.isFocusableInTouchMode = true
         et_phone.requestFocus()
+        if(LocalAccountConfig.getInstance().getAccountInfo().phone!=null){
+            et_phone.setText(LocalAccountConfig.getInstance().getAccountInfo().phone)
+            LocalAccountConfig.getInstance().getAccountInfo().phone?.length?.let { et_phone.setSelection(it) }
+        }
     }
 
     inner class PhoneEtChange : TextWatcher {

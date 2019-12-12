@@ -14,6 +14,7 @@ import com.zhuorui.securities.personal.net.request.RestLoginPswRequest
 import com.zhuorui.securities.personal.net.response.SendLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.RestPswView
 import com.zhuorui.securities.personal.ui.viewmodel.RestPswViewModel
+import com.zhuorui.securities.personal.util.PatternUtils
 import java.util.regex.Pattern
 
 /**
@@ -27,69 +28,7 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         super.init()
         view?.init()
     }
-    fun setTips(strnew:String?,strensure:String?){
-        viewModel?.strnew?.set(strnew)
-        viewModel?.strensure?.set(strensure)
-    }
-    fun detailtips(strnewpsw:String,strensurepsw:String):Boolean{
-        if (strnewpsw == "") {
-            viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
-            return false
-        }else{
-            if (strnewpsw.length<6){
-                viewModel?.strnew?.set(ResUtil.getString(R.string.input_new_pws_mix))
-                if(strensurepsw != ""){
-                    if(strnewpsw==strensurepsw){
-                        viewModel?.strensure?.set(ResUtil.getString(R.string.input_new_pws_mix))
-                        return false
-                    }else{
-                        viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-                        return false
-                    }
-                }
-            }else {
-                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
-                //用正则式匹配文本获取匹配器
-                val matcher = Pattern.compile(pattern).matcher(strnewpsw)
-                if (!matcher.find()) {
-                    viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
-                    if(strensurepsw != ""){
-                        if(strnewpsw==strensurepsw){
-                            viewModel?.strensure?.set(ResUtil.getString(R.string.new_psw_no_match))
-                            return false
-                        }else{
-                            viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-                            return false
-                        }
-                    }
-                }
-            }
-        }
-        if (strensurepsw == "") {
-            viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-            return false
-        }else{
-            if(strnewpsw==strensurepsw){
-                val pattern = "(?!^\\d+\$)(?!^[a-zA-Z]+\$)(?!^[^\\w\\s]+\$).{6,20}"
-                //用正则式匹配文本获取匹配器
-                val matcher = Pattern.compile(pattern).matcher(strnewpsw)
-                if (!matcher.find()) {
-                    viewModel?.strnew?.set(ResUtil.getString(R.string.new_psw_no_match))
-                    viewModel?.strensure?.set(ResUtil.getString(R.string.new_psw_no_match))
-                    return false
-                }else {
-                    viewModel?.strnew?.set("")
-                    viewModel?.strensure?.set("")
-                    return true
-                }
-            }else{
-                viewModel?.strnew?.set("")
-                viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
-                return  false
-            }
-            return false
-        }
-    }
+
     fun requestRestLoginPsw(phone: String?,newpsw:String,code: String?) {
         view?.showProgressDailog(1)
         val request = RestLoginPswRequest(phone, newpsw,code, CountryCodeConfig.read().defaultCode,transactions.createTransaction())
@@ -114,6 +53,37 @@ class RestPswPresenter(context: Context):AbsNetPresenter<RestPswView, RestPswVie
         }
         super.onErrorResponse(response)
     }
+
+    //处理第一个输入框密码提示
+    fun detailPhonePswTips(str:String){
+        if(str!="") {
+            if (str.length < 6) {
+                viewModel?.strnews?.set(ResUtil.getString(R.string.input_new_pws_mix))
+            } else {
+                if (PatternUtils.patternLoginPassWord(str)) {
+                    viewModel?.strnews?.set("")
+                } else {
+                    viewModel?.strnews?.set(ResUtil.getString(R.string.new_psw_no_match))
+                }
+            }
+        }else{
+            viewModel?.strnews?.set("")
+        }
+    }
+
+    //处理第二输入框是否一致
+    fun detailCompareWithPswTips(str:String,strensure:String){
+        if(strensure!="") {
+            if (str == strensure) {
+                viewModel?.strensure?.set("")
+            } else {
+                viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
+            }
+        }else{
+            viewModel?.strensure?.set("")
+        }
+    }
+
 
 
 }

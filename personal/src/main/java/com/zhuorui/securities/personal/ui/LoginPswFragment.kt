@@ -12,25 +12,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.zhuorui.commonwidget.common.CommonCountryCodeFragment
 import com.zhuorui.commonwidget.common.CommonEnum
 import com.zhuorui.commonwidget.dialog.ProgressDialog
-import com.zhuorui.securities.base2app.infra.LogInfra
 import com.zhuorui.securities.base2app.ui.fragment.AbsSwipeBackNetFragment
 import com.zhuorui.securities.base2app.util.Md5Util
-import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.BR
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.databinding.LoginPswFragmentBinding
 import com.zhuorui.securities.personal.ui.dailog.ErrorTimesDialog
 import com.zhuorui.securities.personal.ui.presenter.LoginPswPresenter
 import com.zhuorui.securities.personal.ui.view.LoginPswView
 import com.zhuorui.securities.personal.ui.viewmodel.LoginPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
-import kotlinx.android.synthetic.main.login_and_register_fragment.*
 import kotlinx.android.synthetic.main.login_psw_fragment.*
-import kotlinx.android.synthetic.main.login_psw_fragment.et_phone
-import kotlinx.android.synthetic.main.login_psw_fragment.iv_cancle
-import kotlinx.android.synthetic.main.login_psw_fragment.tv_areaphone_tips
-import kotlinx.android.synthetic.main.login_psw_fragment.tv_btn_login
 import me.jessyan.autosize.utils.LogUtils
 import me.yokeyword.fragmentation.ISupportFragment
 
@@ -212,6 +206,10 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
         et_phone.isFocusable = true
         et_phone.isFocusableInTouchMode = true
         et_phone.requestFocus()
+        if(LocalAccountConfig.getInstance().getAccountInfo().phone!=null){
+            et_phone.setText(LocalAccountConfig.getInstance().getAccountInfo().phone)
+            LocalAccountConfig.getInstance().getAccountInfo().phone?.length?.let { et_phone.setSelection(it) }
+        }
     }
 
     fun dialogshow(type:Int){

@@ -9,6 +9,8 @@ import com.zhuorui.securities.base2app.rxbus.EventThread
 import com.zhuorui.securities.base2app.rxbus.RxBus
 import com.zhuorui.securities.base2app.rxbus.RxSubscribe
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
+import com.zhuorui.securities.base2app.util.ResUtil
+import com.zhuorui.securities.personal.R
 import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.event.LoginStateChangeEvent
 import com.zhuorui.securities.personal.net.IPersonalNet
@@ -18,6 +20,7 @@ import com.zhuorui.securities.personal.net.response.GetUserInfoResponse
 import com.zhuorui.securities.personal.net.response.UserLoginCodeResponse
 import com.zhuorui.securities.personal.ui.view.SettingPswView
 import com.zhuorui.securities.personal.ui.viewmodel.SettingPswViewModel
+import com.zhuorui.securities.personal.util.PatternUtils
 
 /**
  * Created by Maxwell.
@@ -80,5 +83,36 @@ class SettingPswPresenter(context: Context) : AbsNetPresenter<SettingPswView, Se
         // 通知登录状态发生改变
         RxBus.getDefault().post(LoginStateChangeEvent(true,true))
     }
+
+   //处理第一个输入框密码提示
+    fun detailPhonePswTips(str:String){
+       if(str!="") {
+           if (str.length < 6) {
+               viewModel?.strnews?.set(ResUtil.getString(R.string.input_new_pws_mix))
+           } else {
+               if (PatternUtils.patternLoginPassWord(str)) {
+                   viewModel?.strnews?.set("")
+               } else {
+                   viewModel?.strnews?.set(ResUtil.getString(R.string.new_psw_no_match))
+               }
+           }
+       }else{
+           viewModel?.strnews?.set("")
+       }
+    }
+
+    //处理第二输入框是否一致
+    fun detailCompareWithPswTips(str:String,strensure:String){
+        if(strensure!="") {
+            if (str == strensure) {
+                viewModel?.strensure?.set("")
+            } else {
+                viewModel?.strensure?.set(ResUtil.getString(R.string.compare_no_match))
+            }
+        }else{
+            viewModel?.strensure?.set("")
+        }
+    }
+
 
 }

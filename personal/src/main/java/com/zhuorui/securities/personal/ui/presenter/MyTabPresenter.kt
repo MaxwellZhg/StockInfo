@@ -40,15 +40,10 @@ class MyTabPresenter : AbsNetPresenter<MyTabVierw, MyTabVierwModel>() {
         if (response.request is UserLoginOutRequest) {
             // 通知登录状态发生改变
             RxBus.getDefault().post(LoginStateChangeEvent(false))
-            if (LocalAccountConfig.getInstance().saveLogin(
-                    "",
-                    "",
-                    ""
-                )
-            ) {
-                LocalAccountConfig.getInstance().setZrNo(0)
-                view?.gotomain()
-            }
+            LocalAccountConfig.getInstance().loginOut()
+            LocalAccountConfig.getInstance().setZrNo(0)
+            view?.gotomain()
+
         }
     }
 
