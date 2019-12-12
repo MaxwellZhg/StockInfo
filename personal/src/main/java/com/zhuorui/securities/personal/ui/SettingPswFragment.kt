@@ -48,7 +48,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
     override val viewModelId: Int
         get() = BR.viewmodel
     override val createPresenter: SettingPswPresenter
-        get() = SettingPswPresenter(requireContext())
+        get() = SettingPswPresenter()
     override val createViewModel: SettingPswViewModel?
         get() =  ViewModelProviders.of(this).get(SettingPswViewModel::class.java)
     override val getView: SettingPswView
