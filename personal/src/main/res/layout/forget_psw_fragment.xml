@@ -170,6 +170,7 @@
                 android:enabled="false"
                 app:radius="3dp"
                 android:textColor="@color/color_FFFFFFFF"
+                app:pressedBackgroundColor="@color/color_1A6ED2"
                 app:normalBackgroundColor="@color/color_1A6ED2"
                 app:unableBackgroundColor="@color/color_8DB9E4"/>
 
