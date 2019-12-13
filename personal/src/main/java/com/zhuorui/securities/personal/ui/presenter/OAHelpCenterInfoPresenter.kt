@@ -1,4 +1,5 @@
 package com.zhuorui.securities.personal.ui.presenter
+import android.annotation.SuppressLint
 import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
@@ -6,6 +7,8 @@ import com.zhuorui.securities.personal.ui.adapter.HelpCenterInfoAdapter
 import com.zhuorui.securities.personal.ui.model.HelpCenterInfoData
 import com.zhuorui.securities.personal.ui.view.OAHelpCenterInfoView
 import com.zhuorui.securities.personal.ui.viewmodel.OAHelpCenterInfoViewModel
+import io.reactivex.Observable
+import io.reactivex.Observer
 import me.jessyan.autosize.utils.LogUtils
 
 /**
@@ -16,9 +19,6 @@ import me.jessyan.autosize.utils.LogUtils
  */
 class OAHelpCenterInfoPresenter :AbsNetPresenter<OAHelpCenterInfoView, OAHelpCenterInfoViewModel>(){
     var listinfo=ArrayList<HelpCenterInfoData>()
-    override fun init() {
-        super.init()
-    }
 
     fun getTipsInfo(type:Int){
          listinfo.clear()
@@ -62,4 +62,5 @@ class OAHelpCenterInfoPresenter :AbsNetPresenter<OAHelpCenterInfoView, OAHelpCen
         }
         return viewModel?.adapter?.value
     }
+
 }
