@@ -69,6 +69,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
                 }else{
                     et_login_psw.transformationMethod = PasswordTransformationMethod.getInstance()
                 }
+                et_login_psw.text?.length?.let { et_login_psw.setSelection(it) }
             }
         }
         cb_ensure_psw.setOnCheckedChangeListener{ _, isChecked->
@@ -78,6 +79,7 @@ class SettingPswFragment : AbsSwipeBackEventFragment<SettingPswFragmentBinding, 
                 }else{
                     et_ensure_psw.transformationMethod = PasswordTransformationMethod.getInstance()
                 }
+                et_ensure_psw.text?.length?.let { et_ensure_psw.setSelection(it) }
             }
         }
         et_login_psw.addTextChangedListener(PhoneEtChange())

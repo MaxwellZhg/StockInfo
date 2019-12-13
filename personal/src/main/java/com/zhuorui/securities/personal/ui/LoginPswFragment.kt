@@ -95,9 +95,11 @@ class LoginPswFragment :AbsSwipeBackNetFragment<LoginPswFragmentBinding, LoginPs
                 if (isChecked) {
                     et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
                     cb_psw_login.setImageResource(R.mipmap.show_psw)
+                    et_password.text?.length?.let { et_password.setSelection(it) }
                 }else{
                     et_password.transformationMethod = PasswordTransformationMethod.getInstance()
                     cb_psw_login.setImageResource(R.mipmap.hide_psw)
+                    et_password.text?.length?.let { et_password.setSelection(it) }
                 }
                 isChecked=!isChecked
             }

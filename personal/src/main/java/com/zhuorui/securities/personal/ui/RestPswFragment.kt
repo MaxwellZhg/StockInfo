@@ -65,6 +65,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
                 }else{
                     et_new_psw.transformationMethod = PasswordTransformationMethod.getInstance()
                 }
+                et_new_psw.text?.length?.let { et_new_psw.setSelection(it) }
             }
         }
         cb_rest_ensure_psw.setOnCheckedChangeListener{ _, isChecked->
@@ -74,6 +75,7 @@ class RestPswFragment : AbsSwipeBackNetFragment<RestPswFragmentBinding, RestPswV
                 }else{
                     et_rest_ensure_psw.transformationMethod = PasswordTransformationMethod.getInstance()
                 }
+                et_rest_ensure_psw.text?.length?.let { et_rest_ensure_psw.setSelection(it) }
             }
         }
         tv_btn_rest.setOnClickListener(this)
