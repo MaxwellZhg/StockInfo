@@ -12,5 +12,5 @@ interface ForgetPswView :AbsView{
     fun restpsw()
     fun showProgressDailog(type: Int)
     fun showErrorTimes(str: String, type: Int)
-    fun changeLoginSendCodeState(type: Int)
+    fun notifySendCodeClickable(isClick: Boolean)
 }

@@ -35,16 +35,7 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
     private val progressDialog by lazy {
         ProgressDialog(requireContext())
     }
-    /* 加载对话框 */
-    private val phoneDevDailog by lazy {
-        DevComfirmDailog.
-            createWidth255Dialog(requireContext(),true,true)
-            .setNoticeText(R.string.notice)
-            .setMsgText(R.string.dev_login_problem_tips)
-            .setCancelText(R.string.cancle)
-            .setConfirmText(R.string.phone_call)
-            .setCallBack(this)
-    }
+
     private var phone: String  = ""
     override val layout: Int
         get() = R.layout.fragment_phone_dev_verify
@@ -85,7 +76,13 @@ class PhoneDevVerifyFragment :AbsSwipeBackNetFragment<FragmentPhoneDevVerifyBind
 
            }
            R.id.unable_verify_phone->{
-             phoneDevDailog.show()
+               DevComfirmDailog.
+                   createWidth255Dialog(requireContext(),true,true)
+                   .setNoticeText(R.string.notice)
+                   .setMsgText(R.string.dev_login_problem_tips)
+                   .setCancelText(R.string.cancle)
+                   .setConfirmText(R.string.phone_call)
+                   .setCallBack(this).show()
            }
        }
     }

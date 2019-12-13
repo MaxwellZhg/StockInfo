@@ -37,6 +37,7 @@ import java.util.*
 class LoginRegisterFragment :
     AbsSwipeBackNetFragment<LoginAndRegisterFragmentBinding, LoginRegisterViewModel, LoginRegisterView, LoginRegisterPresenter>(),
     View.OnClickListener, TextWatcher, LoginRegisterView {
+
     private lateinit var strphone: String
     private lateinit var phonecode: String
     var filterLength = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
@@ -176,6 +177,7 @@ class LoginRegisterFragment :
         type = arguments?.getInt("type") ?: type
         transaction = arguments?.getString("transaction")
         presenter?.setTransaction(transaction)
+        presenter?.setLifecycleOwner(this)
         if (type == 2) {
             presenter?.postChangeMytabInfo()
         }
@@ -214,22 +216,22 @@ class LoginRegisterFragment :
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                     if (matcher) {
                          presenter?.getGetCodeColor(1)
-                         tv_send_code.isClickable =true
+                         presenter?.setSendCodeClickable(true)
                         tv_btn_login.isEnabled = true
                     } else {
                         presenter?.getGetCodeColor(0)
-                        tv_send_code.isClickable =false
+                        presenter?.setSendCodeClickable(false)
                         tv_btn_login.isEnabled = false
                     }
                 } else {
                     val matcher = PatternUtils.patternOtherPhone(p0.toString())
                     if (matcher) {
                         presenter?.getGetCodeColor(1)
-                        tv_send_code.isClickable =true
+                        presenter?.setSendCodeClickable(true)
                         tv_btn_login.isEnabled = true
                     } else {
                         presenter?.getGetCodeColor(0)
-                        tv_send_code.isClickable =false
+                        presenter?.setSendCodeClickable(false)
                         tv_btn_login.isEnabled = false
                     }
                 }
@@ -238,32 +240,32 @@ class LoginRegisterFragment :
                     val matcher = PatternUtils.patternZhPhone(p0.toString())
                     if (matcher) {
                         presenter?.getGetCodeColor(1)
-                        tv_send_code.isClickable =true
+                        presenter?.setSendCodeClickable(true)
                         tv_btn_login.isEnabled = false
                     } else {
                         presenter?.getGetCodeColor(0)
-                        tv_send_code.isClickable =false
+                        presenter?.setSendCodeClickable(false)
                         tv_btn_login.isEnabled = false
                     }
                 } else {
                     val matcher = PatternUtils.patternOtherPhone(p0.toString())
                     if (matcher) {
                         presenter?.getGetCodeColor(1)
-                        tv_send_code.isClickable =true
+                        presenter?.setSendCodeClickable(true)
                         tv_btn_login.isEnabled = false
                     } else {
                         presenter?.getGetCodeColor(0)
-                        tv_send_code.isClickable =false
+                        presenter?.setSendCodeClickable(false)
                         tv_btn_login.isEnabled = false
                     }
                 }
             } else if (TextUtils.isEmpty(p0.toString()) && !TextUtils.isEmpty(et_phone_code.text.toString())) {
                 presenter?.getGetCodeColor(0)
-                tv_send_code.isClickable =false
+                presenter?.setSendCodeClickable(false)
                 tv_btn_login.isEnabled = false
             } else if (TextUtils.isEmpty(p0.toString()) && TextUtils.isEmpty(et_phone_code.text.toString())) {
                 presenter?.getGetCodeColor(0)
-                tv_send_code.isClickable =false
+                presenter?.setSendCodeClickable(false)
                 tv_btn_login.isEnabled = false
             }
         }
@@ -312,10 +314,9 @@ class LoginRegisterFragment :
             }
         })
     }
-    override fun changeLoginSendCodeState(type: Int) {
-        if(tv_send_code!=null) {
-            tv_send_code.isClickable = type != 1
-        }
+
+    override fun notifySendCodeClickable(isClick: Boolean) {
+        tv_send_code.isClickable =isClick
     }
 
 }

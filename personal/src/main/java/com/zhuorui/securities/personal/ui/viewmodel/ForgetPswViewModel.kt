@@ -1,6 +1,7 @@
 package com.zhuorui.securities.personal.ui.viewmodel
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.personal.R
@@ -14,6 +15,7 @@ import com.zhuorui.securities.personal.R
 class ForgetPswViewModel :ViewModel(){
     var str= ObservableField<String>()
     var getcodeState=ObservableField<Int>()
+    var getCodeClickState= MutableLiveData<Boolean>()
     init {
         getcodeState.set(0)
         str.set(ResUtil.getString(R.string.send_verification_code))

@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.InputFilter
 import android.text.TextUtils
 import android.widget.EditText
+import androidx.lifecycle.LifecycleOwner
 import com.zhuorui.commonwidget.StateButton
 import com.zhuorui.commonwidget.common.CountryCodeConfig
 import com.zhuorui.securities.base2app.Cache
@@ -23,9 +24,11 @@ import com.zhuorui.securities.personal.ui.view.ForgetPswView
 import com.zhuorui.securities.personal.ui.viewmodel.ForgetPswViewModel
 import com.zhuorui.securities.personal.util.PatternUtils
 import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -35,22 +38,20 @@ import java.util.concurrent.TimeUnit
  * Date: 2019/8/21
  * Desc:
  */
-class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
+class ForgetPswPresenter : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
+    internal var timer: Timer? = null
     private var recLen = 60//跳过倒计时提示5秒
-    private var disposable:Disposable?=null
+    internal var task: TimerTask? = null
+    private var  disposable:Disposable?=null
+    private val disposables = LinkedList<Disposable?>()
 
-    fun startTask() {
-         disposable = Observable.interval(0,1,  TimeUnit.SECONDS).take(61)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                recLen--
-                viewModel?.str?.set(recLen.toString()+"s")
-                if(recLen<0) {
-                    viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
-                    viewModel?.getcodeState?.set(1)
-                    view?.changeLoginSendCodeState(0)
-                }
+    fun setLifecycleOwner(lifecycleOwner: LifecycleOwner) {
+        // 监听datas的变化
+        lifecycleOwner.let {
+            viewModel?.getCodeClickState?.observe(it,
+                androidx.lifecycle.Observer<Boolean> { t ->
+                    view?.notifySendCodeClickable(t)
+                })
         }
     }
 
@@ -67,9 +68,8 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
         if (!transactions.isMyTransaction(response)) return
         view?.showProgressDailog(0)
         if(response.request is SendLoginCodeRequest){
-            view?.changeLoginSendCodeState(1)
-            recLen=60
-            startTask()
+            setSendCodeClickable(false)
+            startTimeCountDown()
         }else if(response.request is VerifForgetCodeRequest){
             view?.showProgressDailog(0)
             view?.restpsw()
@@ -119,22 +119,22 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
                 if(matcher) {
                     getGetCodeColor(1)
-                    view?.changeLoginSendCodeState(0)
+                    setSendCodeClickable(true)
                     btn_login.isEnabled = true
                 }else{
                     getGetCodeColor(0)
-                    view?.changeLoginSendCodeState(1)
+                    setSendCodeClickable(false)
                     btn_login.isEnabled = false
                 }
             }else{
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
                 if(matcher) {
                     getGetCodeColor(1)
-                    view?.changeLoginSendCodeState(0)
+                    setSendCodeClickable(true)
                     btn_login.isEnabled = true
                 }else{
                     getGetCodeColor(0)
-                    view?.changeLoginSendCodeState(1)
+                    setSendCodeClickable(false)
                     btn_login.isEnabled = false
                 }
             }
@@ -143,39 +143,98 @@ class ForgetPswPresenter(context: Context) : AbsNetPresenter<ForgetPswView,Forge
                 val matcher = PatternUtils.patternZhPhone(et_phone.text.toString())
                 if(matcher) {
                     getGetCodeColor(1)
-                    view?.changeLoginSendCodeState(0)
+                    setSendCodeClickable(true)
                     btn_login.isEnabled = false
                 }else{
                     getGetCodeColor(0)
-                    view?.changeLoginSendCodeState(1)
+                    setSendCodeClickable(false)
                     btn_login.isEnabled = false
                 }
             }else{
                 val matcher = PatternUtils.patternOtherPhone(et_phone.text.toString())
                 if(matcher) {
                     getGetCodeColor(1)
-                    view?.changeLoginSendCodeState(0)
+                    setSendCodeClickable(true)
                     btn_login.isEnabled = false
                 }else{
                     getGetCodeColor(0)
-                    view?.changeLoginSendCodeState(1)
+                    setSendCodeClickable(false)
                     btn_login.isEnabled = false
                 }
             }
         }else if(TextUtils.isEmpty(et_phone.text.toString())&&!TextUtils.isEmpty(et_code.text.toString())){
             getGetCodeColor(0)
-            view?.changeLoginSendCodeState(1)
+            setSendCodeClickable(false)
             btn_login.isEnabled=false
         }else if(TextUtils.isEmpty(et_phone.text.toString())&& TextUtils.isEmpty(et_code.text.toString())){
             getGetCodeColor(0)
-            view?.changeLoginSendCodeState(1)
+            setSendCodeClickable(false)
             btn_login.isEnabled=false
         }
     }
 
     override fun destroy() {
         super.destroy()
-         disposable?.dispose()
+        timer?.cancel()
+        // 释放disposable
+        if (disposables.isNullOrEmpty()) return
+        for (disposable in disposables) {
+            disposable?.dispose()
+        }
+        disposables.clear()
+    }
+
+    @Throws(InterruptedException::class)
+    fun startTask() {
+        if (task == null) {
+            timer = Timer()
+            task = object : TimerTask() {
+                override fun run() {
+                    recLen--
+                    viewModel?.str?.set(recLen.toString() + "s")
+                    if (recLen < 0) {
+                        timer!!.cancel()
+                        task = null
+                        timer = null
+                        viewModel?.str?.set(ResUtil.getString(R.string.send_verification_code))
+                        viewModel?.getcodeState?.set(1)
+                        disposable = Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+                            emitter.onNext(true)
+                            emitter.onComplete()
+                        })  .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe{
+                                viewModel?.getCodeClickState?.value=true
+                            }
+                        disposables.add(disposable)
+                    }
+                }
+            }
+            timer?.schedule(task, 1000, 1000)
+        }
+
+    }
+
+    fun startTimeCountDown() {
+        if (recLen == 60) {
+            try {
+                startTask()
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+
+        } else if (recLen < 0) {
+            recLen = 60
+            try {
+                startTask()
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun setSendCodeClickable(isClick:Boolean){
+        viewModel?.getCodeClickState?.value=isClick
     }
 
 }

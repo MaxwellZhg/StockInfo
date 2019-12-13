@@ -37,20 +37,9 @@ class PhoneDevVerifyCodeFragment :
     AbsSwipeBackNetFragment<FragmentPhoneDevVerifyCodeBinding, PhoneDevVerifyCodeViewModel, PhoneDevVerifyCodeView, PhoneDevVerifyCodePresenter>(),
     PhoneDevVerifyCodeView, View.OnClickListener, TextWatcher, AbsActivity.OnDispatchTouchEventListener,
     CheckRequestPermissionsListener,DevComfirmDailog.CallBack {
-
     /* 加载进度条 */
     private val progressDialog by lazy {
         ProgressDialog(requireContext())
-    }
-    /* 加载对话框 */
-    private val phoneDevDailog by lazy {
-        DevComfirmDailog.
-            createWidth255Dialog(requireContext(),true,true)
-            .setNoticeText(R.string.notice)
-            .setMsgText(R.string.dev_login_problem_tips)
-            .setCancelText(R.string.cancle)
-            .setConfirmText(R.string.phone_call)
-            .setCallBack(this)
     }
 
     private var phone: String = ""
@@ -89,18 +78,26 @@ class PhoneDevVerifyCodeFragment :
         super.onLazyInitView(savedInstanceState)
         phone = arguments?.getString("phone")?:phone
         phoneArea = arguments?.getString("phoneArea") ?:phoneArea
+        presenter?.setLifecycleOwner(this)
         et_phone_code.addTextChangedListener(this)
         tv_no_reciver_code.setOnClickListener(this)
         tv_timer_tips.setOnClickListener(this)
         tv_phone_timer_tips.text =
             ResUtil.getString(R.string.phone_dev_timer_phonenum_tips) + PhoneHideUtils.hidePhoneNum(phone)
         presenter?.startTask()
+        presenter?.setSendCodeClickable(false)
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.tv_no_reciver_code -> {
-               phoneDevDailog.show()
+                DevComfirmDailog.
+                    createWidth255Dialog(requireContext(),true,true)
+                    .setNoticeText(R.string.notice)
+                    .setMsgText(R.string.dev_login_problem_tips)
+                    .setCancelText(R.string.cancle)
+                    .setConfirmText(R.string.phone_call)
+                    .setCallBack(this).show()
             }
             R.id.tv_timer_tips->{
                 phone?.let { presenter?.requestSendLoginCode(it) }
@@ -184,12 +181,11 @@ class PhoneDevVerifyCodeFragment :
     override fun onConfirm() {
         gotoPhone()
     }
-    override fun changeLoginSendCodeState(type: Int) {
-        if(tv_timer_tips!=null) {
-            tv_timer_tips.isClickable = type != 1
-        }
-    }
 
+
+ override fun notifySendCodeClickable(isClick: Boolean) {
+     tv_timer_tips.isClickable =isClick
+ }
 
 
 

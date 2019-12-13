@@ -17,5 +17,5 @@ interface LoginRegisterView :AbsView{
 
     fun showErrorTimes(str:String,type:Int)
 
-    fun  changeLoginSendCodeState(type:Int)
+    fun notifySendCodeClickable(isClick: Boolean)
 }
