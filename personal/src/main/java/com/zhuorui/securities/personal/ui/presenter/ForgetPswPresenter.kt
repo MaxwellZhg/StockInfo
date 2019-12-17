@@ -16,6 +16,7 @@ import com.zhuorui.securities.base2app.ui.fragment.AbsNetPresenter
 import com.zhuorui.securities.base2app.util.ResUtil
 import com.zhuorui.securities.base2app.util.ToastUtil
 import com.zhuorui.securities.personal.R
+import com.zhuorui.securities.personal.config.LocalAccountConfig
 import com.zhuorui.securities.personal.net.IPersonalNet
 import com.zhuorui.securities.personal.net.request.SendLoginCodeRequest
 import com.zhuorui.securities.personal.net.request.VerifForgetCodeRequest
@@ -72,6 +73,7 @@ class ForgetPswPresenter : AbsNetPresenter<ForgetPswView,ForgetPswViewModel>(){
             startTimeCountDown()
         }else if(response.request is VerifForgetCodeRequest){
             view?.showProgressDailog(0)
+            LocalAccountConfig.getInstance().getAccountInfo()?.phone= (response.request as VerifForgetCodeRequest).phone
             view?.restpsw()
         }
     }
